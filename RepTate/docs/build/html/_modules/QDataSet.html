@@ -943,7 +943,7 @@
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">do_show_all</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_show_all</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">topLevelItemCount</span><span class="p">()):</span>
             <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">topLevelItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inactive_files</span><span class="p">:</span>
@@ -1062,7 +1062,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span>  <span class="c1">#remove the xy-range limits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theory_actions_disabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1">#enable theory buttons</span>
-        <span class="n">newth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_theory_new</span><span class="p">(</span><span class="n">th_name</span><span class="p">,</span> <span class="n">calculate</span><span class="p">)</span>
+        <span class="n">newth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_new</span><span class="p">(</span><span class="n">th_name</span><span class="p">,</span> <span class="n">calculate</span><span class="p">)</span>
 
         <span class="c1"># add new theory tab</span>
         <span class="k">if</span> <span class="n">th_tab_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>

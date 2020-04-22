@@ -5,7 +5,7 @@ RepTate contributors
 Main developers
 ---------------
 
-- Jorge Ramirez (jorge.ramirez AT upm.es, [personal page](http://blogs.upm.es/compsoftmatter))
+- Jorge Ramirez (jorge.ramirez AT upm.es, `personal page <http://blogs.upm.es/compsoftmatter>`_) 
 - Victor Boudara (victor.boudara AT gmail.com)
 
 Contributing applications

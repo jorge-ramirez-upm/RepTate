@@ -127,6 +127,8 @@
 <span class="kn">from</span> <span class="nn">ToolInterpolate</span> <span class="k">import</span> <span class="n">ToolInterpolateExtrapolate</span>
 <span class="kn">from</span> <span class="nn">ToolMaterialsDatabase</span> <span class="k">import</span> <span class="n">ToolMaterialsDatabase</span>
 <span class="kn">from</span> <span class="nn">mplcursors</span> <span class="k">import</span> <span class="n">cursor</span>
+<span class="kn">from</span> <span class="nn">colorama</span> <span class="k">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Style</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <div class="viewcode-block" id="Application"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application">[docs]</a><span class="k">class</span> <span class="nc">Application</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main abstract class that represents an application</span>
@@ -143,17 +145,11 @@
                  <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        **Constructor**</span>
-<span class="sd">        </span>
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            - name {[type]} -- [description] (default: {&quot;ApplicationTemplate&quot;})</span>
-<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        **Constructor**&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_manager</span> <span class="o">=</span> <span class="n">parent</span>
-        <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">views</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span> <span class="c1"># keep filetypes in order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theories</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>  <span class="c1"># keep theory combobox in order</span>
@@ -201,11 +197,368 @@
         <span class="c1"># self.canvas = self.multiplots.canvas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax_opt_defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontweight&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> <span class="s1">&#39;color_ax&#39;</span><span class="p">:</span>  <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">(),</span><span class="s1">&#39;color_label&#39;</span><span class="p">:</span>  <span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getRgbF</span><span class="p">(),</span> <span class="s1">&#39;tick_label_size&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;axis_thickness&#39;</span><span class="p">:</span> <span class="mf">1.25</span><span class="p">,</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;label_size_auto&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opt_defaults</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;resize_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizeplot</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;scroll_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom_wheel</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_motion</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onrelease</span><span class="p">)</span>
+
+        <span class="c1"># Variables used during matplotlib interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store active button during interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store x and y axes concerned by interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># To store reference event during interaction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span> 
 
         <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">cmdline</span><span class="p">):</span>
             <span class="c1"># self.figure.show()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">setWindowFlags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">windowFlags</span><span class="p">()</span> 
+                                           <span class="o">&amp;</span> <span class="o">~</span><span class="n">Qt</span><span class="o">.</span><span class="n">WindowCloseButtonHint</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datacursor_</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># LOGGING STUFF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_manager</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;New LVE app&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Application.resizeplot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.resizeplot">[docs]</a>    <span class="k">def</span> <span class="nf">resizeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Rescale plot graphics when the window is resized&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;label_size_auto&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">]):</span>
+            <span class="k">return</span>
+        <span class="c1">#large window settings</span>
+        <span class="n">w_large</span> <span class="o">=</span> <span class="mi">900</span>
+        <span class="n">h_large</span> <span class="o">=</span> <span class="mi">650</span>
+        <span class="n">font_large</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="c1">#small window settings</span>
+        <span class="n">w_small</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="n">h_small</span> <span class="o">=</span> <span class="mi">400</span>
+        <span class="n">font_small</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="c1">#interpolate for current window size</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">frameGeometry</span><span class="p">()</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+        <span class="n">scale_w</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">w_large</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span>
+        <span class="n">scale_h</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">h_large</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span>
+        <span class="n">font_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">scale_w</span><span class="p">,</span> <span class="n">scale_h</span><span class="p">)</span>
+        <span class="c1">#resize plot fonts</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;label_size_auto&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">*.</span><span class="mi">8</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Application.zoom_wheel"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.zoom_wheel">[docs]</a>    <span class="k">def</span> <span class="nf">zoom_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">base_scale</span> <span class="o">=</span> <span class="mf">1.1</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
+            <span class="c1"># deal with zoom in</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">base_scale</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="c1"># deal with zoom out</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">base_scale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># deal with something that should never happen</span>
+            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># if event.step &gt; 0:</span>
+            <span class="c1"># scale_factor = self.scale_factor</span>
+        <span class="c1"># else:</span>
+            <span class="c1"># scale_factor = 1. / self.scale_factor</span>
+
+        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
+        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
+            <span class="n">transform</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+            <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+            <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+            <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">xdata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
+                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="n">ydata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
+                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">())</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> </div>
+
+    <span class="k">def</span> <span class="nf">_axes_to_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns two sets of Axes to update according to event.</span>
+
+<span class="sd">        Takes care of multiple axes and shared axes.</span>
+
+<span class="sd">        :param MouseEvent event: Matplotlib event to consider</span>
+<span class="sd">        :return: Axes for which to update xlimits and ylimits</span>
+<span class="sd">        :rtype: 2-tuple of set (xaxes, yaxes)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="c1"># For twin x axes, makes sure the zoom is applied once</span>
+                <span class="n">shared_x_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_x_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">x_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_x_axes</span><span class="p">):</span>
+                    <span class="n">x_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+                <span class="c1"># For twin y axes, makes sure the zoom is applied once</span>
+                <span class="n">shared_y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_y_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">y_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_y_axes</span><span class="p">):</span>
+                    <span class="n">y_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+
+    <span class="k">def</span> <span class="nf">_zoom_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a 1D range zoomed around center.</span>
+<span class="sd">        :param float begin: The begin bound of the range.</span>
+<span class="sd">        :param float end: The end bound of the range.</span>
+<span class="sd">        :param float center: The center of the zoom (i.e., invariant point)</span>
+<span class="sd">        :param float scale_factor: The scale factor to apply.</span>
+<span class="sd">        :param str scale: The scale of the axis</span>
+<span class="sd">        :return: The zoomed range (min, max)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">end</span><span class="p">,</span> <span class="n">begin</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">old_min</span><span class="p">,</span> <span class="n">old_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="n">old_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span> <span class="k">if</span> <span class="n">min_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+                <span class="n">center</span> <span class="k">if</span> <span class="n">center</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">old_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="k">if</span> <span class="n">max_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s1">&#39;Zoom on wheel not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
+
+        <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">center</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span>
+        <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale_factor</span>
+        <span class="n">new_min</span> <span class="o">=</span> <span class="n">center</span> <span class="o">-</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">range_</span>
+        <span class="n">new_max</span> <span class="o">=</span> <span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">range_</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_min</span><span class="p">),</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_max</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OverflowError</span><span class="p">:</span>  <span class="c1"># Limit case</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+            <span class="k">if</span> <span class="n">new_min</span> <span class="o">&lt;=</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="n">new_max</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>  <span class="c1"># Limit case</span>
+                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+
+        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_max</span><span class="p">,</span> <span class="n">new_min</span>
+
+<div class="viewcode-block" id="Application.on_press"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># Pan</span>
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c1"># Zoom</span>
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Application.on_motion"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># zoom area</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Application.onrelease"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.onrelease">[docs]</a>    <span class="k">def</span> <span class="nf">onrelease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when releasing mouse&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1">#if release a right click</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="ow">and</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">open_figure_popup_menu</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_pan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end pan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># pan</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>    
+
+    <span class="k">def</span> <span class="nf">_pan_update_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axis_id</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">last_event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute limits with applied pan.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">axis_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">axis_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span>
+
+        <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">last_data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">last_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">last_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span> <span class="o">-</span> <span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span>
+            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span>
+        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span> <span class="o">-</span> \
+                    <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span>
+                <span class="n">new_lim</span> <span class="o">=</span> <span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)),</span>
+                           <span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">))]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">OverflowError</span><span class="p">):</span>
+                <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>  <span class="c1"># Keep previous limits</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Pan not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>
+        <span class="k">return</span> <span class="n">new_lim</span>
+
+    <span class="k">def</span> <span class="nf">_zoom_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin drag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">copy_from_bbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end drag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="c1"># self._patch do not exist</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">return</span>  <span class="c1"># No zoom when points are too close</span>
+
+            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span>
+
+            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
+                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span> 
+                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dx</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
+                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span> 
+                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dy</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># drag</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+                <span class="k">return</span>  <span class="c1"># Ignore event outside plot</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_width</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">xdata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_height</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">restore_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Application.update_datacursor_artists"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_datacursor_artists">[docs]</a>    <span class="k">def</span> <span class="nf">update_datacursor_artists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the datacursor instance </span>
@@ -252,6 +605,9 @@
             <span class="n">sel</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">get_bbox_patch</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
             <span class="n">sel</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">arrow_patch</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Application.delete_multiplot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.delete_multiplot">[docs]</a>    <span class="k">def</span> <span class="nf">delete_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span></div>
+
 <div class="viewcode-block" id="Application.set_multiplot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_multiplot">[docs]</a>    <span class="k">def</span> <span class="nf">set_multiplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nplots</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;defines the plot&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span> <span class="o">=</span> <span class="n">MultiView</span><span class="p">(</span><span class="n">PlotOrganizationType</span><span class="o">.</span><span class="n">OptimalRow</span><span class="p">,</span>
@@ -293,70 +649,44 @@
         <span class="n">array_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line_strings</span><span class="p">)</span>
         <span class="n">QApplication</span><span class="o">.</span><span class="n">clipboard</span><span class="p">()</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">array_string</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.handle_close_window"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.handle_close_window">[docs]</a>    <span class="k">def</span> <span class="nf">handle_close_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - evt {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Application window </span><span class="si">%s</span><span class="s2"> has been closed</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Please, return to the RepTate prompt and delete the application&quot;</span><span class="p">)</span></div>
+    <span class="c1"># JR: I THINK THE FOLLOWING FUNCTION IS NOT NEEDED ANYMORE</span>
+    <span class="c1"># def handle_close_window(self, evt):</span>
+    <span class="c1">#     &quot;&quot;&quot;[summary]</span>
+        
+    <span class="c1">#     [description]</span>
+        
+    <span class="c1">#     Arguments:</span>
+    <span class="c1">#         - evt {[type]} -- [description]</span>
+        
+    <span class="c1">#     Returns:</span>
+    <span class="c1">#         [type] -- [description]</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     print(&quot;\nApplication window %s has been closed\n&quot; % self.name)</span>
+    <span class="c1">#     print(</span>
+    <span class="c1">#         &quot;Please, return to the RepTate prompt and delete the application&quot;)</span>
 
 <div class="viewcode-block" id="Application.new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create new empty dataset in the application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Create new empty dataset in the application&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-            <span class="n">dsname</span> <span class="o">=</span> <span class="s2">&quot;DataSet</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span>
-            <span class="n">dsdescription</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">dsname</span> <span class="o">=</span> <span class="s2">&quot;Set</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_datasets</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">items</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-            <span class="n">dsname</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">dsdescription</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">dsdescription</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">ds</span> <span class="o">=</span> <span class="n">DataSet</span><span class="p">(</span><span class="n">dsname</span><span class="p">,</span> <span class="n">dsdescription</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ds</span><span class="p">,</span> <span class="n">dsname</span></div>
-
-<div class="viewcode-block" id="Application.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new empty dataset in this application.</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            line {str} -- [NAME [, DESCRIPTION]]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ds</span><span class="p">,</span> <span class="n">dsname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">dsname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
+            <span class="n">dsname</span> <span class="o">=</span> <span class="n">line</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">DataSet</span><span class="p">(</span><span class="n">dsname</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
+        <span class="k">return</span> <span class="n">ds</span><span class="p">,</span> <span class="n">dsname</span></div>
+
+<div class="viewcode-block" id="Application.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new empty dataset in this application.&quot;&quot;&quot;</span>
+        <span class="n">ds</span><span class="p">,</span> <span class="n">dsname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">dsname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Application.delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - ds_name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">ds_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_ds_ax_lines</span><span class="p">(</span><span class="n">ds_name</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds_name</span><span class="p">]</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -371,13 +701,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data Set </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">ds_name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Application.remove_ds_ax_lines"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.remove_ds_ax_lines">[docs]</a>    <span class="k">def</span> <span class="nf">remove_ds_ax_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove all dataset file artists from ax including theory ones</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - ds_name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Remove all dataset file artists from ax including theory ones&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds_name</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -393,120 +717,124 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Application.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Delete a dataset from the current application&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+    <span class="n">do_del</span> <span class="o">=</span> <span class="n">do_delete</span>
 
 <div class="viewcode-block" id="Application.complete_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete delete dataset command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Complete delete dataset command&quot;&quot;&quot;</span>
         <span class="n">dataset_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">dataset_names</span><span class="p">[:]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataset_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
+    <span class="n">complete_del</span> <span class="o">=</span> <span class="n">complete_delete</span>
 
-<div class="viewcode-block" id="Application.list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.list">[docs]</a>    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List the datasets in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the datasets in the current application&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_list_tools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_list_datasets</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Application.do_list_datasets"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_list_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the datasets in the current application&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DATASETS IN THE CURRENT APPLICATION&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===================================&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List the datasets in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Application.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Switch the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+<div class="viewcode-block" id="Application.do_tree"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tree">[docs]</a>    <span class="k">def</span> <span class="nf">do_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List all the tools, datasets, files and theories in the current application&quot;&quot;&quot;</span>
+        <span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">offset</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+            <span class="n">done</span><span class="o">=</span><span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">offset</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">offset</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;|--&quot;</span>
+                    <span class="n">done</span><span class="o">=</span><span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong argument for the tree command.&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong argument for the tree command.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">do_tree</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">offset</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Application.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set focus to an open set/theory/tool. </span>
+<span class="sd">By hitting TAB, all the currently accessible elements are shown.</span>
+<span class="sd">Arguments:</span>
+<span class="sd">    - name {str} -- Name of the set/theory/tool to switch the focus to.&quot;&quot;&quot;</span>
+        <span class="n">items</span><span class="o">=</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>            
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">cmdqueue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;switch &#39;</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DataSet </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>         
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">listtools</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">listtools</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DataSet </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Application.complete_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete the switch dataset command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ds_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="sd">&quot;&quot;&quot;Complete switch command&quot;&quot;&quot;</span>
+        <span class="n">setlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">thlist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">setlist</span><span class="p">:</span>
+            <span class="n">thnames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">get_tree</span><span class="p">()</span>
+            <span class="n">thlist</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ds</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">thnames</span><span class="p">]</span>
+        <span class="n">switchlist</span> <span class="o">=</span> <span class="n">setlist</span> <span class="o">+</span> <span class="n">thlist</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
-            <span class="n">completions</span> <span class="o">=</span> <span class="n">ds_names</span><span class="p">[:]</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">switchlist</span><span class="p">[:]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">switchlist</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
+
+<div class="viewcode-block" id="Application.get_tree"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.get_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ds_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">thlist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">ds_names</span><span class="p">:</span>
+            <span class="n">thnames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">get_tree</span><span class="p">()</span>
+            <span class="n">thlist</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ds</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">thnames</span><span class="p">]</span>
+        <span class="n">to_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ds_names</span> <span class="o">+</span> <span class="n">thlist</span> <span class="o">+</span> <span class="n">to_names</span></div>
 
 <span class="c1"># FILE TYPE STUFF</span>
 
-<div class="viewcode-block" id="Application.filetype_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available file types in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_available_filetypes"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_available_filetypes">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_filetypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available file types in the current application&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AVAILABLE FILETYPES&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===================&quot;</span><span class="p">)</span>
         <span class="n">ftypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">ftype</span> <span class="ow">in</span> <span class="n">ftypes</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="s2">*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ftype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ftype</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-                                     <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="Application.do_filetype_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_filetype_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_filetype_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available file types in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filetype_available</span><span class="p">()</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (&quot;</span><span class="o">%</span><span class="n">ftype</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;*.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">ftype</span><span class="o">.</span><span class="n">extension</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s2">&quot;): </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">ftype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span></div>
 
 <span class="c1"># VIEW STUFF</span>
 
 <div class="viewcode-block" id="Application.set_views"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_views">[docs]</a>    <span class="k">def</span> <span class="nf">set_views</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set current view and assign availiable view</span>
-<span class="sd">        labels to viewComboBox if in GUI mode</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Set current view and assign availiable view labels to viewComboBox if in GUI mode&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">view_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">):</span>  <span class="c1">#loop over the keys</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1">#index 0 is the defaut view</span>
@@ -520,35 +848,27 @@
             <span class="c1">#index 0 is the defaut selection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.view_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.view_available">[docs]</a>    <span class="k">def</span> <span class="nf">view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available views in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_available_views"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_available_views">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_views</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available views in the current application&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AVAILABLE VIEWS&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===============&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_view</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RED</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
+                <span class="n">c</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">BLUE</span> <span class="o">+</span> <span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">view</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> 
+                    <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">view</span><span class="o">.</span><span class="n">description</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.do_view_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_view_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available views in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">view_available</span><span class="p">()</span></div>
+<div class="viewcode-block" id="Application.do_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Views and Tools available in the current application&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_available_tools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_available_filetypes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_available_views</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_available_theories</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Application.view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change to another view from open application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Change to another view from open application&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_viewtab</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -565,37 +885,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span> <span class="o">=</span> <span class="n">temp</span></div>
 
 <div class="viewcode-block" id="Application.update_all_ds_plots"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_all_ds_plots">[docs]</a>    <span class="k">def</span> <span class="nf">update_all_ds_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Update all plots from all DataSets&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Application.do_view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change to another view from open application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_plot">[docs]</a>    <span class="k">def</span> <span class="nf">do_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update and refresh all plots&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_all_ds_plots</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Application.do_view"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_view">[docs]</a>    <span class="k">def</span> <span class="nf">do_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the active view&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view_switch</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_view_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_view_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_view_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete switch view command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.complete_view"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_view">[docs]</a>    <span class="k">def</span> <span class="nf">complete_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete view command&quot;&quot;&quot;</span>
         <span class="n">view_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">view_names</span><span class="p">[:]</span>
@@ -605,70 +908,50 @@
 
 <span class="c1"># THEORY STUFF</span>
 
-<div class="viewcode-block" id="Application.theory_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available theories in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_available_theories"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_available_theories">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available theories in the current application&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AVAILABLE THEORIES&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==================&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="Application.do_theory_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available theories in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theory_available</span><span class="p">()</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">thname</span> <span class="o">+</span> <span class="p">(</span><span class="mi">20</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">))</span><span class="o">*</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">)</span></div>
 
 <span class="c1"># TOOL STUFF</span>
-<div class="viewcode-block" id="Application.tool_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available tools in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_available_tools"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_available_tools">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available tools in the current application&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AVAILABLE TOOLS&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===============&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.do_tool_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available tools in the current application</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tool_available</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Application.do_tool_add"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.do_tool_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a new tool of the type specified to the list of tools&quot;&quot;&quot;</span>
         <span class="n">tooltypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">extratooltypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">line</span> <span class="ow">in</span> <span class="n">tooltypes</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">line</span> <span class="ow">in</span> <span class="n">extratooltypes</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_tools</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">to_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tools</span><span class="p">)</span>
+            <span class="n">to_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>  <span class="c1">#get the upper case letters of th_name</span>
+            <span class="n">to_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">to_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tools</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="ow">in</span> <span class="n">tooltypes</span><span class="p">):</span>
                 <span class="n">to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="p">[</span><span class="n">line</span><span class="p">](</span><span class="n">to_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="k">elif</span> <span class="p">(</span><span class="n">line</span> <span class="ow">in</span> <span class="n">extratooltypes</span><span class="p">):</span>
                 <span class="n">to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="p">[</span><span class="n">line</span><span class="p">](</span><span class="n">to_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
-                <span class="k">pass</span>
+                <span class="k">return</span> <span class="n">to</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
                     <span class="n">to</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">to</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">to</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
+                    <span class="n">to</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="n">to</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
                 <span class="n">to</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">to</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Application.complete_tool_add"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_add">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.complete_tool_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_tool_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Complete new tool command&quot;&quot;&quot;</span>
         <span class="n">tool_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availabletools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extratools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
@@ -696,19 +979,22 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listtools</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
         
-<div class="viewcode-block" id="Application.do_tool_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List opened tools&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Application.do_list_tools"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_list_tools">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List opened tools in the current application&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OPEN TOOLS IN THIS APPLICATION&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==============================&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; *&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="p">(</span><span class="mi">15</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">))</span><span class="o">*</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="p">(</span><span class="mi">15</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">))</span><span class="o">*</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Application.do_tool_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the active tool&quot;&quot;&quot;</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">listtools</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">listtools</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
@@ -719,6 +1005,7 @@
         <span class="k">return</span> <span class="n">completions</span></div>
 
 <div class="viewcode-block" id="Application.do_tool_activate"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_tool_activate">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable/Disable a given tool&quot;&quot;&quot;</span>
         <span class="n">listtools</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">listtools</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -736,32 +1023,20 @@
 <span class="c1"># LEGEND STUFF</span>
 
 <div class="viewcode-block" id="Application.legend"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.legend">[docs]</a>    <span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Show/Hide the legend&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend_visible</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">legend_visible</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_legend_properties</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Application.do_legend"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_legend">[docs]</a>    <span class="k">def</span> <span class="nf">do_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Show/Hide the legend&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span></div>
 
 
 <span class="c1"># OTHER STUFF</span>
 
 <div class="viewcode-block" id="Application.update_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.update_plot">[docs]</a>    <span class="k">def</span> <span class="nf">update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Update the plot in the current application&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span><span class="p">)</span>
         <span class="c1">#self.set_legend_properties()</span>
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
@@ -769,10 +1044,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Application.set_axes_properties"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_axes_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_axes_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Set axes properties&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span>
@@ -842,20 +1114,29 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Application.set_legend_properties"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.set_legend_properties">[docs]</a>    <span class="k">def</span> <span class="nf">set_legend_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Set default legend properties&quot;&quot;&quot;</span>
         <span class="c1"># pass</span>
         <span class="n">leg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_visible</span><span class="p">):</span>
-            <span class="n">leg</span><span class="o">.</span><span class="n">draggable</span><span class="p">()</span>
+            <span class="n">leg</span><span class="o">.</span><span class="n">set_draggable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">leg</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="k">pass</span></div></div>
+                <span class="k">pass</span></div>
                 <span class="c1">#print(&quot;legend: %s&quot;%e)</span>
+
+<div class="viewcode-block" id="Application.do_figure_save"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.do_figure_save">[docs]</a>    <span class="k">def</span> <span class="nf">do_figure_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the figure to file. Argument = file name. The image format is determined from the file extension.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;RepTateFigure.png&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Application.complete_figure_save"><a class="viewcode-back" href="../developers/CodeCoreCL.html#Application.Application.complete_figure_save">[docs]</a>    <span class="k">def</span> <span class="nf">complete_figure_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete the figure_save command&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_cd</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

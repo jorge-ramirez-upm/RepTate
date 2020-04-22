@@ -354,18 +354,12 @@
             <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="BaseTheoryDiscrMWD.destructor"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.BaseTheoryDiscrMWD.destructor">[docs]</a>    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphic_bins_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphic_bins</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseTheoryDiscrMWD.show_theory_extras"><a class="viewcode-back" href="../developers/CodeTheories.html#TheoryDiscrMWD.BaseTheoryDiscrMWD.show_theory_extras">[docs]</a>    <span class="k">def</span> <span class="nf">show_theory_extras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when the active theory is changed</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called when the active theory is changed&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Qhide_theory_extras</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphic_bins_visible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span></div>

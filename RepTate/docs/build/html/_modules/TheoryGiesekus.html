@@ -116,7 +116,7 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
 <span class="kn">from</span> <span class="nn">SpreadsheetWidget</span> <span class="k">import</span> <span class="n">SpreadsheetWidget</span>
 <span class="kn">from</span> <span class="nn">Theory</span> <span class="k">import</span> <span class="n">EndComputationRequested</span>
-<span class="kn">from</span> <span class="nn">ApplicationLAOS</span> <span class="k">import</span> <span class="n">GUIApplicationLAOS</span>
+<span class="kn">from</span> <span class="nn">ApplicationLAOS</span> <span class="k">import</span> <span class="n">GUIApplicationLAOS</span><span class="p">,</span> <span class="n">CLApplicationLAOS</span>
 
 <span class="k">class</span> <span class="nc">FlowMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Defines the flow geometry used</span>
@@ -294,38 +294,18 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;in RP init:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flow_mode</span> <span class="o">=</span> <span class="n">FlowMode</span><span class="o">.</span><span class="n">shear</span>  <span class="c1">#default mode: shear</span>
 
-    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when the theory tab is closed</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
     <span class="k">def</span> <span class="nf">get_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Get the values of Maxwell Modes from this theory&quot;&quot;&quot;</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nmodes</span><span class="p">)</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nmodes</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
             <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
             <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span>
+        <span class="k">return</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">set_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - - tau {[type]} -- [description]</span>
-<span class="sd">            - - G {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Set the values of Maxwell Modes from another theory&quot;&quot;&quot;</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;nmodes&quot;</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;nstretch&quot;</span><span class="p">,</span> <span class="n">nmodes</span><span class="p">)</span>
@@ -333,6 +313,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmodes</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;tauD</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span><span class="s2">&quot;G</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">n1_uext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Upper Convected Maxwell model in uniaxial extension.</span>
@@ -569,7 +550,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nmodes&quot;</span><span class="p">):</span>
             <span class="n">oldn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nmodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spinbox</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="n">message</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseTheoryGiesekus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_param_value</span><span class="p">(</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
@@ -625,6 +607,8 @@
 <span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_dataset</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">parent_application</span><span class="p">,</span> <span class="n">CLApplicationLAOS</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_giesekusLAOS</span>
 
 
 <span class="k">class</span> <span class="nc">GUITheoryGiesekus</span><span class="p">(</span><span class="n">BaseTheoryGiesekus</span><span class="p">,</span> <span class="n">QTheory</span><span class="p">):</span>
@@ -730,7 +714,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Qcopy_modes</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">edit_modes_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">times</span><span class="p">,</span> <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
+        <span class="n">times</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get modes successfully&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">EditModesDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAX_MODES</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">exec_</span><span class="p">():</span>
             <span class="n">nmodes</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>

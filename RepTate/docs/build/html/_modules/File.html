@@ -102,6 +102,7 @@
 <span class="sd">&quot;&quot;&quot;</span> 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
+<span class="kn">from</span> <span class="nn">colorama</span> <span class="k">import</span> <span class="n">Fore</span>
 
 <div class="viewcode-block" id="File"><a class="viewcode-back" href="../developers/CodeCoreCL.html#File.File">[docs]</a><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Basic class that describes elements of a DataSet</span>
@@ -157,7 +158,7 @@
 <span class="sd">        </span>
 <span class="sd">        [description]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_full_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="s1">&#39;File: &#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span>  <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span>  <span class="o">+</span> <span class="s1">&#39;Path: &#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">file_full_path</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RED</span> <span class="o">+</span> <span class="s1">&#39;Parameters: &#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">file_parameters</span>
         
 <div class="viewcode-block" id="File.mincol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#File.File.mincol">[docs]</a>    <span class="k">def</span> <span class="nf">mincol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Minimum value in data_table column col</span>

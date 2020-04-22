@@ -119,12 +119,11 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="k">import</span> <span class="n">simps</span>
 <span class="kn">import</span> <span class="nn">matplotlib.patheffects</span> <span class="k">as</span> <span class="nn">pe</span>
+<span class="kn">from</span> <span class="nn">colorama</span> <span class="k">import</span> <span class="n">Fore</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <div class="viewcode-block" id="ColorMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.ColorMode">[docs]</a><span class="k">class</span> <span class="nc">ColorMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class to describe how to change colors in the current DataSet&quot;&quot;&quot;</span>
     <span class="n">fixed</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">variable</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">gradient</span> <span class="o">=</span> <span class="mi">2</span>
@@ -183,10 +182,7 @@
 
 
 <div class="viewcode-block" id="SymbolMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.SymbolMode">[docs]</a><span class="k">class</span> <span class="nc">SymbolMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class to describe how to change the symbols in the DataSet&quot;&quot;&quot;</span>
     <span class="n">fixed</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">fixedfilled</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">variable</span> <span class="o">=</span> <span class="mi">2</span>
@@ -220,10 +216,7 @@
 
 
 <div class="viewcode-block" id="ThLineMode"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.ThLineMode">[docs]</a><span class="k">class</span> <span class="nc">ThLineMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class to describe how to change the line types in Theories&quot;&quot;&quot;</span>
     <span class="n">as_data</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">fixed</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">#black RGB</span>
@@ -244,25 +237,13 @@
 
 
 <div class="viewcode-block" id="DataSet"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet">[docs]</a><span class="k">class</span> <span class="nc">DataSet</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>  <span class="c1"># cmd.Cmd not using super() is OK for CL mode.</span>
-    <span class="sd">&quot;&quot;&quot;Abstract class to describe a data set</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class to describe a data set&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DataSet&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        **Constructor**</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            - name {[type]} -- [description] (default: {&quot;DataSet&quot;})</span>
-<span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DataSet&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">nplots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -291,45 +272,53 @@
         <span class="p">]</span>  <span class="c1">#save the file&#39;s marker shape, fill and color there</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_file</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1"># LOGGING STUFF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;New DataSet&#39;</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">seterrcall</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataSet.write"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write numpy error logs to the logger&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
 <span class="c1"># DATASET STUFF ##########################################################################################################</span>
 
-    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List the files in the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">keylist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keylist</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
-                <span class="n">vallist</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keylist</span><span class="p">:</span>
-                    <span class="n">vallist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="n">ds</span><span class="o">.</span><span class="n">current_file</span><span class="p">):</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vallist</span><span class="p">)))</span>
+<div class="viewcode-block" id="DataSet.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List files and theories in the current DataSet&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_list_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_list_theories</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataSet.do_tree"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_tree">[docs]</a>    <span class="k">def</span> <span class="nf">do_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List all the tools, datasets, files and theories in the current application&quot;&quot;&quot;</span>
+        <span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">offset</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+            <span class="n">done</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">offset</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">offset</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;|--&quot;</span>
+                    <span class="n">done</span><span class="o">=</span><span class="kc">True</span>
+                <span class="k">elif</span> <span class="n">offset</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;|  |--&quot;</span>
+                    <span class="n">done</span><span class="o">=</span><span class="kc">True</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vallist</span><span class="p">)))</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="se">\t</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong argument for the tree command.&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong argument for the tree command.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataSet.get_tree"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.get_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="DataSet.change_file_visibility"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.change_file_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">change_file_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name_short</span><span class="p">,</span> <span class="n">check_state</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Hide/Show file in the figure</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - file_name_short {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            - check_state {[type]} -- [description] (default: {True})</span>
-<span class="sd">        </span>
-<span class="sd">        Raises:</span>
-<span class="sd">            - ValueError -- [description]</span>
-<span class="sd">            - ValueError -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Hide/Show file in the figure&quot;&quot;&quot;</span>
         <span class="n">file_matching</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">file_name_short</span><span class="p">:</span>  <span class="c1">#find changed file</span>
@@ -366,11 +355,8 @@
                 <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DataSet.do_show_all"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_show_all">[docs]</a>    <span class="k">def</span> <span class="nf">do_show_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_show_all"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_show_all">[docs]</a>    <span class="k">def</span> <span class="nf">do_show_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show all files in the current DataSet&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inactive_files</span><span class="p">:</span>
                 <span class="n">file</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
@@ -379,13 +365,11 @@
                     <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>  <span class="c1">#loop over the plots</span>
                         <span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">do_show</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span><span class="p">]</span><span class="o">.</span><span class="n">do_show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.do_hide_all"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_hide_all">[docs]</a>    <span class="k">def</span> <span class="nf">do_hide_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_hide_all"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_hide_all">[docs]</a>    <span class="k">def</span> <span class="nf">do_hide_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Hide all files in the current DataSet&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="n">file</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">dt</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">data_table</span>
@@ -393,11 +377,65 @@
                 <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>  <span class="c1">#loop over the plots</span>
                     <span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">th</span><span class="o">.</span><span class="n">do_hide</span><span class="p">()</span></div>
-        
+            <span class="n">th</span><span class="o">.</span><span class="n">do_hide</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="DataSet.do_file_hide"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file_hide">[docs]</a>    <span class="k">def</span> <span class="nf">do_file_hide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Hide a specific file&quot;&quot;&quot;</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">%s</span><span class="s2"> is already hidden&quot;</span><span class="o">%</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
+                            <span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">done</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataSet.complete_file_hide"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_file_hide">[docs]</a>    <span class="k">def</span> <span class="nf">complete_file_hide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete with the names of files that are currently visible&quot;&quot;&quot;</span>
+        <span class="n">f_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fl</span><span class="o">.</span><span class="n">file_name_short</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="k">if</span> <span class="n">fl</span><span class="o">.</span><span class="n">active</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">f_names</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">f_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">completions</span></div>
+
+<div class="viewcode-block" id="DataSet.do_file_show"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file_show">[docs]</a>    <span class="k">def</span> <span class="nf">do_file_show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a specific file&quot;&quot;&quot;</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">%s</span><span class="s2"> is already visible&quot;</span><span class="o">%</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
+                            <span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">done</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataSet.complete_file_show"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_file_show">[docs]</a>    <span class="k">def</span> <span class="nf">complete_file_show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete with the names of the files in the DataSet that are currently hidden&quot;&quot;&quot;</span>
+        <span class="n">f_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fl</span><span class="o">.</span><span class="n">file_name_short</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">fl</span><span class="o">.</span><span class="n">active</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="n">f_names</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">f_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">completions</span></div>
+
 <div class="viewcode-block" id="DataSet.do_plot"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_plot">[docs]</a>    <span class="k">def</span> <span class="nf">do_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Plot the current dataset using the current view of the parent application</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Plot the current dataset using the current view of the parent application&quot;&quot;&quot;</span>
         <span class="c1"># view = self.parent_application.current_view</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">table_icon_list</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -537,10 +575,11 @@
                                     <span class="n">label</span> <span class="o">+=</span> <span class="n">pmt</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
                                         <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">pmt</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
                                 <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1">#if parameter missing from data file</span>
-                                    <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
-                                        <span class="nb">print</span><span class="p">(</span>
-                                            <span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in data file&quot;</span>
-                                            <span class="o">%</span> <span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in data file&quot;</span><span class="o">%</span><span class="n">e</span><span class="p">)</span>
+                                    <span class="c1"># if CmdBase.mode != CmdMode.GUI:</span>
+                                    <span class="c1">#     print(</span>
+                                    <span class="c1">#         &quot;Parameter %s not found in data file&quot;</span>
+                                    <span class="c1">#         % (e))</span>
                             <span class="c1">#dt.series[nx][i].set_label(file.file_name_short)</span>
                             <span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
@@ -606,13 +645,14 @@
 
 <div class="viewcode-block" id="DataSet.do_sort"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_sort">[docs]</a>    <span class="k">def</span> <span class="nf">do_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sort files in dataset according to the value of a file parameter</span>
-<span class="sd">        sort Mw [,reverse]</span>
 <span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">Examples:</span>
+<span class="sd">    sort Mw,reverse</span>
+<span class="sd">    sort T</span>
+<span class="sd">                </span>
+<span class="sd">Arguments:</span>
+<span class="sd">    - Par {[str]} -- File parameter according to which the files will be sorted</span>
+<span class="sd">    - reverse -- The files will be sorted in reverse order&quot;&quot;&quot;</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong number of arguments&quot;</span><span class="p">)</span>
@@ -629,25 +669,16 @@
             <span class="k">if</span> <span class="n">fp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
                     <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">fp</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="n">rev</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">fp</span> <span class="o">==</span> <span class="s2">&quot;File&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">rev</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in files&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in files&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
+                <span class="c1"># print(&quot;Parameter %s not found in files&quot; % line)</span>
 
 <div class="viewcode-block" id="DataSet.complete_sort"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_sort">[docs]</a>    <span class="k">def</span> <span class="nf">complete_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete with the list of file parameters of the current file in the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Complete with the list of file parameters of the current file in the current dataset&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_file</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A file must be selected first&quot;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -660,38 +691,24 @@
 
 <span class="c1"># FILE STUFF ##########################################################################################################</span>
 
-<div class="viewcode-block" id="DataSet.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete file from the data set</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_file_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_file_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete file from the data set&quot;&quot;&quot;</span>
         <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">line</span><span class="p">):</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_file</span> <span class="o">==</span> <span class="n">f</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_file</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">done</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.complete_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.complete_file_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_file_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_file_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
         <span class="n">f_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fl</span><span class="o">.</span><span class="n">file_name_short</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">f_names</span><span class="p">[:]</span>
@@ -699,39 +716,32 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">f_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="DataSet.do_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List the files in the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_list_files"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list_files">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the files in the current dataset. Active files are shown with an *. Hidden files are shown with (-).&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FILES IN THE CURRENT DATASET&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;============================&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_file</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;*</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
+                <span class="n">c</span><span class="o">=</span><span class="s2">&quot;*&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span></div>
+                <span class="n">c</span><span class="o">=</span><span class="s2">&quot; &quot;</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">=</span><span class="s2">&quot;(-)&quot;</span>
 
-<div class="viewcode-block" id="DataSet.do_list_details"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list_details">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List the files in the dataset with the file parameters</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span><span class="o">%</span><span class="n">c</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span><span class="o">%</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">a</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataSet.do_list_files_details"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list_files_details">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_files_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the files in the dataset with the file parameters&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="DataSet.do_file_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_file_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add an empty file of the given type to the current Data Set</span>
 <span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {str} -- TYPE (extension of file) [, NAME (name, optional)]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">Arguments:</span>
+<span class="sd">    - line {str} -- TYPE (extension of file) [, NAME (name, optional)]&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing file type&quot;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -763,20 +773,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File type </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> cannot be read by application </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
                   <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="DataSet.complete_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete new file command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.complete_file_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_file_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_file_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete new file command&quot;&quot;&quot;</span>
         <span class="n">file_types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">file_types</span><span class="p">[:]</span>
@@ -784,8 +782,8 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_types</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="DataSet.do_new_dummy_file"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_new_dummy_file">[docs]</a>    <span class="k">def</span> <span class="nf">do_new_dummy_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">xrange</span><span class="o">=</span><span class="p">[],</span> <span class="n">yval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zval</span><span class="o">=</span><span class="p">[],</span> <span class="n">fparams</span><span class="o">=</span><span class="p">{},</span> <span class="n">file_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create File form xrange and file parameters</span>
+<div class="viewcode-block" id="DataSet.new_dummy_file"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.new_dummy_file">[docs]</a>    <span class="k">def</span> <span class="nf">new_dummy_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">xrange</span><span class="o">=</span><span class="p">[],</span> <span class="n">yval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zval</span><span class="o">=</span><span class="p">[],</span> <span class="n">fparams</span><span class="o">=</span><span class="p">{},</span> <span class="n">file_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create File from xrange and file parameters</span>
 <span class="sd">        xrange: list of x points</span>
 <span class="sd">        yval: float</span>
 <span class="sd">        fparam: dict containing file parameter names and values</span>
@@ -832,11 +830,8 @@
 <div class="viewcode-block" id="DataSet.do_open"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_open">[docs]</a>    <span class="k">def</span> <span class="nf">do_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open file(s)</span>
 <span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">Arguments:</span>
+<span class="sd">    - line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
             <span class="n">f_names</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">f_names</span><span class="p">:</span>
@@ -882,6 +877,8 @@
                                 <span class="s2">&quot;TH_&quot;</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">newtables</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;File type </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span> <span class="o">%</span> <span class="n">f_ext</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">:</span>
@@ -889,27 +886,27 @@
                 <span class="k">return</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-    <span class="c1"># def reload_data(self):</span>
-    <span class="c1">#     paths_to_open = []</span>
-    <span class="c1">#     for file in self.files:</span>
-    <span class="c1">#         paths_to_open.append([file.file_full_path, file.file_type])</span>
-    <span class="c1">#     del self.files[:]</span>
-
-    <span class="c1">#     for i in len(paths_to_open):</span>
-    <span class="c1">#         path, ft = paths_to_open[i]</span>
-    <span class="c1">#         df = ft.read_file(path, self, self.parent_application.axarr[0])</span>
+<div class="viewcode-block" id="DataSet.do_reload_data"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_reload_data">[docs]</a>    <span class="k">def</span> <span class="nf">do_reload_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reload data files in the current DataSet&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_full_path</span>
+            <span class="n">ft</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">file_type</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not open file </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">header_lines</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">header_lines</span><span class="p">[:]</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_columns</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">num_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List directory &#39;root&#39; appending the path separator to subdirs.</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - root {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;List directory &#39;root&#39; appending the path separator to subdirs.&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -920,16 +917,7 @@
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">__complete_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Perform completion of filesystem path</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            - path {[type]} -- [description] (default: {None})</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Perform completion of filesystem path&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
 
@@ -950,21 +938,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="DataSet.complete_open"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_open">[docs]</a>    <span class="k">def</span> <span class="nf">complete_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete the file_open command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            [type] -- [description]</span>
-
-<span class="sd">        todo:: IF NO APPLICATION, SEARCH AND OPEN AVAILABLE ONE THAT MATCHES FILE EXTENSION</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Complete the file_open command&quot;&quot;&quot;</span>
         <span class="n">test</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__complete_path</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -987,14 +961,9 @@
         <span class="c1">#                    ]</span>
         <span class="c1">#return completions</span>
 
-<div class="viewcode-block" id="DataSet.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change active file in the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_file_active"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file_active">[docs]</a>    <span class="k">def</span> <span class="nf">do_file_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change active file in the current dataset&quot;&quot;&quot;</span>
+        <span class="n">done</span><span class="o">=</span><span class="kc">False</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">line</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_file</span> <span class="o">=</span> <span class="n">f</span>
@@ -1002,40 +971,50 @@
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">done</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-    <span class="c1">#complete_switch = complete_delete</span>
+    <span class="n">complete_file_active</span> <span class="o">=</span> <span class="n">complete_file_delete</span>
 
-<div class="viewcode-block" id="DataSet.do_print"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_print">[docs]</a>    <span class="k">def</span> <span class="nf">do_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show the contents of the current file on the screen</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_file</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Path: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="o">.</span><span class="n">file_full_path</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">header_lines</span><span class="p">)</span>
-        <span class="n">dfile</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> 
-        <span class="n">inspect_header</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="s1">&#39; [&#39;</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_names</span><span class="p">,</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_units</span><span class="p">)]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">inspect_header</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+<div class="viewcode-block" id="DataSet.do_file"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_file">[docs]</a>    <span class="k">def</span> <span class="nf">do_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show the contents of a given file on the screen (if the file name is not specified, it shows the current file)&quot;&quot;&quot;</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">line</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_file</span><span class="o">.</span><span class="n">file_name_short</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span> <span class="o">==</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="s2">&quot;File: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="n">file</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">+</span> <span class="s2">&quot;Path: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="n">file</span><span class="o">.</span><span class="n">file_full_path</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span> <span class="o">+</span> <span class="s2">&quot;Parameters: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span> <span class="o">+</span> <span class="s2">&quot;Header Lines: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">header_lines</span><span class="p">)</span>
+                <span class="n">dfile</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">filetypes</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> 
+                <span class="n">inspect_header</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">+</span><span class="s1">&#39; [&#39;</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_names</span><span class="p">,</span><span class="n">dfile</span><span class="o">.</span><span class="n">col_units</span><span class="p">)]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">BLUE</span> <span class="o">+</span> <span class="s2">&quot;Column Header: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">inspect_header</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span> <span class="o">+</span> <span class="s2">&quot;Data: &quot;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">data_table</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">done</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
+    <span class="n">complete_file</span> <span class="o">=</span> <span class="n">complete_file_delete</span>
 
 <span class="c1"># THEORY STUFF ##########################################################################################################</span>
 
-<div class="viewcode-block" id="DataSet.do_theory_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_theory_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List available theories in parent application&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">theory_available</span><span class="p">()</span></div>
+<div class="viewcode-block" id="DataSet.do_available"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_available">[docs]</a>    <span class="k">def</span> <span class="nf">do_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available filetypes and theories in parent application&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">do_available_filetypes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">do_available_theories</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DataSet.do_theory_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_theory_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete a theory from the current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - name {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_available_filetypes"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_available_filetypes">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_filetypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available filetypes in parent application&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">do_available_filetypes</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataSet.do_available_theories"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_available_theories">[docs]</a>    <span class="k">def</span> <span class="nf">do_available_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List available theories in parent application&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">do_available_theories</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataSet.do_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete a theory from the current dataset&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">destructor</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span>
@@ -1045,23 +1024,12 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span>
                             <span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_plot</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theory </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.complete_theory_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_theory_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_theory_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete delete theory command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.complete_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete delete theory command&quot;&quot;&quot;</span>
         <span class="n">th_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">th_names</span><span class="p">[:]</span>
@@ -1069,28 +1037,16 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">th_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="DataSet.do_theory_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_theory_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List open theories in current dataset</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_list_theories"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_list_theories">[docs]</a>    <span class="k">def</span> <span class="nf">do_list_theories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List open theories in current dataset&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OPEN THEORIES IN THE CURRENT DATASET&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;====================================&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="se">\t</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">RESET</span> <span class="o">+</span> <span class="p">(</span><span class="mi">15</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">))</span><span class="o">*</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">t</span><span class="o">.</span><span class="n">thname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.do_theory_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_theory_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">calculate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a new theory of the type specified to the current Data Set</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_new">[docs]</a>    <span class="k">def</span> <span class="nf">do_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">calculate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a new theory of the type specified to the current Data Set&quot;&quot;&quot;</span>
         <span class="n">thtypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="ow">in</span> <span class="n">thtypes</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -1099,7 +1055,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">num_theories</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1">#th_id = &quot;%s%02d&quot;%(line,self.num_theories)</span>
             <span class="c1"># th_id = &#39;&#39;.join(c for c in line if c.isupper()) #get the upper case letters of th_name</span>
-            <span class="n">th_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_theories</span><span class="p">)</span>
+            <span class="c1">#th_id = &quot;%s%02d&quot; % (line, self.num_theories)</span>
+            <span class="n">th_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>  <span class="c1">#get the upper case letters of th_name</span>
+            <span class="n">th_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">th_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_theories</span><span class="p">)</span>  <span class="c1">#append number</span>
             <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">line</span><span class="p">](</span>
                 <span class="n">th_id</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">th</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">th</span>
@@ -1109,32 +1069,20 @@
                     <span class="n">th</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">th</span><span class="o">.</span><span class="n">Qprint</span><span class="p">(</span><span class="s2">&quot;&lt;font color=green&gt;&lt;b&gt;Press </span><span class="se">\&quot;</span><span class="s2">Calculate</span><span class="se">\&quot;</span><span class="s2">&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">th</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">batch</span><span class="p">):</span>
                     <span class="n">th</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">th</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">th</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
+                    <span class="n">th</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span> <span class="o">+</span> <span class="n">th_id</span> <span class="o">+</span> <span class="s1">&#39;&gt; &#39;</span>
                 <span class="k">if</span> <span class="n">calculate</span><span class="p">:</span>
                     <span class="n">th</span><span class="o">.</span><span class="n">do_calculate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
                 <span class="n">th</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">th</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theory </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> does not exists&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.complete_theory_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_theory_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_theory_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete new theory command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.complete_new"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_new">[docs]</a>    <span class="k">def</span> <span class="nf">complete_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete new theory command&quot;&quot;&quot;</span>
         <span class="n">theory_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
             <span class="n">completions</span> <span class="o">=</span> <span class="n">theory_names</span><span class="p">[:]</span>
@@ -1142,14 +1090,8 @@
             <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">theory_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">completions</span></div>
 
-<div class="viewcode-block" id="DataSet.do_theory_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_theory_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_theory_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change the active theory</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSet.do_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the active theory&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_theory</span> <span class="o">=</span> <span class="n">line</span>
@@ -1157,86 +1099,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Theory </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSet.complete_theory_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_theory_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_theory_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete the theory switch command</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - text {[type]} -- [description]</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">            - begidx {[type]} -- [description]</span>
-<span class="sd">            - endidx {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_theory_delete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">completions</span></div>
+    <span class="n">complete_switch</span><span class="o">=</span><span class="n">complete_delete</span>
 
-<span class="c1"># TOOL STUFF ##########################################################################################################</span>
-        
-<div class="viewcode-block" id="DataSet.do_tool_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change the active tool&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">line</span><span class="p">]</span>
-            <span class="n">to</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DataSet.complete_tool_switch"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_tool_switch">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete the tool switch command&quot;&quot;&quot;</span>
-        <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_tool_delete</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">completions</span></div>
-
-<div class="viewcode-block" id="DataSet.do_tool_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete a tool from the current dataset&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">destructor</span><span class="p">()</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No destructor programmed for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
-                      <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>  <span class="c1"># remove matplotlib artist from ax</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">MAX_NUM_SERIES</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nplots</span><span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">axarr</span><span class="p">[</span><span class="n">nx</span><span class="p">]</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tt</span><span class="o">.</span><span class="n">series</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tool </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DataSet.complete_tool_delete"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.complete_tool_delete">[docs]</a>    <span class="k">def</span> <span class="nf">complete_tool_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Complete delete tool command&quot;&quot;&quot;</span>
-        <span class="n">to_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
-            <span class="n">completions</span> <span class="o">=</span> <span class="n">to_names</span><span class="p">[:]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">to_names</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">completions</span></div>
-
-<div class="viewcode-block" id="DataSet.do_tool_list"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_tool_list">[docs]</a>    <span class="k">def</span> <span class="nf">do_tool_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;List open tools in current dataset&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="se">\t</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">toolname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">description</span><span class="p">))</span></div>
-
-<span class="c1">###########################      </span>
-        
 <div class="viewcode-block" id="DataSet.do_legend"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.do_legend">[docs]</a>    <span class="k">def</span> <span class="nf">do_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - line {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Show/hide the legend&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span><span class="o">.</span><span class="n">do_legend</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataSet.mincol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.mincol">[docs]</a>    <span class="k">def</span> <span class="nf">mincol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Minimum value in table column line of all Files in DataSet</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Minimum value in table column line of all Files in DataSet&quot;&quot;&quot;</span>
         <span class="nb">min</span> <span class="o">=</span> <span class="mf">1e100</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="n">minfile</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">mincol</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
@@ -1245,11 +1115,7 @@
         <span class="k">return</span> <span class="nb">min</span></div>
 
 <div class="viewcode-block" id="DataSet.minpositivecol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.minpositivecol">[docs]</a>    <span class="k">def</span> <span class="nf">minpositivecol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Minimum positive value in table column line of all Files in DataSet</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Minimum positive value in table column line of all Files in DataSet&quot;&quot;&quot;</span>
         <span class="nb">min</span> <span class="o">=</span> <span class="mf">1e100</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="n">minfile</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">minpositivecol</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
@@ -1258,11 +1124,7 @@
         <span class="k">return</span> <span class="nb">min</span></div>
 
 <div class="viewcode-block" id="DataSet.maxcol"><a class="viewcode-back" href="../developers/CodeCoreCL.html#DataSet.DataSet.maxcol">[docs]</a>    <span class="k">def</span> <span class="nf">maxcol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Maximum value in table column line of all Files in DataSet</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Maximum value in table column line of all Files in DataSet&quot;&quot;&quot;</span>
         <span class="nb">max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1e100</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
             <span class="n">maxfile</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">maxcol</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>

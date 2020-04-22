@@ -105,9 +105,9 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">abspath</span>
 <span class="kn">from</span> <span class="nn">PyQt5.uic</span> <span class="k">import</span> <span class="n">loadUiType</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QDesktopServices</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">Qt</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QDesktopServices</span><span class="p">,</span> <span class="n">QTextCursor</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QUrl</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QSize</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QToolButton</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QPlainTextEdit</span><span class="p">,</span> <span class="n">QTextBrowser</span>
 
 <span class="kn">from</span> <span class="nn">CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span><span class="p">,</span> <span class="n">CalcMode</span>
 <span class="kn">from</span> <span class="nn">QApplicationWindow</span> <span class="k">import</span> <span class="n">QApplicationWindow</span>
@@ -118,9 +118,29 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">Version</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">PATH</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 <span class="n">Ui_MainWindow</span><span class="p">,</span> <span class="n">QMainWindow</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span> <span class="s1">&#39;ReptateMainWindow.ui&#39;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="QTextEditLogger"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QTextEditLogger">[docs]</a><span class="k">class</span> <span class="nc">QTextEditLogger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1">#self.widget = QPlainTextEdit(parent)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">QTextBrowser</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background-color: rgb(255, 255, 222);&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="QTextEditLogger.emit"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QTextEditLogger.emit">[docs]</a>    <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="c1">#self.widget.appendPlainText(msg)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">insertHtml</span><span class="p">(</span><span class="n">msg</span><span class="o">+</span><span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span><span class="o">.</span><span class="n">maximum</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">moveCursor</span><span class="p">(</span><span class="n">QTextCursor</span><span class="o">.</span><span class="n">End</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="QApplicationManager"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager">[docs]</a><span class="k">class</span> <span class="nc">QApplicationManager</span><span class="p">(</span><span class="n">ApplicationManager</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">Ui_MainWindow</span><span class="p">):</span>
@@ -129,17 +149,15 @@
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">help_file</span> <span class="o">=</span> <span class="s1">&#39;http://reptate.readthedocs.io/index.html&#39;</span>
-    <span class="c1">#reptatelogger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
-    <span class="c1">#reptatelogger.setLevel(logging.DEBUG)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 
 <span class="sd">        Keyword Arguments:</span>
 <span class="sd">            - parent {[type]} -- [description] (default: {None})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">loglevel</span><span class="o">=</span><span class="n">loglevel</span><span class="p">)</span>
         <span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">Ui_MainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span>  <span class="c1">#set GUI mode</span>
@@ -162,6 +180,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLVE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionNLVE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCrystal</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionGt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCreep</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionSANS</span><span class="p">)</span>
@@ -186,6 +205,8 @@
         <span class="c1">#self.toolBarHelpAbout.insertWidget(self.actionAbout_Qt, tbut)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tbut</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarHelpAbout</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Logger</span><span class="p">)</span>
         
         <span class="n">tbut</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
         <span class="n">tbut</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
@@ -216,22 +237,11 @@
         <span class="c1"># self.toolBarApps.insertAction(self.actionMWD, self.actionXY)</span>
         <span class="c1"># #connect button</span>
         <span class="c1"># self.actionXY.triggered.connect(lambda: self.handle_new_app(&#39;XY&#39;))</span>
-        <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icons/Images/new_icons/Crystal.png&#39;</span><span class="p">)</span>
-        <span class="n">tool_tip</span> <span class="o">=</span> <span class="s1">&#39;Flow Induced Crystallisation&#39;</span>  <span class="c1"># text that appear on hover</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actionCrystal</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">tool_tip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="c1">#insert the new button before the &quot;MWD&quot; button</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">insertAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionGt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCrystal</span><span class="p">)</span>
 
         <span class="c1"># App tabs behaviour</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setMovable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setTabsClosable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">setUsesScrollButtons</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># log file</span>
-        <span class="c1">#log_file_name = &#39;Qreptate.log&#39;</span>
-        <span class="c1">#handler = logging.handlers.RotatingFileHandler(</span>
-        <span class="c1">#    log_file_name, maxBytes=20000, backupCount=2)</span>
-        <span class="c1">#self.reptatelogger.addHandler(handler)</span>
 
         <span class="c1"># Connect actions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionOpenProject</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">launch_open_dialog</span><span class="p">)</span>
@@ -255,7 +265,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close_app_tab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ApplicationtabWidget</span><span class="o">.</span><span class="n">currentChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_changed</span><span class="p">)</span>
-        <span class="c1">#self.Projecttree.itemSelectionChanged.connect(self.treeChanged)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAbout_Qt</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">QApplication</span><span class="o">.</span><span class="n">aboutQt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAbout</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_about</span><span class="p">)</span>
@@ -274,7 +283,59 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">actionAboutScipy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_about_scipy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionCite_RepTate</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_cite_RepTate</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actionCheckRepTateVersion</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_check_RepTate_version</span><span class="p">)</span>
+        
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdockWidget</span><span class="o">.</span><span class="n">visibilityChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_loggerVisibilityChanged</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Logger</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showLogger</span><span class="p">)</span>
 
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">()</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">))</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">setOrientation</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span> <span class="o">=</span> <span class="n">QToolButton</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setPopupMode</span><span class="p">(</span><span class="n">QToolButton</span><span class="o">.</span><span class="n">MenuButtonPopup</span><span class="p">)</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">()</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogNotSet</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogDebug</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogInfo</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogWarning</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogError</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogCritical</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogNotSet</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogDebug</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogInfo</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogWarning</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogError</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loglevel</span><span class="o">==</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogCritical</span><span class="p">)</span>            
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">)</span>
+        <span class="n">tb</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="p">)</span>
+
+        <span class="n">tb</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionCopyLogText</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdochorizontalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span> <span class="o">=</span> <span class="n">QTextEditLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;&lt;font color=blue&gt;</span><span class="si">%(asctime)s</span><span class="s1">&lt;/font&gt; &lt;b&gt;</span><span class="si">%(name)s</span><span class="s1"> &lt;font color=red&gt;</span><span class="si">%(levelname)s</span><span class="s1">&lt;/font&gt;&lt;/b&gt;: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2"> %H%M%S&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">matplotlib</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdochorizontalLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">widget</span><span class="p">)</span>
+
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogNotSet</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logNotSet</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogDebug</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logDebug</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogInfo</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logInfo</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogWarning</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logWarning</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogError</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logError</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionLogCritical</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logCritical</span><span class="p">)</span>
+        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopyLogText</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">copyLogText</span><span class="p">)</span>
 
         <span class="c1">#self.add_save_load_buttons()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">REPTATE_PROJ_JSON</span> <span class="o">=</span> <span class="s1">&#39;reptate_project.json&#39;</span> <span class="c1"># json filename inside zip</span>
@@ -286,6 +347,53 @@
         <span class="c1">#self.text_edit.initInterpreter(locals())</span>
         <span class="c1">#self.verticalLayout.addWidget(self.text_edit)</span>
 
+        <span class="c1"># Hide Logger Window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdockWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span>
+
+<div class="viewcode-block" id="QApplicationManager.showLogger"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.showLogger">[docs]</a>    <span class="k">def</span> <span class="nf">showLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle show Log window&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdockWidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LoggerdockWidget</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.handle_loggerVisibilityChanged"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged">[docs]</a>    <span class="k">def</span> <span class="nf">handle_loggerVisibilityChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle the hide/show event of the logger window&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionShow_Logger</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logNotSet"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logNotSet">[docs]</a>    <span class="k">def</span> <span class="nf">logNotSet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogNotSet</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logDebug"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logDebug">[docs]</a>    <span class="k">def</span> <span class="nf">logDebug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogDebug</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logInfo"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logInfo">[docs]</a>    <span class="k">def</span> <span class="nf">logInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogInfo</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logWarning"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logWarning">[docs]</a>    <span class="k">def</span> <span class="nf">logWarning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogWarning</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logError"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logError">[docs]</a>    <span class="k">def</span> <span class="nf">logError</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogError</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.logCritical"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.logCritical">[docs]</a>    <span class="k">def</span> <span class="nf">logCritical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;RepTate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbutlog</span><span class="o">.</span><span class="n">setDefaultAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionLogCritical</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QApplicationManager.copyLogText"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.copyLogText">[docs]</a>    <span class="k">def</span> <span class="nf">copyLogText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">selectAll</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logTextBox</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="QApplicationManager.handle_show_reptate_help"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationManager.QApplicationManager.handle_show_reptate_help">[docs]</a>    <span class="k">def</span> <span class="nf">handle_show_reptate_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show RepTate documentation&quot;&quot;&quot;</span>

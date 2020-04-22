@@ -659,7 +659,10 @@
                 <span class="n">tauinds</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
                 <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
                 <span class="n">G0</span> <span class="o">=</span> <span class="n">G0</span><span class="p">[</span><span class="n">tauinds</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_modes</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not set modes successfully&quot;</span><span class="p">)</span>
+                    <span class="k">return</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">update_parameter_table</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent_dataset</span><span class="o">.</span><span class="n">handle_actionCalculate_Theory</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -675,7 +678,10 @@
             <span class="k">return</span>
             
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">times</span><span class="p">,</span> <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
+            <span class="n">times</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_modes</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not get modes correctly&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
 
             <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# Maxwell modes</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# Generated with RepTate v</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Version</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span>

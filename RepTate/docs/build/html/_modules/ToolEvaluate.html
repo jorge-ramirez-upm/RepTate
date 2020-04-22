@@ -116,26 +116,12 @@
     <span class="n">citations</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Keyword Arguments:</span>
-<span class="sd">            - name {[type]} -- [description] (default: {&#39;&#39;})</span>
-<span class="sd">            - parent_dataset {[type]} -- [description] (default: {None})</span>
-<span class="sd">            - ax {[type]} -- [description] (default: {None})</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;**Constructor**&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">GUIToolEvaluate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_app</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">CmdBase</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">CmdMode</span><span class="o">.</span><span class="n">GUI</span><span class="p">)</span> <span class="k">else</span> <span class="n">CLToolEvaluate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent_app</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">BaseToolEvaluate</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">    </span>
-<span class="sd">    [description]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Base Class for Evaluation of expressions&quot;&quot;&quot;</span>
     <span class="c1">#help_file = &#39;http://reptate.readthedocs.io/manual/Tools/template.html&#39;</span>
     <span class="n">toolname</span> <span class="o">=</span> <span class="n">ToolEvaluate</span><span class="o">.</span><span class="n">toolname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">ToolEvaluate</span><span class="o">.</span><span class="n">citations</span>
@@ -166,17 +152,6 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">safe_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">safe_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             
-            
-    <span class="k">def</span> <span class="nf">destructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Evaluate function that returns the square of the y, according to the view        </span>
 <span class="sd">        &quot;&quot;&quot;</span>

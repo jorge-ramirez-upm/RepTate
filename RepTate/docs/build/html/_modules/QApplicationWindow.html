@@ -388,7 +388,6 @@
         <span class="n">Ui_AppWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="c1">#self.logger = logging.getLogger(&#39;ReptateLogger&#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_application</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tab_count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -570,20 +569,16 @@
         <span class="c1"># self.canvas.draw()</span>
         <span class="c1"># self.update_Qplot()</span>
         <span class="c1"># LEGEND STUFF</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># leg=plt.legend(loc=&#39;upper left&#39;, frameon=True, ncol=2)</span>
-        <span class="c1"># if leg:</span>
-        <span class="c1">#     leg.draggable()</span>
-                
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="kc">None</span>                
 
         <span class="c1"># EVENT HANDLING</span>
         <span class="c1"># Matplotlib events</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;resize_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resizeplot</span><span class="p">)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;resize_event&#39;, self.resizeplot)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;pick_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onpick</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onrelease</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;scroll_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zoom_wheel</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
-        <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_motion</span><span class="p">)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;button_release_event&#39;, self.onrelease)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;scroll_event&#39;, self.zoom_wheel)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;button_press_event&#39;, self.on_press)</span>
+        <span class="c1">#connection_id = self.figure.canvas.mpl_connect(&#39;motion_notify_event&#39;, self.on_motion)</span>
 
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionShowFigureTools</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewMPLToolbar</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionInspect_Data</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showDataInspector</span><span class="p">)</span>
@@ -619,13 +614,6 @@
         
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionCopy</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">copy</span><span class="p">)</span>
         <span class="n">connection_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionPaste</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inspector_table</span><span class="o">.</span><span class="n">paste</span><span class="p">)</span>
-
-        <span class="c1"># Variables used during matplotlib interaction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store active button during interaction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># To store x and y axes concerned by interaction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># To store reference event during interaction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span> 
 
         <span class="c1"># Annotation stuff</span>
         <span class="c1">#connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)</span>
@@ -1479,67 +1467,65 @@
         <span class="c1">#self.actionShiftVertically.setChecked(False)</span>
         
 <div class="viewcode-block" id="QApplicationWindow.handle_actionReload_Data"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionReload_Data">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionReload_Data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Reload the data files: remove and reopen the current files</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Reload the data files in the current DataSet&quot;&quot;&quot;</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_curve_drag</span><span class="p">()</span>
-        <span class="n">paths_to_reopen</span><span class="p">,</span> <span class="n">th_to_reopen</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clear_files_and_th_from_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">paths_to_reopen</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">new_tables_from_files</span><span class="p">(</span><span class="n">paths_to_reopen</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">th_name</span><span class="p">,</span> <span class="n">tab_name</span> <span class="ow">in</span> <span class="n">th_to_reopen</span><span class="p">:</span>
-                <span class="n">ds</span><span class="o">.</span><span class="n">new_theory</span><span class="p">(</span><span class="n">th_name</span><span class="p">,</span> <span class="n">tab_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Reload Error&#39;</span><span class="p">,</span> <span class="s1">&#39;Error in locating some data files&#39;</span><span class="p">)</span></div>
+        <span class="n">ds</span><span class="o">.</span><span class="n">do_reload_data</span><span class="p">()</span>        </div>
 
-<div class="viewcode-block" id="QApplicationWindow.clear_files_and_th_from_dataset"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">clear_files_and_th_from_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove all files from dataset and widgetTree,</span>
-<span class="sd">        return a list with the full path of deleted files and opened theories</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - ds {[type]} -- [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            - [type] -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">file_paths_cleaned</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">th_cleaned</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#save file names</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
-            <span class="n">fpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">file_full_path</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
-            <span class="n">file_paths_cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
-        <span class="c1">#remove lines from figure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_ds_ax_lines</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> 
-        <span class="n">ds</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span> 
-        <span class="c1">#remove tables from ds</span>
-        <span class="n">ntable</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">topLevelItemCount</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntable</span><span class="p">):</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">DataSettreeWidget</span><span class="o">.</span><span class="n">takeTopLevelItem</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="c1">#save theory tabs of ds</span>
-        <span class="n">ntabs</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntabs</span><span class="p">):</span>
-            <span class="n">th</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">th</span><span class="o">.</span><span class="n">destructor</span><span class="p">()</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">pass</span>
-            <span class="n">thname</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">thname</span>
-            <span class="n">thtabname</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">th_cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">thname</span><span class="p">,</span> <span class="n">thtabname</span><span class="p">))</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">TheorytabWidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># def handle_actionReload_Data(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;Reload the data files: remove and reopen the current files</span>
         
-        <span class="n">ds</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">theories</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">file_paths_cleaned</span><span class="p">,</span> <span class="n">th_cleaned</span><span class="p">,</span> <span class="kc">True</span></div>
+    <span class="c1">#     [description]</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     ds = self.DataSettabWidget.currentWidget()</span>
+    <span class="c1">#     if not ds:</span>
+    <span class="c1">#         return</span>
+    <span class="c1">#     self.disconnect_curve_drag()</span>
+    <span class="c1">#     paths_to_reopen, th_to_reopen, success = self.clear_files_and_th_from_dataset(ds)</span>
+    <span class="c1">#     if success:</span>
+    <span class="c1">#         if paths_to_reopen:</span>
+    <span class="c1">#             self.new_tables_from_files(paths_to_reopen)</span>
+    <span class="c1">#         for th_name, tab_name in th_to_reopen:</span>
+    <span class="c1">#             ds.new_theory(th_name, tab_name)</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         QMessageBox.warning(self, &#39;Reload Error&#39;, &#39;Error in locating some data files&#39;)</span>
+
+    <span class="c1"># def clear_files_and_th_from_dataset(self, ds):</span>
+    <span class="c1">#     &quot;&quot;&quot;Remove all files from dataset and widgetTree,</span>
+    <span class="c1">#     return a list with the full path of deleted files and opened theories&quot;&quot;&quot;</span>
+    <span class="c1">#     file_paths_cleaned = []</span>
+    <span class="c1">#     th_cleaned = []</span>
+    <span class="c1">#     #save file names</span>
+    <span class="c1">#     for f in ds.files:</span>
+    <span class="c1">#         fpath = f.file_full_path</span>
+    <span class="c1">#         print(fpath)</span>
+    <span class="c1">#         if not isfile(fpath):</span>
+    <span class="c1">#             return None, None, False</span>
+    <span class="c1">#         file_paths_cleaned.append(fpath)</span>
+    <span class="c1">#     #remove lines from figure</span>
+    <span class="c1">#     self.remove_ds_ax_lines(ds.name) </span>
+    <span class="c1">#     ds.set_no_limits(ds.current_theory) </span>
+    <span class="c1">#     #remove tables from ds</span>
+    <span class="c1">#     ntable = ds.DataSettreeWidget.topLevelItemCount()</span>
+    <span class="c1">#     for i in range(ntable):</span>
+    <span class="c1">#         ds.DataSettreeWidget.takeTopLevelItem(0)</span>
+    <span class="c1">#     #save theory tabs of ds</span>
+    <span class="c1">#     ntabs = ds.TheorytabWidget.count()</span>
+    <span class="c1">#     for i in range(ntabs):</span>
+    <span class="c1">#         th = ds.TheorytabWidget.widget(0)</span>
+    <span class="c1">#         try:</span>
+    <span class="c1">#             th.destructor()</span>
+    <span class="c1">#         except:</span>
+    <span class="c1">#             pass</span>
+    <span class="c1">#         thname = th.thname</span>
+    <span class="c1">#         thtabname = ds.TheorytabWidget.tabText(0)</span>
+    <span class="c1">#         th_cleaned.append((thname, thtabname))</span>
+    <span class="c1">#         ds.TheorytabWidget.removeTab(0)</span>
+        
+    <span class="c1">#     ds.files.clear()</span>
+    <span class="c1">#     ds.theories.clear()</span>
+    <span class="c1">#     return file_paths_cleaned, th_cleaned, True</span>
 
 <div class="viewcode-block" id="QApplicationWindow.handle_actionView_All_SetTheories"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories">[docs]</a>    <span class="k">def</span> <span class="nf">handle_actionView_All_SetTheories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
@@ -1585,7 +1571,7 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntab</span><span class="p">):</span> 
                 <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="n">index</span><span class="p">:</span>
                     <span class="n">ds_to_hide</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="c1">#hide files of all datasets except current one</span>
-                    <span class="n">ds_to_hide</span><span class="o">.</span><span class="n">do_hide_all</span><span class="p">()</span>
+                    <span class="n">ds_to_hide</span><span class="o">.</span><span class="n">do_hide_all</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
                     <span class="n">ds_to_hide</span><span class="o">.</span><span class="n">set_no_limits</span><span class="p">(</span><span class="n">ds_to_hide</span><span class="o">.</span><span class="n">current_theory</span><span class="p">)</span> 
             <span class="n">ds</span><span class="o">.</span><span class="n">Qshow_all</span><span class="p">()</span> <span class="c1">#show all data of current dataset, except previously unticked files</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">highlight_series</span><span class="p">()</span>
@@ -1701,23 +1687,17 @@
         <span class="c1"># self.canvas.draw()</span>
 
 <div class="viewcode-block" id="QApplicationWindow.addTableToCurrentDataSet"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet">[docs]</a>    <span class="k">def</span> <span class="nf">addTableToCurrentDataSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add file table to curent dataset tab</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        </span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            - dt {[type]} -- [description]</span>
-<span class="sd">            - ext {[type]} -- [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Add file table to curent dataset tab&quot;&quot;&quot;</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DataSettabWidget</span><span class="o">.</span><span class="n">currentWidget</span><span class="p">()</span>
         <span class="n">lnew</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filetypes</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">basic_file_parameters</span><span class="p">[:]:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">s_param</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;Missing Parameter&quot;</span>
+                <span class="c1"># header = &quot;Missing Parameter&quot;</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2"> not found in file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
-                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="c1"># QMessageBox.warning(self, header, message)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># parameter exists</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -1821,7 +1801,7 @@
                 <span class="n">fname</span> <span class="o">+=</span> <span class="s2">&quot;_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;col3&quot;</span><span class="p">]</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
-            <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">do_new_dummy_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">xrange</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">yval</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">zval</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_dummy_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="o">+</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">xrange</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">yval</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">zval</span><span class="o">=</span><span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">addTableToCurrentDataSet</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">res_dic</span><span class="p">[</span><span class="s2">&quot;flag_nan&quot;</span><span class="p">]:</span>
@@ -1885,7 +1865,7 @@
                 <span class="n">fparams</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">paramsnames</span><span class="p">):</span>
                     <span class="n">fparams</span><span class="p">[</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">do_new_dummy_file</span><span class="p">(</span><span class="n">xrange</span><span class="o">=</span><span class="n">xrange</span><span class="p">,</span> <span class="n">yval</span><span class="o">=</span><span class="n">yval</span><span class="p">,</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
+                <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_dummy_file</span><span class="p">(</span><span class="n">xrange</span><span class="o">=</span><span class="n">xrange</span><span class="p">,</span> <span class="n">yval</span><span class="o">=</span><span class="n">yval</span><span class="p">,</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">addTableToCurrentDataSet</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ftype</span><span class="o">.</span><span class="n">extension</span><span class="p">)</span></div>
         
@@ -1911,7 +1891,7 @@
                 <span class="n">xrange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">xmin</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">xmax</span><span class="p">),</span> <span class="n">npoints</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">xrange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">npoints</span><span class="p">)</span>
-            <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">do_new_dummy_file</span><span class="p">(</span><span class="n">xrange</span><span class="o">=</span><span class="n">xrange</span><span class="p">,</span> <span class="n">yval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_dummy_file</span><span class="p">(</span><span class="n">xrange</span><span class="o">=</span><span class="n">xrange</span><span class="p">,</span> <span class="n">yval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fparams</span><span class="o">=</span><span class="n">fparams</span><span class="p">,</span> <span class="n">file_type</span><span class="o">=</span><span class="n">ftype</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
                 <span class="n">cols</span> <span class="o">=</span> <span class="n">ftype</span><span class="o">.</span><span class="n">col_names</span>
@@ -1971,8 +1951,9 @@
                     <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Parameter(s) {</span><span class="si">%s</span><span class="s2">} not found in file &#39;</span><span class="si">%s</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2"> Value(s) set to 0&quot;</span><span class="o">%</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">e_list</span><span class="p">),</span> <span class="n">dt</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">)</span>
-                <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;Missing Parameter&quot;</span>
-                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="c1"># header = &quot;Missing Parameter&quot;</span>
+                <span class="c1"># QMessageBox.warning(self, header, message)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">e_param</span> <span class="ow">in</span> <span class="n">e_list</span><span class="p">:</span>
                     <span class="n">dt</span><span class="o">.</span><span class="n">file_parameters</span><span class="p">[</span><span class="n">e_param</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span></div>
 
@@ -2033,36 +2014,36 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fileName</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
         
 
-<div class="viewcode-block" id="QApplicationWindow.resizeplot"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.resizeplot">[docs]</a>    <span class="k">def</span> <span class="nf">resizeplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-<span class="sd">        </span>
-<span class="sd">        [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;label_size_auto&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">]):</span>
-            <span class="k">return</span>
-        <span class="c1">#large window settings</span>
-        <span class="n">w_large</span> <span class="o">=</span> <span class="mi">900</span>
-        <span class="n">h_large</span> <span class="o">=</span> <span class="mi">650</span>
-        <span class="n">font_large</span> <span class="o">=</span> <span class="mi">16</span>
-        <span class="c1">#small window settings</span>
-        <span class="n">w_small</span> <span class="o">=</span> <span class="mi">300</span>
-        <span class="n">h_small</span> <span class="o">=</span> <span class="mi">400</span>
-        <span class="n">font_small</span> <span class="o">=</span> <span class="mi">10</span>
-        <span class="c1">#interpolate for current window size</span>
-        <span class="n">geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplots</span><span class="o">.</span><span class="n">frameGeometry</span><span class="p">()</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
-        <span class="n">scale_w</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">w_large</span> <span class="o">-</span> <span class="n">w_small</span><span class="p">)</span>
-        <span class="n">scale_h</span> <span class="o">=</span> <span class="n">font_small</span> <span class="o">+</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">font_large</span> <span class="o">-</span> <span class="n">font_small</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">h_large</span> <span class="o">-</span> <span class="n">h_small</span><span class="p">)</span>
-        <span class="n">font_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">scale_w</span><span class="p">,</span> <span class="n">scale_h</span><span class="p">)</span>
-        <span class="c1">#resize plot fonts</span>
-        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axarr</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;label_size_auto&#39;</span><span class="p">]:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_opts</span><span class="p">[</span><span class="s1">&#39;tick_label_size_auto&#39;</span><span class="p">]:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="o">*.</span><span class="mi">8</span><span class="p">)</span></div>
+    <span class="c1"># def resizeplot(self, event=&quot;&quot;):</span>
+    <span class="c1">#     &quot;&quot;&quot;[summary]</span>
+        
+    <span class="c1">#     [description]</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if not (self.ax_opts[&#39;label_size_auto&#39;] or self.ax_opts[&#39;tick_label_size_auto&#39;]):</span>
+    <span class="c1">#         return</span>
+    <span class="c1">#     #large window settings</span>
+    <span class="c1">#     w_large = 900</span>
+    <span class="c1">#     h_large = 650</span>
+    <span class="c1">#     font_large = 16</span>
+    <span class="c1">#     #small window settings</span>
+    <span class="c1">#     w_small = 300</span>
+    <span class="c1">#     h_small = 400</span>
+    <span class="c1">#     font_small = 10</span>
+    <span class="c1">#     #interpolate for current window size</span>
+    <span class="c1">#     geometry = self.multiplots.frameGeometry()</span>
+    <span class="c1">#     width = geometry.width()</span>
+    <span class="c1">#     height = geometry.height()</span>
+    <span class="c1">#     scale_w = font_small + (width - w_small)*(font_large - font_small)/(w_large - w_small)</span>
+    <span class="c1">#     scale_h = font_small + (height - h_small)*(font_large - font_small)/(h_large - h_small)</span>
+    <span class="c1">#     font_size = min(scale_w, scale_h)</span>
+    <span class="c1">#     #resize plot fonts</span>
+    <span class="c1">#     for ax in self.axarr:</span>
+    <span class="c1">#         if self.ax_opts[&#39;label_size_auto&#39;]:</span>
+    <span class="c1">#             ax.xaxis.label.set_size(font_size)</span>
+    <span class="c1">#             ax.yaxis.label.set_size(font_size)</span>
+    <span class="c1">#         if self.ax_opts[&#39;tick_label_size_auto&#39;]:</span>
+    <span class="c1">#             ax.tick_params(which=&#39;major&#39;, labelsize=font_size)</span>
+    <span class="c1">#             ax.tick_params(which=&#39;minor&#39;, labelsize=font_size*.8)</span>
 
   
 <div class="viewcode-block" id="QApplicationWindow.onpick"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.onpick">[docs]</a>    <span class="k">def</span> <span class="nf">onpick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
@@ -2073,128 +2054,128 @@
                 <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">artist</span><span class="o">.</span><span class="n">get_visible</span><span class="p">():</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">artist</span><span class="p">)</span>  <span class="c1">#collect all artists under mouse</span></div>
 
-<div class="viewcode-block" id="QApplicationWindow.onrelease"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.onrelease">[docs]</a>    <span class="k">def</span> <span class="nf">onrelease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when releasing mouse&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1">#if release a right click</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">open_figure_popup_menu</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">artists_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="kc">None</span></div>
+    <span class="c1"># def onrelease(self, event):</span>
+    <span class="c1">#     &quot;&quot;&quot;Called when releasing mouse&quot;&quot;&quot;</span>
+    <span class="c1">#     if event.button == 3:  #if release a right click</span>
+    <span class="c1">#         self._zoom_area(event)</span>
+    <span class="c1">#         if not self._was_zooming:</span>
+    <span class="c1">#             self.open_figure_popup_menu(event)</span>
+    <span class="c1">#         self.artists_clicked.clear()</span>
+    <span class="c1">#         self._was_zooming = False</span>
+    <span class="c1">#     elif event.button == 2:</span>
+    <span class="c1">#         self._pan(event)</span>
+    <span class="c1">#     self._pressed_button = None</span>
 
-    <span class="k">def</span> <span class="nf">_zoom_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin drag</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span>
-                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
+    <span class="c1"># def _zoom_area(self, event):</span>
+    <span class="c1">#     if event.name == &#39;button_press_event&#39;:  # begin drag</span>
+    <span class="c1">#         self._event = event</span>
+    <span class="c1">#         self._patch = plt.Rectangle(</span>
+    <span class="c1">#             xy=(event.xdata, event.ydata), width=0, height=0,</span>
+    <span class="c1">#             fill=False, linewidth=1., linestyle=&#39;:&#39;, color=&#39;gray&#39;)</span>
+    <span class="c1">#         self._event.inaxes.add_patch(self._patch)</span>
 
-            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
-            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">copy_from_bbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
-            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="c1">#         canvas = self._patch.figure.canvas</span>
+    <span class="c1">#         axes = self._patch.axes</span>
+    <span class="c1">#         self._patch.set_animated(True)</span>
+    <span class="c1">#         canvas.draw()</span>
+    <span class="c1">#         self.background = canvas.copy_from_bbox(self._patch.axes.bbox)</span>
+    <span class="c1">#         axes.draw_artist(self._patch)</span>
+    <span class="c1">#         canvas.update()</span>
 
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end drag</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span>
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="c1"># self._patch do not exist</span>
-                <span class="k">pass</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">return</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span>
-                    <span class="nb">abs</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">return</span>  <span class="c1"># No zoom when points are too close</span>
+    <span class="c1">#     elif event.name == &#39;button_release_event&#39;:  # end drag</span>
+    <span class="c1">#         self.background = None</span>
+    <span class="c1">#         try:</span>
+    <span class="c1">#             self._patch.remove()</span>
+    <span class="c1">#             del self._patch</span>
+    <span class="c1">#         except AttributeError:</span>
+    <span class="c1">#             # self._patch do not exist</span>
+    <span class="c1">#             pass</span>
+    <span class="c1">#         if self._event == None:</span>
+    <span class="c1">#             self._was_zooming = False</span>
+    <span class="c1">#             return</span>
+    <span class="c1">#         if (abs(event.x - self._event.x) &lt; 3 or</span>
+    <span class="c1">#                 abs(event.y - self._event.y) &lt; 3):</span>
+    <span class="c1">#             self._was_zooming = False</span>
+    <span class="c1">#             return  # No zoom when points are too close</span>
 
-            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span>
+    <span class="c1">#         x_axes, y_axes = self._axes</span>
 
-            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
-                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
-                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="c1">#         for ax in x_axes:</span>
+    <span class="c1">#             pixel_to_data = ax.transData.inverted()</span>
+    <span class="c1">#             end_pt = pixel_to_data.transform_point((event.x, event.y))</span>
+    <span class="c1">#             begin_pt = pixel_to_data.transform_point(</span>
+    <span class="c1">#                 (self._event.x, self._event.y))</span>
 
-                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span> 
-                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">dx</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis_inverted</span><span class="p">():</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dx</span><span class="p">)</span>
+    <span class="c1">#             min_ = min(begin_pt[0], end_pt[0])</span>
+    <span class="c1">#             max_ = max(begin_pt[0], end_pt[0])</span>
+    <span class="c1">#             if (end_pt[0]&gt;begin_pt[0]):</span>
+    <span class="c1">#                 if not ax.xaxis_inverted():</span>
+    <span class="c1">#                     ax.set_xlim(min_, max_)</span>
+    <span class="c1">#                 else:</span>
+    <span class="c1">#                     ax.set_xlim(max_, min_)</span>
+    <span class="c1">#             else:</span>
+    <span class="c1">#                 min_now, max_now = ax.get_xlim() </span>
+    <span class="c1">#                 if ax.get_xscale() == &#39;log&#39;:</span>
+    <span class="c1">#                     fac = 10.0**((math.log10(max_) - math.log10(min_))/2)</span>
+    <span class="c1">#                     if not ax.xaxis_inverted():</span>
+    <span class="c1">#                         ax.set_xlim(min_now/fac, max_now*fac)</span>
+    <span class="c1">#                     else:</span>
+    <span class="c1">#                         ax.set_xlim(max_now*fac, min_now/fac)</span>
+    <span class="c1">#                 else:</span>
+    <span class="c1">#                     dx = max_ - min_</span>
+    <span class="c1">#                     if not ax.xaxis_inverted():</span>
+    <span class="c1">#                         ax.set_xlim(min_now-dx, max_now+dx)</span>
+    <span class="c1">#                     else:</span>
+    <span class="c1">#                         ax.set_xlim(max_now+dx, min_now-dx)</span>
 
-            <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
-                <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
-                <span class="n">end_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-                <span class="n">begin_pt</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="c1">#         for ax in y_axes:</span>
+    <span class="c1">#             pixel_to_data = ax.transData.inverted()</span>
+    <span class="c1">#             end_pt = pixel_to_data.transform_point((event.x, event.y))</span>
+    <span class="c1">#             begin_pt = pixel_to_data.transform_point(</span>
+    <span class="c1">#                 (self._event.x, self._event.y))</span>
 
-                <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">end_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">begin_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_</span><span class="p">,</span> <span class="n">min_</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">min_now</span><span class="p">,</span> <span class="n">max_now</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span> 
-                    <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-                        <span class="n">fac</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">,</span> <span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">*</span><span class="n">fac</span><span class="p">,</span> <span class="n">min_now</span><span class="o">/</span><span class="n">fac</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">dy</span> <span class="o">=</span> <span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_inverted</span><span class="p">():</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">,</span> <span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">max_now</span><span class="o">+</span><span class="n">dy</span><span class="p">,</span> <span class="n">min_now</span><span class="o">-</span><span class="n">dy</span><span class="p">)</span>
+    <span class="c1">#             min_ = min(begin_pt[1], end_pt[1])</span>
+    <span class="c1">#             max_ = max(begin_pt[1], end_pt[1])</span>
+    <span class="c1">#             if (end_pt[1]&lt;begin_pt[1]):</span>
+    <span class="c1">#                 if not ax.yaxis_inverted():</span>
+    <span class="c1">#                     ax.set_ylim(min_, max_)</span>
+    <span class="c1">#                 else:</span>
+    <span class="c1">#                     ax.set_ylim(max_, min_)</span>
+    <span class="c1">#             else:</span>
+    <span class="c1">#                 min_now, max_now = ax.get_ylim() </span>
+    <span class="c1">#                 if ax.get_yscale() == &#39;log&#39;:</span>
+    <span class="c1">#                     fac = 10.0**((math.log10(max_) - math.log10(min_))/2)</span>
+    <span class="c1">#                     if not ax.yaxis_inverted():</span>
+    <span class="c1">#                         ax.set_ylim(min_now/fac, max_now*fac)</span>
+    <span class="c1">#                     else:</span>
+    <span class="c1">#                         ax.set_ylim(max_now*fac, min_now/fac)</span>
+    <span class="c1">#                 else:</span>
+    <span class="c1">#                     dy = max_ - min_</span>
+    <span class="c1">#                     if not ax.yaxis_inverted():</span>
+    <span class="c1">#                         ax.set_ylim(min_now-dy, max_now+dy)</span>
+    <span class="c1">#                     else:</span>
+    <span class="c1">#                         ax.set_ylim(max_now+dy, min_now-dy)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_was_zooming</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="c1">#         self._event = None</span>
+    <span class="c1">#         self._was_zooming = True</span>
+    <span class="c1">#         self.figure.canvas.draw()</span>
 
 
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># drag</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span>
+    <span class="c1">#     elif event.name == &#39;motion_notify_event&#39;:  # drag</span>
+    <span class="c1">#         if self._event is None:</span>
+    <span class="c1">#             return</span>
 
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
-                <span class="k">return</span>  <span class="c1"># Ignore event outside plot</span>
+    <span class="c1">#         if event.inaxes != self._event.inaxes:</span>
+    <span class="c1">#             return  # Ignore event outside plot</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_width</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">xdata</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">set_height</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+    <span class="c1">#         self._patch.set_width(event.xdata - self._event.xdata)</span>
+    <span class="c1">#         self._patch.set_height(event.ydata - self._event.ydata)</span>
 
-            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span>
-            <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="o">.</span><span class="n">axes</span>
-            <span class="n">canvas</span><span class="o">.</span><span class="n">restore_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
-            <span class="n">axes</span><span class="o">.</span><span class="n">draw_artist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_patch</span><span class="p">)</span>
-            <span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="c1">#         canvas = self._patch.figure.canvas</span>
+    <span class="c1">#         axes = self._patch.axes</span>
+    <span class="c1">#         canvas.restore_region(self.background)</span>
+    <span class="c1">#         axes.draw_artist(self._patch)</span>
+    <span class="c1">#         canvas.update()</span>
 
 
 
@@ -2255,194 +2236,194 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiviews</span><span class="p">[</span><span class="n">n_ax</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="n">view_name</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_plot</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_plot</span><span class="p">()</span></div></div>
 
-    <span class="k">def</span> <span class="nf">_pan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_press_event&#39;</span><span class="p">:</span>  <span class="c1"># begin pan</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>
+    <span class="c1"># def _pan(self, event):</span>
+    <span class="c1">#     if event.name == &#39;button_press_event&#39;:  # begin pan</span>
+    <span class="c1">#         self._event = event</span>
 
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;button_release_event&#39;</span><span class="p">:</span>  <span class="c1"># end pan</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1">#     elif event.name == &#39;button_release_event&#39;:  # end pan</span>
+    <span class="c1">#         self._event = None</span>
 
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;motion_notify_event&#39;</span><span class="p">:</span>  <span class="c1"># pan</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span>
+    <span class="c1">#     elif event.name == &#39;motion_notify_event&#39;:  # pan</span>
+    <span class="c1">#         if self._event is None:</span>
+    <span class="c1">#             return</span>
 
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                    <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="c1">#         if event.x != self._event.x:</span>
+    <span class="c1">#             for ax in self._axes[0]:</span>
+    <span class="c1">#                 xlim = self._pan_update_limits(ax, 0, event, self._event)</span>
+    <span class="c1">#                 ax.set_xlim(xlim)</span>
 
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pan_update_limits</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">)</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+    <span class="c1">#         if event.y != self._event.y:</span>
+    <span class="c1">#             for ax in self._axes[1]:</span>
+    <span class="c1">#                 ylim = self._pan_update_limits(ax, 1, event, self._event)</span>
+    <span class="c1">#                 ax.set_ylim(ylim)</span>
 
-            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="c1">#         if event.x != self._event.x or event.y != self._event.y:</span>
+    <span class="c1">#             self.figure.canvas.draw()</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span> <span class="o">=</span> <span class="n">event</span>    
+    <span class="c1">#         self._event = event    </span>
 
-    <span class="k">def</span> <span class="nf">_pan_update_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axis_id</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">last_event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute limits with applied pan.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">axis_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">axis_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-            <span class="n">scale</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">()</span>
+    <span class="c1"># def _pan_update_limits(self, ax, axis_id, event, last_event):</span>
+    <span class="c1">#     &quot;&quot;&quot;Compute limits with applied pan.&quot;&quot;&quot;</span>
+    <span class="c1">#     assert axis_id in (0, 1)</span>
+    <span class="c1">#     if axis_id == 0:</span>
+    <span class="c1">#         lim = ax.get_xlim()</span>
+    <span class="c1">#         scale = ax.get_xscale()</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         lim = ax.get_ylim()</span>
+    <span class="c1">#         scale = ax.get_yscale()</span>
 
-        <span class="n">pixel_to_data</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="n">last_data</span> <span class="o">=</span> <span class="n">pixel_to_data</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">last_event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">last_event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="c1">#     pixel_to_data = ax.transData.inverted()</span>
+    <span class="c1">#     data = pixel_to_data.transform_point((event.x, event.y))</span>
+    <span class="c1">#     last_data = pixel_to_data.transform_point((last_event.x, last_event.y))</span>
 
-        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
-            <span class="n">delta</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span> <span class="o">-</span> <span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">]</span>
-            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span>
-        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">delta</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span> <span class="o">-</span> \
-                    <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">last_data</span><span class="p">[</span><span class="n">axis_id</span><span class="p">])</span>
-                <span class="n">new_lim</span> <span class="o">=</span> <span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)),</span>
-                           <span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">delta</span><span class="p">))]</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">OverflowError</span><span class="p">):</span>
-                <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>  <span class="c1"># Keep previous limits</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Pan not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
-            <span class="n">new_lim</span> <span class="o">=</span> <span class="n">lim</span>
-        <span class="k">return</span> <span class="n">new_lim</span>
+    <span class="c1">#     if scale == &#39;linear&#39;:</span>
+    <span class="c1">#         delta = data[axis_id] - last_data[axis_id]</span>
+    <span class="c1">#         new_lim = lim[0] - delta, lim[1] - delta</span>
+    <span class="c1">#     elif scale == &#39;log&#39;:</span>
+    <span class="c1">#         try:</span>
+    <span class="c1">#             delta = math.log10(data[axis_id]) - \</span>
+    <span class="c1">#                 math.log10(last_data[axis_id])</span>
+    <span class="c1">#             new_lim = [pow(10., (math.log10(lim[0]) - delta)),</span>
+    <span class="c1">#                        pow(10., (math.log10(lim[1]) - delta))]</span>
+    <span class="c1">#         except (ValueError, OverflowError):</span>
+    <span class="c1">#             new_lim = lim  # Keep previous limits</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         logging.warning(&#39;Pan not implemented for scale &quot;%s&quot;&#39; % scale)</span>
+    <span class="c1">#         new_lim = lim</span>
+    <span class="c1">#     return new_lim</span>
 
-    <span class="k">def</span> <span class="nf">_zoom_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a 1D range zoomed around center.</span>
-<span class="sd">        :param float begin: The begin bound of the range.</span>
-<span class="sd">        :param float end: The end bound of the range.</span>
-<span class="sd">        :param float center: The center of the zoom (i.e., invariant point)</span>
-<span class="sd">        :param float scale_factor: The scale factor to apply.</span>
-<span class="sd">        :param str scale: The scale of the axis</span>
-<span class="sd">        :return: The zoomed range (min, max)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
-            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="n">end</span><span class="p">,</span> <span class="n">begin</span>
+    <span class="c1"># def _zoom_range(self, begin, end, center, scale_factor, scale):</span>
+    <span class="c1">#     &quot;&quot;&quot;Compute a 1D range zoomed around center.</span>
+    <span class="c1">#     :param float begin: The begin bound of the range.</span>
+    <span class="c1">#     :param float end: The end bound of the range.</span>
+    <span class="c1">#     :param float center: The center of the zoom (i.e., invariant point)</span>
+    <span class="c1">#     :param float scale_factor: The scale factor to apply.</span>
+    <span class="c1">#     :param str scale: The scale of the axis</span>
+    <span class="c1">#     :return: The zoomed range (min, max)</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if begin &lt; end:</span>
+    <span class="c1">#         min_, max_ = begin, end</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         min_, max_ = end, begin</span>
 
-        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
-            <span class="n">old_min</span><span class="p">,</span> <span class="n">old_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
-        <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="n">old_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">min_</span> <span class="k">if</span> <span class="n">min_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
-                <span class="n">center</span> <span class="k">if</span> <span class="n">center</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">old_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="k">if</span> <span class="n">max_</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="mf">0.</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s1">&#39;Zoom on wheel not implemented for scale &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">scale</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">begin</span><span class="p">,</span> <span class="n">end</span>
+    <span class="c1">#     if scale == &#39;linear&#39;:</span>
+    <span class="c1">#         old_min, old_max = min_, max_</span>
+    <span class="c1">#     elif scale == &#39;log&#39;:</span>
+    <span class="c1">#         old_min = np.log10(min_ if min_ &gt; 0. else np.nextafter(0, 1))</span>
+    <span class="c1">#         center = np.log10(</span>
+    <span class="c1">#             center if center &gt; 0. else np.nextafter(0, 1))</span>
+    <span class="c1">#         old_max = np.log10(max_) if max_ &gt; 0. else 0.</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         logging.warning(</span>
+    <span class="c1">#             &#39;Zoom on wheel not implemented for scale &quot;%s&quot;&#39; % scale)</span>
+    <span class="c1">#         return begin, end</span>
 
-        <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">center</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span>
-        <span class="n">range_</span> <span class="o">=</span> <span class="p">(</span><span class="n">old_max</span> <span class="o">-</span> <span class="n">old_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale_factor</span>
-        <span class="n">new_min</span> <span class="o">=</span> <span class="n">center</span> <span class="o">-</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">range_</span>
-        <span class="n">new_max</span> <span class="o">=</span> <span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">range_</span>
+    <span class="c1">#     offset = (center - old_min) / (old_max - old_min)</span>
+    <span class="c1">#     range_ = (old_max - old_min) / scale_factor</span>
+    <span class="c1">#     new_min = center - offset * range_</span>
+    <span class="c1">#     new_max = center + (1. - offset) * range_</span>
 
-        <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_min</span><span class="p">),</span> <span class="mf">10.</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">new_max</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">OverflowError</span><span class="p">:</span>  <span class="c1"># Limit case</span>
-                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
-            <span class="k">if</span> <span class="n">new_min</span> <span class="o">&lt;=</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="n">new_max</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>  <span class="c1"># Limit case</span>
-                <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span> <span class="o">=</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span>
+    <span class="c1">#     if scale == &#39;log&#39;:</span>
+    <span class="c1">#         try:</span>
+    <span class="c1">#             new_min, new_max = 10. ** float(new_min), 10. ** float(new_max)</span>
+    <span class="c1">#         except OverflowError:  # Limit case</span>
+    <span class="c1">#             new_min, new_max = min_, max_</span>
+    <span class="c1">#         if new_min &lt;= 0. or new_max &lt;= 0.:  # Limit case</span>
+    <span class="c1">#             new_min, new_max = min_, max_</span>
 
-        <span class="k">if</span> <span class="n">begin</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">new_min</span><span class="p">,</span> <span class="n">new_max</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">new_max</span><span class="p">,</span> <span class="n">new_min</span>
+    <span class="c1">#     if begin &lt; end:</span>
+    <span class="c1">#         return new_min, new_max</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         return new_max, new_min</span>
             
-<div class="viewcode-block" id="QApplicationWindow.zoom_wheel"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.zoom_wheel">[docs]</a>    <span class="k">def</span> <span class="nf">zoom_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="n">base_scale</span> <span class="o">=</span> <span class="mf">1.1</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
-            <span class="c1"># deal with zoom in</span>
-            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">base_scale</span>
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
-            <span class="c1"># deal with zoom out</span>
-            <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">base_scale</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># deal with something that should never happen</span>
-            <span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># def zoom_wheel(self, event):</span>
+    <span class="c1">#     base_scale = 1.1</span>
+    <span class="c1">#     if event.button == &#39;up&#39;:</span>
+    <span class="c1">#         # deal with zoom in</span>
+    <span class="c1">#         scale_factor = 1 / base_scale</span>
+    <span class="c1">#     elif event.button == &#39;down&#39;:</span>
+    <span class="c1">#         # deal with zoom out</span>
+    <span class="c1">#         scale_factor = base_scale</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         # deal with something that should never happen</span>
+    <span class="c1">#         scale_factor = 1</span>
 
-        <span class="c1"># if event.step &gt; 0:</span>
-            <span class="c1"># scale_factor = self.scale_factor</span>
-        <span class="c1"># else:</span>
-            <span class="c1"># scale_factor = 1. / self.scale_factor</span>
+    <span class="c1">#     # if event.step &gt; 0:</span>
+    <span class="c1">#         # scale_factor = self.scale_factor</span>
+    <span class="c1">#     # else:</span>
+    <span class="c1">#         # scale_factor = 1. / self.scale_factor</span>
 
-        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
-        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    <span class="c1">#     # Go through all axes to enable zoom for multiple axes subplots</span>
+    <span class="c1">#     x_axes, y_axes = self._axes_to_update(event)</span>
 
-        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">x_axes</span><span class="p">:</span>
-            <span class="n">transform</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
-            <span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">transform_point</span><span class="p">((</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="c1">#     for ax in x_axes:</span>
+    <span class="c1">#         transform = ax.transData.inverted()</span>
+    <span class="c1">#         xdata, ydata = transform.transform_point((event.x, event.y))</span>
 
-            <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-            <span class="n">xlim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="n">xdata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
-                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_xscale</span><span class="p">())</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="c1">#         xlim = ax.get_xlim()</span>
+    <span class="c1">#         xlim = self._zoom_range(xlim[0], xlim[1],</span>
+    <span class="c1">#                                 xdata, scale_factor,</span>
+    <span class="c1">#                                 ax.get_xscale())</span>
+    <span class="c1">#         ax.set_xlim(xlim)</span>
 
-        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">y_axes</span><span class="p">:</span>
-            <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-            <span class="n">ylim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_range</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                    <span class="n">ydata</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span>
-                                    <span class="n">ax</span><span class="o">.</span><span class="n">get_yscale</span><span class="p">())</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+    <span class="c1">#     for ax in y_axes:</span>
+    <span class="c1">#         ylim = ax.get_ylim()</span>
+    <span class="c1">#         ylim = self._zoom_range(ylim[0], ylim[1],</span>
+    <span class="c1">#                                 ydata, scale_factor,</span>
+    <span class="c1">#                                 ax.get_yscale())</span>
+    <span class="c1">#         ax.set_ylim(ylim)</span>
 
-        <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span> </div>
+    <span class="c1">#     if x_axes or y_axes:</span>
+    <span class="c1">#         self.figure.canvas.draw() </span>
         
-<div class="viewcode-block" id="QApplicationWindow.on_press"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_press">[docs]</a>    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="c1"># Pan</span>
-            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c1"># Zoom</span>
-            <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_to_update</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">x_axes</span> <span class="ow">or</span> <span class="n">y_axes</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_axes</span> <span class="o">=</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+    <span class="c1"># def on_press(self, event):</span>
+    <span class="c1">#     if event.button == 2: # Pan</span>
+    <span class="c1">#         x_axes, y_axes = self._axes_to_update(event)</span>
+    <span class="c1">#         if x_axes or y_axes:</span>
+    <span class="c1">#             self._axes = x_axes, y_axes</span>
+    <span class="c1">#             self._pressed_button = event.button</span>
+    <span class="c1">#             self._pan(event)</span>
+    <span class="c1">#     elif event.button == 3: # Zoom</span>
+    <span class="c1">#         x_axes, y_axes = self._axes_to_update(event)</span>
+    <span class="c1">#         if x_axes or y_axes:</span>
+    <span class="c1">#             self._axes = x_axes, y_axes</span>
+    <span class="c1">#             self._pressed_button = event.button</span>
+    <span class="c1">#             self._zoom_area(event)</span>
 
-    <span class="k">def</span> <span class="nf">_axes_to_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns two sets of Axes to update according to event.</span>
+    <span class="c1"># def _axes_to_update(self, event):</span>
+    <span class="c1">#     &quot;&quot;&quot;Returns two sets of Axes to update according to event.</span>
 
-<span class="sd">        Takes care of multiple axes and shared axes.</span>
+    <span class="c1">#     Takes care of multiple axes and shared axes.</span>
 
-<span class="sd">        :param MouseEvent event: Matplotlib event to consider</span>
-<span class="sd">        :return: Axes for which to update xlimits and ylimits</span>
-<span class="sd">        :rtype: 2-tuple of set (xaxes, yaxes)</span>
+    <span class="c1">#     :param MouseEvent event: Matplotlib event to consider</span>
+    <span class="c1">#     :return: Axes for which to update xlimits and ylimits</span>
+    <span class="c1">#     :rtype: 2-tuple of set (xaxes, yaxes)</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     x_axes, y_axes = set(), set()</span>
 
-        <span class="c1"># Go through all axes to enable zoom for multiple axes subplots</span>
-        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="c1"># For twin x axes, makes sure the zoom is applied once</span>
-                <span class="n">shared_x_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_x_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">x_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_x_axes</span><span class="p">):</span>
-                    <span class="n">x_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="c1">#     # Go through all axes to enable zoom for multiple axes subplots</span>
+    <span class="c1">#     for ax in self.figure.axes:</span>
+    <span class="c1">#         if ax.contains(event)[0]:</span>
+    <span class="c1">#             # For twin x axes, makes sure the zoom is applied once</span>
+    <span class="c1">#             shared_x_axes = set(ax.get_shared_x_axes().get_siblings(ax))</span>
+    <span class="c1">#             if x_axes.isdisjoint(shared_x_axes):</span>
+    <span class="c1">#                 x_axes.add(ax)</span>
 
-                <span class="c1"># For twin y axes, makes sure the zoom is applied once</span>
-                <span class="n">shared_y_axes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_shared_y_axes</span><span class="p">()</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">y_axes</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">shared_y_axes</span><span class="p">):</span>
-                    <span class="n">y_axes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="c1">#             # For twin y axes, makes sure the zoom is applied once</span>
+    <span class="c1">#             shared_y_axes = set(ax.get_shared_y_axes().get_siblings(ax))</span>
+    <span class="c1">#             if y_axes.isdisjoint(shared_y_axes):</span>
+    <span class="c1">#                 y_axes.add(ax)</span>
 
-        <span class="k">return</span> <span class="n">x_axes</span><span class="p">,</span> <span class="n">y_axes</span>
+    <span class="c1">#     return x_axes, y_axes</span>
 
-<div class="viewcode-block" id="QApplicationWindow.on_motion"><a class="viewcode-back" href="../developers/CodeCoreGUI.html#QApplicationWindow.QApplicationWindow.on_motion">[docs]</a>    <span class="k">def</span> <span class="nf">on_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># pan</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pan</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pressed_button</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># zoom area</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_zoom_area</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
+    <span class="c1"># def on_motion(self, event):</span>
+    <span class="c1">#     if self._pressed_button == 2:  # pan</span>
+    <span class="c1">#         self._pan(event)</span>
+    <span class="c1">#     elif self._pressed_button == 3:  # zoom area</span>
+    <span class="c1">#         self._zoom_area(event)</span>
 </pre></div>
 
           </div>

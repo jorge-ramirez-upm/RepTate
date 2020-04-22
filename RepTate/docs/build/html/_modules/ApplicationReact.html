@@ -492,8 +492,8 @@
 
         <span class="c1">#set the current view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_views</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_view_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># for _ in self.extra_view_names:</span>
+        <span class="c1">#     self.viewComboBox.removeItem(self.viewComboBox.count() - 1)</span>
 
     <span class="k">def</span> <span class="nf">change_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Redefinition to handle the x-range selection when P&amp;S is selected&quot;&quot;&quot;</span>
@@ -752,6 +752,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 
         <span class="c1">#add the GUI-specific objects here:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_view_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">viewComboBox</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
           </div>

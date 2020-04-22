@@ -106,7 +106,7 @@
 ApplicationManager.</p>
 <dl class="class">
 <dt id="QApplicationManager.QApplicationManager">
-<em class="property">class </em><code class="sig-prename descclassname">QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">loglevel=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#ApplicationManager.ApplicationManager" title="ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
 <p>Main Reptate window and application manager</p>
 <p>[description]</p>
@@ -142,6 +142,11 @@ ApplicationManager.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.copyLogText">
+<code class="sig-name descname">copyLogText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.copyLogText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.copyLogText" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="QApplicationManager.QApplicationManager.handle_about_matplotlib">
@@ -195,6 +200,12 @@ ApplicationManager.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged">
+<code class="sig-name descname">handle_loggerVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param">visible</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.handle_loggerVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the hide/show event of the logger window</p>
 </dd></dl>
 
 <dl class="method">
@@ -254,6 +265,36 @@ Maxwell modes</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logCritical">
+<code class="sig-name descname">logCritical</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logCritical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logCritical" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logDebug">
+<code class="sig-name descname">logDebug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logDebug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logDebug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logError">
+<code class="sig-name descname">logError</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logInfo">
+<code class="sig-name descname">logInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logNotSet">
+<code class="sig-name descname">logNotSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logNotSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logNotSet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="QApplicationManager.QApplicationManager.logWarning">
+<code class="sig-name descname">logWarning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.logWarning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.logWarning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="QApplicationManager.QApplicationManager.open_project">
 <code class="sig-name descname">open_project</code><span class="sig-paren">(</span><em class="sig-param">project_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.open_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.open_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open file and load project</p>
@@ -302,6 +343,12 @@ Maxwell modes</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="QApplicationManager.QApplicationManager.showLogger">
+<code class="sig-name descname">showLogger</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.showLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.showLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle show Log window</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="QApplicationManager.QApplicationManager.show_about">
 <code class="sig-name descname">show_about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QApplicationManager.show_about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QApplicationManager.show_about" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show about window</p>
@@ -319,6 +366,20 @@ Maxwell modes</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="QApplicationManager.QTextEditLogger">
+<em class="property">class </em><code class="sig-prename descclassname">QApplicationManager.</code><code class="sig-name descname">QTextEditLogger</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QTextEditLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QTextEditLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Handler</span></code></p>
+<dl class="method">
+<dt id="QApplicationManager.QTextEditLogger.emit">
+<code class="sig-name descname">emit</code><span class="sig-paren">(</span><em class="sig-param">record</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationManager.html#QTextEditLogger.emit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationManager.QTextEditLogger.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do whatever it takes to actually log the specified logging record.</p>
+<p>This version is intended to be implemented by subclasses and so
+raises a NotImplementedError.</p>
 </dd></dl>
 
 </dd></dl>
@@ -415,14 +476,6 @@ RGB format in the dataset legend info.</p>
 <dt id="QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet">
 <code class="sig-name descname">addTableToCurrentDataSet</code><span class="sig-paren">(</span><em class="sig-param">dt</em>, <em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.addTableToCurrentDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add file table to curent dataset tab</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>dt {[type]} – [description]</p></li>
-<li><p>ext {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
@@ -452,24 +505,6 @@ RGB format in the dataset legend info.</p>
 <dt>Arguments:</dt><dd><ul class="simple">
 <li><p>newtables {[type]} – [description]</p></li>
 <li><p>ext {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset">
-<code class="sig-name descname">clear_files_and_th_from_dataset</code><span class="sig-paren">(</span><em class="sig-param">ds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.clear_files_and_th_from_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.clear_files_and_th_from_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove all files from dataset and widgetTree,
-return a list with the full path of deleted files and opened theories</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>ds {[type]} – [description]</p></li>
-</ul>
-</dd>
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
 </ul>
 </dd>
 </dl>
@@ -574,8 +609,7 @@ the marker properties: size, shape, color, fill</p>
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.handle_actionReload_Data">
 <code class="sig-name descname">handle_actionReload_Data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.handle_actionReload_Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.handle_actionReload_Data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reload the data files: remove and reopen the current files</p>
-<p>[description]</p>
+<dd><p>Reload the data files in the current DataSet</p>
 </dd></dl>
 
 <dl class="method">
@@ -776,25 +810,9 @@ RGB format used for gradient color type</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.on_motion">
-<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_motion" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.on_press" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.onpick">
 <code class="sig-name descname">onpick</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when clicking on a plot/artist</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.onrelease">
-<code class="sig-name descname">onrelease</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.onrelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.onrelease" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called when releasing mouse</p>
 </dd></dl>
 
 <dl class="method">
@@ -848,13 +866,6 @@ with filled or empty markers, depending on the user’s choice</p>
 <dl class="method">
 <dt id="QApplicationWindow.QApplicationWindow.printPlot">
 <code class="sig-name descname">printPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.printPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.printPlot" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.resizeplot">
-<code class="sig-name descname">resizeplot</code><span class="sig-paren">(</span><em class="sig-param">event=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.resizeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.resizeplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <p>[description]</p>
 </dd></dl>
@@ -928,11 +939,6 @@ with filled or empty markers, depending on the user’s choice</p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="method">
-<dt id="QApplicationWindow.QApplicationWindow.zoom_wheel">
-<code class="sig-name descname">zoom_wheel</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/QApplicationWindow.html#QApplicationWindow.zoom_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QApplicationWindow.QApplicationWindow.zoom_wheel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
