@@ -56,8 +56,9 @@ from math import log
 from ToolMaterialsDatabase import check_chemistry, get_all_parameters
 from colorama import Fore
 import logging
-
+from scipy.interpolate import interp1d
 from html.parser import HTMLParser
+
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
     def __init__(self):
@@ -504,6 +505,70 @@ File error is calculated as the mean square of the residual, averaged over all p
             self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
         else:
             self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
+
+    def do_error_interpolated(self, line):
+        """Report the error of the current theory
+This routine works when the theory and the experimental data are not measured on the same points"""
+        total_error = 0
+        npoints = 0
+        view = self.parent_dataset.parent_application.current_view
+        tools = self.parent_dataset.parent_application.tools       
+        tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
+        for f in self.theory_files():
+            if self.stop_theory_flag:
+                break
+            xexp, yexp, success = view.view_proc(f.data_table,
+                                                 f.file_parameters)
+            tmp_dt = self.get_non_extended_th_table(f)
+            xth, yth, success = view.view_proc(tmp_dt,
+                                               f.file_parameters)
+            # HERE WE INTERPOLATE
+            yth2 = np.zeros_like(yexp)
+            for i in range(view.n):
+                funcinterp = interp1d(xth[:,i], yth[:,i], kind='linear') # Linear interpolation
+                yth2[:,i] = funcinterp(xexp[:,i])
+
+            if (self.xrange.get_visible()):
+                conditionx = (xexp > self.xmin) * (xexp < self.xmax)
+            else:
+                conditionx = np.ones_like(xexp, dtype=np.bool)
+            if (self.yrange.get_visible()):
+                conditiony = (yexp > self.ymin) * (yexp < self.ymax)
+            else:
+                conditiony = np.ones_like(yexp, dtype=np.bool)
+            conditionnaninf = (~np.isnan(xexp)) * (~np.isnan(yexp)) * (
+                ~np.isnan(yth2)) * (~np.isinf(xexp)) * (
+                    ~np.isinf(yexp)) * (~np.isinf(yth2))
+            yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
+            yth2 = np.extract(conditionx * conditiony * conditionnaninf, yth2)
+                
+            if self.normalizebydata:
+                f_error = np.mean(((yth2 - yexp)/yexp)**2)
+            else:
+                f_error = np.mean((yth2 - yexp)**2)
+            npt = len(yth2)
+            total_error += f_error * npt
+            npoints += npt
+            # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
+            tab_data.append(['%-18s'% f.file_name_short, '%-18.4g' % f_error, '%-18d' %npt])
+        # table+='''</table><br>'''
+        # self.Qprint(table)
+        self.Qprint(tab_data)
+
+        #count number of fitting parameters
+        free_p = 0
+        for p in self.parameters.values():
+            if p.opt_type == OptType.opt:
+                free_p += 1
+
+        if npoints != 0 and total_error > 0 :
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
+            # Bayesian information criterion (BIC) penalise free parametters (overfitting)
+            # Model with lowest BIC number is prefered
+            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
+        else:
+            self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
+
 
     def fit_callback_basinhopping(self, x, f, accepted):
         if accepted and f<self.fminnow:

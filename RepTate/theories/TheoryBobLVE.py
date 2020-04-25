@@ -128,7 +128,7 @@ class BaseTheoryBobLVE:
 
     def do_error(self, line=""):
         """This theory does not calculate the error"""
-        pass
+        self.do_error_interpolated(line="")
 
     def calculate(self, f=None):
         """Create polymer configuration file and calculate distribution characteristics
