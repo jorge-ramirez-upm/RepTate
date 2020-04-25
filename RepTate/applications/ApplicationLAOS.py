@@ -412,7 +412,7 @@ class BaseApplicationLAOS:
         if N > 25*Ncycles: # display a maximum of 25 harmonics, so that plot is not too "squished"
             wn_end = 25*Ncycles
         else:
-            wn_end = length(wn)
+            wn_end = len(wn)
 
         x = np.zeros((wn_end, 1))
         y = np.zeros((wn_end, 1))
