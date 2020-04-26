@@ -708,7 +708,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         
     def new_tool(self, tool_name, tool_tab_id=""):
         """Create new tool"""
-        newtool = self.do_tool_add(tool_name)
+        newtool = self.do_tool_new(tool_name)
 
         # add new tool tab
         if tool_tab_id == "":

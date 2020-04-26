@@ -382,7 +382,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         """
         super().__init__(name, parent_app)
         self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
+        #self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
         self.active = False
