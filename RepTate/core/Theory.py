@@ -124,10 +124,10 @@ class Theory(CmdBase):
     """ thname {str} -- Theory name """
     description = ""
     """ description {str} -- Description of theory """
-    citations = ""
-    """ citations {str} -- Articles that should be cited """
-    doi = ""
-    """ doicode {str} -- Doi code of the article """
+    citations = []
+    """ citations {list of str} -- Articles that should be cited """
+    doi = []
+    """ doicode {list of str} -- Doi code of the article """
     nfev = 0
     """ nfev {int} -- Number of function evaluations """
 
@@ -1302,8 +1302,9 @@ that provide this functionality."""
 
     def do_cite(self, line):
         """Print citation information"""
-        if (self.citations != ""):
-            self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
+        if len(self.citations)>0:
+            for i in range(len(self.citations)):
+                self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""

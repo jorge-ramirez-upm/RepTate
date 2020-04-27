@@ -79,8 +79,8 @@ class TheorySCCR(CmdBase):
     """
     thname = "GLaMM"
     description = "SCCR theory for linear entangled polymers"
-    citations = "Graham, R.S., Likhtman, A.E., McLeish, T.C.B. & Milner, S.T., J. Rheol., 2003, 47, 1171-1200"
-    doi = "http://dx.doi.org/10.1122/1.1595099"
+    citations = ["Graham, R.S. et al., J. Rheol., 2003, 47, 1171-1200"]
+    doi = ["http://dx.doi.org/10.1122/1.1595099"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

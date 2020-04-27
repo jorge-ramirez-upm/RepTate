@@ -65,7 +65,8 @@ class TheoryWLF(CmdBase):
     """
     thname = 'WLF'
     description = 'Williams-Landel-Ferry'
-    citations = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

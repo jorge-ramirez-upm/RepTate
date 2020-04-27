@@ -59,8 +59,8 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
     
     thname = "Likhtman-McLeish"
     description = "Likhtman-McLeish theory for linear entangled polymers"
-    citations = "Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"
-    doi = "http://dx.doi.org/10.1021/ma0200219"
+    citations = ["Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"]
+    doi = ["http://dx.doi.org/10.1021/ma0200219"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

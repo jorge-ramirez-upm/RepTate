@@ -57,8 +57,8 @@ class TheoryMultiMetCSTR(CmdBase):
     """
     thname = 'Multi-Met CSTR'
     description = 'Multiple Metallocene CSTR Reaction Theory'
-    citations = 'Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051'
-    doi = "http://dx.doi.org/10.1021/ma030354l"
+    citations = ['Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051']
+    doi = ["http://dx.doi.org/10.1021/ma030354l"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

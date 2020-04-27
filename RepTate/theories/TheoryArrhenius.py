@@ -54,7 +54,7 @@ class TheoryArrhenius(CmdBase):
     """
     thname = 'ArrheniusTheory'
     description = 'Arrhenius Theory'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

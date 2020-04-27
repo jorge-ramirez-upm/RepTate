@@ -84,8 +84,8 @@ class TheoryShanbhagMaxwellModesFrequency(CmdBase):
     """
     thname = "ReSpect"
     description = "Relaxation spectra from dynamic moduli"
-    citations = "Takeh, A. and Shanbhag, S., Appl. Rheol. 2013, 23, 24628"
-    doi = 'http://dx.doi.org/10.3933/ApplRheol-23-24628'
+    citations = ["Takeh, A. and Shanbhag, S., Appl. Rheol. 2013, 23, 24628"]
+    doi = ['http://dx.doi.org/10.3933/ApplRheol-23-24628']
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -1482,8 +1482,8 @@ class TheoryShanbhagMaxwellModesTime(CmdBase):
     """
     thname = "ReSpect"
     description = "Relaxation spectra from relaxation modulus"
-    citations = "Shanbhag, S., Macromolecular Theory and Simulations, 2019, 1900005"
-    doi = 'http://dx.doi.org/10.1002/mats.201900005'
+    citations = ["Shanbhag, S., Macromolecular Theory and Simulations, 2019, 1900005"]
+    doi = ['http://dx.doi.org/10.1002/mats.201900005']
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

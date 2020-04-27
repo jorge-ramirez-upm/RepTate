@@ -47,7 +47,7 @@ class ToolBounds(CmdBase):
     """
     toolname = 'Bounds'
     description = 'Bounds Tool'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

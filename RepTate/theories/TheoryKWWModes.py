@@ -70,8 +70,8 @@ class TheoryKWWModesFrequency(CmdBase):
     """
     thname = "KWW modes"
     description = "Fit Kohlrausch-Williams-Watts modes"
-    citations = "Kohlrausch, R. Annalen der Physik und Chemie 1854, 91, 56-82\nWilliams G. and Watts D.C., Trans. Faraday Soc. 1970, 66, 80-85"
-    doi = "http://dx.doi.org/10.1039/TF9706600080"
+    citations = ["Kohlrausch, R. Annalen der Physik und Chemie 1854, 91, 56-82", "Williams G. and Watts D.C., Trans. Faraday Soc. 1970, 66, 80-85"]
+    doi = ["http://dx.doi.org/10.1002/andp.18541670203", "http://dx.doi.org/10.1039/TF9706600080"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

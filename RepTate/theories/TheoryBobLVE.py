@@ -65,8 +65,8 @@ class TheoryBobLVE(CmdBase):
     """
     thname = 'BOB'
     description = 'Branch-On-Branch rheology'
-    citations = 'Das C., Inkson N.J., Read D.J., Kelmanson M.A. and McLeish T.C.B., J. Rheol. 2006, 50, 207-234'
-    doi = "http://dx.doi.org/10.1122/1.2167487"
+    citations = ['Das C. et al., J. Rheol. 2006, 50, 207-234']
+    doi = ["http://dx.doi.org/10.1122/1.2167487"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

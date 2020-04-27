@@ -63,8 +63,8 @@ class TheoryCarreauYasuda(CmdBase):
     """
     thname = 'Carreau-Yasuda'
     description = 'Carreau-Yasuda equation'
-    citations = ''
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]

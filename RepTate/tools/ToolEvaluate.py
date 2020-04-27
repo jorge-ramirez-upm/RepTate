@@ -48,7 +48,7 @@ class ToolEvaluate(CmdBase):
     """
     toolname = 'Eval Exp'
     description = 'Evaluate Expression Tool'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """**Constructor**"""

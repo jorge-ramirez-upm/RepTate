@@ -50,7 +50,7 @@ class ToolIntegral(CmdBase):
     """
     toolname = 'Integral'
     description = 'Integral of current data/view'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

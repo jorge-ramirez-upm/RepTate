@@ -50,7 +50,7 @@ class ToolInterpolateExtrapolate(CmdBase):
     """
     toolname = 'Interpolate/Extrapolate'
     description = 'Interpolate/Extrapolate from view'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

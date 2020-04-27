@@ -66,8 +66,8 @@ class TheoryMaxwellModesFrequency(CmdBase):
     """
     thname = "Maxwell Modes"
     description = "Maxwell modes, frequency dependent"
-    citations = ""
-    doi = ''
+    citations = []
+    doi = []
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
@@ -469,7 +469,7 @@ class TheoryMaxwellModesTime(CmdBase):
     """
     thname = "Maxwell Modes"
     description = "Maxwell modes, time dependent"
-    citations = ""
+    citations = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

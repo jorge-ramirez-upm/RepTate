@@ -57,8 +57,8 @@ class TheoryReactMix(CmdBase):
     """
     thname = 'React Mix'
     description = 'Combine other active React theories'
-    citations = '-'
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

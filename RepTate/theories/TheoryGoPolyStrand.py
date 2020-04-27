@@ -482,8 +482,8 @@ class TheoryGoPolyStrand(CmdBase):
     """
     thname = "GO-polySTRAND"
     description = "GO-polySTRAND model for flow-induced nucleation"
-    citations = "Daniel J. Read, Claire McIlroy, Chinmay Das, Oliver G. Harlen and Richard S.~Graham (Under review)"
-    doi = "http://dx.doi.org/XXXXX"
+    citations = ["D.J. Read et al., Phys. Rev. Lett. 124, 147802 (2020)"]
+    doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

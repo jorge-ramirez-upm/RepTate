@@ -49,7 +49,8 @@ class TheoryTemplate(CmdBase):
     """
     thname = 'TemplateTheory'
     description = 'Template Theory'
-    citations = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

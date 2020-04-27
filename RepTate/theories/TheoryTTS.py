@@ -74,8 +74,8 @@ class TheoryWLFShift(CmdBase):
     """
     thname = "WLF Shift"
     description = "TTS shift based on the WLF equation"
-    citations = ""
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

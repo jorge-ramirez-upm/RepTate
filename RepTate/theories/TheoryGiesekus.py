@@ -128,8 +128,8 @@ class TheoryGiesekus(CmdBase):
     """
     thname = "Giesekus"
     description = "Giesekus constitutive equation"
-    citations = "Giesekus H., Rheol. Acta 1966, 5, 29"
-    doi = "http://dx.doi.org/10.1007/BF01973575"
+    citations = ["Giesekus H., Rheol. Acta 1966, 5, 29"]
+    doi = ["http://dx.doi.org/10.1007/BF01973575"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

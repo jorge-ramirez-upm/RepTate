@@ -50,7 +50,7 @@ class ToolFindPeaks(CmdBase):
     """
     toolname = 'Find Peaks'
     description = 'Find Peaks in current data/view'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

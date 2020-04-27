@@ -55,8 +55,8 @@ class TheoryStickyReptation(CmdBase):
 
     thname = 'StickyReptation'
     description = 'Sticky Reptation'
-    citations = 'Ludwik Leibler, Michael Rubinstein and Ralph H. Colby, Macromolecules, 1991, 24, 4701-4704'
-    doi = "http://dx.doi.org/10.1021/ma00016a034"
+    citations = ['L. Leibler et al., Macromolecules, 1991, 24, 4701-4704']
+    doi = ["http://dx.doi.org/10.1021/ma00016a034"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

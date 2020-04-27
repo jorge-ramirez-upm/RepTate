@@ -61,8 +61,9 @@ class Tool(CmdBase):
     """ toolname {str} -- Tool name """
     description = ""
     """ description {str} -- Description of Tool """
-    citations = ""
-    """ citations {str} -- Articles that should be cited """
+    citations = []
+    """ citations {list of str} -- Articles that should be cited """
+    doi = []
 
     print_signal = pyqtSignal(str)
 
@@ -272,15 +273,10 @@ class Tool(CmdBase):
         self.applytotheory = not self.applytotheory
 
     def do_cite(self, line):
-        """Print citation information
-        
-        [description]
-        
-        Arguments:
-            - line {[type]} -- [description]
-        """
-        if (self.citations != ""):
-            self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi, self.citations))
+        """Print citation information """
+        if len(self.citations)>1:
+            for i in range(len(self.citations)):
+                self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
 
     def do_plot(self, line):
         """Update plot"""

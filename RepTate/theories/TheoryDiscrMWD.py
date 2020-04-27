@@ -54,8 +54,8 @@ class TheoryDiscrMWD(CmdBase):
     """
     thname = "Discretize MWD"
     description = "Discretize a Molecular Weight Distribution"
-    citations = ""
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

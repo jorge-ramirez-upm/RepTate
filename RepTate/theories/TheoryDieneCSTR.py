@@ -55,8 +55,8 @@ class TheoryDieneCSTR(CmdBase):
     """
     thname = 'Diene CSTR'
     description = 'The Diene CSTR reaction theory'
-    citations = 'Das C., Read D. J., Soulages J. M., and Shirodkar P. P., Macromol. Theory Simul., 26, 1700006 (2017)'
-    doi = "https://doi.org/10.1002/mats.201700006"
+    citations = ['Das C. et al, Macromol. Theory Simul., 26, 1700006 (2017)']
+    doi = ["https://doi.org/10.1002/mats.201700006"]
 
     def __new__(cls, name='', parent_dataset=None, ax=None):
         """[summary]

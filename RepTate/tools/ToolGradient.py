@@ -48,7 +48,7 @@ class ToolGradient(CmdBase):
     """
     toolname = 'Gradient'
     description = 'Take derivative of current data/view'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

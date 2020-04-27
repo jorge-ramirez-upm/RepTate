@@ -199,7 +199,7 @@ class ToolMaterialsDatabase(CmdBase):
     """
     toolname = 'Materials Database'
     description = 'Materials Database Explorer'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_app=None):
         """[summary]

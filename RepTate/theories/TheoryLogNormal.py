@@ -48,8 +48,8 @@ class TheoryLogNormal(CmdBase):
     """
     thname = 'LogNormal'
     description = 'LogNormal distribution'
-    citations = ''
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

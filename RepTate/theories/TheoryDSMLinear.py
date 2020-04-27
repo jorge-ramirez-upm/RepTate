@@ -46,8 +46,8 @@ class TheoryDSMLinear(CmdBase):
 
     thname = "CFSM+Rouse"
     description = "Clustered Fixed Slip Link theory for linear entangled polymers"
-    citations = "Katzarova, M. et al, Rheol Acta 2015, 54(3), 169-183."
-    doi = "https://doi.org/10.1007/s00397-015-0836-0"
+    citations = ["Katzarova, M. et al, Rheol Acta 2015, 54(3), 169-183."]
+    doi = ["https://doi.org/10.1007/s00397-015-0836-0"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """**Constructor**"""

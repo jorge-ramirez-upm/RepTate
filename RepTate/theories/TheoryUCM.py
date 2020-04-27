@@ -145,8 +145,8 @@ class TheoryUCM(CmdBase):
     """
     thname = "UCM"
     description = "Upper-convected Maxwell constitutive equation"
-    citations = "Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"
-    doi = "http://dx.doi.org/10.1098/rspa.1950.0035"
+    citations = ["Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"]
+    doi = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

@@ -71,8 +71,8 @@ class TheorySCCROLD(CmdBase):
     """
     thname = "SCCROLD"
     description = "SCCROLD theory for linear entangled polymers"
-    citations = "Graham, R.S., Likhtman, A.E., McLeish, T.C.B. & Milner, S.T., J. Rheo., 2003, 47, 1171-1200"
-    doi = "http://dx.doi.org/10.1122/1.1595099"
+    citations = ["Graham, R.S. et al., J. Rheo., 2003, 47, 1171-1200"]
+    doi = ["http://dx.doi.org/10.1122/1.1595099"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

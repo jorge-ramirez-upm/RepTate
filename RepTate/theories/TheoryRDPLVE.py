@@ -74,7 +74,7 @@ class TheoryRDPLVE(CmdBase):
     """
     thname = 'RDP LVE'
     description = 'Linear ViscoElastic predictions of the Rolie-Double-Poly model'
-    citations = ''
+    citations = []
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]

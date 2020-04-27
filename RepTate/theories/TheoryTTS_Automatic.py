@@ -62,8 +62,8 @@ class TheoryTTSShiftAutomatic(CmdBase):
     """
     thname = "Automatic TTS Shift"
     description = "Shift data automatically for best overlap"
-    citations = ""
-    doi = ''
+    citations = []
+    doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

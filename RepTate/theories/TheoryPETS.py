@@ -84,8 +84,8 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
     """
     thname = "PETS"
     description = "Preaveraged model for entangled telechelic star polymers"
-    citations = "Boudara, V.A.H, and D.J. Read, J. Rheol., 61, 339-362 (2017)"
-    doi = "http://dx.doi.org/10.1122/1.4974908"
+    citations = ["Boudara, V.A.H, and D.J. Read, J. Rheol., 61, 339-362 (2017)"]
+    doi = ["http://dx.doi.org/10.1122/1.4974908"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

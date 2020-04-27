@@ -67,8 +67,8 @@ class TheoryDebyeModesFrequency(CmdBase):
     """
     thname = "Debye modes"
     description = "Fit Debye modes"
-    citations = ""
-    doi = ''
+    citations = []
+    doi = []
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]

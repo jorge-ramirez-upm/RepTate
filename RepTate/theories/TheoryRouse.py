@@ -66,8 +66,8 @@ class TheoryRouseTime(CmdBase):
     """
     thname = "Rouse"
     description = "Rouse model"
-    citations = "Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"
-    doi = "http://dx.doi.org/10.1063/1.1699180"
+    citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
+    doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
@@ -269,8 +269,8 @@ class TheoryRouseFrequency(CmdBase):
     """
     thname = "Rouse"
     description = "Rouse model"
-    citations = "Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"
-    doi = "http://dx.doi.org/10.1063/1.1699180"    
+    citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
+    doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
         """[summary]
