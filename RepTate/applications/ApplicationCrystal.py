@@ -85,17 +85,8 @@ class BaseApplicationCrystal:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
         """
-        #from TheoryRoliePoly import TheoryRoliePoly
-        #from TheoryUCM import TheoryUCM
-        #from TheoryGiesekus import TheoryGiesekus
-        #from TheoryPomPom import TheoryPomPom
-        #from TheoryRolieDoublePoly import TheoryRolieDoublePoly
         from TheoryGoPolyStrand import TheoryGoPolyStrand
         from TheorySmoothPolyStrand import TheorySmoothPolyStrand
-        #from TheoryBobNLVE import TheoryBobNLVE
-        #from TheoryPETS import TheoryPETS
-        #from TheorySCCR import TheorySCCR
-        # from TheorySCCROLD import TheorySCCROLD
 
         super().__init__(name, parent)
 
@@ -301,28 +292,10 @@ class BaseApplicationCrystal:
         ftype = TXTColumnFile("Elongation flow with crystallisation", "uextxs",
                               "Elongation crystallisation files", ['t', 'N1', 'Ndot', 'phi_X', 'N'],
                               ['gdot', 'T','tstop'], ['s', 'Pa$\cdot$s', 's$^{-1}$m$^{-3}$', '-', 'm$^{-3}$'])
-        #self.filetypes[ftype.extension] = ftype
-        #ftype = TXTColumnFile("Start-up of shear flow", "shear",
-        #                      "Shear flow files", ['t', 'sigma_xy'], ['gdot', 'T'],
-        #                      ['s', 'Pa$\cdot$s'])
-        #self.filetypes[ftype.extension] = ftype
-        #ftype = TXTColumnFile("Elongation flow", "uext",
-        #                      "Elongation flow files", ['t', 'N1'],
-        #                      ['gdot', 'T'], ['s', 'Pa$\cdot$s'])
-        #self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        #self.theories[TheoryRoliePoly.thname] = TheoryRoliePoly
-        #self.theories[TheoryUCM.thname] = TheoryUCM
-        #self.theories[TheoryGiesekus.thname] = TheoryGiesekus
-        #self.theories[TheoryPomPom.thname] = TheoryPomPom
-        #self.theories[TheoryRolieDoublePoly.thname] = TheoryRolieDoublePoly
         self.theories[TheoryGoPolyStrand.thname] = TheoryGoPolyStrand
         self.theories[TheorySmoothPolyStrand.thname] = TheorySmoothPolyStrand
-        #self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
-        #self.theories[TheoryPETS.thname] = TheoryPETS
-        #self.theories[TheorySCCR.thname] = TheorySCCR
-        # self.theories[TheorySCCROLD.thname] = TheorySCCROLD
         self.add_common_theories()
         
         #set the current view

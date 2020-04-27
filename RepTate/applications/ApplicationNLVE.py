@@ -93,7 +93,6 @@ class BaseApplicationNLVE:
         from TheoryBobNLVE import TheoryBobNLVE
         from TheoryPETS import TheoryPETS
         from TheorySCCR import TheorySCCR
-        # from TheorySCCROLD import TheorySCCROLD
 
         super().__init__(name, parent)
 
@@ -212,7 +211,6 @@ class BaseApplicationNLVE:
         self.theories[TheoryBobNLVE.thname] = TheoryBobNLVE
         self.theories[TheoryPETS.thname] = TheoryPETS
         self.theories[TheorySCCR.thname] = TheorySCCR
-        # self.theories[TheorySCCROLD.thname] = TheorySCCROLD
         self.add_common_theories()
         
         #set the current view
