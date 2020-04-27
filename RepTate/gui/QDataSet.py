@@ -742,7 +742,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th.Qprint("Close theory tab requested")
         th.request_stop_computations()
         self.set_no_limits(th_name)
-        self.do_theory_delete(th_name)  #call DataSet.do_theory_delete
+        self.do_delete(th_name)  #call DataSet.do_delete
         self.TheorytabWidget.removeTab(index)
 
     def handle_itemSelectionChanged(self):
