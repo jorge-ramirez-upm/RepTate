@@ -980,6 +980,41 @@ Arguments:
         for t in self.theories.values():
             print(Fore.MAGENTA + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.thname)
 
+    def new(self, line):
+        """Create a new theory"""
+        """Add a new theory of the type specified to the current Data Set"""
+        thtypes = list(self.parent_application.theories.keys())
+        if (line in thtypes):
+            if (self.current_file is None):
+                print("Current dataset is empty\n" "%s was not created" % line)
+                return
+            self.num_theories += 1
+            th_id = ''.join(
+                c for c in line
+                if c.isupper())  #get the upper case letters of th_name
+            th_id = "%s%d" % (th_id, self.num_theories)  #append number
+            th = self.parent_application.theories[line](
+                th_id, self, self.parent_application.axarr)
+            self.theories[th.name] = th
+            self.current_theory = th.name
+            if self.mode == CmdMode.GUI:
+                if th.autocalculate:
+                    th.do_calculate('')
+                else:
+                    th.Qprint("<font color=green><b>Press \"Calculate\"</b></font>")
+                return th, th_id
+            else:
+                if (self.mode == CmdMode.batch):
+                    th.prompt = ''
+                else:
+                    th.prompt = self.prompt[:-2] + '/' + Fore.MAGENTA + th_id + '> '
+                if th.autocalculate:
+                    th.do_calculate('')
+                return th, th_id
+        else:
+            print("Theory \"%s\" does not exists" % line)
+            return None, None
+
     def do_new(self, line, calculate=True):
         """Add a new theory of the type specified to the current Data Set"""
         thtypes = list(self.parent_application.theories.keys())

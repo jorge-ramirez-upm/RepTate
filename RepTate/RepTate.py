@@ -101,6 +101,7 @@ def start_RepTate(argv):
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
     parser.add_argument('-d', '--dpi', help='High DPI support on Windows', action='store_true')
     parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
+    parser.add_argument('-t', '--theory', help='Open the given theory (if available)', default='')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
@@ -153,12 +154,17 @@ def start_RepTate(argv):
             ex.handle_new_app(d[k])
             appname="%s%d"%(d[k],ex.application_counter)
             ex.applications[appname].new_tables_from_files(dictfiles[k])      
+            if args.theory in list(ex.applications[appname].theories.keys()):
+                ex.applications[appname].datasets['Set1'].new_theory(args.theory)
+
         elif np.any([k in key for key in d.keys()]): # works with spaces in extensions
             for key in d.keys():
                 if k in key:
                     ex.handle_new_app(d[key])
                     appname="%s%d"%(d[key],ex.application_counter)
                     ex.applications[appname].new_tables_from_files(dictfiles[k])
+                    if args.theory in list(ex.applications[appname].theories.keys()):
+                        ex.applications[appname].datasets['Set1'].new_theory(args.theory)
                     break
         else:
             print("File type %s cannot be opened"%k)

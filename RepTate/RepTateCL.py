@@ -96,9 +96,10 @@ def start_RepTate(argv):
     parser = argparse.ArgumentParser(
         description='RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.',
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
-    parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
-    parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-b', '--batch', help='Run in batch mode (no graphics)', action='store_true')
+    parser.add_argument('-s', '--single', help='Run Reptate as a single thread application', action='store_true')
+    parser.add_argument('-t', '--theory', help='Open the given theory (if available)', default='')
+    parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
 
@@ -126,9 +127,12 @@ def start_RepTate(argv):
     CmdBase.calcmode = CalcMode.singlethread # avoid troubles when loading multiple apps/files/theories
     d = {app.extension: app.appname for app in  list(app.available_applications.values())}
     fileopen = False
+    theoryopen = False
     for k in dictfiles.keys():
         if k == 'rept':
-            ex.open_project(dictfiles[k][0])
+            #ex.open_project(dictfiles[k][0])
+            app.logger.warning("Open RepTate projects not implemented for the Command Line version")
+            pass # Not implemented yet
         elif np.any([k == key for key in d.keys()]):
             app.new(d[k])
             appname="%s%d"%(d[k],app.application_counter)
@@ -137,6 +141,10 @@ def start_RepTate(argv):
             for f in dictfiles[k]:
                 ds.do_open(f)
             fileopen = True
+            if args.theory in list(app.applications[appname].theories.keys()):
+                th, thname = ds.new(args.theory)
+                if th != None:
+                    theoryopen = True
             ds.do_plot()
         elif np.any([k in key for key in d.keys()]): # works with spaces in extensions
             for key in d.keys():
@@ -148,6 +156,10 @@ def start_RepTate(argv):
                     for f in dictfiles[k]:
                         ds.do_open(f)
                     fileopen = True
+                    if args.theory in list(app.applications[appname].theories.keys()):
+                        th, thname = ds.new(args.theory)
+                        if th != None:
+                            theoryopen = True
                     ds.do_plot()
                     break
         else:
@@ -172,7 +184,9 @@ def start_RepTate(argv):
             
     sys.excepthook = my_excepthook
 
-    if fileopen:
+    if fileopen and theoryopen:
+        app.cmdqueue.append("switch %s.%s.%s"%(appname,dsname,thname))
+    elif fileopen:
         app.cmdqueue.append("switch %s.%s"%(appname,dsname))
     try:
         sys.exit(app.cmdloop())
