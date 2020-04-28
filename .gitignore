@@ -284,7 +284,17 @@ __pycache__/
 
 dist
 /RepTate/*.spec
+/RepTate/*.bak
 /RepTate/core/*.bak
 /RepTate/theories/*.bak
+/RepTate/applications/*.bak
+/RepTate/gui/*.bak
+/RepTate/tools/*.bak
 
 /RepTate/data/Crystal/CoccorulloMacromolecules2008/Synthetic
+
+# TMP DOCUMENTATION BUILT BY VSCode
+RepTate/docs/source/_build
+
+# OUTPUT FROM REPTATE TESTS
+RepTate/tests/output
