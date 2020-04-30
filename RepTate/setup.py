@@ -26,8 +26,8 @@ setup(
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate = RepTate:__main__',
-            'RepTateCL = RepTateCL:__main__'
+            'RepTate = RepTate:main',
+            'RepTateCL = RepTateCL:main'
         ]
     },
 	license='GPL License',
