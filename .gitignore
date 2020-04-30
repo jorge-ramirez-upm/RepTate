@@ -150,7 +150,7 @@ publish/
 *.[Pp]ublish.xml
 *.azurePubxml
 
-# TODO: Un-comment the next line if you do not want to checkin 
+# TODO: Un-comment the next line if you do not want to checkin
 # your web deploy settings because they may include unencrypted
 # passwords
 #*.pubxml
@@ -257,6 +257,7 @@ ModelManifest.xml
 *.pyc
 __pycache__/
 *.py[cod]
+*.egg-info
 
 /RepTate/data/PI_LINEAR/PI_225.9k_T-35_TH.tts
 /RepTate/data/PI_LINEAR/osc/PI_94.9k_25.0.tts
