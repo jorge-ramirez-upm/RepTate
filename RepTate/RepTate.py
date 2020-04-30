@@ -43,20 +43,13 @@ import traceback
 import numpy as np
 import logging
 
-# os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('tools')
-from CmdBase import CmdBase, CalcMode, CmdMode
-from QApplicationManager import QApplicationManager
+from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.gui.QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtCore import QUrl, Qt, QCoreApplication
-from SplashScreen import SplashScreen
+from RepTate.gui.SplashScreen import SplashScreen
 # from time import time, sleep
 
 def main():

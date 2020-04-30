@@ -42,16 +42,10 @@ import argparse
 import logging
 import numpy as np
 
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('tools')
-from ApplicationManager import ApplicationManager
+from RepTate.core.ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication
-from CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 
 def main():
     start_RepTate(sys.argv[1:])

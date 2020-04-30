@@ -45,22 +45,22 @@ import logging.handlers
 from pathlib import Path
 import os
 
-from CmdBase import CmdBase, CmdMode
-from ApplicationTTS import ApplicationTTS
-from ApplicationTTSFactors import ApplicationTTSFactors
-from ApplicationLVE import ApplicationLVE
-from ApplicationNLVE import ApplicationNLVE
-from ApplicationCrystal import ApplicationCrystal
-from ApplicationMWD import ApplicationMWD
-from ApplicationGt import ApplicationGt
-from ApplicationCreep import ApplicationCreep
-from ApplicationSANS import ApplicationSANS
-from ApplicationReact import ApplicationReact
-from ApplicationDielectric import ApplicationDielectric
-from ApplicationLAOS import ApplicationLAOS
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.applications.ApplicationTTS import ApplicationTTS
+from RepTate.applications.ApplicationTTSFactors import ApplicationTTSFactors
+from RepTate.applications.ApplicationLVE import ApplicationLVE
+from RepTate.applications.ApplicationNLVE import ApplicationNLVE
+from RepTate.applications.ApplicationCrystal import ApplicationCrystal
+from RepTate.applications.ApplicationMWD import ApplicationMWD
+from RepTate.applications.ApplicationGt import ApplicationGt
+from RepTate.applications.ApplicationCreep import ApplicationCreep
+from RepTate.applications.ApplicationSANS import ApplicationSANS
+from RepTate.applications.ApplicationReact import ApplicationReact
+from RepTate.applications.ApplicationDielectric import ApplicationDielectric
+from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 # from ApplicationXY import ApplicationXY
 #from ApplicationFRS_I import *
-import Version
+import RepTate.core.Version as Version
 from collections import OrderedDict
 from colorama import Fore
 class ApplicationManager(CmdBase):
@@ -70,7 +70,7 @@ class ApplicationManager(CmdBase):
 
     version = Version.VERSION
     date = Version.DATE
-    prompt = Fore.GREEN + 'RepTate> ' 
+    prompt = Fore.GREEN + 'RepTate> '
     intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
         version, date)
 
@@ -128,9 +128,9 @@ class ApplicationManager(CmdBase):
 
     def available(self):
         """Return list of available applications
-        
+
         [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -144,16 +144,16 @@ class ApplicationManager(CmdBase):
         """List all the available applications in RepTate."""
         print("AVAILABLE APPLICATIONS")
         print("======================")
-        
+
         L = self.available()
         for app in L:
             print(app)
 
     def delete(self, name):
         """Delete an open application
-        
+
         [description]
-        
+
         Arguments:
             - name {[type]} -- [description]
         """
@@ -165,7 +165,7 @@ class ApplicationManager(CmdBase):
 
     def do_delete(self, name):
         """Delete an open application. By hitting TAB, all the currently open applications are shown.
-                
+
         Arguments:
             - name {str} -- Application to delete"""
         self.delete(name)
@@ -193,7 +193,7 @@ class ApplicationManager(CmdBase):
         """List all the currently open applications."""
         print("CURRENTLY RUNNING APPLICATIONS")
         print("==============================")
-        
+
         L = self.list()
         for app in L:
             print(app)
@@ -206,7 +206,7 @@ class ApplicationManager(CmdBase):
 
     def new(self, appname):
         """Create a new application and open it.
-        
+
 Arguments:
     - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         if (appname in self.available_applications):
@@ -225,7 +225,7 @@ Arguments:
 
     def do_new(self, appname):
         """Create a new application and open it.
-        
+
 Arguments:
     - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         newapp = self.new(appname)
@@ -236,15 +236,15 @@ Arguments:
 
     def complete_new(self, text, line, begidx, endidx):
         """Complete new application command
-        
+
         [description]
-        
+
         Arguments:
             - text {[type]} -- [description]
             - line {[type]} -- [description]
             - begidx {[type]} -- [description]
             - endidx {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -256,13 +256,13 @@ Arguments:
         return completions
 
     def do_switch(self, line):
-        """Set focus to an open application/set/theory/tool. 
+        """Set focus to an open application/set/theory/tool.
 By hitting TAB, all the currently accessible elements are shown.
 Arguments:
     - name {str} -- Name of the applicaton/set/theory/tool to switch the focus to."""
         items=line.split('.')
         if len(items)>1:
-            name=items[0]            
+            name=items[0]
             if name in self.applications.keys():
                 app = self.applications[name]
                 app.cmdqueue.append('switch '+'.'.join(items[1:]))
@@ -270,7 +270,7 @@ Arguments:
             else:
                 print("Application \"%s\" not found" % name)
         else:
-            name=items[0]            
+            name=items[0]
             if name in self.applications.keys():
                 app = self.applications[name]
                 app.cmdloop()
@@ -298,7 +298,7 @@ Arguments:
 
 Usage:
     copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
-        
+
 Arguments:
     - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
         apps = line.split()
@@ -380,7 +380,7 @@ Arguments:
             print("The following open theories provide/require Maxwell Modes:")
             for k in L.keys():
                 items = k.split('.')
-                print(Fore.RED + items[0] + Fore.RESET + "." + 
+                print(Fore.RED + items[0] + Fore.RESET + "." +
                       Fore.YELLOW + items[1] + Fore.RESET + "." +
                       Fore.MAGENTA + items[2])
         else:
@@ -390,7 +390,7 @@ Arguments:
 
     def help_tutorial(self):
         """[summary]
-        
+
         [description]
         """
         print('Visit the page:')
@@ -403,11 +403,11 @@ Arguments:
               "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds " +
               "and the University of Reading, as part of the muPP2 project, funded by the EPSRC.")
         print("")
-        print("This new version is a port (and enhancement) of the original RepTate code to python," + 
+        print("This new version is a port (and enhancement) of the original RepTate code to python," +
               " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations.")
         print("")
-        print("It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, " + Fore.CYAN 
-            + "jorge.ramirez@upm.es" + Fore.RESET + ") and Victor Boudara (University of Leeds, " 
+        print("It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, " + Fore.CYAN
+            + "jorge.ramirez@upm.es" + Fore.RESET + ") and Victor Boudara (University of Leeds, "
             + Fore.CYAN + "v.a.boudara@leeds.ac.uk" + Fore.RESET +").")
         print("")
         print("The program and source code are released under the GPLv3 license.")
@@ -451,4 +451,3 @@ Arguments:
                 print("The version of RepTate on Github (%s) is more recent than the one you are running (%s)"%(version_github, version_current))
             else:
                 print("Your version is up to date.")
-

@@ -38,28 +38,29 @@ Module that defines the GUI counterpart of the class Tool.
 #from PyQt5.QtCore import *
 import sys
 from PyQt5.uic import loadUiType
-from CmdBase import CmdBase, CalcMode
-from Tool import Tool
+from RepTate.core.CmdBase import CmdBase, CalcMode
+from RepTate.core.Tool import Tool
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QToolBar
 from PyQt5.QtCore import Qt, QObject, QThread, QSize, pyqtSignal, pyqtSlot, QEvent
 from PyQt5.QtGui import QDoubleValidator, QIcon, QCursor
-from Parameter import OptType, ParameterType
+from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
 import ast
 PATH = dirname(abspath(__file__))
+sys.path.append(PATH)
 Ui_ToolTab, QWidget = loadUiType(join(PATH, 'Tooltab.ui'))
 
 class QTool(Ui_ToolTab, QWidget, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="QTool", parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"QTool"})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -105,7 +106,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         menu.addAction("Deacrease Font Size", lambda: self.change_toolTextBox_fontsize(0.8))
         menu.addAction("Clear Text", self.toolTextBox.clear)
         menu.exec_(QCursor.pos())
-    
+
     def change_toolTextBox_fontsize(self, factor):
         """Change the toolTextBox font size by a factor `factor` """
         font = self.toolTextBox.currentFont()
@@ -118,10 +119,10 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
     def editItem(self, item, column):
         print(column)
-        
+
     def update_parameter_table(self):
         """Update the Tool parameter table
-        
+
         [description]
         """
         #clean table
@@ -142,9 +143,9 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the Tool table
-        
+
         [description]
-        
+
         Arguments:
             - item {[type]} -- [description]
             - column {[type]} -- [description]

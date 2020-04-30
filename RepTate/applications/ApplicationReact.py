@@ -35,11 +35,11 @@
 React module
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -48,7 +48,7 @@ import matplotlib.gridspec as gridspec
 
 class ApplicationReact(CmdBase):
     """Application for Monte Carlo polymerisation
-    
+
     """
     appname = 'React'
     description = 'React Application'  #used in the command-line Reptate
@@ -56,13 +56,13 @@ class ApplicationReact(CmdBase):
 
     def __new__(cls, name='React', parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'React'})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -74,7 +74,7 @@ class ApplicationReact(CmdBase):
 
 class BaseApplicationReact:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
@@ -83,7 +83,7 @@ class BaseApplicationReact:
     def __init__(self, name='React', parent=None, **kwargs):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'React'})
             - parent {[type]} -- [description] (default: {None})
@@ -386,10 +386,10 @@ class BaseApplicationReact:
             n=1,
             snames=["av_strand_length"],
             with_thline=False)
-        
+
         self.extra_view_names = [
             '<senio(prio)> log-log', '<senio(prio)> lin-log', '<senio(prio)> lin-lin',
-            '<prio(senio)> log-log', '<prio(senio)> lin-log', '<prio(senio)> lin-lin', 
+            '<prio(senio)> log-log', '<prio(senio)> lin-log', '<prio(senio)> lin-lin',
             'p(senio) log-log', 'p(senio) lin-log',
             'p(prio) log-log', 'p(prio) lin-log',
             '<mass br(senio)> log-log', '<mass br(senio)> lin-lin',
@@ -488,7 +488,7 @@ class BaseApplicationReact:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 3]
         return x, y, True
-    
+
     def thview_avprio_v_senio(self, dt, file_parameters):
         try:
             data = dt.extra_tables['avprio_v_senio']
@@ -497,7 +497,7 @@ class BaseApplicationReact:
             y = np.zeros((1, 3))
             y[:] = np.nan
             return x, y, True
-        
+
         nrows = len(data[:, 0])
         x = np.zeros((nrows, 3))
         y = np.zeros((nrows, 3))
@@ -512,10 +512,10 @@ class BaseApplicationReact:
         x[:, 2] = data[:, 0]
         y[:, 2] = np.power(2, data[:, 0] - 1)
         # avoid large numbers
-        y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)   
+        y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)
 
         return x, y, True
-    
+
     def thview_avsenio_v_prio(self, dt, file_parameters):
         try:
             data = dt.extra_tables['avsenio_v_prio']
@@ -524,7 +524,7 @@ class BaseApplicationReact:
             y = np.zeros((1, 3))
             y[:] = np.nan
             return x, y, True
-        
+
         nrows = len(data[:, 0])
         x = np.zeros((nrows, 3))
         y = np.zeros((nrows, 3))
@@ -539,7 +539,7 @@ class BaseApplicationReact:
         x[:, 2] = data[:, 0]
         y[:, 2] = np.log(data[:, 0]) / np.log(2) + 1
         # avoid large numbers
-        y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)   
+        y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)
 
         return x, y, True
 
@@ -653,14 +653,14 @@ class BaseApplicationReact:
 
 class CLApplicationReact(BaseApplicationReact, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='React', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'React'})
             - parent {[type]} -- [description] (default: {None})
@@ -671,14 +671,14 @@ class CLApplicationReact(BaseApplicationReact, Application):
 
 class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='React', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'React'})
             - parent {[type]} -- [description] (default: {None})

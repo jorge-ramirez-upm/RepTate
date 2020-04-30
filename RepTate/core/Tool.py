@@ -42,16 +42,16 @@ import getpass
 import numpy as np
 from scipy.stats.distributions import t
 
-from CmdBase import CmdBase, CmdMode
-from DataTable import DataTable
-from Parameter import Parameter, ParameterType, OptType
-from DraggableArtists import DraggableVLine, DraggableHLine, DragType
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.DataTable import DataTable
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
 
-import Theory
+import RepTate.core.Theory
 
 import logging
 class Tool(CmdBase):
@@ -70,10 +70,10 @@ class Tool(CmdBase):
     def __init__(self, name="Tool", parent_app=None):
         """
         **Constructor**
-        
+
         The following variables should be set by the particular realization of the Tool:
             - parameters     (dict): Parameters of the Tool
-        
+
         Keyword Arguments:
             - name {str} -- Name of Tool (default: {"Tool"})
         """
@@ -101,21 +101,21 @@ class Tool(CmdBase):
         self.logger.info('numpy: %s (flag %s)'%(type, flag))
 
     def destructor(self):
-        """If the Tool needs to erase some memory in a special way, any 
+        """If the Tool needs to erase some memory in a special way, any
         child theory must rewrite this funcion"""
         pass
 
     def precmd(self, line):
         """Calculations before the Tool is calculated
-        
+
         This function could be erased
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
         before execution (for example, variable substitution) do it here.
-        
+
         Arguments:
             - line {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -127,14 +127,14 @@ class Tool(CmdBase):
         Added so that Maxwell modes works in CL
         """
         pass
-        
+
     def do_parameters(self, line):
         """View and switch the minimization state of the Tool parameters
            parameters A B
-        
+
         Several parameters are allowed
         With no arguments, show the current values
-        
+
         Arguments:
             line {[type]} -- [description]
         """
@@ -149,7 +149,7 @@ class Tool(CmdBase):
                     formatstring = "%10s"
                 else:
                     formatstring = "%10.5g"
-                print("%8s = "%self.parameters[p].name  + 
+                print("%8s = "%self.parameters[p].name  +
                       formatstring%self.parameters[p].value)
         else:
             for s in line.split():
@@ -165,15 +165,15 @@ class Tool(CmdBase):
 
     def complete_parameters(self, text, line, begidx, endidx):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - text {[type]} -- [description]
             - line {[type]} -- [description]
             - begidx {[type]} -- [description]
             - endidx {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -186,7 +186,7 @@ class Tool(CmdBase):
 
     def plot_tool_stuff(self):
         """[summary]
-        
+
         [description]
         """
         pass
@@ -217,10 +217,10 @@ class Tool(CmdBase):
 # SAVE Tool STUFF (IS THIS NEEDED?)
 
     # def do_save(self, line):
-        # """Save the results from all Tool calculations to file? 
-        
+        # """Save the results from all Tool calculations to file?
+
         # [description]
-        
+
         # Arguments:
             # - line {[type]} -- [description]
         # """
@@ -284,9 +284,9 @@ class Tool(CmdBase):
 
     def set_param_value(self, name, value):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - name {[type]} -- [description]
             - value {[type]} -- [description]
@@ -373,11 +373,11 @@ class Tool(CmdBase):
 
     def default(self, line):
         """Called when the input command is not recognized
-        
+
         Called on an input line when the command prefix is not recognized.
         Check if there is an = sign in the line. If so, it is a parameter change.
         Else, we execute the line as Python code.
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -395,9 +395,9 @@ class Tool(CmdBase):
 
     def Qprint(self, msg, end='<br>'):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - msg {[type]} -- [description]
         """
@@ -414,7 +414,7 @@ class Tool(CmdBase):
                 msg = msg.replace('<br>', '\n')
                 msg = self.strip_tags(msg)
             print(msg, end=end)
-    
+
     def table_as_html(self, tab):
         header = tab[0]
         rows = tab[1:]

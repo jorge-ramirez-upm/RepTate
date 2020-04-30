@@ -35,17 +35,17 @@
 Template file for the definition of a new Application Module
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationTemplate(CmdBase):
     """Application for ...
-    
+
     [description]
     """
     appname = 'Template'
@@ -54,13 +54,13 @@ class ApplicationTemplate(CmdBase):
 
     def __new__(cls, name='Template', parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'Template'})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationTemplate(CmdBase):
 
 class BaseApplicationTemplate:
     """[summary]
-    
+
     [description]
     """
 
@@ -81,7 +81,7 @@ class BaseApplicationTemplate:
     def __init__(self, name='Template', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'Template'})
             - parent {[type]} -- [description] (default: {None})
@@ -139,13 +139,13 @@ class BaseApplicationTemplate:
 
     def viewyx(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -158,14 +158,14 @@ class BaseApplicationTemplate:
 
 class CLApplicationTemplate(BaseApplicationTemplate, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='Template', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'Template'})
             - parent {[type]} -- [description] (default: {None})
@@ -176,14 +176,14 @@ class CLApplicationTemplate(BaseApplicationTemplate, Application):
 
 class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='Template', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'Template'})
             - parent {[type]} -- [description] (default: {None})

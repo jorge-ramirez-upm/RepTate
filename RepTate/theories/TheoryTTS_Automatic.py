@@ -43,10 +43,10 @@ from os.path import dirname, join, abspath, isfile, isdir
 from scipy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog, QComboBox, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -55,10 +55,10 @@ from PyQt5.QtGui import QIcon
 
 class TheoryTTSShiftAutomatic(CmdBase):
     """Automatic Time-temperature superposition of experimental data.
-        
+
     * **Parameters**
        - This theory has no parameters.
-    
+
     """
     thname = "Automatic TTS Shift"
     description = "Shift data automatically for best overlap"
@@ -67,14 +67,14 @@ class TheoryTTSShiftAutomatic(CmdBase):
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -85,7 +85,7 @@ class TheoryTTSShiftAutomatic(CmdBase):
 
 class BaseTheoryTTSShiftAutomatic:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift'
@@ -97,7 +97,7 @@ class BaseTheoryTTSShiftAutomatic:
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -132,9 +132,9 @@ class BaseTheoryTTSShiftAutomatic:
 
     def TheoryTTSShiftAutomatic(self, f=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -156,7 +156,7 @@ class BaseTheoryTTSShiftAutomatic:
 
     def get_cases(self):
         """Get all different samples in the dataset
-        
+
            Samples are different if Mw, Mw2, phi, phi2 are different
         """
         nfiles = len(self.parent_dataset.files)
@@ -193,7 +193,7 @@ class BaseTheoryTTSShiftAutomatic:
 
     def do_error(self, line):
         """Override the error calculation for TTS
-        
+
         The error is calculated as the vertical distance between theory points, in the current view,\
         calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
         they correspond to files with the same Mw (if the parameters Mw2 and phi exist, their values are also
@@ -201,7 +201,7 @@ class BaseTheoryTTSShiftAutomatic:
         Report the error of the current theory on all the files.\n\
         File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
         Total error is the mean square of the residual, averaged over all points considered in all files.
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -277,12 +277,12 @@ class BaseTheoryTTSShiftAutomatic:
 
     def func_fitTTS(self, *param_in):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - \*param_in {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -300,12 +300,12 @@ class BaseTheoryTTSShiftAutomatic:
 
     def func_fitTTS_one(self, *param_in):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - \*param_in {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -343,9 +343,9 @@ class BaseTheoryTTSShiftAutomatic:
 
     def do_fit(self, line):
         """Minimize the error
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -459,9 +459,9 @@ class BaseTheoryTTSShiftAutomatic:
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -472,15 +472,15 @@ class BaseTheoryTTSShiftAutomatic:
 
     def complete_print(self, text, line, begidx, endidx):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - text {[type]} -- [description]
             - line {[type]} -- [description]
             - begidx {[type]} -- [description]
             - endidx {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -493,9 +493,9 @@ class BaseTheoryTTSShiftAutomatic:
 
     def do_save(self, line, extra_txt=''):
         """Save the results from TTSShiftAutomatic theory predictions to a TTS file
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -565,14 +565,14 @@ class BaseTheoryTTSShiftAutomatic:
 
 class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -583,14 +583,14 @@ class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
 
 class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -706,7 +706,7 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                 Files = [x[3] for x in self.Tdict[case]]
                 indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
 
-                f0 = Files[0]              
+                f0 = Files[0]
                 for pname in f0.file_parameters:
                     if pname != 'T':
                         fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
@@ -724,4 +724,3 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
             QMessageBox.information(self, 'Saved Files', msg)
         else:
             print(msg)
-            

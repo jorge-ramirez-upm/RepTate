@@ -36,17 +36,17 @@ FindPeaks file for creating a new Tool
 """
 import numpy as np
 from scipy.optimize import curve_fit
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtGui import QIcon
 
 class ToolFindPeaks(CmdBase):
     """Find peaks (maxima or minima) in the data, as represented by the current view. The option to find the maxima or the minima is specified by the min/max check button (the minpeaks parameter in the command line version). The **threshold** controls the relative height that a peak must have (with respect to the data span) in order to be detected. The **minimum_distance** parameter controls how far from each other the peaks must be in order to be distinguished. The returned peaks correspond to the maximum/minimum data point in the current view. Alternatively, the user can select to fit a parabola to the peaks and find the analytical maximum or minimum of the parabola. The parameter **minimum_distance** also controls the number of points around the maximum data point used to fit the parabola. The peaks are returned in the Tool information area and shown as symbols in the chart.
-    
-    The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks. 
+
+    The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks.
     """
     toolname = 'Find Peaks'
     description = 'Find Peaks in current data/view'
@@ -54,14 +54,14 @@ class ToolFindPeaks(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -70,7 +70,7 @@ class ToolFindPeaks(CmdBase):
 
 class BaseToolFindPeaks:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
@@ -80,7 +80,7 @@ class BaseToolFindPeaks:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -159,7 +159,7 @@ class BaseToolFindPeaks:
                     rem[sl] = True
                     rem[peak] = False
             peaks = np.arange(y.size)[~rem]
-        
+
         xp=np.zeros(len(peaks))
         yp=np.zeros(len(peaks))
         if minpeaks:
@@ -210,14 +210,14 @@ class BaseToolFindPeaks:
 
 class CLToolFindPeaks(BaseToolFindPeaks, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -230,14 +230,14 @@ class CLToolFindPeaks(BaseToolFindPeaks, Tool):
 
 class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -269,8 +269,8 @@ class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
         self.minpeaks.setChecked(checked)
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
-        
+
     def handle_parabola_button(self, checked):
         self.parabola.setChecked(checked)
         self.set_param_value("parabola", checked)
-        self.parent_application.update_all_ds_plots()        
+        self.parent_application.update_all_ds_plots()

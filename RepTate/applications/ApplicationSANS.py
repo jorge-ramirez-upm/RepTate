@@ -35,17 +35,17 @@
 Module for the analysis of data from SANS experiments
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationSANS(CmdBase):
     """Application to Analyze Data from SANS experiments
-    
+
     """
     appname = "SANS"
     description = "Small Angle Neutron Scattering Experiments"
@@ -53,13 +53,13 @@ class ApplicationSANS(CmdBase):
 
     def __new__(cls, name="SANS", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"SANS"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationSANS(CmdBase):
 
 class BaseApplicationSANS:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html'
@@ -80,7 +80,7 @@ class BaseApplicationSANS:
     def __init__(self, name="SANS", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"SANS"})
             - parent {[type]} -- [description] (default: {None})
@@ -111,7 +111,7 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewSANS,
-            n=1, 
+            n=1,
             snames=["I"])
         self.views["Zimm"] = View(
             name="Zimm",
@@ -123,7 +123,7 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewZimm,
-            n=1, 
+            n=1,
             snames=["1/I"])
         self.views["Kratky"] = View(
             name="Kratky",
@@ -135,7 +135,7 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewKratky,
-            n=1, 
+            n=1,
             snames=["q2*I"])
 
         #set multiviews
@@ -179,7 +179,7 @@ class BaseApplicationSANS:
         return x, y, True
 
     def viewKratky(self, dt, file_parameters):
-        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q` 
+        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -198,14 +198,14 @@ class BaseApplicationSANS:
 
 class CLApplicationSANS(BaseApplicationSANS, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="SANS", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"SANS"})
             - parent {[type]} -- [description] (default: {None})
@@ -215,14 +215,14 @@ class CLApplicationSANS(BaseApplicationSANS, Application):
 
 class GUIApplicationSANS(BaseApplicationSANS, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="SANS", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"SANS"})
             - parent {[type]} -- [description] (default: {None})

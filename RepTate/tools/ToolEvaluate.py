@@ -37,14 +37,14 @@ Evaluate expression
 import traceback
 from numpy import *
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 
 class ToolEvaluate(CmdBase):
-    """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser. 
+    """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser.
     """
     toolname = 'Eval Exp'
     description = 'Evaluate Expression Tool'
@@ -64,7 +64,7 @@ class BaseToolEvaluate:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -86,15 +86,15 @@ class BaseToolEvaluate:
         self.safe_dict = {}
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
-            
+
     def calculate(self, x, y, ax=None, color=None):
-        """Evaluate function that returns the square of the y, according to the view        
+        """Evaluate function that returns the square of the y, according to the view
         """
         xexpr = self.parameters["x"].value
         yexpr = self.parameters["y"].value
         self.safe_dict['x']=x
         self.safe_dict['y']=y
-        
+
         try:
             x2 = eval(xexpr, {"__builtins__":None}, self.safe_dict)
             #x2 = eval(xexpr, var)
@@ -104,19 +104,19 @@ class BaseToolEvaluate:
         except Exception as e:
             self.Qprint("in ToolEvaluate.calculate(): %s"%traceback.format_exc())
             return x, y
-        
+
 
 
 class CLToolEvaluate(BaseToolEvaluate, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -129,14 +129,14 @@ class CLToolEvaluate(BaseToolEvaluate, Tool):
 
 class GUIToolEvaluate(BaseToolEvaluate, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})

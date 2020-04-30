@@ -35,22 +35,22 @@
 Module for the analysis of stress relaxation data from simulations and experiments.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from View import View
-from FileType import TXTColumnFile
-from QApplicationWindow import QApplicationWindow
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
 
 from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
 from PyQt5.QtGui import QDoubleValidator
-import schwarzl_ctypes_helper as sch
+import RepTate.theories.schwarzl_ctypes_helper as sch
 from math import log10, sin, cos
 
 class ApplicationGt(CmdBase):
     """Application to Analyze Stress Relaxation Data
-    
+
     """
     appname = "Gt"
     description = "Relaxation modulus"
@@ -58,13 +58,13 @@ class ApplicationGt(CmdBase):
 
     def __new__(cls, name="Gt", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Gt"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -76,7 +76,7 @@ class ApplicationGt(CmdBase):
 
 class BaseApplicationGt:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html'
@@ -85,7 +85,7 @@ class BaseApplicationGt:
     def __init__(self, name="Gt", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Gt"})
             - parent {[type]} -- [description] (default: {None})
@@ -228,8 +228,8 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters):
-        """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus 
-        :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)` 
+        """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus
+        :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`
         """
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
@@ -389,14 +389,14 @@ class BaseApplicationGt:
 
 class CLApplicationGt(BaseApplicationGt, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Gt", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Gt"})
             - parent {[type]} -- [description] (default: {None})
@@ -412,14 +412,14 @@ class CLApplicationGt(BaseApplicationGt, Application):
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Gt", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Gt"})
             - parent {[type]} -- [description] (default: {None})
@@ -428,7 +428,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
 
         self.add_oversampling_widget()
         self.set_oversampling_widget_visible(False)
-        
+
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
 
@@ -442,10 +442,10 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         self.viewLayout.insertWidget(2, self.sb_oversampling)
 
     def add_xrange_widget_view(self):
-        """Add widgets below the view combobox to select the 
+        """Add widgets below the view combobox to select the
         x-range applied to view transformation"""
         hlayout = QHBoxLayout()
-        
+
         hlayout.addStretch()
         #xmin
         self.xmin_view = QLineEdit("-inf")
@@ -511,7 +511,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         self.xmax_label.setVisible(state)
         self.xmin_view.setVisible(state)
         self.xmax_view.setVisible(state)
-        
+
     def set_view_tools(self, view_name):
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:

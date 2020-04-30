@@ -40,7 +40,7 @@ import enum
 import math
 import numpy as np
 import itertools
-from CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase, CmdMode
 #from UI_Multimatplotlib import Ui_Form
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
 from PyQt5.QtCore import QSize, QMetaObject, Qt
@@ -52,9 +52,9 @@ import matplotlib.gridspec as gridspec
 
 class PlotOrganizationType(enum.Enum):
     """[summary]
-    
+
     For Vertical and Horizontal, the number of columns is discarded
-    
+
     Vertical:
         -------
         -------
@@ -66,11 +66,11 @@ class PlotOrganizationType(enum.Enum):
         |  |  | ... |
 
     OptimalRow:
-        The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
+        The plots are organized in nplots/ncols X ncols giving more importance to the first plot,
         which will occupy as much space as available from the first row
 
     OptimalColumn:
-        The plots are organized in nplots/ncols X ncols giving more importance to the first plot, 
+        The plots are organized in nplots/ncols X ncols giving more importance to the first plot,
         which will occupy as much space as available from the first column
 
     Specified:
@@ -103,10 +103,10 @@ class MultiView(QWidget):
         self.ncols = ncols
         self.setupUi()
         mpl.rcParams['savefig.dpi'] = self.DPI
-        
+
     def setupUi(self):
         # Remove seaborn dependency
-        dark_gray = ".15" 
+        dark_gray = ".15"
         light_gray = ".8"
         style_dict = {
             "figure.facecolor": "white",
@@ -126,8 +126,8 @@ class MultiView(QWidget):
             "xtick.major.size": 6,
             "ytick.major.size": 6,
             "xtick.minor.size": 3,
-            "ytick.minor.size": 3,             
-            "axes.grid": False, 
+            "ytick.minor.size": 3,
+            "axes.grid": False,
             "axes.axisbelow": True,
             "image.cmap": "rocket",
             "font.family": ["sans-serif"],
@@ -136,7 +136,7 @@ class MultiView(QWidget):
             "grid.linestyle": "-",
             "lines.solid_capstyle": "round",
             }
-        mpl.rcParams.update(style_dict)            
+        mpl.rcParams.update(style_dict)
 
         self.setObjectName("self")
         self.horizontalLayout = QHBoxLayout(self)
@@ -167,17 +167,17 @@ class MultiView(QWidget):
             self.plotselecttabWidget.addTab(self.tab, "%d"%(i+1))
         self.horizontalLayout.addWidget(self.plotselecttabWidget)
         self.plotselecttabWidget.setCurrentIndex(0)
-       
+
         self.plotcontainer = QVBoxLayout()
         self.plotcontainer.setObjectName("plotcontainer")
-        self.horizontalLayout.addLayout(self.plotcontainer)    
-        
+        self.horizontalLayout.addLayout(self.plotcontainer)
+
         # Create the multiplot figure
         gs = self.organizeplots(self.pot, self.nplots, self.ncols)
         self.axarr = []
         self.figure = plt.figure()
         for i in range(self.nplots):
-            self.axarr.append(self.figure.add_subplot(gs[i]))            
+            self.axarr.append(self.figure.add_subplot(gs[i]))
 
         self.set_bbox()
 
@@ -209,7 +209,7 @@ class MultiView(QWidget):
             x1max = max(x1max, bboxnow.x1)
             y1max = max(y1max, bboxnow.y1)
         self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
-    
+
     def reorg_fig(self, nplots):
         """Reorganise the views to show nplots"""
         if CmdBase.mode == CmdMode.GUI:
@@ -263,7 +263,7 @@ class MultiView(QWidget):
         self.parent_application.update_all_ds_plots()
         self.handle_plottabChanged(0) # switch to all plot tab
         self.plotselecttabWidget.blockSignals(False)
-    
+
     def init_plot(self, index):
         if index == 0: #multiplots
             for i in range(self.nplots):

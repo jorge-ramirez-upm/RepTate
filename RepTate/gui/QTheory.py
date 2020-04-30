@@ -38,15 +38,15 @@ Module that defines the GUI counterpart of the class Theory.
 #from PyQt5.QtCore import *
 import sys
 from PyQt5.uic import loadUiType
-from CmdBase import CmdBase, CalcMode
-from Theory import Theory, MinimizationMethod, ErrorCalculationMethod
+from RepTate.core.CmdBase import CmdBase, CalcMode
+from RepTate.core.Theory import Theory, MinimizationMethod, ErrorCalculationMethod
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QWidget, QTabWidget, QTreeWidget, QTreeWidgetItem, QFrame, QHeaderView, QMessageBox, QDialog, QVBoxLayout, QRadioButton, QDialogButtonBox, QButtonGroup, QFormLayout, QLineEdit, QComboBox, QLabel, QFileDialog, QApplication, QTextBrowser, QSplitter, QMenu
 from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
-from Parameter import OptType, ParameterType
+from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
-import Version
+import RepTate.core.Version as Version
 import time
 import ast
 PATH = dirname(abspath(__file__))
@@ -167,7 +167,7 @@ class GetModesDialog(QDialog):
             rb = QRadioButton(item, self)
             layout.addWidget(rb)
             self.btngrp.addButton(rb)
-        
+
         #select first button by default
         rb = self.btngrp.buttons()[0]
         rb.setChecked(True)
@@ -182,14 +182,14 @@ class GetModesDialog(QDialog):
 
 class QTheory(Ui_TheoryTab, QWidget, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"QTheory"})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -243,7 +243,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.fittingoptionsdialog.ui.LSxtollineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.LSgtollineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.LSf_scalelineEdit.setValidator(dvalidator)
-        self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator) 
+        self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.LSmethodcomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSmethodcomboBox.findText(self.LSmethod))
         self.fittingoptionsdialog.ui.LSjaccomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSjaccomboBox.findText(self.LSjac))
         self.fittingoptionsdialog.ui.LSftollineEdit.setText('%g'%self.LSftol)
@@ -334,7 +334,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         menu.addAction("Deacrease Font Size", lambda: self.change_thtextbox_fontsize(0.8))
         menu.addAction("Clear Text", self.thTextBox.clear)
         menu.exec_(QCursor.pos())
-    
+
     def change_thtextbox_fontsize(self, factor):
         """Change the thTextBox font size by a factor `factor` """
         font = self.thTextBox.currentFont()
@@ -348,7 +348,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def set_extra_data(self, extra_data):
         """set the extra data dict at loading, redefined in Child class if needed"""
         self.extra_data = extra_data
-    
+
     def get_extra_data(self):
         """get the extra data dict before saving (defined in Child class if needed)"""
         pass
@@ -356,14 +356,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def theory_buttons_disabled(self, state):
         """Disable theory button inside the theory"""
         pass
-    
+
     def handle_actionCalculate_Theory(self):
         if self.thread_calc_busy:
             return
         self.thread_calc_busy = True
         #disable buttons
         self.parent_dataset.actionNew_Theory.setDisabled(True) #only needed for theories using shared libraries
-        self.theory_buttons_disabled(True) 
+        self.theory_buttons_disabled(True)
 
         if CmdBase.calcmode == CalcMode.multithread:
             self.worker = CalculationThread(
@@ -407,7 +407,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
-        
+
         [description]
         """
         if self.thread_fit_busy:
@@ -450,7 +450,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         for param in self.parameters:
             p = self.parameters[param]
             text += "%s\t%g\n"%(p.name,p.value)
-        QApplication.clipboard().setText(text)    
+        QApplication.clipboard().setText(text)
 
     def paste_parameters(self):
         text = QApplication.clipboard().text()
@@ -461,14 +461,14 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             cols = rows[i].split() # split on whitespaces
             if (len(cols)==2):
                 if (cols[0] in self.parameters):
-                    message, success = self.set_param_value(cols[0], cols[1])                          
+                    message, success = self.set_param_value(cols[0], cols[1])
         self.update_parameter_table()
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
-     
+
     def update_parameter_table(self):
         """Update the theory parameter table
-        
+
         [description]
         """
         #clean table
@@ -504,9 +504,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
         Or edit all parameters fittingoptionsdialog if parameter name is double clicked
-        
+
         [description]
-        
+
         Arguments:
             - - item {[type]} -- [description]
             - - column {[type]} -- [description]
@@ -548,9 +548,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the theory table
-        
+
         [description]
-        
+
         Arguments:
             - item {[type]} -- [description]
             - column {[type]} -- [description]
@@ -581,7 +581,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def Qcopy_modes(self):
         """[summary]
-        
+
         [description]
         """
         apmng = self.parent_dataset.parent_application.parent_manager
@@ -595,7 +595,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 tau = tau[tauinds]
                 G0 = G0[tauinds]
                 success = self.set_modes(tau, G0)
-                if not success: 
+                if not success:
                     self.logger.warning("Could not set modes successfully")
                     return
                 self.update_parameter_table()
@@ -603,7 +603,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         else:
             QMessageBox.information(self, 'Import Modes', 'Found no opened theory to import modes from')
 
-            
+
     def save_modes(self):
         """Save Maxwell modes to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
@@ -611,7 +611,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                                                "data/", "Text (*.txt)")
         if fpath == '':
             return
-            
+
         with open(fpath, 'w') as f:
             times, G, success = self.get_modes()
             if not success:
@@ -632,9 +632,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
             for i in range(n):
                 f.write('%5d\t%15g\t%15g\n'%(i+1,times[i],G[i]))
-            
+
             f.write('\n#end')
 
         QMessageBox.information(self, 'Success',
                                 'Wrote Maxwell modes \"%s\"' % fpath)
-            

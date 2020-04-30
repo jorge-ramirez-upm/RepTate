@@ -32,14 +32,14 @@
 # --------------------------------------------------------------------------------------------------------
 """Module ToolBounds
 
-Remove data ouside Bounds 
+Remove data ouside Bounds
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 
 
 class ToolBounds(CmdBase):
@@ -51,14 +51,14 @@ class ToolBounds(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -67,7 +67,7 @@ class ToolBounds(CmdBase):
 
 class BaseToolBounds:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
@@ -77,7 +77,7 @@ class BaseToolBounds:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -106,7 +106,7 @@ class BaseToolBounds:
             type=ParameterType.real)
 
     def calculate(self, x, y, ax=None, color=None):
-        """Bounds function that returns the square of the y, according to the view        
+        """Bounds function that returns the square of the y, according to the view
         """
         xmin = self.parameters["xmin"].value
         xmax = self.parameters["xmax"].value
@@ -121,14 +121,14 @@ class BaseToolBounds:
 
 class CLToolBounds(BaseToolBounds, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -141,14 +141,14 @@ class CLToolBounds(BaseToolBounds, Tool):
 
 class GUIToolBounds(BaseToolBounds, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -166,7 +166,7 @@ class GUIToolBounds(BaseToolBounds, QTool):
         try:
             new_value = float(value)
         except ValueError:
-            return "Value must be a float", False        
+            return "Value must be a float", False
         message, success = super().set_param_value(name, value)
         if success:
             if name == 'xmax':
@@ -193,5 +193,5 @@ class GUIToolBounds(BaseToolBounds, QTool):
                     p.value = old_value
                     message = "ymin must be < ymax"
                     success = False
-           
+
         return message, success

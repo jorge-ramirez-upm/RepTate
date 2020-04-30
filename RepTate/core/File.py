@@ -34,23 +34,23 @@
 
 Module that defines a basic File, with headers, columns and data.
 
-""" 
+"""
 import os
-from DataTable import DataTable
+from RepTate.core.DataTable import DataTable
 from colorama import Fore
 
 class File(object):
     """Basic class that describes elements of a DataSet
-    
+
     [description]
     """
 
     def __init__(self, file_name="", file_type=None, parent_dataset=None, axarr=None):
         """
         **Constructor**
-        
+
         [description]
-        
+
         Keyword Arguments:
             - file_name {str} -- Full path
             - file_type {[type]} -- [description] (default: {None})
@@ -90,18 +90,18 @@ class File(object):
 
     def __str__(self):
         """[summary]
-        
+
         [description]
         """
         return Fore.YELLOW + 'File: ' + Fore.RESET  + '%s\n'%self.file_name_short + Fore.CYAN  + 'Path: ' + Fore.RESET + '%s\n'%self.file_full_path + Fore.RED + 'Parameters: ' + Fore.RESET + '%s'%self.file_parameters
-        
+
     def mincol(self, col):
         """Minimum value in data_table column col
         [description]
 
         """
         return self.data_table.mincol(col)
-        
+
     def minpositivecol(self, col):
         """Minimum positive value in data_table column col
         [description]
@@ -115,4 +115,3 @@ class File(object):
 
         """
         return self.data_table.maxcol(col)
-    

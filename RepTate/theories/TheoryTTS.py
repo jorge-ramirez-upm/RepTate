@@ -42,17 +42,17 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QAction, QStyle, QFileDialog, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 
 class TheoryWLFShift(CmdBase):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
-    
+
     * **Function**
         .. math::
             \\begin{eqnarray}
@@ -62,7 +62,7 @@ class TheoryWLFShift(CmdBase):
             b_T &= & \\frac{\\rho(T_r)T_r}{\\rho(T)T} = \\frac{(1+\\alpha T)(T_r+273.15)}{(1+\\alpha T_r)(T+273.15)} \\\\
             T_g &= &T_g^\\infty - \\frac{C_{T_g}}{M_w}
             \\end{eqnarray}
-    
+
     * **Parameters**
        - :math:`T_r`: Reference temperature to which the experimental data will be shifted.
        - :math:`B_1`: Material parameter, corresponding to :math:`C_1\cdot C_2`, with :math:`C_1` and :math:`C_2` being the standard WLF material parameters.
@@ -70,7 +70,7 @@ class TheoryWLFShift(CmdBase):
        - logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.
        - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.
        - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
-    
+
     """
     thname = "WLF Shift"
     description = "TTS shift based on the WLF equation"
@@ -79,14 +79,14 @@ class TheoryWLFShift(CmdBase):
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -98,7 +98,7 @@ class TheoryWLFShift(CmdBase):
 
 class BaseTheoryWLFShift:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift'
@@ -106,11 +106,11 @@ class BaseTheoryWLFShift:
     thname = TheoryWLFShift.thname
     citations = TheoryWLFShift.citations
     doi = TheoryWLFShift.doi
-    
+
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -171,13 +171,13 @@ class BaseTheoryWLFShift:
 
         self.get_material_parameters()
         self.shift_factor_dic = {}
-     
+
 
     def TheoryWLFShift(self, f=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -219,7 +219,7 @@ class BaseTheoryWLFShift:
 
     def do_error(self, line):
         """Override the error calculation for TTS
-        
+
         The error is calculated as the vertical distance between theory points, in the current view,\
         calculated over all possible pairs of theory tables, when the theories overlap in the horizontal direction and\
         they correspond to files with the same Mw (if the parameters Mw2 and phi exist, their values are also
@@ -227,7 +227,7 @@ class BaseTheoryWLFShift:
         Report the error of the current theory on all the files.\n\
         File error is calculated as the mean square of the residual, averaged over all calculated points in the shifted tables.\n\
         Total error is the mean square of the residual, averaged over all points considered in all files.
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -328,12 +328,12 @@ class BaseTheoryWLFShift:
 
     def func_fitTTS(self, *param_in):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - \*param_in {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -351,9 +351,9 @@ class BaseTheoryWLFShift:
 
     def do_fit(self, line):
         """Minimize the error
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -406,9 +406,9 @@ class BaseTheoryWLFShift:
 
     def do_print(self, line):
         """Print the theory table associated with the given file name
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -419,15 +419,15 @@ class BaseTheoryWLFShift:
 
     def complete_print(self, text, line, begidx, endidx):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - text {[type]} -- [description]
             - line {[type]} -- [description]
             - begidx {[type]} -- [description]
             - endidx {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -440,9 +440,9 @@ class BaseTheoryWLFShift:
 
     def do_save(self, line, extra_txt=''):
         """Save the results from WLFShift theory predictions to a TTS file
-        
+
         [description]
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -529,14 +529,14 @@ class BaseTheoryWLFShift:
 
 class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -547,14 +547,14 @@ class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
 
 class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -659,7 +659,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
                 list_out.sort()
                 for (T, aT, bT) in list_out:
                     fout.write("%-12g %-12g %-12g\n" % (T, aT, bT))
-                        
+
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         if CmdBase.mode == CmdMode.GUI:
             QMessageBox.information(self, 'Saved Files', msg)
