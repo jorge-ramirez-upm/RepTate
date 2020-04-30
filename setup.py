@@ -2,12 +2,7 @@ import os
 from setuptools import setup, find_packages
 import sys
 
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('tools')
+sys.path.append('RepTate/core')
 
 import Version
 
@@ -23,11 +18,12 @@ setup(
     author_email="jorge.ramirez@upm.es",
 	url='http://github.com/jorge-ramirez-upm/RepTate',
 	packages=find_packages(),
+    package_data={'': ['*.ui', '*.qrc', '*.npy', '*.so']},
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate = RepTate:main',
-            'RepTateCL = RepTateCL:main'
+            'RepTate = RepTate.RepTate:main',
+            'RepTateCL = RepTate.RepTateCL:main'
         ]
     },
 	license='GPL License',
