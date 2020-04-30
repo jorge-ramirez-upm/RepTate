@@ -104,13 +104,13 @@ class BaseTheoryDSMLinear:
             opt_type=OptType.opt,
             display_flag=True)
 
-        self.parameters["beta"] = Parameter(
-            name=r'beta',
-            value=30,
-            description="Entanglement activity parameter for input to DSM simulations",
-            type=ParameterType.real,
-            opt_type=OptType.opt,
-            display_flag=True)
+        # self.parameters["beta"] = Parameter(
+            # name=r'beta',
+            # value=30,
+            # description="Entanglement activity parameter for input to DSM simulations",
+            # type=ParameterType.real,
+            # opt_type=OptType.opt,
+            # display_flag=True)
 
         # self.parameters["tau_K"] = Parameter(
         #     name=r'tau_K',
@@ -148,7 +148,7 @@ class BaseTheoryDSMLinear:
             self.tau_c = 151.148/(omega_x*self.Nc**3.50)
             self.set_param_value("tau_c", self.tau_c)
             self.beta = Mw/(0.56*self.Nc*MK) - 1
-            self.set_param_value("beta", self.beta)
+            #self.set_param_value("beta", self.beta)
             self.tau_K = self.tau_c/(0.265*self.beta**(8.0/3.0))
             self.N_K = Mw/MK
 
@@ -277,13 +277,15 @@ class BaseTheoryDSMLinear:
 
         Mc = self.parameters["Mc"].value
         tau_c = self.parameters["tau_c"].value
-        beta = self.parameters["beta"].value
-        tau_K = tau_c/(0.265*beta**(8.0/3.0))
+        #beta = self.parameters["beta"].value
         MK = self.parameters["MK"].value
+        beta = Mc/0.56/MK - 1.0
+        tau_K = tau_c/(0.265*beta**(8.0/3.0))
 
-        self.Qprint("<b>Additional DSM Parameters:</b>")
+        self.Qprint("<b>Additional FSM Parameters:</b>")
         tab_data = [['%-18s' % 'Name', '%-18s' % 'Value']]
         tab_data.append(['%-18s'%'<b>tau_K</b>', '%18.4g' % tau_K])
+        tab_data.append(['%-18s'%'<b>beta</b>', '%18.4g' % beta])
         self.Qprint(tab_data)
 
         tab_data = [['%-18s' % 'File', '%-18s' % 'NK', '%-18s' % 'Nc']]
@@ -324,7 +326,8 @@ class BaseTheoryDSMLinear:
 
         Mc = self.parameters["Mc"].value
         tau_c = self.parameters["tau_c"].value
-        beta = self.parameters["beta"].value
+        #beta = self.parameters["beta"].value
+        beta = Mc/0.56/MK-1.0
         Nc = Mw/Mc
         tau_K = tau_c/(0.265*beta**(8.0/3.0))
         N_K = Mw/MK
