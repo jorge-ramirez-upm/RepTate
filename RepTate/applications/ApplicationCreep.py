@@ -35,11 +35,11 @@
 Module for the analysis of data from Creep experiments
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from View import View
-from FileType import TXTColumnFile
-from QApplicationWindow import QApplicationWindow
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
 
@@ -49,7 +49,7 @@ from math import log10, sin, cos
 
 class ApplicationCreep(CmdBase):
     """Application to Analyze Data from Creep experiments
-    
+
     """
     appname = "Creep"
     description = "Creep Experiments"
@@ -57,13 +57,13 @@ class ApplicationCreep(CmdBase):
 
     def __new__(cls, name="Creep", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Creep"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -75,7 +75,7 @@ class ApplicationCreep(CmdBase):
 
 class BaseApplicationCreep:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html'
@@ -84,7 +84,7 @@ class BaseApplicationCreep:
     def __init__(self, name="Creep", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Creep"})
             - parent {[type]} -- [description] (default: {None})
@@ -96,7 +96,7 @@ class BaseApplicationCreep:
         self.eta = 10000
         self.tmin_view = -np.inf
         self.tmax_view = np.inf
-        
+
         # VIEWS
         self.views["log(gamma(t))"] = View(
             name="log(gamma(t))",
@@ -120,7 +120,7 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewStraint,
-            n=1, 
+            n=1,
             snames=["gamma"])
         self.views["log(J(t))"] = View(
             name="log(J(t))",
@@ -132,7 +132,7 @@ class BaseApplicationCreep:
             log_x=False,
             log_y=False,
             view_proc=self.viewLogJt,
-            n=1, 
+            n=1,
             snames=["log(J)"])
         self.views["J(t)"] = View(
             name="J(t)",
@@ -144,7 +144,7 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewJt,
-            n=1, 
+            n=1,
             snames=["J"])
         self.views["t/J(t)"] = View(
             name="t/J(t)",
@@ -156,7 +156,7 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewt_Jt,
-            n=1, 
+            n=1,
             snames=["t/J"])
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
@@ -228,7 +228,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewLogJt(self, dt, file_parameters):
-        """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t` 
+        """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -289,12 +289,12 @@ class BaseApplicationCreep:
         for i in range(ind1+1,n):
             aux += (np.exp(-1j*w*t[i-1])-np.exp(-1j*w*t[i]))*(j[i]-j[i-1])/(t[i]-t[i-1])
         Gstar=1j*w/aux
-        
+
         y[:,0]=Gstar.real
         y[:,1]=Gstar.imag
-        
+
         return x, y, True
-        
+
     def viewiRheoOver(self, dt, file_parameters):
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
         """
@@ -350,17 +350,17 @@ class BaseApplicationCreep:
         x_in_range = dt.data[:, 0][args]
         y_in_range = dt.data[:, 1][args]
         return x_in_range, y_in_range
-        
+
 class CLApplicationCreep(BaseApplicationCreep, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Creep", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Creep"})
             - parent {[type]} -- [description] (default: {None})
@@ -375,14 +375,14 @@ class CLApplicationCreep(BaseApplicationCreep, Application):
 
 class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Creep", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Creep"})
             - parent {[type]} -- [description] (default: {None})
@@ -391,7 +391,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
 
         self.add_oversampling_widget()
         self.set_oversampling_widget_visible(False)
-        
+
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
 
@@ -405,10 +405,10 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.viewLayout.insertWidget(2, self.sb_oversampling)
 
     def add_xrange_widget_view(self):
-        """Add widgets below the view combobox to select the 
+        """Add widgets below the view combobox to select the
         x-range applied to view transformation"""
         hlayout = QHBoxLayout()
-        
+
         hlayout.addStretch()
         #eta
         self.eta_view = QLineEdit("4")
@@ -497,7 +497,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.eta_view.setVisible(state)
         self.xmin_view.setVisible(state)
         self.xmax_view.setVisible(state)
-        
+
     def set_view_tools(self, view_name):
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
@@ -512,4 +512,3 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
                 self.set_oversampling_widget_visible(False)
             except AttributeError:
                 pass
-        

@@ -29,12 +29,12 @@
 # You should have received a copy of the GNU General Public License
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -------------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------------
 """Module Reptate
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
 import glob
@@ -43,21 +43,17 @@ import traceback
 import numpy as np
 import logging
 
-# os.chdir(os.path.dirname(sys.argv[0])) # set cwd as *this* dir
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('tools')
-from CmdBase import CmdBase, CalcMode, CmdMode
-from QApplicationManager import QApplicationManager
+from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.gui.QApplicationManager import QApplicationManager
 #from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtCore import QUrl, Qt, QCoreApplication
-from SplashScreen import SplashScreen
+from RepTate.gui.SplashScreen import SplashScreen
 # from time import time, sleep
+
+def main():
+    start_RepTate(sys.argv[1:])
 
 def get_argument_files(finlist):
     """
@@ -90,8 +86,8 @@ def get_argument_files(finlist):
 
 def start_RepTate(argv):
     """
-    Main RepTate application. 
-    
+    Main RepTate application.
+
     :param list argv: Command line parameters passed to Reptate
     """
     GUI = True
@@ -106,7 +102,7 @@ def start_RepTate(argv):
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
 
-    args = parser.parse_args(args=argv) 
+    args = parser.parse_args(args=argv)
 
     # Get files from command line
     dictfiles=get_argument_files(args.finlist)
@@ -132,11 +128,11 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
     #if args.dpi:
     #    app.setAttribute(Qt.AA_EnableHighDpiScaling)
-    
+
     splash = SplashScreen()
     # splash.showMessage("Loading RepTate...\n")
     splash.show()
-    
+
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     # splash.showMessage("Loading RepTate...")
@@ -153,7 +149,7 @@ def start_RepTate(argv):
             # exact match
             ex.handle_new_app(d[k])
             appname="%s%d"%(d[k],ex.application_counter)
-            ex.applications[appname].new_tables_from_files(dictfiles[k])      
+            ex.applications[appname].new_tables_from_files(dictfiles[k])
             if args.theory in list(ex.applications[appname].theories.keys()):
                 ex.applications[appname].datasets['Set1'].new_theory(args.theory)
 
@@ -193,11 +189,11 @@ def start_RepTate(argv):
             subject = "Something went wrong"
             body = "%s\nIf you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message\nPlease, do NOT include confidential information\n%s\nError Traceback:\n %s" % ("-"*60, "-"*60 + "\n"*10 + "-"*60,  tb_msg)
             QDesktopServices.openUrl(QUrl("mailto:?to=%s&subject=%s&body=%s" % (address, subject, body), QUrl.TolerantMode))
-            
+
     sys.excepthook = my_excepthook
 
     ex.showMaximized()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    start_RepTate(sys.argv[1:])
+    main()

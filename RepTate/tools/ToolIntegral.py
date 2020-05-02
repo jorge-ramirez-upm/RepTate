@@ -36,16 +36,16 @@ Integral file for creating a new Tool
 """
 import traceback
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 from scipy.integrate import odeint, simps
 from scipy.interpolate import interp1d
 
 class ToolIntegral(CmdBase):
-    """Calculate the integral of y with respect to x, where y is the ordinate and x is the abcissa in the current view. Repeated points in the data are removed before the integral is performed. The data between the point is interpolated with a cubic spline. The total value of the definite integral is shown in the Tool output region. 
+    """Calculate the integral of y with respect to x, where y is the ordinate and x is the abcissa in the current view. Repeated points in the data are removed before the integral is performed. The data between the point is interpolated with a cubic spline. The total value of the definite integral is shown in the Tool output region.
     If a different integration interval is needed, the Bounds tool can be used before the Integral tool.
     """
     toolname = 'Integral'
@@ -54,14 +54,14 @@ class ToolIntegral(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -70,7 +70,7 @@ class ToolIntegral(CmdBase):
 
 class BaseToolIntegral:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
@@ -80,7 +80,7 @@ class BaseToolIntegral:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -103,7 +103,7 @@ class BaseToolIntegral:
         yunique=y[indunique]
         try:
             ff = interp1d(xunique, yunique, bounds_error=False, kind='cubic', fill_value='extrapolate', assume_sorted=True)
-                
+
             func = lambda y0, t: ff(t)
             y2 = odeint(func, [0], xunique)
 
@@ -113,18 +113,18 @@ class BaseToolIntegral:
         except Exception as e:
             self.Qprint("in ToolIntegral.calculate(): %s"%traceback.format_exc())
             return x, y
-           
+
 
 class CLToolIntegral(BaseToolIntegral, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -137,14 +137,14 @@ class CLToolIntegral(BaseToolIntegral, Tool):
 
 class GUIToolIntegral(BaseToolIntegral, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})

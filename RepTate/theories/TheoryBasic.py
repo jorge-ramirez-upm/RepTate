@@ -36,10 +36,10 @@ Module that defines the basic theories that should be available for all Applicat
 
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Theory import Theory
-from QTheory import QTheory
-from Parameter import Parameter, ParameterType, OptType
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PyQt5.QtWidgets import QToolBar, QSpinBox
 from PyQt5.QtCore import QSize
 
@@ -49,7 +49,7 @@ from PyQt5.QtCore import QSize
 
 class TheoryPolynomial(CmdBase):
     """Fit a polynomial of degree :math:`n` to the data
-    
+
     * **Function**
         .. math::
             y(x) = \\sum_{i=0}^n A_i x^i
@@ -77,7 +77,7 @@ class BaseTheoryPolynomial:
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -141,10 +141,10 @@ class BaseTheoryPolynomial:
 
     def polynomial(self, f=None):
         """Actual polynomial function.
-        
+
         .. math::
             (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -162,14 +162,14 @@ class BaseTheoryPolynomial:
 
 class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -180,14 +180,14 @@ class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
 
 class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -210,7 +210,7 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmode'
-        
+
         Arguments:
             - value {[type]} -- [description]
         """
@@ -223,7 +223,7 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
 
 class TheoryPowerLaw(CmdBase):
     """Fit a power law to the data
-    
+
     * **Function**
         .. math::
             y(x) = a x^b
@@ -238,14 +238,14 @@ class TheoryPowerLaw(CmdBase):
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -257,7 +257,7 @@ class TheoryPowerLaw(CmdBase):
 
 class BaseTheoryPowerLaw:
     """Fit a power law to the data
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
@@ -267,7 +267,7 @@ class BaseTheoryPowerLaw:
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -283,9 +283,9 @@ class BaseTheoryPowerLaw:
 
     def powerlaw(self, f=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -302,15 +302,15 @@ class BaseTheoryPowerLaw:
 
 class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -321,14 +321,14 @@ class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
 
 class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -343,7 +343,7 @@ class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
 
 class TheoryExponential(CmdBase):
     """Fit a single exponential decay to the data
-    
+
     * **Function**
         .. math::
             y(x) = a \\exp(-x/T)
@@ -358,14 +358,14 @@ class TheoryExponential(CmdBase):
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -377,7 +377,7 @@ class TheoryExponential(CmdBase):
 
 class BaseTheoryExponential:
     """Fit an exponential decay to the data
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
@@ -387,7 +387,7 @@ class BaseTheoryExponential:
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -408,9 +408,9 @@ class BaseTheoryExponential:
 
     def exponential(self, f=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -427,14 +427,14 @@ class BaseTheoryExponential:
 
 class CLTheoryExponential(BaseTheoryExponential, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -445,14 +445,14 @@ class CLTheoryExponential(BaseTheoryExponential, Theory):
 
 class GUITheoryExponential(BaseTheoryExponential, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -467,7 +467,7 @@ class GUITheoryExponential(BaseTheoryExponential, QTheory):
 
 class TheoryTwoExponentials(CmdBase):
     """Fit **two** single exponential decay to the data
-    
+
     * **Function**
         .. math::
             y(x) = a_1 \\exp(x/T_1) + a_2 \\exp(-x/T_2)
@@ -482,14 +482,14 @@ class TheoryTwoExponentials(CmdBase):
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -501,7 +501,7 @@ class TheoryTwoExponentials(CmdBase):
 
 class BaseTheoryTwoExponentials:
     """Fit 2 exponentials decay to the data
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
@@ -511,7 +511,7 @@ class BaseTheoryTwoExponentials:
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -539,9 +539,9 @@ class BaseTheoryTwoExponentials:
 
     def two_exponentials(self, f=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - f {[type]} -- [description] (default: {None})
         """
@@ -562,14 +562,14 @@ class BaseTheoryTwoExponentials:
 
 class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -580,14 +580,14 @@ class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
 
 class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {""})
             - parent_dataset {[type]} -- [description] (default: {None})

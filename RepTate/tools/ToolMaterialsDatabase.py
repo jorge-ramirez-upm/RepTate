@@ -36,17 +36,21 @@ MaterialsDatabase Viewer
 """
 import numpy as np
 import os
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QComboBox, QLabel, QToolBar, QLineEdit, QAction, QMessageBox, QDialog, QDialogButtonBox, QVBoxLayout, QGroupBox, QFormLayout, QInputDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
 from pathlib import Path
-import polymer_data
+import RepTate.tools.polymer_data as polymer_data
 from colorama import Fore
+
+# The following two lines are temporary. They can be removed after the database is pickeld with RepTate.ttols.polymer_data instead of polymer_data
+import sys
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 materials_database = np.load(os.path.join(dir_path, 'materials_database.npy'), allow_pickle=True).item()
@@ -104,7 +108,7 @@ class EditMaterialParametersDialog(QDialog):
 
 
 def check_chemistry(chem):
-    """Check if the file contains chemistry. If so, check if the chemistry appears in 
+    """Check if the file contains chemistry. If so, check if the chemistry appears in
     the user or general materials database.
         Arguments:
             - chem {str} -- Chemistry
@@ -119,7 +123,7 @@ def check_chemistry(chem):
         return -1
 
 def get_all_parameters(chem, theory, fparam, dbindex):
-    """Gets all possible parameters from the corresponding materials database. 
+    """Gets all possible parameters from the corresponding materials database.
     The function check_chemistry must be involed before this one, to get chem and dbindex.
         Arguments:
             - chem {str} -- Chemistry
@@ -133,14 +137,14 @@ def get_all_parameters(chem, theory, fparam, dbindex):
         if p in materials_db[dbindex][chem].data.keys():
             value, success = get_single_parameter(chem, p, fparam, dbindex)
             if success:
-                theory.set_param_value(p, value) 
+                theory.set_param_value(p, value)
 
 def get_single_parameter(chem, param, fparam, dbindex):
-    """Returns the parameter 'param' of the chemistry 'chem' using the database 
+    """Returns the parameter 'param' of the chemistry 'chem' using the database
     given by dbindex (0 user, 1 general) and taking into account the parameters
-    of fparam (for example, T and Mw). 
+    of fparam (for example, T and Mw).
     The parameter 'param' must exist in the database. This is done when this function
-    is invoked from get_all_parameters. If this function is invoked directly, the 
+    is invoked from get_all_parameters. If this function is invoked directly, the
     condition must be chedked beforehand.
         Arguments:
             - chem {str} -- Chemistry
@@ -161,7 +165,7 @@ def get_single_parameter(chem, param, fparam, dbindex):
         B1 = materials_db[dbindex][chem].data['B1']
         B2 = materials_db[dbindex][chem].data['B2']
         Te = materials_db[dbindex][chem].data['Te']
-        aT = np.power(10.0, -B1 * (Te - T) / (B2 + T) / (B2 + Te))        
+        aT = np.power(10.0, -B1 * (Te - T) / (B2 + T) / (B2 + Te))
         tau_e /= aT; # We don´t consider the effect of Tg in this estimate
         return tau_e, True
     elif param=='Ge':
@@ -203,14 +207,14 @@ class ToolMaterialsDatabase(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -219,7 +223,7 @@ class ToolMaterialsDatabase(CmdBase):
 
 class BaseToolMaterialsDatabase:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
@@ -229,7 +233,7 @@ class BaseToolMaterialsDatabase:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
             - name {[type]} -- [description] (default: {''})
         Keyword Arguments:
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -258,7 +262,7 @@ class BaseToolMaterialsDatabase:
         self.parameters['C_inf'] = Parameter(name='C_inf', description='Characteristic ratio')
 
     def calculate(self, x, y, ax=None, color=None):
-        """MaterialsDatabase function that returns the square of the y, according to the view        
+        """MaterialsDatabase function that returns the square of the y, according to the view
         """
         return x, y
 
@@ -266,7 +270,7 @@ class BaseToolMaterialsDatabase:
         """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
 Example:
     calculate_stuff 35.4 240 1 1
-    
+
     Mw=35.4 T=240 isofrictional=True verticalshift=True"""
         items=line.split()
         if len(items)==4:
@@ -291,7 +295,7 @@ Example:
                 Trcorrected = T - CTg / Mw #+ 68.7 * dx12
             else:
                 Trcorrected = T
-            
+
             aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
             if vert:
                 bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
@@ -325,14 +329,14 @@ Example:
 
 class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -351,7 +355,7 @@ class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
         db=check_chemistry(line)
         if line=="":
             print("Current Material: " + Fore.RED + self.parameters['name'].value)
-        elif db<0:    
+        elif db<0:
             print("Material " + Fore.RED + line + Fore.RESET + " not found.")
         else:
             for k in materials_db[db][line].data.keys():
@@ -367,14 +371,14 @@ class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
 
 class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -480,8 +484,8 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
                 ok = False
 
         # Create new material with empty  parameters and open the edit dialog
-        newmaterial=polymer_data.polymer(name=name,long='Long Name', author='Author', date='dd/mm/yyyy', 
-                                         source='lab', comment='comment', B1=900, B2=100, logalpha=-3, CTg=0, 
+        newmaterial=polymer_data.polymer(name=name,long='Long Name', author='Author', date='dd/mm/yyyy',
+                                         source='lab', comment='comment', B1=900, B2=100, logalpha=-3, CTg=0,
                                          tau_e=1.e-6, Ge=1.E6, Me=1.6, c_nu=0.1, rho0=1.0, chem='C6H6', Te=25, M0=0)
         newmaterial.data['name']=name
         materials_user_database[name]=newmaterial
@@ -493,7 +497,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.edit_material()
 
     """
-    Edit the parameters of a user material. 
+    Edit the parameters of a user material.
         - dbindex {int} -- Index of the database to use (0 user, 1 general)
     """
     def edit_material(self):
@@ -515,11 +519,11 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
                         print(e)
                 self.set_param_value(p, material.data[p])
             self.change_material()
-                
+
     def save_usermaterials(self):
         home_path = str(Path.home())
         file_user_database = os.path.join(home_path, 'user_database.npy')
-        np.save(file_user_database, materials_user_database) 
+        np.save(file_user_database, materials_user_database)
 
     def copy_material(self):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
@@ -534,16 +538,16 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
                 ok = False
         # Create new user material with same parameters as source material and new NAME
         #newpar=
-        selected_material_name = self.cbmaterial.currentText()        
+        selected_material_name = self.cbmaterial.currentText()
         if (self.cbmaterial.currentIndex() < self.num_materials_base):
             dbindex = 1
         else:
             dbindex = 0
         aux=materials_db[dbindex][selected_material_name].data
-        newmaterial=polymer_data.polymer(name=name, long=aux['long'], author='Alexei Likhtman', date='17/03/2006', 
+        newmaterial=polymer_data.polymer(name=name, long=aux['long'], author='Alexei Likhtman', date='17/03/2006',
                                          source=aux['source'], comment=aux['comment'], B1=aux['B1'], B2=aux['B2'],
-                                         logalpha=aux['logalpha'], CTg=aux['CTg'], tau_e=aux['tau_e'], Ge=aux['Ge'], 
-                                         Me=aux['Me'], c_nu=aux['c_nu'], rho0=aux['rho0'], chem=aux['chem'], 
+                                         logalpha=aux['logalpha'], CTg=aux['CTg'], tau_e=aux['tau_e'], Ge=aux['Ge'],
+                                         Me=aux['Me'], c_nu=aux['c_nu'], rho0=aux['rho0'], chem=aux['chem'],
                                          Te=aux['Te'], M0=aux['M0'])
         materials_user_database[name]=newmaterial
         item = QStandardItem(name)
@@ -559,12 +563,12 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             QMessageBox.warning(self, 'Dekete material parameters', 'Error: Only user materials can be deleted.')
             return
         # Dialog to ask for confimarion
-        ans = QMessageBox.question(self, "Delete material parameters", 
-                "Do you want to delete the material %s?"%selected_material_name, 
+        ans = QMessageBox.question(self, "Delete material parameters",
+                "Do you want to delete the material %s?"%selected_material_name,
                 buttons=(QMessageBox.Yes | QMessageBox.No))
         # Delete from ComboBox and User Material dictionary
         if ans == QMessageBox.Yes:
-            self.cbmaterial.removeItem(self.cbmaterial.currentIndex()) 
+            self.cbmaterial.removeItem(self.cbmaterial.currentIndex())
             materials_user_database.pop(selected_material_name)
 
     def calculate_stuff(self, line=""):
@@ -589,7 +593,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             Trcorrected = T - CTg / Mw #+ 68.7 * dx12
         else:
             Trcorrected = T
-        
+
         aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
         if vert:
             bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)

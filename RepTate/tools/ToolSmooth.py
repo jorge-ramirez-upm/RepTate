@@ -36,11 +36,11 @@ Smooth data by applying a Savitzky-Golay filter
 """
 import traceback
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 from scipy.signal import savgol_filter
 
 class ToolSmooth(CmdBase):
@@ -58,7 +58,7 @@ class ToolSmooth(CmdBase):
 
 class BaseToolSmooth:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
@@ -68,7 +68,7 @@ class BaseToolSmooth:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -107,19 +107,19 @@ class BaseToolSmooth:
         except Exception as e:
             self.Qprint("in ToolSmooth.calculate(): %s"%traceback.format_exc())
             return x, y
-        
+
 
 
 class CLToolSmooth(BaseToolSmooth, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -132,14 +132,14 @@ class CLToolSmooth(BaseToolSmooth, Tool):
 
 class GUIToolSmooth(BaseToolSmooth, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -157,7 +157,7 @@ class GUIToolSmooth(BaseToolSmooth, QTool):
         try:
             new_value = int(value)
         except ValueError:
-            return "Value must be a integer", False        
+            return "Value must be a integer", False
         message, success = super().set_param_value(name, value)
         if success:
             if name == 'window':
@@ -172,5 +172,5 @@ class GUIToolSmooth(BaseToolSmooth, QTool):
                     p.value = old_value
                     message = "order must be >=0 and smaller than window"
                     success = False
-           
+
         return message, success

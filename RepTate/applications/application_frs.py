@@ -35,12 +35,12 @@
 Module for handling FRS experiments and simulations.
 
 """
-from Application import Application
+from RepTate.core.Application import Application
 
 
 class ApplicationFRS_I(Application):
     """Application to FRS Intensity simulations
-    
+
     [description]
     """
     name = "FRS_I"
@@ -49,7 +49,7 @@ class ApplicationFRS_I(Application):
     def __init__(self, name="FRS_I", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"FRS_I"})
             - parent {[type]} -- [description] (default: {None})
@@ -98,13 +98,13 @@ class ApplicationFRS_I(Application):
 
     def viewIt(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -116,13 +116,13 @@ class ApplicationFRS_I(Application):
 
     def viewLogIt(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """

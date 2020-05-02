@@ -35,17 +35,17 @@
 Module for handling data from start up of shear and extensional flow experiments.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationNLVE(CmdBase):
     """Application to Analyze Start up of Nonlinear flow
-    
+
     """
     appname = "NLVE"
     description = "Non-Linear Flow"
@@ -53,13 +53,13 @@ class ApplicationNLVE(CmdBase):
 
     def __new__(cls, name="NLVE", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"NLVE"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationNLVE(CmdBase):
 
 class BaseApplicationNLVE:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html'
@@ -80,7 +80,7 @@ class BaseApplicationNLVE:
     def __init__(self, name="NLVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -120,7 +120,7 @@ class BaseApplicationNLVE:
             log_y=True,
             view_proc=self.vieweta,
             n=1,
-            snames=["eta"])            
+            snames=["eta"])
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
             description="log transient shear stress vs gamma",
@@ -144,7 +144,7 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewSigmaGamma,
             n=1,
-            snames=["sigma"])            
+            snames=["sigma"])
         self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs time",
@@ -212,7 +212,7 @@ class BaseApplicationNLVE:
         self.theories[TheoryPETS.thname] = TheoryPETS
         self.theories[TheorySCCR.thname] = TheorySCCR
         self.add_common_theories()
-        
+
         #set the current view
         self.set_views()
 
@@ -228,7 +228,7 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
-        
+
     def vieweta(self, dt, file_parameters):
         """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)
         """
@@ -259,7 +259,7 @@ class BaseApplicationNLVE:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def viewLogSigmaGamma(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`
         """
@@ -272,7 +272,7 @@ class BaseApplicationNLVE:
         x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  #compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
-        
+
     def viewSigmaGamma(self, dt, file_parameters):
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`
         """
@@ -285,7 +285,7 @@ class BaseApplicationNLVE:
         x[:, 0] = dt.data[:, 0] * flow_rate  #compute strain
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def view_flowcurve(self, dt, file_parameters):
         """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
         """
@@ -303,14 +303,14 @@ class BaseApplicationNLVE:
 
 class CLApplicationNLVE(BaseApplicationNLVE, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="NLVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -320,14 +320,14 @@ class CLApplicationNLVE(BaseApplicationNLVE, Application):
 
 class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="NLVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})

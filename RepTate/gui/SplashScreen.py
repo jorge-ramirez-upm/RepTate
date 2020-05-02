@@ -34,22 +34,22 @@
 
 Module that defines the GUI Splashscreen that is loaded during the startup of RepTate.
 
-""" 
+"""
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QColor
 from PyQt5.QtWidgets import QSplashScreen, QApplication, QLabel
 from PyQt5.QtGui import QPixmap, QFont
-import Version
+import RepTate.core.Version as Version
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress
-    
+
     [description]
     """
     def __init__(self):
         """
         **Constructor**
-        
+
         [description]
         """
         QSplashScreen.__init__(
@@ -68,9 +68,9 @@ class SplashScreen(QSplashScreen):
 
     def showMessage(self, msg):
         """Procedure to update message in splash
-        
+
         [description]
-        
+
         Arguments:
             - msg {[type]} -- [description]
         """
@@ -84,11 +84,11 @@ class SplashScreen(QSplashScreen):
 
     def clearMessage(self):
         """[summary]
-        
+
         [description]
         """
         QSplashScreen.clearMessage(self)
         QApplication.processEvents()
-        
+
     def mousePressEvent(self, event):
         self.hide()

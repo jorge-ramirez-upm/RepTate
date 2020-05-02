@@ -43,17 +43,17 @@ import numpy as np
 from scipy.optimize import curve_fit, basinhopping, dual_annealing, differential_evolution, shgo, brute
 from scipy.stats.distributions import t
 
-from CmdBase import CmdBase, CmdMode
-from DataTable import DataTable
-from Parameter import Parameter, ParameterType, OptType
-from DraggableArtists import DraggableVLine, DraggableHLine, DragType
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.DataTable import DataTable
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox
 
 from collections import OrderedDict
 from math import log
-from ToolMaterialsDatabase import check_chemistry, get_all_parameters
+from RepTate.tools.ToolMaterialsDatabase import check_chemistry, get_all_parameters
 from colorama import Fore
 import logging
 from scipy.interpolate import interp1d
@@ -69,13 +69,13 @@ class MLStripper(HTMLParser):
 
     def handle_data(self, d):
         self.fed.append(d)
-    
+
     def get_data(self):
         return ''.join(self.fed)
-        
+
 class MinimizationMethod(enum.Enum):
     """Method used during minimization
-    
+
     Parameters can be:
         - ls: Non-linear Least Squares (default)
         - basinhopping: Basin-hopping method
@@ -92,7 +92,7 @@ class MinimizationMethod(enum.Enum):
     SHGO=4
     bruteforce=5
     types=["ls", "basinhopping", "dualannealing", "diffevol", "SHGO", "bruteforce"]
-    descriptions=["Non-linear Least Squares", "Basin-hopping method", "Dual-Annealing", 
+    descriptions=["Non-linear Least Squares", "Basin-hopping method", "Dual-Annealing",
                   "Differential Evolution", "Simplicial Homology Global Optimization", "Find the minimum on a hypergrid"]
 
     def __str__(self):
@@ -104,7 +104,7 @@ class MinimizationMethod(enum.Enum):
 
 class ErrorCalculationMethod(enum.Enum):
     """Method to determine the error of a theory calculation.
-    
+
     Options are:
         - View1: Use current view number 1 in the application.
         - RawData: Use the data table as defined by the application.
@@ -136,7 +136,7 @@ class Theory(CmdBase):
     def __init__(self, name="Theory", parent_dataset=None, axarr=None):
         """
         **Constructor**
-        
+
         The following variables should be set by the particular realization of the theory:
             - parameters     (dict): Parameters of the theory
             - function       (func): Function that calculates the theory
@@ -149,7 +149,7 @@ class Theory(CmdBase):
             - eps            (real): precision for adaptive algorithms
             - integration_method   : Euler, RungeKutta5, AdaptiveDt
             - stop_steady    (bool): Stop calculation if steady state of component 0 is attained
-        
+
         Keyword Arguments:
             - name {str} -- Name of theory (default: {"Theory"})
             - parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
@@ -258,7 +258,7 @@ class Theory(CmdBase):
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
         self.logger.info('numpy: %s (flag %s)'%(type, flag))
-   
+
     def setup_default_minimization_options(self):
         # MINIMIZATION OPTIONS
         self.mintype=MinimizationMethod.ls
@@ -267,7 +267,7 @@ class Theory(CmdBase):
         self.LSftol=1e-8
         self.LSxtol=1e-8
         self.LSgtol=1e-8
-        self.LSloss='linear' 
+        self.LSloss='linear'
         self.LSf_scale=1.0
         self.LSmax_fnev=None
         self.LStr_solver=None
@@ -316,13 +316,13 @@ class Theory(CmdBase):
         self.normalizebydata = False
 
     def destructor(self):
-        """If the theory needs to erase some memory in a special way, any 
+        """If the theory needs to erase some memory in a special way, any
         child theory must rewrite this funcion"""
         pass
 
     def precmd(self, line):
         """Calculations before the theory is calculated
-        
+
         This function could be erased
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
@@ -400,7 +400,7 @@ class Theory(CmdBase):
                 data_min = np.zeros((len(xextra_min), ncol))
                 data_min[:, 0] = xextra_min
                 fcopy.data_table.data = np.concatenate((data_min, fcopy.data_table.data))
-        
+
         try:
             thmax = float(fcopy.theory_xmax)
         except ValueError:
@@ -416,7 +416,7 @@ class Theory(CmdBase):
                 data_max[:, 0] = xextra_max
                 fcopy.data_table.data = np.concatenate((fcopy.data_table.data, data_max))
         fcopy.data_table.num_rows = fcopy.data_table.data.shape[0]
-    
+
     def get_non_extended_th_table(self, f):
         """return a copy of the theory table associated with f, where the extra rows are deleted"""
         if f.with_extra_x:
@@ -447,14 +447,14 @@ class Theory(CmdBase):
 
     def do_error(self, line):
         """Report the error of the current theory
-        
+
 Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
 File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
-        tools = self.parent_dataset.parent_application.tools       
+        tools = self.parent_dataset.parent_application.tools
         # table='''<table border="1" width="100%">'''
         # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
         tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
@@ -512,7 +512,7 @@ This routine works when the theory and the experimental data are not measured on
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
-        tools = self.parent_dataset.parent_application.tools       
+        tools = self.parent_dataset.parent_application.tools
         tab_data = [['%-18s' % 'File', '%-18s' % 'Error (RSS)', '%-18s' % '# Pts'],]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -541,7 +541,7 @@ This routine works when the theory and the experimental data are not measured on
                     ~np.isinf(yexp)) * (~np.isinf(yth2))
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth2 = np.extract(conditionx * conditiony * conditionnaninf, yth2)
-                
+
             if self.normalizebydata:
                 f_error = np.mean(((yth2 - yexp)/yexp)**2)
             else:
@@ -602,7 +602,7 @@ This routine works when the theory and the experimental data are not measured on
         return tmax and tmin
 
     def func_fit_and_error(self, x):
-        """Calls the theory function, constructs the vector with the theory predictions and 
+        """Calls the theory function, constructs the vector with the theory predictions and
            returns the sum of the squares of the residuals
         """
         # NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT
@@ -627,7 +627,7 @@ This routine works when the theory and the experimental data are not measured on
         # 2. Call the theory function
         self.do_calculate("", timing=False)
 
-        # 3. Constructs the y vector that contains all the Y values from the theory after 
+        # 3. Constructs the y vector that contains all the Y values from the theory after
         #    applying the current view and respecting the {xmin, xmax} & {ymin, ymax} limits
         y = []
         view = self.parent_dataset.parent_application.current_view
@@ -737,14 +737,14 @@ This routine works when the theory and the experimental data are not measured on
             par = self.parameters[p]
             if par.opt_type == OptType.opt:
                 initial_guess.append(par.value)
-                self.param_min.append(par.min_value)  
-                self.param_max.append(par.max_value)  
+                self.param_min.append(par.min_value)
+                self.param_max.append(par.max_value)
         # Return if the list of checked parameters is empty
         if (not initial_guess) or (not self.param_min) or (not self.param_max):
             self.Qprint("No parameter to minimize")
             self.is_fitting = False
             return
-        
+
         # 3. This is where the actual optimization is done
         # TODO: We should add the option to use different minimization methods
         #       like those included in scipy or even other ones implemented by us (MC methods)
@@ -774,17 +774,17 @@ This routine works when the theory and the experimental data are not measured on
                 elif self.LSmethod=='lm':
                     self.Qprint("Method: Levenberg-Marquardt")
                 if self.LSmethod=='trf' or self.LSmethod=='dogbox':
-                    pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                    pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max),
                                         method=self.LSmethod, jac=self.LSjac, ftol=self.LSftol, xtol=self.LSxtol,
                                         gtol=self.LSgtol, loss=self.LSloss, f_scale=self.LSf_scale, max_nfev=self.LSmax_fnev,
                                         tr_solver=self.LStr_solver)
                 else:
                     if self.LSmax_fnev==None:
-                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max),
                                             method=self.LSmethod, ftol=self.LSftol, xtol=self.LSxtol,
                                             gtol=self.LSgtol)
                     else:
-                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max), 
+                        pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess, bounds=(self.param_min, self.param_max),
                                             method=self.LSmethod, ftol=self.LSftol, xtol=self.LSxtol,
                                             gtol=self.LSgtol, maxfev=self.LSmax_fnev)
             except Exception as e:
@@ -798,9 +798,9 @@ This routine works when the theory and the experimental data are not measured on
             self.Qprint('<b>Global optimisation</b>')
             minimizer_kwargs = {"method": "BFGS"}
             try:
-                ret = basinhopping(self.func_fit_and_error, initial_guess, niter=self.basinniter, T=self.basinT, 
-                                   stepsize=self.basinstepsize, minimizer_kwargs=minimizer_kwargs,  
-                                   accept_test=self.fit_check_bounds, callback=self.fit_callback_basinhopping, 
+                ret = basinhopping(self.func_fit_and_error, initial_guess, niter=self.basinniter, T=self.basinT,
+                                   stepsize=self.basinstepsize, minimizer_kwargs=minimizer_kwargs,
+                                   accept_test=self.fit_check_bounds, callback=self.fit_callback_basinhopping,
                                    interval=self.basininterval, niter_success=self.basinniter_success, seed=self.basinseed)
                 initial_guess1=ret.x
                 pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), method='trf')
@@ -815,61 +815,61 @@ This routine works when the theory and the experimental data are not measured on
             self.Qprint('<b>Global optimisation</b>')
             try:
                 param_bounds=list(zip(self.param_min, self.param_max))
-                ret = dual_annealing(self.func_fit_and_error, bounds=param_bounds, 
-                                     maxiter=self.annealmaxiter, initial_temp=self.annealinitial_temp, 
-                                     restart_temp_ratio=self.annealrestart_temp_ratio, 
-                                     visit=self.annealvisit, accept=self.annealaccept, 
+                ret = dual_annealing(self.func_fit_and_error, bounds=param_bounds,
+                                     maxiter=self.annealmaxiter, initial_temp=self.annealinitial_temp,
+                                     restart_temp_ratio=self.annealrestart_temp_ratio,
+                                     visit=self.annealvisit, accept=self.annealaccept,
                                      maxfun=self.annealmaxfun, seed=self.annealseed,
                                      no_local_search=self.annealno_local_search,
                                      callback=self.fit_callback_dualannealing, x0=initial_guess)
                 initial_guess1=ret.x
-                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, 
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1,
                                        bounds=(self.param_min, self.param_max), method='trf')
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
                 self.is_fitting = False
-                return 
+                return
 
         elif self.mintype==MinimizationMethod.diffevol:
             self.Qprint("<b>Differential Evolution<b>")
             self.Qprint('<b>Global optimisation</b>')
             try:
                 param_bounds=list(zip(self.param_min, self.param_max))
-                ret = differential_evolution(self.func_fit_and_error, bounds=param_bounds, 
+                ret = differential_evolution(self.func_fit_and_error, bounds=param_bounds,
                                              strategy=self.diffevolstrategy, maxiter=self.diffevolmaxiter,
-                                             popsize=self.diffevolpopsize, tol=self.diffevoltol, 
+                                             popsize=self.diffevolpopsize, tol=self.diffevoltol,
                                              mutation=self.diffevolmutation, recombination=self.diffevolrecombination,
                                              seed=self.diffevolseed, callback=self.fit_callback_diffevol,
-                                             polish=self.diffevolpolish, init=self.diffevolinit, 
+                                             polish=self.diffevolpolish, init=self.diffevolinit,
                                              atol=self.diffevolatol, updating=self.diffevolupdating)
                 initial_guess1=ret.x
-                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max),
                                        method='trf')
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
                 self.is_fitting = False
-                return 
-                
+                return
+
         elif self.mintype==MinimizationMethod.SHGO:
             self.Qprint("<b>Simplicial Homology Global Optimization<b>")
             try:
                 param_bounds=list(zip(self.param_min, self.param_max))
                 options={'maxfev': self.SHGOmaxfev, 'f_min': self.SHGOf_min, 'f_tol': self.SHGOf_tol,
                          'maxiter': self.SHGOmaxiter, 'maxev': self.SHGOmaxev, 'maxtime': self.SHGOmaxtime,
-                         'minhgrd': self.SHGOminhgrd, 'minimize_every_iter': self.SHGOminimize_every_iter, 
+                         'minhgrd': self.SHGOminhgrd, 'minimize_every_iter': self.SHGOminimize_every_iter,
                          'local_iter': self.SHGOlocal_iter, 'infty_constraints': self.SHGOinfty_constraints}
                 ret = shgo(self.func_fit_and_error, bounds=param_bounds, n=self.SHGOn, iters=self.SHGOiters,
                            callback=self.fit_callback_shgo, options=options, sampling_method=self.SHGOsampling_method)
                 initial_guess1=ret.x
-                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max),
                                        method='trf')
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
                 self.is_fitting = False
-                return 
+                return
 
         elif self.mintype==MinimizationMethod.bruteforce:
             self.Qprint("<b>Brute Force Global Optimization<b>")
@@ -877,13 +877,13 @@ This routine works when the theory and the experimental data are not measured on
                 param_bounds=list(zip(self.param_min, self.param_max))
                 ret = brute(self.func_fit_and_error, ranges=param_bounds, Ns=self.BruteNs)
                 initial_guess1=ret
-                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max), 
+                pars, pcov = curve_fit(self.func_fit, x, y, p0=initial_guess1, bounds=(self.param_min, self.param_max),
                                        method='trf')
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
                 self.is_fitting = False
-                return 
+                return
 
         # 4. Statistical analysis of the solution found
         residuals = y - self.func_fit(x, *initial_guess)
@@ -930,7 +930,7 @@ This routine works when the theory and the experimental data are not measured on
                 # table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
                 table.append(['%-18s' % par.name, '%-18.4g' % par.value])
         # table+='''</table><br>'''
-        self.Qprint(table)        
+        self.Qprint(table)
         self.is_fitting = False
         self.do_calculate(line, timing=False)
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
@@ -940,7 +940,7 @@ This routine works when the theory and the experimental data are not measured on
         """Shows or changes the minimization method"""
         if (line==""):
             print("Current minimization method:")
-            print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] + 
+            print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] +
                   Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
         elif (line=="available"):
             m = MinimizationMethod(0)
@@ -949,7 +949,7 @@ This routine works when the theory and the experimental data are not measured on
             self.mintype=MinimizationMethod[line]
         else:
             print ("Minimization method %s not valid"%line)
-        
+
     def complete_mintype(self, text, line, begidx, endidx):
         """Complete mintype command"""
         types = MinimizationMethod.types.value + ["available"]
@@ -978,7 +978,7 @@ This routine works when the theory and the experimental data are not measured on
     def do_parameters(self, line):
         """View and switch the minimization state of the theory parameters
            parameters A B
-        
+
         Several parameters are allowed. With no arguments, show the current values
         """
         if (line == ""):
@@ -1011,15 +1011,15 @@ This routine works when the theory and the experimental data are not measured on
 
     def complete_parameters(self, text, line, begidx, endidx):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - text {[type]} -- [description]
             - line {[type]} -- [description]
             - begidx {[type]} -- [description]
             - endidx {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -1028,11 +1028,11 @@ This routine works when the theory and the experimental data are not measured on
             completions = parameter_names[:]
         else:
             completions = [f for f in parameter_names if f.startswith(text)]
-        return completions        
-        
+        return completions
+
     def plot_theory_stuff(self):
         """[summary]
-        
+
         [description]
         """
         pass
@@ -1080,7 +1080,7 @@ This routine works when the theory and the experimental data are not measured on
                 fout.write('\n')
             fout.close()
             counter += 1
-        
+
         # print information
         msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
         if CmdBase.mode == CmdMode.GUI:
@@ -1095,9 +1095,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def change_xmin(self, dx, dy):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dx {[type]} -- [description]
             - dy {[type]} -- [description]
@@ -1112,9 +1112,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def change_xmax(self, dx, dy):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dx {[type]} -- [description]
             - dy {[type]} -- [description]
@@ -1129,9 +1129,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def change_ymin(self, dx, dy):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dx {[type]} -- [description]
             - dy {[type]} -- [description]
@@ -1143,9 +1143,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def change_ymax(self, dx, dy):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dx {[type]} -- [description]
             - dy {[type]} -- [description]
@@ -1157,9 +1157,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def do_xrange(self, line, visible=None):
         """Set/show xrange for fit and shows limits
-        
+
         With no arguments: switches ON/OFF the horizontal span
-        
+
         Arguments:
             - line {[xmin xmax]} -- Sets the limits of the span
 
@@ -1199,9 +1199,9 @@ This routine works when the theory and the experimental data are not measured on
 
     def do_yrange(self, line, visible=None):
         """Set/show yrange for fit and shows limits
-        
+
         With no arguments: switches ON/OFF the vertical span
-        
+
         Arguments:
             - line {[ymin ymax]} -- Sets the limits of the span
         """
@@ -1237,7 +1237,7 @@ This routine works when the theory and the experimental data are not measured on
 
     def set_xy_limits_visible(self, xstate=False, ystate=False):
         """Hide the x- and y-range selectors
-        
+
         [description]
         """
         self.xrange.set_visible(xstate)
@@ -1266,7 +1266,7 @@ This routine works when the theory and the experimental data are not measured on
         L, S= apmng.list_theories_Maxwell(th_exclude=self)
         if line in L.keys():
             tau, G0, success = L[line]()
-            if not success: 
+            if not success:
                 self.logger.warning("Could not get modes successfully")
             tauinds = (-tau).argsort()
             tau = tau[tauinds]
@@ -1392,11 +1392,11 @@ that provide this functionality."""
 
     def default(self, line):
         """Called when the input command is not recognized
-        
+
         Called on an input line when the command prefix is not recognized.
         Check if there is an = sign in the line. If so, it is a parameter change.
         Else, we execute the line as Python code.
-        
+
         Arguments:
             - line {[type]} -- [description]
         """
@@ -1417,7 +1417,7 @@ that provide this functionality."""
 
     def do_hide(self, line=''):
         """Hide the theory artists and associated tools
-        
+
         [description]
         """
         if self.active:
@@ -1438,7 +1438,7 @@ that provide this functionality."""
 
     def do_show(self, line=''):
         """[summary]
-        
+
         [description]
         """
         self.active = True
@@ -1457,9 +1457,9 @@ that provide this functionality."""
 
     def Qprint(self, msg, end='<br>'):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - msg {[type]} -- [description]
         """
@@ -1477,7 +1477,7 @@ that provide this functionality."""
                 msg = msg.replace('<br>', '\n')
                 msg = self.strip_tags(msg)
             print(msg, end=end)
-    
+
     def table_as_html(self, tab):
         header = tab[0]
         rows = tab[1:]
@@ -1539,12 +1539,12 @@ that provide this functionality."""
             if chem in materials_user_database.keys():
                 for p in self.parameters.keys():
                     if p in materials_user_database[chem].data.keys():
-                        self.set_param_value(p, materials_user_database[chem].data[p]) 
+                        self.set_param_value(p, materials_user_database[chem].data[p])
                 return True
             elif chem in materials_database.keys():
                 for p in self.parameters.keys():
                     if p in materials_database[chem].data.keys():
-                        self.set_param_value(p, materials_database[chem].data[p]) 
+                        self.set_param_value(p, materials_database[chem].data[p])
                 return True
             else:
                 return False

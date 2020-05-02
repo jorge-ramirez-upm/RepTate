@@ -36,11 +36,11 @@ Module for handling small angle oscillatory shear experiments and applying the
 time-temperature superposition principle.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
@@ -86,8 +86,8 @@ class BaseApplicationTTS:
             - name {[type]} -- [description] (default: {"TTS"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryTTS import TheoryWLFShift
-        from TheoryTTS_Automatic import TheoryTTSShiftAutomatic
+        from RepTate.theories.TheoryTTS import TheoryWLFShift
+        from RepTate.theories.TheoryTTS_Automatic import TheoryTTSShiftAutomatic
         super().__init__(name, parent)
 
         # VIEWS
@@ -338,7 +338,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewLogEtaStar(self, dt, file_parameters):
-        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)` 
+        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -366,7 +366,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewLogTanDelta(self, dt, file_parameters):
-        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)` 
+        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -375,7 +375,7 @@ class BaseApplicationTTS:
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
-        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)` 
+        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -478,14 +478,14 @@ class BaseApplicationTTS:
 
 class CLApplicationTTS(BaseApplicationTTS, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="TTS", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"TTS"})
             - parent {[type]} -- [description] (default: {None})
@@ -495,14 +495,14 @@ class CLApplicationTTS(BaseApplicationTTS, Application):
 
 class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="TTS", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"TTS"})
             - parent {[type]} -- [description] (default: {None})

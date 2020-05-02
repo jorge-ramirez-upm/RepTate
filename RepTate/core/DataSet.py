@@ -41,12 +41,12 @@ import os
 import glob
 
 from enum import Enum
-from CmdBase import CmdBase, CmdMode
-from Theory import Theory
-from Tool import Tool
-from FileType import TXTColumnFile
-from File import File
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Theory import Theory
+from RepTate.core.Tool import Tool
+from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.File import File
+from RepTate.core.DataTable import DataTable
 
 import itertools
 from collections import OrderedDict
@@ -278,7 +278,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             th.set_th_table_visible(file_matching[0].file_name_short,
                                     check_state)
 
-                                    
+
         #save the check_state to recover it upon change of tab or 'view all' events
         if check_state == False:
             self.inactive_files[file_matching[0]
@@ -314,7 +314,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         for th in self.theories.values():
             th.do_hide()
         self.do_plot("")
-    
+
     def do_file_hide(self, line):
         """Hide a specific file"""
         done = False
@@ -564,10 +564,10 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                 tt.series[nx][i].set_marker('.')
                                 if view.filled:
                                     tt.series[nx][i].set_markerfacecolor(th_color)
-                                else: 
+                                else:
                                     tt.series[nx][i].set_markerfacecolor('none')
                                 tt.series[nx][i].set_markersize(size)
- 
+
                             tt.series[nx][i].set_linewidth(self.th_line_width)
                             tt.series[nx][i].set_color(th_color)
                             tt.series[nx][i].set_label('')
@@ -580,11 +580,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
-        
+
 Examples:
     sort Mw,reverse
     sort T
-                
+
 Arguments:
     - Par {[str]} -- File parameter according to which the files will be sorted
     - reverse -- The files will be sorted in reverse order"""
@@ -636,7 +636,7 @@ Arguments:
                 dt = f.data_table
                 for i in range(dt.MAX_NUM_SERIES):
                         for nx in range(self.nplots):
-                            self.parent_application.axarr[nx].lines.remove(dt.series[nx][i]) 
+                            self.parent_application.axarr[nx].lines.remove(dt.series[nx][i])
                 self.files.remove(f)
                 done = True
                 self.do_plot()
@@ -674,7 +674,7 @@ Arguments:
 
     def do_file_new(self, line):
         """Add an empty file of the given type to the current Data Set
-        
+
 Arguments:
     - line {str} -- TYPE (extension of file) [, NAME (name, optional)]"""
         if (line == ""):
@@ -764,7 +764,7 @@ Arguments:
 
     def do_open(self, line):
         """Open file(s)
-        
+
 Arguments:
     - line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed"""
         if CmdBase.mode != CmdMode.GUI:
@@ -922,7 +922,7 @@ Arguments:
                 print(file.file_parameters)
                 print(Fore.GREEN + "Header Lines: " + Fore.RESET)
                 print(file.header_lines)
-                dfile = list(self.parent_application.filetypes.values())[0] 
+                dfile = list(self.parent_application.filetypes.values())[0]
                 inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
                 print(Fore.BLUE + "Column Header: " + Fore.RESET)
                 print(inspect_header)

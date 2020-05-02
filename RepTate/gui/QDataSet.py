@@ -41,11 +41,11 @@ from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon, QIntValidator, QDouble
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QTabWidget, QHeaderView, QToolBar, QComboBox, QMessageBox, QInputDialog, QFrame, QToolButton, QMenu, QAction, QAbstractItemView, QTableWidgetItem, QDialog, QVBoxLayout, QTableWidget, QDialogButtonBox, QGroupBox, QFormLayout, QLineEdit, QLabel, QFileDialog, QCheckBox
-from DataSet import DataSet
-from DataTable import DataTable
-from QTheory import QTheory
-from Theory import MinimizationMethod, ErrorCalculationMethod
-from DataSetWidget import DataSetWidget
+from RepTate.core.DataSet import DataSet
+from RepTate.core.DataTable import DataTable
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.Theory import MinimizationMethod, ErrorCalculationMethod
+from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import threading
 import matplotlib.patheffects as pe
@@ -177,16 +177,16 @@ class EditFileParametersDialog(QDialog):
 
 class QDataSet(DataSet, QWidget, Ui_DataSet):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="QDataSet", parent=None):
         """
         **Constructor**
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"QDataSet"})
             - parent {[type]} -- [description] (default: {None})
@@ -276,7 +276,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         menu2.addAction(self.actionPaste_Parameters)
         tbut2.setMenu(menu2)
         tb.addWidget(tbut2)
-        
+
         self.TheoryLayout.insertWidget(0, tb)
         self.splitter.setSizes((1000, 3000))
 
@@ -312,7 +312,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self.copy_parameters)
         connection_id = self.actionPaste_Parameters.triggered.connect(
             self.paste_parameters)
-            
+
 
         connection_id = self.actionVertical_Limits.triggered.connect(
             self.toggle_vertical_limits)
@@ -334,7 +334,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             self.theories[th].paste_parameters()
-            
+
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""
         th = self.current_theory
@@ -359,9 +359,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)
-        
+
         [description]
-        
+
         Arguments:
             - table_icon_list {[type]} -- [description]
         """
@@ -396,9 +396,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def theory_actions_disabled(self, state):
         """Disable theory buttons if no theory tab is open
-        
+
         [description]
-        
+
         Arguments:
             - state {[type]} -- [description]
         """
@@ -412,7 +412,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def set_limit_icon(self):
         """[summary]
-        
+
         [description]
         """
         if self.current_theory:
@@ -431,9 +431,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def set_no_limits(self, th_name):
         """Turn the x and yrange selectors off
-        
+
         [description]
-        
+
         Arguments:
             - th_name {[type]} -- [description]
         """
@@ -443,7 +443,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def toggle_vertical_limits(self, checked):
         """Show/Hide the xrange selector for fit
-        
+
         [description]
         """
         if self.current_theory:
@@ -454,7 +454,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def toggle_horizontal_limits(self, checked):
         """Show/Hide the yrange selector for fit
-        
+
         [description]
         """
         if self.current_theory:
@@ -531,9 +531,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             th.diffevolmaxiter=int(th.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.text())
             th.diffevolpopsize=int(th.fittingoptionsdialog.ui.diffevolpopsizelineEdit.text())
             th.diffevoltol=float(th.fittingoptionsdialog.ui.diffevoltollineEdit.text())
-            th.diffevolmutation=(float(th.fittingoptionsdialog.ui.diffevolmutationAlineEdit.text()), 
+            th.diffevolmutation=(float(th.fittingoptionsdialog.ui.diffevolmutationAlineEdit.text()),
                                  float(th.fittingoptionsdialog.ui.diffevolmutationBlineEdit.text()))
-            th.diffevolrecombination=float(th.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.text())                    
+            th.diffevolrecombination=float(th.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.text())
             if th.fittingoptionsdialog.ui.diffevolseedcheckBox.isChecked():
                 th.diffevolseed=int(th.fittingoptionsdialog.ui.diffevolseedlineEdit.text())
             else:
@@ -595,14 +595,14 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         if not success:
             return
-        
+
         if th.errorcalculationdialog.ui.View1radioButton.isChecked():
             th.errormethod = ErrorCalculationMethod.View1
         elif th.errorcalculationdialog.ui.RawDataradioButton.isChecked():
             th.errormethod = ErrorCalculationMethod.RawData
         elif th.errorcalculationdialog.ui.AllViewsradioButton.isChecked():
             th.errormethod = ErrorCalculationMethod.AllViews
-            
+
         th.normalizebydata = th.errorcalculationdialog.ui.NormalizecheckBox.isChecked()
 
 
@@ -637,7 +637,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_actionMinimize_Error(self):
         """Minimize the error
-        
+
         [description]
         """
         if self.current_theory and self.files:
@@ -677,9 +677,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed
-        
+
         [description]
-        
+
         Arguments:
             - index {[type]} -- [description]
         """
@@ -708,7 +708,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_thTabBarDoubleClicked(self, index):
         """Edit Theory name
-        
+
         Edit the theory tab name, leave 'theories' dictionary keys unchanged.
         Two tabs can share the same name
 
@@ -731,9 +731,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_thTabCloseRequested(self, index):
         """Delete a theory tab from the current dataset
-        
+
         [description]
-        
+
         Arguments:
             - index {[type]} -- [description]
         """
@@ -747,7 +747,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_itemSelectionChanged(self):
         """Define actions for when a file table is selected
-        
+
         [description]
         """
         selection = self.DataSettreeWidget.selectedItems()
@@ -766,7 +766,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def highlight_series(self):
         """Highligh the data series of the selected file
-        
+
         [description]
         """
         self.do_plot()  #remove current series highlight
@@ -804,7 +804,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def populate_inspector(self):
         """[summary]
-        
+
         [description]
         """
         file = self.selected_file
@@ -837,12 +837,12 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         # Update shift factors
         for i in range(DataTable.MAX_NUM_SERIES):
             self.parent_application.update_shifts(0, 0, i)
-             
+
     def handle_itemChanged(self, item, column):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - item {[type]} -- [description]
             - column {[type]} -- [description]
@@ -854,9 +854,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_sortIndicatorChanged(self, column, order):
         """Sort files according to the selected parameter (column) and replot
-        
+
         [description]
-        
+
         Arguments:
             - column {[type]} -- [description]
             - order {[type]} -- [description]
@@ -875,7 +875,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def Qshow_all(self):
         """Show all the files in this dataset, except those previously hiden
-        
+
         [description]
         """
         self.do_show_all("")
@@ -888,9 +888,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def resizeEvent(self, evt=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - evt {[type]} -- [description] (default: {None})
         """
@@ -903,9 +903,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_itemDoubleClicked(self, item, column):
         """Edit item entry upon double click
-        
+
         [description]
-        
+
         Arguments:
             - item {[type]} -- [description]
             - column {[type]} -- [description]
@@ -959,7 +959,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
                     try:
                         file.th_num_pts = float(d.th_num_pts.text())
                     except ValueError:
-                        pass 
+                        pass
                     try:
                         file.th_num_pts = max(int(d.th_num_pts.text()), 2)
                     except ValueError:
@@ -969,13 +969,13 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def handle_actionNew_Theory(self):
         """Create new theory and do fit
-        
+
         [description]
         """
         self.actionNew_Theory.setDisabled(True)
         if self.cbtheory.currentIndex() == 0:
             # by default, open first theory in the list
-            th_name = self.cbtheory.itemText(1) 
+            th_name = self.cbtheory.itemText(1)
         else:
             th_name = self.cbtheory.currentText()
         self.cbtheory.setCurrentIndex(0) # reset the combobox selection
@@ -985,9 +985,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
     def new_theory(self, th_name, th_tab_id="", calculate=True, show=True):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - th_name {[type]} -- [description]
         """

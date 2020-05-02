@@ -35,17 +35,17 @@
 Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationCrystal(CmdBase):
     """Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
-    
+
     """
     appname = "Crystal"
     description = "Flow induced Crystallisation"
@@ -53,13 +53,13 @@ class ApplicationCrystal(CmdBase):
 
     def __new__(cls, name="Crystal", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Crystal"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationCrystal(CmdBase):
 
 class BaseApplicationCrystal:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'
@@ -80,7 +80,7 @@ class BaseApplicationCrystal:
     def __init__(self, name="Crystal", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -186,7 +186,7 @@ class BaseApplicationCrystal:
             log_y=True,
             view_proc=self.vieweta,
             n=1,
-            snames=["eta"])                      
+            snames=["eta"])
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
             description="log transient shear stress vs gamma",
@@ -210,7 +210,7 @@ class BaseApplicationCrystal:
             log_y=False,
             view_proc=self.viewSigmaGamma,
             n=1,
-            snames=["sigma"])            
+            snames=["sigma"])
         self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs time",
@@ -297,7 +297,7 @@ class BaseApplicationCrystal:
         self.theories[TheoryGoPolyStrand.thname] = TheoryGoPolyStrand
         self.theories[TheorySmoothPolyStrand.thname] = TheorySmoothPolyStrand
         self.add_common_theories()
-        
+
         #set the current view
         self.set_views()
 
@@ -313,7 +313,7 @@ class BaseApplicationCrystal:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
-        
+
     def vieweta(self, dt, file_parameters):
         """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)
         """
@@ -335,7 +335,7 @@ class BaseApplicationCrystal:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 2]
         return x, y, True
-    
+
     def viewNt(self, dt, file_parameters):
         """Nucleation density as a function of time on log axis :math:`N(t)` vs time :math:`t` (x-axis on log scale by default)
         """
@@ -353,7 +353,7 @@ class BaseApplicationCrystal:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 3]
         return x, y, True
-    
+
     def viewLogSigmaTime(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`
         """
@@ -371,7 +371,7 @@ class BaseApplicationCrystal:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def viewLogSigmaGamma(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`
         """
@@ -384,7 +384,7 @@ class BaseApplicationCrystal:
         x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  #compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
-        
+
     def viewSigmaGamma(self, dt, file_parameters):
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`
         """
@@ -397,7 +397,7 @@ class BaseApplicationCrystal:
         x[:, 0] = dt.data[:, 0] * flow_rate  #compute strain
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def view_flowcurve(self, dt, file_parameters):
         """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
         """
@@ -429,14 +429,14 @@ class BaseApplicationCrystal:
 
 class CLApplicationCrystal(BaseApplicationCrystal, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Crystal", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -446,14 +446,14 @@ class CLApplicationCrystal(BaseApplicationCrystal, Application):
 
 class GUIApplicationCrystal(BaseApplicationCrystal, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Crystal", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})

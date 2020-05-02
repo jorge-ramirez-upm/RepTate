@@ -35,17 +35,17 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationDielectric(CmdBase):
     """Application to Analyze Dielectric Spectroscopy Data
-    
+
     """
     appname = "Dielectric"
     description = "Dielectric Spectroscopy"
@@ -53,13 +53,13 @@ class ApplicationDielectric(CmdBase):
 
     def __new__(cls, name="Dielectric", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Dielectric"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationDielectric(CmdBase):
 
 class BaseApplicationDielectric:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html'
@@ -80,7 +80,7 @@ class BaseApplicationDielectric:
     def __init__(self, name="Dielectric", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Dielectric"})
             - parent {[type]} -- [description] (default: {None})
@@ -88,7 +88,7 @@ class BaseApplicationDielectric:
         from TheoryDebyeModes import TheoryDebyeModesFrequency
         from TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
         from TheoryKWWModes import TheoryKWWModesFrequency
-        
+
         super().__init__(name, parent)
 
         # VIEWS
@@ -332,14 +332,14 @@ class BaseApplicationDielectric:
 
 class CLApplicationDielectric(BaseApplicationDielectric, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Dielectric", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Dielectric"})
             - parent {[type]} -- [description] (default: {None})
@@ -349,14 +349,14 @@ class CLApplicationDielectric(BaseApplicationDielectric, Application):
 
 class GUIApplicationDielectric(BaseApplicationDielectric, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="Dielectric", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"Dielectric"})
             - parent {[type]} -- [description] (default: {None})

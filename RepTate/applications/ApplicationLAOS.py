@@ -35,18 +35,18 @@
 Large Amplitude Oscillatory Shear
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View, ViewMode
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
 
 
 class ApplicationLAOS(CmdBase):
     """Application for ...
-    
+
     [description]
     """
     appname = 'LAOS'
@@ -55,13 +55,13 @@ class ApplicationLAOS(CmdBase):
 
     def __new__(cls, name='LAOS', parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'LAOS'})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -72,7 +72,7 @@ class ApplicationLAOS(CmdBase):
 
 class BaseApplicationLAOS:
     """[summary]
-    
+
     [description]
     """
 
@@ -83,7 +83,7 @@ class BaseApplicationLAOS:
     def __init__(self, name='LAOS', parent=None, **kwargs):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'LAOS'})
             - parent {[type]} -- [description] (default: {None})
@@ -292,13 +292,13 @@ class BaseApplicationLAOS:
 
     def view_sigmatgammatRAW(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -313,13 +313,13 @@ class BaseApplicationLAOS:
 
     def view_sigmatgammatRAWSCALED(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -334,13 +334,13 @@ class BaseApplicationLAOS:
 
     def view_sigmagammaRAW(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -352,18 +352,18 @@ class BaseApplicationLAOS:
 
     def view_sigmagammaFILTERED(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
- 
+
         gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
 
         ndata=len(gam_recon)
@@ -371,17 +371,17 @@ class BaseApplicationLAOS:
         y = np.zeros((ndata, 1))
         x[:, 0] = gam_recon
         y[:, 0] = tau_recon
-        return x, y, True        
+        return x, y, True
 
     def view_fftspectrum(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -394,7 +394,7 @@ class BaseApplicationLAOS:
 
         if An[Ncycles-1]>0:  # ensure that G_1'' is positive
             Gpp = An/gam_0   # G'' from cosine terms
-        else: 
+        else:
             Gpp = -An/gam_0
 
         N=len(An) # number of available harmonics
@@ -424,13 +424,13 @@ class BaseApplicationLAOS:
 
     def view_sigmagammadot(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -454,13 +454,13 @@ class BaseApplicationLAOS:
 
     def view_sigmagammaANLS(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -501,17 +501,17 @@ class BaseApplicationLAOS:
         x[:len(Xe), 2] = gam_0*Xe
         y[:len(Xe), 2] = fe3
 
-        return x, y, True        
+        return x, y, True
 
     def view_sigmagammadotANLS(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -559,18 +559,18 @@ class BaseApplicationLAOS:
         x[:len(Xv), 2] = gam_0*w*Xv
         y[:len(Xv), 2] = fv3
 
-        return x, y, True        
+        return x, y, True
 
 
     def view_chebelastic(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -586,7 +586,7 @@ class BaseApplicationLAOS:
         # contains e1, e2, e3, e4, ...
         for o in range(0,int(np.floor(len(Gp)/Ncycles)),2):
             e_n[o] = Gp[Ncycles*(o+1)-1]*(-1)**(o/2)  # only works for ODD Chebyshevs, so I leave even Chebyshevs = 0;
-    
+
         x = np.zeros((self.HHSR, 1))
         y = np.zeros((self.HHSR, 1))
         x[:, 0] = np.linspace(1,self.HHSR,self.HHSR)
@@ -595,13 +595,13 @@ class BaseApplicationLAOS:
 
     def view_chebviscous(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -609,7 +609,7 @@ class BaseApplicationLAOS:
 
         if An[Ncycles-1]>0:  # ensure that G_1'' is positive
             Gpp = An/gam_0   # G'' from cosine terms
-        else: 
+        else:
             Gpp = -An/gam_0
 
         w = float(file_parameters["omega"])
@@ -617,8 +617,8 @@ class BaseApplicationLAOS:
         # Chebyshev coefficients, found from FT results
         v_n = np.zeros(int(np.floor(len(Gpp)/Ncycles)))
         for o in range(0,int(np.floor(len(Gpp)/Ncycles)),2):
-            v_n[o] = Gpp[Ncycles*(o+1)-1]/w   
-    
+            v_n[o] = Gpp[Ncycles*(o+1)-1]/w
+
         x = np.zeros((self.HHSR, 1))
         y = np.zeros((self.HHSR, 1))
         x[:, 0] = np.linspace(1,self.HHSR,self.HHSR)
@@ -627,13 +627,13 @@ class BaseApplicationLAOS:
 
     def view_sigmatRAW(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -646,13 +646,13 @@ class BaseApplicationLAOS:
 
     def view_gammatRAW(self, dt, file_parameters):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             - dt {[type]} -- [description]
             - file_parameters {[type]} -- [description]
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -677,7 +677,7 @@ class BaseApplicationLAOS:
         if lgth <= 1:
             #if there are 0 or 1 locations of gamma crossing zero,
             #it is impossible to extract the minimum of 1 cycle
-        
+
             # give an output before exiting
             istrain = 0
             istress = 0
@@ -695,8 +695,8 @@ class BaseApplicationLAOS:
             #           include final Npts of signal
 
             #estimate number of points per cycle
-            Npts = (d_zero[1] - d_zero[0]) *2 
-            
+            Npts = (d_zero[1] - d_zero[0]) *2
+
             if (len(gamma) < Npts): # if there are not enough points
                 # give an output before exiting
                 istrain = 0
@@ -767,7 +767,7 @@ class BaseApplicationLAOS:
         f = A0*T0(x) + A1*T1(x) + A2*T2(x) + ...
 
         [An]= chebyshev_decompose(F,N,X)
-                *Assumes F occupies the domain [-1 : +1] 
+                *Assumes F occupies the domain [-1 : +1]
         with an arbitrary number of data points
         Uses trapz.m to calculate integrals
               INPUT VARIABLES
@@ -781,7 +781,7 @@ class BaseApplicationLAOS:
         M=len(F)
         if X is None: # Make X (input range) linear spaced and same length as F
             X=np.linspace(-1,1,M)
-            
+
         An = np.zeros(N) # initialize vector of Chebyshev coefficients
 
         #T = gallery('chebvand',X);  # Matrix of Chebyshev polynomials evaluated at X
@@ -800,10 +800,10 @@ class BaseApplicationLAOS:
         # Remaining coefficients use same front factor
         for i in range (1,N):
             An[i] = 2/np.pi * np.trapz(T[i,:]*F, THETA)
-        
+
         return An
 
-    def do_FFT_and_STUFF(self, dt): 
+    def do_FFT_and_STUFF(self, dt):
         time_uneven  = dt.data[:,0]  # raw time
         gamma_uneven = dt.data[:,1]  # raw strain
         tau_uneven =   dt.data[:,2]  # raw stress
@@ -813,7 +813,7 @@ class BaseApplicationLAOS:
         gamma  = np.interp(time, time_uneven,gamma_uneven)  # untrimmed strain
         tauxy  = np.interp(time, time_uneven,tau_uneven)    # untrimmed stress
 
-        # This section is equivilent to cycletrim 
+        # This section is equivilent to cycletrim
 
         d_zero=[]
 
@@ -836,18 +836,18 @@ class BaseApplicationLAOS:
             # give an output before exiting
             #self.Qprint('ERROR: Selected data never crosses zero.  Unable to find integer number of cycles')
             return
-            
-        elif lgth == 1:   
+
+        elif lgth == 1:
             # if there are 0 or 1 locations of gamma crossing zero, it is impossible to extract the minimum of 1 cycle
             #self.Qprint('WARNING: It looks like you have only one cycle, but this cannot be confirmed.')
             Ncycles = 1
             istart  = 0
             istop   = len(gamma)
-            
+
             time = time[istart:istop]
             istrain     = gamma[istart:istop]
-            istress     = tauxy[istart:istop]          
-            
+            istress     = tauxy[istart:istop]
+
         elif lgth == 2:
             # if there are 2 locations where gamma crosses zero, a fancy cycle trimming must be performed, which will NOT start with a sine wave
             # SEQUENCE:  estimate points per cycle
@@ -855,39 +855,39 @@ class BaseApplicationLAOS:
             #           include final Npts of signal
 
             Npts = (d_zero[1] - d_zero[0] ) *2 # estimate number of points per cycle
-            
+
             if len(gamma) < (0.95*Npts):  # if there are not enough points
                 # give an output before exiting
                 #self.Qprint('WARNING: It looks like there aren''t enough points for a complete cycle. Proceed with extreme caution.')
                 istart  = 0
                 istop   = len(gamma)
                 Ncycles       = 1
-                
+
                 time = time[istart:istop]
                 istrain     = gamma[istart:istop]
                 istress     = tauxy[istart:istop]
-                
-                
+
+
             elif len(gamma) > (1.05*Npts): #  check for excess data beyond one cycle (x% tolerance)
                 istart = len(gamma) - Npts
                 istop  = len(gamma)
                 Ncycles = 1
-                
+
                 time = time[istart:istop]
                 istrain     = gamma[istart:istop]
                 istress     = tauxy[istart:istop]
-                
+
                 #self.Qprint('WARNING: The beginning of your data was trimmed in order to have exactly one cycle')
             else:
                 istart = 0
                 istop  = len(gamma)
                 Ncycles = 1
-                
+
                 time = time[istart:istop]
                 istrain     = gamma[istart:istop]
                 istress     = tauxy[istart:istop]
-                #self.Qprint('WARNING: It looks like you have exactly one cycle.  It will not be trimmed.')            
-            
+                #self.Qprint('WARNING: It looks like you have exactly one cycle.  It will not be trimmed.')
+
         elif lgth > 2:
             # perform cycle trimming as usual
             [gam, tau, Ncycles, istart, istop] = self.cycletrim_MITlaos(gamma, tauxy)
@@ -915,7 +915,7 @@ class BaseApplicationLAOS:
             if Bn[Ncycles-1] < 0:
                 An = -An
                 Bn = -Bn
-        
+
         return gam_0, Bn, An, Ncycles
 
     def reconstruct_gamma_tau(self, An, Bn, gam_0, Ncycles):
@@ -941,14 +941,14 @@ class BaseApplicationLAOS:
 
 class CLApplicationLAOS(BaseApplicationLAOS, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='LAOS', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'LAOS'})
             - parent {[type]} -- [description] (default: {None})
@@ -959,14 +959,14 @@ class CLApplicationLAOS(BaseApplicationLAOS, Application):
 
 class GUIApplicationLAOS(BaseApplicationLAOS, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='LAOS', parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {'LAOS'})
             - parent {[type]} -- [description] (default: {None})

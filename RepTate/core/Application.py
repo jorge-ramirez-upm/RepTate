@@ -40,34 +40,34 @@ import io
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
 
-from CmdBase import CmdBase, CmdMode
-from Theory import Theory
-from DataSet import DataSet
-from TheoryBasic import *
-from Tool import *
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Theory import Theory
+from RepTate.core.DataSet import DataSet
+from RepTate.theories.TheoryBasic import *
+from RepTate.core.Tool import *
 
-from MultiView import MultiView, PlotOrganizationType
+from RepTate.core.MultiView import MultiView, PlotOrganizationType
 from PyQt5.QtWidgets import QMenu, QApplication
 from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
-from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
-from ToolIntegral import ToolIntegral
-from ToolFindPeaks import ToolFindPeaks
-from ToolGradient import ToolGradient
-from ToolSmooth import ToolSmooth
-from ToolBounds import ToolBounds
-from ToolEvaluate import ToolEvaluate
-from ToolInterpolate import ToolInterpolateExtrapolate
-from ToolMaterialsDatabase import ToolMaterialsDatabase
-from mplcursors import cursor
+from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
+from RepTate.tools.ToolIntegral import ToolIntegral
+from RepTate.tools.ToolFindPeaks import ToolFindPeaks
+from RepTate.tools.ToolGradient import ToolGradient
+from RepTate.tools.ToolSmooth import ToolSmooth
+from RepTate.tools.ToolBounds import ToolBounds
+from RepTate.tools.ToolEvaluate import ToolEvaluate
+from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
+from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
+from RepTate.core.mplcursors import cursor
 from colorama import Fore, Style
 import logging
 
 class Application(CmdBase):
     """Main abstract class that represents an application
-    
+
     """
     name = "Template"
     description = "Abstract class that defines basic functionality"
@@ -120,7 +120,7 @@ class Application(CmdBase):
         self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
-        
+
         # MATPLOTLIB STUFF
         self.set_multiplot(self.nplots, self.ncols)
         # self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
@@ -132,7 +132,7 @@ class Application(CmdBase):
         # self.canvas = self.multiplots.canvas
         self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
         self.ax_opts = self.ax_opt_defaults.copy()
-        
+
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
         connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
         connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
@@ -144,11 +144,11 @@ class Application(CmdBase):
         self._pressed_button = None # To store active button during interaction
         self._axes = None # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
-        self._was_zooming = False 
+        self._was_zooming = False
 
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
-            self.multiplots.setWindowFlags(self.multiplots.windowFlags() 
+            self.multiplots.setWindowFlags(self.multiplots.windowFlags()
                                            & ~Qt.WindowCloseButtonHint)
             self.multiplots.show()
         self.datacursor_ = None
@@ -223,7 +223,7 @@ class Application(CmdBase):
             ax.set_ylim(ylim)
 
         if x_axes or y_axes:
-            self.figure.canvas.draw() 
+            self.figure.canvas.draw()
 
     def _axes_to_update(self, event):
         """Returns two sets of Axes to update according to event.
@@ -352,7 +352,7 @@ class Application(CmdBase):
             if event.x != self._event.x or event.y != self._event.y:
                 self.figure.canvas.draw()
 
-            self._event = event    
+            self._event = event
 
     def _pan_update_limits(self, ax, axis_id, event, last_event):
         """Compute limits with applied pan."""
@@ -432,7 +432,7 @@ class Application(CmdBase):
                     else:
                         ax.set_xlim(max_, min_)
                 else:
-                    min_now, max_now = ax.get_xlim() 
+                    min_now, max_now = ax.get_xlim()
                     if ax.get_xscale() == 'log':
                         fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
                         if not ax.xaxis_inverted():
@@ -460,7 +460,7 @@ class Application(CmdBase):
                     else:
                         ax.set_ylim(max_, min_)
                 else:
-                    min_now, max_now = ax.get_ylim() 
+                    min_now, max_now = ax.get_ylim()
                     if ax.get_yscale() == 'log':
                         fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
                         if not ax.yaxis_inverted():
@@ -496,9 +496,9 @@ class Application(CmdBase):
             canvas.update()
 
     def update_datacursor_artists(self):
-        """Update the datacursor instance 
+        """Update the datacursor instance
         Called at the end of ds.do_plot() and when plot-tab is changed"""
-        try: 
+        try:
             self.datacursor_.remove()
         except AttributeError:
             pass
@@ -527,11 +527,11 @@ class Application(CmdBase):
                                     artists.append(dt.series[self.current_viewtab - 1][j])
                                     if th:
                                         artists.append(th.tables[f.file_name_short].series[self.current_viewtab - 1][j])
-                self.datacursor_ = cursor(pickables=artists) 
+                self.datacursor_ = cursor(pickables=artists)
                 self.datacursor_.bindings["deselect"] = 1
         else:
             axs = [self.axarr[i] for i in range(self.nplots)]
-            self.datacursor_ = cursor(pickables=axs) 
+            self.datacursor_ = cursor(pickables=axs)
             self.datacursor_.bindings["deselect"] = 1
         @self.datacursor_.connect("add")
         def _(sel):
@@ -560,7 +560,7 @@ class Application(CmdBase):
     def add_common_theories(self):
         for th in self.common_theories.values():
             self.theories[th.thname] = th
-                                                
+
     def refresh_plot(self):
         self.view_switch(self.current_view.name)
 
@@ -587,12 +587,12 @@ class Application(CmdBase):
     # JR: I THINK THE FOLLOWING FUNCTION IS NOT NEEDED ANYMORE
     # def handle_close_window(self, evt):
     #     """[summary]
-        
+
     #     [description]
-        
+
     #     Arguments:
     #         - evt {[type]} -- [description]
-        
+
     #     Returns:
     #         [type] -- [description]
     #     """
@@ -704,14 +704,14 @@ class Application(CmdBase):
                 self.datasets[ds].do_tree(str(offset+1))
 
     def do_switch(self, line):
-        """Set focus to an open set/theory/tool. 
+        """Set focus to an open set/theory/tool.
 By hitting TAB, all the currently accessible elements are shown.
 Arguments:
     - name {str} -- Name of the set/theory/tool to switch the focus to."""
         items=line.split('.')
         listtools = [x.name for x in self.tools]
         if len(items)>1:
-            name=items[0]            
+            name=items[0]
             if name in self.datasets.keys():
                 ds = self.datasets[name]
                 ds.cmdqueue.append('switch '+'.'.join(items[1:]))
@@ -719,7 +719,7 @@ Arguments:
             else:
                 print("DataSet \"%s\" not found" % name)
         else:
-            name=items[0]         
+            name=items[0]
             if name in self.datasets.keys():
                 ds = self.datasets[name]
                 ds.cmdloop()
@@ -792,7 +792,7 @@ Arguments:
                 c = Fore.RED + "*" + Fore.RESET
             else:
                 c = " "
-            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name + 
+            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
                     Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
     def do_available(self, line):
@@ -888,7 +888,7 @@ Arguments:
 
     def complete_tool_new(self, text, line, begidx, endidx):
         """Complete new tool command"""
-        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys()) 
+        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys())
         if not text:
             completions = tool_names[:]
         else:
@@ -904,7 +904,7 @@ Arguments:
             del self.tools[idx]
         except AttributeError as e:
             print("Tool \"%s\" not found" % name)
-            
+
     def complete_tool_delete(self, text, line, begidx, endidx):
         """Complete delete tool command"""
         listtools = [x.name for x in self.tools]
@@ -913,7 +913,7 @@ Arguments:
         else:
             completions = [f for f in listtools if f.startswith(text)]
         return completions
-        
+
     def do_list_tools(self, line=""):
         """List opened tools in the current application"""
         if len(self.tools)>0:
@@ -1010,14 +1010,14 @@ Arguments:
 
             ax.set_xlabel(view.x_label + ' [' + view.x_units + ']')
             ax.set_ylabel(view.y_label + ' [' + view.y_units + ']')
-            
+
             if not self.ax_opts['label_size_auto']:
                 ax.xaxis.label.set_size(self.ax_opts['fontsize'])
                 ax.yaxis.label.set_size(self.ax_opts['fontsize'])
 
             ax.xaxis.label.set_color(self.ax_opts['color_label'])
             ax.yaxis.label.set_color(self.ax_opts['color_label'])
-            
+
             ax.xaxis.label.set_style(self.ax_opts['style'])
             ax.yaxis.label.set_style(self.ax_opts['style'])
 
@@ -1030,7 +1030,7 @@ Arguments:
             ax_thick = self.ax_opts['axis_thickness']
             ax.tick_params(which='major', width=1.00*ax_thick, length=5*ax_thick)
             ax.tick_params(which='minor', width=0.75*ax_thick, length=2.5*ax_thick)
-            
+
             if not self.ax_opts['tick_label_size_auto']:
                 ax.tick_params(which='major', labelsize=self.ax_opts['tick_label_size'])
                 ax.tick_params(which='minor', labelsize=self.ax_opts['tick_label_size']*.8)
@@ -1041,7 +1041,7 @@ Arguments:
                 ax.spines[pos].set_linewidth(ax_thick)
                 ax.spines[pos].set_color(self.ax_opts['color_ax'])
             ax.tick_params(which='both', color=self.ax_opts['color_ax'], labelcolor=self.ax_opts['color_ax'])
-            
+
             if autoscale:
                 self.axarr[nx].relim(True)
                 self.axarr[nx].autoscale(True)

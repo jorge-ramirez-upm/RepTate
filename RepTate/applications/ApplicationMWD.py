@@ -35,17 +35,17 @@
 Module for handling Molecular weight distributions from GPC experiments.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationMWD(CmdBase):
     """Application to analyze Molecular Weight Distributions
-    
+
     """
     appname = "MWD"
     description = "Experimental Molecular weight distributions"
@@ -53,13 +53,13 @@ class ApplicationMWD(CmdBase):
 
     def __new__(cls, name="LVE", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -71,7 +71,7 @@ class ApplicationMWD(CmdBase):
 
 class BaseApplicationMWD:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html'
@@ -80,7 +80,7 @@ class BaseApplicationMWD:
     def __init__(self, name="MWD", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"MWD"})
             - parent {[type]} -- [description] (default: {None})
@@ -165,9 +165,9 @@ class BaseApplicationMWD:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def view_logWM(self, dt, file_parameters):
-        """:math:`\\log(W(M))` vs :math:`\\log(M)` 
+        """:math:`\\log(W(M))` vs :math:`\\log(M)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -177,14 +177,14 @@ class BaseApplicationMWD:
 
 class CLApplicationMWD(BaseApplicationMWD, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="MWD", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"MWD"})
             - parent {[type]} -- [description] (default: {None})
@@ -194,14 +194,14 @@ class CLApplicationMWD(BaseApplicationMWD, Application):
 
 class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="MWD", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"MWD"})
             - parent {[type]} -- [description] (default: {None})

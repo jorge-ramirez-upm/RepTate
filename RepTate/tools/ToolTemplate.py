@@ -35,16 +35,16 @@
 Template file for creating a new Tool
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 
 
 class ToolTemplate(CmdBase):
     """[summary]
-    
+
     [description]
     """
     toolname = 'TemplateTool'
@@ -53,14 +53,14 @@ class ToolTemplate(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -69,7 +69,7 @@ class ToolTemplate(CmdBase):
 
 class BaseToolTemplate:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
@@ -79,7 +79,7 @@ class BaseToolTemplate:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -99,21 +99,21 @@ If not, you can safely delete it."""
         pass
 
     def calculate(self, x, y, ax=None, color=None):
-        """Template function that returns the square of the y, according to the view        
+        """Template function that returns the square of the y, according to the view
         """
         return x, y*y
 
 
 class CLToolTemplate(BaseToolTemplate, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -126,14 +126,14 @@ class CLToolTemplate(BaseToolTemplate, Tool):
 
 class GUIToolTemplate(BaseToolTemplate, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})

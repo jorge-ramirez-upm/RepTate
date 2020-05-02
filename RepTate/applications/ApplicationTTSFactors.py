@@ -35,11 +35,11 @@
 Module for handling time-temperature superposition factors and fit theories.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
@@ -207,7 +207,7 @@ class BaseApplicationTTSFactors:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def viewLogbT(self, dt, file_parameters):
         """Logarithm of the vertical shift factor
         """
@@ -236,7 +236,7 @@ class BaseApplicationTTSFactors:
         y[:, 0] = np.log10(dt.data[:, 1])
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
-        
+
     def viewLogaT_invT(self, dt, file_parameters):
         """Logarithm of the horizontal shift factor
         """
@@ -248,14 +248,14 @@ class BaseApplicationTTSFactors:
 
 class CLApplicationTTSFactors(BaseApplicationTTSFactors, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="TTSFactors", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"TTSFactors"})
             - parent {[type]} -- [description] (default: {None})
@@ -265,14 +265,14 @@ class CLApplicationTTSFactors(BaseApplicationTTSFactors, Application):
 
 class GUIApplicationTTSFactors(BaseApplicationTTSFactors, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="TTSFactors", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"TTSFactors"})
             - parent {[type]} -- [description] (default: {None})

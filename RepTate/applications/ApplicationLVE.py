@@ -35,18 +35,18 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile, ExcelFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile, ExcelFile
 import numpy as np
 from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
 from PyQt5.QtGui import QDoubleValidator
 
 class ApplicationLVE(CmdBase):
     """Application to Analyze Linear Viscoelastic Data
-    
+
     """
     appname = "LVE"
     description = "Linear Viscoelasticity"
@@ -54,13 +54,13 @@ class ApplicationLVE(CmdBase):
 
     def __new__(cls, name="LVE", parent=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -72,7 +72,7 @@ class ApplicationLVE(CmdBase):
 
 class BaseApplicationLVE:
     """[summary]
-    
+
     [description]
     """
     help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/LVE.html'
@@ -81,7 +81,7 @@ class BaseApplicationLVE:
     def __init__(self, name="LVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -96,7 +96,7 @@ class BaseApplicationLVE:
         from TheoryBobLVE import TheoryBobLVE
         from TheoryRDPLVE import TheoryRDPLVE
         from TheoryStickyReptation import TheoryStickyReptation
-        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency        
+        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency
         super().__init__(name, parent)
 
         # VIEWS
@@ -308,10 +308,10 @@ class BaseApplicationLVE:
         self.filetypes['osc'] = TXTColumnFile("OSC files", "osc",
             "Small-angle oscillatory masurements from the Rheometer",
             ['w', 'G\'', 'G\'\''], ['Mw', 'T'], ['rad/s', 'Pa', 'Pa'])
-        
+
         self.filetypes['xlsx'] = ExcelFile("Excel files", "xlsx", "Excel File",
                                             ['w','G\'','G\'\''], [], ['rad/s', 'Pa', 'Pa'])
-        
+
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname] = TheoryMaxwellModesFrequency
         self.theories[TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
@@ -361,7 +361,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogEtaStar(self, dt, file_parameters):
-        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)` 
+        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -389,7 +389,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogTanDelta(self, dt, file_parameters):
-        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)` 
+        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -398,7 +398,7 @@ class BaseApplicationLVE:
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
-        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)` 
+        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -501,14 +501,14 @@ class BaseApplicationLVE:
 
 class CLApplicationLVE(BaseApplicationLVE, Application):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="LVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
@@ -518,14 +518,14 @@ class CLApplicationLVE(BaseApplicationLVE, Application):
 
 class GUIApplicationLVE(BaseApplicationLVE, QApplicationWindow):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name="LVE", parent=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})

@@ -29,12 +29,12 @@
 # You should have received a copy of the GNU General Public License
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
-# -------------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------------
 """Module ReptateCL
 
 Main program that launches the CL version of RepTate.
 
-""" 
+"""
 import os
 import sys
 import glob
@@ -42,16 +42,13 @@ import argparse
 import logging
 import numpy as np
 
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('tools')
-from ApplicationManager import ApplicationManager
+from RepTate.core.ApplicationManager import ApplicationManager
 from time import time, sleep
 from PyQt5.QtWidgets import QApplication
-from CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+
+def main():
+    start_RepTate(sys.argv[1:])
 
 def get_argument_files(finlist):
     """
@@ -84,8 +81,8 @@ def get_argument_files(finlist):
 
 def start_RepTate(argv):
     """
-    Main RepTate application. 
-    
+    Main RepTate application.
+
     :param list argv: Command line parameters passed to Reptate
     """
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
@@ -103,9 +100,9 @@ def start_RepTate(argv):
     parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
 
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
-    if args.batch: 
+    if args.batch:
         CmdBase.mode = CmdMode.batch
 
     if args.verbose:
@@ -119,8 +116,8 @@ def start_RepTate(argv):
     if args.version:
         print(ApplicationManager.intro)
         sys.exit()
-    
-    qapp = QApplication(sys.argv)  # Needed, because some internal functions use Qt 
+
+    qapp = QApplication(sys.argv)  # Needed, because some internal functions use Qt
     app = ApplicationManager(loglevel=loglevel)
 
     # Handle files & open apps accordingly
@@ -181,7 +178,7 @@ def start_RepTate(argv):
         app.logger.critical(msg)
         msg = 'Report bug to reptate.rheology@gmail.com: Describe the error, attach logfile and datafiles'
         app.logger.critical(msg)
-            
+
     sys.excepthook = my_excepthook
 
     if fileopen and theoryopen:
@@ -194,4 +191,4 @@ def start_RepTate(argv):
         pass
 
 if __name__ == '__main__':
-    start_RepTate(sys.argv[1:])
+    main()

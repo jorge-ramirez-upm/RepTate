@@ -36,16 +36,16 @@ Interpolate/Extrapolate data
 """
 import traceback
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
+from RepTate.core.DataTable import DataTable
 from scipy.interpolate import interp1d
 
 class ToolInterpolateExtrapolate(CmdBase):
     """[summary]
-    
+
     [description]
     """
     toolname = 'Interpolate/Extrapolate'
@@ -54,14 +54,14 @@ class ToolInterpolateExtrapolate(CmdBase):
 
     def __new__(cls, name='', parent_app=None):
         """[summary]
-        
+
         [description]
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
             - ax {[type]} -- [description] (default: {None})
-        
+
         Returns:
             - [type] -- [description]
         """
@@ -70,7 +70,7 @@ class ToolInterpolateExtrapolate(CmdBase):
 
 class BaseToolInterpolateExtrapolate:
     """[summary]
-    
+
     [description]
     """
     #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
@@ -80,7 +80,7 @@ class BaseToolInterpolateExtrapolate:
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -95,7 +95,7 @@ class BaseToolInterpolateExtrapolate:
             opt_type=OptType.const)
 
     def calculate(self, x, y, ax=None, color=None):
-        """InterpolateExtrapolate function that returns the square of the y, according to the view        
+        """InterpolateExtrapolate function that returns the square of the y, according to the view
         """
         xval = self.parameters["x"].value
         xunique, indunique = np.unique(x, return_index=True)
@@ -109,7 +109,7 @@ class BaseToolInterpolateExtrapolate:
             yval = func(xval)
             # table+='''<tr><td>%.4e</td><td>%.4e</td></tr>'''%(xval,yval)
             table.append(['%-10.4e' % xval, '%-10.4e' % yval])
-            # table+='''</table><br>'''            
+            # table+='''</table><br>'''
             self.Qprint(table)
         except Exception as e:
             self.Qprint("in ToolInterpolateExtrapolate.calculate(): %s"%traceback.format_exc())
@@ -118,14 +118,14 @@ class BaseToolInterpolateExtrapolate:
 
 class CLToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, Tool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
@@ -138,14 +138,14 @@ class CLToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, Tool):
 
 class GUIToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, QTool):
     """[summary]
-    
+
     [description]
     """
 
     def __init__(self, name='', parent_app=None):
         """
         **Constructor**
-        
+
         Keyword Arguments:
             - name {[type]} -- [description] (default: {''})
             - parent_dataset {[type]} -- [description] (default: {None})
