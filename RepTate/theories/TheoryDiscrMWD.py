@@ -36,15 +36,15 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """
 import os
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 import numpy as np
 from PyQt5.QtCore import Qt, QSize, QFile
 from PyQt5.QtWidgets import QToolBar, QSpinBox, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
-from DraggableArtists import DragType, DraggableBinSeries
+from RepTate.core.DraggableArtists import DragType, DraggableBinSeries
 
 
 class TheoryDiscrMWD(CmdBase):

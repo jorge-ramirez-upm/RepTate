@@ -37,31 +37,31 @@ Module for the GO-polyStrand model of flow-induced crystallisation in polymers.
 """
 import numpy as np
 from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
-from Theory_rc import *
+from RepTate.gui.Theory_rc import *
 from enum import Enum
 from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
+from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 import time
-import Version
+import RepTate.core.Version
 
-import rp_blend_ctypes_helper as rpch
-import goLandscape_ctypes_helper as goL
-from Theory import EndComputationRequested
+import RepTate.theories.rp_blend_ctypes_helper as rpch
+import RepTate.theories.goLandscape_ctypes_helper as goL
+from RepTate.core.Theory import EndComputationRequested
 from collections import OrderedDict
 
-import GOpolySTRAND
-import GOpolySTRAND_initialGuess
-import SchneiderRate
-import timeArraySplit
+import RepTate.theories.GOpolySTRAND as GOpolySTRAND
+import RepTate.theories.GOpolySTRAND_initialGuess as GOpolySTRAND_initialGuess
+import RepTate.theories.SchneiderRate as SchneiderRate
+import RepTate.theories.timeArraySplit as timeArraySplit
 
 class Dilution():
     def __init__(self, m, phi, taue, Me, parent_theory):

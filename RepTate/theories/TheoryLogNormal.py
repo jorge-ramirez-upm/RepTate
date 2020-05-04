@@ -34,11 +34,11 @@
 """
 import numpy as np
 from math import gamma, pi
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 
 
 class TheoryLogNormal(CmdBase):

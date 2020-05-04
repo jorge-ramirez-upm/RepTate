@@ -89,10 +89,10 @@ class BaseApplicationLAOS:
             - parent {[type]} -- [description] (default: {None})
         """
         # IMPORT THEORIES
-        from TheoryRoliePoly import TheoryRoliePoly
-        from TheoryUCM import TheoryUCM
-        from TheoryGiesekus import TheoryGiesekus
-        from TheoryPomPom import TheoryPomPom
+        from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly
+        from RepTate.theories.TheoryUCM import TheoryUCM
+        from RepTate.theories.TheoryGiesekus import TheoryGiesekus
+        from RepTate.theories.TheoryPomPom import TheoryPomPom
 
         super().__init__(name, parent)
 
@@ -213,8 +213,7 @@ class BaseApplicationLAOS:
             log_y=False,
             view_proc=self.view_chebelastic,
             n=1,
-            snames=['chebelastic'],
-            viewmode_data=ViewMode.bar)
+            snames=['chebelastic'])
 
         self.views['Cheb viscous'] = View(
             name='Cheb viscous',

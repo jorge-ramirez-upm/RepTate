@@ -85,7 +85,7 @@ class BaseApplicationSANS:
             - name {[type]} -- [description] (default: {"SANS"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryDebye import TheoryDebye
+        from RepTate.theories.TheoryDebye import TheoryDebye
         super().__init__(name, parent)
 
         # VIEWS

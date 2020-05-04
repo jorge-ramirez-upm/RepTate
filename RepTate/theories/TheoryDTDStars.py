@@ -35,15 +35,15 @@
 Dynamics Tube Dilution for Stars
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from scipy.integrate import quad
 from scipy.special import gammaln
 
-import dtd_ctypes_helper as dtdh
+import RepTate.theories.dtd_ctypes_helper as dtdh
 
 
 class TheoryDTDStarsFreq(CmdBase):

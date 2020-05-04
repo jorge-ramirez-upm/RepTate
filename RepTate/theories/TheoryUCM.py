@@ -37,20 +37,20 @@ Module for the Upper Convected Maxwell model
 """
 import numpy as np
 from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
-from Theory_rc import *
+from RepTate.gui.Theory_rc import *
 from enum import Enum
 from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
-from ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
+from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
+from RepTate.applications.ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used

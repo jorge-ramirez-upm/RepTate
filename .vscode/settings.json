@@ -1,0 +1,10 @@
+{
+    "restructuredtext.confPath": "${workspaceFolder}\\docs\\source",
+    "python.testing.pytestArgs": [
+        "./tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.pythonPath": "C:\\WPy64-3741\\python-3.7.4.amd64\\python.exe"
+}

@@ -89,7 +89,7 @@ class BaseApplicationCreep:
             - name {[type]} -- [description] (default: {"Creep"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryRetardationModes import TheoryRetardationModesTime
+        from RepTate.theories.TheoryRetardationModes import TheoryRetardationModesTime
         super().__init__(name, parent)
 
         # time range for view conversion to frequency domain

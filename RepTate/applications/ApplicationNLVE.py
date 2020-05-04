@@ -85,14 +85,14 @@ class BaseApplicationNLVE:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryRoliePoly import TheoryRoliePoly
-        from TheoryUCM import TheoryUCM
-        from TheoryGiesekus import TheoryGiesekus
-        from TheoryPomPom import TheoryPomPom
-        from TheoryRolieDoublePoly import TheoryRolieDoublePoly
-        from TheoryBobNLVE import TheoryBobNLVE
-        from TheoryPETS import TheoryPETS
-        from TheorySCCR import TheorySCCR
+        from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly
+        from RepTate.theories.TheoryUCM import TheoryUCM
+        from RepTate.theories.TheoryGiesekus import TheoryGiesekus
+        from RepTate.theories.TheoryPomPom import TheoryPomPom
+        from RepTate.theories.TheoryRolieDoublePoly import TheoryRolieDoublePoly
+        from RepTate.theories.TheoryBobNLVE import TheoryBobNLVE
+        from RepTate.theories.TheoryPETS import TheoryPETS
+        from RepTate.theories.TheorySCCR import TheorySCCR
 
         super().__init__(name, parent)
 

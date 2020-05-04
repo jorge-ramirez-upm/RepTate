@@ -2,9 +2,7 @@ import os
 from setuptools import setup, find_packages
 import sys
 
-sys.path.append('RepTate/core')
-
-import Version
+from RepTate.core.Version import Version
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 requirements_file = open(os.path.join(base_dir, 'requirements.txt'))
@@ -22,8 +20,8 @@ setup(
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate = RepTate.RepTate:main',
-            'RepTateCL = RepTate.RepTateCL:main'
+            'RepTate = RepTate:main',
+            'RepTateCL = RepTate.CL:main'
         ]
     },
 	license='GPL License',

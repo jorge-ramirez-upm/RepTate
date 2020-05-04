@@ -37,30 +37,30 @@ Module for the Smooth Poly STRAND model of polymer FIC (uses the Rolie-Double-Po
 """
 import numpy as np
 from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
-from Theory_rc import *
+from RepTate.gui.Theory_rc import *
 from enum import Enum
 from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
+from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 import time
-import Version
+import RepTate.core.Version
 
-import rp_blend_ctypes_helper as rpch
-import QuiescentSmoothStrand
-from Theory import EndComputationRequested
+import RepTate.theories.rp_blend_ctypes_helper as rpch
+import RepTate.theories.QuiescentSmoothStrand as QuiescentSmoothStrand
+from RepTate.core.Theory import EndComputationRequested
 from collections import OrderedDict
 
-import SmoothPolySTRAND
-import SchneiderRate
-import timeArraySplit
+import RepTate.theories.SmoothPolySTRAND as SmoothPolySTRAND
+import RepTate.theories.SchneiderRate as SmoothPolySTRAND
+import RepTate.theories.timeArraySplit as timeArraySplit
 
 class Dilution():
     def __init__(self, m, phi, taue, Me, parent_theory):
@@ -623,7 +623,6 @@ class BaseTheorySmoothPolyStrand:
             description="Plateau modulus",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0)
         self.parameters["Me"] = Parameter(
             name="Me",
@@ -631,7 +630,6 @@ class BaseTheorySmoothPolyStrand:
             description="Entanglement molecular mass",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         self.parameters["tau_e"] = Parameter(
@@ -640,7 +638,6 @@ class BaseTheorySmoothPolyStrand:
             description="Entanglement relaxation time",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         nmode = self.parameters["nmodes"].value
@@ -652,7 +649,6 @@ class BaseTheorySmoothPolyStrand:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -661,7 +657,6 @@ class BaseTheorySmoothPolyStrand:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
@@ -669,7 +664,6 @@ class BaseTheorySmoothPolyStrand:
                 description="Rouse time of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
-                bracketed=True,
                 min_value=0)
 
         self.view_LVEenvelope = False
@@ -1209,7 +1203,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -1218,7 +1211,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
@@ -1227,7 +1219,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.opt,
                     display_flag=True,
-                    bracketed=True,
                     min_value=0)
             if (oldn > self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value, oldn):

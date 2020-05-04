@@ -85,9 +85,9 @@ class BaseApplicationMWD:
             - name {[type]} -- [description] (default: {"MWD"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryDiscrMWD import TheoryDiscrMWD
-        from TheoryGEX import TheoryGEX
-        from TheoryLogNormal import TheoryLogNormal
+        from RepTate.theories.TheoryDiscrMWD import TheoryDiscrMWD
+        from RepTate.theories.TheoryGEX import TheoryGEX
+        from RepTate.theories.TheoryLogNormal import TheoryLogNormal
 
         super().__init__(name, parent, nplot_max=3)
 

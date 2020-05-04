@@ -86,17 +86,17 @@ class BaseApplicationLVE:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryMaxwellModes import TheoryMaxwellModesFrequency
-        from TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
-        from TheoryDSMLinear import TheoryDSMLinear
-        from TheoryTTS import TheoryWLFShift
-        from TheoryCarreauYasuda import TheoryCarreauYasuda
-        from TheoryRouse import TheoryRouseFrequency
-        from TheoryDTDStars import TheoryDTDStarsFreq
-        from TheoryBobLVE import TheoryBobLVE
-        from TheoryRDPLVE import TheoryRDPLVE
-        from TheoryStickyReptation import TheoryStickyReptation
-        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency
+        from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesFrequency
+        from RepTate.theories.TheoryLikhtmanMcLeish2002 import TheoryLikhtmanMcLeish2002
+        from RepTate.theories.TheoryDSMLinear import TheoryDSMLinear
+        from RepTate.theories.TheoryTTS import TheoryWLFShift
+        from RepTate.theories.TheoryCarreauYasuda import TheoryCarreauYasuda
+        from RepTate.theories.TheoryRouse import TheoryRouseFrequency
+        from RepTate.theories.TheoryDTDStars import TheoryDTDStarsFreq
+        from RepTate.theories.TheoryBobLVE import TheoryBobLVE
+        from RepTate.theories.TheoryRDPLVE import TheoryRDPLVE
+        from RepTate.theories.TheoryStickyReptation import TheoryStickyReptation
+        from RepTate.theories.TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesFrequency
         super().__init__(name, parent)
 
         # VIEWS

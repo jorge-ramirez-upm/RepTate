@@ -85,9 +85,9 @@ class BaseApplicationDielectric:
             - name {[type]} -- [description] (default: {"Dielectric"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryDebyeModes import TheoryDebyeModesFrequency
-        from TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
-        from TheoryKWWModes import TheoryKWWModesFrequency
+        from RepTate.theories.TheoryDebyeModes import TheoryDebyeModesFrequency
+        from RepTate.theories.TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
+        from RepTate.theories.TheoryKWWModes import TheoryKWWModesFrequency
 
         super().__init__(name, parent)
 

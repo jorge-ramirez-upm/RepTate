@@ -37,23 +37,23 @@ Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QFileDialog
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
 from PyQt5.QtCore import Qt
-from Theory_rc import *
+from RepTate.gui.Theory_rc import *
 from enum import Enum
 from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
-import Version
+from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
+import RepTate.core.Version
 import time
-from Theory import EndComputationRequested
-from ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
+from RepTate.core.Theory import EndComputationRequested
+from RepTate.applications.ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
 
 class FlowMode(Enum):
     """Defines the flow geometry used

@@ -85,8 +85,8 @@ class BaseApplicationCrystal:
             - name {[type]} -- [description] (default: {"LVE"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryGoPolyStrand import TheoryGoPolyStrand
-        from TheorySmoothPolyStrand import TheorySmoothPolyStrand
+        from RepTate.theories.TheoryGoPolyStrand import TheoryGoPolyStrand
+        from RepTate.theories.TheorySmoothPolyStrand import TheorySmoothPolyStrand
 
         super().__init__(name, parent)
 

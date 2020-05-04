@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "RepTate",
+            "type": "python",
+            "request": "launch",
+            "module": "RepTate",
+            "console": "integratedTerminal",
+            "args": ["-s","-v", "data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos","-t", "Giesekus"]
+        },
+        {
+            "name": "RepTateCL",
+            "type": "python",
+            "request": "launch",
+            "module": "RepTate.CL",
+            "console": "integratedTerminal",
+            "args": ["-v","data/DOW/Non-Linear_Rheology/Start-up_Shear/*.shear"]
+        },
+        {
+            "name": "Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/RepTate_Test_BoB_polyconf.py",
+            "console": "integratedTerminal",
+            "args": []
+        }
+    ]
+}

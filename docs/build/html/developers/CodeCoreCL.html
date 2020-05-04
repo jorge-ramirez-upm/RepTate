@@ -1,0 +1,179 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Core classes (Command Line) &#8212; RepTate 1.0.0 20200330 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Core classes (Graphical User Interface)" href="CodeCoreGUI.html" />
+    <link rel="prev" title="Navigate the source Code of RepTate" href="code.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CodeCoreGUI.html" title="Core classes (Graphical User Interface)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Navigate the source Code of RepTate"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Core classes (Command Line)</a><ul>
+<li><a class="reference internal" href="#application">Application</a></li>
+<li><a class="reference internal" href="#applicationmanager">ApplicationManager</a></li>
+<li><a class="reference internal" href="#cmdbase-and-cmdmode">CmdBase and CmdMode</a></li>
+<li><a class="reference internal" href="#dataset">DataSet</a></li>
+<li><a class="reference internal" href="#datatable">DataTable</a></li>
+<li><a class="reference internal" href="#draggableartists">DraggableArtists</a></li>
+<li><a class="reference internal" href="#file">File</a></li>
+<li><a class="reference internal" href="#filetype">FileType</a></li>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
+<li><a class="reference internal" href="#theory">Theory</a></li>
+<li><a class="reference internal" href="#version">Version</a></li>
+<li><a class="reference internal" href="#view">View</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="previous chapter">Navigate the source Code of RepTate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CodeCoreGUI.html"
+                        title="next chapter">Core classes (Graphical User Interface)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/CodeCoreCL.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="core-classes-command-line">
+<h1>Core classes (Command Line)<a class="headerlink" href="#core-classes-command-line" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="application">
+<h2>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="applicationmanager">
+<h2>ApplicationManager<a class="headerlink" href="#applicationmanager" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmdbase-and-cmdmode">
+<h2>CmdBase and CmdMode<a class="headerlink" href="#cmdbase-and-cmdmode" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="dataset">
+<h2>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="datatable">
+<h2>DataTable<a class="headerlink" href="#datatable" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="draggableartists">
+<h2>DraggableArtists<a class="headerlink" href="#draggableartists" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="file">
+<h2>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="filetype">
+<h2>FileType<a class="headerlink" href="#filetype" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="parameter">
+<h2>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="version">
+<h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="view">
+<h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="CodeCoreGUI.html" title="Core classes (Graphical User Interface)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Navigate the source Code of RepTate"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

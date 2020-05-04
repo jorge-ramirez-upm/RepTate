@@ -88,12 +88,12 @@ class BaseApplicationReact:
             - name {[type]} -- [description] (default: {'React'})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryLDPEBatch import TheoryTobitaBatch
-        from TheoryTobitaCSTR import TheoryTobitaCSTR
-        from TheoryMultiMetCSTR import TheoryMultiMetCSTR
-        from TheoryReactMix import TheoryReactMix
-        from TheoryCreatePolyconf import TheoryCreatePolyconf
-        from TheoryDieneCSTR import TheoryDieneCSTR
+        from RepTate.theories.TheoryLDPEBatch import TheoryTobitaBatch
+        from RepTate.theories.TheoryTobitaCSTR import TheoryTobitaCSTR
+        from RepTate.theories.TheoryMultiMetCSTR import TheoryMultiMetCSTR
+        from RepTate.theories.TheoryReactMix import TheoryReactMix
+        from RepTate.theories.TheoryCreatePolyconf import TheoryCreatePolyconf
+        from RepTate.theories.TheoryDieneCSTR import TheoryDieneCSTR
 
         super().__init__(name, parent)
 

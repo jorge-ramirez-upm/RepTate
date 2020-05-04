@@ -90,10 +90,10 @@ class BaseApplicationGt:
             - name {[type]} -- [description] (default: {"Gt"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryMaxwellModes import TheoryMaxwellModesTime
-        from TheoryRouse import TheoryRouseTime
-        from TheoryDTDStars import TheoryDTDStarsTime
-        from TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesTime
+        from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesTime
+        from RepTate.theories.TheoryRouse import TheoryRouseTime
+        from RepTate.theories.TheoryDTDStars import TheoryDTDStarsTime
+        from RepTate.theories.TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesTime
 
         super().__init__(name, parent)
 

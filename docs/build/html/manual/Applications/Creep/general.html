@@ -1,0 +1,227 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Creep: General description &#8212; RepTate 1.0.0 20200330 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Creep Theories" href="Theory/theory.html" />
+    <link rel="prev" title="Creep Experiments" href="Creep.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Theory/theory.html" title="Creep Theories"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Creep.html" title="Creep Experiments"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="Creep.html" accesskey="U"> Creep Experiments</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creep: General description</a><ul>
+<li><a class="reference internal" href="#purpose">Purpose</a></li>
+<li><a class="reference internal" href="#data-files">Data Files</a><ul>
+<li><a class="reference internal" href="#creep-extension"><code class="docutils literal notranslate"><span class="pre">.creep</span></code> extension</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views">Views</a><ul>
+<li><a class="reference internal" href="#log-gamma-t">log(gamma(t))</a></li>
+<li><a class="reference internal" href="#gamma-t">gamma(t)</a></li>
+<li><a class="reference internal" href="#log-j-t">log(J(t))</a></li>
+<li><a class="reference internal" href="#j-t">J(t)</a></li>
+<li><a class="reference internal" href="#t-j-t">t/J(t)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Creep.html"
+                        title="previous chapter"> Creep Experiments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Theory/theory.html"
+                        title="next chapter">Creep Theories</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/manual/Applications/Creep/general.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="creep-general-description">
+<h1>Creep: General description<a class="headerlink" href="#creep-general-description" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#purpose" id="id1">Purpose</a></p></li>
+<li><p><a class="reference internal" href="#data-files" id="id2">Data Files</a></p>
+<ul>
+<li><p><a class="reference internal" href="#creep-extension" id="id3"><code class="docutils literal notranslate"><span class="pre">.creep</span></code> extension</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#views" id="id4">Views</a></p>
+<ul>
+<li><p><a class="reference internal" href="#log-gamma-t" id="id5">log(gamma(t))</a></p></li>
+<li><p><a class="reference internal" href="#gamma-t" id="id6">gamma(t)</a></p></li>
+<li><p><a class="reference internal" href="#log-j-t" id="id7">log(J(t))</a></p></li>
+<li><p><a class="reference internal" href="#j-t" id="id8">J(t)</a></p></li>
+<li><p><a class="reference internal" href="#t-j-t" id="id9">t/J(t)</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="purpose">
+<h2><a class="toc-backref" href="#id1">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="data-files">
+<h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The first line of the file should contain the sample parameters separated by semi-colons (<code class="docutils literal notranslate"><span class="pre">;</span></code>).
+It may contain any number of parameters which will be read and saved as file-parameter in RepTate.</p></li>
+<li><p>Then the data columns should appear, separated by <strong>spaces</strong> or <strong>tabs</strong>.</p></li>
+</ul>
+<div class="section" id="creep-extension">
+<h3><a class="toc-backref" href="#id3"><code class="docutils literal notranslate"><span class="pre">.creep</span></code> extension</a><a class="headerlink" href="#creep-extension" title="Permalink to this headline">¶</a></h3>
+<p>Text files with <code class="docutils literal notranslate"><span class="pre">.creep</span></code> extension should be organised as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.creep</span></code> files should contain <strong>at least</strong> the parameter value for the:</p>
+<ol class="arabic simple">
+<li><p>Applied stress <code class="docutils literal notranslate"><span class="pre">stress</span></code></p></li>
+</ol>
+</li>
+<li><p>2 columns separated by <strong>spaces</strong> or <strong>tabs</strong> containing respectively:</p>
+<ol class="arabic simple">
+<li><p>time, <span class="math notranslate nohighlight">\(t\)</span>,</p></li>
+<li><p>strain, <span class="math notranslate nohighlight">\(\gamma\)</span>,</p></li>
+</ol>
+</li>
+</ul>
+<p>A correct <code class="docutils literal notranslate"><span class="pre">.creep</span></code> file looks like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>stress=10;chem=PE;label=CM3;T=150;
+t         strain          stress      T
+s         -           Pa          C
+1E-3  1.413E-5        10          149.9
+1E-3  -9.419E-6       10          149.9
+1E-3  -2.826E-5       10          149.9
+...   ...         ...     ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="views">
+<h2><a class="toc-backref" href="#id4">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="log-gamma-t">
+<h3><a class="toc-backref" href="#id5">log(gamma(t))</a><a class="headerlink" href="#log-gamma-t" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../../../_images/Creep_LogGammat.png"><img alt="../../../_images/Creep_LogGammat.png" class="align-center" src="../../../_images/Creep_LogGammat.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="gamma-t">
+<h3><a class="toc-backref" href="#id6">gamma(t)</a><a class="headerlink" href="#gamma-t" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../../../_images/Creep_Gammat.png"><img alt="../../../_images/Creep_Gammat.png" class="align-center" src="../../../_images/Creep_Gammat.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="log-j-t">
+<h3><a class="toc-backref" href="#id7">log(J(t))</a><a class="headerlink" href="#log-j-t" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../../../_images/Creep_LogJt.png"><img alt="../../../_images/Creep_LogJt.png" class="align-center" src="../../../_images/Creep_LogJt.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="j-t">
+<h3><a class="toc-backref" href="#id8">J(t)</a><a class="headerlink" href="#j-t" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../../../_images/Creep_Jt.png"><img alt="../../../_images/Creep_Jt.png" class="align-center" src="../../../_images/Creep_Jt.png" style="width: 45%;" /></a>
+</div>
+<div class="section" id="t-j-t">
+<h3><a class="toc-backref" href="#id9">t/J(t)</a><a class="headerlink" href="#t-j-t" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../../../_images/Creep_t_Jt.png"><img alt="../../../_images/Creep_t_Jt.png" class="align-center" src="../../../_images/Creep_t_Jt.png" style="width: 45%;" /></a>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Theory/theory.html" title="Creep Theories"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Creep.html" title="Creep Experiments"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="Creep.html" > Creep Experiments</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

@@ -37,17 +37,17 @@
 import os
 import numpy as np
 import time
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import pyqtSignal
 
 import ctypes as ct
-import react_ctypes_helper as rch
-import react_gui_tools as rgt
+import RepTate.theories.react_ctypes_helper as rch
+import RepTate.theories.react_gui_tools as rgt
 
 
 class TheoryReactMix(CmdBase):

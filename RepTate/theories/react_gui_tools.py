@@ -33,7 +33,7 @@
 import os
 import numpy as np
 import ctypes as ct
-import react_ctypes_helper as rch
+import RepTate.theories.react_ctypes_helper as rch
 #BoB form
 from PyQt5.QtWidgets import QDialog, QToolBar, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QLineEdit, QGroupBox, QFormLayout, QLabel, QFileDialog, QRadioButton, QSpinBox, QGridLayout, QSizePolicy, QSpacerItem, QScrollArea, QWidget, QCheckBox, QMessageBox, QFrame, QPlainTextEdit
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon, QDesktopServices

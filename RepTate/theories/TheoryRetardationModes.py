@@ -36,15 +36,15 @@ Module that defines theories related to Retardation modes, in the frequency and 
 
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from DataTable import DataTable
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.DataTable import DataTable
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices
-from DraggableArtists import DragType, DraggableModesSeries
+from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 
 class TheoryRetardationModesTime(CmdBase):

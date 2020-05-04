@@ -51,8 +51,8 @@ import time
 import ast
 PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, 'theorytab.ui'))
-from fittingoptions import Ui_Dialog
-import errorcalculationoptions
+from RepTate.gui.fittingoptions import Ui_Dialog
+import RepTate.gui.errorcalculationoptions
 
 # def trap_exc_during_debug(*args):
 #     # when app raises uncaught exception, print info
