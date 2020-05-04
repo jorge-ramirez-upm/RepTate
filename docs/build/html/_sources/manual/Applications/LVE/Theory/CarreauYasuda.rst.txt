@@ -8,7 +8,7 @@ Carreau-Yasuda equation
 Summary
 -------
 
-.. autoclass:: TheoryCarreauYasuda.TheoryCarreauYasuda()
+.. autoclass:: RepTate.theories.TheoryCarreauYasuda.TheoryCarreauYasuda()
    
 Description
 -----------

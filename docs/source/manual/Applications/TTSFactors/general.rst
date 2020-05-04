@@ -54,25 +54,25 @@ Views
 
 Log(aT)
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT()
    
 aT
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewaT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewaT()
    
 Log(bT)
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogbT()
    
 bT
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewbT()
    
 Log(aT, bT)
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaTbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaTbT()
    
 Log(aT) vs 1/T (Kelvin)
 -------------------------------------------
-.. automethod:: ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT_invT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT_invT()
    

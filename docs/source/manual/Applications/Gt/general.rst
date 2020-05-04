@@ -53,7 +53,7 @@ Views
 
 log[G(t)]
 -------------------------
-.. automethod:: ApplicationGt.BaseApplicationGt.viewLogGt()
+.. automethod:: RepTate.applications.ApplicationGt.BaseApplicationGt.viewLogGt()
 
 .. image:: images/Gt_LogGt.png
     :width: 45%
@@ -61,7 +61,7 @@ log[G(t)]
 
 G(t)
 --------------
-.. automethod:: ApplicationGt.BaseApplicationGt.viewGt()
+.. automethod:: RepTate.applications.ApplicationGt.BaseApplicationGt.viewGt()
 
 .. image:: images/Gt_Gt.png
     :width: 45%
@@ -69,7 +69,7 @@ G(t)
 
 Schwarzl G',G''
 -----------------------
-.. automethod:: ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt()
+.. automethod:: RepTate.applications.ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt()
 
 The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Schwarzl_1971`.
 
@@ -79,7 +79,7 @@ The time range of the :math:`G(t)` that will be used for the Fourier transformat
 
 i-Rheo G',G''
 ---------------------
-.. automethod:: ApplicationGt.BaseApplicationGt.viewiRheo()
+.. automethod:: RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheo()
 
 The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Tassieri_2016`.
 
@@ -89,7 +89,7 @@ The time range of the :math:`G(t)` that will be used for the Fourier transformat
 
 i-Rheo-Over G',G''
 ---------------------
-.. automethod:: ApplicationGt.BaseApplicationGt.viewiRheoOver()
+.. automethod:: RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheoOver()
 
 The time range of the :math:`G(t)` that will be used for the Fourier transformation can be selected by changing the values of the text boxes :math:`\log(t_{min})` and :math:`\log(t_{min})`. For more details, check :cite:`Gt-Tassieri_2016`.
 

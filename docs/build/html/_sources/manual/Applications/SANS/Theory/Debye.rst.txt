@@ -8,7 +8,7 @@ Debye function
 Summary
 -------
 
-.. autoclass:: TheoryDebye.TheoryDebye()
+.. autoclass:: RepTate.theories.TheoryDebye.TheoryDebye()
 
 Description
 -----------

@@ -27,7 +27,7 @@ Graphical User Interface
 Command Line Version
 --------------------
 
-.. automodule:: RepTateCL
+.. automodule:: RepTate.CL
     :members:
     :undoc-members:
     :inherited-members:

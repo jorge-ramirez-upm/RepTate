@@ -57,14 +57,14 @@
   <ul>
 <li><a class="reference internal" href="#">Tools</a><ul>
 <li><a class="reference internal" href="#materials-database">Materials Database</a><ul>
-<li><a class="reference internal" href="#polymer-data">Polymer Data</a></li>
-<li><a class="reference internal" href="#create-basic-materials-database">Create Basic Materials Database</a></li>
-<li><a class="reference internal" href="#read-the-materials-database">Read the Materials Database</a></li>
+<li><a class="reference internal" href="#module-RepTate.tools.polymer_data">Polymer Data</a></li>
+<li><a class="reference internal" href="#module-RepTate.tools.CreateMaterialsDatabaseFile">Create Basic Materials Database</a></li>
+<li><a class="reference internal" href="#module-RepTate.tools.ReadMaterialsDataBaseFile">Read the Materials Database</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#likhtman-mcleish-theory">Likhtman-McLeish theory</a><ul>
-<li><a class="reference internal" href="#create-compact-linlin-data-file">Create compact linlin data file</a></li>
-<li><a class="reference internal" href="#read-compact-linlin-data-file">Read compact linlin data file</a></li>
+<li><a class="reference internal" href="#module-RepTate.tools.linlin2npz">Create compact linlin data file</a></li>
+<li><a class="reference internal" href="#module-RepTate.tools.readlinlin">Read compact linlin data file</a></li>
 </ul>
 </li>
 </ul>
@@ -108,23 +108,42 @@
 </div>
 <div class="section" id="materials-database">
 <h2>Materials Database<a class="headerlink" href="#materials-database" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="polymer-data">
-<h3>Polymer Data<a class="headerlink" href="#polymer-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-RepTate.tools.polymer_data">
+<span id="polymer-data"></span><h3>Polymer Data<a class="headerlink" href="#module-RepTate.tools.polymer_data" title="Permalink to this headline">¶</a></h3>
+<p>Module polymer_data</p>
+<p>Module to define the basic information about a polymer for the materials database.</p>
+<dl class="class">
+<dt id="RepTate.tools.polymer_data.polymer">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.polymer_data.</code><code class="sig-name descname">polymer</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/polymer_data.html#polymer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.polymer_data.polymer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>[summary]</p>
+<p>[description]</p>
+</dd></dl>
+
 </div>
-<div class="section" id="create-basic-materials-database">
-<h3>Create Basic Materials Database<a class="headerlink" href="#create-basic-materials-database" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-RepTate.tools.CreateMaterialsDatabaseFile">
+<span id="create-basic-materials-database"></span><h3>Create Basic Materials Database<a class="headerlink" href="#module-RepTate.tools.CreateMaterialsDatabaseFile" title="Permalink to this headline">¶</a></h3>
+<p>Module CreateMaterialsDatabaseFile</p>
+<p>Module that creates the basic Materials database data.</p>
 </div>
-<div class="section" id="read-the-materials-database">
-<h3>Read the Materials Database<a class="headerlink" href="#read-the-materials-database" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-RepTate.tools.ReadMaterialsDataBaseFile">
+<span id="read-the-materials-database"></span><h3>Read the Materials Database<a class="headerlink" href="#module-RepTate.tools.ReadMaterialsDataBaseFile" title="Permalink to this headline">¶</a></h3>
+<p>Module ReadMaterialsDataBaseFile</p>
+<p>Module to read the contents of the materials database file.</p>
 </div>
 </div>
 <div class="section" id="likhtman-mcleish-theory">
 <h2>Likhtman-McLeish theory<a class="headerlink" href="#likhtman-mcleish-theory" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="create-compact-linlin-data-file">
-<h3>Create compact linlin data file<a class="headerlink" href="#create-compact-linlin-data-file" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-RepTate.tools.linlin2npz">
+<span id="create-compact-linlin-data-file"></span><h3>Create compact linlin data file<a class="headerlink" href="#module-RepTate.tools.linlin2npz" title="Permalink to this headline">¶</a></h3>
+<p>Module linlin2npz</p>
+<p>Reads all the files of the precalculated linlin theory and saves them 
+in a more compact <a href="#id1"><span class="problematic" id="id2">*</span></a>.npz format</p>
 </div>
-<div class="section" id="read-compact-linlin-data-file">
-<h3>Read compact linlin data file<a class="headerlink" href="#read-compact-linlin-data-file" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-RepTate.tools.readlinlin">
+<span id="read-compact-linlin-data-file"></span><h3>Read compact linlin data file<a class="headerlink" href="#module-RepTate.tools.readlinlin" title="Permalink to this headline">¶</a></h3>
+<p>Module readlinlin</p>
+<p>Reads the linlin data from the compact <a href="#id3"><span class="problematic" id="id4">*</span></a>.npz file</p>
 </div>
 </div>
 </div>

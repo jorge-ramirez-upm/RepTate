@@ -12,7 +12,7 @@ Polynomial
 Summary
 -------
 
-.. autoclass:: TheoryBasic.TheoryPolynomial()
+.. autoclass:: RepTate.theories.TheoryBasic.TheoryPolynomial()
 
 
 ---------
@@ -22,7 +22,7 @@ Power Law
 Summary
 -------
 
-.. autoclass:: TheoryBasic.TheoryPowerLaw()
+.. autoclass:: RepTate.theories.TheoryBasic.TheoryPowerLaw()
 
 
 
@@ -33,7 +33,7 @@ Exponential
 Summary
 -------
 
-.. autoclass:: TheoryBasic.TheoryExponential()
+.. autoclass:: RepTate.theories.TheoryBasic.TheoryExponential()
 
 
 ------------------
@@ -43,5 +43,5 @@ Double Exponential
 Summary
 -------
 
-.. autoclass:: TheoryBasic.TheoryTwoExponentials()
+.. autoclass:: RepTate.theories.TheoryBasic.TheoryTwoExponentials()
 

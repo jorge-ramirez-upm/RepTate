@@ -8,7 +8,7 @@ Core classes (Command Line)
 Application
 -----------
 
-.. automodule:: Application
+.. automodule:: RepTate.core.Application
     :members:
     :undoc-members:
     :show-inheritance:
@@ -16,7 +16,7 @@ Application
 ApplicationManager
 ------------------
 
-.. automodule:: ApplicationManager
+.. automodule:: RepTate.core.ApplicationManager
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ ApplicationManager
 CmdBase and CmdMode
 -------------------
 
-.. automodule:: CmdBase
+.. automodule:: RepTate.core.CmdBase
     :members:
     :undoc-members:
     :show-inheritance:
@@ -32,7 +32,7 @@ CmdBase and CmdMode
 DataSet
 -------
 
-.. automodule:: DataSet
+.. automodule:: RepTate.core.DataSet
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,7 +40,7 @@ DataSet
 DataTable
 ---------
 
-.. automodule:: DataTable
+.. automodule:: RepTate.core.DataTable
     :members:
     :undoc-members:
     :show-inheritance:
@@ -48,7 +48,7 @@ DataTable
 DraggableArtists
 ----------------
     
-.. automodule:: DraggableArtists
+.. automodule:: RepTate.core.DraggableArtists
     :members:
     :undoc-members:
     :show-inheritance:
@@ -56,7 +56,7 @@ DraggableArtists
 File
 ----
     
-.. automodule:: File
+.. automodule:: RepTate.core.File
     :members:
     :undoc-members:
     :show-inheritance:
@@ -64,7 +64,7 @@ File
 FileType
 --------
     
-.. automodule:: FileType
+.. automodule:: RepTate.core.FileType
     :members:
     :undoc-members:
     :show-inheritance:
@@ -72,7 +72,7 @@ FileType
 Parameter
 ---------
     
-.. automodule:: Parameter
+.. automodule:: RepTate.core.Parameter
     :members:
     :undoc-members:
     :show-inheritance:
@@ -80,7 +80,7 @@ Parameter
 Theory
 ------
     
-.. automodule:: Theory
+.. automodule:: RepTate.core.Theory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -88,7 +88,7 @@ Theory
 Version
 -------
     
-.. automodule:: Version
+.. automodule:: RepTate.core.Version
     :members:
     :undoc-members:
     :show-inheritance:
@@ -96,7 +96,7 @@ Version
 View
 ----
     
-.. automodule:: View
+.. automodule:: RepTate.core.View
     :members:
     :undoc-members:
     :show-inheritance:

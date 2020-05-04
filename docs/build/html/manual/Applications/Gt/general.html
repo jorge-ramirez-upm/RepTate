@@ -131,6 +131,12 @@
 </div>
 <div class="section" id="purpose">
 <h2><a class="toc-backref" href="#id4">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.applications.ApplicationGt.ApplicationGt">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationGt.</code><code class="sig-name descname">ApplicationGt</code><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application to Analyze Stress Relaxation Data</p>
+</dd></dl>
+
 </div>
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id5">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
@@ -171,24 +177,55 @@ t sxy
 <h2><a class="toc-backref" href="#id7">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="log-g-t">
 <h3><a class="toc-backref" href="#id8">log[G(t)]</a><a class="headerlink" href="#log-g-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationGt.BaseApplicationGt.viewLogGt">
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewLogGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#BaseApplicationGt.viewLogGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.BaseApplicationGt.viewLogGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Gt_LogGt.png"><img alt="../../../_images/Gt_LogGt.png" class="align-center" src="../../../_images/Gt_LogGt.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="g-t">
 <h3><a class="toc-backref" href="#id9">G(t)</a><a class="headerlink" href="#g-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationGt.BaseApplicationGt.viewGt">
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewGt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#BaseApplicationGt.viewGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.BaseApplicationGt.viewGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Gt_Gt.png"><img alt="../../../_images/Gt_Gt.png" class="align-center" src="../../../_images/Gt_Gt.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="schwarzl-g-g">
 <h3><a class="toc-backref" href="#id10">Schwarzl G’,G’’</a><a class="headerlink" href="#schwarzl-g-g" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt">
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewSchwarzl_Gt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#BaseApplicationGt.viewSchwarzl_Gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.BaseApplicationGt.viewSchwarzl_Gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schwarzl transformation: numerical calculation of the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus
+<span class="math notranslate nohighlight">\(G''(\omega)\)</span> from the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span></p>
+</dd></dl>
+
 <p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="bibtex reference internal" href="#gt-schwarzl-1971" id="id1">[1]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_Schwarzl.png"><img alt="../../../_images/Gt_Schwarzl.png" class="align-center" src="../../../_images/Gt_Schwarzl.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="i-rheo-g-g">
 <h3><a class="toc-backref" href="#id11">i-Rheo G’,G’’</a><a class="headerlink" href="#i-rheo-g-g" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheo">
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewiRheo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#BaseApplicationGt.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheo" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (no oversamplig).</p>
+</dd></dl>
+
 <p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="bibtex reference internal" href="#gt-tassieri-2016" id="id2">[2]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_iRheo.png"><img alt="../../../_images/Gt_iRheo.png" class="align-center" src="../../../_images/Gt_iRheo.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="i-rheo-over-g-g">
 <h3><a class="toc-backref" href="#id12">i-Rheo-Over G’,G’’</a><a class="headerlink" href="#i-rheo-over-g-g" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheoOver">
+<code class="sig-prename descclassname">BaseApplicationGt.</code><code class="sig-name descname">viewiRheoOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationGt.html#BaseApplicationGt.viewiRheoOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.BaseApplicationGt.viewiRheoOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the relaxation modulus <span class="math notranslate nohighlight">\(G(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
+</dd></dl>
+
 <p>The time range of the <span class="math notranslate nohighlight">\(G(t)\)</span> that will be used for the Fourier transformation can be selected by changing the values of the text boxes <span class="math notranslate nohighlight">\(\log(t_{min})\)</span> and <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>. For more details, check <a class="bibtex reference internal" href="#gt-tassieri-2016" id="id3">[2]</a>.</p>
 <a class="reference internal image-reference" href="../../../_images/Gt_iRheoOver.png"><img alt="../../../_images/Gt_iRheoOver.png" class="align-center" src="../../../_images/Gt_iRheoOver.png" style="width: 45%;" /></a>
 <p class="rubric">References</p>

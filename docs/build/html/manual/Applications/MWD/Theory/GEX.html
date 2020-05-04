@@ -80,6 +80,30 @@
 <h1>Generalized Exponential Function<a class="headerlink" href="#generalized-exponential-function" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryGEX.BaseTheoryGEX">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryGEX.</code><code class="sig-name descname">BaseTheoryGEX</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryGEX.html#BaseTheoryGEX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryGEX.BaseTheoryGEX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generalized Exponential Function (GEX) for experimental molecular weight distributions.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[W(M) = W_0 \frac{b}{M_0 \Gamma\left(\frac{a}{b}\right)} \left(\frac{M}{M_0}\right)^{a-1} \exp\left[ -\left(\frac{M}{M_0}\right)^b \right]\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">logW0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(W_0)\)</span>: Normalization constant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logM0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(M_0)\)</span>: Proportional to <span class="math notranslate nohighlight">\(M_n\)</span> and <span class="math notranslate nohighlight">\(M_w\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> : Parameter related to polydispersity and skewness</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> : Parameter related to polydispersity and skewness</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

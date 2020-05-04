@@ -8,7 +8,7 @@ Kolhrauch-Williams-Watts (KWW) modes
 Summary
 -------
 
-.. autoclass:: TheoryKWWModes.TheoryKWWModesFrequency()
+.. autoclass:: RepTate.theories.TheoryKWWModes.TheoryKWWModesFrequency()
 
 Description
 -----------

@@ -5,4 +5,4 @@ Rouse Frequency
 Summary
 -------
 
-.. autoclass:: TheoryRouse.TheoryRouseFrequency()
+.. autoclass:: RepTate.theories.TheoryRouse.TheoryRouseFrequency()

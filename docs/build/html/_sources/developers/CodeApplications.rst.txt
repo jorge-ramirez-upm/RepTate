@@ -7,7 +7,7 @@ Applications
 ApplicationGt
 -------------
 
-.. automodule:: ApplicationGt
+.. automodule:: RepTate.applications.ApplicationGt
     :members:
     :undoc-members:
     :show-inheritance:
@@ -15,7 +15,7 @@ ApplicationGt
 ApplicationLVE
 --------------
 
-.. automodule:: ApplicationLVE
+.. automodule:: RepTate.applications.ApplicationLVE
     :members:
     :undoc-members:
     :show-inheritance:
@@ -23,7 +23,7 @@ ApplicationLVE
 ApplicationMWD
 --------------
 
-.. automodule:: ApplicationMWD
+.. automodule:: RepTate.applications.ApplicationMWD
     :members:
     :undoc-members:
     :show-inheritance:
@@ -31,7 +31,7 @@ ApplicationMWD
 ApplicationNLVE
 ---------------
     
-.. automodule:: ApplicationNLVE
+.. automodule:: RepTate.applications.ApplicationNLVE
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,7 +39,7 @@ ApplicationNLVE
 ApplicationTTS
 --------------
     
-.. automodule:: ApplicationTTS
+.. automodule:: RepTate.applications.ApplicationTTS
     :members:
     :undoc-members:
     :show-inheritance:

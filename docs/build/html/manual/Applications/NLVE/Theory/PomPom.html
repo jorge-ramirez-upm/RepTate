@@ -80,6 +80,45 @@
 <h1>Multi-mode Pom-Pom Model<a class="headerlink" href="#multi-mode-pom-pom-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryPomPom.TheoryPomPom">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryPomPom.</code><code class="sig-name descname">TheoryPomPom</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryPomPom.html#TheoryPomPom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryPomPom.TheoryPomPom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-mode PomPom Model based on <a class="bibtex reference internal" href="theory.html#nlve-blackwell2000" id="id1">[3]</a>:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol \sigma &amp;= 3 \sum_{i=1}^n G_i  \lambda_i^2(t) \boldsymbol S_i (t),\\
+\boldsymbol S_i &amp;= \dfrac{\boldsymbol A_i } {\mathrm{Tr} \boldsymbol A_i}\\
+\dfrac {\mathrm D \boldsymbol A_i} {\mathrm D t} &amp;= \boldsymbol \kappa \cdot \boldsymbol A_i
++ \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
+- \dfrac {1} {\tau_{\mathrm b, i}}  (\boldsymbol A_i - \boldsymbol I), \\
+\dfrac {\mathrm D  \lambda_i} {\mathrm D t} &amp;=
+\lambda_i (\boldsymbol \kappa : \boldsymbol S_i)
+- \dfrac {1} {\tau_{\mathrm s, i}}  (\lambda_i - 1)
+\exp\left( \nu^* (\lambda_i - 1) \right),\end{split}\]</div>
+<dl class="simple">
+<dt>where, for each mode <span class="math notranslate nohighlight">\(i\)</span>:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_i\)</span>: weight of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_{\mathrm b, i}\)</span>: backbone orientation relaxation time of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_{\mathrm s, i}\)</span>: backbone stretch relaxation time of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\nu_i^* = \dfrac{2}{q_i - 1}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(q_i\)</span>: the number of dangling arms of each mode</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<ul>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">q_i</span></code> <span class="math notranslate nohighlight">\(\equiv q_i\)</span>: the number of dangling arms of each mode</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ratio_i</span></code> <span class="math notranslate nohighlight">\(\equiv \dfrac{\tau_{\mathrm b, i}}{\tau_{\mathrm s, i}}\)</span>:</p></li>
+</ul>
+<p>the ratio of orientation to stretch relaxation times of each mode</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

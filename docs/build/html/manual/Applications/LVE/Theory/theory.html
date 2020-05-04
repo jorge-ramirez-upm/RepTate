@@ -263,6 +263,31 @@ should be enough to fit the terminal time.</p></li>
 </div>
 <div class="section" id="id1">
 <h3><a class="toc-backref" href="#id26">Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryCarreauYasuda.TheoryCarreauYasuda">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryCarreauYasuda.</code><code class="sig-name descname">TheoryCarreauYasuda</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryCarreauYasuda.html#TheoryCarreauYasuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryCarreauYasuda.TheoryCarreauYasuda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the complex viscosity with the Carreau-Yasuda equation.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[\eta^*(\omega) = \eta_\infty + (\eta_0-\eta_\infty)\left( 1 + (\lambda\omega)^a \right)^{(n-1)/a}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\eta_0\)</span>: Viscosity at zero shear rate.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_\infty\)</span>: Viscosity at infinite shear rate.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span>: Relaxation time.</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: Power law index.</p></li>
+<li><p><span class="math notranslate nohighlight">\(a\)</span>: Dimensionless parameter (2 in most cases)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="id2">
 <h3><a class="toc-backref" href="#id27">Description</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
@@ -290,6 +315,24 @@ the theory will be applied to the first one in the list of active files.</p>
 </div>
 <div class="section" id="id3">
 <h3><a class="toc-backref" href="#id29">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryLikhtmanMcLeish2002.</code><code class="sig-name descname">TheoryLikhtmanMcLeish2002</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryLikhtmanMcLeish2002.html#TheoryLikhtmanMcLeish2002"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_e</span></code> : Rouse time of one entanglement segment (of length <span class="math notranslate nohighlight">\(M_e\)</span>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ge</span></code> : Entanglement modulus.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Me</span></code> : Entanglement molecular weight.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c_nu</span></code> : Constraint release parameter.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="id4">
 <h3><a class="toc-backref" href="#id30">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
@@ -325,12 +368,85 @@ the theory will be applied to the first one in the list of active files.</p>
 <h2><a class="toc-backref" href="#id32">Rouse Frequency</a><a class="headerlink" href="#rouse-frequency" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id6">
 <h3><a class="toc-backref" href="#id33">Summary</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryRouse.TheoryRouseFrequency">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryRouse.</code><code class="sig-name descname">TheoryRouseFrequency</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryRouse.html#TheoryRouseFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryRouse.TheoryRouseFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Rouse modes to a frequency dependent relaxation function</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><p>Continuous Rouse model (valid for “large” <span class="math notranslate nohighlight">\(N\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G'(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{(\omega\tau_p)^2} {1 +  (\omega\tau_p)^2}\\
+G''(\omega) &amp;= G_0 \dfrac 1 N \sum_{p=1}^N \dfrac{\omega\tau_p} {1 +  (\omega\tau_p)^2}\\
+\tau_p &amp;= \dfrac{N^2 \tau_0 }{ 2 p^2}\end{split}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_0\)</span>: relaxation time of an elementary segment</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_0\)</span>: molar mass of an elementary segment</p></li>
+</ul>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(c\)</span>: number of segments per unit volume</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_\mathrm  B\)</span>: Boltzmann constant</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: temperature</p></li>
+<li><p><span class="math notranslate nohighlight">\(N=M_w/M_0\)</span>: number of segments par chain</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_w\)</span>: weight-average molecular mass</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="dynamic-dilution-equation-for-stars">
 <h2><a class="toc-backref" href="#id34">Dynamic dilution equation for stars</a><a class="headerlink" href="#dynamic-dilution-equation-for-stars" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id7">
 <h3><a class="toc-backref" href="#id35">Summary</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryDTDStars.TheoryDTDStarsFreq">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryDTDStars.</code><code class="sig-name descname">TheoryDTDStarsFreq</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryDTDStars.html#TheoryDTDStarsFreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryDTDStars.TheoryDTDStarsFreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit DTD Theory for stars.
+Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>Function</strong></dt><dd><p>See <a class="reference external" href="http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf">Milner-McLeish (1997)</a>
+and
+<a class="reference external" href="http://www.personal.reading.ac.uk/~sms06al2/papers/definit.pdf">Larson et al. (2003)</a> for details.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">G0</span></code> <span class="math notranslate nohighlight">\(\equiv G_N^0\)</span>: Plateau modulus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_e</span></code> <span class="math notranslate nohighlight">\(\equiv \tau_\mathrm e = \left(\dfrac{M_\mathrm e^\mathrm G}{M_0}\right)^2  \dfrac{\zeta b^2}{3\pi^2k_\mathrm B T}\)</span>: 
+Entanglement equilibration time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Me</span></code> <span class="math notranslate nohighlight">\(\equiv M_\mathrm e^\mathrm G = \dfrac 4 5 \dfrac{\rho R T} {G_N^0}\)</span>: Entanglement molecular weight</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>: Dilution exponent</p></li>
+</ul>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\rho\)</span>: polymer density</p></li>
+<li><p><span class="math notranslate nohighlight">\(\zeta\)</span>: monomeric friction coefficient</p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span>: monomer-based segment length</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_\mathrm B T\)</span>: thermal energy</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_0\)</span>: molar mass of an elementary segment</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="bob-lve">
@@ -339,6 +455,15 @@ the theory will be applied to the first one in the list of active files.</p>
 </div>
 <div class="section" id="id8">
 <h3><a class="toc-backref" href="#id37">Summary</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryBobLVE.TheoryBobLVE">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBobLVE.</code><code class="sig-name descname">TheoryBobLVE</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryBobLVE.html#TheoryBobLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBobLVE.TheoryBobLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyse the relaxation of polymers read from a polymer configuration file
+using BoB v2.5 (Chinmay Das and Daniel Read).
+These files can be generated from the React application in RepTate.</p>
+<p>The original documentation of BoB can be found here: <a class="reference external" href="https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download">https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download</a>.</p>
+</dd></dl>
+
 <p>Publications related to BoB: <a class="bibtex reference internal" href="#boblve-das2006" id="id9">[1]</a>  <a class="bibtex reference internal" href="#boblve-das2006b" id="id10">[2]</a> <a class="bibtex reference internal" href="#boblve-chambon2008" id="id11">[3]</a>.</p>
 <p class="rubric">References</p>
 <p id="bibtex-bibliography-manual/Applications/LVE/Theory/theory-1"><dl class="citation">
@@ -359,6 +484,37 @@ the theory will be applied to the first one in the list of active files.</p>
 <h2><a class="toc-backref" href="#id38">Rolie-Double-Poly LVE</a><a class="headerlink" href="#rolie-double-poly-lve" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id12">
 <h3><a class="toc-backref" href="#id39">Summary</a><a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryRDPLVE.TheoryRDPLVE">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryRDPLVE.</code><code class="sig-name descname">TheoryRDPLVE</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryRDPLVE.html#TheoryRDPLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryRDPLVE.TheoryRDPLVE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rolie-Double-Poly equation for the linear predictions of polydispere entangled linear polymers</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+G'(\omega) &amp; = &amp; \sum_{i=1}^{n_{modes}}\sum_{j=1}^{n_{modes}} G \phi_i \phi_j \frac{(\omega\tau)^2}{1+(\omega\tau)^2} \\
+G''(\omega) &amp; = &amp; \sum_{i=1}^{n_{modes}}\sum_{j=1}^{n_{modes}} G \phi_i \phi_j \frac{\omega\tau}{1+(\omega\tau)^2}
+\end{eqnarray}\end{split}\]</div>
+<p>where, <span class="math notranslate nohighlight">\(\tau = (\tau_{\text D,i}^{-1} + \tau_{\text D, j}^{-1})^{-1}\)</span>, and,
+if the “modulus correction” button is clicked, <span class="math notranslate nohighlight">\(G=G_N^0 \times g(Z_\text{eff})\)</span>, with <span class="math notranslate nohighlight">\(g\)</span> the Likthman-McLeish CLF correction function,
+otherwise <span class="math notranslate nohighlight">\(G=G_N^0\)</span></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nmodes</span></code> : number of molecular mass components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">G_N^0</span></code> : Plateau modulus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phi0i</span></code> : Volume fraction of component <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tauD0i</span></code> : Reptation time of component <span class="math notranslate nohighlight">\(i\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>[description]</p>
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="sticky-reptation">
@@ -367,6 +523,25 @@ the theory will be applied to the first one in the list of active files.</p>
 </div>
 <div class="section" id="id13">
 <h3><a class="toc-backref" href="#id41">Summary</a><a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryStickyReptation.TheoryStickyReptation">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryStickyReptation.</code><code class="sig-name descname">TheoryStickyReptation</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryStickyReptation.html#TheoryStickyReptation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryStickyReptation.TheoryStickyReptation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the Sticky Reptation theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ge</span></code> : elastic plateau modulus.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ze</span></code> : number of entanglements per chain.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Zs</span></code> : number of stickers per chain.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_s</span></code> : sticker dissociation time.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code> : dimensionless constant.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="id14">
 <h3><a class="toc-backref" href="#id42">Description</a><a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>

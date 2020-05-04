@@ -80,6 +80,37 @@
 <h1>Multi-mode Giesekus model<a class="headerlink" href="#multi-mode-giesekus-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryGiesekus.TheoryGiesekus">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryGiesekus.</code><code class="sig-name descname">TheoryGiesekus</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryGiesekus.html#TheoryGiesekus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryGiesekus.TheoryGiesekus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-mode Giesekus Model (see Chapter 6 of <a class="bibtex reference internal" href="theory.html#nlve-larson1988" id="id1">[1]</a>):</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol  {A_i},\\
+\dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
++ \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
+- \dfrac {1} {\tau_i}  (\boldsymbol A_i - \boldsymbol I)
+-  \dfrac {\alpha_i} {\tau_i} (\boldsymbol A_i - \boldsymbol I)^2,\end{split}\]</div>
+<dl class="simple">
+<dt>where for each mode <span class="math notranslate nohighlight">\(i\)</span>:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_i\)</span>: weight of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_i\)</span>: relaxation time of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_i\)</span>: constant of proportionality mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha_i</span></code> <span class="math notranslate nohighlight">\(\equiv \alpha_i\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

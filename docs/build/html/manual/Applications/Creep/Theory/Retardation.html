@@ -83,6 +83,38 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryRetardationModes.TheoryRetardationModesTime">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryRetardationModes.</code><code class="sig-name descname">TheoryRetardationModesTime</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryRetardationModes.html#TheoryRetardationModesTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryRetardationModes.TheoryRetardationModesTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a discrete Retardation spectrum to time dependent creep data</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[\gamma(t) = \sigma_0 \left( J_0 + \sum_{1}^{n_{modes}} J_i \left[ 1 - \exp\left(\frac{-t}{\tau_i}\right) \right] + \frac{t}{\eta_0} \right)\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sigma_0\)</span>: constant stress applied during the creep experiment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(J_0\)</span>: Instantaneous compliance (<code class="docutils literal notranslate"><span class="pre">logJini</span></code>, in logarithmic scale).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_0\)</span>: Terminal viscosity (<code class="docutils literal notranslate"><span class="pre">logeta0</span></code>, in logarithmic scale).</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{modes}\)</span>: number of Retardation modes equally distributed in logarithmic scale between <span class="math notranslate nohighlight">\(t_{min}\)</span> and <span class="math notranslate nohighlight">\(t_{max}\)</span>.</p></li>
+<li><p>logtmin = <span class="math notranslate nohighlight">\(\log(t_{min})\)</span>: decimal logarithm of the minimum time range for the modes.</p></li>
+<li><p>logtmax = <span class="math notranslate nohighlight">\(\log(t_{max})\)</span>: decimal logarithm of the maximum time.</p></li>
+<li><p>logJi = <span class="math notranslate nohighlight">\(\log(J_{i})\)</span>: decimal logarithm of the compliance of Retardation mode <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

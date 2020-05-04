@@ -131,6 +131,12 @@
 </div>
 <div class="section" id="purpose">
 <h2><a class="toc-backref" href="#id1">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.applications.ApplicationCreep.ApplicationCreep">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCreep.</code><code class="sig-name descname">ApplicationCreep</code><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#ApplicationCreep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.ApplicationCreep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application to Analyze Data from Creep experiments</p>
+</dd></dl>
+
 </div>
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
@@ -171,22 +177,52 @@ s         -           Pa          C
 <h2><a class="toc-backref" href="#id4">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="log-gamma-t">
 <h3><a class="toc-backref" href="#id5">log(gamma(t))</a><a class="headerlink" href="#log-gamma-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogStraint">
+<code class="sig-prename descclassname">BaseApplicationCreep.</code><code class="sig-name descname">viewLogStraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewLogStraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogStraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the applied strain <span class="math notranslate nohighlight">\(\gamma(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Creep_LogGammat.png"><img alt="../../../_images/Creep_LogGammat.png" class="align-center" src="../../../_images/Creep_LogGammat.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="gamma-t">
 <h3><a class="toc-backref" href="#id6">gamma(t)</a><a class="headerlink" href="#gamma-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewStraint">
+<code class="sig-prename descclassname">BaseApplicationCreep.</code><code class="sig-name descname">viewStraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewStraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewStraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applied strain <span class="math notranslate nohighlight">\(\gamma(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Creep_Gammat.png"><img alt="../../../_images/Creep_Gammat.png" class="align-center" src="../../../_images/Creep_Gammat.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="log-j-t">
 <h3><a class="toc-backref" href="#id7">log(J(t))</a><a class="headerlink" href="#log-j-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogJt">
+<code class="sig-prename descclassname">BaseApplicationCreep.</code><code class="sig-name descname">viewLogJt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewLogJt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogJt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the compliance <span class="math notranslate nohighlight">\(J(t)=\gamma(t)/\sigma_0\)</span> (where <span class="math notranslate nohighlight">\(\sigma_0\)</span> is the applied stress in the creep experiment) vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Creep_LogJt.png"><img alt="../../../_images/Creep_LogJt.png" class="align-center" src="../../../_images/Creep_LogJt.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="j-t">
 <h3><a class="toc-backref" href="#id8">J(t)</a><a class="headerlink" href="#j-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewJt">
+<code class="sig-prename descclassname">BaseApplicationCreep.</code><code class="sig-name descname">viewJt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewJt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewJt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compliance <span class="math notranslate nohighlight">\(J(t)=\gamma(t)/\sigma_0\)</span> (where <span class="math notranslate nohighlight">\(\sigma_0\)</span> is the applied stress in the creep experiment) vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Creep_Jt.png"><img alt="../../../_images/Creep_Jt.png" class="align-center" src="../../../_images/Creep_Jt.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="t-j-t">
 <h3><a class="toc-backref" href="#id9">t/J(t)</a><a class="headerlink" href="#t-j-t" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewt_Jt">
+<code class="sig-prename descclassname">BaseApplicationCreep.</code><code class="sig-name descname">viewt_Jt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewt_Jt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewt_Jt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time divided by compliance <span class="math notranslate nohighlight">\(t/J(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/Creep_t_Jt.png"><img alt="../../../_images/Creep_t_Jt.png" class="align-center" src="../../../_images/Creep_t_Jt.png" style="width: 45%;" /></a>
 </div>
 </div>

@@ -8,7 +8,7 @@ Retardation modes
 Summary
 -------
 
-.. autoclass:: TheoryRetardationModes.TheoryRetardationModesTime()
+.. autoclass:: RepTate.theories.TheoryRetardationModes.TheoryRetardationModesTime()
 
 Description
 -----------

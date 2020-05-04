@@ -131,6 +131,12 @@
 </div>
 <div class="section" id="purpose">
 <h2><a class="toc-backref" href="#id1">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.applications.ApplicationReact.ApplicationReact">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationReact.</code><code class="sig-name descname">ApplicationReact</code><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#ApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.ApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application for Monte Carlo polymerisation</p>
+</dd></dl>
+
 </div>
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
@@ -169,26 +175,58 @@ It may contain any number of parameters which will be read and saved as file-par
 <h2><a class="toc-backref" href="#id4">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="w-m">
 <h3><a class="toc-backref" href="#id5">w(M)</a><a class="headerlink" href="#w-m" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_wM">
+<code class="sig-prename descclassname">BaseApplicationReact.</code><code class="sig-name descname">view_wM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_wM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_wM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Molecular weight distribution <span class="math notranslate nohighlight">\(w(M)\)</span> vs molecular weight <span class="math notranslate nohighlight">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/React_wM.png"><img alt="../../../_images/React_wM.png" class="align-center" src="../../../_images/React_wM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="log-w-m">
 <h3><a class="toc-backref" href="#id6">log(w(M))</a><a class="headerlink" href="#log-w-m" title="Permalink to this headline">¶</a></h3>
 <p><span class="math notranslate nohighlight">\(\log_{10}(w(M))\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_logwM">
+<code class="sig-prename descclassname">BaseApplicationReact.</code><code class="sig-name descname">view_logwM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_logwM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_logwM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the molecular weight distribution <span class="math notranslate nohighlight">\(\log(w(M))\)</span> vs molecular weight <span class="math notranslate nohighlight">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/React_logwM.png"><img alt="../../../_images/React_logwM.png" class="align-center" src="../../../_images/React_logwM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="g-m">
 <h3><a class="toc-backref" href="#id7">g(M)</a><a class="headerlink" href="#g-m" title="Permalink to this headline">¶</a></h3>
 <p><span class="math notranslate nohighlight">\(g(M)\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_gM">
+<code class="sig-prename descclassname">BaseApplicationReact.</code><code class="sig-name descname">view_gM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_gM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_gM" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math notranslate nohighlight">\(g\)</span>-factor is defined as <span class="math notranslate nohighlight">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/React_gM.png"><img alt="../../../_images/React_gM.png" class="align-center" src="../../../_images/React_gM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="log-g-m">
 <h3><a class="toc-backref" href="#id8">log(g(M))</a><a class="headerlink" href="#log-g-m" title="Permalink to this headline">¶</a></h3>
 <p><span class="math notranslate nohighlight">\(\log_{10}(g(M))\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_loggM">
+<code class="sig-prename descclassname">BaseApplicationReact.</code><code class="sig-name descname">view_loggM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_loggM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_loggM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the <span class="math notranslate nohighlight">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math notranslate nohighlight">\(g\)</span>-factor is defined as <span class="math notranslate nohighlight">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/React_LoggM.png"><img alt="../../../_images/React_LoggM.png" class="align-center" src="../../../_images/React_LoggM.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="br-1000c">
 <h3><a class="toc-backref" href="#id9">br/1000C</a><a class="headerlink" href="#br-1000c" title="Permalink to this headline">¶</a></h3>
 <p><span class="math notranslate nohighlight">\(\text{br/1000C}\)</span> (log-linear)</p>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_br_1000C">
+<code class="sig-prename descclassname">BaseApplicationReact.</code><code class="sig-name descname">view_br_1000C</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_br_1000C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_br_1000C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of branching points per 1000 carbon as a function of the molecular weight</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/React_br_1000C.png"><img alt="../../../_images/React_br_1000C.png" class="align-center" src="../../../_images/React_br_1000C.png" style="width: 45%;" /></a>
 </div>
 </div>

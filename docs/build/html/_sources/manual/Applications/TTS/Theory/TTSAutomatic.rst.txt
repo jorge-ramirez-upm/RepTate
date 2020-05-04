@@ -8,7 +8,7 @@ Automatic TTS Shift
 Summary
 -------
 
-.. autoclass:: TheoryTTS_Automatic.TheoryTTSShiftAutomatic()
+.. autoclass:: RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic()
    
 Description
 -----------

@@ -8,7 +8,7 @@ Williams-Landel-Ferry TTS Shift
 Summary
 -------
 
-.. autoclass:: TheoryTTS.TheoryWLFShift()
+.. autoclass:: RepTate.theories.TheoryTTS.TheoryWLFShift()
 
 Description
 -----------

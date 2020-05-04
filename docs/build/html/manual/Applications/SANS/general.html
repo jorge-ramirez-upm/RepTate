@@ -129,6 +129,12 @@
 </div>
 <div class="section" id="purpose">
 <h2><a class="toc-backref" href="#id1">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.applications.ApplicationSANS.ApplicationSANS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationSANS.</code><code class="sig-name descname">ApplicationSANS</code><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationSANS.html#ApplicationSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.ApplicationSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application to Analyze Data from SANS experiments</p>
+</dd></dl>
+
 </div>
 <div class="section" id="data-files">
 <h2><a class="toc-backref" href="#id2">Data Files</a><a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h2>
@@ -170,18 +176,42 @@ It may contain any number of parameters which will be read and saved as file-par
 <h2><a class="toc-backref" href="#id4">Views</a><a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="log-i-q">
 <h3><a class="toc-backref" href="#id5">log(I(q))</a><a class="headerlink" href="#log-i-q" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewLogSANS">
+<code class="sig-prename descclassname">BaseApplicationSANS.</code><code class="sig-name descname">viewLogSANS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewLogSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewLogSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the scattered intensity <span class="math notranslate nohighlight">\(\log (I(q))\)</span> vs the logarithm of the scattering vector <span class="math notranslate nohighlight">\(\log(q)\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/SANS_LogIq.png"><img alt="../../../_images/SANS_LogIq.png" class="align-center" src="../../../_images/SANS_LogIq.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="i-q">
 <h3><a class="toc-backref" href="#id6">I(q)</a><a class="headerlink" href="#i-q" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewSANS">
+<code class="sig-prename descclassname">BaseApplicationSANS.</code><code class="sig-name descname">viewSANS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattered intensity <span class="math notranslate nohighlight">\(I(q)\)</span> vs scattering vector <span class="math notranslate nohighlight">\(q\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/SANS_Iq.png"><img alt="../../../_images/SANS_Iq.png" class="align-center" src="../../../_images/SANS_Iq.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="zimm">
 <h3><a class="toc-backref" href="#id7">Zimm</a><a class="headerlink" href="#zimm" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewZimm">
+<code class="sig-prename descclassname">BaseApplicationSANS.</code><code class="sig-name descname">viewZimm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewZimm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewZimm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zimm plot: <span class="math notranslate nohighlight">\(I(q)^{-1}\)</span> vs <span class="math notranslate nohighlight">\(q^2\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/SANS_Zimm.png"><img alt="../../../_images/SANS_Zimm.png" class="align-center" src="../../../_images/SANS_Zimm.png" style="width: 45%;" /></a>
 </div>
 <div class="section" id="kratky">
 <h3><a class="toc-backref" href="#id8">Kratky</a><a class="headerlink" href="#kratky" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewKratky">
+<code class="sig-prename descclassname">BaseApplicationSANS.</code><code class="sig-name descname">viewKratky</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewKratky"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewKratky" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kratky plot: <span class="math notranslate nohighlight">\(q^2\cdot I(q)\)</span> vs <span class="math notranslate nohighlight">\(q\)</span></p>
+</dd></dl>
+
 <a class="reference internal image-reference" href="../../../_images/SANS_Kratky.png"><img alt="../../../_images/SANS_Kratky.png" class="align-center" src="../../../_images/SANS_Kratky.png" style="width: 45%;" /></a>
 </div>
 </div>

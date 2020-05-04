@@ -80,6 +80,43 @@
 <h1>Dynamic dilution equation for stars<a class="headerlink" href="#dynamic-dilution-equation-for-stars" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryDTDStars.TheoryDTDStarsFreq">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryDTDStars.</code><code class="sig-name descname">TheoryDTDStarsFreq</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryDTDStars.html#TheoryDTDStarsFreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryDTDStars.TheoryDTDStarsFreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit DTD Theory for stars.
+Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>Function</strong></dt><dd><p>See <a class="reference external" href="http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf">Milner-McLeish (1997)</a>
+and
+<a class="reference external" href="http://www.personal.reading.ac.uk/~sms06al2/papers/definit.pdf">Larson et al. (2003)</a> for details.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">G0</span></code> <span class="math notranslate nohighlight">\(\equiv G_N^0\)</span>: Plateau modulus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tau_e</span></code> <span class="math notranslate nohighlight">\(\equiv \tau_\mathrm e = \left(\dfrac{M_\mathrm e^\mathrm G}{M_0}\right)^2  \dfrac{\zeta b^2}{3\pi^2k_\mathrm B T}\)</span>: 
+Entanglement equilibration time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Me</span></code> <span class="math notranslate nohighlight">\(\equiv M_\mathrm e^\mathrm G = \dfrac 4 5 \dfrac{\rho R T} {G_N^0}\)</span>: Entanglement molecular weight</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>: Dilution exponent</p></li>
+</ul>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\rho\)</span>: polymer density</p></li>
+<li><p><span class="math notranslate nohighlight">\(\zeta\)</span>: monomeric friction coefficient</p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span>: monomer-based segment length</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_\mathrm B T\)</span>: thermal energy</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_0\)</span>: molar mass of an elementary segment</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

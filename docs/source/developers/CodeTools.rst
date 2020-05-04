@@ -10,7 +10,7 @@ Materials Database
 
 Polymer Data
 ~~~~~~~~~~~~
-.. automodule:: polymer_data
+.. automodule:: RepTate.tools.polymer_data
     :members:
     :undoc-members:
     :show-inheritance:
@@ -19,7 +19,7 @@ Polymer Data
 Create Basic Materials Database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: CreateMaterialsDatabaseFile
+.. automodule:: RepTate.tools.CreateMaterialsDatabaseFile
     :members:
     :undoc-members:
     :show-inheritance:
@@ -27,7 +27,7 @@ Create Basic Materials Database
 Read the Materials Database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: ReadMaterialsDataBaseFile
+.. automodule:: RepTate.tools.ReadMaterialsDataBaseFile
     :members:
     :undoc-members:
     :show-inheritance:
@@ -38,7 +38,7 @@ Likhtman-McLeish theory
 Create compact linlin data file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: linlin2npz
+.. automodule:: RepTate.tools.linlin2npz
     :members:
     :undoc-members:
     :show-inheritance:
@@ -46,7 +46,7 @@ Create compact linlin data file
 Read compact linlin data file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: readlinlin
+.. automodule:: RepTate.tools.readlinlin
     :members:
     :undoc-members:
     :show-inheritance:

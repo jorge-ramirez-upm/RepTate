@@ -5,6 +5,6 @@ Rouse Time
 Summary
 -------
 
-.. autoclass:: TheoryRouse.TheoryRouseTime()
+.. autoclass:: RepTate.theories.TheoryRouse.TheoryRouseTime()
 
 

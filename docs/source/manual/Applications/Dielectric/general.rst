@@ -56,7 +56,7 @@ Views
 log(e',e''(w))
 --------------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE1E2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1E2()
 
 .. image:: images/Dielectric_LogE1E1.png
     :width: 45%
@@ -65,7 +65,7 @@ log(e',e''(w))
 semilog(e',e''(w))
 -------------------------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1E2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1E2()
 
 .. image:: images/Dielectric_SemiLogE1E1.png
     :width: 45%
@@ -74,7 +74,7 @@ semilog(e',e''(w))
 e'(w)", "e''(w)    
 ----------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE1E2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1E2()
 
 .. image:: images/Dielectric_E1E2.png
     :width: 45%
@@ -83,7 +83,7 @@ e'(w)", "e''(w)
 log(e')    
 ----------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE1()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1()
 
 .. image:: images/Dielectric_LogE1.png
     :width: 45%
@@ -92,7 +92,7 @@ log(e')
 semilog(e')
 ----------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1()
 
 .. image:: images/Dielectric_SemiLogE1.png
     :width: 45%
@@ -101,7 +101,7 @@ semilog(e')
 e'
 ----------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE1()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1()
 
 .. image:: images/Dielectric_E1.png
     :width: 45%
@@ -110,7 +110,7 @@ e'
 log(e'')    
 ----------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewLogE2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE2()
 
 .. image:: images/Dielectric_LogE2.png
     :width: 45%
@@ -119,7 +119,7 @@ log(e'')
 semilog(e'')
 ----------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE2()
 
 .. image:: images/Dielectric_SemiLogE2.png
     :width: 45%
@@ -128,7 +128,7 @@ semilog(e'')
 e''
 ----------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewE2()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE2()
 
 .. image:: images/Dielectric_E2.png
     :width: 45%
@@ -137,7 +137,7 @@ e''
 Cole-Cole
 ----------------------------
 
-.. automethod:: ApplicationDielectric.BaseApplicationDielectric.viewColeCole()
+.. automethod:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewColeCole()
 
 .. image:: images/Dielectric_ColeCole.png
     :width: 45%

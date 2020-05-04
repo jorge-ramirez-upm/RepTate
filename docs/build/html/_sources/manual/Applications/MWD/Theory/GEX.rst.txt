@@ -5,4 +5,4 @@ Generalized Exponential Function
 Summary
 -------
 
-.. autoclass:: TheoryGEX.BaseTheoryGEX()
+.. autoclass:: RepTate.theories.TheoryGEX.BaseTheoryGEX()

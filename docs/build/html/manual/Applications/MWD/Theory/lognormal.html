@@ -80,6 +80,29 @@
 <h1>Log-Normal distribution<a class="headerlink" href="#log-normal-distribution" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryLogNormal.BaseTheoryLogNormal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryLogNormal.</code><code class="sig-name descname">BaseTheoryLogNormal</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryLogNormal.html#BaseTheoryLogNormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryLogNormal.BaseTheoryLogNormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log-Normal distribution: the logarithm of the molecular weight is normally distributed</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[W(M) = W_0 \frac{1}{\sqrt{2\pi\sigma^2}} \frac{1}{M} \exp\left[ - \frac{\left(\ln{M}-\ln{M_0}\right)^2}{2\sigma^2} \right]\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">logW0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(W_0)\)</span>: Normalization constant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logM0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(M_0)\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code> <span class="math notranslate nohighlight">\(\equiv\sigma\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

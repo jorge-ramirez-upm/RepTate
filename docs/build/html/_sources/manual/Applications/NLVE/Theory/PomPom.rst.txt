@@ -5,4 +5,4 @@ Multi-mode Pom-Pom Model
 Summary
 -------
 
-.. autoclass:: TheoryPomPom.TheoryPomPom()
+.. autoclass:: RepTate.theories.TheoryPomPom.TheoryPomPom()

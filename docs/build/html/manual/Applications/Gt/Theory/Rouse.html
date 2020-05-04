@@ -80,6 +80,40 @@
 <h1>Rouse Time<a class="headerlink" href="#rouse-time" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryRouse.TheoryRouseTime">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryRouse.</code><code class="sig-name descname">TheoryRouseTime</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryRouse.html#TheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryRouse.TheoryRouseTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Rouse modes to a time dependent relaxation function</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><p>Continuous Rouse model (valid for “large” <span class="math notranslate nohighlight">\(N\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[G(t) = G_0 \dfrac 1 N \sum_{p=1}^N \exp\left(\dfrac{-2p^2t}{N^2\tau_0}\right)\]</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_0\)</span>: relaxation time of an elementary segment</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_0\)</span>: molar mass of an elementary segment</p></li>
+</ul>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(c\)</span>: number of segments per unit volume</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_\mathrm  B\)</span>: Boltzmann constant</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: temperature</p></li>
+<li><p><span class="math notranslate nohighlight">\(N=M_w/M_0\)</span>: number of segments par chain</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_w\)</span>: weight-average molecular mass</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

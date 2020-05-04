@@ -129,6 +129,38 @@
 </div>
 <div class="section" id="summary">
 <h3><a class="toc-backref" href="#id8">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryTTS.TheoryWLFShift">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryTTS.</code><code class="sig-name descname">TheoryWLFShift</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryTTS.html#TheoryWLFShift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryTTS.TheoryWLFShift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\omega(T_r) &amp;= &amp; a_T \omega(T) \\
+G(T_r) &amp;= &amp; b_T G(T) \\
+\log_{10} a_T &amp;= &amp; \frac{-B_1 (T-T_r)}{(B_2+T_r)(B_2+T)} \\
+b_T &amp;= &amp; \frac{\rho(T_r)T_r}{\rho(T)T} = \frac{(1+\alpha T)(T_r+273.15)}{(1+\alpha T_r)(T+273.15)} \\
+T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
+\end{eqnarray}\end{split}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_r\)</span>: Reference temperature to which the experimental data will be shifted.</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_1\)</span>: Material parameter, corresponding to <span class="math notranslate nohighlight">\(C_1\cdot C_2\)</span>, with <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> being the standard WLF material parameters.</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_2\)</span>: Material parameter, corresponding to <span class="math notranslate nohighlight">\(C_2-T_r\)</span>, <span class="math notranslate nohighlight">\(C_2\)</span> being the standard WLF material parameter.</p></li>
+<li><p>logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.</p></li>
+<li><p><span class="math notranslate nohighlight">\(C_{T_g}\)</span>: Material parameter that describes the dependence of <span class="math notranslate nohighlight">\(T_g\)</span> with <span class="math notranslate nohighlight">\(M_w\)</span>.</p></li>
+<li><p>dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h3><a class="toc-backref" href="#id9">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
@@ -198,6 +230,21 @@ B_2 &amp; = C_2 - T_r
 </div>
 <div class="section" id="id3">
 <h3><a class="toc-backref" href="#id11">Summary</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryTTS_Automatic.</code><code class="sig-name descname">TheoryTTSShiftAutomatic</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryTTS_Automatic.html#TheoryTTSShiftAutomatic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatic Time-temperature superposition of experimental data.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p>This theory has no parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="id4">
 <h3><a class="toc-backref" href="#id12">Description</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>

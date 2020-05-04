@@ -14,41 +14,41 @@ The following tools are available in all applications. In general, the aim of th
 Bounds
 ------
 
-.. autoclass:: ToolBounds.ToolBounds()
+.. autoclass:: RepTate.tools.ToolBounds.ToolBounds()
 
 -------------------
 Evaluate Expression
 -------------------
 
-.. autoclass:: ToolEvaluate.ToolEvaluate()
+.. autoclass:: RepTate.tools.ToolEvaluate.ToolEvaluate()
 
 -------------------
 Find Peaks
 -------------------
 
-.. autoclass:: ToolFindPeaks.ToolFindPeaks()
+.. autoclass:: RepTate.tools.ToolFindPeaks.ToolFindPeaks()
 
 -------------------
 Gradient
 -------------------
 
-.. autoclass:: ToolGradient.ToolGradient()
+.. autoclass:: RepTate.tools.ToolGradient.ToolGradient()
 
 -------------------
 Integral
 -------------------
 
-.. autoclass:: ToolIntegral.ToolIntegral()
+.. autoclass:: RepTate.tools.ToolIntegral.ToolIntegral()
 
 -------------------
 Smooth
 -------------------
 
-.. autoclass:: ToolSmooth.ToolSmooth()
+.. autoclass:: RepTate.tools.ToolSmooth.ToolSmooth()
 
 
 ------------------
 Materials Database
 ------------------
 
-.. autoclass:: ToolMaterialsDatabase.ToolMaterialsDatabase()
+.. autoclass:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase()

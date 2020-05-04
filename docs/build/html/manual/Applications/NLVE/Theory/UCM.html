@@ -80,6 +80,54 @@
 <h1>Multi-mode Upper Convected Maxwell Model<a class="headerlink" href="#multi-mode-upper-convected-maxwell-model" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryUCM.TheoryUCM">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryUCM.</code><code class="sig-name descname">TheoryUCM</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryUCM.html#TheoryUCM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryUCM.TheoryUCM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-mode Upper Convected Maxwell model (see Chapter 1 of <a class="bibtex reference internal" href="theory.html#nlve-larson1988" id="id1">[1]</a>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol \sigma &amp;= \sum_{i=1}^n G_i \boldsymbol A_i\\
+\dfrac {\mathrm D \boldsymbol  A_i} {\mathrm D t} &amp;=  \boldsymbol \kappa \cdot \boldsymbol A_i
++ \boldsymbol A_i\cdot \boldsymbol \kappa ^T 
+ - \dfrac 1 {\tau_i} (\boldsymbol A_i - \boldsymbol I)\end{split}\]</div>
+<ul>
+<li><dl>
+<dt><strong>Functions</strong></dt><dd><ul>
+<li><p>Analytical solution in shear</p>
+<div class="math notranslate nohighlight">
+\[\eta^+(t) = \sum_{i=1}^n G_i \tau_i (1 - \exp(-t/\tau_i))\]</div>
+</li>
+<li><p>Analytical solution in uniaxial extension</p>
+<div class="math notranslate nohighlight">
+\[\eta^+_\mathrm E (t) = \dfrac 1 {\dot\varepsilon}
+\sum_{i=1}^n G_i (A_{xx, i}(t) - A_{yy, i}(t))\]</div>
+<p>with</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}A_{xx, i}(t) &amp;= \dfrac{ 1 - 2 \dot\varepsilon\tau_i 
+\exp(-(1 - 2 \dot\varepsilon\tau_i) t / \tau_i) } {1 - 2 \dot\varepsilon\tau_i }\\
+A_{yy, i}(t) &amp;= \dfrac{ 1 + \dot\varepsilon\tau_i 
+\exp(-(1 + \dot\varepsilon\tau_i)t/\tau_i) } { 1+ \dot\varepsilon\tau_i}\end{split}\]</div>
+</div></blockquote>
+</li>
+</ul>
+<dl class="simple">
+<dt>where for each mode <span class="math notranslate nohighlight">\(i\)</span>:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_i\)</span>: weight of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_i\)</span>: relaxation time of mode <span class="math notranslate nohighlight">\(i\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><p>[none]</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 

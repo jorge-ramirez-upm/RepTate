@@ -83,6 +83,34 @@
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="RepTate.theories.TheoryDebyeModes.TheoryDebyeModesFrequency">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryDebyeModes.</code><code class="sig-name descname">TheoryDebyeModesFrequency</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryDebyeModes.html#TheoryDebyeModesFrequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryDebyeModes.TheoryDebyeModesFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a generalized Debye model to a frequency dependent relaxation function.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\epsilon'(\omega) &amp; = &amp; \epsilon_\infty + \sum_{1}^{n_{modes}} \Delta\epsilon_i \frac{1}{1+(\omega\tau_i)^2} \\
+\epsilon''(\omega) &amp; = &amp; \sum_{1}^{n_{modes}} \Delta\epsilon_i \frac{\omega\tau_i}{1+(\omega\tau_i)^2}
+\end{eqnarray}\end{split}\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p>einf = <span class="math notranslate nohighlight">\(\epsilon_{\infty}\)</span>: Unrelaxed permitivity</p></li>
+<li><p><span class="math notranslate nohighlight">\(n_{modes}\)</span>: number of Debye modes equally distributed in logarithmic scale between <span class="math notranslate nohighlight">\(\omega_{min}\)</span> and <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p></li>
+<li><p>logwmin = <span class="math notranslate nohighlight">\(\log(\omega_{min})\)</span>: decimal logarithm of the minimum frequency.</p></li>
+<li><p>logwmax = <span class="math notranslate nohighlight">\(\log(\omega_{max})\)</span>: decimal logarithm of the maximum frequency.</p></li>
+<li><p>logDei = <span class="math notranslate nohighlight">\(\log(\Delta\epsilon_{i})\)</span>, where <span class="math notranslate nohighlight">\(\Delta\epsilon_{i}=\epsilon_{s,i}-\epsilon_\infty\)</span>: decimal logarithm of the relaxation strength of Debye mode <span class="math notranslate nohighlight">\(i\)</span>, where <span class="math notranslate nohighlight">\(\epsilon_{s,i}\)</span> is the static permitivity of mode <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>

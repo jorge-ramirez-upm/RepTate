@@ -17,7 +17,7 @@ Core classes
 Application
 ------------------
 
-.. automodule:: Application
+.. automodule:: RepTate.core.Application
     :members:
     :undoc-members:
     :show-inheritance:
@@ -25,7 +25,7 @@ Application
 ApplicationManager
 ------------------
 
-.. automodule:: ApplicationManager
+.. automodule:: RepTate.core.ApplicationManager
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,7 +33,7 @@ ApplicationManager
 CmdBase and CmdMode
 -------------------
 
-.. automodule:: CmdBase
+.. automodule:: RepTate.core.CmdBase
     :members:
     :undoc-members:
     :show-inheritance:
@@ -41,7 +41,7 @@ CmdBase and CmdMode
 DataSet
 -------
 
-.. automodule:: DataSet
+.. automodule:: RepTate.core.DataSet
     :members:
     :undoc-members:
     :show-inheritance:
@@ -49,7 +49,7 @@ DataSet
 DataTable
 ---------
 
-.. automodule:: DataTable
+.. automodule:: RepTate.core.DataTable
     :members:
     :undoc-members:
     :show-inheritance:
@@ -57,7 +57,7 @@ DataTable
 DraggableArtists
 ----------------
     
-.. automodule:: DraggableArtists
+.. automodule:: RepTate.core.DraggableArtists
     :members:
     :undoc-members:
     :show-inheritance:
@@ -69,7 +69,7 @@ Applications
 ApplicationGt
 -------------
 
-.. automodule:: ApplicationGt
+.. automodule:: RepTate.applications.ApplicationGt
     :members:
     :undoc-members:
     :show-inheritance:
@@ -77,7 +77,7 @@ ApplicationGt
 ApplicationLVE
 --------------
 
-.. automodule:: ApplicationLVE
+.. automodule:: RepTate.applications.ApplicationLVE
     :members:
     :undoc-members:
     :show-inheritance:
@@ -85,7 +85,7 @@ ApplicationLVE
 ApplicationMWD
 --------------
 
-.. automodule:: ApplicationMWD
+.. automodule:: RepTate.applications.ApplicationMWD
     :members:
     :undoc-members:
     :show-inheritance:
@@ -93,7 +93,7 @@ ApplicationMWD
 ApplicationNLVE
 ---------------
     
-.. automodule:: ApplicationNLVE
+.. automodule:: RepTate.applications.ApplicationNLVE
     :members:
     :undoc-members:
     :show-inheritance:
@@ -104,7 +104,7 @@ Theories
 TheoryBasic
 -----------
 
-.. automodule:: TheoryBasic
+.. automodule:: RepTate.theories.TheoryBasic
     :members:
     :undoc-members:
     :show-inheritance:
@@ -112,7 +112,7 @@ TheoryBasic
 TheoryLikhtmanMcLeish2002
 -------------------------
 
-.. automodule:: TheoryLikhtmanMcLeish2002
+.. automodule:: RepTate.theories.TheoryLikhtmanMcLeish2002
     :members:
     :undoc-members:
     :show-inheritance:
@@ -120,7 +120,7 @@ TheoryLikhtmanMcLeish2002
 TheoryMaxwellModes
 ------------------
     
-.. automodule:: TheoryMaxwellModes
+.. automodule:: RepTate.theories.TheoryMaxwellModes
     :members:
     :undoc-members:
     :show-inheritance:
@@ -129,7 +129,7 @@ TheoryMaxwellModes
 TheoryRoliePoly
 ---------------
 
-.. automodule:: TheoryRoliePoly
+.. automodule:: RepTate.theories.TheoryRoliePoly
     :members:
     :undoc-members:
     :show-inheritance:
@@ -137,7 +137,7 @@ TheoryRoliePoly
 TheoryTTS
 ---------
 
-.. automodule:: TheoryTTS
+.. automodule:: RepTate.theories.TheoryTTS
     :members:
     :undoc-members:
     :show-inheritance:

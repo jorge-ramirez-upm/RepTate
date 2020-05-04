@@ -8,7 +8,7 @@ Theories
 TheoryBasic
 -----------
 
-.. automodule:: TheoryBasic
+.. automodule:: RepTate.theories.TheoryBasic
     :members:
     :undoc-members:
     :show-inheritance:
@@ -16,7 +16,7 @@ TheoryBasic
 TheoryDiscrMWD
 --------------
 
-.. automodule:: TheoryDiscrMWD
+.. automodule:: RepTate.theories.TheoryDiscrMWD
     :members:
     :undoc-members:
     :show-inheritance:
@@ -25,7 +25,7 @@ TheoryDiscrMWD
 TheoryLikhtmanMcLeish2002
 -------------------------
 
-.. automodule:: TheoryLikhtmanMcLeish2002
+.. automodule:: RepTate.theories.TheoryLikhtmanMcLeish2002
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,7 +33,7 @@ TheoryLikhtmanMcLeish2002
 TheoryMaxwellModes
 ------------------
     
-.. automodule:: TheoryMaxwellModes
+.. automodule:: RepTate.theories.TheoryMaxwellModes
     :members:
     :undoc-members:
     :show-inheritance:
@@ -42,7 +42,7 @@ TheoryMaxwellModes
 TheoryRoliePoly
 ---------------
 
-.. automodule:: TheoryRoliePoly
+.. automodule:: RepTate.theories.TheoryRoliePoly
     :members:
     :undoc-members:
     :show-inheritance:
@@ -50,7 +50,7 @@ TheoryRoliePoly
 TheoryRouse
 -----------
 
-.. automodule:: TheoryRouse
+.. automodule:: RepTate.theories.TheoryRouse
     :members:
     :undoc-members:
     :show-inheritance:
@@ -58,7 +58,7 @@ TheoryRouse
 TheoryTTS
 ---------
 
-.. automodule:: TheoryTTS
+.. automodule:: RepTate.theories.TheoryTTS
     :members:
     :undoc-members:
     :show-inheritance:

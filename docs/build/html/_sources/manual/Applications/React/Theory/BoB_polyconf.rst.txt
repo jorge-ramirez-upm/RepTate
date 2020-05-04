@@ -9,7 +9,7 @@ Create Polymer Configuaration with BoB
 Summary
 -------
 
-.. autoclass:: TheoryCreatePolyconf.TheoryCreatePolyconf()
+.. autoclass:: RepTate.theories.TheoryCreatePolyconf.TheoryCreatePolyconf()
 
 Publications related to BoB: :cite:`polyconf-Das2006`  :cite:`polyconf-Das2006b` :cite:`polyconf-Chambon2008`.
 

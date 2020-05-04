@@ -52,7 +52,7 @@ Views
 
 log(gamma(t))
 --------------------------------
-.. automethod:: ApplicationCreep.BaseApplicationCreep.viewLogStraint()
+.. automethod:: RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogStraint()
 
 .. image:: images/Creep_LogGammat.png
     :width: 45%
@@ -60,7 +60,7 @@ log(gamma(t))
 
 gamma(t)
 -------------------------------------------
-.. automethod:: ApplicationCreep.BaseApplicationCreep.viewStraint()
+.. automethod:: RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewStraint()
 
 .. image:: images/Creep_Gammat.png
     :width: 45%
@@ -68,7 +68,7 @@ gamma(t)
 
 log(J(t))
 ----------------------
-.. automethod:: ApplicationCreep.BaseApplicationCreep.viewLogJt()
+.. automethod:: RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogJt()
 
 .. image:: images/Creep_LogJt.png
     :width: 45%
@@ -76,7 +76,7 @@ log(J(t))
 
 J(t)
 ----------------------------
-.. automethod:: ApplicationCreep.BaseApplicationCreep.viewJt()
+.. automethod:: RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewJt()
 
 .. image:: images/Creep_Jt.png
     :width: 45%
@@ -84,7 +84,7 @@ J(t)
 
 t/J(t)
 ----------------------
-.. automethod:: ApplicationCreep.BaseApplicationCreep.viewt_Jt()
+.. automethod:: RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewt_Jt()
 
 .. image:: images/Creep_t_Jt.png
     :width: 45%
