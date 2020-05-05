@@ -226,7 +226,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
         # Setup Error Calculation Options
         self.errorcalculationdialog = QDialog()
-        self.errorcalculationdialog.ui = errorcalculationoptions.Ui_Dialog()
+        self.errorcalculationdialog.ui = RepTate.gui.errorcalculationoptions.Ui_Dialog()
         self.errorcalculationdialog.ui.setupUi(self.errorcalculationdialog)
         self.populate_default_error_calculation_options()
 
