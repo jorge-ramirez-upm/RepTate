@@ -126,7 +126,8 @@ class BaseTheorySCCR:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.SCCR
         self.has_modes = False
-        self.signal_get_MW.connect(self.launch_get_MW_dialog)
+        if CmdBase.mode == CmdMode.GUI:
+            self.signal_get_MW.connect(self.launch_get_MW_dialog)
 
         self.parameters["tau_e"] = Parameter(
             "tau_e",
@@ -355,7 +356,8 @@ class BaseTheorySCCR:
         except KeyError:
             self.success_MW = None
             self.fname_missing_mw = f.file_name_short
-            self.signal_get_MW.emit(self)
+            if CmdBase.mode == CmdMode.GUI:
+                self.signal_get_MW.emit(self)
             while self.success_MW is None:
                 time.sleep(0.5)
             if self.success_MW:
