@@ -62,7 +62,7 @@ setup(
 	entry_points={
         'console_scripts': [
             'RepTate = RepTate:main',
-            'RepTateCL = RepTateCL:main'
+            'RepTateCL = RepTate.CL:main'
         ]
     },
 	license='GNU General Public License v3 or later (GPLv3+)',
