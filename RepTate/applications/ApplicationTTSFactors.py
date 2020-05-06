@@ -85,8 +85,8 @@ class BaseApplicationTTSFactors:
             - name {[type]} -- [description] (default: {"TTSFactors"})
             - parent {[type]} -- [description] (default: {None})
         """
-        from TheoryWLF import TheoryWLF
-        from TheoryArrhenius import TheoryArrhenius
+        from RepTate.theories.TheoryWLF import TheoryWLF
+        from RepTate.theories.TheoryArrhenius import TheoryArrhenius
         #from TheoryArrhenius import TheoryArrhenius
         super().__init__(name, parent)
 

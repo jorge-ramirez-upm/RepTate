@@ -25,11 +25,11 @@ Cite RepTate
 Boudara V.A.H, Daniel J. Read and Jorge Ramírez, "RepTate rheology software: Toolkit for the analysis of theories and experiments", Journal of Rheology 64, 709 (2020); `https://doi.org/10.1122/8.0000002 <https://doi.org/10.1122/8.0000002>`_
 
 
-.. image:: RepTate/docs/source/images/RepTate_LVE.png
+.. image:: docs/source/images/RepTate_LVE.png
     :width: 400pt
     :align: center
 
-.. image:: RepTate/docs/source/images/RepTate_React.png
+.. image:: docs/source/images/RepTate_React.png
     :width: 400pt
     :align: center
 
