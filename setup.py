@@ -48,7 +48,7 @@ with open("README.rst", "r") as fh:
 setup(
     name="RepTate-test",
 	# version=Version.VERSION,
-	version="1.0.4",
+	version="1.0.5",
     description="Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment",
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -61,8 +61,8 @@ setup(
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate = RepTate:main',
-            'RepTateCL = RepTate.CL:main'
+            'RepTate-test = RepTate:main',
+            'RepTateCL-test = RepTate.CL:main'
         ]
     },
 	license='GNU General Public License v3 or later (GPLv3+)',
