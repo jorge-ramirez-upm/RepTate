@@ -48,7 +48,7 @@ with open("README.rst", "r") as fh:
 setup(
     name="RepTate-test",
 	# version=Version.VERSION,
-	version="1.0.5",
+	version="1.0.6",
     description="Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment",
     long_description=long_description,
     long_description_content_type="text/x-rst",
