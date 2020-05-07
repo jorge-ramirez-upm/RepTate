@@ -56,12 +56,12 @@ setup(
     author_email="reptate.rheology@gmail.com",
 	url='http://github.com/jorge-ramirez-upm/RepTate',
 	packages=find_packages(),
-    package_data={'': ['*.ui', '*.qrc', '*.npy', '*.so']},
+    package_data={'': ['*.ui', '*.qrc', '*.npy', '*.so', '*.npz']},
     data_files=list_data_files,
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate-test = RepTate:main',
+            'RepTate-test = RepTate.__main__:main',
             'RepTateCL-test = RepTate.CL:main'
         ]
     },
