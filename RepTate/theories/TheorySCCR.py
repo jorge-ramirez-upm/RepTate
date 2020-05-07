@@ -358,8 +358,8 @@ class BaseTheorySCCR:
             self.fname_missing_mw = f.file_name_short
             if CmdBase.mode == CmdMode.GUI:
                 self.signal_get_MW.emit(self)
-            while self.success_MW is None:
-                time.sleep(0.5)
+                while self.success_MW is None:
+                    time.sleep(0.5)
             if self.success_MW:
                 f.file_parameters["Mw"] = self.new_MW_val
                 Mw = self.new_MW_val
