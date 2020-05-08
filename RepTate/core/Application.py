@@ -60,6 +60,7 @@ from RepTate.tools.ToolSmooth import ToolSmooth
 from RepTate.tools.ToolBounds import ToolBounds
 from RepTate.tools.ToolEvaluate import ToolEvaluate
 from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
+from RepTate.tools.ToolPowerLaw import ToolPowerLaw
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 from RepTate.core.mplcursors import cursor
 from colorama import Fore, Style
@@ -119,6 +120,7 @@ class Application(CmdBase):
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
+        self.availabletools[ToolPowerLaw.toolname] = ToolPowerLaw
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
 
         # MATPLOTLIB STUFF
