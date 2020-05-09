@@ -130,6 +130,7 @@ class Theory(CmdBase):
     """ doicode {list of str} -- Doi code of the article """
     nfev = 0
     """ nfev {int} -- Number of function evaluations """
+    doc_header = 'Theory commands (type help <topic>):'
 
     print_signal = pyqtSignal(str)
 
@@ -976,11 +977,7 @@ This routine works when the theory and the experimental data are not measured on
         return completions
 
     def do_parameters(self, line):
-        """View and switch the minimization state of the theory parameters
-           parameters A B
-
-        Several parameters are allowed. With no arguments, show the current values
-        """
+        """View/switch minimization of Theory parameters. Several parameters are allowed. With no arguments, show the current values"""
         if (line == ""):
             plist = list(self.parameters.keys())
             plist.sort()
@@ -1001,9 +998,9 @@ This routine works when the theory and the experimental data are not measured on
             for s in line.split():
                 if (s in self.parameters):
                     if self.parameters[s].opt_type == OptType.opt:
-                        self.parameters[s].opt_type == OptType.nopt
+                        self.parameters[s].opt_type = OptType.nopt
                     elif self.parameters[s].opt_type == OptType.nopt:
-                        self.parameters[s].opt_type == OptType.opt
+                        self.parameters[s].opt_type = OptType.opt
                     elif self.parameters[s].opt_type == OptType.const:
                         print("Parameter %s is not optimized" % s)
                 else:
@@ -1156,17 +1153,8 @@ This routine works when the theory and the experimental data are not measured on
                             [1, self.ymin], [0, self.ymin]])
 
     def do_xrange(self, line, visible=None):
-        """Set/show xrange for fit and shows limits
-
-        With no arguments: switches ON/OFF the horizontal span
-
-        Arguments:
-            - line {[xmin xmax]} -- Sets the limits of the span
-
-        Example:
-            - xrange -4 5
-            - xrange 0.35 3.44
-        """
+        """Set/show xrange for fit and shows limits. Arguments: limits of the span. 
+With no arguments: switches ON/OFF the horizontal span. Example: xrange -4 5"""
         if visible == None:
             visible = not self.xrange.get_visible()
         if (line == ""):
@@ -1304,7 +1292,10 @@ that provide this functionality."""
         """Print citation information"""
         if len(self.citations)>0:
             for i in range(len(self.citations)):
-                self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
+                if CmdBase.mode == CmdMode.GUI:
+                    self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
+                elif CmdBase.mode == CmdMode.cmdline:
+                    self.Qprint(Fore.RED + 'CITE' + Fore.RESET + ':%s ('%self.citations[i] + Fore.CYAN + '%s'%self.doi[i] + Fore.RESET + ')')
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""
@@ -1550,3 +1541,27 @@ that provide this functionality."""
                 return False
         else:
             return False
+
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate theories"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        print('Visit the page:')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "parameters" + Fore.RESET)
+        self.do_help("parameters")
+        print(Fore.RED + "par1=val1" + Fore.RESET)
+        print("Change the value of parameter par1")
+        print(Fore.RED + "calculate" + Fore.RESET)
+        self.do_help("calculate")
+        print(Fore.RED + "error" + Fore.RESET)
+        self.do_help("error")
+        print(Fore.RED + "fit" + Fore.RESET)
+        self.do_help("fit")
+        print(Fore.RED + "xrange" + Fore.RESET)
+        print(Fore.RED + "yrange" + Fore.RESET)
+        self.do_help("xrange")
+        print("")
