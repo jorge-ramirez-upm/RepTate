@@ -156,7 +156,8 @@ class Parameter(object):
 
         .. todo:: Refine this.
         """
-        return "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%s,%s,%g,%g,%s)"%(
+        return "Parameter(name,value,description,type,opt_type,min_value,max_value,display_flag)\n" + \
+            "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%g,%s)"%(
             self.name, self.value, self.description, self.type, 
             self.opt_type, 
             self.min_value, self.max_value, self.display_flag)
