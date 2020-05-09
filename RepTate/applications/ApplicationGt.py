@@ -79,7 +79,7 @@ class BaseApplicationGt:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html'
     appname = ApplicationGt.appname
 
     def __init__(self, name="Gt", parent=None):

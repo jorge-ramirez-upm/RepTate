@@ -81,7 +81,7 @@ class BaseTheoryDiscrMWD:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization'
     single_file = True
     thname = TheoryDiscrMWD.thname
     citations = TheoryDiscrMWD.citations
@@ -335,13 +335,7 @@ class BaseTheoryDiscrMWD:
         self.update_parameter_table()
 
     def do_error(self, line):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            line {[type]} -- [description]
-        """
+        """This theory does not calculate the error"""
         pass
 
     def do_fit(self, line=''):

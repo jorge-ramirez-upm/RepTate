@@ -73,7 +73,7 @@ class BaseToolInterpolateExtrapolate:
 
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolInterpolateExtrapolate.toolname
     citations = ToolInterpolateExtrapolate.citations
 

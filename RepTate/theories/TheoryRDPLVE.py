@@ -100,7 +100,7 @@ class BaseTheoryRDPLVE:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRDPLVE.thname
     citations = TheoryRDPLVE.citations

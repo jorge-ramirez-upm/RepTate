@@ -226,7 +226,7 @@ class BaseToolMaterialsDatabase:
 
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
     toolname = ToolMaterialsDatabase.toolname
     citations = ToolMaterialsDatabase.citations
 

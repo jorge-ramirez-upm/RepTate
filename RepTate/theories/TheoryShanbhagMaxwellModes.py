@@ -109,7 +109,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
     """[summary] 
         
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
     thname = TheoryShanbhagMaxwellModesFrequency.thname
     citations = TheoryShanbhagMaxwellModesFrequency.citations
@@ -1191,6 +1191,11 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Qprint("Fitting not allowed in this theory")
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
@@ -1509,7 +1514,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
     thname = TheoryShanbhagMaxwellModesTime.thname
     citations = TheoryShanbhagMaxwellModesTime.citations
@@ -2561,6 +2566,11 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.Qprint("Fitting not allowed in this theory")
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view

@@ -154,7 +154,7 @@ class BaseTheoryCreatePolyconf:
     
     [description]
     """
-    help_file = 'https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html'
+    html_help_file = 'https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryCreatePolyconf.thname
     citations = TheoryCreatePolyconf.citations

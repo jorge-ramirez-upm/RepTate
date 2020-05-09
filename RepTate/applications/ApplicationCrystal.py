@@ -74,7 +74,7 @@ class BaseApplicationCrystal:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'
     appname = ApplicationCrystal.appname
 
     def __init__(self, name="Crystal", parent=None):

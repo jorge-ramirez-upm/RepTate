@@ -75,7 +75,7 @@ class BaseApplicationTemplate:
     [description]
     """
 
-    #help_file = ''
+    #html_help_file = ''
     appname = ApplicationTemplate.appname
 
     def __init__(self, name='Template', parent=None):

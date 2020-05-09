@@ -92,7 +92,7 @@ class BaseTheoryBobLVE:
     
     [description]
     """
-    help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve'
+    html_help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobLVE.thname
     citations = TheoryBobLVE.citations
@@ -127,7 +127,7 @@ class BaseTheoryBobLVE:
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
     def do_error(self, line=""):
-        """This theory does not calculate the error"""
+        """This theory calculate the error by interpolating the theory solution"""
         self.do_error_interpolated(line="")
 
     def calculate(self, f=None):

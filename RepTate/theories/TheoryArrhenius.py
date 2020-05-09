@@ -80,7 +80,7 @@ class BaseTheoryArrhenius:
     
     [description]
     """
-    #help_file = ''
+    #html_help_file = ''
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryArrhenius.thname
     citations = TheoryArrhenius.citations

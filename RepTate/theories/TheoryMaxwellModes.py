@@ -91,7 +91,7 @@ class BaseTheoryMaxwellModesFrequency:
     """[summary] 
         
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesFrequency.thname
     citations = TheoryMaxwellModesFrequency.citations
@@ -495,7 +495,7 @@ class BaseTheoryMaxwellModesTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesTime.thname
     citations = TheoryMaxwellModesTime.citations

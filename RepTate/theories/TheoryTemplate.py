@@ -76,7 +76,7 @@ class BaseTheoryTemplate:
     
     [description]
     """
-    #help_file = ''
+    #html_help_file = ''
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryTemplate.thname
     citations = TheoryTemplate.citations

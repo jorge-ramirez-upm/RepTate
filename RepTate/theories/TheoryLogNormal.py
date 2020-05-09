@@ -82,7 +82,7 @@ class BaseTheoryLogNormal:
        - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`
        - ``sigma`` :math:`\\equiv\\sigma`
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryLogNormal.thname
     citations = TheoryLogNormal.citations
@@ -145,6 +145,11 @@ class BaseTheoryLogNormal:
             -(np.log(tt.data[:, 0]) - np.log(M0))**2 / 2 / sigma**2)
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
         if (line == ""):
             self.Qprint('''<h3>Characteristics of the fitted MWD</h3>''')

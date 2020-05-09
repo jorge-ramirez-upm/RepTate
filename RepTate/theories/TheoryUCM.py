@@ -172,7 +172,7 @@ class BaseTheoryUCM:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model'
     single_file = False
     thname = TheoryUCM.thname
     citations = TheoryUCM.citations

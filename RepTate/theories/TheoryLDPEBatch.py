@@ -94,8 +94,8 @@ class BaseTheoryTobitaBatch():
     
     [description]
     """
-    # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html'
+    # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryTobitaBatch.thname
     citations = TheoryTobitaBatch.citations
@@ -378,6 +378,7 @@ class BaseTheoryTobitaBatch():
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
     def do_error(self, line):
+        """This theory does not calculate the error"""
         pass
 
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):

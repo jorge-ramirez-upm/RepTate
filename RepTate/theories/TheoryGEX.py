@@ -85,7 +85,7 @@ class BaseTheoryGEX:
        - ``a`` : Parameter related to polydispersity and skewness
        - ``b`` : Parameter related to polydispersity and skewness
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryGEX.thname
     citations = TheoryGEX.citations
@@ -156,6 +156,11 @@ class BaseTheoryGEX:
             tt.data[:, 0] / M0, a) * np.exp(-np.power(tt.data[:, 0] / M0, b))
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
         if (line == ""):
             self.Qprint('''<h3>Characteristics of the fitted MWD</h3>''')

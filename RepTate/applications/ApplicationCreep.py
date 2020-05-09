@@ -78,7 +78,7 @@ class BaseApplicationCreep:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html'
     appname = ApplicationCreep.appname
 
     def __init__(self, name="Creep", parent=None):

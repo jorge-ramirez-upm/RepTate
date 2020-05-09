@@ -90,7 +90,7 @@ class BaseTheoryCarreauYasuda:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation'
     single_file = False # False if the theory can be applied to multiple files simultaneously
     thname = TheoryCarreauYasuda.thname
     citations = TheoryCarreauYasuda.citations

@@ -83,7 +83,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/index.html'
+    html_help_file = 'http://reptate.readthedocs.io/index.html'
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """
@@ -333,20 +333,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def handle_show_reptate_help(self):
         """Show RepTate documentation"""
         try:
-            help_file = self.help_file
+            html_help_file = self.html_help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
             return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_show_app_help(self):
         """Show RepTate current application (if any) manual, or all applications"""
         try:
-            help_file = self.ApplicationtabWidget.currentWidget().help_file
+            html_help_file = self.ApplicationtabWidget.currentWidget().html_help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/manual/Applications/applications.html'
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            html_help_file = 'http://reptate.readthedocs.io/manual/Applications/applications.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_show_th_help(self):
         """Show RepTate current theory (if any) manual, or all theories"""
@@ -354,11 +354,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             app = self.ApplicationtabWidget.currentWidget()
             ds = app.DataSettabWidget.currentWidget()
             th = ds.theories[ds.current_theory]
-            help_file = th.help_file
+            html_help_file = th.html_help_file
         except Exception as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html'
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_actionShow_offline_help(self):
         QDesktopServices.openUrl(QUrl.fromLocalFile('docs/build/html/index.html'))

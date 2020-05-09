@@ -509,7 +509,7 @@ class BaseTheoryGoPolyStrand:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
     thname = TheoryGoPolyStrand.thname
     citations = TheoryGoPolyStrand.citations

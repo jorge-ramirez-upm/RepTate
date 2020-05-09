@@ -82,7 +82,7 @@ class BaseTheoryDieneCSTR:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryDieneCSTR.thname
     citations = TheoryDieneCSTR.citations
@@ -223,6 +223,7 @@ class BaseTheoryDieneCSTR:
         super().request_stop_computations()
 
     def do_error(self, line):
+        """This theory does not calculate the error"""
         pass
 
     def Calc(self, f=None):

@@ -74,7 +74,7 @@ class BaseApplicationSANS:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html'
     appname = ApplicationSANS.appname
 
     def __init__(self, name="SANS", parent=None):

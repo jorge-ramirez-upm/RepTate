@@ -57,7 +57,7 @@ class ToolEvaluate(CmdBase):
 
 class BaseToolEvaluate:
     """Base Class for Evaluation of expressions"""
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolEvaluate.toolname
     citations = ToolEvaluate.citations
 

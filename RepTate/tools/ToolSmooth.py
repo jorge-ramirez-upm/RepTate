@@ -61,7 +61,7 @@ class BaseToolSmooth:
 
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolSmooth.toolname
     citations = ToolSmooth.citations
 

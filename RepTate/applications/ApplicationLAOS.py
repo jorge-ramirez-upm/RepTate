@@ -76,7 +76,7 @@ class BaseApplicationLAOS:
     [description]
     """
 
-    #help_file = ''
+    #html_help_file = ''
     appname = ApplicationLAOS.appname
 
 

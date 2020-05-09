@@ -72,7 +72,7 @@ class BaseToolTemplate:
 
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolTemplate.toolname
     citations = ToolTemplate.citations
 

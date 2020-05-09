@@ -101,7 +101,7 @@ class BaseTheoryWLFShift:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift'
     single_file = False
     thname = TheoryWLFShift.thname
     citations = TheoryWLFShift.citations

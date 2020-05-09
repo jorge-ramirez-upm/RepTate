@@ -93,7 +93,7 @@ class BaseTheoryRouseTime:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseTime.thname
     citations = TheoryRouseTime.citations
@@ -295,7 +295,7 @@ class BaseTheoryRouseFrequency:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryRouseFrequency.thname
     citations = TheoryRouseFrequency.citations

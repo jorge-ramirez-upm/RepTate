@@ -73,7 +73,7 @@ class BaseToolFindPeaks:
 
     [description]
     """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
+    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
     toolname = ToolFindPeaks.toolname
     citations = ToolFindPeaks.citations
 

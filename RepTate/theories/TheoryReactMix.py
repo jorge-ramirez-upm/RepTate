@@ -84,7 +84,7 @@ class BaseTheoryReactMix:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/mixture.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/mixture.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryReactMix.thname
     citations = TheoryReactMix.citations

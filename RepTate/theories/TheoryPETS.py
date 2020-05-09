@@ -112,7 +112,7 @@ class BaseTheoryPETS:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation'
     single_file = False
     thname = TheoryPETS.thname
     citations = TheoryPETS.citations

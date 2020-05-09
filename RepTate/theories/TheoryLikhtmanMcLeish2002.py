@@ -85,7 +85,7 @@ class BaseTheoryLikhtmanMcLeish2002:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory'
     single_file = False
     thname = TheoryLikhtmanMcLeish2002.thname
     citations = TheoryLikhtmanMcLeish2002.citations
@@ -234,6 +234,11 @@ class BaseTheoryLikhtmanMcLeish2002:
                                Ge * table[:, 2])
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
         taue = self.parameters["tau_e"].value
         Me = self.parameters["Me"].value

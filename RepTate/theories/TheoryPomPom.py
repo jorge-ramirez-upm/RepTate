@@ -166,7 +166,7 @@ class BaseTheoryPomPom:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model'
     single_file = False
     thname = TheoryPomPom.thname
     citations = TheoryPomPom.citations

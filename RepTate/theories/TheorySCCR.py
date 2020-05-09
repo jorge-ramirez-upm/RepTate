@@ -106,7 +106,7 @@ class BaseTheorySCCR:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory'
     single_file = False
     thname = TheorySCCR.thname
     citations = TheorySCCR.citations

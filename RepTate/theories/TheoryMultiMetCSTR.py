@@ -84,7 +84,7 @@ class BaseTheoryMultiMetCSTR:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryMultiMetCSTR.thname
     citations = TheoryMultiMetCSTR.citations
@@ -407,6 +407,7 @@ class BaseTheoryMultiMetCSTR:
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
     def do_error(self, line):
+        """This theory does not calculate the error"""
         pass
 
 class CLTheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, Theory):

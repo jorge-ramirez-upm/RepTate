@@ -75,7 +75,7 @@ class BaseApplicationTTS:
 
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html'
     appname = ApplicationTTS.appname
 
     def __init__(self, name="TTS", parent=None):

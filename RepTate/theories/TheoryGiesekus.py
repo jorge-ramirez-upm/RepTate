@@ -155,7 +155,7 @@ class BaseTheoryGiesekus:
     
     [description]
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
     thname = TheoryGiesekus.thname
     citations = TheoryGiesekus.citations
