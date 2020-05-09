@@ -52,60 +52,7 @@ from math import sqrt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 from RepTate.core.Theory import EndComputationRequested
 from RepTate.applications.ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
-
-class EditModesDialog(QDialog):
-    def __init__(self, parent=None, times=0, G=0, MAX_MODES=0):
-        super(EditModesDialog, self).__init__(parent)
-
-        self.setWindowTitle("Edit Maxwell modes")
-        layout = QVBoxLayout(self)
-        nmodes = len(times)
-
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(nmodes)  #initial value
-        layout.addWidget(self.spinbox)
-
-        self.table = SpreadsheetWidget()  #allows copy/paste
-        self.table.setRowCount(nmodes)
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["tauD", "G"])
-        for i in range(nmodes):
-            tau = "%g" % times[i]
-            mod = "%g" % G[i]
-            self.table.setItem(i, 0, QTableWidgetItem(tau))
-            self.table.setItem(i, 1, QTableWidgetItem(mod))
-
-        layout.addWidget(self.table)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def handle_spinboxValueChanged(self, value):
-        nrow_old = self.table.rowCount()
-        self.table.setRowCount(value)
-        for i in range(nrow_old, value):  #create extra rows with defaut values
-            self.table.setItem(i, 0, QTableWidgetItem("10"))
-            self.table.setItem(i, 1, QTableWidgetItem("1000"))
-
+from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 class TheoryGiesekus(CmdBase):
     """Multi-mode Giesekus Model (see Chapter 6 of :cite:`NLVE-Larson1988`):

@@ -44,9 +44,9 @@ from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTab
 from PyQt5.QtCore import QSize, QUrl
 from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
 from PyQt5.QtCore import Qt
-from RepTate.theories.TheoryRolieDoublePoly import Dilution, GcorrMode, GetMwdRepate, EditMWDDialog, EditModesDialog
 from math import sqrt
 from collections import OrderedDict
+from RepTate.theories.theory_helpers import Dilution, GcorrMode, GetMwdRepTate, EditMWDDialog, EditModesDialog
 
 
 class TheoryRDPLVE(CmdBase):
@@ -433,7 +433,7 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
                                                th_tab_name)] = th.get_mwd
 
         if get_dict:
-            d = GetMwdRepate(self, get_dict, 'Select Discretized MWD')
+            d = GetMwdRepTate(self, get_dict, 'Select Discretized MWD')
             if (d.exec_() and d.btngrp.checkedButton() != None):
                 _, success1 = self.set_param_value("tau_e", d.taue_text.text())
                 _, success2 = self.set_param_value("Me", d.Me_text.text())

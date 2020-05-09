@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "RepTate",
             "console": "integratedTerminal",
-            "args": ["-s","-v", "data/LAOS/GiesekusSimulation-omega01p00-gam05p000.laos","-t", "Giesekus"]
+            "args": ["-s","-v", "data/DOW/Non-Linear_Rheology/Start-up_Shear/*.shear"]
         },
         {
             "name": "RepTateCL",

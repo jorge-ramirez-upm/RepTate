@@ -53,18 +53,7 @@ from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 import RepTate.core.Version
 import time
 from RepTate.core.Theory import EndComputationRequested
-
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
+from RepTate.theories.theory_helpers import FlowMode
 
 class TheoryPETS(CmdBase):
     """Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of 

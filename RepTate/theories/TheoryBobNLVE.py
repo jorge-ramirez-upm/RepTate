@@ -54,17 +54,7 @@ from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QC
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
 from PyQt5.QtCore import QUrl, pyqtSignal, QSize
 from shutil import copy2
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
+from RepTate.theories.theory_helpers import FlowMode
 
 class TheoryBobNLVE(CmdBase):
     """Predict the nonlinear rheology of "branch-on-branch" polymers, read from a polymer configuration file,

@@ -57,16 +57,7 @@ import RepTate.theories.sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
 from math import exp
 from PyQt5.QtCore import pyqtSignal
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
+from RepTate.theories.theory_helpers import FlowMode
 
 class TheorySCCR(CmdBase):
     """Full SCCR theory for the Non-linear transient flow of linear entangled polymers.
