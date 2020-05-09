@@ -38,3 +38,6 @@ Module that sets the current version and date of RepTate.
 VERSION='1.0.0'
 # Date in the format YYYY-MM-DD
 DATE='20200330'
+
+if __name__ == '__main__':
+    print ('_v' + VERSION + '_' + DATE)
