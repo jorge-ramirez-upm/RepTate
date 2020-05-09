@@ -173,6 +173,7 @@ class ThLineMode(Enum):
 
 class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
     """Abstract class to describe a data set"""
+    doc_header = 'DataSet commands (type help <topic>):'
 
     def __init__(self, name="DataSet", parent=None):
         """**Constructor**"""
@@ -763,10 +764,7 @@ Arguments:
             return None, False
 
     def do_open(self, line):
-        """Open file(s)
-
-Arguments:
-    - line {str} -- FILENAMES (pattern expansion characters -- \*, ? -- allowed"""
+        """Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
         if CmdBase.mode != CmdMode.GUI:
             f_names = glob.glob(line)
             if not f_names:
@@ -1101,3 +1099,29 @@ Arguments:
             if maxfile > max:
                 max = maxfile
         return max
+
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate Datasets"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        print('Visit the page:')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "available" + Fore.RESET)
+        self.do_help("available")
+        print(Fore.RED + "open" + Fore.RESET)
+        self.do_help("open")
+        print(Fore.RED + "file*" + Fore.RESET)
+        print("Several operations (show, delete, hide...) for files")
+        print(Fore.RED + "list" + Fore.RESET)
+        self.do_help("list")
+        print(Fore.RED + "tree" + Fore.RESET)
+        self.do_help("tree")
+        print(Fore.RED + "switch" + Fore.RESET)
+        self.do_help("switch")
+        print(Fore.RED + "reload_data" + Fore.RESET)
+        self.do_help("reload_data")
+        print("")
+        

@@ -51,7 +51,7 @@ from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
 
-import RepTate.core.Theory
+import RepTate.core.Theory as Theory
 
 import logging
 class Tool(CmdBase):
@@ -64,6 +64,7 @@ class Tool(CmdBase):
     citations = []
     """ citations {list of str} -- Articles that should be cited """
     doi = []
+    doc_header = 'Tool commands (type help <topic>):'
 
     print_signal = pyqtSignal(str)
 
@@ -129,39 +130,19 @@ class Tool(CmdBase):
         pass
 
     def do_parameters(self, line):
-        """View and switch the minimization state of the Tool parameters
-           parameters A B
-
-        Several parameters are allowed
-        With no arguments, show the current values
-
-        Arguments:
-            line {[type]} -- [description]
-        """
-        if (line == ""):
-            plist = list(self.parameters.keys())
-            plist.sort()
-            print("%9s   %10s" % ("Parameter",
-                                                          "Value"))
-            print("==================================")
-            for p in plist:
-                if self.parameters[p].type == ParameterType.string:
-                    formatstring = "%10s"
-                else:
-                    formatstring = "%10.5g"
-                print("%8s = "%self.parameters[p].name  +
-                      formatstring%self.parameters[p].value)
-        else:
-            for s in line.split():
-                if (s in self.parameters):
-                    if self.parameters[s].opt_type == OptType.opt:
-                        self.parameters[s].opt_type == OptType.nopt
-                    elif self.parameters[s].opt_type == OptType.nopt:
-                        self.parameters[s].opt_type == OptType.opt
-                    elif self.parameters[s].opt_type == OptType.const:
-                        print("Parameter %s is not optimized" % s)
-                else:
-                    print("Parameter %s not found" % s)
+        """View the Tool parameters. Several parameters are allowed. With no arguments, show the current values"""
+        plist = list(self.parameters.keys())
+        plist.sort()
+        print("%9s   %10s" % ("Parameter",
+                                                        "Value"))
+        print("==================================")
+        for p in plist:
+            if self.parameters[p].type == ParameterType.string:
+                formatstring = "%10s"
+            else:
+                formatstring = "%10.5g"
+            print("%8s = "%self.parameters[p].name  +
+                    formatstring%self.parameters[p].value)
 
     def complete_parameters(self, text, line, begidx, endidx):
         """[summary]
@@ -385,6 +366,7 @@ class Tool(CmdBase):
             par = line.split("=")
             if (par[0] in self.parameters):
                 self.set_param_value(par[0], par[1])
+                self.do_plot("")
             else:
                 print("Parameter %s not found" % par[0])
         elif line in self.parameters.keys():
@@ -452,3 +434,21 @@ class Tool(CmdBase):
         self.toolTextBox.verticalScrollBar().setValue(
             self.toolTextBox.verticalScrollBar().maximum())
         self.toolTextBox.moveCursor(QTextCursor.End)
+
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate tools"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        print('Visit the page:')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "parameters" + Fore.RESET)
+        self.do_help("parameters")
+        print(Fore.RED + "par1=val1" + Fore.RESET)
+        print("Change the value of parameter par1")
+        print(Fore.RED + "activate" + Fore.RESET)
+        self.do_help("activate")
+        print("")
+

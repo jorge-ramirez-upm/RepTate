@@ -73,6 +73,7 @@ class Application(CmdBase):
     name = "Template"
     description = "Abstract class that defines basic functionality"
     extension = ""
+    doc_header = 'Application commands (type help <topic>):'
 
     def __init__(self,
                  name="ApplicationTemplate",
@@ -798,7 +799,7 @@ Arguments:
                     Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
     def do_available(self, line):
-        """Views and Tools available in the current application"""
+        """Tools/File Types/Views/Theories available in the current application"""
         self.do_available_tools()
         self.do_available_filetypes()
         self.do_available_views()
@@ -1074,3 +1075,31 @@ Arguments:
     def complete_figure_save(self, text, line, begidx, endidx):
         """Complete the figure_save command"""
         return self.complete_cd(text, line, begidx, endidx)
+
+# TUTORIAL
+
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate applications"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        print('Visit the page:')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "available" + Fore.RESET)
+        self.do_help("available")
+        print(Fore.RED + "new" + Fore.RESET)
+        self.do_help("new")
+        print(Fore.RED + "tool_new" + Fore.RESET)
+        self.do_help("tool_new")
+        print(Fore.RED + "view" + Fore.RESET)
+        self.do_help("view")
+        print(Fore.RED + "tree" + Fore.RESET)
+        self.do_help("tree")
+        print(Fore.RED + "switch" + Fore.RESET)
+        self.do_help("switch")
+        print(Fore.RED + "plot" + Fore.RESET)
+        self.do_help("plot")
+        print("")
+        

@@ -41,7 +41,7 @@ import cmd
 import readline
 import enum
 #from pint import UnitRegistry
-from colorama import Fore
+from colorama import Fore, init
 from numpy import *
 import logging
 
@@ -92,6 +92,8 @@ class CmdBase(cmd.Cmd):
     def __init__ (self, parent=None):
         """Constructor"""
         super().__init__()
+        
+        init()
 
         delims = readline.get_completer_delims()
         delims = delims.replace(os.sep, '')
@@ -373,7 +375,8 @@ Arguments:
         return completions
 
     def cmdloop(self, intro=""):
-        #print(self.intro)
+        if (self.intro != None):
+            print(self.intro)
         while True:
             try:
                 super(CmdBase, self).cmdloop(intro="")

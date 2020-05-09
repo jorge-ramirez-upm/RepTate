@@ -71,8 +71,9 @@ class ApplicationManager(CmdBase):
     version = Version.VERSION
     date = Version.DATE
     prompt = Fore.GREEN + 'RepTate> '
-    intro = 'RepTate Version %s - %s command processor\nhelp [command] for instructions\nTAB for completions' % (
-        version, date)
+    intro = Fore.GREEN + 'RepTate' + Fore.RESET + ' Version ' + Fore.RED + '%s - %s'% (version, date) + Fore.RESET + ' command processor\nhelp [command] for instructions\nTAB for completions' 
+    doc_header = 'RepTate Manager commands (type help <topic>):'
+    
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """
@@ -224,10 +225,7 @@ Arguments:
             return None
 
     def do_new(self, appname):
-        """Create a new application and open it.
-
-Arguments:
-    - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
+        """Create a new application and open it. Arguments: name (MWD, LVE, TTS, etc... Application to open)"""
         newapp = self.new(appname)
         if (newapp != None):
             if CmdBase.mode != CmdMode.GUI:
@@ -256,10 +254,8 @@ Arguments:
         return completions
 
     def do_switch(self, line):
-        """Set focus to an open application/set/theory/tool.
-By hitting TAB, all the currently accessible elements are shown.
-Arguments:
-    - name {str} -- Name of the applicaton/set/theory/tool to switch the focus to."""
+        """Set focus to an open application/set/theory/tool. 
+Argument: name -- applicaton/set/theory/tool to switch the focus to (hit TAB to complete)"""
         items=line.split('.')
         if len(items)>1:
             name=items[0]
@@ -388,16 +384,34 @@ Arguments:
 
 # OTHER STUFF
 
-    def help_tutorial(self):
-        """[summary]
-
-        [description]
-        """
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate application manager"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
         print('Visit the page:')
-        print('https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "available" + Fore.RESET)
+        self.do_help("available")
+        print(Fore.RED + "new LVE" + Fore.RESET)
+        self.do_help("new")
+        print(Fore.RED + "list" + Fore.RESET)
+        self.do_help("list")
+        print(Fore.RED + "switch LVE1" + Fore.RESET)
+        print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
+        self.do_help("switch")
+        print(Fore.RED + "tree" + Fore.RESET)
+        self.do_help("tree")
+        print(Fore.RED + "quit" + Fore.RESET)
+        self.do_help("quit")
+        print("")
 
     def do_about(self, line):
         """Show about info."""
+        print(ApplicationManager.intro)
+        print("")
         print(Fore.GREEN + "RepTate " + Fore.RESET +
               "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), " +
               "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds " +
@@ -418,7 +432,7 @@ Arguments:
         print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
     def do_quit(self, args):
-        """Exit from the application."""
+        """Exit RepTate."""
         msg = 'Do you really want to exit RepTate?'
         shall = input("\n%s (y/N) " % msg).lower() == 'y'
         if (shall):
