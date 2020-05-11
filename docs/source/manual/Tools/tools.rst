@@ -47,6 +47,12 @@ Smooth
 .. autoclass:: RepTate.tools.ToolSmooth.ToolSmooth()
 
 
+-------------------
+Power Law
+-------------------
+
+.. autoclass:: RepTate.tools.ToolPowerLaw.ToolPowerLaw()
+
 ------------------
 Materials Database
 ------------------
