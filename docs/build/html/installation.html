@@ -192,6 +192,7 @@ This will open up a window where you can type commands to install the extra pack
 <span class="n">conda</span> <span class="n">install</span> <span class="n">scipy</span>
 <span class="n">conda</span> <span class="n">install</span> <span class="n">openpyxl</span>
     <span class="n">conda</span> <span class="n">install</span> <span class="n">xlrd</span>
+    <span class="n">conda</span> <span class="n">install</span> <span class="n">colorama</span>
 </pre></div>
 </div>
 <p>Additionally, on Windows:</p>
@@ -205,7 +206,7 @@ This will open up a window where you can type commands to install the extra pack
 <p>If a package is missing and you try to run RepTate, Python will print an
 information message in the terminal telling you what went missing.
 For example, something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;openpyxl&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;openpyxl&#39;</span>
 </pre></div>
 </div>
 <p>tells you that you need to install the <code class="docutils literal notranslate"><span class="pre">openpyxl</span></code> package. Note that, in other Python distributions, the standard command to install packages is <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
@@ -236,14 +237,18 @@ To download the full repository to your computer, type in the command line inter
 <div class="section" id="launch-reptate">
 <h4>Launch RepTate<a class="headerlink" href="#launch-reptate" title="Permalink to this headline">¶</a></h4>
 <p>To launch RepTate, you should change the current working directory of the
-command line interface to <code class="docutils literal notranslate"><span class="pre">RepTate/RepTate/</span></code>. Type:</p>
+command line interface to <code class="docutils literal notranslate"><span class="pre">RepTate/</span></code>. Type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">RepTate</span>
-<span class="n">cd</span> <span class="n">RepTate</span>
 <span class="n">python</span> <span class="n">RepTate</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+<p>Alternatively, you can also run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">RepTate</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">RepTate</span>
+</pre></div>
+</div>
 <p>Wait a little and RepTate should appear on your screen. Note that you may need to use
-<code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">RepTate.py</span></code> depending on your system.</p>
+<code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">RepTate.py</span></code> or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">RepTate</span></code> depending on your system.</p>
 <p>Take a moment to read the <a class="reference external" href="http://reptate.readthedocs.io/manual/manual.html">User Manual</a>.</p>
 </div>
 <div class="section" id="update-reptate">

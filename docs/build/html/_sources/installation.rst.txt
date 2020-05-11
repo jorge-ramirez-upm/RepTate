@@ -99,6 +99,7 @@ This will open up a window where you can type commands to install the extra pack
     conda install scipy
     conda install openpyxl
 	conda install xlrd
+	conda install colorama
 
 Additionally, on Windows::
     
@@ -149,14 +150,18 @@ Launch RepTate
 ~~~~~~~~~~~~~~
 
 To launch RepTate, you should change the current working directory of the
-command line interface to ``RepTate/RepTate/``. Type::
+command line interface to ``RepTate/``. Type::
 
-    cd RepTate
     cd RepTate
     python RepTate.py
+	
+Alternatively, you can also run::
+
+	cd RepTate
+	python -m RepTate
 
 Wait a little and RepTate should appear on your screen. Note that you may need to use 
-``python3 RepTate.py`` depending on your system.
+``python3 RepTate.py`` or ``python3 -m RepTate`` depending on your system.
 
 Take a moment to read the `User Manual <http://reptate.readthedocs.io/manual/manual.html>`_.
 

@@ -35,7 +35,7 @@ Contents:
 More info:
 ----------
 
-- Code repository: https://github.com/jorge-ramirez-upm/RepTate
+- Source code: https://github.com/jorge-ramirez-upm/RepTate
 
 Authors:
 --------

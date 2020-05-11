@@ -100,11 +100,11 @@
 <span class="sd">Remove data ouside Bounds</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">RepTate.core.CmdBase</span> <span class="k">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
-<span class="kn">from</span> <span class="nn">RepTate.core.Parameter</span> <span class="k">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
-<span class="kn">from</span> <span class="nn">RepTate.core.Tool</span> <span class="k">import</span> <span class="n">Tool</span>
-<span class="kn">from</span> <span class="nn">RepTate.gui.QTool</span> <span class="k">import</span> <span class="n">QTool</span>
-<span class="kn">from</span> <span class="nn">RepTate.core.DataTable</span> <span class="k">import</span> <span class="n">DataTable</span>
+<span class="kn">from</span> <span class="nn">RepTate.core.CmdBase</span> <span class="kn">import</span> <span class="n">CmdBase</span><span class="p">,</span> <span class="n">CmdMode</span>
+<span class="kn">from</span> <span class="nn">RepTate.core.Parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">,</span> <span class="n">OptType</span>
+<span class="kn">from</span> <span class="nn">RepTate.core.Tool</span> <span class="kn">import</span> <span class="n">Tool</span>
+<span class="kn">from</span> <span class="nn">RepTate.gui.QTool</span> <span class="kn">import</span> <span class="n">QTool</span>
+<span class="kn">from</span> <span class="nn">RepTate.core.DataTable</span> <span class="kn">import</span> <span class="n">DataTable</span>
 
 
 <div class="viewcode-block" id="ToolBounds"><a class="viewcode-back" href="../manual/Tools/tools.html#ToolBounds.ToolBounds">[docs]</a><span class="k">class</span> <span class="nc">ToolBounds</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
@@ -114,7 +114,7 @@
     <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Bounds Tool&#39;</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 
 <span class="sd">        [description]</span>
@@ -139,7 +139,7 @@
     <span class="n">toolname</span> <span class="o">=</span> <span class="n">ToolBounds</span><span class="o">.</span><span class="n">toolname</span>
     <span class="n">citations</span> <span class="o">=</span> <span class="n">ToolBounds</span><span class="o">.</span><span class="n">citations</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 
@@ -190,7 +190,7 @@
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 
@@ -210,7 +210,7 @@
 <span class="sd">    [description]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent_app</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        **Constructor**</span>
 

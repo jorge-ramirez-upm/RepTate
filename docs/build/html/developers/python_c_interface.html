@@ -108,7 +108,7 @@
   <div class="section" id="tutorial-interfacing-python-and-c-code">
 <h1>Tutorial: Interfacing Python and C code<a class="headerlink" href="#tutorial-interfacing-python-and-c-code" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#goals" id="id4">Goals</a></p></li>
 <li><p><a class="reference internal" href="#our-c-code" id="id5">Our C code</a></p></li>
@@ -246,14 +246,14 @@ In a new file, write the following and save it as, for example,
 <span class="k">try</span><span class="p">:</span>
     <span class="n">basic_function_lib</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">lib_path</span><span class="p">)</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;OS </span><span class="si">%s</span><span class="s1"> not recognized&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OS </span><span class="si">%s</span><span class="s1"> not recognized&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">))</span>
 
 <span class="n">python_c_square</span> <span class="o">=</span> <span class="n">basic_function_lib</span><span class="o">.</span><span class="n">c_square</span>
-<span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">python_c_square</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </td></tr></table></div>
 <p>Some explainations:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_double</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">CDLL</span>
 </pre></div>
 </div>
 <p>imports the Python Ctypes object we will be needing.</p>
@@ -341,7 +341,7 @@ transforms the Python integer into a <code class="docutils literal notranslate">
 <code class="docutils literal notranslate"><span class="pre">do_square_using_c</span></code>. To use it in a RepTate module, simply import the
 function by including in the module header.</p>
 <p>As an example, the following calculates the square of numbers from 0 to 999:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">basic_function_helper</span> <span class="k">import</span> <span class="n">do_square_using_c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">basic_function_helper</span> <span class="kn">import</span> <span class="n">do_square_using_c</span>
 <span class="o">...</span>
 <span class="n">my_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">squared_list</span> <span class="o">=</span> <span class="n">do_square_using_c</span><span class="p">(</span><span class="o">*</span><span class="n">my_list</span><span class="p">)</span>

@@ -114,7 +114,7 @@
   <div class="section" id="tutorial-adding-new-functionality-to-reptate">
 <h1>Tutorial: Adding new functionality to RepTate<a class="headerlink" href="#tutorial-adding-new-functionality-to-reptate" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
-<p class="topic-title first">Contents</p>
+<p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#goals" id="id2">Goals</a></p></li>
 <li><p><a class="reference internal" href="#new-application" id="id3">New application</a></p>
@@ -359,8 +359,8 @@ That view is located in the <code class="docutils literal notranslate"><span cla
     <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;y(x)&#39;</span><span class="p">,</span>
     <span class="n">x_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
     <span class="n">y_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-    <span class="n">log_x</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-    <span class="n">log_y</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewyx</span><span class="p">,</span>
     <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y(x)&#39;</span><span class="p">])</span>
@@ -422,7 +422,7 @@ given by</p>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
 </pre></div>
 </td></tr></table></div>
 <p>The two lines <code class="docutils literal notranslate"><span class="pre">x[:,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">dt.data[:,</span> <span class="pre">0]</span></code> and <code class="docutils literal notranslate"><span class="pre">y[:,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">dt.data[:,</span> <span class="pre">1]</span></code>
@@ -454,8 +454,8 @@ In the <code class="docutils literal notranslate"><span class="pre">__init__</sp
     <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;$y^{1/2}$&#39;</span><span class="p">,</span>
     <span class="n">x_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
     <span class="n">y_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-    <span class="n">log_x</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-    <span class="n">log_y</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_sqrt_y</span><span class="p">,</span>
     <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">])</span>
@@ -499,7 +499,7 @@ In <code class="docutils literal notranslate"><span class="pre">class</span> <sp
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span>
-    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
 </pre></div>
 </td></tr></table></div>
 <div class="admonition note">
@@ -542,7 +542,7 @@ The first lines of <code class="docutils literal notranslate"><span class="pre">
 <span class="sd">Theory fitting a line to the data</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </td></tr></table></div>
 </li>

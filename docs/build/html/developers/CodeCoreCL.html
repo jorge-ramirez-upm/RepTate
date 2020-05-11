@@ -206,7 +206,7 @@
 <dl class="method">
 <dt id="RepTate.core.Application.Application.do_available">
 <code class="sig-name descname">do_available</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Application.html#Application.do_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Application.Application.do_available" title="Permalink to this definition">¶</a></dt>
-<dd><p>Views and Tools available in the current application</p>
+<dd><p>Tools/File Types/Views/Theories available in the current application</p>
 </dd></dl>
 
 <dl class="method">
@@ -331,10 +331,21 @@ Arguments:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="RepTate.core.Application.Application.do_tutorial">
+<code class="sig-name descname">do_tutorial</code><span class="sig-paren">(</span><em class="sig-param">line=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Application.html#Application.do_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Application.Application.do_tutorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a short tutorial about the commands in RepTate applications</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="RepTate.core.Application.Application.do_view">
 <code class="sig-name descname">do_view</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Application.html#Application.do_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Application.Application.do_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the active view</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.core.Application.Application.doc_header">
+<code class="sig-name descname">doc_header</code><em class="property"> = 'Application commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#RepTate.core.Application.Application.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="RepTate.core.Application.Application.extension">
@@ -551,7 +562,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 <dl class="method">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.do_EOF">
 <code class="sig-name descname">do_EOF</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_EOF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application.</p>
+<dd><p>Exit RepTate.</p>
 </dd></dl>
 
 <dl class="method">
@@ -625,32 +636,20 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 <dl class="method">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.do_new">
 <code class="sig-name descname">do_new</code><span class="sig-paren">(</span><em class="sig-param">appname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.do_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new application and open it.</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>name {str} – Application to open (MWD, LVE, TTS, etc)</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Create a new application and open it. Arguments: name (MWD, LVE, TTS, etc… Application to open)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.do_quit">
 <code class="sig-name descname">do_quit</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.do_quit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application.</p>
+<dd><p>Exit RepTate.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.do_switch">
 <code class="sig-name descname">do_switch</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.do_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_switch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set focus to an open application/set/theory/tool.
-By hitting TAB, all the currently accessible elements are shown.
-Arguments:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>name {str} – Name of the applicaton/set/theory/tool to switch the focus to.</p></li>
-</ul>
-</div></blockquote>
+<dd><p>Set focus to an open application/set/theory/tool. 
+Argument: name – applicaton/set/theory/tool to switch the focus to (hit TAB to complete)</p>
 </dd></dl>
 
 <dl class="method">
@@ -660,21 +659,25 @@ Arguments:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="RepTate.core.ApplicationManager.ApplicationManager.do_up">
-<code class="sig-name descname">do_up</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_up" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exit from the application.</p>
+<dt id="RepTate.core.ApplicationManager.ApplicationManager.do_tutorial">
+<code class="sig-name descname">do_tutorial</code><span class="sig-paren">(</span><em class="sig-param">line=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.do_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_tutorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a short tutorial about the commands in RepTate application manager</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="RepTate.core.ApplicationManager.ApplicationManager.help_tutorial">
-<code class="sig-name descname">help_tutorial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.help_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.help_tutorial" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dt id="RepTate.core.ApplicationManager.ApplicationManager.do_up">
+<code class="sig-name descname">do_up</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.do_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit RepTate.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="RepTate.core.ApplicationManager.ApplicationManager.doc_header">
+<code class="sig-name descname">doc_header</code><em class="property"> = 'RepTate Manager commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.intro">
-<code class="sig-name descname">intro</code><em class="property"> = 'RepTate Version 1.0.0 - 20200330 command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">intro</code><em class="property"> = '\x1b[32mRepTate\x1b[39m Version \x1b[31m1.0.0 - 20200330\x1b[39m command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1171,13 +1174,7 @@ to that data set.</p>
 <dl class="method">
 <dt id="RepTate.core.DataSet.DataSet.do_open">
 <code class="sig-name descname">do_open</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#DataSet.do_open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.DataSet.do_open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open file(s)</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {str} – FILENAMES (pattern expansion characters – *, ? – allowed</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Open file(s). Arguments: FILENAME(s) (pattern expansion characters – *, ? – allowed</p>
 </dd></dl>
 
 <dl class="method">
@@ -1225,6 +1222,17 @@ sort T</p>
 <code class="sig-name descname">do_tree</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#DataSet.do_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.DataSet.do_tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all the tools, datasets, files and theories in the current application</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="RepTate.core.DataSet.DataSet.do_tutorial">
+<code class="sig-name descname">do_tutorial</code><span class="sig-paren">(</span><em class="sig-param">line=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#DataSet.do_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.DataSet.do_tutorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a short tutorial about the commands in RepTate Datasets</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.core.DataSet.DataSet.doc_header">
+<code class="sig-name descname">doc_header</code><em class="property"> = 'DataSet commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#RepTate.core.DataSet.DataSet.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="RepTate.core.DataSet.DataSet.get_tree">
@@ -2611,11 +2619,7 @@ This routine works when the theory and the experimental data are not measured on
 <dl class="method">
 <dt id="RepTate.core.Theory.Theory.do_parameters">
 <code class="sig-name descname">do_parameters</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#Theory.do_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.Theory.do_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>View and switch the minimization state of the theory parameters</dt><dd><p>parameters A B</p>
-</dd>
-</dl>
-<p>Several parameters are allowed. With no arguments, show the current values</p>
+<dd><p>View/switch minimization of Theory parameters. Several parameters are allowed. With no arguments, show the current values</p>
 </dd></dl>
 
 <dl class="method">
@@ -2638,21 +2642,16 @@ This routine works when the theory and the experimental data are not measured on
 </dd></dl>
 
 <dl class="method">
+<dt id="RepTate.core.Theory.Theory.do_tutorial">
+<code class="sig-name descname">do_tutorial</code><span class="sig-paren">(</span><em class="sig-param">line=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#Theory.do_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.Theory.do_tutorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a short tutorial about the commands in RepTate theories</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="RepTate.core.Theory.Theory.do_xrange">
 <code class="sig-name descname">do_xrange</code><span class="sig-paren">(</span><em class="sig-param">line</em>, <em class="sig-param">visible=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#Theory.do_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.Theory.do_xrange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set/show xrange for fit and shows limits</p>
-<p>With no arguments: switches ON/OFF the horizontal span</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>line {[xmin xmax]} – Sets the limits of the span</p></li>
-</ul>
-</dd>
-<dt>Example:</dt><dd><ul class="simple">
-<li><p>xrange -4 5</p></li>
-<li><p>xrange 0.35 3.44</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Set/show xrange for fit and shows limits. Arguments: limits of the span. 
+With no arguments: switches ON/OFF the horizontal span. Example: xrange -4 5</p>
 </dd></dl>
 
 <dl class="method">
@@ -2667,6 +2666,11 @@ This routine works when the theory and the experimental data are not measured on
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.core.Theory.Theory.doc_header">
+<code class="sig-name descname">doc_header</code><em class="property"> = 'Theory commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#RepTate.core.Theory.Theory.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="RepTate.core.Theory.Theory.doi">
