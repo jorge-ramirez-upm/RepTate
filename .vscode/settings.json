@@ -1,5 +1,4 @@
 {
-    "restructuredtext.confPath": "${workspaceFolder}\\docs\\source",
     "python.testing.pytestArgs": [
         "./tests"
     ],
