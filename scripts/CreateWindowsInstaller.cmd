@@ -49,8 +49,9 @@ copy %WINPYDIR%\DLLs\tk86t.dll %OUTPUTFOLDER%
 REM COPY OTHER FOLDERS AND FILES NEEDED BY REPTATE
 if not exist %OUTPUTFOLDER%\data mkdir %OUTPUTFOLDER%\data
 xcopy /S data %OUTPUTFOLDER%\data
-if not exist %OUTPUTFOLDER%\docs\build\html mkdir %OUTPUTFOLDER%\docs\build\html
-xcopy /S docs\build\html %OUTPUTFOLDER%\docs\build\html
+REM COPY DOCUMENTATION OR NOT?
+REM if not exist %OUTPUTFOLDER%\docs\build\html mkdir %OUTPUTFOLDER%\docs\build\html
+REM xcopy /S docs\build\html %OUTPUTFOLDER%\docs\build\html
 if not exist %OUTPUTFOLDER%\tests mkdir %OUTPUTFOLDER%\tests
 xcopy /S tests %OUTPUTFOLDER%\tests
 copy Reptate_license.txt %OUTPUTFOLDER%
@@ -58,16 +59,16 @@ copy Reptate_license.rtf %OUTPUTFOLDER%
 REM COPY ICONS
 if not exist %OUTPUTFOLDER%\icons mkdir %OUTPUTFOLDER%\icons
 copy RepTate\gui\Images\Reptate64.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\OSC.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\LVE.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\NLVE.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\React.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\MWD.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\Gt.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\SANS.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\Dielectric.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\Creep.ico %OUTPUTFOLDER%\icons
-copy RepTate\gui\Images\LAOS.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\OSC.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\LVE.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\NLVE.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\React.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\MWD.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\Gt.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\SANS.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\Dielectric.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\Creep.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\new_icons\LAOS.ico %OUTPUTFOLDER%\icons
 copy RepTate\gui\Images\Crystal.ico %OUTPUTFOLDER%\icons
 
 REM UNPACK PYTHON IN THE INSTALLATION FOLDER
@@ -84,7 +85,15 @@ del get-pip.py
 python -m pip install -r ..\..\requirements.txt
 for /f "delims=" %%a in ('dir /b *.whl') do python -m pip install %%a
 del *.whl
-python -c "import compileall; compileall.compile_dir('./', force=True)"
+
+REM ALTERNATIVE 1: BYTE COMPILE ALL AND LEAVE ORIGINAL FILES UNTOUCHED
+REM python -c "import compileall; compileall.compile_dir('./', force=True)"
+
+REM ALTERNATIVE 2: BYTE COMPILE EACH FILE AND SUBSTITUTE py BY pyc (about 50 Mb less)
+cd Lib\site-packages
+python ..\..\..\..\scripts\traverse.py
+cd ..\..
+
 
 REM INVOKE makensis
 cd ..
