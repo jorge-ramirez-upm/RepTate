@@ -1,6 +1,18 @@
+!ifndef REPTATEVERSION
+    !error "REPTATEVERSION must be defined"
+!endif
+ 
+!ifndef REPTATEDATE
+    !error "REPTATEDATE must be defined"
+!endif
+
+!ifndef REPTATEBUILD
+    !error "REPTATEBUILD must be defined"
+!endif
+
 !include "MUI2.nsh"
-!define MUI_ICON "RepTate\RepTate\gui\Images\Reptate64.ico"
-#!define MUI_UNICON "RepTate\gui\Images\Reptate64.ico"
+
+!define MUI_ICON "RepTate\Reptate64.ico"
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "RepTate"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "RepTate\Reptate_license.rtf"
@@ -27,10 +39,8 @@ LangString DESC_FileAssoc ${LANG_ENGLISH} "Associate common RepTate files (*.tts
 
 # Version must be with the format x.x.x.x
 !define VERSION "1.0.0.0"
-!define DATE "20200330"
-Name "RepTate v${VERSION}"
-OutFile "RepTate Installer - v${VERSION} ${DATE}.exe"
-#Icon "RepTate\gui\Images\Reptate64.ico"
+Name "RepTate ${REPTATEVERSION}"
+OutFile "RepTateInstaller-${REPTATEVERSION}_${REPTATEDATE}.exe"
 InstallDir "$PROGRAMFILES64\RepTate"
 InstallDirRegKey HKLM "Software\RepTate" "Install_Dir"
 #LicenseData "RepTate\Reptate_license.rtf"
@@ -42,14 +52,7 @@ VIAddVersionKey "LegalCopyright" "© UPM, ULeeds"
 VIAddVersionKey "FileDescription" "Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiments"
 VIAddVersionKey "FileVersion" ${VERSION}
 
-#Page license
-#Page components
-#Page directory
-#Page instfiles
-#UninstPage uninstConfirm
-#UninstPage instfiles
-
-Section "RepTate v${VERSION}" SectionRepTate
+Section "RepTate ${REPTATEVERSION}" SectionRepTate
 	#SetBrandingImage "RepTate\gui\Images\logo_with_uni_logo.png"
 	SetOutPath $INSTDIR
 	File /r "RepTate\*"
@@ -59,17 +62,12 @@ Section "RepTate v${VERSION}" SectionRepTate
 
 	;Create shortcuts
 	CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\RepTate.exe"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\pythonw.exe" "-m RepTate"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk" "$INSTDIR\python.exe" "-m RepTate.CL"
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk" "$INSTDIR\Uninstall RepTate.exe"
 
 	!insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
-
-#Section "Start Menu Shortcuts"
-#  CreateDirectory "$SMPROGRAMS\RepTate"
-#  CreateShortcut "$SMPROGRAMS\RepTate\Uninstall.lnk" "$INSTDIR\Uninstall RepTate.exe" "" "$INSTDIR\Uninstall RepTate.exe" 0
-#  CreateShortcut "$SMPROGRAMS\RepTate\RepTate.lnk" "$INSTDIR\RepTate.exe" "" "$INSTDIR\RepTate.exe" 0
-#SectionEnd
 
 Section "File Associations" SectionFileAssociations
 
@@ -90,23 +88,20 @@ Section "File Associations" SectionFileAssociations
 	WriteRegStr ${_hkey} "${_pid}\shell\edit\command" "" '"${_exe}" "%1"'
 	!macroend
 
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".OSC" "RepTate.OSC" "$INSTDIR\RepTate\gui\Images\OSC.ico"
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".TTS" "RepTate.TTS" "$INSTDIR\RepTate\gui\Images\LVE.ico"
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".SHEAR" "RepTate.SHEAR" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".UEXT" "RepTate.UEXT" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".REAC" "RepTate.REAC" "$INSTDIR\RepTate\gui\Images\React.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".GPC" "RepTate.GPC" "$INSTDIR\RepTate\gui\Images\MWD.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".GT" "RepTate.GT" "$INSTDIR\RepTate\gui\Images\Gt.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".SANS" "RepTate.SANS" "$INSTDIR\RepTate\gui\Images\SANS.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".DLS" "RepTate.DLS" "$INSTDIR\RepTate\gui\Images\Dielectric.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".CREEP" "RepTate.CREEP" "$INSTDIR\RepTate\gui\Images\Creep.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".LAOS" "RepTate.LAOS" "$INSTDIR\RepTate\gui\Images\LAOS.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\RepTate.exe" ".SHEARXS" "RepTate.SHEARXS" "$INSTDIR\RepTate\gui\Images\Crystal.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".OSC" "RepTate.OSC" "$INSTDIR\RepTate\gui\Images\OSC.ico"
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".TTS" "RepTate.TTS" "$INSTDIR\RepTate\gui\Images\LVE.ico"
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SHEAR" "RepTate.SHEAR" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".UEXT" "RepTate.UEXT" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".REAC" "RepTate.REAC" "$INSTDIR\RepTate\gui\Images\React.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".GPC" "RepTate.GPC" "$INSTDIR\RepTate\gui\Images\MWD.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".GT" "RepTate.GT" "$INSTDIR\RepTate\gui\Images\Gt.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SANS" "RepTate.SANS" "$INSTDIR\RepTate\gui\Images\SANS.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".DLS" "RepTate.DLS" "$INSTDIR\RepTate\gui\Images\Dielectric.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".CREEP" "RepTate.CREEP" "$INSTDIR\RepTate\gui\Images\Creep.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".LAOS" "RepTate.LAOS" "$INSTDIR\RepTate\gui\Images\LAOS.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SHEARXS" "RepTate.SHEARXS" "$INSTDIR\RepTate\gui\Images\Crystal.ico"	
 
 SectionEnd
-
-#UninstallText "This will uninstall example2. Hit next to continue."
-#UninstallIcon "RepTate\gui\Images\Reptate64.ico"
 
 Section "Uninstall"
 	#Delete "$INSTDIR\*"
@@ -136,6 +131,7 @@ Section "Uninstall"
 	!insertmacro MUI_STARTMENU_GETFOLDER "RepTate" $StartMenuFolder
 
 	Delete "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 
