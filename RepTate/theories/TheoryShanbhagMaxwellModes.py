@@ -51,7 +51,7 @@ from scipy.optimize import nnls, minimize, least_squares
 from scipy.interpolate import interp1d
 from scipy.integrate import cumtrapz, quad
 from enum import Enum
-import RepTate.core.Version
+import RepTate
 import time
 
 class PredictionMode(Enum):
@@ -1408,10 +1408,13 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
             return
             
         with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
 
             header = '# Continuous spectrum\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)

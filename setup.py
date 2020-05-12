@@ -1,9 +1,9 @@
 import os
 import sys
 from setuptools import setup, find_packages
+import versioneer
 import functools
 import glob
-from RepTate.core import Version
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 requirements_file = open(os.path.join(base_dir, 'requirements.txt'))
@@ -46,9 +46,9 @@ with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="RepTate-test",
-	# version=Version.VERSION,
-	version="1.0.6",
+    name="RepTate",
+	version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     description="Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment",
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -61,8 +61,8 @@ setup(
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate-test = RepTate.__main__:main',
-            'RepTateCL-test = RepTate.CL:main'
+            'RepTate = RepTate.__main__:main',
+            'RepTateCL = RepTate.CL:main'
         ]
     },
 	license='GNU General Public License v3 or later (GPLv3+)',

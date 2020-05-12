@@ -60,21 +60,21 @@ from RepTate.applications.ApplicationDielectric import ApplicationDielectric
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 # from ApplicationXY import ApplicationXY
 #from ApplicationFRS_I import *
-import RepTate.core.Version as Version
+import RepTate
 from collections import OrderedDict
 from colorama import Fore
 class ApplicationManager(CmdBase):
     """Main Reptate container of applications
 
     """
-
-    version = Version.VERSION
-    date = Version.DATE
+    verdata = RepTate._version.get_versions()
+    version = verdata['version'].split('+')[0]
+    date = verdata['date'].split('T')[0]
+    build = verdata['version']
     prompt = Fore.GREEN + 'RepTate> '
-    intro = Fore.GREEN + 'RepTate' + Fore.RESET + ' Version ' + Fore.RED + '%s - %s'% (version, date) + Fore.RESET + ' command processor\nhelp [command] for instructions\nTAB for completions' 
+    intro = Fore.GREEN + 'RepTate ' + Fore.RED + '%s - %s'% (version, date) + Fore.RESET + ' command processor (Build %s'%build + ')\nhelp [command] for instructions\nTAB for completions' 
     doc_header = 'RepTate Manager commands (type help <topic>):'
     
-
     def __init__(self, parent=None, loglevel=logging.INFO):
         """
         **Constructor**"""

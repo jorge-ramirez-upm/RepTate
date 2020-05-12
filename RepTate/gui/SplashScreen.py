@@ -39,7 +39,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QColor
 from PyQt5.QtWidgets import QSplashScreen, QApplication, QLabel
 from PyQt5.QtGui import QPixmap, QFont
-import RepTate.core.Version as Version
+import RepTate
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress
@@ -56,7 +56,13 @@ class SplashScreen(QSplashScreen):
             self,
             QPixmap(":/Images/Images/logo_with_uni_logo.png"))
         lblVersion = QLabel(self)
-        lblVersion.setText("RepTate Version %s %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %(Version.VERSION, Version.DATE))
+
+        verdata = RepTate._version.get_versions()
+        version = verdata['version'].split('+')[0]
+        date = verdata['date'].split('T')[0]
+        build = verdata['version']
+
+        lblVersion.setText("RepTate %s %s (build %s)<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %(version, date, build))
         font = self.font()
         font.setPixelSize(11)
         font.setWeight(QFont.Bold)

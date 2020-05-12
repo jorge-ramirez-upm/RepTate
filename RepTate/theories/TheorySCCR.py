@@ -50,7 +50,6 @@ from RepTate.gui.Theory_rc import *
 from enum import Enum
 from math import sqrt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
-import RepTate.core.Version
 import time
 from RepTate.core.Theory import EndComputationRequested
 import RepTate.theories.sccr_ctypes_helper as sch

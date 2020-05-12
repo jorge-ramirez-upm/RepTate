@@ -51,7 +51,7 @@ from enum import Enum
 from math import sqrt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 import time
-import RepTate.core.Version
+import RepTate
 
 import RepTate.theories.rp_blend_ctypes_helper as rpch
 from RepTate.core.Theory import EndComputationRequested
@@ -730,9 +730,12 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
             return
 
         with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
             header = '#flowGen input\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)

@@ -1,0 +1,2 @@
+include versioneer.py
+include RepTate/_version.py

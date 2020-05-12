@@ -46,7 +46,7 @@ from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
-import RepTate.core.Version as Version
+import RepTate
 import time
 import ast
 PATH = dirname(abspath(__file__))
@@ -622,8 +622,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                 return
 
             header = '# Maxwell modes\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)
