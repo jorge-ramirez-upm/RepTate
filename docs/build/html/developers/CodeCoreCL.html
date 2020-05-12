@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Core classes (Command Line) &#8212; RepTate 1.0.0 20200330 documentation</title>
+    <title>Core classes (Command Line) &#8212; RepTate v1.0.0 2020-05-11 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -66,7 +66,7 @@
 <li><a class="reference internal" href="#module-RepTate.core.FileType">FileType</a></li>
 <li><a class="reference internal" href="#module-RepTate.core.Parameter">Parameter</a></li>
 <li><a class="reference internal" href="#module-RepTate.core.Theory">Theory</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.Version">Version</a></li>
+<li><a class="reference internal" href="#version">Version</a></li>
 <li><a class="reference internal" href="#module-RepTate.core.View">View</a></li>
 </ul>
 </li>
@@ -492,6 +492,11 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 </dl>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="RepTate.core.ApplicationManager.ApplicationManager.build">
+<code class="sig-name descname">build</code><em class="property"> = 'v1.0.0+80.ged624bbf.dirty'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.check_version">
 <code class="sig-name descname">check_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager.check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.check_version" title="Permalink to this definition">¶</a></dt>
@@ -543,7 +548,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 
 <dl class="attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.date">
-<code class="sig-name descname">date</code><em class="property"> = '20200330'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">date</code><em class="property"> = '2020-05-11'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.date" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -677,7 +682,7 @@ Argument: name – applicaton/set/theory/tool to switch the focus to (hit TAB to
 
 <dl class="attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.intro">
-<code class="sig-name descname">intro</code><em class="property"> = '\x1b[32mRepTate\x1b[39m Version \x1b[31m1.0.0 - 20200330\x1b[39m command processor\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">intro</code><em class="property"> = '\x1b[32mRepTate \x1b[31mv1.0.0 - 2020-05-11\x1b[39m command processor (Build v1.0.0+80.ged624bbf.dirty)\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -711,8 +716,13 @@ Maxwell modes</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="RepTate.core.ApplicationManager.ApplicationManager.verdata">
+<code class="sig-name descname">verdata</code><em class="property"> = {'date': '2020-05-11T21:02:03+0200', 'dirty': True, 'error': None, 'full-revisionid': 'ed624bbfd8a09ec2a18010a1a5a9577b8c028e8b', 'version': 'v1.0.0+80.ged624bbf.dirty'}</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.verdata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.version">
-<code class="sig-name descname">version</code><em class="property"> = '1.0.0'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">version</code><em class="property"> = 'v1.0.0'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2874,10 +2884,8 @@ that provide this functionality.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.core.Version">
-<span id="version"></span><h2>Version<a class="headerlink" href="#module-RepTate.core.Version" title="Permalink to this headline">¶</a></h2>
-<p>Module Version</p>
-<p>Module that sets the current version and date of RepTate.</p>
+<div class="section" id="version">
+<h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-RepTate.core.View">
 <span id="view"></span><h2>View<a class="headerlink" href="#module-RepTate.core.View" title="Permalink to this headline">¶</a></h2>
@@ -2947,7 +2955,7 @@ TO BE DONE…</p>
         <li class="right" >
           <a href="code.html" title="Navigate the source Code of RepTate"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate 1.0.0 20200330 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
