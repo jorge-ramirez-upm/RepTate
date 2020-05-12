@@ -61,8 +61,11 @@ setup(
 	install_requires=requirements,
 	entry_points={
         'console_scripts': [
-            'RepTate = RepTate.__main__:main',
             'RepTateCL = RepTate.CL:main'
+        ],
+        'gui_scripts': [
+            'RepTate = RepTate.__main__:main',
+            'MatDB = RepTate.MatDB:main'
         ]
     },
 	license='GNU General Public License v3 or later (GPLv3+)',

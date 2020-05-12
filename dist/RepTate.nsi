@@ -12,7 +12,7 @@
 
 !include "MUI2.nsh"
 
-!define MUI_ICON "RepTate\Reptate64.ico"
+!define MUI_ICON "RepTate\icons\Reptate64.ico"
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "RepTate"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "RepTate\Reptate_license.rtf"
@@ -88,18 +88,18 @@ Section "File Associations" SectionFileAssociations
 	WriteRegStr ${_hkey} "${_pid}\shell\edit\command" "" '"${_exe}" "%1"'
 	!macroend
 
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".OSC" "RepTate.OSC" "$INSTDIR\RepTate\gui\Images\OSC.ico"
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".TTS" "RepTate.TTS" "$INSTDIR\RepTate\gui\Images\LVE.ico"
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SHEAR" "RepTate.SHEAR" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".UEXT" "RepTate.UEXT" "$INSTDIR\RepTate\gui\Images\NLVE.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".REAC" "RepTate.REAC" "$INSTDIR\RepTate\gui\Images\React.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".GPC" "RepTate.GPC" "$INSTDIR\RepTate\gui\Images\MWD.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".GT" "RepTate.GT" "$INSTDIR\RepTate\gui\Images\Gt.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SANS" "RepTate.SANS" "$INSTDIR\RepTate\gui\Images\SANS.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".DLS" "RepTate.DLS" "$INSTDIR\RepTate\gui\Images\Dielectric.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".CREEP" "RepTate.CREEP" "$INSTDIR\RepTate\gui\Images\Creep.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".LAOS" "RepTate.LAOS" "$INSTDIR\RepTate\gui\Images\LAOS.ico"	
-	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\pythonw.exe -m RepTate" ".SHEARXS" "RepTate.SHEARXS" "$INSTDIR\RepTate\gui\Images\Crystal.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".OSC" "RepTate.OSC" "$INSTDIR\icons\OSC.ico"
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".TTS" "RepTate.TTS" "$INSTDIR\icons\LVE.ico"
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".SHEAR" "RepTate.SHEAR" "$INSTDIR\icons\NLVE.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".UEXT" "RepTate.UEXT" "$INSTDIR\icons\NLVE.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".REAC" "RepTate.REAC" "$INSTDIR\icons\React.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".GPC" "RepTate.GPC" "$INSTDIR\icons\MWD.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".GT" "RepTate.GT" "$INSTDIR\icons\Gt.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".SANS" "RepTate.SANS" "$INSTDIR\icons\SANS.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".DLS" "RepTate.DLS" "$INSTDIR\icons\Dielectric.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".CREEP" "RepTate.CREEP" "$INSTDIR\icons\Creep.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".LAOS" "RepTate.LAOS" "$INSTDIR\icons\LAOS.ico"	
+	!insertmacro AssocAddFileExtAndProgId HKCR "$INSTDIR\Scripts\RepTate.exe" ".SHEARXS" "RepTate.SHEARXS" "$INSTDIR\RepTate\gui\Images\Crystal.ico"	
 
 SectionEnd
 

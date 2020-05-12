@@ -55,7 +55,20 @@ if not exist %OUTPUTFOLDER%\tests mkdir %OUTPUTFOLDER%\tests
 xcopy /S tests %OUTPUTFOLDER%\tests
 copy Reptate_license.txt %OUTPUTFOLDER%
 copy Reptate_license.rtf %OUTPUTFOLDER%
-copy RepTate\gui\Images\Reptate64.ico %OUTPUTFOLDER%
+REM COPY ICONS
+if not exist %OUTPUTFOLDER%\icons mkdir %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Reptate64.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\OSC.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\LVE.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\NLVE.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\React.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\MWD.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Gt.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\SANS.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Dielectric.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Creep.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\LAOS.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Crystal.ico %OUTPUTFOLDER%\icons
 
 REM UNPACK PYTHON IN THE INSTALLATION FOLDER
 "C:\Program Files\7-Zip\7z.exe" x -aos -o"%OUTPUTFOLDER%" "%BUILDFOLDER%\%PYTHONFILENAME%"
