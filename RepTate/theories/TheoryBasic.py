@@ -35,17 +35,24 @@
 Module that defines the basic theories that should be available for all Applications.
 
 """
+from numpy import *
 import numpy as np
+import re
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from PyQt5.QtWidgets import QToolBar, QSpinBox
+from PyQt5.QtWidgets import QToolBar, QSpinBox, QComboBox
 from PyQt5.QtCore import QSize
 
-##################################################################
-##################################################################
-
+"""
+             _                             _       _ 
+ _ __   ___ | |_   _ _ __   ___  _ __ ___ (_) __ _| |
+| '_ \ / _ \| | | | | '_ \ / _ \| '_ ` _ \| |/ _` | |
+| |_) | (_) | | |_| | | | | (_) | | | | | | | (_| | |
+| .__/ \___/|_|\__, |_| |_|\___/|_| |_| |_|_|\__,_|_|
+|_|            |___/                                 
+"""
 
 class TheoryPolynomial(CmdBase):
     """Fit a polynomial of degree :math:`n` to the data
@@ -57,7 +64,6 @@ class TheoryPolynomial(CmdBase):
     * **Parameters**
        - :math:`n`: degree of the polynomial function.
        - :math:`A_i`: polynomial coefficeints.
-
     """
     thname = "Polynomial"
     description = "Fit a polynomial of degree n"
@@ -75,13 +81,12 @@ class BaseTheoryPolynomial:
     thname = TheoryPolynomial.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
+        """**Constructor**
 
         Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
+            - name {str} -- Name of the theory (default: {""})
+            - parent_dataset {DataSet} -- DataSet that contains this theory (default: {None})
+            - ax {Axes array} -- Matplotlib axes where the theory will plot the data (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
         self.MAX_DEGREE = 10
@@ -94,29 +99,23 @@ class BaseTheoryPolynomial:
             opt_type=OptType.const,
             display_flag=False)
         for i in range(self.parameters["n"].value + 1):
-            self.parameters["A%02d" % i] = Parameter(
-                "A%02d" % i,
+            self.parameters["A%d" % i] = Parameter(
+                "A%d" % i,
                 1.0,
                 "Coefficient order %d" % i,
                 ParameterType.real,
                 opt_type=OptType.opt)
-        self.Qprint("%s: A00 + A01*x + A02*x^2 + ..." % self.thname)
+        self.Qprint("%s: A0 + A1*x + A2*x^2 + ..." % self.thname)
 
     def set_param_value(self, name, value):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
+        """Change a parameter value, in particular *n*
         """
         if name == 'n':
             nold = self.parameters["n"].value
             Aold = np.zeros(nold + 1)
             for i in range(nold + 1):
-                Aold[i] = self.parameters["A%02d" % i].value
-                del self.parameters["A%02d" % i]
+                Aold[i] = self.parameters["A%d" % i].value
+                del self.parameters["A%d" % i]
 
             nnew = value
             message, success = super().set_param_value("n", nnew)
@@ -125,8 +124,8 @@ class BaseTheoryPolynomial:
                     Aval = Aold[i]
                 else:
                     Aval = 1.0
-                self.parameters["A%02d" % i] = Parameter(
-                    "A%02d" % i,
+                self.parameters["A%d" % i] = Parameter(
+                    "A%d" % i,
                     Aval,
                     "Coefficient degree %d" % i,
                     ParameterType.real,
@@ -143,10 +142,7 @@ class BaseTheoryPolynomial:
         """Actual polynomial function.
 
         .. math::
-            (a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2
-
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
+            y(x) = \\sum_{i=0}^n A_i x^i
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -155,52 +151,31 @@ class BaseTheoryPolynomial:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
         for i in range(self.parameters["n"].value + 1):
-            a = self.parameters["A%02d" % i].value
+            a = self.parameters["A%d" % i].value
             for j in range(1, tt.num_columns):
                 tt.data[:, j] += a * tt.data[:, 0]**i
 
 
 class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(1,
-                              self.MAX_DEGREE)  # min and max number of modes
+        self.spinbox.setRange(1, self.MAX_DEGREE) # min and max number of modes
         self.spinbox.setPrefix("degree ")
         self.spinbox.setValue(self.parameters["n"].value)  #initial value
         tb.addWidget(self.spinbox)
@@ -209,17 +184,16 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
             self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmode'
-
-        Arguments:
-            - value {[type]} -- [description]
-        """
+        """Handle a change of the parameter 'nmode'"""
         self.set_param_value("n", value)
 
-
-##################################################################
-##################################################################
-
+"""
+ _ __   _____      _____ _ __  | | __ ___      __
+| '_ \ / _ \ \ /\ / / _ \ '__| | |/ _` \ \ /\ / /
+| |_) | (_) \ V  V /  __/ |    | | (_| |\ V  V / 
+| .__/ \___/ \_/\_/ \___|_|    |_|\__,_| \_/\_/  
+|_|                                              
+"""
 
 class TheoryPowerLaw(CmdBase):
     """Fit a power law to the data
@@ -231,24 +205,12 @@ class TheoryPowerLaw(CmdBase):
     * **Parameters**
        - :math:`a`: prefactor.
        - :math:`b`: exponent.
-
     """
     thname = "Power Law"
     description = "Fit Power Law"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """**Constructor**"""
         return GUITheoryPowerLaw(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPowerLaw(
@@ -256,23 +218,13 @@ class TheoryPowerLaw(CmdBase):
 
 
 class BaseTheoryPowerLaw:
-    """Fit a power law to the data
-
-    [description]
-    """
+    """Fit a power law to the data"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
     thname = TheoryPowerLaw.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.powerlaw
         self.parameters["a"] = Parameter(
@@ -282,12 +234,11 @@ class BaseTheoryPowerLaw:
         self.Qprint("%s: a*x^b" % self.thname)
 
     def powerlaw(self, f=None):
-        """[summary]
+        """Actual function
 
-        [description]
-
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
+    * **Function**
+        .. math::
+            y(x) = a x^b
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -301,45 +252,28 @@ class BaseTheoryPowerLaw:
 
 
 class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
-
-##################################################################
-##################################################################
-
+"""
+                                        _   _       _ 
+  _____  ___ __   ___  _ __   ___ _ __ | |_(_) __ _| |
+ / _ \ \/ / '_ \ / _ \| '_ \ / _ \ '_ \| __| |/ _` | |
+|  __/>  <| |_) | (_) | | | |  __/ | | | |_| | (_| | |
+ \___/_/\_\ .__/ \___/|_| |_|\___|_| |_|\__|_|\__,_|_|
+          |_|                                         
+"""
 
 class TheoryExponential(CmdBase):
     """Fit a single exponential decay to the data
@@ -357,42 +291,20 @@ class TheoryExponential(CmdBase):
     description = "Fit Exponential"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """**Constructor**"""
         return GUITheoryExponential(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryExponential(
                 name, parent_dataset, ax)
 
-
 class BaseTheoryExponential:
-    """Fit an exponential decay to the data
-
-    [description]
-    """
+    """Fit an exponential decay to the data"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
     thname = TheoryExponential.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.exponential
         self.parameters["a"] = Parameter(
@@ -405,14 +317,11 @@ class BaseTheoryExponential:
             opt_type=OptType.opt)
         self.Qprint("%s: a*exp(-x/T)" % self.thname)
 
-
     def exponential(self, f=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
+        """Actual function
+    * **Function**
+        .. math::
+            y(x) = a \\exp(-x/T)
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -424,46 +333,29 @@ class BaseTheoryExponential:
             tt.data[:, j] = self.parameters["a"].value * np.exp(
                 -tt.data[:, 0] / self.parameters["T"].value)
 
-
 class CLTheoryExponential(BaseTheoryExponential, Theory):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryExponential(BaseTheoryExponential, QTheory):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
-
-##################################################################
-##################################################################
-
+"""
+ ____                                           _   _       _     
+|___ \    _____  ___ __   ___  _ __   ___ _ __ | |_(_) __ _| |___ 
+  __) |  / _ \ \/ / '_ \ / _ \| '_ \ / _ \ '_ \| __| |/ _` | / __|
+ / __/  |  __/>  <| |_) | (_) | | | |  __/ | | | |_| | (_| | \__ \
+|_____|  \___/_/\_\ .__/ \___/|_| |_|\___|_| |_|\__|_|\__,_|_|___/
+                  |_|                                             
+"""
 
 class TheoryTwoExponentials(CmdBase):
     """Fit **two** single exponential decay to the data
@@ -475,48 +367,25 @@ class TheoryTwoExponentials(CmdBase):
     * **Parameters**
        - :math:`a_1`, :math:`a_2`: prefactors.
        - :math:`T_1`, :math:`T_2`: exponential "time" constants.
-
     """
     thname = "Two Exponentials"
     description = "Fit two exponentials"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """**Constructor**"""
         return GUITheoryTwoExponentials(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTwoExponentials(
                 name, parent_dataset, ax)
 
-
 class BaseTheoryTwoExponentials:
-    """Fit 2 exponentials decay to the data
-
-    [description]
-    """
+    """Fit 2 exponentials decay to the data"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
     thname = TheoryTwoExponentials.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.two_exponentials
         self.parameters["a1"] = Parameter(
@@ -538,12 +407,11 @@ class BaseTheoryTwoExponentials:
         self.Qprint("%s: a1*exp(-x/T1) + a2*exp(-x/T2)" % self.thname)
 
     def two_exponentials(self, f=None):
-        """[summary]
+        """Actual function
 
-        [description]
-
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
+    * **Function**
+        .. math::
+            y(x) = a_1 \\exp(x/T_1) + a_2 \\exp(-x/T_2)
         """
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -559,42 +427,223 @@ class BaseTheoryTwoExponentials:
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
                 -tt.data[:, 0] / T2)
 
-
 class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
+        """**Constructor**"""
+        super().__init__(name, parent_dataset, ax)
 
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
+"""
+       _            _               _      
+  __ _| | __ _  ___| |__  _ __ __ _(_) ___ 
+ / _` | |/ _` |/ _ \ '_ \| '__/ _` | |/ __|
+| (_| | | (_| |  __/ |_) | | | (_| | | (__ 
+ \__,_|_|\__, |\___|_.__/|_|  \__,_|_|\___|
+         |___/                             
+                                   _             
+  _____  ___ __  _ __ ___  ___ ___(_) ___  _ __  
+ / _ \ \/ / '_ \| '__/ _ \/ __/ __| |/ _ \| '_ \ 
+|  __/>  <| |_) | | |  __/\__ \__ \ | (_) | | | |
+ \___/_/\_\ .__/|_|  \___||___/___/_|\___/|_| |_|
+          |_|                                    
+"""
+
+class TheoryAlgebraicExpression(CmdBase):
+    """Fit a user algebraic expression with :math:`n` parameters. 
+    
+    The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt
+
+    It is the responsability of the user to input functions that make mathematical sense.
+
+    * **Function**
+        .. math::
+            y(x) = f({A_i}, x)
+
+    * **Parameters**
+       - :math:`n`: number of parameters.
+       - :math:`A_i`: coefficeints of the algebraic expression
+    """
+    thname = "Algebraic Expression"
+    description = "Fit an algebraic expression with n parameters"
+
+    def __new__(cls, name="", parent_dataset=None, ax=None):
+        return GUITheoryAlgebraicExpression(
+            name, parent_dataset,
+            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryAlgebraicExpression(
+                name, parent_dataset, ax)
+
+
+class BaseTheoryAlgebraicExpression:
+    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
+    single_file = True
+    thname = TheoryAlgebraicExpression.thname
+
+    def __init__(self, name="", parent_dataset=None, ax=None):
+        """**Constructor**"""
+        super().__init__(name, parent_dataset, ax)
+        self.MAX_DEGREE = 10
+        self.function = self.algebraicexpression
+        self.parameters["n"] = Parameter(
+            name="n",
+            value=2,
+            description="Number of Parameters",
+            type=ParameterType.integer,
+            opt_type=OptType.const,
+            display_flag=False)
+        self.parameters["expression"] = Parameter(
+            name="expression",
+            value="A0+A1*x",
+            description="Algebraic Expression",
+            type=ParameterType.string,
+            opt_type=OptType.const,
+            display_flag=False)
+        for i in range(self.parameters["n"].value):
+            self.parameters["A%d" % i] = Parameter(
+                "A%d" % i,
+                1.0,
+                "Parameter %d" % i,
+                ParameterType.real,
+                opt_type=OptType.opt)
+
+        safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt']
+        self.safe_dict = {}
+        for k in safe_list:
+            self.safe_dict[k] = globals().get(k, None)
+        
+
+    def set_param_value(self, name, value):
+        """Change a parameter value, in particular *n*
         """
+        if name == 'n':
+            nold = self.parameters["n"].value
+            Aold = np.zeros(nold)
+            for i in range(nold):
+                Aold[i] = self.parameters["A%d" % i].value
+                del self.parameters["A%d" % i]
+
+            nnew = value
+            message, success = super().set_param_value("n", nnew)
+            for i in range(nnew):
+                if i < nold:
+                    Aval = Aold[i]
+                else:
+                    Aval = 1.0
+                self.parameters["A%d" % i] = Parameter(
+                    "A%d" % i,
+                    Aval,
+                    "Parameter %d" % i,
+                    ParameterType.real,
+                    opt_type=OptType.opt)
+        else:
+            message, success = super().set_param_value(name, value)
+
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
+        return message, success
+
+    def algebraicexpression(self, f=None):
+        """Actual function.
+
+    * **Function**
+        .. math::
+            y(x) = f({A_i}, x)
+        """
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        expression = self.parameters["expression"].value
+        params = set(re.findall( "A\d{1,2}", expression))
+        nparams=len(params)
+        maxparamindex=-1;
+        for p in params:
+            paramindex=int(p.split('A')[1])
+            if paramindex>maxparamindex:
+                maxparamindex = paramindex
+        n = self.parameters["n"].value
+        if (maxparamindex!=n-1) or (nparams!=n):
+            self.logger.warning("Wrong expression or number of parameters. Review your theory")
+            self.Qprint("<b><font color=red>Wrong expression or number of parameters</font></b>. Review your theory")
+        else:
+            self.safe_dict['x']=tt.data[:, 0]
+            for i in range(n):
+                self.safe_dict['A%d'%i]=self.parameters["A%d" % i].value
+            
+            try:
+                y = eval(expression, {"__builtins__":None}, self.safe_dict)
+                for j in range(1, tt.num_columns):
+                    tt.data[:, j] = y
+            except NameError as e:
+                self.Qprint("<b>Error in algebraic expression <b>")
+                self.logger.exception("Error in Algebraic Expression")
+            except TypeError as e:
+                self.Qprint("<b>Error in algebraic expression <b>")
+                self.logger.exception("Error in Algebraic Expression")
+            except Exception as e:
+                self.Qprint("<b>Error in algebraic expression <b>")
+                self.logger.exception("Error in Algebraic Expression")
+                #print (e.__class__, ":", e)
+
+
+    def do_error(self, line):
+        super().do_error(line)
+        self.Qprint("%s: <b>%s</b>" % (self.thname, self.parameters["expression"].value))
+
+class CLTheoryAlgebraicExpression(BaseTheoryAlgebraicExpression, Theory):
+    """CL Version"""
+
+    def __init__(self, name="", parent_dataset=None, ax=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
-##################################################################
-##################################################################
+class GUITheoryAlgebraicExpression(BaseTheoryAlgebraicExpression, QTheory):
+    """GUI Version"""
+
+    def __init__(self, name="", parent_dataset=None, ax=None):
+        """**Constructor**"""
+        super().__init__(name, parent_dataset, ax)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
+        self.spinbox.setToolTip("Number of parameters")
+        self.spinbox.setValue(self.parameters["n"].value)  #initial value
+        tb.addWidget(self.spinbox)
+        self.expressionCB = QComboBox()
+        self.expressionCB.setToolTip("Algebraic expression")
+        self.expressionCB.addItem("A0+A1*x")
+        self.expressionCB.addItem("A0*sin(A1*x)")
+        self.expressionCB.addItem("A0*sin(A1*x+A2)")
+        self.expressionCB.setEditable(True)
+        self.expressionCB.setMinimumWidth(self.parent_dataset.width()-75)
+        tb.addWidget(self.expressionCB)
+
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+        connection_id = self.expressionCB.currentIndexChanged.connect(
+            self.handle_expressionChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'n'"""
+        self.set_param_value("n", value)
+
+    def handle_expressionChanged(self, item):
+        """Handle a change in the algebraic expression"""
+        self.set_param_value("expression", self.expressionCB.itemText(item))

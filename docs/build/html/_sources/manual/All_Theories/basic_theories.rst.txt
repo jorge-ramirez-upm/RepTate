@@ -45,3 +45,12 @@ Summary
 
 .. autoclass:: RepTate.theories.TheoryBasic.TheoryTwoExponentials()
 
+--------------------
+Algebraic Expression
+--------------------
+
+Summary
+-------
+
+.. autoclass:: RepTate.theories.TheoryBasic.TheoryAlgebraicExpression()
+

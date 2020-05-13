@@ -52,7 +52,7 @@ from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
-from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
+from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials, TheoryAlgebraicExpression
 from RepTate.tools.ToolIntegral import ToolIntegral
 from RepTate.tools.ToolFindPeaks import ToolFindPeaks
 from RepTate.tools.ToolGradient import ToolGradient
@@ -112,6 +112,7 @@ class Application(CmdBase):
         self.common_theories[TheoryPowerLaw.thname] = TheoryPowerLaw
         self.common_theories[TheoryExponential.thname] = TheoryExponential
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
+        self.common_theories[TheoryAlgebraicExpression.thname] = TheoryAlgebraicExpression
 
         # Tools available everywhere
         self.availabletools[ToolBounds.toolname] = ToolBounds

@@ -929,7 +929,10 @@ This routine works when the theory and the experimental data are not measured on
                 table.append(['%-18s' % par.name, '%-18s' % val_err])
             else:
                 # table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
-                table.append(['%-18s' % par.name, '%-18.4g' % par.value])
+                if par.type == ParameterType.string:
+                    table.append(['%-18s' % par.name, '%18s' % par.value])
+                else:
+                    table.append(['%-18s' % par.name, '%-18.4g' % par.value])
         # table+='''</table><br>'''
         self.Qprint(table)
         self.is_fitting = False

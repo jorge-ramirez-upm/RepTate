@@ -106,6 +106,7 @@ class EditThParametersDialog(QDialog):
                 cb.addItem('discrete_real')
                 cb.addItem('discrete_integer')
                 cb.addItem('boolean')
+                cb.addItem('string')
                 # cb.setCurrentText('%s'.split(".")[-1] % p_attributes[attr_name])
                 s = '%s' % p_attributes[attr_name]
                 cb.setCurrentText(s.split(".")[-1])
@@ -479,9 +480,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             p = self.parameters[param]
             if p.display_flag:  #only allowed param enter the table
                 if p.opt_type == OptType.const:
-                    item = QTreeWidgetItem(
-                        self.thParamTable,
-                        [p.name, "%0.3g" % p.value, "N/A"])
+                    if (p.type==ParameterType.string):
+                        item = QTreeWidgetItem(self.thParamTable, [p.name, p.value, "N/A"])
+                    else:
+                        item = QTreeWidgetItem(self.thParamTable,
+                            [p.name, "%0.3g" % p.value, "N/A"])
                     item.setCheckState(0, Qt.PartiallyChecked)
                     item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
                 else:
@@ -489,9 +492,11 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
                         err = "%0.3g" % p.error
                     except:
                         err = "-"
-                    item = QTreeWidgetItem(
-                        self.thParamTable,
-                        [p.name, "%0.3g" % p.value, err])
+                    if (p.type==ParameterType.string):
+                        item = QTreeWidgetItem(self.thParamTable, [p.name, p.value, "N/A"])
+                    else:
+                        item = QTreeWidgetItem(self.thParamTable,
+                            [p.name, "%0.3g" % p.value, err])
                     if p.opt_type == OptType.opt:
                         item.setCheckState(0, Qt.Checked)
                     elif p.opt_type == OptType.nopt:
