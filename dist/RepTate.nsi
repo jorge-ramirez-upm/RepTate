@@ -65,6 +65,7 @@ Section "RepTate ${REPTATEVERSION}" SectionRepTate
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\Scripts\RepTate.exe" "" "$INSTDIR\icons\Reptate64.ico"
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk" "$INSTDIR\Scripts\RepTateCL.exe" "" "$INSTDIR\icons\Calculator.ico"
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\MatDB.lnk" "$INSTDIR\Scripts\MatDB.exe" "" "$INSTDIR\icons\DataTable3D.ico"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\UV.lnk" "$INSTDIR\Scripts\UV.exe" "" "$INSTDIR\icons\UView_Icon.ico"
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk" "$INSTDIR\Uninstall RepTate.exe"
 
 	!insertmacro MUI_STARTMENU_WRITE_END
@@ -133,6 +134,8 @@ Section "Uninstall"
 
 	Delete "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\MatDB.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\UV.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 
