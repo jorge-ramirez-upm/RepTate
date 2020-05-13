@@ -466,7 +466,7 @@ class TheoryAlgebraicExpression(CmdBase):
 
     * **Function**
         .. math::
-            y(x) = f({A_i}, x)
+            y(x) = f({A_i}, x, F_{params})
 
     * **Parameters**
        - :math:`n`: number of parameters.
@@ -484,7 +484,7 @@ class TheoryAlgebraicExpression(CmdBase):
 
 class BaseTheoryAlgebraicExpression:
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
-    single_file = True
+    single_file = False
     thname = TheoryAlgebraicExpression.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
@@ -578,6 +578,17 @@ class BaseTheoryAlgebraicExpression:
             self.logger.warning("Wrong expression or number of parameters. Review your theory")
             self.Qprint("<b><font color=red>Wrong expression or number of parameters</font></b>. Review your theory")
         else:
+            # Find FILE PARAMETERS IN THE EXPRESSION
+            fparams = re.findall("\[(.*?)\]",expression)
+            for fp in fparams:
+                if fp in f.file_parameters:
+                    self.safe_dict[fp]=float(f.file_parameters[fp])
+                else:
+                    self.logger.warning("File parameter not found. Review your theory")
+                    self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your theory")
+                    self.safe_dict[fp]=0.0
+            expression = expression.replace("[","").replace("]","")
+
             self.safe_dict['x']=tt.data[:, 0]
             for i in range(n):
                 self.safe_dict['A%d'%i]=self.parameters["A%d" % i].value
