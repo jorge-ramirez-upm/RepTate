@@ -43,7 +43,7 @@ class DataTable(object):
     
     [description]
     """
-    MAX_NUM_SERIES=3
+    MAX_NUM_SERIES=10
     PICKRADIUS = 10
 
     def __init__(self, axarr=None, _name=''):

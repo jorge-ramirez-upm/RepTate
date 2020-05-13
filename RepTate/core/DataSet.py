@@ -496,7 +496,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                 face = 'none'
                         else:
                             face = color
-                            fillstyles=["left", "right", "bottom", "top"]
+                            fillstyles=["left", "right", "bottom", "top", "full", "left", "right", "bottom", "top", "full", "left", "right", "bottom", "top"]
                             fs = fillstyles[i-2]
                             dt.series[nx][i].set_fillstyle(fs)
                         dt.series[nx][i].set_markerfacecolor(face)
