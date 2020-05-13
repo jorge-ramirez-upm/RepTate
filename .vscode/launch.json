@@ -21,6 +21,14 @@
             "args": ["-v","data/DOW/Non-Linear_Rheology/Start-up_Shear/*.shear"]
         },
         {
+            "name": "UV",
+            "type": "python",
+            "request": "launch",
+            "module": "RepTate.UV",
+            "console": "integratedTerminal",
+            "args": ["-s","-v","../../Associating Polymers/Codes/C++/20190410 HDS 3D Not Tracking - New/N100A4ka0.1Keq10beta1dt0.0625.HDSequilibrium"]
+        },
+        {
             "name": "Test",
             "type": "python",
             "request": "launch",

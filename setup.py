@@ -65,7 +65,8 @@ setup(
         ],
         'gui_scripts': [
             'RepTate = RepTate.__main__:main',
-            'MatDB = RepTate.MatDB:main'
+            'MatDB = RepTate.MatDB:main',
+            'UV = RepTate.UV:main'
         ]
     },
 	license='GNU General Public License v3 or later (GPLv3+)',
