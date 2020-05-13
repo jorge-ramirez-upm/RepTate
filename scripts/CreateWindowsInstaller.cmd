@@ -70,6 +70,8 @@ copy RepTate\gui\Images\new_icons\Dielectric.ico %OUTPUTFOLDER%\icons
 copy RepTate\gui\Images\new_icons\Creep.ico %OUTPUTFOLDER%\icons
 copy RepTate\gui\Images\new_icons\LAOS.ico %OUTPUTFOLDER%\icons
 copy RepTate\gui\Images\Crystal.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\DataTable3D.ico %OUTPUTFOLDER%\icons
+copy RepTate\gui\Images\Calculator.ico %OUTPUTFOLDER%\icons
 
 REM UNPACK PYTHON IN THE INSTALLATION FOLDER
 "C:\Program Files\7-Zip\7z.exe" x -aos -o"%OUTPUTFOLDER%" "%BUILDFOLDER%\%PYTHONFILENAME%"
