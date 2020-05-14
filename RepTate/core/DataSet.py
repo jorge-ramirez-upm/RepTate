@@ -482,23 +482,36 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         else:
                             y[:,i]+=file.yshift[i]
 
+                fillstylesempty = itertools.cycle(("none", "full", "left", "right", "bottom", "top"))
+                fillstylesfilled = itertools.cycle(("full", "none", "right", "left", "top", "bottom"))
                 for i in range(dt.MAX_NUM_SERIES):
                     if (i < view.n and file.active):
                         dt.series[nx][i].set_data(x[:, i], y[:, i])
                         dt.series[nx][i].set_visible(True)
                         dt.series[nx][i].set_marker(marker)
-                        if i == 0:
-                            face = color if filled else 'none'
-                        elif i == 1: # filled and empty symbols
-                            if face == 'none':
-                                face = color
-                            elif face == color:
-                                face = 'none'
+                        
+                        if filled:
+                            fs = next(fillstylesfilled)
+                        else:
+                            fs = next(fillstylesempty)
+                        if fs=='none':
+                            face = 'none'
                         else:
                             face = color
-                            fillstyles=["left", "right", "bottom", "top", "full", "left", "right", "bottom", "top", "full", "left", "right", "bottom", "top"]
-                            fs = fillstyles[i-2]
-                            dt.series[nx][i].set_fillstyle(fs)
+                        dt.series[nx][i].set_fillstyle(fs)
+
+                        # if i == 0:
+                        #     face = color if filled else 'none'
+                        # elif i == 1: # filled and empty symbols
+                        #     if face == 'none':
+                        #         face = color
+                        #     elif face == color:
+                        #         face = 'none'
+                        # else:
+                        #     face = color
+                        #     fillstyles=["left", "right", "bottom", "top", "full", "left", "right", "bottom", "top", "full", "left", "right", "bottom", "top"]
+                        #     fs = fillstyles[i-2]
+                        #     dt.series[nx][i].set_fillstyle(fs)
                         dt.series[nx][i].set_markerfacecolor(face)
                         dt.series[nx][i].set_markeredgecolor(color)
                         dt.series[nx][i].set_markeredgewidth(width)

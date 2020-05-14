@@ -30,9 +30,9 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # -------------------------------------------------------------------------------------------------------- 
-"""Module Reptate
+"""Module UV
 
-Main program that launches the GUI.
+Main program that launches the Universal Viewer of RepTate
 
 """ 
 import os
@@ -44,13 +44,17 @@ import numpy as np
 import logging
 import configparser
 
+from PyQt5.QtWidgets import QApplication, QMessageBox, QShortcut
+from PyQt5.QtGui import QDesktopServices, QIcon, QKeySequence
+from PyQt5.QtCore import QUrl, Qt, QCoreApplication
+from RepTate.core.DataTable import DataTable
+DataTable.MAX_NUM_SERIES=10
 from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversalViewer
-from PyQt5.QtWidgets import QApplication, QMessageBox, QAction, QShortcut
-from PyQt5.QtGui import QDesktopServices, QIcon, QKeySequence
-from PyQt5.QtCore import QUrl, Qt, QCoreApplication
-import RepTate
+
+def main():
+    start_RepTate(sys.argv[1:])
 
 def get_argument_files(finlist):
     """
@@ -193,4 +197,4 @@ def start_RepTate(argv):
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    start_RepTate(sys.argv[1:])
+    main()

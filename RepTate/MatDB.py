@@ -46,8 +46,8 @@ import logging
 from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
-from PyQt5.QtWidgets import QApplication, QMessageBox, QDesktopWidget
-from PyQt5.QtGui import QDesktopServices, QIcon
+from PyQt5.QtWidgets import QApplication, QMessageBox, QDesktopWidget, QShortcut
+from PyQt5.QtGui import QDesktopServices, QIcon, QKeySequence
 from PyQt5.QtCore import QUrl, Qt, QCoreApplication
 
 def main():
@@ -66,9 +66,13 @@ def start_RepTate(argv):
         epilog='(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)')
     parser.add_argument('-d', '--dpi', help='High DPI support on Windows', action='store_true')
     parser.add_argument('-v', '--verbose', help='Write debug information to stdout', action='store_true')
+    parser.add_argument('-V', '--version', help='Print RepTate version and exit', action='store_true')
     parser.add_argument('finlist', nargs='*')
 
     args = parser.parse_args(args=argv) 
+    if args.version:
+        print(QApplicationManager.intro)
+        sys.exit()
 
     if args.verbose:
         loglevel=logging.DEBUG
@@ -93,6 +97,9 @@ def start_RepTate(argv):
     ex.setWindowTitle('RepTate Material''s Database')
     ex.resize(300, 900)
     ex.move(100, 20)
+
+    shortcut = QShortcut(QKeySequence("Ctrl+Q"), ex)
+    shortcut.activated.connect(app.quit)
 
     CmdBase.calcmode = CalcMode.singlethread
 

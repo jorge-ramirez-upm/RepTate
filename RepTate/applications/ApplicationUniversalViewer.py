@@ -67,9 +67,9 @@ class ViewParseExpression(object):
         for i in range(self.n):
             # First we do it with x
             if i<len(self.xexpr):
-                expression = self.xexpr[i]
+                expression = self.xexpr[i].replace('^','**')
             else:
-                expression = self.xexpr[0] # For x, it is not necessary to provide all expressions                
+                expression = self.xexpr[0].replace('^','**') # For x, it is not necessary to provide all expressions                
             # Find FILE PARAMETERS IN THE EXPRESSION
             fparams = re.findall("\[(.*?)\]",expression)
             for fp in fparams:
@@ -99,7 +99,7 @@ class ViewParseExpression(object):
                 self.parent.logger.exception("Error in view (%s) x[%d]"%(self.name, i))
 
             # Now do the same for y
-            expression = self.yexpr[i]
+            expression = self.yexpr[i].replace('^','**')
             # Find FILE PARAMETERS IN THE EXPRESSION
             fparams = re.findall("\[(.*?)\]",expression)
             for fp in fparams:
@@ -180,6 +180,7 @@ class BaseApplicationUniversalViewer:
                 xexpr=self.config.get("view%d"%nv, "xexpr").split(",")
                 yexpr=self.config.get("view%d"%nv, "yexpr").split(",")
                 name, x_label, y_label = self.config.get("view%d"%nv, "name").split(",")
+                x_units, y_units = self.config.get("view%d"%nv, "units", fallback="-,-").split(",")
                 n = self.config.getint("view%d"%nv, "n")
                 self.viewclasses[name] = ViewParseExpression(name, n, col_names=ftype.col_names, xexpr=xexpr, yexpr=yexpr, parent=self)
                 log_x = self.config.getboolean("view%d"%nv, "logx")
@@ -189,8 +190,9 @@ class BaseApplicationUniversalViewer:
                     name = name,
                     description = name,
                     x_label = x_label,
-                    x_units = '-',
-                    y_units = '-',
+                    y_label = y_label,
+                    x_units = x_units,
+                    y_units = y_units,
                     log_x = log_x,
                     log_y = log_y,
                     view_proc=self.viewclasses[name].view,
