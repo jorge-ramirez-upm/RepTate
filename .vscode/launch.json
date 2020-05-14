@@ -10,7 +10,8 @@
             "request": "launch",
             "module": "RepTate",
             "console": "integratedTerminal",
-            "args": ["-s","-v", "data/LAOS/SlugSlime-omega03p00-Run31.laos", "-t", "Algebraic Expression"]
+            "args": ["-s","-v", "data/PI_LINEAR/PI*tts"]
+//            "args": ["-s","-v", "data/LAOS/SlugSlime-omega03p00-Run31.laos", "-t", "Algebraic Expression"]
         },
         {
             "name": "RepTateCL",
