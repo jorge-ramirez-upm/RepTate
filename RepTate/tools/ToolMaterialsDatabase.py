@@ -264,6 +264,7 @@ class BaseToolMaterialsDatabase:
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """MaterialsDatabase function that returns the square of the y, according to the view
         """
+        self.calculate_stuff("", file_parameters)
         return x, y
 
     def do_calculate_stuff(self, line=""):
@@ -327,6 +328,26 @@ Example:
             print("Wrong number of parameters.")
             print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
+    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
+        """Calculate the tool for all views - In MatDB, only first view is needed """
+        newxy = []
+        lenx=1e9
+        for i in range(n):
+            self.Qprint('<b>Series %d</b>'%(i+1))
+            xcopy = x[:, i]
+            ycopy = y[:, i]
+            if i==0:
+                xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
+            newxy.append([xcopy,ycopy])
+            lenx=min(lenx, len(xcopy))
+        x = np.resize(x, (lenx,n))
+        y = np.resize(y, (lenx,n))
+        for i in range(n):
+            x[:, i] = np.resize(newxy[i][0], lenx)
+            y[:, i] = np.resize(newxy[i][1], lenx)
+        return x, y
+
+
 class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
     """[summary]
 
@@ -389,9 +410,9 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         #self.parent_application.update_all_ds_plots()
 
     # add widgets specific to the Tool here:
-        self.active = False
+        self.active = True
         self.applytotheory = False
-        self.actionActive.setVisible(False)
+        self.actionActive.setVisible(True)
         self.actionApplyToTheory.setVisible(False)
         self.cbmaterial = QComboBox()
         self.cbmaterial.setToolTip("Choose a Material from the database")
@@ -412,7 +433,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.tb.addWidget(self.cbmaterial)
         connection_id = self.cbmaterial.currentIndexChanged.connect(self.change_material)
 
-        self.actionCalculate = QAction(QIcon(':/Icon8/Images/new_icons/icons8-ok.png'), "Calculate stuff", self)
+        self.actionCalculate = QAction(QIcon(':/Icon8/Images/new_icons/icons8-ok.png'), "Calculate stuff with selected Mw/T", self)
         self.tb.addAction(self.actionCalculate)
         self.actionNew = QAction(QIcon(':/Icon8/Images/new_icons/icons8-add-file.png'), "New Material", self)
         self.tb.addAction(self.actionNew)
@@ -458,8 +479,13 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         self.isofrictional.setCheckable(True)
         self.isofrictional.setChecked(True)
         self.verticalLayout.insertWidget(2, self.tbMwT)
+        connection_id = self.isofrictional.triggered.connect(self.handle_vert_and_iso)
+        connection_id = self.verticalshift.triggered.connect(self.handle_vert_and_iso)
 
         self.change_material()
+
+    def handle_vert_and_iso(self):
+        self.do_plot()
 
     def change_material(self):
         selected_material_name = self.cbmaterial.currentText()
@@ -471,6 +497,7 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         for k in materials_db[dbindex][selected_material_name].data.keys():
             self.set_param_value(k, materials_db[dbindex][selected_material_name].data[k])
         self.update_parameter_table()
+        self.do_plot()
 
     def new_material(self):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
@@ -571,9 +598,15 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             self.cbmaterial.removeItem(self.cbmaterial.currentIndex())
             materials_user_database.pop(selected_material_name)
 
-    def calculate_stuff(self, line=""):
-        Mw = float(self.editMw.text())
-        T = float(self.editT.text())
+    def calculate_stuff(self, line="", file_parameters=[]):
+        if "Mw" in file_parameters:
+            Mw = float(file_parameters["Mw"])
+        else:
+            Mw = float(self.editMw.text())
+        if "T" in file_parameters:
+            T = float(file_parameters["T"])
+        else:
+            T = float(self.editT.text())
         B1 = self.parameters['B1'].value
         B2 = self.parameters['B2'].value
         logalpha = self.parameters['logalpha'].value
@@ -600,24 +633,25 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         else:
             bT = 1
 
-        self.Qprint('<hr><h3>WLF TTS Shift Factors</h3>')
-        # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
-        self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
-        self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
-
-        self.Qprint('<h3>Tube Theory parameters</h3>')
+        tab_data = [['<b>Material &</b>', '<b>Temperature</b>'],]
+        tab_data.append(['<b>Chemistry</b>', self.parameters['long'].value])
+        tab_data.append(['<b>Mw</b>', "%g" % Mw])
+        tab_data.append(['<b>T</b>', "%g" % T])
+        tab_data.append (['<b>WLF Shift</b>', '<b>Factors</b>'])
+        tab_data.append(['<b>C1</b>', "%g" % (B1 / (B2 + T))])
+        tab_data.append(['<b>C2</b>', "%g" % (B2 + T)])
+        tab_data.append(['<b>Polymer &</b>', '<b>Tube dynamics</b>'])
         Ge /= bT
         tau_e /= aT
-        self.Qprint("<b>tau_e</b> = %g" % tau_e)
-        self.Qprint("<b>Ge</b> = %g<br>" % Ge)
-
-        self.Qprint('<h3>Other Results</h3>')
+        tab_data.append(['<b>tau_e</b>', "%g" % tau_e])
+        tab_data.append(['<b>Ge</b>', "%g" % Ge])
         CC1 = 1.69
         CC2 = 4.17
         CC3 = -1.55
         Z = Mw / Me
         tR = tau_e * Z*Z
         tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
-        self.Qprint("<b>Z</b> = %g" % Z)
-        self.Qprint("<b>tau_R</b> = %g" % tR)
-        self.Qprint("<b>tau_D</b> = %g<br>" % tD)
+        tab_data.append(['<b>Z</b>', "%g" % Z])
+        tab_data.append(['<b>tau_R</b>', "%g" % tR])
+        tab_data.append(['<b>tau_D</b>', "%g" % tD])
+        self.Qprint(tab_data)

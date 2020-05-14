@@ -259,7 +259,7 @@ class Tool(CmdBase):
             for i in range(len(self.citations)):
                 self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
 
-    def do_plot(self, line):
+    def do_plot(self, line=""):
         """Update plot"""
         self.parent_application.update_all_ds_plots()
 
