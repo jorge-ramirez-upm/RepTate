@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Theories &#8212; RepTate v1.0.0 2020-05-11 documentation</title>
+    <title>Theories &#8212; RepTate v1.0.0 2020-05-14 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -107,22 +107,65 @@
 <p>Module TheoryBasic</p>
 <p>Module that defines the basic theories that should be available for all Applications.</p>
 <dl class="class">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">BaseTheoryAlgebraicExpression</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryAlgebraicExpression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.algebraicexpression">
+<code class="sig-name descname">algebraicexpression</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryAlgebraicExpression.algebraicexpression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.algebraicexpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Actual function.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[y(x) = f({A_i}, x)\]</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.do_error">
+<code class="sig-name descname">do_error</code><span class="sig-paren">(</span><em class="sig-param">line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryAlgebraicExpression.do_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.do_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.set_param_value">
+<code class="sig-name descname">set_param_value</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryAlgebraicExpression.set_param_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.set_param_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change a parameter value, in particular <em>n</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.single_file">
+<code class="sig-name descname">single_file</code><em class="property"> = False</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.single_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.thname">
+<code class="sig-name descname">thname</code><em class="property"> = 'Algebraic Expression'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression.thname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryExponential">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">BaseTheoryExponential</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryExponential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit an exponential decay to the data</p>
-<p>[description]</p>
 <dl class="method">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryExponential.exponential">
 <code class="sig-name descname">exponential</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryExponential.exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryExponential.exponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Keyword Arguments:</dt><dd><ul class="simple">
-<li><p>f {[type]} – [description] (default: {None})</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Actual function
+* <strong>Function</strong></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[y(x) = a \exp(-x/T)\]</div>
+</div></blockquote>
 </dd></dl>
 
 <dl class="attribute">
@@ -156,27 +199,13 @@
 <code class="sig-name descname">polynomial</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryPolynomial.polynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryPolynomial.polynomial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actual polynomial function.</p>
 <div class="math notranslate nohighlight">
-\[(a + b)^2  =  (a + b)(a + b) =  a^2 + 2ab + b^2\]</div>
-<dl class="simple">
-<dt>Keyword Arguments:</dt><dd><ul class="simple">
-<li><p>f {[type]} – [description] (default: {None})</p></li>
-</ul>
-</dd>
-</dl>
+\[y(x) = \sum_{i=0}^n A_i x^i\]</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryPolynomial.set_param_value">
 <code class="sig-name descname">set_param_value</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryPolynomial.set_param_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryPolynomial.set_param_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>name {[type]} – [description]</p></li>
-<li><p>value {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Change a parameter value, in particular <em>n</em></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -196,7 +225,6 @@
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">BaseTheoryPowerLaw</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit a power law to the data</p>
-<p>[description]</p>
 <dl class="attribute">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryPowerLaw.html_help_file">
 <code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryPowerLaw.html_help_file" title="Permalink to this definition">¶</a></dt>
@@ -205,14 +233,15 @@
 <dl class="method">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryPowerLaw.powerlaw">
 <code class="sig-name descname">powerlaw</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryPowerLaw.powerlaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryPowerLaw.powerlaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Keyword Arguments:</dt><dd><ul class="simple">
-<li><p>f {[type]} – [description] (default: {None})</p></li>
-</ul>
+<dd><p>Actual function</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[y(x) = a x^b\]</div>
 </dd>
 </dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="attribute">
@@ -232,7 +261,6 @@
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">BaseTheoryTwoExponentials</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fit 2 exponentials decay to the data</p>
-<p>[description]</p>
 <dl class="attribute">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials.html_help_file">
 <code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials.html_help_file" title="Permalink to this definition">¶</a></dt>
@@ -251,74 +279,89 @@
 <dl class="method">
 <dt id="RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials.two_exponentials">
 <code class="sig-name descname">two_exponentials</code><span class="sig-paren">(</span><em class="sig-param">f=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#BaseTheoryTwoExponentials.two_exponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials.two_exponentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Keyword Arguments:</dt><dd><ul class="simple">
-<li><p>f {[type]} – [description] (default: {None})</p></li>
-</ul>
+<dd><p>Actual function</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[y(x) = a_1 \exp(x/T_1) + a_2 \exp(-x/T_2)\]</div>
 </dd>
 </dl>
+</li>
+</ul>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="RepTate.theories.TheoryBasic.CLTheoryAlgebraicExpression">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">CLTheoryAlgebraicExpression</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#CLTheoryAlgebraicExpression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.CLTheoryAlgebraicExpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression" title="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
+<p>CL Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.CLTheoryExponential">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">CLTheoryExponential</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#CLTheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.CLTheoryExponential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryExponential" title="RepTate.theories.TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>CL Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.CLTheoryPolynomial">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">CLTheoryPolynomial</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#CLTheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.CLTheoryPolynomial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryPolynomial" title="RepTate.theories.TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>CL Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.CLTheoryPowerLaw">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">CLTheoryPowerLaw</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#CLTheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.CLTheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryPowerLaw" title="RepTate.theories.TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>CL Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.CLTheoryTwoExponentials">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">CLTheoryTwoExponentials</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#CLTheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.CLTheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials" title="RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">GUITheoryAlgebraicExpression</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryAlgebraicExpression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression" title="RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryAlgebraicExpression</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTheory.QTheory" title="RepTate.gui.QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTheory.QTheory</span></code></a></p>
+<p>GUI Version</p>
+<dl class="method">
+<dt id="RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression.handle_expressionChanged">
+<code class="sig-name descname">handle_expressionChanged</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryAlgebraicExpression.handle_expressionChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression.handle_expressionChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a change in the algebraic expression</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression.handle_spinboxValueChanged">
+<code class="sig-name descname">handle_spinboxValueChanged</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryAlgebraicExpression.handle_spinboxValueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryAlgebraicExpression.handle_spinboxValueChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a change of the parameter ‘n’</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.GUITheoryExponential">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">GUITheoryExponential</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryExponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryExponential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryExponential" title="RepTate.theories.TheoryBasic.BaseTheoryExponential"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryExponential</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTheory.QTheory" title="RepTate.gui.QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTheory.QTheory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>GUI Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.GUITheoryPolynomial">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">GUITheoryPolynomial</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryPolynomial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryPolynomial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryPolynomial" title="RepTate.theories.TheoryBasic.BaseTheoryPolynomial"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryPolynomial</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTheory.QTheory" title="RepTate.gui.QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTheory.QTheory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>GUI Version</p>
 <dl class="method">
 <dt id="RepTate.theories.TheoryBasic.GUITheoryPolynomial.handle_spinboxValueChanged">
 <code class="sig-name descname">handle_spinboxValueChanged</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryPolynomial.handle_spinboxValueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryPolynomial.handle_spinboxValueChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle a change of the parameter ‘nmode’</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>value {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -327,16 +370,49 @@
 <dt id="RepTate.theories.TheoryBasic.GUITheoryPowerLaw">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">GUITheoryPowerLaw</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryPowerLaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryPowerLaw" title="RepTate.theories.TheoryBasic.BaseTheoryPowerLaw"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryPowerLaw</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTheory.QTheory" title="RepTate.gui.QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTheory.QTheory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>GUI Version</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="RepTate.theories.TheoryBasic.GUITheoryTwoExponentials">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">GUITheoryTwoExponentials</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#GUITheoryTwoExponentials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.GUITheoryTwoExponentials" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials" title="RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.theories.TheoryBasic.BaseTheoryTwoExponentials</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTheory.QTheory" title="RepTate.gui.QTheory.QTheory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTheory.QTheory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
+<p>GUI Version</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="RepTate.theories.TheoryBasic.TheoryAlgebraicExpression">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryBasic.</code><code class="sig-name descname">TheoryAlgebraicExpression</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/theories/TheoryBasic.html#TheoryAlgebraicExpression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryBasic.TheoryAlgebraicExpression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Fit a user algebraic expression with <span class="math notranslate nohighlight">\(n\)</span> parameters.</p>
+<p>The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, <a href="#id1"><span class="problematic" id="id2">round_</span></a>, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt</p>
+<p>It is the responsability of the user to input functions that make mathematical sense.</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[y(x) = f({A_i}, x, F_{params})\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: number of parameters.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_i\)</span>: coefficeints of the algebraic expression</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="attribute">
+<dt id="RepTate.theories.TheoryBasic.TheoryAlgebraicExpression.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Fit an algebraic expression with n parameters'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.TheoryAlgebraicExpression.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="RepTate.theories.TheoryBasic.TheoryAlgebraicExpression.thname">
+<code class="sig-name descname">thname</code><em class="property"> = 'Algebraic Expression'</em><a class="headerlink" href="#RepTate.theories.TheoryBasic.TheoryAlgebraicExpression.thname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -2056,7 +2132,7 @@ T_g &amp;= &amp;T_g^\infty - \frac{C_{T_g}}{M_w}
         <li class="right" >
           <a href="CodeApplications.html" title="Applications"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>

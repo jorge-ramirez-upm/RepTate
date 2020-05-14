@@ -46,6 +46,7 @@ import logging
 from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
+from RepTate.applications.ApplicationCreep import ApplicationCreep
 from PyQt5.QtWidgets import QApplication, QMessageBox, QDesktopWidget, QShortcut
 from PyQt5.QtGui import QDesktopServices, QIcon, QKeySequence
 from PyQt5.QtCore import QUrl, Qt, QCoreApplication
@@ -92,7 +93,8 @@ def start_RepTate(argv):
     
     CmdBase.mode = CmdMode.GUI
     tmpex = QApplicationManager(loglevel=loglevel)
-    ex = ToolMaterialsDatabase("MatDB", tmpex)
+    tmpapp = ApplicationCreep("tmpapp", tmpex)
+    ex = ToolMaterialsDatabase("MatDB", tmpapp)
     ex.setWindowIcon(QIcon('RepTate/gui/Images/DataTable3D.ico'))
     ex.setWindowTitle('RepTate Material''s Database')
     ex.resize(300, 900)

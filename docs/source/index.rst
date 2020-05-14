@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. title:: RepTate documentation
+
 .. |img1| image:: images/RepTate_LVE.png
     :width: 45%
 
@@ -12,7 +14,7 @@
 RepTate documentation
 =====================
 
-RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experiment)
+**RepTate** (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experiment)
 is a free and open source software package for viewing, exchanging and analysing experimental data.
 It features a command-line interface and a graphical user interface.
 

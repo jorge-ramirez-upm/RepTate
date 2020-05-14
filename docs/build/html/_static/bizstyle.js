@@ -36,6 +36,6 @@ $(window).resize(function(){
         $("li.nav-item-0 a").text("Top");
     }
     else {
-        $("li.nav-item-0 a").text("RepTate v1.0.0 2020-05-11 documentation");
+        $("li.nav-item-0 a").text("RepTate v1.0.0 2020-05-14 documentation");
     }
 });

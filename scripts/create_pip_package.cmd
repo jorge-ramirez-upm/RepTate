@@ -11,3 +11,9 @@ python setup.py bdist_wheel
 
 REM upload to PyPi
 python -m twine upload dist/*.whl
+
+REM Create conda stuff (to be done...)
+REM conda install conda-build
+REM conda update conda
+REM conda update conda-build
+REM conda skeleton pypi click

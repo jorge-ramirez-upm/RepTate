@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Tutorial G(t) Application &#8212; RepTate v1.0.0 2020-05-11 documentation</title>
+    <title>Tutorial G(t) Application &#8212; RepTate v1.0.0 2020-05-14 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="tutorial.html" title="G(t): Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../Gt.html" > G(t): Stress Relaxation</a> &#187;</li>
@@ -123,7 +123,7 @@
 </div></blockquote>
 <ol class="arabic">
 <li><p>Select a theory, e.g. “Maxwell modes”, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it (calculation is done with default parameter values). Press “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
-<a class="reference internal image-reference" href="../../../../_images/new_theory1.png"><img alt="New Maxwell modes theory" class="align-center" src="../../../../_images/new_theory1.png" style="width: 75%;" /></a>
+<a class="reference internal image-reference" href="../../../../_images/new_theory.png"><img alt="New Maxwell modes theory" class="align-center" src="../../../../_images/new_theory.png" style="width: 75%;" /></a>
 </li>
 <li><p>The MD data has too many oscillations at early time, so we want to avoid fitting data for t&lt;1e-4. First, we are going to restrict the xrange of the data that we are going to fit.</p>
 <blockquote>
@@ -159,7 +159,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>If we want to save the complex modulus G*(w), we can click the <a class="reference internal" href="../../../../_images/icons8-saveView1.png"><img alt="view_save" class="align-bottom" src="../../../../_images/icons8-saveView1.png" style="width: 20pt; height: 20pt;" /></a> button. This option will create a text file with all the <strong>experimental data</strong> <em>as shown</em> in the current view or set of views. In the example shown above, we would get a file with contents similar to what is shown below. The file has 5 columns (the first two correspond to the first view and the last three columns correspond to the second view, the complex modulus calculated with i-Rheo):</p>
+<li><p>If we want to save the complex modulus G*(w), we can click the <a class="reference internal" href="../../../../_images/icons8-saveView.png"><img alt="view_save" class="align-bottom" src="../../../../_images/icons8-saveView.png" style="width: 20pt; height: 20pt;" /></a> button. This option will create a text file with all the <strong>experimental data</strong> <em>as shown</em> in the current view or set of views. In the example shown above, we would get a file with contents similar to what is shown below. The file has 5 columns (the first two correspond to the first view and the last three columns correspond to the second view, the complex modulus calculated with i-Rheo):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#view(s)=[log(G(t)), i-Rheo G&#39;,G&#39;&#39;, i-Rheo-Over G&#39;,G&#39;&#39;, Schwarzl G&#39;,G&#39;&#39;];ncontri=1.0;Mw=224.0;gamma=1.0;
 log(t)                 log(G)          $\omega$        G&#39;              G&#39;&#39;
 -inf                   1.01077051e+01  2.38418806e-02  3.12414178e+05  5.86601932e+05
@@ -204,7 +204,7 @@ log(t)                 log(G)          $\omega$        G&#39;              G&#39
         <li class="right" >
           <a href="tutorial.html" title="G(t): Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="../Gt.html" > G(t): Stress Relaxation</a> &#187;</li>

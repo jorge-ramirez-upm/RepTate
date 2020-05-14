@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Installation &#8212; RepTate v1.0.0 2020-05-11 documentation</title>
+    <title>Installation &#8212; RepTate v1.0.0 2020-05-14 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="features.html" title="Features"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -55,6 +55,7 @@
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#the-shortcut">The “shortcut”</a></li>
+<li><a class="reference internal" href="#the-intermediate-route">The “intermediate” route</a></li>
 <li><a class="reference internal" href="#the-scenic-route">The “scenic route”</a><ul>
 <li><a class="reference internal" href="#executive-summary">Executive summary</a></li>
 <li><a class="reference internal" href="#detailed-explanations">Detailed explanations</a><ul>
@@ -105,17 +106,17 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>RepTate can be installed in two ways:</p>
+<p>RepTate can be installed in three ways:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>the “shortcut”, allows you to run RepTate in a couple of clicks;</p></li>
+<li><p>the “intermediate”, is almost as quick and allows you to run a well tested version of RepTate.</p></li>
 <li><p>the “scenic route”, requires more steps and the use of the command-line interface.</p></li>
 </ol>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>RepTate is continuously updated by the developers. Option-2 will get you the latest version,
-while Option-1 is a “snapshot” in time of the software.</p>
+<p>RepTate is continuously updated by the developers and contributors . Option-3 will get you the latest version, while Options 1 &amp; 2 provide a well tested “snapshot” of the software.</p>
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
@@ -126,7 +127,7 @@ the powerful <code class="docutils literal notranslate"><span class="pre">git</s
 <div class="section" id="the-shortcut">
 <h2>The “shortcut”<a class="headerlink" href="#the-shortcut" title="Permalink to this headline">¶</a></h2>
 <p>Binary packages (containing all the needed files and libraries,
-as well as a Python interpreter), for the latest version (v1.0.0 2020-05-11) can be downloaded here:</p>
+as well as a Python interpreter), for the latest version (v1.0.0 2020-05-14) can be downloaded here:</p>
 <dl class="simple">
 <dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EVPmrLpqiwJJgYJVCjlVHmYB_huq8_D9UtHIcZc-zDC6aw?download=1">RepTate for Windows (Windows 7 64-bit or later) PORTABLE</a></dt><dd><p>Unzip and uncompress the dowloaded file and look for the RepTate executable <code class="docutils literal notranslate"><span class="pre">RepTate.exe</span></code>.</p>
 </dd>
@@ -135,8 +136,33 @@ as well as a Python interpreter), for the latest version (v1.0.0 2020-05-11) can
 <dt><a class="reference external" href="https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1">RepTate for Mac (OS X 10.11 or later)</a></dt><dd><p>Drag-and-drop the RepTate application in your Applications folder.</p>
 </dd>
 </dl>
-<p>Linux users are supposed to follow the instruction below.</p>
+<p>Linux users are expected to follow the instruction below.</p>
 <p>Previous versions of the code can be downloaded from the following <a class="reference external" href="https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz">folder</a>.</p>
+</div>
+<div class="section" id="the-intermediate-route">
+<h2>The “intermediate” route<a class="headerlink" href="#the-intermediate-route" title="Permalink to this headline">¶</a></h2>
+<p>This option requires the installation of Python 3 and the RepTate package, from the command line.</p>
+<ol class="arabic">
+<li><p>Install Python 3.6 or later. Possible alternatives are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Go to the official <a class="reference external" href="https://www.python.org/ftp/python/3.7.4/">Python</a> site (the example points to the folder that contains the installation packages for version 3.7.4). Download the package that corresponds to your system.</p></li>
+<li><p>On Windows, a good alternative is <a class="reference external" href="https://winpython.github.io/">WinPython</a>. The packages <em>Zero</em> and <em>dot</em> are rather compact and can be installed inside a folder, without affecting the rest of the operating system.</p></li>
+<li><p>Install <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Open a command prompt from which you can access python (different distributions provide different ways of doing this) and install RepTate via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">RepTate</span></code>. The pip program (<em>package installer for Python</em>) will take care of installing all the necessary packages to get RepTate running.</p></li>
+<li><p>Try launching RepTate application. There are two options for this:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>From the python command prompt, run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">RepTate</span></code>.</p></li>
+<li><p>Search on the <code class="docutils literal notranslate"><span class="pre">bin</span></code> or <code class="docutils literal notranslate"><span class="pre">scripts</span></code> folder of your Python installation for an executable file named <code class="docutils literal notranslate"><span class="pre">RepTate</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>The “intermediate” route is easy and convenient. However, it only allows you to run well tested releases of RepTate. If you want to inspect the latest version of the code, we recommend you to use the “scenic” route, explained below.</p>
 </div>
 <div class="section" id="the-scenic-route">
 <h2>The “scenic route”<a class="headerlink" href="#the-scenic-route" title="Permalink to this headline">¶</a></h2>
@@ -145,10 +171,10 @@ and the “cloning” of RepTate’s repository.</p>
 <div class="section" id="executive-summary">
 <h3>Executive summary<a class="headerlink" href="#executive-summary" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li><p>Install Python 3.6 or later via <a class="reference external" href="https://conda.io/miniconda.html">Minconda</a> (or your favourite method)</p></li>
-<li><p>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> (or via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> if you are using a different Python distribution).</p></li>
+<li><p>Install Python 3.6 or later. Use the same instructions as above.</p></li>
 <li><p>Install Git (version control system)  via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">git</span></code> (or a native implementation of git for your operating system).</p></li>
 <li><p>Clone RepTate’s repository via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/jorge-ramirez-upm/RepTate.git</span></code></p></li>
+<li><p>Install RepTate’s package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> (or via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> if you are using a different Python distribution). Alternatively, you can go to the RepTate code tree and run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code>. This will take care of installing all the packages that RepTate needs.</p></li>
 <li><p>Try launching RepTate application: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then again <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">RepTate</span></code> then <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">RepTate.py</span></code></p></li>
 <li><p>From time to time, check for updates via <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></p></li>
 </ol>
@@ -203,6 +229,7 @@ This will open up a window where you can type commands to install the extra pack
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">readline</span>
 </pre></div>
 </div>
+<p>Alternatively, you can change into the RepTate code folder and run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code>. The file <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> contains a list of all the python packages and libraries that RepTate needs in order to run properly.</p>
 <p>If a package is missing and you try to run RepTate, Python will print an
 information message in the terminal telling you what went missing.
 For example, something like:</p>
@@ -292,7 +319,7 @@ using the contact details given on the <a class="reference external" href="http:
         <li class="right" >
           <a href="features.html" title="Features"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-11 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-14 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

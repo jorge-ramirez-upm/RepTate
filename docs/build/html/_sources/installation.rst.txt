@@ -2,14 +2,14 @@
 Installation
 ============
 
-RepTate can be installed in two ways: 
+RepTate can be installed in three ways: 
 
     #. the "shortcut", allows you to run RepTate in a couple of clicks;
+    #. the "intermediate", is almost as quick and allows you to run a well tested version of RepTate.
     #. the "scenic route", requires more steps and the use of the command-line interface. 
 
 .. note::
-    RepTate is continuously updated by the developers. Option-2 will get you the latest version, 
-    while Option-1 is a "snapshot" in time of the software. 
+    RepTate is continuously updated by the developers and contributors . Option-3 will get you the latest version, while Options 1 & 2 provide a well tested "snapshot" of the software. 
 
 .. hint::
     Ultimately, the "scenic route" is faster than the "shortcut":
@@ -31,10 +31,33 @@ as well as a Python interpreter), for the latest version (|release|) can be down
 `RepTate for Mac (OS X 10.11 or later) <https://upm365-my.sharepoint.com/:u:/g/personal/jorge_ramirez_upm_es/EZrT61uCzZdKsXRe167rwrkB519j1aSaAcRh8cGb4_zrMw?download=1>`_ 
     Drag-and-drop the RepTate application in your Applications folder. 
     
-Linux users are supposed to follow the instruction below.
+Linux users are expected to follow the instruction below.
 
 Previous versions of the code can be downloaded from the following `folder 
 <https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz>`_.
+
+The "intermediate" route
+======================
+
+This option requires the installation of Python 3 and the RepTate package, from the command line.
+
+#. Install Python 3.6 or later. Possible alternatives are:
+
+    - Go to the official `Python <https://www.python.org/ftp/python/3.7.4/>`_ site (the example points to the folder that contains the installation packages for version 3.7.4). Download the package that corresponds to your system.
+
+    - On Windows, a good alternative is `WinPython <https://winpython.github.io/>`_. The packages *Zero* and *dot* are rather compact and can be installed inside a folder, without affecting the rest of the operating system. 
+
+    - Install `Minconda <https://conda.io/miniconda.html>`_ 
+
+#. Open a command prompt from which you can access python (different distributions provide different ways of doing this) and install RepTate via ``pip install RepTate``. The pip program (*package installer for Python*) will take care of installing all the necessary packages to get RepTate running.
+
+#. Try launching RepTate application. There are two options for this: 
+
+    - From the python command prompt, run ``python -m RepTate``.
+
+    - Search on the ``bin`` or ``scripts`` folder of your Python installation for an executable file named ``RepTate``. 
+
+The "intermediate" route is easy and convenient. However, it only allows you to run well tested releases of RepTate. If you want to inspect the latest version of the code, we recommend you to use the "scenic" route, explained below.
 
 The "scenic route"
 ==================
@@ -45,10 +68,10 @@ and the "cloning" of RepTate's repository.
 Executive summary
 -----------------
 
-#. Install Python 3.6 or later via `Minconda <https://conda.io/miniconda.html>`_ (or your favourite method)
-#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution).
+#. Install Python 3.6 or later. Use the same instructions as above.
 #. Install Git (version control system)  via ``conda install git`` (or a native implementation of git for your operating system).
 #. Clone RepTate's repository via ``git clone https://github.com/jorge-ramirez-upm/RepTate.git``
+#. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution). Alternatively, you can go to the RepTate code tree and run ``pip install -r requirements.txt``. This will take care of installing all the packages that RepTate needs.
 #. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
 #. From time to time, check for updates via ``git pull``
 
@@ -108,6 +131,8 @@ Additionally, on Windows::
 On  Mac or Linux::
 
     conda install readline
+
+Alternatively, you can change into the RepTate code folder and run ``pip install -r requirements.txt``. The file ``requirements.txt`` contains a list of all the python packages and libraries that RepTate needs in order to run properly.
 
 If a package is missing and you try to run RepTate, Python will print an 
 information message in the terminal telling you what went missing. 
