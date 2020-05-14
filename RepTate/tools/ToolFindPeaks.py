@@ -123,7 +123,7 @@ class BaseToolFindPeaks:
         """This is called when the Tool tab is closed"""
         self.clean_graphic_stuff()
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
         minpeaks = self.parameters["minpeaks"].value

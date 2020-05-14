@@ -172,7 +172,7 @@ class Tool(CmdBase):
         """
         pass
 
-    def calculate_all(self, n, x, y, ax=None, color=None):
+    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
         """Calculate the tool for all views"""
         newxy = []
         lenx=1e9
@@ -180,7 +180,7 @@ class Tool(CmdBase):
             self.Qprint('<b>Series %d</b>'%(i+1))
             xcopy = x[:, i]
             ycopy = y[:, i]
-            xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color)
+            xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
             newxy.append([xcopy,ycopy])
             lenx=min(lenx, len(xcopy))
         x = np.resize(x, (lenx,n))
@@ -190,7 +190,7 @@ class Tool(CmdBase):
             y[:, i] = np.resize(newxy[i][1], lenx)
         return x, y
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         return x, y
 
     def clean_graphic_stuff(self):

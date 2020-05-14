@@ -86,7 +86,7 @@ class BaseToolSmooth:
             description='Order of smoothing polynomial (must be smaller than window)',
             type=ParameterType.integer)
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Smooth the x, y data
         """
         window = self.parameters["window"].value

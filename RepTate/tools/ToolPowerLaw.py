@@ -80,7 +80,7 @@ class BaseToolPowerLaw:
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Returns y divided by x^n, according to the view
         """
         n = self.parameters["n"].value

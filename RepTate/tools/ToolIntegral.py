@@ -96,7 +96,7 @@ class BaseToolIntegral:
             # type=ParameterType.real,
             # opt_type=OptType.const)
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Integral function that returns the square of the y, according to the view"""
         xunique, indunique = np.unique(x, return_index=True)
         num_rows = len(xunique)

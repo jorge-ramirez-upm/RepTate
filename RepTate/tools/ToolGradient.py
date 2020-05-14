@@ -93,7 +93,7 @@ class BaseToolGradient:
             # type=ParameterType.real,
             # opt_type=OptType.const)
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         try:
             y2 = np.gradient(y,x)
             return x, y2

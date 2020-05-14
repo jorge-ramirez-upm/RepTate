@@ -98,7 +98,7 @@ class BaseToolTemplate:
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Template function that returns the square of the y, according to the view
         """
         return x, y*y

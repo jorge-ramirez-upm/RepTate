@@ -105,7 +105,7 @@ class BaseToolBounds:
             description='Maximum y',
             type=ParameterType.real)
 
-    def calculate(self, x, y, ax=None, color=None):
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Bounds function that returns the square of the y, according to the view
         """
         xmin = self.parameters["xmin"].value

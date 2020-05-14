@@ -32,11 +32,12 @@
 # --------------------------------------------------------------------------------------------------------
 """Module ToolEvaluate
 
-Evaluate expression
+Evaluate algebraic expressions in the current view
 """
 import traceback
 from numpy import *
 import numpy as np
+import re
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Tool import Tool
@@ -44,8 +45,7 @@ from RepTate.gui.QTool import QTool
 from RepTate.core.DataTable import DataTable
 
 class ToolEvaluate(CmdBase):
-    """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser.
-    """
+    """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser."""
     toolname = 'Eval Exp'
     description = 'Evaluate Expression Tool'
     citations = []
@@ -62,14 +62,7 @@ class BaseToolEvaluate:
     citations = ToolEvaluate.citations
 
     def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters['x'] = Parameter(
             name='x',
@@ -87,13 +80,33 @@ class BaseToolEvaluate:
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
 
-    def calculate(self, x, y, ax=None, color=None):
-        """Evaluate function that returns the square of the y, according to the view
-        """
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        """Evaluate function that returns the square of the y, according to the view"""
         xexpr = self.parameters["x"].value
         yexpr = self.parameters["y"].value
         self.safe_dict['x']=x
         self.safe_dict['y']=y
+
+        # Find FILE PARAMETERS IN THE EXPRESSION
+        fparams = re.findall("\[(.*?)\]",xexpr)
+        for fp in fparams:
+            if fp in file_parameters:
+                self.safe_dict[fp]=float(file_parameters[fp])
+            else:
+                self.logger.warning("File parameter not found. Review your Tool expression for x")
+                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for x")
+                self.safe_dict[fp]=0.0
+        xexpr = xexpr.replace("[","").replace("]","")
+
+        fparams = re.findall("\[(.*?)\]",yexpr)
+        for fp in fparams:
+            if fp in file_parameters:
+                self.safe_dict[fp]=float(file_parameters[fp])
+            else:
+                self.logger.warning("File parameter not found. Review your Tool expression for y")
+                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for y")
+                self.safe_dict[fp]=0.0
+        yexpr = yexpr.replace("[","").replace("]","")
 
         try:
             x2 = eval(xexpr, {"__builtins__":None}, self.safe_dict)

@@ -468,7 +468,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 for to in self.parent_application.tools:
                     if file.active and to.active:
                         to.Qprint("<h3>"+file.file_name_short+"</h3>")
-                        x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
+                        x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color, file.file_parameters)
 
                 # Apply current shifts to data
                 for i in range(view.n):
@@ -552,7 +552,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                     for to in self.parent_application.tools:
                         if (file.active and to.active and to.applytotheory):
                             to.Qprint("* <i>"+th.name+"</i>")
-                            x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color)
+                            x, y = to.calculate_all(view.n, x, y, self.parent_application.axarr[nx], color, file.file_parameters)
 
                     for i in range(tt.MAX_NUM_SERIES):
                         if (i < view.n and file.active and th.active):
