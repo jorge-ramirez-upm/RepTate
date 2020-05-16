@@ -37,7 +37,7 @@ Previous versions of the code can be downloaded from the following `folder
 <https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz>`_.
 
 The "intermediate" route
-======================
+========================
 
 This option requires the installation of Python 3 and the RepTate package, from the command line.
 

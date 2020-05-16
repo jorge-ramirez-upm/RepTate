@@ -14,3 +14,4 @@ User Manual
    :maxdepth: 1
 
    All_Theories/All_Theories
+   Applications/All_Tutorials/All_Tutorials

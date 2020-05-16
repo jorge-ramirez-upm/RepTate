@@ -2,21 +2,21 @@
 
 <!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Core classes (Graphical User Interface) &#8212; RepTate v1.0.0 2020-05-15 documentation</title>
+    <title>Core classes (Graphical User Interface) &#8212; RepTate v1.0.0 2020-05-16 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/bizstyle.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/bizstyle.js"></script>
     <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -25,7 +25,7 @@
     <link rel="prev" title="Core classes (Command Line)" href="CodeCoreCL.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-15 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" accesskey="U">Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
@@ -86,7 +86,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -104,279 +104,241 @@
 <p>Module QApplicationManager</p>
 <p>Module for the main Graphical User Interface of RepTate. It is the GUI counterpart of
 ApplicationManager.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">loglevel=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationManager.</code><code class="sig-name descname">QApplicationManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">loglevel</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.ApplicationManager.ApplicationManager" title="RepTate.core.ApplicationManager.ApplicationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.ApplicationManager.ApplicationManager</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_ReptateMainWindow</span></code></p>
 <p>Main Reptate window and application manager</p>
-<p>[description]</p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.Qopen_app">
-<code class="sig-name descname">Qopen_app</code><span class="sig-paren">(</span><em class="sig-param">app_name</em>, <em class="sig-param">icon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.Qopen_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.Qopen_app" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>app_name {[type]} – [description]</p></li>
-<li><p>icon {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">Qopen_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">icon</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.Qopen_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.Qopen_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open app</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.closeEvent">
-<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.closeEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.closeEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask if we want to save project before closing RepTate (uncomment the rest)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.close_app_tab">
-<code class="sig-name descname">close_app_tab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.close_app_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.close_app_tab" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">close_app_tab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.close_app_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.close_app_tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close an app</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.copyLogText">
 <code class="sig-name descname">copyLogText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.copyLogText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.copyLogText" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_about_matplotlib">
 <code class="sig-name descname">handle_about_matplotlib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_about_matplotlib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_about_matplotlib" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show matplotlib web site</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_about_numpy">
 <code class="sig-name descname">handle_about_numpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_about_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_about_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show numpy web site</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_about_scipy">
 <code class="sig-name descname">handle_about_scipy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_about_scipy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_about_scipy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show scipy web site</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_actionShow_offline_help">
 <code class="sig-name descname">handle_actionShow_offline_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_actionShow_offline_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_actionShow_offline_help" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_app_coming_soon">
-<code class="sig-name descname">handle_app_coming_soon</code><span class="sig-paren">(</span><em class="sig-param">appname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_app_coming_soon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_app_coming_soon" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_app_coming_soon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">appname</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_app_coming_soon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_app_coming_soon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show message</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_check_RepTate_version">
 <code class="sig-name descname">handle_check_RepTate_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_check_RepTate_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_check_RepTate_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query Github for the latest RepTate release</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_cite_RepTate">
 <code class="sig-name descname">handle_cite_RepTate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_cite_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_cite_RepTate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visit the web site of the RepTatepaper</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_doubleClickTab">
-<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit Application name, tab only, the dictinary key remains unchanged</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged">
-<code class="sig-name descname">handle_loggerVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param">visible</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_loggerVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_loggerVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">visible</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_loggerVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_loggerVisibilityChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle the hide/show event of the logger window</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_new_app">
-<code class="sig-name descname">handle_new_app</code><span class="sig-paren">(</span><em class="sig-param">app_name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_new_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_new_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_new_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_new_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_new_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a new application window from name</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_show_app_help">
 <code class="sig-name descname">handle_show_app_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_show_app_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_show_app_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate current application (if any) manual, or all applications</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_show_reptate_help">
 <code class="sig-name descname">handle_show_reptate_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_show_reptate_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_show_reptate_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate documentation</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.handle_show_th_help">
 <code class="sig-name descname">handle_show_th_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.handle_show_th_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.handle_show_th_help" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show RepTate current theory (if any) manual, or all theories</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.html_help_file">
 <code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/index.html'</em><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.html_help_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.launch_open_dialog">
 <code class="sig-name descname">launch_open_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.launch_open_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.launch_open_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get filename of RepTate project to open</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.launch_save_dialog">
 <code class="sig-name descname">launch_save_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.launch_save_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.launch_save_dialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get filename of RepTate project to save</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.list_theories_Maxwell">
-<code class="sig-name descname">list_theories_Maxwell</code><span class="sig-paren">(</span><em class="sig-param">th_exclude=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.list_theories_Maxwell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.list_theories_Maxwell" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_theories_Maxwell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">th_exclude</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.list_theories_Maxwell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.list_theories_Maxwell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Redefinition for the GUI mode that lists the tab names.
 List the theories in the current RepTate instance that provide and need
 Maxwell modes</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logCritical">
 <code class="sig-name descname">logCritical</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logCritical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logCritical" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logDebug">
 <code class="sig-name descname">logDebug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logDebug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logDebug" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logError">
 <code class="sig-name descname">logError</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logError" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logInfo">
 <code class="sig-name descname">logInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logInfo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logNotSet">
 <code class="sig-name descname">logNotSet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logNotSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logNotSet" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.logWarning">
 <code class="sig-name descname">logWarning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.logWarning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.logWarning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.open_project">
-<code class="sig-name descname">open_project</code><span class="sig-paren">(</span><em class="sig-param">project_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.open_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.open_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.open_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.open_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open file and load project</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_annotations">
-<code class="sig-name descname">restore_annotations</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">annotations</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_annotations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_annotations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app</span></em>, <em class="sig-param"><span class="n">annotations</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the annotations</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_app">
-<code class="sig-name descname">restore_app</code><span class="sig-paren">(</span><em class="sig-param">app_name</em>, <em class="sig-param">app_tabname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app_name</span></em>, <em class="sig-param"><span class="n">app_tabname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open new application</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_files">
-<code class="sig-name descname">restore_files</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ds</span></em>, <em class="sig-param"><span class="n">files</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open data files</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_marker_settings">
-<code class="sig-name descname">restore_marker_settings</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">marker_dic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_marker_settings" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_marker_settings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ds</span></em>, <em class="sig-param"><span class="n">marker_dic</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_marker_settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the dataset marker settings</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_theories">
-<code class="sig-name descname">restore_theories</code><span class="sig-paren">(</span><em class="sig-param">ds</em>, <em class="sig-param">theories</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_theories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_theories" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_theories</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ds</span></em>, <em class="sig-param"><span class="n">theories</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_theories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_theories" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open theories</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.restore_tools">
-<code class="sig-name descname">restore_tools</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">tools</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_tools" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">restore_tools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app</span></em>, <em class="sig-param"><span class="n">tools</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.restore_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.restore_tools" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore the tools</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.save_reptate">
-<code class="sig-name descname">save_reptate</code><span class="sig-paren">(</span><em class="sig-param">fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.save_reptate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.save_reptate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_reptate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.save_reptate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.save_reptate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save RepTate project to ‘fpath’</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.showLogger">
-<code class="sig-name descname">showLogger</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.showLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.showLogger" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">showLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.showLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.showLogger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle show Log window</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.show_about">
 <code class="sig-name descname">show_about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.show_about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.show_about" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show about window</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QApplicationManager.tab_changed">
-<code class="sig-name descname">tab_changed</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.tab_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.tab_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tab_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QApplicationManager.tab_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QApplicationManager.tab_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Capture when the active application has changed</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationManager.QTextEditLogger">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationManager.</code><code class="sig-name descname">QTextEditLogger</code><span class="sig-paren">(</span><em class="sig-param">parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QTextEditLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QTextEditLogger" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationManager.</code><code class="sig-name descname">QTextEditLogger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QTextEditLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QTextEditLogger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Handler</span></code></p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationManager.QTextEditLogger.emit">
-<code class="sig-name descname">emit</code><span class="sig-paren">(</span><em class="sig-param">record</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QTextEditLogger.emit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QTextEditLogger.emit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">emit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationManager.html#QTextEditLogger.emit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationManager.QTextEditLogger.emit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do whatever it takes to actually log the specified logging record.</p>
 <p>This version is intended to be implemented by subclasses and so
 raises a NotImplementedError.</p>
@@ -390,63 +352,63 @@ raises a NotImplementedError.</p>
 <p>Module QApplicationWindow</p>
 <p>Module that defines the basic GUI class from which all GUI applications are derived.
 It is the GUI counterpart of Application.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationWindow.AddDummyFiles">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">AddDummyFiles</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">filetype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddDummyFiles" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">AddDummyFiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filetype</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddDummyFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked">
-<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddDummyFiles.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">column</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddDummyFiles.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddDummyFiles.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationWindow.AddFileFunction">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">AddFileFunction</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">filetype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">AddFileFunction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filetype</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.AddFileFunction.createColumnsGroupBox">
-<code class="sig-name descname">createColumnsGroupBox</code><span class="sig-paren">(</span><em class="sig-param">filetype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction.createColumnsGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction.createColumnsGroupBox" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createColumnsGroupBox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filetype</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction.createColumnsGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction.createColumnsGroupBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values the file columns</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.AddFileFunction.createLabelGroupBox">
 <code class="sig-name descname">createLabelGroupBox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction.createLabelGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction.createLabelGroupBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the range and scale (linear or logarithmic) of the label x</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.AddFileFunction.createParametersGroupBox">
-<code class="sig-name descname">createParametersGroupBox</code><span class="sig-paren">(</span><em class="sig-param">filetype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction.createParametersGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction.createParametersGroupBox" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createParametersGroupBox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filetype</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#AddFileFunction.createParametersGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.AddFileFunction.createParametersGroupBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values of important file parameters</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationWindow.EditAnnotation">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">EditAnnotation</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">annotation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">EditAnnotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annotation</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Dialog</span></code></p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.EditAnnotation.apply_changes">
 <code class="sig-name descname">apply_changes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation.apply_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation.apply_changes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.EditAnnotation.delete">
 <code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation.delete" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.EditAnnotation.handle_pickFontColor">
 <code class="sig-name descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.EditAnnotation.showColorDialog">
 <code class="sig-name descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#EditAnnotation.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.EditAnnotation.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
@@ -454,401 +416,312 @@ RGB format in the dataset legend info.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">QApplicationWindow</code><span class="sig-paren">(</span><em class="sig-param">name='Application Template'</em>, <em class="sig-param">parent=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">QApplicationWindow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Application Template'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
-<p>[summary]</p>
-<p>[description]</p>
-<dl class="method">
+<p>GUI Application</p>
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.addDummyFiles">
 <code class="sig-name descname">addDummyFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.addDummyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.addDummyFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add dummy files to dataset</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.addFileFunction">
 <code class="sig-name descname">addFileFunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.addFileFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.addFileFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a File to the current DataSet using a mathematical expression</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet">
-<code class="sig-name descname">addTableToCurrentDataSet</code><span class="sig-paren">(</span><em class="sig-param">dt</em>, <em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.addTableToCurrentDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addTableToCurrentDataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">ext</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.addTableToCurrentDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.addTableToCurrentDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add file table to curent dataset tab</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.add_annotation">
-<code class="sig-name descname">add_annotation</code><span class="sig-paren">(</span><em class="sig-param">action_trig=False</em>, <em class="sig-param">text=None</em>, <em class="sig-param">x=0</em>, <em class="sig-param">y=0</em>, <em class="sig-param">annotation_opts={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.add_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.add_annotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_annotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action_trig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">text</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">annotation_opts</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.add_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.add_annotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.change_ax_view">
-<code class="sig-name descname">change_ax_view</code><span class="sig-paren">(</span><em class="sig-param">n_ax</em>, <em class="sig-param">view_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.change_ax_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.change_ax_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_ax_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_ax</span></em>, <em class="sig-param"><span class="n">view_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.change_ax_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.change_ax_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the view corresponding to axis n_ax</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.change_view">
-<code class="sig-name descname">change_view</code><span class="sig-paren">(</span><em class="sig-param">x_vis=False</em>, <em class="sig-param">y_vis=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_vis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">y_vis</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.change_view" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change plot view</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.check_no_param_missing">
-<code class="sig-name descname">check_no_param_missing</code><span class="sig-paren">(</span><em class="sig-param">newtables</em>, <em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.check_no_param_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.check_no_param_missing" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>newtables {[type]} – [description]</p></li>
-<li><p>ext {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">check_no_param_missing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">newtables</span></em>, <em class="sig-param"><span class="n">ext</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.check_no_param_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.check_no_param_missing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.close_data_tab_handler">
-<code class="sig-name descname">close_data_tab_handler</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.close_data_tab_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.close_data_tab_handler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">close_data_tab_handler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.close_data_tab_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.close_data_tab_handler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a dataset tab from the current application</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset">
-<code class="sig-name descname">createNew_Empty_Dataset</code><span class="sig-paren">(</span><em class="sig-param">tabname=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createNew_Empty_Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tabname</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add New empty tab to DataSettabWidget</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.dataset_actions_disabled">
-<code class="sig-name descname">dataset_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dataset_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dataset_actions_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dataset_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dataset_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dataset_actions_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable buttons when there is no file in the dataset</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>state {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.disconnect_curve_drag">
 <code class="sig-name descname">disconnect_curve_drag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.disconnect_curve_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.disconnect_curve_drag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the Matplotlib drag connections
 and reset the shift buttons in the data inspector</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.dragEnterEvent">
-<code class="sig-name descname">dragEnterEvent</code><span class="sig-paren">(</span><em class="sig-param">e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dragEnterEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>e {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">dragEnterEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dragEnterEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drag and drop stuff</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.dropEvent">
-<code class="sig-name descname">dropEvent</code><span class="sig-paren">(</span><em class="sig-param">e</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dropEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dropEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>e {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">dropEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.dropEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.dropEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drag and drop stuff</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.edit_annotation">
-<code class="sig-name descname">edit_annotation</code><span class="sig-paren">(</span><em class="sig-param">artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.edit_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.edit_annotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit_annotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">artist</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.edit_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.edit_annotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.finish_shifts">
-<code class="sig-name descname">finish_shifts</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.finish_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.finish_shifts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">finish_shifts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.finish_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.finish_shifts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionAutoscale">
-<code class="sig-name descname">handle_actionAutoscale</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionAutoscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionAutoscale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionAutoscale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionAutoscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionAutoscale" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings">
 <code class="sig-name descname">handle_actionMarkerSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionMarkerSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionMarkerSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the dialog box where the user can change
 the marker properties: size, shape, color, fill</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionNewTool">
 <code class="sig-name descname">handle_actionNewTool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionNewTool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionNewTool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new tool</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionReload_Data">
 <code class="sig-name descname">handle_actionReload_Data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionReload_Data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionReload_Data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reload the data files in the current DataSet</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionResetShiftTriggered">
 <code class="sig-name descname">handle_actionResetShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionResetShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionResetShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionSaveShiftTriggered">
 <code class="sig-name descname">handle_actionSaveShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionSaveShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionSaveShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered">
 <code class="sig-name descname">handle_actionShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allow the current ‘selected_file’ to be dragged</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered">
 <code class="sig-name descname">handle_actionViewShiftTriggered</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionViewShiftTriggered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionViewShiftTriggered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories">
-<code class="sig-name descname">handle_actionView_All_SetTheories</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_SetTheories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionView_All_SetTheories</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_SetTheories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_SetTheories" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets">
-<code class="sig-name descname">handle_actionView_All_Sets</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_Sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_actionView_All_Sets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_actionView_All_Sets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_actionView_All_Sets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show all datasets simultaneously</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>checked {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_action_import_from_excel">
 <code class="sig-name descname">handle_action_import_from_excel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_action_import_from_excel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_action_import_from_excel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_apply_button_pressed">
 <code class="sig-name descname">handle_apply_button_pressed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_apply_button_pressed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_apply_button_pressed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the selected marker properties to all the files in the current dataset</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_change_view">
 <code class="sig-name descname">handle_change_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_change_view" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset">
 <code class="sig-name descname">handle_createNew_Empty_Dataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_createNew_Empty_Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_createNew_Empty_Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when button ‘new dataset’ pushed</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_currentChanged">
-<code class="sig-name descname">handle_currentChanged</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_currentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_currentChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_currentChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_currentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_currentChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change figure when the active DataSet tab is changed
 and empty the dataInspector</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_doubleClickTab">
-<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_doubleClickTab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_doubleClickTab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_doubleClickTab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit DataSet name</p>
 <p>Edit the dataset tab name, leave the ‘dataset’ dictionary keys unchanged.
 Two datasets can share the sae name.</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged">
-<code class="sig-name descname">handle_inspectorVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param">visible</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_inspectorVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_inspectorVisibilityChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">visible</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_inspectorVisibilityChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_inspectorVisibilityChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle the hide/show event of the data inspector</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>visible {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickColor1">
 <code class="sig-name descname">handle_pickColor1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickColor1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickColor1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected color to <cite>color1</cite> in RGB format</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickColor2">
 <code class="sig-name descname">handle_pickColor2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickColor2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickColor2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected color to <cite>color2</cite> in
 RGB format used for gradient color type</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickEdgeColor">
 <code class="sig-name descname">handle_pickEdgeColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickEdgeColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickEdgeColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFaceColor">
 <code class="sig-name descname">handle_pickFaceColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickFaceColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFaceColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor">
 <code class="sig-name descname">handle_pickFontColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor_ax">
 <code class="sig-name descname">handle_pickFontColor_ax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor_ax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor_ax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor_label">
 <code class="sig-name descname">handle_pickFontColor_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickFontColor_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickFontColor_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected legend face color in
 RGB format in the dataset legend info.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickThColor">
 <code class="sig-name descname">handle_pickThColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_pickThColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_pickThColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call the color picker and save the selected theory line color in
 RGB format used for gradient color type</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_reset_all_pb">
 <code class="sig-name descname">handle_reset_all_pb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_reset_all_pb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_reset_all_pb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested">
-<code class="sig-name descname">handle_toolTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_toolTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_toolTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_toolTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabCloseRequested" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a Tool tab</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabMoved">
-<code class="sig-name descname">handle_toolTabMoved</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_toolTabMoved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabMoved" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_toolTabMoved</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.handle_toolTabMoved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.handle_toolTabMoved" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.new_tables_from_files">
-<code class="sig-name descname">new_tables_from_files</code><span class="sig-paren">(</span><em class="sig-param">paths_to_open</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.new_tables_from_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.new_tables_from_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>paths_to_open {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">new_tables_from_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paths_to_open</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.new_tables_from_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.new_tables_from_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new Files in a DataSet from a list of files</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.new_tool">
-<code class="sig-name descname">new_tool</code><span class="sig-paren">(</span><em class="sig-param">tool_name</em>, <em class="sig-param">tool_tab_id=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.new_tool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.new_tool" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">new_tool</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tool_name</span></em>, <em class="sig-param"><span class="n">tool_tab_id</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.new_tool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.new_tool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new tool</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.onpick">
-<code class="sig-name descname">onpick</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onpick</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.onpick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called when clicking on a plot/artist</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.openDataset">
 <code class="sig-name descname">openDataset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.openDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.openDataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Open Files to a new Dataset</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.openFileNamesDialog">
-<code class="sig-name descname">openFileNamesDialog</code><span class="sig-paren">(</span><em class="sig-param">ext_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.openFileNamesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.openFileNamesDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">openFileNamesDialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ext_filter</span><span class="o">=</span><span class="default_value">'All Files (*)'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.openFileNamesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.openFileNamesDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open Files</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.open_figure_popup_menu">
-<code class="sig-name descname">open_figure_popup_menu</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.open_figure_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.open_figure_popup_menu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">open_figure_popup_menu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.open_figure_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.open_figure_popup_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a menu to let the user copy data or chart to clipboard</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbPalette">
 <code class="sig-name descname">populate_cbPalette</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.populate_cbPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbPalette" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list color palettes in the marker-settings dialog</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbSymbolType">
 <code class="sig-name descname">populate_cbSymbolType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.populate_cbSymbolType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbSymbolType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list of the markers in the marker-settings dialog</p>
@@ -856,95 +729,73 @@ RGB format used for gradient color type</p>
 with filled or empty markers, depending on the user’s choice</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbTheoryLine">
 <code class="sig-name descname">populate_cbTheoryLine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.populate_cbTheoryLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.populate_cbTheoryLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populate the list theory linestyle in the marker-settings dialog</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.printPlot">
 <code class="sig-name descname">printPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.printPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.printPlot" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Print/save current plot</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.save_view">
 <code class="sig-name descname">save_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.save_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.save_view" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.set_axis_marker_settings">
 <code class="sig-name descname">set_axis_marker_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.set_axis_marker_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.set_axis_marker_settings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.showColorDialog">
 <code class="sig-name descname">showColorDialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.showColorDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.showColorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the color picker and return the picked QtColor or <cite>None</cite></p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><ul class="simple">
-<li><p>[type] – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.showDataInspector">
-<code class="sig-name descname">showDataInspector</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.showDataInspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.showDataInspector" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>checked {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">showDataInspector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.showDataInspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.showDataInspector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show Data Inspector</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged">
-<code class="sig-name descname">sp_nviews_valueChanged</code><span class="sig-paren">(</span><em class="sig-param">new_nplots</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.sp_nviews_valueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sp_nviews_valueChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_nplots</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.sp_nviews_valueChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.sp_nviews_valueChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the current number of views displayed in the app</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.update_Qplot">
 <code class="sig-name descname">update_Qplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.update_Qplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.update_Qplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>No idea. SHOULD WE DELETE THIS?</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.update_legend">
 <code class="sig-name descname">update_legend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.update_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.update_legend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.update_shifts">
-<code class="sig-name descname">update_shifts</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.update_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.update_shifts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_shifts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.update_shifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.update_shifts" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QApplicationWindow.QApplicationWindow.viewMPLToolbar">
-<code class="sig-name descname">viewMPLToolbar</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.viewMPLToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.viewMPLToolbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><p>checked {[type]} – [description]</p>
-</dd>
-</dl>
+<code class="sig-name descname">viewMPLToolbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#QApplicationWindow.viewMPLToolbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.QApplicationWindow.viewMPLToolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show Matplotlib toolbar</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QApplicationWindow.ViewShiftFactors">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">ViewShiftFactors</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">fnames=None</em>, <em class="sig-param">factorsx=None</em>, <em class="sig-param">factorsy=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#ViewShiftFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.ViewShiftFactors" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QApplicationWindow.</code><code class="sig-name descname">ViewShiftFactors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fnames</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">factorsx</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">factorsy</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QApplicationWindow.html#ViewShiftFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QApplicationWindow.ViewShiftFactors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
@@ -953,299 +804,210 @@ with filled or empty markers, depending on the user’s choice</p>
 <span id="qdataset"></span><h2>QDataSet<a class="headerlink" href="#module-RepTate.gui.QDataSet" title="Permalink to this headline">¶</a></h2>
 <p>Module QDataSet</p>
 <p>Module that defines the GUI counterpart of Dataset.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QDataSet.EditFileParametersDialog">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QDataSet.</code><code class="sig-name descname">EditFileParametersDialog</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QDataSet.</code><code class="sig-name descname">EditFileParametersDialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the file parameters</p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.EditFileParametersDialog.activate_th_widgets">
 <code class="sig-name descname">activate_th_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.activate_th_widgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.activate_th_widgets" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBox">
-<code class="sig-name descname">createFormGroupBox</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.createFormGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBox" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createFormGroupBox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.createFormGroupBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values of the file parameters</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBoxTheory">
-<code class="sig-name descname">createFormGroupBoxTheory</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.createFormGroupBoxTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBoxTheory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">createFormGroupBoxTheory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.createFormGroupBoxTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.createFormGroupBoxTheory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.EditFileParametersDialog.update_current_view_xrange">
 <code class="sig-name descname">update_current_view_xrange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#EditFileParametersDialog.update_current_view_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.EditFileParametersDialog.update_current_view_xrange" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QDataSet.QDataSet">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QDataSet.</code><code class="sig-name descname">QDataSet</code><span class="sig-paren">(</span><em class="sig-param">name='QDataSet'</em>, <em class="sig-param">parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QDataSet.</code><code class="sig-name descname">QDataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'QDataSet'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.DataSet.DataSet" title="RepTate.core.DataSet.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DataSet.DataSet</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
-<p>[summary]</p>
-<p>[description]</p>
-<dl class="method">
+<p>Class that contains data files</p>
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.Qshow_all">
 <code class="sig-name descname">Qshow_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.Qshow_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.Qshow_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show all the files in this dataset, except those previously hiden</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.copy_parameters">
 <code class="sig-name descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.copy_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy the parameters of the currently active theory to the clipboard</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.end_of_computation">
-<code class="sig-name descname">end_of_computation</code><span class="sig-paren">(</span><em class="sig-param">th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.end_of_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.end_of_computation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">end_of_computation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">th_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.end_of_computation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.end_of_computation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Action when theory has finished computations</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_actionCalculate_Theory">
 <code class="sig-name descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_actionMinimize_Error">
 <code class="sig-name descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize the error</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_actionNew_Theory">
 <code class="sig-name descname">handle_actionNew_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_actionNew_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_actionNew_Theory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new theory and do fit</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_action_save_theory_data">
 <code class="sig-name descname">handle_action_save_theory_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_action_save_theory_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_action_save_theory_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save theory data of current theory</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_error_calculation_options">
 <code class="sig-name descname">handle_error_calculation_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_error_calculation_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_error_calculation_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_fitting_options">
 <code class="sig-name descname">handle_fitting_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_fitting_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_fitting_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_itemChanged">
-<code class="sig-name descname">handle_itemChanged</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_itemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_itemChanged" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>item {[type]} – [description]</p></li>
-<li><p>column {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">handle_itemChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">column</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_itemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_itemChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect when an item has been selected in the dataset</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_itemDoubleClicked">
-<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_itemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">column</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_itemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_itemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit item entry upon double click</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>item {[type]} – [description]</p></li>
-<li><p>column {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_itemSelectionChanged">
 <code class="sig-name descname">handle_itemSelectionChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_itemSelectionChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_itemSelectionChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define actions for when a file table is selected</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_sortIndicatorChanged">
-<code class="sig-name descname">handle_sortIndicatorChanged</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">order</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_sortIndicatorChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_sortIndicatorChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_sortIndicatorChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">order</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_sortIndicatorChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_sortIndicatorChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sort files according to the selected parameter (column) and replot</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>column {[type]} – [description]</p></li>
-<li><p>order {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_thCurrentChanged">
-<code class="sig-name descname">handle_thCurrentChanged</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thCurrentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thCurrentChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thCurrentChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thCurrentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thCurrentChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change figure when the active theory tab is changed</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_thTabBarDoubleClicked">
-<code class="sig-name descname">handle_thTabBarDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thTabBarDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thTabBarDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thTabBarDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thTabBarDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thTabBarDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit Theory name</p>
 <p>Edit the theory tab name, leave ‘theories’ dictionary keys unchanged.
 Two tabs can share the same name</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.handle_thTabCloseRequested">
-<code class="sig-name descname">handle_thTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thTabCloseRequested" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_thTabCloseRequested</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.handle_thTabCloseRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.handle_thTabCloseRequested" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a theory tab from the current dataset</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>index {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.highlight_series">
 <code class="sig-name descname">highlight_series</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.highlight_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.highlight_series" title="Permalink to this definition">¶</a></dt>
 <dd><p>Highligh the data series of the selected file</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.icon_calculate_is_stop">
-<code class="sig-name descname">icon_calculate_is_stop</code><span class="sig-paren">(</span><em class="sig-param">ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.icon_calculate_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.icon_calculate_is_stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">icon_calculate_is_stop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ans</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.icon_calculate_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.icon_calculate_is_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the “calculate” button to “stop” button</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.icon_fit_is_stop">
-<code class="sig-name descname">icon_fit_is_stop</code><span class="sig-paren">(</span><em class="sig-param">ans</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.icon_fit_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.icon_fit_is_stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">icon_fit_is_stop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ans</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.icon_fit_is_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.icon_fit_is_stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the “fit” button to “stop” button</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.new_theory">
-<code class="sig-name descname">new_theory</code><span class="sig-paren">(</span><em class="sig-param">th_name</em>, <em class="sig-param">th_tab_id=''</em>, <em class="sig-param">calculate=True</em>, <em class="sig-param">show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.new_theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.new_theory" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>th_name {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">new_theory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">th_name</span></em>, <em class="sig-param"><span class="n">th_tab_id</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">calculate</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.new_theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.new_theory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new theory from name</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.paste_parameters">
 <code class="sig-name descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.paste_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paste the parameters from the clipboard to the currently active theory</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.populate_inspector">
 <code class="sig-name descname">populate_inspector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.populate_inspector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.populate_inspector" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Fill the data inspector table</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.resizeEvent">
-<code class="sig-name descname">resizeEvent</code><span class="sig-paren">(</span><em class="sig-param">evt=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.resizeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.resizeEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Keyword Arguments:</dt><dd><ul class="simple">
-<li><p>evt {[type]} – [description] (default: {None})</p></li>
-</ul>
-</dd>
-</dl>
+<code class="sig-name descname">resizeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">evt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.resizeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.resizeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize dataset</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.set_limit_icon">
 <code class="sig-name descname">set_limit_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.set_limit_icon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.set_limit_icon" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Set xrange / yrange</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.set_no_limits">
-<code class="sig-name descname">set_no_limits</code><span class="sig-paren">(</span><em class="sig-param">th_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.set_no_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.set_no_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_no_limits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">th_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.set_no_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.set_no_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn the x and yrange selectors off</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>th_name {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.set_table_icons">
-<code class="sig-name descname">set_table_icons</code><span class="sig-paren">(</span><em class="sig-param">table_icon_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.set_table_icons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.set_table_icons" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_table_icons</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">table_icon_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.set_table_icons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.set_table_icons" title="Permalink to this definition">¶</a></dt>
 <dd><p>The list ‘table_icon_list’ contains tuples (file_name_short, marker_name, face, color)</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>table_icon_list {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.theory_actions_disabled">
-<code class="sig-name descname">theory_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.theory_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.theory_actions_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">theory_actions_disabled</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.theory_actions_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.theory_actions_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable theory buttons if no theory tab is open</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>state {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.toggle_horizontal_limits">
-<code class="sig-name descname">toggle_horizontal_limits</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.toggle_horizontal_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.toggle_horizontal_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_horizontal_limits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.toggle_horizontal_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.toggle_horizontal_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show/Hide the yrange selector for fit</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QDataSet.QDataSet.toggle_vertical_limits">
-<code class="sig-name descname">toggle_vertical_limits</code><span class="sig-paren">(</span><em class="sig-param">checked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.toggle_vertical_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.toggle_vertical_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">toggle_vertical_limits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checked</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QDataSet.html#QDataSet.toggle_vertical_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QDataSet.QDataSet.toggle_vertical_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show/Hide the xrange selector for fit</p>
-<p>[description]</p>
 </dd></dl>
 
 </dd></dl>
@@ -1255,173 +1017,147 @@ Two tabs can share the same name</p>
 <span id="qtheory"></span><h2>QTheory<a class="headerlink" href="#module-RepTate.gui.QTheory" title="Permalink to this headline">¶</a></h2>
 <p>Module QTheory</p>
 <p>Module that defines the GUI counterpart of the class Theory.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QTheory.CalculationThread">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">CalculationThread</code><span class="sig-paren">(</span><em class="sig-param">fthread</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#CalculationThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.CalculationThread" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">CalculationThread</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fthread</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#CalculationThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.CalculationThread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtCore.QObject</span></code></p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="RepTate.gui.QTheory.CalculationThread.sig_done">
 <code class="sig-name descname">sig_done</code><a class="headerlink" href="#RepTate.gui.QTheory.CalculationThread.sig_done" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.CalculationThread.work">
 <code class="sig-name descname">work</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#CalculationThread.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.CalculationThread.work" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QTheory.EditThParametersDialog">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">EditThParametersDialog</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#EditThParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.EditThParametersDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">EditThParametersDialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">p_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#EditThParametersDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.EditThParametersDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 <p>Create the form that is used to modify the theorys parameters</p>
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.EditThParametersDialog.create_param_tab">
-<code class="sig-name descname">create_param_tab</code><span class="sig-paren">(</span><em class="sig-param">p_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#EditThParametersDialog.create_param_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.EditThParametersDialog.create_param_tab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_param_tab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#EditThParametersDialog.create_param_tab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.EditThParametersDialog.create_param_tab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a form to set the new values of the file parameters</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QTheory.GetModesDialog">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">GetModesDialog</code><span class="sig-paren">(</span><em class="sig-param">parent=None</em>, <em class="sig-param">th_dict={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#GetModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.GetModesDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">GetModesDialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">th_dict</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#GetModesDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.GetModesDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QDialog</span></code></p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="RepTate.gui.QTheory.QTheory">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">QTheory</code><span class="sig-paren">(</span><em class="sig-param">name='QTheory'</em>, <em class="sig-param">parent_dataset=None</em>, <em class="sig-param">axarr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.gui.QTheory.</code><code class="sig-name descname">QTheory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'QTheory'</span></em>, <em class="sig-param"><span class="n">parent_dataset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axarr</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_TheoryTab</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Theory.Theory" title="RepTate.core.Theory.Theory"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Theory.Theory</span></code></a></p>
-<p>[summary]</p>
-<p>[description]</p>
-<dl class="method">
+<p>Abstract class that defines a theory</p>
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.Qcopy_modes">
 <code class="sig-name descname">Qcopy_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.Qcopy_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.Qcopy_modes" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<p>[description]</p>
+<dd><p>Copy Maxwell modes between theories</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.change_thtextbox_fontsize">
-<code class="sig-name descname">change_thtextbox_fontsize</code><span class="sig-paren">(</span><em class="sig-param">factor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.change_thtextbox_fontsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.change_thtextbox_fontsize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_thtextbox_fontsize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">factor</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.change_thtextbox_fontsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.change_thtextbox_fontsize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the thTextBox font size by a factor <cite>factor</cite></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.copy_parameters">
 <code class="sig-name descname">copy_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.copy_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.copy_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.end_thread_calc">
 <code class="sig-name descname">end_thread_calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.end_thread_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.end_thread_calc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.end_thread_fit">
 <code class="sig-name descname">end_thread_fit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.end_thread_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.end_thread_fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.get_extra_data">
 <code class="sig-name descname">get_extra_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.get_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.get_extra_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the extra data dict before saving (defined in Child class if needed)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.handle_actionCalculate_Theory">
 <code class="sig-name descname">handle_actionCalculate_Theory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.handle_actionCalculate_Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.handle_actionCalculate_Theory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used only in non GUI mode</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.handle_actionMinimize_Error">
 <code class="sig-name descname">handle_actionMinimize_Error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.handle_actionMinimize_Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.handle_actionMinimize_Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimize the error</p>
-<p>[description]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.handle_parameterItemChanged">
-<code class="sig-name descname">handle_parameterItemChanged</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.handle_parameterItemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.handle_parameterItemChanged" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">handle_parameterItemChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">column</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.handle_parameterItemChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.handle_parameterItemChanged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modify parameter values when changed in the theory table</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><p>item {[type]} – [description]</p></li>
-<li><p>column {[type]} – [description]</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.onTreeWidgetItemDoubleClicked">
-<code class="sig-name descname">onTreeWidgetItemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param">item</em>, <em class="sig-param">column</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.onTreeWidgetItemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.onTreeWidgetItemDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onTreeWidgetItemDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">column</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.onTreeWidgetItemDoubleClicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.onTreeWidgetItemDoubleClicked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start editing text when a table cell is double clicked
 Or edit all parameters fittingoptionsdialog if parameter name is double clicked</p>
-<p>[description]</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><ul class="simple">
-<li><ul>
-<li><p>item {[type]} – [description]</p></li>
-</ul>
-</li>
-<li><ul>
-<li><p>column {[type]} – [description]</p></li>
-</ul>
-</li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.paste_parameters">
 <code class="sig-name descname">paste_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.paste_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.paste_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.populate_default_error_calculation_options">
 <code class="sig-name descname">populate_default_error_calculation_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.populate_default_error_calculation_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.populate_default_error_calculation_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.populate_default_minimization_options">
 <code class="sig-name descname">populate_default_minimization_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.populate_default_minimization_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.populate_default_minimization_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.save_modes">
 <code class="sig-name descname">save_modes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.save_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.save_modes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save Maxwell modes to a text file</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.set_extra_data">
-<code class="sig-name descname">set_extra_data</code><span class="sig-paren">(</span><em class="sig-param">extra_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.set_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.set_extra_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_extra_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">extra_data</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.set_extra_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.set_extra_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the extra data dict at loading, redefined in Child class if needed</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.theory_buttons_disabled">
-<code class="sig-name descname">theory_buttons_disabled</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.theory_buttons_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.theory_buttons_disabled" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">theory_buttons_disabled</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.theory_buttons_disabled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.theory_buttons_disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable theory button inside the theory</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.thtextbox_context_menu">
 <code class="sig-name descname">thtextbox_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.thtextbox_context_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.thtextbox_context_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Custom contextual menu for the theory textbox</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="RepTate.gui.QTheory.QTheory.update_parameter_table">
 <code class="sig-name descname">update_parameter_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/gui/QTheory.html#QTheory.update_parameter_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.gui.QTheory.QTheory.update_parameter_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the theory parameter table</p>
-<p>[description]</p>
 </dd></dl>
 
 </dd></dl>
@@ -1450,14 +1186,14 @@ Or edit all parameters fittingoptionsdialog if parameter name is double clicked<
         <li class="right" >
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-15 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="code.html" >Navigate the source Code of RepTate</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Universidad Politécnica de Madrid, University of Leeds.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
     </div>
   </body>
 </html>

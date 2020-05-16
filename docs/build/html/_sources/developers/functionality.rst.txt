@@ -265,17 +265,7 @@ given by
     :lineno-start: 140
     
     def viewyx(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
+        """Documentation"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -321,17 +311,7 @@ In ``class BaseApplicationXY``, add the definition
     :lineno-start: 158
     
     def view_sqrt_y(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            dt {[type]} -- [description]
-            file_parameters {[type]} -- [description]
-        
-        Returns:
-            [type] -- [description]
-        """
+        """Documentation"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
