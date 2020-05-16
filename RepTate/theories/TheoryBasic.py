@@ -463,7 +463,7 @@ class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
 class TheoryAlgebraicExpression(CmdBase):
     """Fit a user algebraic expression with :math:`n` parameters. 
     
-    The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt
+    The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt
 
     It is the responsability of the user to input functions that make mathematical sense.
 

@@ -1,52 +1,92 @@
 Tools
-========
+=====
 
 .. toctree::
    :maxdepth: 2
 
-   
-Materials Database
-------------------
+ToolBounds
+----------
 
-Polymer Data
-~~~~~~~~~~~~
-.. automodule:: RepTate.tools.polymer_data
+.. autoclass:: RepTate.tools.ToolBounds.ToolBounds 
     :members:
     :undoc-members:
     :show-inheritance:
 
-
-Create Basic Materials Database
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: RepTate.tools.CreateMaterialsDatabaseFile
+.. autoclass:: RepTate.tools.ToolBounds.BaseToolBounds 
     :members:
     :undoc-members:
     :show-inheritance:
 
-Read the Materials Database
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: RepTate.tools.ReadMaterialsDataBaseFile
+.. autoclass:: RepTate.tools.ToolBounds.CLToolBounds 
     :members:
     :undoc-members:
     :show-inheritance:
 
-Likhtman-McLeish theory
------------------------
-
-Create compact linlin data file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: RepTate.tools.linlin2npz
+.. autoclass:: RepTate.tools.ToolBounds.GUIToolBounds 
     :members:
     :undoc-members:
     :show-inheritance:
 
-Read compact linlin data file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ToolEvaluate
+------------
 
-.. automodule:: RepTate.tools.readlinlin
+.. autoclass:: RepTate.tools.ToolEvaluate.ToolEvaluate 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolFindPeaks
+-------------
+
+.. autoclass:: RepTate.tools.ToolFindPeaks.ToolFindPeaks 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolGradient
+------------
+
+.. autoclass:: RepTate.tools.ToolGradient.ToolGradient 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolIntegral
+------------
+
+.. autoclass:: RepTate.tools.ToolIntegral.ToolIntegral 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolInterpolate
+---------------
+
+.. autoclass:: RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolMaterialsDatabase
+---------------------
+
+.. autoclass:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolPowerLaw
+------------
+
+.. autoclass:: RepTate.tools.ToolPowerLaw.ToolPowerLaw 
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ToolSmooth
+----------
+
+.. autoclass:: RepTate.tools.ToolSmooth.ToolSmooth 
     :members:
     :undoc-members:
     :show-inheritance:

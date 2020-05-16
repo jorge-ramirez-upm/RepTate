@@ -4,9 +4,11 @@ Theories
 .. toctree::
    :maxdepth: 2
 
+.. todo:: 
+    Browse all the theories and add all the missing classes.
 
 TheoryBasic
------------
+----------------
 
 .. automodule:: RepTate.theories.TheoryBasic
     :members:

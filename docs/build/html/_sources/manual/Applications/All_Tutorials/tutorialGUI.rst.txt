@@ -11,9 +11,11 @@ Examples of use of RepTate using the Graphical User Interface.
    ../TTS/Tutorial/tutorialGUITTS
    ../LVE/Tutorial/tutorialGUILVE
    ../NLVE/Tutorial/tutorialGUINLVE
+   ../Crystal/Tutorial/tutorialGUICrystal
    ../Gt/Tutorial/tutorialGUIGt
    ../Creep/Tutorial/tutorialGUICreep
    ../SANS/Tutorial/tutorialGUISANS
    ../React/Tutorial/tutorialGUIReact
-   ../Crystal/Tutorial/tutorialGUICrystal
+   ../Dielectric/Tutorial/tutorialGUIDielectric
+   ../LAOS/Tutorial/tutorialGUILAOS
    

@@ -21,7 +21,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="TODO" href="CodeTODO.html" />
+    <link rel="next" title="Code Class Diagrams" href="callgraphGUI.html" />
     <link rel="prev" title="Theories" href="CodeTheories.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="CodeTODO.html" title="TODO"
+          <a href="callgraphGUI.html" title="Code Class Diagrams"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="CodeTheories.html" title="Theories"
@@ -56,17 +56,15 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tools</a><ul>
-<li><a class="reference internal" href="#materials-database">Materials Database</a><ul>
-<li><a class="reference internal" href="#module-RepTate.tools.polymer_data">Polymer Data</a></li>
-<li><a class="reference internal" href="#module-RepTate.tools.CreateMaterialsDatabaseFile">Create Basic Materials Database</a></li>
-<li><a class="reference internal" href="#module-RepTate.tools.ReadMaterialsDataBaseFile">Read the Materials Database</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#likhtman-mcleish-theory">Likhtman-McLeish theory</a><ul>
-<li><a class="reference internal" href="#module-RepTate.tools.linlin2npz">Create compact linlin data file</a></li>
-<li><a class="reference internal" href="#module-RepTate.tools.readlinlin">Read compact linlin data file</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#toolbounds">ToolBounds</a></li>
+<li><a class="reference internal" href="#toolevaluate">ToolEvaluate</a></li>
+<li><a class="reference internal" href="#toolfindpeaks">ToolFindPeaks</a></li>
+<li><a class="reference internal" href="#toolgradient">ToolGradient</a></li>
+<li><a class="reference internal" href="#toolintegral">ToolIntegral</a></li>
+<li><a class="reference internal" href="#toolinterpolate">ToolInterpolate</a></li>
+<li><a class="reference internal" href="#toolmaterialsdatabase">ToolMaterialsDatabase</a></li>
+<li><a class="reference internal" href="#toolpowerlaw">ToolPowerLaw</a></li>
+<li><a class="reference internal" href="#toolsmooth">ToolSmooth</a></li>
 </ul>
 </li>
 </ul>
@@ -75,8 +73,8 @@
   <p class="topless"><a href="CodeTheories.html"
                         title="previous chapter">Theories</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="CodeTODO.html"
-                        title="next chapter">TODO</a></p>
+  <p class="topless"><a href="callgraphGUI.html"
+                        title="next chapter">Code Class Diagrams</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -106,44 +104,280 @@
 <h1>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="materials-database">
-<h2>Materials Database<a class="headerlink" href="#materials-database" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-RepTate.tools.polymer_data">
-<span id="polymer-data"></span><h3>Polymer Data<a class="headerlink" href="#module-RepTate.tools.polymer_data" title="Permalink to this headline">¶</a></h3>
-<p>Module polymer_data</p>
-<p>Module to define the basic information about a polymer for the materials database.</p>
+<div class="section" id="toolbounds">
+<h2>ToolBounds<a class="headerlink" href="#toolbounds" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="RepTate.tools.polymer_data.polymer">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.polymer_data.</code><code class="sig-name descname">polymer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/polymer_data.html#polymer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.polymer_data.polymer" title="Permalink to this definition">¶</a></dt>
+<dt id="RepTate.tools.ToolBounds.ToolBounds">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolBounds.</code><code class="sig-name descname">ToolBounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#ToolBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.ToolBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Remove points in the current view ïf <span class="math notranslate nohighlight">\(x \notin [x_{min}, x_{max}]\)</span> or <span class="math notranslate nohighlight">\(y \notin [y_{min}, y_{max}]\)</span></p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolBounds.ToolBounds.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolBounds.ToolBounds.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolBounds.ToolBounds.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Bounds Tool'</em><a class="headerlink" href="#RepTate.tools.ToolBounds.ToolBounds.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolBounds.ToolBounds.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Bounds'</em><a class="headerlink" href="#RepTate.tools.ToolBounds.ToolBounds.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.tools.ToolBounds.BaseToolBounds">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolBounds.</code><code class="sig-name descname">BaseToolBounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">parent_app</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#BaseToolBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.BaseToolBounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Defines the basic information held by the materials database</p>
+<p>Base class for both GUI and CL</p>
+<dl class="py method">
+<dt id="RepTate.tools.ToolBounds.BaseToolBounds.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_parameters</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#BaseToolBounds.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.BaseToolBounds.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bounds function limits the data shown in the view</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolBounds.BaseToolBounds.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolBounds.BaseToolBounds.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolBounds.BaseToolBounds.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Bounds'</em><a class="headerlink" href="#RepTate.tools.ToolBounds.BaseToolBounds.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.tools.ToolBounds.CLToolBounds">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolBounds.</code><code class="sig-name descname">CLToolBounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">parent_app</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#CLToolBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.CLToolBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.tools.ToolBounds.BaseToolBounds" title="RepTate.tools.ToolBounds.BaseToolBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.tools.ToolBounds.BaseToolBounds</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Tool.Tool" title="RepTate.core.Tool.Tool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Tool.Tool</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.tools.ToolBounds.GUIToolBounds">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolBounds.</code><code class="sig-name descname">GUIToolBounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">parent_app</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#GUIToolBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.GUIToolBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.tools.ToolBounds.BaseToolBounds" title="RepTate.tools.ToolBounds.BaseToolBounds"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.tools.ToolBounds.BaseToolBounds</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QTool.QTool" title="RepTate.gui.QTool.QTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QTool.QTool</span></code></a></p>
+<p>GUI Version</p>
+<dl class="py method">
+<dt id="RepTate.tools.ToolBounds.GUIToolBounds.set_param_value">
+<code class="sig-name descname">set_param_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolBounds.html#GUIToolBounds.set_param_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolBounds.GUIToolBounds.set_param_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a parameter of the tool</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.tools.CreateMaterialsDatabaseFile">
-<span id="create-basic-materials-database"></span><h3>Create Basic Materials Database<a class="headerlink" href="#module-RepTate.tools.CreateMaterialsDatabaseFile" title="Permalink to this headline">¶</a></h3>
-<p>Module CreateMaterialsDatabaseFile</p>
-<p>Module that creates the basic Materials database data.</p>
+<div class="section" id="toolevaluate">
+<h2>ToolEvaluate<a class="headerlink" href="#toolevaluate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolEvaluate.ToolEvaluate">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolEvaluate.</code><code class="sig-name descname">ToolEvaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolEvaluate.html#ToolEvaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolEvaluate.ToolEvaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (<code class="docutils literal notranslate"><span class="pre">sin,</span> <span class="pre">cos,</span> <span class="pre">tan,</span> <span class="pre">arccos,</span> <span class="pre">arcsin,</span> <span class="pre">arctan,</span> <span class="pre">arctan2,</span> <span class="pre">deg2rad,</span> <span class="pre">rad2deg,</span> <span class="pre">sinh,</span> <span class="pre">cosh,</span> <span class="pre">tanh,</span> <span class="pre">arcsinh,</span> <span class="pre">arccosh,</span> <span class="pre">arctanh,</span> <span class="pre">around,</span> <span class="pre">round_,</span> <span class="pre">rint,</span> <span class="pre">floor,</span> <span class="pre">ceil,</span> <span class="pre">trunc,</span> <span class="pre">exp,</span> <span class="pre">log,</span> <span class="pre">log10,</span> <span class="pre">fabs,</span> <span class="pre">mod,</span> <span class="pre">e,</span> <span class="pre">pi,</span> <span class="pre">power,</span> <span class="pre">sqrt</span></code>) are understood by the expression parser.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolEvaluate.ToolEvaluate.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolEvaluate.ToolEvaluate.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolEvaluate.ToolEvaluate.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Evaluate Expression Tool'</em><a class="headerlink" href="#RepTate.tools.ToolEvaluate.ToolEvaluate.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolEvaluate.ToolEvaluate.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Eval Exp'</em><a class="headerlink" href="#RepTate.tools.ToolEvaluate.ToolEvaluate.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="module-RepTate.tools.ReadMaterialsDataBaseFile">
-<span id="read-the-materials-database"></span><h3>Read the Materials Database<a class="headerlink" href="#module-RepTate.tools.ReadMaterialsDataBaseFile" title="Permalink to this headline">¶</a></h3>
-<p>Module ReadMaterialsDataBaseFile</p>
-<p>Module to read the contents of the materials database file.</p>
+<div class="section" id="toolfindpeaks">
+<h2>ToolFindPeaks<a class="headerlink" href="#toolfindpeaks" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolFindPeaks.ToolFindPeaks">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolFindPeaks.</code><code class="sig-name descname">ToolFindPeaks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolFindPeaks.html#ToolFindPeaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolFindPeaks.ToolFindPeaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Find peaks (maxima or minima) in the data, as represented by the current view. The option to find the maxima or the minima is specified by the min/max check button (the minpeaks parameter in the command line version). The <strong>threshold</strong> controls the relative height that a peak must have (with respect to the data span) in order to be detected. The <strong>minimum_distance</strong> parameter controls how far from each other the peaks must be in order to be distinguished. The returned peaks correspond to the maximum/minimum data point in the current view. Alternatively, the user can select to fit a parabola to the peaks and find the analytical maximum or minimum of the parabola. The parameter <strong>minimum_distance</strong> also controls the number of points around the maximum data point used to fit the parabola. The peaks are returned in the Tool information area and shown as symbols in the chart.</p>
+<p>The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolFindPeaks.ToolFindPeaks.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolFindPeaks.ToolFindPeaks.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolFindPeaks.ToolFindPeaks.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Find Peaks in current data/view'</em><a class="headerlink" href="#RepTate.tools.ToolFindPeaks.ToolFindPeaks.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolFindPeaks.ToolFindPeaks.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Find Peaks'</em><a class="headerlink" href="#RepTate.tools.ToolFindPeaks.ToolFindPeaks.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
+<div class="section" id="toolgradient">
+<h2>ToolGradient<a class="headerlink" href="#toolgradient" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolGradient.ToolGradient">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolGradient.</code><code class="sig-name descname">ToolGradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolGradient.html#ToolGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolGradient.ToolGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Calculate the derivative of y with respect to x, where y is the ordinate and x is the abcissa in the current view. The gradient function from numpy is used, where the derivative is computed using second order accurate central differences in the interior points and first order accurate one-sides (forward or backwards) differences at the boundaries.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolGradient.ToolGradient.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolGradient.ToolGradient.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolGradient.ToolGradient.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Take derivative of current data/view'</em><a class="headerlink" href="#RepTate.tools.ToolGradient.ToolGradient.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolGradient.ToolGradient.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Gradient'</em><a class="headerlink" href="#RepTate.tools.ToolGradient.ToolGradient.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="likhtman-mcleish-theory">
-<h2>Likhtman-McLeish theory<a class="headerlink" href="#likhtman-mcleish-theory" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-RepTate.tools.linlin2npz">
-<span id="create-compact-linlin-data-file"></span><h3>Create compact linlin data file<a class="headerlink" href="#module-RepTate.tools.linlin2npz" title="Permalink to this headline">¶</a></h3>
-<p>Module linlin2npz</p>
-<p>Reads all the files of the precalculated linlin theory and saves them 
-in a more compact <a href="#id1"><span class="problematic" id="id2">*</span></a>.npz format</p>
+<div class="section" id="toolintegral">
+<h2>ToolIntegral<a class="headerlink" href="#toolintegral" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolIntegral.ToolIntegral">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolIntegral.</code><code class="sig-name descname">ToolIntegral</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolIntegral.html#ToolIntegral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolIntegral.ToolIntegral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Calculate the integral of y with respect to x, where y is the ordinate and x is the abcissa in the current view. Repeated points in the data are removed before the integral is performed. The data between the point is interpolated with a cubic spline. The total value of the definite integral is shown in the Tool output region.
+If a different integration interval is needed, the Bounds tool can be used before the Integral tool.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolIntegral.ToolIntegral.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolIntegral.ToolIntegral.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolIntegral.ToolIntegral.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Integral of current data/view'</em><a class="headerlink" href="#RepTate.tools.ToolIntegral.ToolIntegral.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolIntegral.ToolIntegral.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Integral'</em><a class="headerlink" href="#RepTate.tools.ToolIntegral.ToolIntegral.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="module-RepTate.tools.readlinlin">
-<span id="read-compact-linlin-data-file"></span><h3>Read compact linlin data file<a class="headerlink" href="#module-RepTate.tools.readlinlin" title="Permalink to this headline">¶</a></h3>
-<p>Module readlinlin</p>
-<p>Reads the linlin data from the compact <a href="#id3"><span class="problematic" id="id4">*</span></a>.npz file</p>
+<div class="section" id="toolinterpolate">
+<h2>ToolInterpolate<a class="headerlink" href="#toolinterpolate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolInterpolate.</code><code class="sig-name descname">ToolInterpolateExtrapolate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolInterpolate.html#ToolInterpolateExtrapolate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Interpolates data</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Interpolate/Extrapolate from view'</em><a class="headerlink" href="#RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Interpolate/Extrapolate'</em><a class="headerlink" href="#RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
+<div class="section" id="toolmaterialsdatabase">
+<h2>ToolMaterialsDatabase<a class="headerlink" href="#toolmaterialsdatabase" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolMaterialsDatabase.</code><code class="sig-name descname">ToolMaterialsDatabase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolMaterialsDatabase.html#ToolMaterialsDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>A special Tool to store the material parameters. Many apps and theories rely on the
+parameters stored in this database. There are two copies of the database: i) a general one
+that is distributed with RepTate, is stored in the software installation folder and contains
+well established values of the parameters and ii) a user database that contains material
+parameters introduced by the user and is stored in the user HOME folder.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Materials Database Explorer'</em><a class="headerlink" href="#RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Materials Database'</em><a class="headerlink" href="#RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="toolpowerlaw">
+<h2>ToolPowerLaw<a class="headerlink" href="#toolpowerlaw" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolPowerLaw.ToolPowerLaw">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolPowerLaw.</code><code class="sig-name descname">ToolPowerLaw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolPowerLaw.html#ToolPowerLaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolPowerLaw.ToolPowerLaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Check the power law of the data (or some part of it) by dividing the y coordinate by the x coordinate 
+raised to n.</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolPowerLaw.ToolPowerLaw.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolPowerLaw.ToolPowerLaw.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolPowerLaw.ToolPowerLaw.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Check the power law of the data'</em><a class="headerlink" href="#RepTate.tools.ToolPowerLaw.ToolPowerLaw.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolPowerLaw.ToolPowerLaw.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'PowerLaw'</em><a class="headerlink" href="#RepTate.tools.ToolPowerLaw.ToolPowerLaw.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="toolsmooth">
+<h2>ToolSmooth<a class="headerlink" href="#toolsmooth" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.tools.ToolSmooth.ToolSmooth">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.tools.ToolSmooth.</code><code class="sig-name descname">ToolSmooth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/tools/ToolSmooth.html#ToolSmooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.tools.ToolSmooth.ToolSmooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Smooths the current view data by applying a Savitzky-Golay filter. The smoothing procedure is controlled by means of two parameters: the <strong>window</strong> length (a positive, odd integer), which represents the number of convolution coefficients of the filter, and the <strong>order</strong> of the polynomial used to fit the samples (must be smaller than the window length).</p>
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolSmooth.ToolSmooth.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.tools.ToolSmooth.ToolSmooth.citations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolSmooth.ToolSmooth.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Smooth Tool'</em><a class="headerlink" href="#RepTate.tools.ToolSmooth.ToolSmooth.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.tools.ToolSmooth.ToolSmooth.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = 'Smooth'</em><a class="headerlink" href="#RepTate.tools.ToolSmooth.ToolSmooth.toolname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -163,7 +397,7 @@ in a more compact <a href="#id1"><span class="problematic" id="id2">*</span></a>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="CodeTODO.html" title="TODO"
+          <a href="callgraphGUI.html" title="Code Class Diagrams"
              >next</a> |</li>
         <li class="right" >
           <a href="CodeTheories.html" title="Theories"

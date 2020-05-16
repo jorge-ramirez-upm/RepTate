@@ -13,8 +13,11 @@ Examples of use of RepTate using the Command Line interpreter and batch.
    ../TTS/Tutorial/tutorialCLTTS
    ../LVE/Tutorial/tutorialCLLVE
    ../NLVE/Tutorial/tutorialCLNLVE
+   ../Crystal/Tutorial/tutorialCLCrystal
    ../Gt/Tutorial/tutorialCLGt
    ../Creep/Tutorial/tutorialCLCreep
    ../SANS/Tutorial/tutorialCLSANS
    ../React/Tutorial/tutorialCLReact
-   ../Crystal/Tutorial/tutorialCLCrystal
+   ../Dielectric/Tutorial/tutorialCLDielectric
+   ../LAOS/Tutorial/tutorialCLLAOS
+   

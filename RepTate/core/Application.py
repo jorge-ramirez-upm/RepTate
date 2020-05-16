@@ -693,9 +693,17 @@ class Application(CmdBase):
 
     def do_switch(self, line):
         """Set focus to an open set/theory/tool.
-By hitting TAB, all the currently accessible elements are shown.
-Arguments:
-    - name {str} -- Name of the set/theory/tool to switch the focus to."""
+        By hitting TAB, all the currently accessible elements are shown.
+        
+        :param line: Name of the set/theory/tool to switch the focus to.- 
+
+        :Example:
+
+            >>> switch LVE1.Set1.LM1
+            >>> switch NLVE2.Set2.RP2
+
+        .. todo:: Find key functions and document them like this one
+        """
         items=line.split('.')
         listtools = [x.name for x in self.tools]
         if len(items)>1:

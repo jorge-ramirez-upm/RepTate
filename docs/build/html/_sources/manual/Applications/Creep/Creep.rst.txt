@@ -11,4 +11,5 @@
 
     general
     Theory/theory
-	Tutorial/tutorial
+    Tutorial/tutorialCLCreep
+    Tutorial/tutorialGUICreep

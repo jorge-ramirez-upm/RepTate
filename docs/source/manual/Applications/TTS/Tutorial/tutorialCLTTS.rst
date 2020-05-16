@@ -12,7 +12,7 @@ TTS Tutorial: Command Line
 
 **Time-Temperature shift**
     
-#. Start RepTate and create LVE Application::
+#. Start RepTate and create a TTS Application::
 
     RepTate Version 0.9.3 - 20180719 command processor
     help [command] for instructions

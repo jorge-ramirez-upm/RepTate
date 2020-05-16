@@ -828,7 +828,7 @@ Arguments:
         return completions
 
     def do_list_files(self, line=""):
-        """List the files in the current dataset. Active files are shown with an *. Hidden files are shown with (-)."""
+        """List the files in the current dataset. Active files are shown with an \*. Hidden files are shown with (-)."""
         print("FILES IN THE CURRENT DATASET")
         print("============================")
         for f in self.files:

@@ -51,14 +51,14 @@ from PyQt5.QtCore import QUrl, Qt, QCoreApplication
 
 
 def main():
-    start_RepTate(sys.argv[1:])
+    start_MatDB(sys.argv[1:])
 
 
-def start_RepTate(argv):
+def start_MatDB(argv):
     """
-    Main RepTate application. 
+    Materials Database application. 
     
-    :param list argv: Command line parameters passed to Reptate
+    :param list argv: Command line parameters passed to MatDB
     """
     parser = argparse.ArgumentParser(
         description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",

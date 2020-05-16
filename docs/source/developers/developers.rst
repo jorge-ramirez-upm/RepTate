@@ -9,5 +9,6 @@ Contents:
 
    functionality
    python_c_interface
-   callgraphGUI
    code
+   callgraphGUI
+   todo

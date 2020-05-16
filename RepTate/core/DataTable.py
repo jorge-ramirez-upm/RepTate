@@ -66,12 +66,17 @@ class DataTable(object):
 
     def __str__(self):
         """Returns a string describing the data
+
         .. todo:: Refine this. It doesn't work
+
         """
         return self.data
         
     def mincol(self, col):
-        """Minimum value in table column col"""
+        """Minimum value in table column col
+        
+        .. todo:: Example **todo** in the code
+        """
         return np.min(self.data[:,col])
         
     def minpositivecol(self, col):

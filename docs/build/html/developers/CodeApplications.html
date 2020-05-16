@@ -56,11 +56,19 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Applications</a><ul>
-<li><a class="reference internal" href="#module-RepTate.applications.ApplicationGt">ApplicationGt</a></li>
-<li><a class="reference internal" href="#module-RepTate.applications.ApplicationLVE">ApplicationLVE</a></li>
-<li><a class="reference internal" href="#module-RepTate.applications.ApplicationMWD">ApplicationMWD</a></li>
-<li><a class="reference internal" href="#module-RepTate.applications.ApplicationNLVE">ApplicationNLVE</a></li>
-<li><a class="reference internal" href="#module-RepTate.applications.ApplicationTTS">ApplicationTTS</a></li>
+<li><a class="reference internal" href="#applicationcreep">ApplicationCreep</a></li>
+<li><a class="reference internal" href="#applicationcrystal">ApplicationCrystal</a></li>
+<li><a class="reference internal" href="#applicationdielectric">ApplicationDielectric</a></li>
+<li><a class="reference internal" href="#applicationgt">ApplicationGt</a></li>
+<li><a class="reference internal" href="#applicationlaos">ApplicationLAOS</a></li>
+<li><a class="reference internal" href="#applicationlve">ApplicationLVE</a></li>
+<li><a class="reference internal" href="#applicationmwd">ApplicationMWD</a></li>
+<li><a class="reference internal" href="#applicationnlve">ApplicationNLVE</a></li>
+<li><a class="reference internal" href="#applicationreact">ApplicationReact</a></li>
+<li><a class="reference internal" href="#applicationsans">ApplicationSANS</a></li>
+<li><a class="reference internal" href="#applicationtts">ApplicationTTS</a></li>
+<li><a class="reference internal" href="#applicationttsfactors">ApplicationTTSFactors</a></li>
+<li><a class="reference internal" href="#applicationuniversalviewer">ApplicationUniversalViewer</a></li>
 </ul>
 </li>
 </ul>
@@ -100,10 +108,416 @@
 <h1>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="module-RepTate.applications.ApplicationGt">
-<span id="applicationgt"></span><h2>ApplicationGt<a class="headerlink" href="#module-RepTate.applications.ApplicationGt" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationGt</p>
-<p>Module for the analysis of stress relaxation data from simulations and experiments.</p>
+<div class="section" id="applicationcreep">
+<h2>ApplicationCreep<a class="headerlink" href="#applicationcreep" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCreep.ApplicationCreep">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCreep.</code><code class="sig-name descname">ApplicationCreep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#ApplicationCreep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.ApplicationCreep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Data from Creep experiments</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCreep.ApplicationCreep.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Creep'</em><a class="headerlink" href="#RepTate.applications.ApplicationCreep.ApplicationCreep.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCreep.ApplicationCreep.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Creep Experiments'</em><a class="headerlink" href="#RepTate.applications.ApplicationCreep.ApplicationCreep.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCreep.ApplicationCreep.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'creep'</em><a class="headerlink" href="#RepTate.applications.ApplicationCreep.ApplicationCreep.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCreep.</code><code class="sig-name descname">BaseApplicationCreep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Creep'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Creep'</em><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.get_xy_data_in_xrange">
+<code class="sig-name descname">get_xy_data_in_xrange</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.get_xy_data_in_xrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.get_xy_data_in_xrange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the x and y data that with t in [self.tmin_view, self.tmax_view]</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewJt">
+<code class="sig-name descname">viewJt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewJt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewJt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compliance <span class="math notranslate nohighlight">\(J(t)=\gamma(t)/\sigma_0\)</span> (where <span class="math notranslate nohighlight">\(\sigma_0\)</span> is the applied stress in the creep experiment) vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogJt">
+<code class="sig-name descname">viewLogJt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewLogJt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogJt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the compliance <span class="math notranslate nohighlight">\(J(t)=\gamma(t)/\sigma_0\)</span> (where <span class="math notranslate nohighlight">\(\sigma_0\)</span> is the applied stress in the creep experiment) vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogStraint">
+<code class="sig-name descname">viewLogStraint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewLogStraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewLogStraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the applied strain <span class="math notranslate nohighlight">\(\gamma(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewStraint">
+<code class="sig-name descname">viewStraint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewStraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewStraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applied strain <span class="math notranslate nohighlight">\(\gamma(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewiRheo">
+<code class="sig-name descname">viewiRheo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewiRheo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewiRheo" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the compliance <span class="math notranslate nohighlight">\(J(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (no oversamplig).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewiRheoOver">
+<code class="sig-name descname">viewiRheoOver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewiRheoOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewiRheoOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>i-Rheo Fourier transformation of the compliance <span class="math notranslate nohighlight">\(J(t)\)</span> to obtain the storage modulus <span class="math notranslate nohighlight">\(G'(\omega)\)</span> and loss modulus <span class="math notranslate nohighlight">\(G''(\omega)\)</span> (with user selected oversamplig).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewt_Jt">
+<code class="sig-name descname">viewt_Jt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#BaseApplicationCreep.viewt_Jt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep.viewt_Jt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time divided by compliance <span class="math notranslate nohighlight">\(t/J(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCreep.CLApplicationCreep">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCreep.</code><code class="sig-name descname">CLApplicationCreep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Creep'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#CLApplicationCreep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.CLApplicationCreep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep" title="RepTate.applications.ApplicationCreep.BaseApplicationCreep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationCreep.BaseApplicationCreep</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.CLApplicationCreep.hide_sb_oversampling">
+<code class="sig-name descname">hide_sb_oversampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#CLApplicationCreep.hide_sb_oversampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.CLApplicationCreep.hide_sb_oversampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.CLApplicationCreep.show_sb_oversampling">
+<code class="sig-name descname">show_sb_oversampling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#CLApplicationCreep.show_sb_oversampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.CLApplicationCreep.show_sb_oversampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCreep.</code><code class="sig-name descname">GUIApplicationCreep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Creep'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationCreep.BaseApplicationCreep" title="RepTate.applications.ApplicationCreep.BaseApplicationCreep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationCreep.BaseApplicationCreep</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.add_oversampling_widget">
+<code class="sig-name descname">add_oversampling_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.add_oversampling_widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.add_oversampling_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add spinbox for the oversampling ratio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.add_xrange_widget_view">
+<code class="sig-name descname">add_xrange_widget_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.add_xrange_widget_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.add_xrange_widget_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add widgets below the view combobox to select the
+x-range applied to view transformation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_eta">
+<code class="sig-name descname">change_eta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.change_eta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_eta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the value of eta</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_oversampling">
+<code class="sig-name descname">change_oversampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.change_oversampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_oversampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the value of the oversampling ratio.
+Called when the spinbox value is changed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_xmax">
+<code class="sig-name descname">change_xmax</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.change_xmax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_xmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the value of t_max</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_xmin">
+<code class="sig-name descname">change_xmin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.change_xmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.change_xmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the value of t_min</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_oversampling_widget_visible">
+<code class="sig-name descname">set_oversampling_widget_visible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.set_oversampling_widget_visible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_oversampling_widget_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide the extra widget “sampling ratio”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_view_tools">
+<code class="sig-name descname">set_view_tools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">view_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.set_view_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_view_tools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide extra view widgets depending on the current view</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_xrange_widgets_view_visible">
+<code class="sig-name descname">set_xrange_widgets_view_visible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCreep.html#GUIApplicationCreep.set_xrange_widgets_view_visible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCreep.GUIApplicationCreep.set_xrange_widgets_view_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide the extra widgets for xrange selection</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="applicationcrystal">
+<h2>ApplicationCrystal<a class="headerlink" href="#applicationcrystal" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCrystal.ApplicationCrystal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCrystal.</code><code class="sig-name descname">ApplicationCrystal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#ApplicationCrystal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.ApplicationCrystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCrystal.ApplicationCrystal.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Crystal'</em><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.ApplicationCrystal.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCrystal.ApplicationCrystal.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Flow induced Crystallisation'</em><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.ApplicationCrystal.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCrystal.ApplicationCrystal.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'shearxs uextxs shear uext'</em><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.ApplicationCrystal.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCrystal.</code><code class="sig-name descname">BaseApplicationCrystal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Crystal'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Crystal'</em><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaGamma">
+<code class="sig-name descname">viewLogSigmaGamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewLogSigmaGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaGamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math notranslate nohighlight">\(\sigma(t)\)</span> vs logarithm of the strain <span class="math notranslate nohighlight">\(\gamma\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaTime">
+<code class="sig-name descname">viewLogSigmaTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewLogSigmaTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the transient shear or extensional stress (depending on the experiment) <span class="math notranslate nohighlight">\(\sigma(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogeta">
+<code class="sig-name descname">viewLogeta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewLogeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the transient shear or extensional viscosity (depending on the experiment) <span class="math notranslate nohighlight">\(\eta(t)\)</span> vs logarithm of time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNdot">
+<code class="sig-name descname">viewNdot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewNdot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNdot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nucleation rate as a function of time on log axis <span class="math notranslate nohighlight">\(\dot{N}(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (x-axis on log scale by default)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNt">
+<code class="sig-name descname">viewNt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewNt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nucleation density as a function of time on log axis <span class="math notranslate nohighlight">\(N(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (x-axis on log scale by default)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaGamma">
+<code class="sig-name descname">viewSigmaGamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewSigmaGamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaGamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math notranslate nohighlight">\(\sigma(t)\)</span> vs strain <span class="math notranslate nohighlight">\(\gamma\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaTime">
+<code class="sig-name descname">viewSigmaTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewSigmaTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transient shear or extensional stress (depending on the experiment) <span class="math notranslate nohighlight">\(\sigma(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_flowcurve">
+<code class="sig-name descname">view_flowcurve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.view_flowcurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_flowcurve" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\sigma(t_{\to\infty})\)</span> vs flow rate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_steadyNuc">
+<code class="sig-name descname">view_steadyNuc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.view_steadyNuc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_steadyNuc" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(\dot{N}(t_{\to\infty})\)</span> vs flow rate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.vieweta">
+<code class="sig-name descname">vieweta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.vieweta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.vieweta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transient shear or extensional viscosity (depending on the experiment) <span class="math notranslate nohighlight">\(\eta(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (both axes in logarithmic scale by default)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewphiX">
+<code class="sig-name descname">viewphiX</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#BaseApplicationCrystal.viewphiX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewphiX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crystal fraction as a function of time on log axis <span class="math notranslate nohighlight">\(\phi_X(t)\)</span> vs time <span class="math notranslate nohighlight">\(t\)</span> (x-axis on log scale by default)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCrystal.CLApplicationCrystal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCrystal.</code><code class="sig-name descname">CLApplicationCrystal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Crystal'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#CLApplicationCrystal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.CLApplicationCrystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal" title="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationCrystal.BaseApplicationCrystal</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationCrystal.GUIApplicationCrystal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationCrystal.</code><code class="sig-name descname">GUIApplicationCrystal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Crystal'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationCrystal.html#GUIApplicationCrystal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationCrystal.GUIApplicationCrystal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationCrystal.BaseApplicationCrystal" title="RepTate.applications.ApplicationCrystal.BaseApplicationCrystal"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationCrystal.BaseApplicationCrystal</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationdielectric">
+<h2>ApplicationDielectric<a class="headerlink" href="#applicationdielectric" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationDielectric.ApplicationDielectric">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationDielectric.</code><code class="sig-name descname">ApplicationDielectric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#ApplicationDielectric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.ApplicationDielectric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Dielectric Spectroscopy Data</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationDielectric.ApplicationDielectric.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Dielectric'</em><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.ApplicationDielectric.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationDielectric.ApplicationDielectric.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Dielectric Spectroscopy'</em><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.ApplicationDielectric.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationDielectric.ApplicationDielectric.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'dls'</em><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.ApplicationDielectric.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationDielectric.</code><code class="sig-name descname">BaseApplicationDielectric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Dielectric'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Dielectric'</em><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewColeCole">
+<code class="sig-name descname">viewColeCole</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewColeCole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewColeCole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cole-Cole plot: Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon''(\omega)\)</span> vs relative permittivity <span class="math notranslate nohighlight">\(\epsilon'(\omega)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1">
+<code class="sig-name descname">viewE1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewE1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative permittivity <span class="math notranslate nohighlight">\(\epsilon'(\omega)\)</span> vs frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1E2">
+<code class="sig-name descname">viewE1E2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewE1E2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE1E2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative permittivity and Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon'(\omega), \epsilon''(\omega)\)</span> vs frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE2">
+<code class="sig-name descname">viewE2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewE2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewE2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon''(\omega)\)</span> vs frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1">
+<code class="sig-name descname">viewLogE1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewLogE1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log or the relative permittivity <span class="math notranslate nohighlight">\(\epsilon'(\omega)\)</span> vs logarithm of the frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1E2">
+<code class="sig-name descname">viewLogE1E2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewLogE1E2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE1E2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log or the relative permittivity and Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon'(\omega), \epsilon''(\omega)\)</span> vs logarithm of the frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE2">
+<code class="sig-name descname">viewLogE2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewLogE2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewLogE2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log or the Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon''(\omega)\)</span> vs logarithm of the frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1">
+<code class="sig-name descname">viewSemiLogE1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewSemiLogE1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semilog plot: Relative permittivity <span class="math notranslate nohighlight">\(\epsilon'(\omega)\)</span> vs logarithm of the frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1E2">
+<code class="sig-name descname">viewSemiLogE1E2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewSemiLogE1E2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE1E2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semilog plot: Relative permittivity and Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon'(\omega), \epsilon''(\omega)\)</span> vs logarithm of frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE2">
+<code class="sig-name descname">viewSemiLogE2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#BaseApplicationDielectric.viewSemiLogE2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric.viewSemiLogE2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semilog plot: Dielectric Loss <span class="math notranslate nohighlight">\(\epsilon''(\omega)\)</span> vs logarithm of the frequency <span class="math notranslate nohighlight">\(\omega\)</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationDielectric.CLApplicationDielectric">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationDielectric.</code><code class="sig-name descname">CLApplicationDielectric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Dielectric'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#CLApplicationDielectric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.CLApplicationDielectric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric" title="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationDielectric.BaseApplicationDielectric</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationDielectric.GUIApplicationDielectric">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationDielectric.</code><code class="sig-name descname">GUIApplicationDielectric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Dielectric'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationDielectric.html#GUIApplicationDielectric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationDielectric.GUIApplicationDielectric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationDielectric.BaseApplicationDielectric" title="RepTate.applications.ApplicationDielectric.BaseApplicationDielectric"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationDielectric.BaseApplicationDielectric</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationgt">
+<h2>ApplicationGt<a class="headerlink" href="#applicationgt" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.applications.ApplicationGt.ApplicationGt">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationGt.</code><code class="sig-name descname">ApplicationGt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationGt.html#ApplicationGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationGt.ApplicationGt" title="Permalink to this definition">¶</a></dt>
@@ -255,10 +669,230 @@ Called when the spinbox value is changed</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.applications.ApplicationLVE">
-<span id="applicationlve"></span><h2>ApplicationLVE<a class="headerlink" href="#module-RepTate.applications.ApplicationLVE" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationLVE</p>
-<p>Module for the analysis of small angle oscillatory shear data - Master curves</p>
+<div class="section" id="applicationlaos">
+<h2>ApplicationLAOS<a class="headerlink" href="#applicationlaos" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationLAOS.ApplicationLAOS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationLAOS.</code><code class="sig-name descname">ApplicationLAOS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#ApplicationLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.ApplicationLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application for Large Oscillatory Shear data</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationLAOS.ApplicationLAOS.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'LAOS'</em><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.ApplicationLAOS.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationLAOS.ApplicationLAOS.description">
+<code class="sig-name descname">description</code><em class="property"> = 'LAOS Application'</em><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.ApplicationLAOS.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationLAOS.ApplicationLAOS.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'laos'</em><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.ApplicationLAOS.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationLAOS.</code><code class="sig-name descname">BaseApplicationLAOS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'LAOS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.FTtrig_MITlaos">
+<code class="sig-name descname">FTtrig_MITlaos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.FTtrig_MITlaos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.FTtrig_MITlaos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find trigonometric Fourier Series components from FFT:
+f = A0 + SUM_n( An*cos(n*2*pi*t/T + Bn*sin(n*2*pi*t/T)</p>
+<p>VARIABLES
+f           vector to be transformed
+A0          essentially mean(f)
+An          cosine terms
+Bn          sine terms</p>
+<p>SEQUENCE
+force input to have EVEN number of data points (reqd for fft.m)
+take FFT &gt; complex vector results
+extract trigonometric terms from complex vector</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'LAOS'</em><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.chebyshev_decompose_MITlaos">
+<code class="sig-name descname">chebyshev_decompose_MITlaos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">F</span></em>, <em class="sig-param"><span class="n">N</span></em>, <em class="sig-param"><span class="n">X</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.chebyshev_decompose_MITlaos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.chebyshev_decompose_MITlaos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find Chebyshev Polynomial components of input data vector:
+f = A0*T0(x) + A1*T1(x) + A2*T2(x) + …</p>
+<dl class="simple">
+<dt>[An]= chebyshev_decompose(F,N,X)</dt><dd><p><a href="#id1"><span class="problematic" id="id2">*</span></a>Assumes F occupies the domain [-1 : +1]</p>
+</dd>
+</dl>
+<p>with an arbitrary number of data points
+Uses trapz.m to calculate integrals</p>
+<blockquote>
+<div><p>INPUT VARIABLES
+F: vector of data, in domain [-1:1]
+N: degree of desired Legendre Polynomial decomposition
+X: Range points associated with F
+OUTPUT VARIABLE
+An: vector of Chebyshev coefficients</p>
+<blockquote>
+<div><p>An(i) = A_{i-1}</p>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.cycletrim_MITlaos">
+<code class="sig-name descname">cycletrim_MITlaos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">tau</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.cycletrim_MITlaos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.cycletrim_MITlaos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.do_FFT_and_STUFF">
+<code class="sig-name descname">do_FFT_and_STUFF</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.do_FFT_and_STUFF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.do_FFT_and_STUFF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.reconstruct_gamma_tau">
+<code class="sig-name descname">reconstruct_gamma_tau</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">An</span></em>, <em class="sig-param"><span class="n">Bn</span></em>, <em class="sig-param"><span class="n">gam_0</span></em>, <em class="sig-param"><span class="n">Ncycles</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.reconstruct_gamma_tau"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.reconstruct_gamma_tau" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_chebelastic">
+<code class="sig-name descname">view_chebelastic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_chebelastic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_chebelastic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chebyshev decomposition, elastic components</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_chebviscous">
+<code class="sig-name descname">view_chebviscous</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_chebviscous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_chebviscous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chebyshev decomposition, viscous components</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_fftspectrum">
+<code class="sig-name descname">view_fftspectrum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_fftspectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_fftspectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>FFT spectrum of stress signal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_gammatRAW">
+<code class="sig-name descname">view_gammatRAW</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_gammatRAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_gammatRAW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strain vs time RAW data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaANLS">
+<code class="sig-name descname">view_sigmagammaANLS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmagammaANLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaANLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs strain ANALYSIS</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaFILTERED">
+<code class="sig-name descname">view_sigmagammaFILTERED</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmagammaFILTERED"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaFILTERED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs strain FILTERED data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaRAW">
+<code class="sig-name descname">view_sigmagammaRAW</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmagammaRAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammaRAW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs strain RAW data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammadot">
+<code class="sig-name descname">view_sigmagammadot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmagammadot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammadot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs strain rate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammadotANLS">
+<code class="sig-name descname">view_sigmagammadotANLS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmagammadotANLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmagammadotANLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs strain rate ANALYSIS</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatRAW">
+<code class="sig-name descname">view_sigmatRAW</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmatRAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatRAW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress vs time RAW data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatgammatRAW">
+<code class="sig-name descname">view_sigmatgammatRAW</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmatgammatRAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatgammatRAW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress &amp; strain vs time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatgammatRAWSCALED">
+<code class="sig-name descname">view_sigmatgammatRAWSCALED</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#BaseApplicationLAOS.view_sigmatgammatRAWSCALED"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS.view_sigmatgammatRAWSCALED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress SCALED &amp; strain vs time</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationLAOS.CLApplicationLAOS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationLAOS.</code><code class="sig-name descname">CLApplicationLAOS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'LAOS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#CLApplicationLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.CLApplicationLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS" title="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationLAOS.BaseApplicationLAOS</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationLAOS.</code><code class="sig-name descname">GUIApplicationLAOS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'LAOS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationLAOS.BaseApplicationLAOS" title="RepTate.applications.ApplicationLAOS.BaseApplicationLAOS"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationLAOS.BaseApplicationLAOS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.add_HHSR_widget">
+<code class="sig-name descname">add_HHSR_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.add_HHSR_widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.add_HHSR_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add spinbox for HHSR</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.add_PPQC_widget">
+<code class="sig-name descname">add_PPQC_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.add_PPQC_widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.add_PPQC_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add spinbox for HHSR</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.change_HHSR">
+<code class="sig-name descname">change_HHSR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.change_HHSR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.change_HHSR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the value of the HHSR.
+Called when the spinbox value is changed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.change_PPQC">
+<code class="sig-name descname">change_PPQC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.change_PPQC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.change_PPQC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the value of the PPQC.
+Called when the spinbox value is changed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_HHSR_widget_visible">
+<code class="sig-name descname">set_HHSR_widget_visible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.set_HHSR_widget_visible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_HHSR_widget_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide the extra widget “HHSR”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_PPQC_widget_visible">
+<code class="sig-name descname">set_PPQC_widget_visible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.set_PPQC_widget_visible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_PPQC_widget_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide the extra widget “PPQC”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_view_tools">
+<code class="sig-name descname">set_view_tools</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">view_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLAOS.html#GUIApplicationLAOS.set_view_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLAOS.GUIApplicationLAOS.set_view_tools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/Hide extra view widgets depending on the current view</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="applicationlve">
+<h2>ApplicationLVE<a class="headerlink" href="#applicationlve" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.applications.ApplicationLVE.ApplicationLVE">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationLVE.</code><code class="sig-name descname">ApplicationLVE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationLVE.html#ApplicationLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationLVE.ApplicationLVE" title="Permalink to this definition">¶</a></dt>
@@ -415,10 +1049,8 @@ Called when the spinbox value is changed</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.applications.ApplicationMWD">
-<span id="applicationmwd"></span><h2>ApplicationMWD<a class="headerlink" href="#module-RepTate.applications.ApplicationMWD" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationMWD</p>
-<p>Module for handling Molecular weight distributions from GPC experiments.</p>
+<div class="section" id="applicationmwd">
+<h2>ApplicationMWD<a class="headerlink" href="#applicationmwd" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.applications.ApplicationMWD.ApplicationMWD">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationMWD.</code><code class="sig-name descname">ApplicationMWD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationMWD.html#ApplicationMWD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationMWD.ApplicationMWD" title="Permalink to this definition">¶</a></dt>
@@ -485,10 +1117,8 @@ Called when the spinbox value is changed</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.applications.ApplicationNLVE">
-<span id="applicationnlve"></span><h2>ApplicationNLVE<a class="headerlink" href="#module-RepTate.applications.ApplicationNLVE" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationNLVE</p>
-<p>Module for handling data from start up of shear and extensional flow experiments.</p>
+<div class="section" id="applicationnlve">
+<h2>ApplicationNLVE<a class="headerlink" href="#applicationnlve" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.applications.ApplicationNLVE.ApplicationNLVE">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationNLVE.</code><code class="sig-name descname">ApplicationNLVE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationNLVE.html#ApplicationNLVE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationNLVE.ApplicationNLVE" title="Permalink to this definition">¶</a></dt>
@@ -585,11 +1215,222 @@ Called when the spinbox value is changed</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.applications.ApplicationTTS">
-<span id="applicationtts"></span><h2>ApplicationTTS<a class="headerlink" href="#module-RepTate.applications.ApplicationTTS" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationTTS</p>
-<p>Module for handling small angle oscillatory shear experiments and applying the
-time-temperature superposition principle.</p>
+<div class="section" id="applicationreact">
+<h2>ApplicationReact<a class="headerlink" href="#applicationreact" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationReact.ApplicationReact">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationReact.</code><code class="sig-name descname">ApplicationReact</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#ApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.ApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application for Monte Carlo polymerisation</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationReact.ApplicationReact.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'React'</em><a class="headerlink" href="#RepTate.applications.ApplicationReact.ApplicationReact.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationReact.ApplicationReact.description">
+<code class="sig-name descname">description</code><em class="property"> = 'React Application'</em><a class="headerlink" href="#RepTate.applications.ApplicationReact.ApplicationReact.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationReact.ApplicationReact.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'reac'</em><a class="headerlink" href="#RepTate.applications.ApplicationReact.ApplicationReact.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationReact.</code><code class="sig-name descname">BaseApplicationReact</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'React'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'React'</em><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.change_view">
+<code class="sig-name descname">change_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.change_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redefinition to handle the x-range selection when P&amp;S is selected</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avarmlen_v_prio">
+<code class="sig-name descname">thview_avarmlen_v_prio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_avarmlen_v_prio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avarmlen_v_prio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avarmlen_v_senio">
+<code class="sig-name descname">thview_avarmlen_v_senio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_avarmlen_v_senio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avarmlen_v_senio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avprio_v_senio">
+<code class="sig-name descname">thview_avprio_v_senio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_avprio_v_senio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avprio_v_senio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avsenio_v_prio">
+<code class="sig-name descname">thview_avsenio_v_prio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_avsenio_v_prio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_avsenio_v_prio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_mass_br">
+<code class="sig-name descname">thview_proba_mass_br</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_proba_mass_br"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_mass_br" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_num_br">
+<code class="sig-name descname">thview_proba_num_br</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_proba_num_br"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_num_br" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_prio">
+<code class="sig-name descname">thview_proba_prio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_proba_prio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_prio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_senio">
+<code class="sig-name descname">thview_proba_senio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.thview_proba_senio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.thview_proba_senio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_br_1000C">
+<code class="sig-name descname">view_br_1000C</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_br_1000C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_br_1000C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of branching points per 1000 carbon as a function of the molecular weight</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_gM">
+<code class="sig-name descname">view_gM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_gM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_gM" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math notranslate nohighlight">\(g\)</span>-factor is defined as <span class="math notranslate nohighlight">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_loggM">
+<code class="sig-name descname">view_loggM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_loggM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_loggM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the <span class="math notranslate nohighlight">\(g\)</span>-factor as a function of the molecular weight.
+The <span class="math notranslate nohighlight">\(g\)</span>-factor is defined as <span class="math notranslate nohighlight">\(g = \dfrac{\langle R^2_g \rangle_\text{branched}}{\langle R^2_g \rangle_\text{linear}}\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_logwM">
+<code class="sig-name descname">view_logwM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_logwM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_logwM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the molecular weight distribution <span class="math notranslate nohighlight">\(\log(w(M))\)</span> vs molecular weight <span class="math notranslate nohighlight">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationReact.BaseApplicationReact.view_wM">
+<code class="sig-name descname">view_wM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#BaseApplicationReact.view_wM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.BaseApplicationReact.view_wM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Molecular weight distribution <span class="math notranslate nohighlight">\(w(M)\)</span> vs molecular weight <span class="math notranslate nohighlight">\(M\)</span> (in logarithmic scale)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationReact.CLApplicationReact">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationReact.</code><code class="sig-name descname">CLApplicationReact</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'React'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#CLApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.CLApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationReact.BaseApplicationReact" title="RepTate.applications.ApplicationReact.BaseApplicationReact"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationReact.BaseApplicationReact</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationReact.GUIApplicationReact">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationReact.</code><code class="sig-name descname">GUIApplicationReact</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'React'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationReact.html#GUIApplicationReact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationReact.GUIApplicationReact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationReact.BaseApplicationReact" title="RepTate.applications.ApplicationReact.BaseApplicationReact"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationReact.BaseApplicationReact</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationsans">
+<h2>ApplicationSANS<a class="headerlink" href="#applicationsans" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationSANS.ApplicationSANS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationSANS.</code><code class="sig-name descname">ApplicationSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#ApplicationSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.ApplicationSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application to Analyze Data from SANS experiments</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationSANS.ApplicationSANS.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'SANS'</em><a class="headerlink" href="#RepTate.applications.ApplicationSANS.ApplicationSANS.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationSANS.ApplicationSANS.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Small Angle Neutron Scattering Experiments'</em><a class="headerlink" href="#RepTate.applications.ApplicationSANS.ApplicationSANS.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationSANS.ApplicationSANS.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'sans'</em><a class="headerlink" href="#RepTate.applications.ApplicationSANS.ApplicationSANS.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationSANS.</code><code class="sig-name descname">BaseApplicationSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'SANS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'SANS'</em><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewKratky">
+<code class="sig-name descname">viewKratky</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewKratky"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewKratky" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kratky plot: <span class="math notranslate nohighlight">\(q^2\cdot I(q)\)</span> vs <span class="math notranslate nohighlight">\(q\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewLogSANS">
+<code class="sig-name descname">viewLogSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewLogSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewLogSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the scattered intensity <span class="math notranslate nohighlight">\(\log (I(q))\)</span> vs the logarithm of the scattering vector <span class="math notranslate nohighlight">\(\log(q)\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewSANS">
+<code class="sig-name descname">viewSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scattered intensity <span class="math notranslate nohighlight">\(I(q)\)</span> vs scattering vector <span class="math notranslate nohighlight">\(q\)</span> (both axes in logarithmic scale)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewZimm">
+<code class="sig-name descname">viewZimm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#BaseApplicationSANS.viewZimm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewZimm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zimm plot: <span class="math notranslate nohighlight">\(I(q)^{-1}\)</span> vs <span class="math notranslate nohighlight">\(q^2\)</span></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationSANS.CLApplicationSANS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationSANS.</code><code class="sig-name descname">CLApplicationSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'SANS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#CLApplicationSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.CLApplicationSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS" title="RepTate.applications.ApplicationSANS.BaseApplicationSANS"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationSANS.BaseApplicationSANS</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationSANS.GUIApplicationSANS">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationSANS.</code><code class="sig-name descname">GUIApplicationSANS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'SANS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationSANS.html#GUIApplicationSANS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationSANS.GUIApplicationSANS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationSANS.BaseApplicationSANS" title="RepTate.applications.ApplicationSANS.BaseApplicationSANS"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationSANS.BaseApplicationSANS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationtts">
+<h2>ApplicationTTS<a class="headerlink" href="#applicationtts" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.applications.ApplicationTTS.ApplicationTTS">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTS.</code><code class="sig-name descname">ApplicationTTS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTS.html#ApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTS.ApplicationTTS" title="Permalink to this definition">¶</a></dt>
@@ -742,6 +1583,155 @@ time-temperature superposition principle.</p>
 <dt id="RepTate.applications.ApplicationTTS.GUIApplicationTTS">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTS.</code><code class="sig-name descname">GUIApplicationTTS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'TTS'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTS.html#GUIApplicationTTS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTS.GUIApplicationTTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationTTS.BaseApplicationTTS" title="RepTate.applications.ApplicationTTS.BaseApplicationTTS"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationTTS.BaseApplicationTTS</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationttsfactors">
+<h2>ApplicationTTSFactors<a class="headerlink" href="#applicationttsfactors" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTSFactors.</code><code class="sig-name descname">ApplicationTTSFactors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#ApplicationTTSFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application handling time-temperature superposition factors and fit theories</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'TTSF'</em><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.description">
+<code class="sig-name descname">description</code><em class="property"> = 'TTS shift factors'</em><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.extension">
+<code class="sig-name descname">extension</code><em class="property"> = 'ttsf'</em><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTSFactors.</code><code class="sig-name descname">BaseApplicationTTSFactors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'TTSF'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'TTSF'</em><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.html_help_file">
+<code class="sig-name descname">html_help_file</code><em class="property"> = 'http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html'</em><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.html_help_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT">
+<code class="sig-name descname">viewLogaT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewLogaT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the horizontal shift factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT_invT">
+<code class="sig-name descname">viewLogaT_invT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewLogaT_invT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT_invT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the horizontal shift factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaTbT">
+<code class="sig-name descname">viewLogaTbT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewLogaTbT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaTbT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the vertical shift factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogbT">
+<code class="sig-name descname">viewLogbT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewLogbT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogbT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the vertical shift factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewaT">
+<code class="sig-name descname">viewaT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewaT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewaT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal shift factor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewbT">
+<code class="sig-name descname">viewbT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#BaseApplicationTTSFactors.viewbT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewbT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical shift factor</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationTTSFactors.CLApplicationTTSFactors">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTSFactors.</code><code class="sig-name descname">CLApplicationTTSFactors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'TTSFactors'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#CLApplicationTTSFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.CLApplicationTTSFactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors" title="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationTTSFactors.GUIApplicationTTSFactors">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationTTSFactors.</code><code class="sig-name descname">GUIApplicationTTSFactors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'TTSFactors'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationTTSFactors.html#GUIApplicationTTSFactors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationTTSFactors.GUIApplicationTTSFactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors" title="RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
+<p>GUI Version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="applicationuniversalviewer">
+<h2>ApplicationUniversalViewer<a class="headerlink" href="#applicationuniversalviewer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationUniversalViewer.</code><code class="sig-name descname">ApplicationUniversalViewer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationUniversalViewer.html#ApplicationUniversalViewer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="CodeCoreCL.html#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Application for viewing generic txt data described by ini files</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Universal Viewer'</em><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Universal Viewer Application'</em><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.extension">
+<code class="sig-name descname">extension</code><em class="property"> = ''</em><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer.extension" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationUniversalViewer.</code><code class="sig-name descname">BaseApplicationUniversalViewer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Universal Viewer'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inifile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nplot_max</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationUniversalViewer.html#BaseApplicationUniversalViewer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Class for both GUI and CL</p>
+<dl class="py attribute">
+<dt id="RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer.appname">
+<code class="sig-name descname">appname</code><em class="property"> = 'Universal Viewer'</em><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer.appname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer.viewyx">
+<code class="sig-name descname">viewyx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span></em>, <em class="sig-param"><span class="n">file_parameters</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationUniversalViewer.html#BaseApplicationUniversalViewer.viewyx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer.viewyx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example View function</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationUniversalViewer.CLApplicationUniversalViewer">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationUniversalViewer.</code><code class="sig-name descname">CLApplicationUniversalViewer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Universal Viewer'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inifile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nplot_max</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationUniversalViewer.html#CLApplicationUniversalViewer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.CLApplicationUniversalViewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer" title="RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer</span></code></a>, <a class="reference internal" href="CodeCoreCL.html#RepTate.core.Application.Application" title="RepTate.core.Application.Application"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.Application.Application</span></code></a></p>
+<p>CL Version</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="RepTate.applications.ApplicationUniversalViewer.GUIApplicationUniversalViewer">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.applications.ApplicationUniversalViewer.</code><code class="sig-name descname">GUIApplicationUniversalViewer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Universal Viewer'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">inifile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nplot_max</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/applications/ApplicationUniversalViewer.html#GUIApplicationUniversalViewer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.applications.ApplicationUniversalViewer.GUIApplicationUniversalViewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer" title="RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer</span></code></a>, <a class="reference internal" href="CodeCoreGUI.html#RepTate.gui.QApplicationWindow.QApplicationWindow" title="RepTate.gui.QApplicationWindow.QApplicationWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.gui.QApplicationWindow.QApplicationWindow</span></code></a></p>
 <p>GUI Version</p>
 </dd></dl>
 

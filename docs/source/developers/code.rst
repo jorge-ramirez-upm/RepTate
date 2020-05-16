@@ -10,15 +10,14 @@ Navigate the source Code of RepTate
    CodeApplications
    CodeTheories
    CodeTools
-   CodeTODO
 
-Main Application
-================
+Main Applications
+=================
 
 Graphical User Interface
 ------------------------
 
-.. automodule:: RepTate
+.. automodule:: RepTate.__main__
     :members:
     :undoc-members:
     :inherited-members:
@@ -32,4 +31,21 @@ Command Line Version
     :undoc-members:
     :inherited-members:
     :show-inheritance:
-    
+
+Materials Database
+------------------
+
+.. automodule:: RepTate.MatDB
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
+
+Universal Viewer (UV)
+---------------------
+
+.. automodule:: RepTate.UV
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:

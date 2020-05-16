@@ -55,7 +55,7 @@ from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversal
 
 
 def main():
-    start_RepTate(sys.argv[1:])
+    start_UV(sys.argv[1:])
 
 
 def get_argument_files(finlist):
@@ -88,11 +88,11 @@ def get_argument_files(finlist):
     return df
 
 
-def start_RepTate(argv):
+def start_UV(argv):
     """
-    Main RepTate application. 
+    Start Universal Viewer app. 
     
-    :param list argv: Command line parameters passed to Reptate
+    :param list argv: Command line parameters passed to UV
     """
     GUI = True
 

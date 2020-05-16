@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Core classes (Command Line)" href="CodeCoreCL.html" />
-    <link rel="prev" title="Code Diagrams for GUI" href="callgraphGUI.html" />
+    <link rel="prev" title="Tutorial: Interfacing Python and C code" href="python_c_interface.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -41,7 +41,7 @@
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="callgraphGUI.html" title="Code Diagrams for GUI"
+          <a href="python_c_interface.html" title="Tutorial: Interfacing Python and C code"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
@@ -55,9 +55,11 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Navigate the source Code of RepTate</a><ul>
-<li><a class="reference internal" href="#main-application">Main Application</a><ul>
-<li><a class="reference internal" href="#module-RepTate">Graphical User Interface</a></li>
+<li><a class="reference internal" href="#main-applications">Main Applications</a><ul>
+<li><a class="reference internal" href="#module-RepTate.__main__">Graphical User Interface</a></li>
 <li><a class="reference internal" href="#module-RepTate.CL">Command Line Version</a></li>
+<li><a class="reference internal" href="#module-RepTate.MatDB">Materials Database</a></li>
+<li><a class="reference internal" href="#module-RepTate.UV">Universal Viewer (UV)</a></li>
 </ul>
 </li>
 </ul>
@@ -65,8 +67,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="callgraphGUI.html"
-                        title="previous chapter">Code Diagrams for GUI</a></p>
+  <p class="topless"><a href="python_c_interface.html"
+                        title="previous chapter">Tutorial: Interfacing Python and C code</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="CodeCoreCL.html"
                         title="next chapter">Core classes (Command Line)</a></p>
@@ -100,33 +102,41 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="CodeCoreCL.html">Core classes (Command Line)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.Application">Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.ApplicationManager">ApplicationManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.CmdBase">CmdBase and CmdMode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.DataSet">DataSet</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.DataTable">DataTable</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.DraggableArtists">DraggableArtists</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.File">File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.FileType">FileType</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.Parameter">Parameter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.Theory">Theory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#version">Version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#module-RepTate.core.View">View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#application">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#applicationmanager">ApplicationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#cmdbase">CmdBase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#dataset">DataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#datatable">DataTable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#file">File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#filetype">FileType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#parameter">Parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#theory">Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#tool">Tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreCL.html#view">View</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CodeCoreGUI.html">Core classes (Graphical User Interface)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#module-RepTate.gui.QApplicationManager">QApplicationManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#module-RepTate.gui.QApplicationWindow">QApplicationWindow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#module-RepTate.gui.QDataSet">QDataSet</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#module-RepTate.gui.QTheory">QTheory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#qapplicationmanager">QApplicationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#qapplicationwindow">QApplicationWindow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#qdataset">QDataSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#qtheory">QTheory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeCoreGUI.html#qtool">QTool</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CodeApplications.html">Applications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#module-RepTate.applications.ApplicationGt">ApplicationGt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#module-RepTate.applications.ApplicationLVE">ApplicationLVE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#module-RepTate.applications.ApplicationMWD">ApplicationMWD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#module-RepTate.applications.ApplicationNLVE">ApplicationNLVE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#module-RepTate.applications.ApplicationTTS">ApplicationTTS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationcreep">ApplicationCreep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationcrystal">ApplicationCrystal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationdielectric">ApplicationDielectric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationgt">ApplicationGt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationlaos">ApplicationLAOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationlve">ApplicationLVE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationmwd">ApplicationMWD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationnlve">ApplicationNLVE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationreact">ApplicationReact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationsans">ApplicationSANS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationtts">ApplicationTTS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationttsfactors">ApplicationTTSFactors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeApplications.html#applicationuniversalviewer">ApplicationUniversalViewer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CodeTheories.html">Theories</a><ul>
@@ -140,17 +150,52 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CodeTools.html">Tools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#materials-database">Materials Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#likhtman-mcleish-theory">Likhtman-McLeish theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolbounds">ToolBounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolevaluate">ToolEvaluate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolfindpeaks">ToolFindPeaks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolgradient">ToolGradient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolintegral">ToolIntegral</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolinterpolate">ToolInterpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolmaterialsdatabase">ToolMaterialsDatabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolpowerlaw">ToolPowerLaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CodeTools.html#toolsmooth">ToolSmooth</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="CodeTODO.html">TODO</a></li>
 </ul>
 </div>
-<div class="section" id="main-application">
-<h2>Main Application<a class="headerlink" href="#main-application" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-RepTate">
-<span id="graphical-user-interface"></span><h3>Graphical User Interface<a class="headerlink" href="#module-RepTate" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="main-applications">
+<h2>Main Applications<a class="headerlink" href="#main-applications" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-RepTate.__main__">
+<span id="graphical-user-interface"></span><h3>Graphical User Interface<a class="headerlink" href="#module-RepTate.__main__" title="Permalink to this headline">¶</a></h3>
+<p>Module Reptate</p>
+<p>Main program that launches the GUI.</p>
+<dl class="py function">
+<dt id="RepTate.__main__.get_argument_files">
+<code class="sig-prename descclassname">RepTate.__main__.</code><code class="sig-name descname">get_argument_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">finlist</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/__main__.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.__main__.get_argument_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse files from command line and group them by extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>finlist</strong> (<em>list</em>) – List of files from argparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="RepTate.__main__.main">
+<code class="sig-prename descclassname">RepTate.__main__.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/__main__.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.__main__.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="RepTate.__main__.start_RepTate">
+<code class="sig-prename descclassname">RepTate.__main__.</code><code class="sig-name descname">start_RepTate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">argv</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/__main__.html#start_RepTate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.__main__.start_RepTate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main RepTate application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em>) – Command line parameters passed to Reptate</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-RepTate.CL">
 <span id="command-line-version"></span><h3>Command Line Version<a class="headerlink" href="#module-RepTate.CL" title="Permalink to this headline">¶</a></h3>
@@ -184,6 +229,59 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-RepTate.MatDB">
+<span id="materials-database"></span><h3>Materials Database<a class="headerlink" href="#module-RepTate.MatDB" title="Permalink to this headline">¶</a></h3>
+<p>Module MatDB</p>
+<p>Main program that launches the Materials Database</p>
+<dl class="py function">
+<dt id="RepTate.MatDB.main">
+<code class="sig-prename descclassname">RepTate.MatDB.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/MatDB.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.MatDB.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="RepTate.MatDB.start_MatDB">
+<code class="sig-prename descclassname">RepTate.MatDB.</code><code class="sig-name descname">start_MatDB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">argv</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/MatDB.html#start_MatDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.MatDB.start_MatDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Materials Database application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em>) – Command line parameters passed to MatDB</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-RepTate.UV">
+<span id="universal-viewer-uv"></span><h3>Universal Viewer (UV)<a class="headerlink" href="#module-RepTate.UV" title="Permalink to this headline">¶</a></h3>
+<p>Module UV</p>
+<p>Main program that launches the Universal Viewer of RepTate</p>
+<dl class="py function">
+<dt id="RepTate.UV.get_argument_files">
+<code class="sig-prename descclassname">RepTate.UV.</code><code class="sig-name descname">get_argument_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">finlist</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/UV.html#get_argument_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.UV.get_argument_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse files from command line and group them by extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>finlist</strong> (<em>list</em>) – List of files from argparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="RepTate.UV.main">
+<code class="sig-prename descclassname">RepTate.UV.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/UV.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.UV.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="RepTate.UV.start_UV">
+<code class="sig-prename descclassname">RepTate.UV.</code><code class="sig-name descname">start_UV</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">argv</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/UV.html#start_UV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.UV.start_UV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start Universal Viewer app.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em>) – Command line parameters passed to UV</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 </div>
 
@@ -206,7 +304,7 @@
           <a href="CodeCoreCL.html" title="Core classes (Command Line)"
              >next</a> |</li>
         <li class="right" >
-          <a href="callgraphGUI.html" title="Code Diagrams for GUI"
+          <a href="python_c_interface.html" title="Tutorial: Interfacing Python and C code"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 

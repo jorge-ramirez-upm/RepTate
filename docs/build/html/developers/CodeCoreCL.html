@@ -56,18 +56,17 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Core classes (Command Line)</a><ul>
-<li><a class="reference internal" href="#module-RepTate.core.Application">Application</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.ApplicationManager">ApplicationManager</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.CmdBase">CmdBase and CmdMode</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.DataSet">DataSet</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.DataTable">DataTable</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.DraggableArtists">DraggableArtists</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.File">File</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.FileType">FileType</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.Parameter">Parameter</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.Theory">Theory</a></li>
-<li><a class="reference internal" href="#version">Version</a></li>
-<li><a class="reference internal" href="#module-RepTate.core.View">View</a></li>
+<li><a class="reference internal" href="#application">Application</a></li>
+<li><a class="reference internal" href="#applicationmanager">ApplicationManager</a></li>
+<li><a class="reference internal" href="#cmdbase">CmdBase</a></li>
+<li><a class="reference internal" href="#dataset">DataSet</a></li>
+<li><a class="reference internal" href="#datatable">DataTable</a></li>
+<li><a class="reference internal" href="#file">File</a></li>
+<li><a class="reference internal" href="#filetype">FileType</a></li>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
+<li><a class="reference internal" href="#theory">Theory</a></li>
+<li><a class="reference internal" href="#tool">Tool</a></li>
+<li><a class="reference internal" href="#view">View</a></li>
 </ul>
 </li>
 </ul>
@@ -107,10 +106,8 @@
 <h1>Core classes (Command Line)<a class="headerlink" href="#core-classes-command-line" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="module-RepTate.core.Application">
-<span id="application"></span><h2>Application<a class="headerlink" href="#module-RepTate.core.Application" title="Permalink to this headline">¶</a></h2>
-<p>Module Application</p>
-<p>Module that defines the basic class from which all applications are derived.</p>
+<div class="section" id="application">
+<h2>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.Application.Application">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Application.</code><code class="sig-name descname">Application</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ApplicationTemplate'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nplot_max</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">ncols</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Application.html#Application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Application.Application" title="Permalink to this definition">¶</a></dt>
@@ -293,13 +290,22 @@
 <dt id="RepTate.core.Application.Application.do_switch">
 <code class="sig-name descname">do_switch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Application.html#Application.do_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Application.Application.do_switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set focus to an open set/theory/tool.
-By hitting TAB, all the currently accessible elements are shown.
-Arguments:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>name {str} – Name of the set/theory/tool to switch the focus to.</p></li>
-</ul>
-</div></blockquote>
+By hitting TAB, all the currently accessible elements are shown.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>line</strong> – Name of the set/theory/tool to switch the focus to.-</p>
+</dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">switch</span> <span class="n">LVE1</span><span class="o">.</span><span class="n">Set1</span><span class="o">.</span><span class="n">LM1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">switch</span> <span class="n">NLVE2</span><span class="o">.</span><span class="n">Set2</span><span class="o">.</span><span class="n">RP2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Find key functions and document them like this one</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -473,10 +479,8 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.core.ApplicationManager">
-<span id="applicationmanager"></span><h2>ApplicationManager<a class="headerlink" href="#module-RepTate.core.ApplicationManager" title="Permalink to this headline">¶</a></h2>
-<p>Module ApplicationManager</p>
-<p>Module for the Main interface that contains all applications. Command line version.</p>
+<div class="section" id="applicationmanager">
+<h2>ApplicationManager<a class="headerlink" href="#applicationmanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.ApplicationManager.</code><code class="sig-name descname">ApplicationManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">loglevel</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/ApplicationManager.html#ApplicationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager" title="Permalink to this definition">¶</a></dt>
@@ -490,7 +494,7 @@ Called at the end of ds.do_plot() and when plot-tab is changed</p>
 
 <dl class="py attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.build">
-<code class="sig-name descname">build</code><em class="property"> = 'v1.0.0+102.g219216de.dirty'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.build" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build</code><em class="property"> = 'v1.0.0+103.g1d13cf22.dirty'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.build" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -645,7 +649,7 @@ Argument: name – applicaton/set/theory/tool to switch the focus to (hit TAB to
 
 <dl class="py attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.intro">
-<code class="sig-name descname">intro</code><em class="property"> = '\x1b[32mRepTate \x1b[31mv1.0.0 - 2020-05-16\x1b[39m command processor (Build v1.0.0+102.g219216de.dirty)\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">intro</code><em class="property"> = '\x1b[32mRepTate \x1b[31mv1.0.0 - 2020-05-16\x1b[39m command processor (Build v1.0.0+103.g1d13cf22.dirty)\nhelp [command] for instructions\nTAB for completions'</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.intro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -680,7 +684,7 @@ Maxwell modes</p>
 
 <dl class="py attribute">
 <dt id="RepTate.core.ApplicationManager.ApplicationManager.verdata">
-<code class="sig-name descname">verdata</code><em class="property"> = {'date': '2020-05-16T15:10:31+0200', 'dirty': True, 'error': None, 'full-revisionid': '219216de94271b8f1fa2082371a08cf21a1ecf5e', 'version': 'v1.0.0+102.g219216de.dirty'}</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.verdata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">verdata</code><em class="property"> = {'date': '2020-05-16T20:52:33+0200', 'dirty': True, 'error': None, 'full-revisionid': '1d13cf228d32608a1fb02a21e0541246359904cd', 'version': 'v1.0.0+103.g1d13cf22.dirty'}</em><a class="headerlink" href="#RepTate.core.ApplicationManager.ApplicationManager.verdata" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -691,32 +695,8 @@ Maxwell modes</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.core.CmdBase">
-<span id="cmdbase-and-cmdmode"></span><h2>CmdBase and CmdMode<a class="headerlink" href="#module-RepTate.core.CmdBase" title="Permalink to this headline">¶</a></h2>
-<p>Module CmdBase</p>
-<p>Module that defines the basic command line interaction with the user.</p>
-<dl class="py class">
-<dt id="RepTate.core.CmdBase.CalcMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.CmdBase.</code><code class="sig-name descname">CalcMode</code><a class="reference internal" href="../_modules/RepTate/core/CmdBase.html#CalcMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.CmdBase.CalcMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Operation mode: Single or Multithread</p>
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CalcMode.modes">
-<code class="sig-name descname">modes</code><em class="property"> = ['Calc and Min in the same thread as GUI', 'Calc and Min in separate threads to GUI']</em><a class="headerlink" href="#RepTate.core.CmdBase.CalcMode.modes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CalcMode.multithread">
-<code class="sig-name descname">multithread</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.CmdBase.CalcMode.multithread" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CalcMode.singlethread">
-<code class="sig-name descname">singlethread</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.CmdBase.CalcMode.singlethread" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="cmdbase">
+<h2>CmdBase<a class="headerlink" href="#cmdbase" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.CmdBase.CmdBase">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.CmdBase.</code><code class="sig-name descname">CmdBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/CmdBase.html#CmdBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.CmdBase.CmdBase" title="Permalink to this definition">¶</a></dt>
@@ -853,82 +833,9 @@ In that case we execute the line as Python code.</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="RepTate.core.CmdBase.CmdMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.CmdBase.</code><code class="sig-name descname">CmdMode</code><a class="reference internal" href="../_modules/RepTate/core/CmdBase.html#CmdMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.CmdBase.CmdMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Enumeration that describes the mode in which RepTate is running</p>
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CmdMode.GUI">
-<code class="sig-name descname">GUI</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.CmdBase.CmdMode.GUI" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CmdMode.batch">
-<code class="sig-name descname">batch</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.CmdBase.CmdMode.batch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CmdMode.cmdline">
-<code class="sig-name descname">cmdline</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.CmdBase.CmdMode.cmdline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.CmdBase.CmdMode.modes">
-<code class="sig-name descname">modes</code><em class="property"> = ['Command Line Interpreter', 'Batch processing', 'Graphical User Interface']</em><a class="headerlink" href="#RepTate.core.CmdBase.CmdMode.modes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-RepTate.core.DataSet">
-<span id="dataset"></span><h2>DataSet<a class="headerlink" href="#module-RepTate.core.DataSet" title="Permalink to this headline">¶</a></h2>
-<p>Module DataSet</p>
-<p>Module that describes the basic container for data sets (sets of experimental data
-read from different files), as well as the particular theories that are being applied
-to that data set.</p>
-<dl class="py class">
-<dt id="RepTate.core.DataSet.ColorMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DataSet.</code><code class="sig-name descname">ColorMode</code><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#ColorMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.ColorMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Class to describe how to change colors in the current DataSet</p>
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.color1">
-<code class="sig-name descname">color1</code><em class="property"> = (0, 0, 0, 1)</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.color1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.color2">
-<code class="sig-name descname">color2</code><em class="property"> = (1, 0, 0, 1)</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.color2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.colorpalettes">
-<code class="sig-name descname">colorpalettes</code><em class="property"> = {'Bright': [(0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), (1.0, 0.769, 0.0), (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043), (0.541, 0.169, 0.886), (1.0, 0.769, 0.0), (0.0, 0.843, 1.0), (0.0, 0.247, 1.0), (0.012, 0.929, 0.227), (0.91, 0.0, 0.043)], 'ColorBlind': [(0, 0, 0), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0), (0.8, 0.475, 0.655), (0.941, 0.894, 0.259), (0.337, 0.706, 0.914), (0.0, 0.447, 0.698), (0.0, 0.62, 0.451), (0.835, 0.369, 0.0)], 'Dark': [(0, 0, 0), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), (0.722, 0.525, 0.043), (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0), (0.463, 0.0, 0.631), (0.722, 0.525, 0.043), (0.0, 0.388, 0.455), (0.0, 0.11, 0.498), (0.004, 0.459, 0.09), (0.549, 0.035, 0.0)], 'Paired': [(0.651, 0.808, 0.89), (0.122, 0.471, 0.706), (0.698, 0.875, 0.541), (0.2, 0.627, 0.173), (0.984, 0.604, 0.6), (0.89, 0.102, 0.11), (0.992, 0.749, 0.435), (1.0, 0.498, 0.0), (0.792, 0.698, 0.839), (0.416, 0.239, 0.604), (1.0, 1.0, 0.6), (0.694, 0.349, 0.157), (0.651, 0.808, 0.89), (0.122, 0.471, 0.706), (0.698, 0.875, 0.541), (0.2, 0.627, 0.173)], 'Pastel': [(0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604), (0.816, 0.733, 1.0), (1.0, 0.996, 0.639), (0.69, 0.878, 0.902), (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604), (0.816, 0.733, 1.0), (1.0, 0.996, 0.639), (0.69, 0.878, 0.902), (0.573, 0.776, 1.0), (0.592, 0.941, 0.667), (1.0, 0.624, 0.604)], 'Rainbow': [(0, 0, 0), (1.0, 0, 0), (0, 1.0, 0), (0, 0, 1.0), (1.0, 1.0, 0), (1.0, 0, 1.0), (0, 1.0, 1.0), (0.5, 0, 0), (0, 0.5, 0), (0, 0, 0.5), (0.5, 0.5, 0), (0.5, 0, 0.5), (0, 0.5, 0.5), (0.25, 0, 0), (0, 0.25, 0), (0, 0, 0.25), (0.25, 0.25, 0), (0.25, 0, 0.25), (0, 0.25, 0.25)]}</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.colorpalettes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.fixed">
-<code class="sig-name descname">fixed</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.fixed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.gradient">
-<code class="sig-name descname">gradient</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.gradient" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.modes">
-<code class="sig-name descname">modes</code><em class="property"> = ['Fixed color', 'Variable color (from palette)', 'Color gradient']</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.modes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ColorMode.variable">
-<code class="sig-name descname">variable</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.DataSet.ColorMode.variable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="dataset">
+<h2>DataSet<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.DataSet.DataSet">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DataSet.</code><code class="sig-name descname">DataSet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'DataSet'</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#DataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.DataSet" title="Permalink to this definition">¶</a></dt>
@@ -1090,7 +997,7 @@ to that data set.</p>
 <dl class="py method">
 <dt id="RepTate.core.DataSet.DataSet.do_list_files">
 <code class="sig-name descname">do_list_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#DataSet.do_list_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.DataSet.do_list_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>List the files in the current dataset. Active files are shown with an <a href="#id1"><span class="problematic" id="id2">*</span></a>. Hidden files are shown with (-).</p>
+<dd><p>List the files in the current dataset. Active files are shown with an *. Hidden files are shown with (-).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1220,100 +1127,9 @@ fparam: dict containing file parameter names and values</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="RepTate.core.DataSet.SymbolMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DataSet.</code><code class="sig-name descname">SymbolMode</code><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#SymbolMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Class to describe how to change the symbols in the DataSet</p>
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.allmarkernames">
-<code class="sig-name descname">allmarkernames</code><em class="property"> = ['point', 'circle', 'triangle_down', 'triangle_up', 'triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left', 'tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)', 'star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)', 'diamond', 'thin_diamond', 'vline', 'hline']</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.allmarkernames" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.allmarkers">
-<code class="sig-name descname">allmarkers</code><em class="property"> = ['.', 'o', 'v', '^', '&lt;', '&gt;', '1', '2', '3', '4', '8', 's', 'p', 'P', '*', 'h', 'H', '+', 'x', 'X', 'D', 'd', '|', '_']</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.allmarkers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.filledmarkernames">
-<code class="sig-name descname">filledmarkernames</code><em class="property"> = ['point', 'circle', 'triangle_down', 'triangle_up', 'triangle_left', 'triangle_right', 'octagon', 'square', 'pentagon', 'plus (filled)', 'star', 'hexagon1', 'hexagon2', 'x (filled)', 'diamond', 'thin_diamond']</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.filledmarkernames" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.filledmarkers">
-<code class="sig-name descname">filledmarkers</code><em class="property"> = ['.', 'o', 'v', '^', '&lt;', '&gt;', '8', 's', 'p', 'P', '*', 'h', 'H', 'X', 'D', 'd']</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.filledmarkers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.fixed">
-<code class="sig-name descname">fixed</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.fixed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.fixedfilled">
-<code class="sig-name descname">fixedfilled</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.fixedfilled" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.modes">
-<code class="sig-name descname">modes</code><em class="property"> = ['Fixed empty symbol', 'Fixed filled symbol', 'Variable empty symbols', 'Variable filled symbols']</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.modes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.symbol1">
-<code class="sig-name descname">symbol1</code><em class="property"> = '.'</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.symbol1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.symbol1_name">
-<code class="sig-name descname">symbol1_name</code><em class="property"> = 'point'</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.symbol1_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.variable">
-<code class="sig-name descname">variable</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.variable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.SymbolMode.variablefilled">
-<code class="sig-name descname">variablefilled</code><em class="property"> = 3</em><a class="headerlink" href="#RepTate.core.DataSet.SymbolMode.variablefilled" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DataSet.ThLineMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DataSet.</code><code class="sig-name descname">ThLineMode</code><a class="reference internal" href="../_modules/RepTate/core/DataSet.html#ThLineMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataSet.ThLineMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Class to describe how to change the line types in Theories</p>
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ThLineMode.as_data">
-<code class="sig-name descname">as_data</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.DataSet.ThLineMode.as_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ThLineMode.color">
-<code class="sig-name descname">color</code><em class="property"> = (0, 0, 0, 1)</em><a class="headerlink" href="#RepTate.core.DataSet.ThLineMode.color" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ThLineMode.fixed">
-<code class="sig-name descname">fixed</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.DataSet.ThLineMode.fixed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DataSet.ThLineMode.linestyles">
-<code class="sig-name descname">linestyles</code><em class="property"> = {'dashdotdotted': (0, (3, 5, 1, 5, 1, 5)), 'dashdotted': (0, (3, 5, 1, 5)), 'dashed': (0, (5, 5)), 'densely dashdotdotted': (0, (3, 1, 1, 1, 1, 1)), 'densely dashdotted': (0, (3, 1, 1, 1)), 'densely dashed': (0, (5, 1)), 'densely dotted': (0, (1, 1)), 'dotted': (0, (1, 5)), 'loosely dashdotdotted': (0, (3, 10, 1, 10, 1, 10)), 'loosely dashdotted': (0, (3, 10, 1, 10)), 'loosely dashed': (0, (5, 10)), 'loosely dotted': (0, (1, 10)), 'solid': (0, ())}</em><a class="headerlink" href="#RepTate.core.DataSet.ThLineMode.linestyles" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-RepTate.core.DataTable">
-<span id="datatable"></span><h2>DataTable<a class="headerlink" href="#module-RepTate.core.DataTable" title="Permalink to this headline">¶</a></h2>
-<p>Module DataTable</p>
-<p>Module for the actual object that contains the data, both for experiments and theory.</p>
+<div class="section" id="datatable">
+<h2>DataTable<a class="headerlink" href="#datatable" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.DataTable.DataTable">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DataTable.</code><code class="sig-name descname">DataTable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">axarr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataTable.html#DataTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataTable.DataTable" title="Permalink to this definition">¶</a></dt>
@@ -1339,6 +1155,10 @@ fparam: dict containing file parameter names and values</p>
 <dt id="RepTate.core.DataTable.DataTable.mincol">
 <code class="sig-name descname">mincol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">col</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DataTable.html#DataTable.mincol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DataTable.DataTable.mincol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum value in table column col</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Example <strong>todo</strong> in the code</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1350,368 +1170,8 @@ fparam: dict containing file parameter names and values</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.core.DraggableArtists">
-<span id="draggableartists"></span><h2>DraggableArtists<a class="headerlink" href="#module-RepTate.core.DraggableArtists" title="Permalink to this headline">¶</a></h2>
-<p>Module DraggableArtists</p>
-<p>Module for the definition of interactive graphical objects that the user can move.</p>
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DragType">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DragType</code><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DragType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Describes the type of drag that the graphical object can be subjected to</p>
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DragType.both">
-<code class="sig-name descname">both</code><em class="property"> = 3</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType.both" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DragType.horizontal">
-<code class="sig-name descname">horizontal</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType.horizontal" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DragType.none">
-<code class="sig-name descname">none</code><em class="property"> = 4</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType.none" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DragType.special">
-<code class="sig-name descname">special</code><em class="property"> = 5</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType.special" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DragType.vertical">
-<code class="sig-name descname">vertical</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DragType.vertical" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableArtist</code><span class="sig-paren">(</span><em class="sig-param">artist=None</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em>, <em class="sig-param">parent_theory=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Abstract class for motions of a matplotlib artist</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.connect">
-<code class="sig-name descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.connect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connect events</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.disconnect">
-<code class="sig-name descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.disconnect" title="Permalink to this definition">¶</a></dt>
-<dd><p>disconnect all the stored connection ids</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Do nothing</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.lock">
-<code class="sig-name descname">lock</code><em class="property"> = None</em><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.lock" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Do nothing</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.on_motion">
-<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.on_motion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Motion event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press events</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableArtist.on_release">
-<code class="sig-name descname">on_release</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableArtist.on_release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableArtist.on_release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableBinSeries">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableBinSeries</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">logx=False</em>, <em class="sig-param">logy=False</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableBinSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableBinSeries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Dragabble histogram</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableBinSeries.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableBinSeries.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableBinSeries.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change artist coords</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableBinSeries.on_motion">
-<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableBinSeries.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableBinSeries.on_motion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Motion event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableBinSeries.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableBinSeries.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableBinSeries.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableBinSeries.on_release">
-<code class="sig-name descname">on_release</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableBinSeries.on_release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableBinSeries.on_release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableHLine">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableHLine</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em>, <em class="sig-param">parent_theory=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable Horizontal line</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableHLine.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHLine.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHLine.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the artist data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableHLine.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHLine.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHLine.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist coordinates</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableHLine.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHLine.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHLine.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableHSpan">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableHSpan</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHSpan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHSpan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable Horizontal Span</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableHSpan.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHSpan.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHSpan.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the artist data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableHSpan.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableHSpan.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableHSpan.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist data</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableModesSeries</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">parent_application=None</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable points of a series</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify artist coords</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries.on_motion">
-<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries.on_motion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Motion event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries.on_release">
-<code class="sig-name descname">on_release</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries.on_release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries.on_release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableModesSeries.update_logx_logy">
-<code class="sig-name descname">update_logx_logy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableModesSeries.update_logx_logy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableModesSeries.update_logx_logy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableNote">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableNote</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em>, <em class="sig-param">function2=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableNote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableNote" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable annotation box</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableNote.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableNote.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableNote.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the artist data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableNote.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableNote.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableNote.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist position</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableNote.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableNote.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableNote.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableNote.on_release">
-<code class="sig-name descname">on_release</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableNote.on_release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableNote.on_release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggablePatch">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggablePatch</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggablePatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggablePatch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable Patch</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggablePatch.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggablePatch.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggablePatch.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get data of the artist</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggablePatch.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggablePatch.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggablePatch.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify artist coords</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableRectangle">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableRectangle</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableRectangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableRectangle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable rectangle</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableRectangle.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableRectangle.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableRectangle.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get data of the artist</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableRectangle.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableRectangle.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableRectangle.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist coords</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableSeries</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">logx=False</em>, <em class="sig-param">logy=False</em>, <em class="sig-param">xref=0</em>, <em class="sig-param">yref=0</em>, <em class="sig-param">function=None</em>, <em class="sig-param">functionendshift=None</em>, <em class="sig-param">index=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Full draggable series</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.disconnect">
-<code class="sig-name descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.disconnect" title="Permalink to this definition">¶</a></dt>
-<dd><p>disconnect all the stored connection ids</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify artist coords</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.on_motion">
-<code class="sig-name descname">on_motion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.on_motion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.on_motion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Motion event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableSeries.on_release">
-<code class="sig-name descname">on_release</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableSeries.on_release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableSeries.on_release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Release event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableVLine">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableVLine</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em>, <em class="sig-param">parent_theory=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable Verticla line</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableVLine.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVLine.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVLine.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the data from the artist</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableVLine.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVLine.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVLine.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist coordinates</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableVLine.on_press">
-<code class="sig-name descname">on_press</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVLine.on_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVLine.on_press" title="Permalink to this definition">¶</a></dt>
-<dd><p>Press event</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.DraggableArtists.DraggableVSpan">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.DraggableArtists.</code><code class="sig-name descname">DraggableVSpan</code><span class="sig-paren">(</span><em class="sig-param">artist</em>, <em class="sig-param">mode=&lt;DragType.none: 4&gt;</em>, <em class="sig-param">function=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVSpan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVSpan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#RepTate.core.DraggableArtists.DraggableArtist" title="RepTate.core.DraggableArtists.DraggableArtist"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.DraggableArtists.DraggableArtist</span></code></a></p>
-<p>Draggable Vertical Span</p>
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableVSpan.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVSpan.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVSpan.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the artist data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.DraggableArtists.DraggableVSpan.modify_artist">
-<code class="sig-name descname">modify_artist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dx</span></em>, <em class="sig-param"><span class="n">dy</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/DraggableArtists.html#DraggableVSpan.modify_artist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.DraggableArtists.DraggableVSpan.modify_artist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify the artist coordinates</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-RepTate.core.File">
-<span id="file"></span><h2>File<a class="headerlink" href="#module-RepTate.core.File" title="Permalink to this headline">¶</a></h2>
-<p>Module File</p>
-<p>Module that defines a basic File, with headers, columns and data.</p>
+<div class="section" id="file">
+<h2>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.File.File">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.File.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">file_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parent_dataset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axarr</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/File.html#File"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.File.File" title="Permalink to this definition">¶</a></dt>
@@ -1738,133 +1198,11 @@ fparam: dict containing file parameter names and values</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-RepTate.core.FileType">
-<span id="filetype"></span><h2>FileType<a class="headerlink" href="#module-RepTate.core.FileType" title="Permalink to this headline">¶</a></h2>
-<p>Module FileType</p>
-<p>Module for the basic definition of file types.</p>
-<dl class="py class">
-<dt id="RepTate.core.FileType.ExcelFile">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.FileType.</code><code class="sig-name descname">ExcelFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Excel File'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'xlsx'</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">'Generic Excel file'</span></em>, <em class="sig-param"><span class="n">col_names</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">basic_file_parameters</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">col_units</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#ExcelFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.ExcelFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Parse and read contents from Excel file</p>
-<dl class="py method">
-<dt id="RepTate.core.FileType.ExcelFile.read_file">
-<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">parent_dataset</span></em>, <em class="sig-param"><span class="n">axarr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#ExcelFile.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.ExcelFile.read_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Excel File</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.FileType.TXTColumnFile">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.FileType.</code><code class="sig-name descname">TXTColumnFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'TXTColumn'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'txt'</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">'Generic text file with columns'</span></em>, <em class="sig-param"><span class="n">col_names</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">basic_file_parameters</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">col_units</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#TXTColumnFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.TXTColumnFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Basic class for text-column based data files</p>
-<p>Columns should be separated by espaces or tabs</p>
-<p>BASIC Structure of FILE:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LINE</span>    <span class="n">CONTENTS</span>
-<span class="mi">0</span>       <span class="n">Param1</span><span class="o">=</span><span class="mi">434</span><span class="p">;</span><span class="n">Param2</span><span class="o">=</span><span class="mi">4355</span><span class="p">;</span>
-<span class="mi">1</span>       <span class="c1"># Header line and/or comments [OPTIONAL, ANY NUMBER OF HEADER LINES IS POSSIBLE]</span>
-<span class="mi">2</span>       <span class="n">col1</span> <span class="n">col2</span> <span class="n">col3</span> <span class="p">[</span><span class="n">NAMES</span> <span class="n">OF</span> <span class="n">COLUMNS</span><span class="p">,</span> <span class="n">OPTIONAL</span><span class="p">]</span>
-<span class="mi">3</span>       <span class="mi">4343</span> <span class="mf">434.5</span> <span class="mf">535e-434</span> <span class="p">[</span><span class="n">DATA</span><span class="p">,</span> <span class="n">ONLY</span> <span class="n">NUMBERS</span> <span class="n">ALLOWED</span><span class="p">]</span>
-</pre></div>
+<div class="section" id="filetype">
+<h2>FileType<a class="headerlink" href="#filetype" title="Permalink to this headline">¶</a></h2>
 </div>
-<p>The following examples can be declared with the line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ftype</span><span class="o">=</span><span class="n">TXTColumnFile</span><span class="p">(</span><span class="s2">&quot;LVE files&quot;</span><span class="p">,</span> <span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="s2">&quot;LVE files&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;&#39;,&#39;</span><span class="n">G</span><span class="s1">&#39;&#39;&#39;], [&#39;Mw&#39;,&#39;T&#39;], [&#39;rad/s&#39;,&#39;Pa&#39;,&#39;Pa&#39;])</span>
-</pre></div>
-</div>
-<p>EXAMPLE 1: columns line, no header lines:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C1</span><span class="o">=</span><span class="mf">8.77210163229153</span><span class="p">;</span><span class="n">C2</span><span class="o">=</span><span class="mf">114.03</span><span class="p">;</span><span class="n">Rho0</span><span class="o">=</span><span class="mf">0.928</span><span class="p">;</span><span class="n">C3</span><span class="o">=</span><span class="mf">0.61</span><span class="p">;</span><span class="n">T</span><span class="o">=-</span><span class="mi">35</span><span class="p">;</span><span class="n">CTg</span><span class="o">=</span><span class="mf">14.65</span><span class="p">;</span><span class="n">dx12</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">isof</span><span class="o">=</span><span class="n">true</span><span class="p">;</span><span class="n">Mw</span><span class="o">=</span><span class="mf">634.5</span><span class="p">;</span><span class="n">chem</span><span class="o">=</span><span class="n">PI</span><span class="p">;</span><span class="n">PDI</span><span class="o">=</span><span class="mf">1.03</span><span class="p">;</span>
-<span class="n">w</span>                           <span class="n">G</span><span class="s1">&#39;                          G&#39;&#39;                        T                            g</span>
-<span class="mf">4.29882628773180E-0008</span>      <span class="mf">1.44001856995549E+0002</span>      <span class="mf">3.70207627600662E+0003</span>     <span class="o">-</span><span class="mf">3.30000000000000E-0003</span>      <span class="mf">0.00000000000000E+0000</span>
-<span class="mf">6.30767835406968E-0008</span>      <span class="mf">2.56947504513849E+0002</span>      <span class="mf">5.39032089470917E+0003</span>      <span class="mf">3.14760000000000E-0004</span>      <span class="mf">0.00000000000000E+0000</span>
-<span class="mf">9.25946098215800E-0008</span>      <span class="mf">4.87031807130633E+0002</span>      <span class="mf">7.86538338583378E+0003</span>     <span class="o">-</span><span class="mf">1.01000000000000E-0002</span>      <span class="mf">0.00000000000000E+0000</span>
-</pre></div>
-</div>
-<p>EXAMPLE 2: Neither columns line nor header lines:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C1</span><span class="o">=</span><span class="mf">8.77210163229153</span><span class="p">;</span><span class="n">C2</span><span class="o">=</span><span class="mf">114.03</span><span class="p">;</span><span class="n">Rho0</span><span class="o">=</span><span class="mf">0.928</span><span class="p">;</span><span class="n">C3</span><span class="o">=</span><span class="mf">0.61</span><span class="p">;</span><span class="n">T</span><span class="o">=-</span><span class="mi">35</span><span class="p">;</span><span class="n">CTg</span><span class="o">=</span><span class="mf">14.65</span><span class="p">;</span><span class="n">dx12</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">isof</span><span class="o">=</span><span class="n">true</span><span class="p">;</span><span class="n">Mw</span><span class="o">=</span><span class="mf">23.4</span><span class="p">;</span><span class="n">chem</span><span class="o">=</span><span class="n">PI</span><span class="p">;</span><span class="n">PDI</span><span class="o">=</span><span class="mf">1.03</span><span class="p">;</span>
-<span class="mf">2.42782390212358E-0003</span>      <span class="mf">2.11182193155015E+0001</span>      <span class="mf">1.72559181398615E+0003</span>      <span class="mf">1.25000000000000E-0003</span>      <span class="mf">0.00000000000000E+0000</span>
-<span class="mf">3.56351666244471E-0003</span>      <span class="mf">4.30476548641552E+0001</span>      <span class="mf">2.53490824331357E+0003</span>      <span class="mf">1.48400000000000E-0002</span>      <span class="mf">0.00000000000000E+0000</span>
-</pre></div>
-</div>
-<p>EXAMPLE 3: 2 Header lines, no column line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">T</span><span class="o">=</span><span class="mi">160</span><span class="p">;</span><span class="n">chem</span><span class="o">=</span><span class="n">PE</span><span class="p">;</span>
-<span class="c1"># Header 1</span>
-<span class="c1"># Header 2</span>
-<span class="mf">4.23333e-05</span> <span class="mf">1.05E+00</span> <span class="mf">2.96E+01</span>
-<span class="mf">6.7e-05</span> <span class="mf">2.02E+00</span> <span class="mf">3.97E+01</span>
-</pre></div>
-</div>
-<p>EXAMPLE 4: 2 Header lines + column line:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">T</span><span class="o">=</span><span class="mi">160</span><span class="p">;</span><span class="n">chem</span><span class="o">=</span><span class="n">PE</span><span class="p">;</span>
-<span class="c1"># Header 1</span>
-<span class="c1"># Header 2</span>
-<span class="n">w</span> <span class="n">G</span><span class="s1">&#39; G&#39;&#39;</span>
-<span class="mf">4.23333e-05</span> <span class="mf">1.05E+00</span> <span class="mf">2.96E+01</span>
-<span class="mf">6.7e-05</span> <span class="mf">2.02E+00</span> <span class="mf">3.97E+01</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt id="RepTate.core.FileType.TXTColumnFile.find_col_names_and_first_data_lines">
-<code class="sig-name descname">find_col_names_and_first_data_lines</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lines</span></em>, <em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#TXTColumnFile.find_col_names_and_first_data_lines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.TXTColumnFile.find_col_names_and_first_data_lines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find column names and first row with data</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.FileType.TXTColumnFile.get_parameters">
-<code class="sig-name descname">get_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em>, <em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#TXTColumnFile.get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.TXTColumnFile.get_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the file parameters</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.FileType.TXTColumnFile.is_number">
-<code class="sig-name descname">is_number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#TXTColumnFile.is_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.TXTColumnFile.is_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the input string contains a number</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.FileType.TXTColumnFile.read_file">
-<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">parent_dataset</span></em>, <em class="sig-param"><span class="n">axarr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/FileType.html#TXTColumnFile.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.FileType.TXTColumnFile.read_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the data from the file</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-RepTate.core.Parameter">
-<span id="parameter"></span><h2>Parameter<a class="headerlink" href="#module-RepTate.core.Parameter" title="Permalink to this headline">¶</a></h2>
-<p>Module Parameter</p>
-<p>Module that defines theory parameters and their properties.</p>
-<dl class="py class">
-<dt id="RepTate.core.Parameter.OptType">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Parameter.</code><code class="sig-name descname">OptType</code><a class="reference internal" href="../_modules/RepTate/core/Parameter.html#OptType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Parameter.OptType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Store the optimization type that can be used in a Theory</p>
-<dl class="simple">
-<dt>Parameters can be:</dt><dd><ul class="simple">
-<li><p>opt: Optimized at the next minimization</p></li>
-<li><p>nopt: Not optimized at the next minimization</p></li>
-<li><p>const: Not allowed to be minimized</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.OptType.const">
-<code class="sig-name descname">const</code><em class="property"> = 3</em><a class="headerlink" href="#RepTate.core.Parameter.OptType.const" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.OptType.nopt">
-<code class="sig-name descname">nopt</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.Parameter.OptType.nopt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.OptType.opt">
-<code class="sig-name descname">opt</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.Parameter.OptType.opt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="parameter">
+<h2>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.Parameter.Parameter">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Parameter.</code><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">value=0</em>, <em class="sig-param">description=''</em>, <em class="sig-param">type=&lt;ParameterType.real: 0&gt;</em>, <em class="sig-param">opt_type=&lt;OptType.opt: 1&gt;</em>, <em class="sig-param">min_value=-inf</em>, <em class="sig-param">max_value=inf</em>, <em class="sig-param">display_flag=True</em>, <em class="sig-param">discrete_values=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Parameter.html#Parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Parameter.Parameter" title="Permalink to this definition">¶</a></dt>
@@ -1878,170 +1216,9 @@ fparam: dict containing file parameter names and values</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="RepTate.core.Parameter.ParameterType">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Parameter.</code><code class="sig-name descname">ParameterType</code><a class="reference internal" href="../_modules/RepTate/core/Parameter.html#ParameterType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Parameter.ParameterType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Types of parameters that can be used in a Theory</p>
-<dl class="simple">
-<dt>Parameters can be:</dt><dd><ul class="simple">
-<li><p>real: Any real number</p></li>
-<li><p>integer: Any integer number</p></li>
-<li><p>discrete_real: It can take a value only from a discrete set of prescribed real values</p></li>
-<li><p>discrete_integer: It can take a value only from a discrete set of prescribed integer values</p></li>
-<li><p>bool: The parameter is a flag</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.boolean">
-<code class="sig-name descname">boolean</code><em class="property"> = 4</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.boolean" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.discrete_integer">
-<code class="sig-name descname">discrete_integer</code><em class="property"> = 3</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.discrete_integer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.discrete_real">
-<code class="sig-name descname">discrete_real</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.discrete_real" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.integer">
-<code class="sig-name descname">integer</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.integer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.real">
-<code class="sig-name descname">real</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.real" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Parameter.ParameterType.string">
-<code class="sig-name descname">string</code><em class="property"> = 5</em><a class="headerlink" href="#RepTate.core.Parameter.ParameterType.string" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-RepTate.core.Theory">
-<span id="theory"></span><h2>Theory<a class="headerlink" href="#module-RepTate.core.Theory" title="Permalink to this headline">¶</a></h2>
-<p>Module Theory</p>
-<p>Module that defines the basic structure and properties of a theory.</p>
-<dl class="py exception">
-<dt id="RepTate.core.Theory.EndComputationRequested">
-<em class="property">exception </em><code class="sig-prename descclassname">RepTate.core.Theory.</code><code class="sig-name descname">EndComputationRequested</code><a class="reference internal" href="../_modules/RepTate/core/Theory.html#EndComputationRequested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.EndComputationRequested" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Exception class to end computations</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.Theory.ErrorCalculationMethod">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Theory.</code><code class="sig-name descname">ErrorCalculationMethod</code><a class="reference internal" href="../_modules/RepTate/core/Theory.html#ErrorCalculationMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.ErrorCalculationMethod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Method to determine the error of a theory calculation.</p>
-<dl class="simple">
-<dt>Options are:</dt><dd><ul class="simple">
-<li><p>View1: Use current view number 1 in the application.</p></li>
-<li><p>RawData: Use the data table as defined by the application.</p></li>
-<li><p>AllViews: Use all active views.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.ErrorCalculationMethod.AllViews">
-<code class="sig-name descname">AllViews</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.Theory.ErrorCalculationMethod.AllViews" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.ErrorCalculationMethod.RawData">
-<code class="sig-name descname">RawData</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.Theory.ErrorCalculationMethod.RawData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.ErrorCalculationMethod.View1">
-<code class="sig-name descname">View1</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.Theory.ErrorCalculationMethod.View1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.Theory.MLStripper">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Theory.</code><code class="sig-name descname">MLStripper</code><a class="reference internal" href="../_modules/RepTate/core/Theory.html#MLStripper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.MLStripper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">html.parser.HTMLParser</span></code></p>
-<p>Remove HTML tags from string</p>
-<dl class="py method">
-<dt id="RepTate.core.Theory.MLStripper.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#MLStripper.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.MLStripper.get_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="RepTate.core.Theory.MLStripper.handle_data">
-<code class="sig-name descname">handle_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#MLStripper.handle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.MLStripper.handle_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.Theory.MinimizationMethod">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Theory.</code><code class="sig-name descname">MinimizationMethod</code><a class="reference internal" href="../_modules/RepTate/core/Theory.html#MinimizationMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Method used during minimization</p>
-<dl class="simple">
-<dt>Parameters can be:</dt><dd><ul class="simple">
-<li><p>ls: Non-linear Least Squares (default)</p></li>
-<li><p>basinhopping: Basin-hopping method</p></li>
-<li><p>dualannealing: Dual-Annealing method</p></li>
-<li><p>diffevol: Differential Evolution method</p></li>
-<li><p>SHGO: simplicial homology global optimization</p></li>
-<li><p>bruteforce: Find the minimum on a hypergrid</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.SHGO">
-<code class="sig-name descname">SHGO</code><em class="property"> = 4</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.SHGO" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.basinhopping">
-<code class="sig-name descname">basinhopping</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.basinhopping" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.bruteforce">
-<code class="sig-name descname">bruteforce</code><em class="property"> = 5</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.bruteforce" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.descriptions">
-<code class="sig-name descname">descriptions</code><em class="property"> = ['Non-linear Least Squares', 'Basin-hopping method', 'Dual-Annealing', 'Differential Evolution', 'Simplicial Homology Global Optimization', 'Find the minimum on a hypergrid']</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.descriptions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.diffevol">
-<code class="sig-name descname">diffevol</code><em class="property"> = 3</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.diffevol" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.dualannealing">
-<code class="sig-name descname">dualannealing</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.dualannealing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.ls">
-<code class="sig-name descname">ls</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.ls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.Theory.MinimizationMethod.types">
-<code class="sig-name descname">types</code><em class="property"> = ['ls', 'basinhopping', 'dualannealing', 'diffevol', 'SHGO', 'bruteforce']</em><a class="headerlink" href="#RepTate.core.Theory.MinimizationMethod.types" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.Theory.Theory">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Theory.</code><code class="sig-name descname">Theory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Theory'</span></em>, <em class="sig-param"><span class="n">parent_dataset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axarr</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Theory.html#Theory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Theory.Theory" title="Permalink to this definition">¶</a></dt>
@@ -2453,50 +1630,191 @@ that provide this functionality.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="version">
-<h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tool">
+<h2>Tool<a class="headerlink" href="#tool" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.core.Tool.Tool">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.Tool.</code><code class="sig-name descname">Tool</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'Tool'</span></em>, <em class="sig-param"><span class="n">parent_app</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#RepTate.core.CmdBase.CmdBase" title="RepTate.core.CmdBase.CmdBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepTate.core.CmdBase.CmdBase</span></code></a></p>
+<p>Abstract class to describe a Tool</p>
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.Qprint">
+<code class="sig-name descname">Qprint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">'&lt;br&gt;'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.Qprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.Qprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a message on the Tool info area</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_parameters</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.calculate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.calculate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.calculate_all">
+<code class="sig-name descname">calculate_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_parameters</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.calculate_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.calculate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the tool for all views</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.citations">
+<code class="sig-name descname">citations</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.core.Tool.Tool.citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>citations {list of str} – Articles that should be cited</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.clean_graphic_stuff">
+<code class="sig-name descname">clean_graphic_stuff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.clean_graphic_stuff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.clean_graphic_stuff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.complete_parameters">
+<code class="sig-name descname">complete_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">line</span></em>, <em class="sig-param"><span class="n">begidx</span></em>, <em class="sig-param"><span class="n">endidx</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.complete_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.complete_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complete the names of parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.default">
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the input command is not recognized</p>
+<p>Called on an input line when the command prefix is not recognized.
+Check if there is an = sign in the line. If so, it is a parameter change.
+Else, we execute the line as Python code.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.description">
+<code class="sig-name descname">description</code><em class="property"> = ''</em><a class="headerlink" href="#RepTate.core.Tool.Tool.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>description {str} – Description of Tool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.destructor">
+<code class="sig-name descname">destructor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.destructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.destructor" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the Tool needs to erase some memory in a special way, any
+child theory must rewrite this funcion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_activate">
+<code class="sig-name descname">do_activate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/disable the Tool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_applytotheory">
+<code class="sig-name descname">do_applytotheory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_applytotheory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_applytotheory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the tool to the theory data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_cite">
+<code class="sig-name descname">do_cite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_cite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_cite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print citation information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_parameters">
+<code class="sig-name descname">do_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>View the Tool parameters. Several parameters are allowed. With no arguments, show the current values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_plot">
+<code class="sig-name descname">do_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update plot</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.do_tutorial">
+<code class="sig-name descname">do_tutorial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.do_tutorial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.do_tutorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show a short tutorial about the commands in RepTate tools</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.doc_header">
+<code class="sig-name descname">doc_header</code><em class="property"> = 'Tool commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#RepTate.core.Tool.Tool.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.doi">
+<code class="sig-name descname">doi</code><em class="property"> = []</em><a class="headerlink" href="#RepTate.core.Tool.Tool.doi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.plot_tool_stuff">
+<code class="sig-name descname">plot_tool_stuff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.plot_tool_stuff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.plot_tool_stuff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special function to plot tool graphical objects</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.precmd">
+<code class="sig-name descname">precmd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.precmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.precmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculations before the Tool is calculated</p>
+<p>This function could be erased
+This method is called after the line has been input but before
+it has been interpreted. If you want to modifdy the input line
+before execution (for example, variable substitution) do it here.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.print_qtextbox">
+<code class="sig-name descname">print_qtextbox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.print_qtextbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.print_qtextbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print message in the GUI log text box</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.print_signal">
+<code class="sig-name descname">print_signal</code><a class="headerlink" href="#RepTate.core.Tool.Tool.print_signal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.set_param_value">
+<code class="sig-name descname">set_param_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.set_param_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.set_param_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of a parameter of the tool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.strip_tags">
+<code class="sig-name descname">strip_tags</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">html_text</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.strip_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.strip_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.table_as_ascii">
+<code class="sig-name descname">table_as_ascii</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tab</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.table_as_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.table_as_ascii" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.table_as_html">
+<code class="sig-name descname">table_as_html</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tab</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.table_as_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.table_as_html" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="RepTate.core.Tool.Tool.toolname">
+<code class="sig-name descname">toolname</code><em class="property"> = ''</em><a class="headerlink" href="#RepTate.core.Tool.Tool.toolname" title="Permalink to this definition">¶</a></dt>
+<dd><p>toolname {str} – Tool name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.update_parameter_table">
+<code class="sig-name descname">update_parameter_table</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.update_parameter_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.update_parameter_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RepTate.core.Tool.Tool.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">flag</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/Tool.html#Tool.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.Tool.Tool.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write numpy error logs to the logger</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="module-RepTate.core.View">
-<span id="view"></span><h2>View<a class="headerlink" href="#module-RepTate.core.View" title="Permalink to this headline">¶</a></h2>
-<p>Module View</p>
-<p>Module that defines the basic properties of a View, that will be used to represent
-the data graphically.</p>
+<div class="section" id="view">
+<h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="RepTate.core.View.View">
 <em class="property">class </em><code class="sig-prename descclassname">RepTate.core.View.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">description=''</em>, <em class="sig-param">x_label=''</em>, <em class="sig-param">y_label=''</em>, <em class="sig-param">x_units=''</em>, <em class="sig-param">y_units=''</em>, <em class="sig-param">log_x=False</em>, <em class="sig-param">log_y=False</em>, <em class="sig-param">view_proc=None</em>, <em class="sig-param">n=1</em>, <em class="sig-param">snames=[]</em>, <em class="sig-param">inverse_view_proc=None</em>, <em class="sig-param">index=0</em>, <em class="sig-param">with_thline=True</em>, <em class="sig-param">filled=False</em>, <em class="sig-param">viewmode_data=&lt;ViewMode.symbol: 0&gt;</em>, <em class="sig-param">viewmode_theory=&lt;ViewMode.line: 1&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RepTate/core/View.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.View.View" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Abstract class to describe a view</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="RepTate.core.View.ViewMode">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.core.View.</code><code class="sig-name descname">ViewMode</code><a class="reference internal" href="../_modules/RepTate/core/View.html#ViewMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.core.View.ViewMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Defines how to show the experimental/theoretical data view
-TO BE DONE…</p>
-<dl class="simple">
-<dt>Parameters can be:</dt><dd><ul class="simple">
-<li><p>symbol: Show symbols (default for experimental data – files in the dataset)</p></li>
-<li><p>line: Show lines (default for theories)</p></li>
-<li><p>bar: Show bars</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt id="RepTate.core.View.ViewMode.bar">
-<code class="sig-name descname">bar</code><em class="property"> = 2</em><a class="headerlink" href="#RepTate.core.View.ViewMode.bar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.View.ViewMode.line">
-<code class="sig-name descname">line</code><em class="property"> = 1</em><a class="headerlink" href="#RepTate.core.View.ViewMode.line" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="RepTate.core.View.ViewMode.symbol">
-<code class="sig-name descname">symbol</code><em class="property"> = 0</em><a class="headerlink" href="#RepTate.core.View.ViewMode.symbol" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
