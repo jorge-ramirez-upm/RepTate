@@ -24,7 +24,7 @@ When the user clicks the button "Inspect contents of data files" |inspection| (C
 View the current file data
 --------------------------
 
-When a file in the current Dataset is selected with the mouse, the corresponding plot is highlighted and the contents of the file are shown in the data inspection table (if the data inspection table is shown, see :numref:`figdatainspaction`). 
+When a file in the current Dataset is selected with the mouse, the corresponding plot is highlighted and the contents of the file are shown in the data inspection table (if the data inspection table is shown, see :numref:`figdatainspection`). 
 
 .. _figdatainspection:
 .. figure:: images/DataInpection.png

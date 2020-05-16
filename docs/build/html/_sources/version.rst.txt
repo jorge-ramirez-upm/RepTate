@@ -3,7 +3,7 @@ Version History
 ===============
 
 Release 1.0.0 - 20200330
-======================
+========================
 - NEW Crystal application for flow induced crystallization
 - NEW LAOS application for the analysis of large amplitude oscillatory shear data (based on MITlaos)
 - NEW Sticky Reptation theory in the LVE module

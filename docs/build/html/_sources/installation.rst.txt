@@ -47,7 +47,7 @@ This option requires the installation of Python 3 and the RepTate package, from 
 
     - On Windows, a good alternative is `WinPython <https://winpython.github.io/>`_. The packages *Zero* and *dot* are rather compact and can be installed inside a folder, without affecting the rest of the operating system. 
 
-    - Install `Minconda <https://conda.io/miniconda.html>`_ 
+    - Install `Miniconda <https://conda.io/miniconda.html>`_ 
 
 #. Open a command prompt from which you can access python (different distributions provide different ways of doing this) and install RepTate via ``pip install RepTate``. The pip program (*package installer for Python*) will take care of installing all the necessary packages to get RepTate running.
 

@@ -34,18 +34,18 @@ Prediction of LVE data of linear polymer melts
 #. Plot the files using the default LVE Application view::
 
     plot
-.. image:: tutorial_images/PI_LVE_plot.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+	.. image:: tutorial_images/PI_LVE_plot.png
+		:width: 400pt
+		:align: center
+		:alt: Empty Graph window
 
 #. View the legend. By default, the legend shows the most important file parameters, according to the corresponding file type.
 
     legend
-.. image:: tutorial_images/PI_LVE_legend.png
-    :width: 400pt
-    :align: center
-    :alt: Empty Graph window
+	.. image:: tutorial_images/PI_LVE_legend.png
+		:width: 400pt
+		:align: center
+		:alt: Empty Graph window
 
 #. Create new theory (calculation is done with default paramter values)::
     
