@@ -34,17 +34,20 @@
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
 import getopt
-sys.path.append('.')
+
+sys.path.append(".")
 from RepTate.gui.QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 from RepTate.core.CmdBase import CmdBase, CalcMode
 import logging
+
 
 def start_RepTate(argv):
     """
@@ -52,32 +55,32 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+
     app = QApplication(sys.argv)
-    
+
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
-    
+
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('MWD')
-    
+    ex.handle_new_app("MWD")
+
     #####################
     # Open a Dataset
-    gt_dir = "data%sMWD%s"%((os.sep,)*2)
-    ex.applications["MWD1"].new_tables_from_files([
-                                                   gt_dir + "Munstedt_PSIII.gpc",
-                                                   ])
+    gt_dir = "data%sMWD%s" % ((os.sep,) * 2)
+    ex.applications["MWD1"].new_tables_from_files(
+        [gt_dir + "Munstedt_PSIII.gpc",]
+    )
     # Open a theory
     ex.applications["MWD1"].datasets["Set1"].new_theory("Discretize MWD")
     ex.applications["MWD1"].datasets["Set1"].new_theory("LogNormal")
@@ -85,12 +88,12 @@ def start_RepTate(argv):
 
     sys.exit(app.exec_())
 
-    ex.handle_new_app('MWD')
+    ex.handle_new_app("MWD")
 
     # THE TEST FAILS FOR THE CODE BELOW... STRANGE!
-    ex.applications["MWD2"].new_tables_from_files([
-                                                   gt_dir + "Munstedt_PSIV.gpc",
-                                                   ])
+    ex.applications["MWD2"].new_tables_from_files(
+        [gt_dir + "Munstedt_PSIV.gpc",]
+    )
     # Open a theory
     ex.applications["MWD2"].datasets["Set1"].new_theory("Discretize MWD")
     ex.applications["MWD2"].datasets["Set1"].new_theory("LogNormal")
@@ -98,5 +101,6 @@ def start_RepTate(argv):
 
     sys.exit(app.exec_())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     start_RepTate(sys.argv[1:])

@@ -39,8 +39,8 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from RepTate.core.DataTable import DataTable
 from scipy import interpolate
+
 
 class TheoryStickyReptation(CmdBase):
     """Fit the Sticky Reptation theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
@@ -53,104 +53,92 @@ class TheoryStickyReptation(CmdBase):
        - ``alpha`` : dimensionless constant.
     """
 
-    thname = 'StickyReptation'
-    description = 'Sticky Reptation'
-    citations = ['L. Leibler et al., Macromolecules, 1991, 24, 4701-4704']
+    thname = "StickyReptation"
+    description = "Sticky Reptation"
+    citations = ["L. Leibler et al., Macromolecules, 1991, 24, 4701-4704"]
     doi = ["http://dx.doi.org/10.1021/ma00016a034"]
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryStickyReptation(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryStickyReptation(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryStickyReptation(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryStickyReptation(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryStickyReptation:
-    """[summary]
-    
-    [description]
-    """
-    #html_help_file = ''
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    # html_help_file = ''
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryStickyReptation.thname
     citations = TheoryStickyReptation.citations
     doi = TheoryStickyReptation.doi
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['Ge'] = Parameter(
-            name='Ge',
+        self.parameters["Ge"] = Parameter(
+            name="Ge",
             value=10605.97,
-            description='Entanglement modulus',
+            description="Entanglement modulus",
             type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=1,
-            max_value=1e8)
-        self.parameters['tau_s'] = Parameter(
-            name='tau_s',
+            max_value=1e8,
+        )
+        self.parameters["tau_s"] = Parameter(
+            name="tau_s",
             value=0.01435800,
-            description='sticker time',
+            description="sticker time",
             type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=1e-5,
-            max_value=1e2)
-        self.parameters['Zs'] = Parameter(
-            name='Zs',
+            max_value=1e2,
+        )
+        self.parameters["Zs"] = Parameter(
+            name="Zs",
             value=4.022881,
-            description='Number of stickers per chain',
+            description="Number of stickers per chain",
             type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-            max_value=100)
-        self.parameters['Ze'] = Parameter(
-            name='Ze',
+            max_value=100,
+        )
+        self.parameters["Ze"] = Parameter(
+            name="Ze",
             value=10.49686,
-            description='Number of entanglements',
+            description="Number of entanglements",
             type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-            max_value=100)
-        self.parameters['alpha'] = Parameter(
-            name='alpha',
+            max_value=100,
+        )
+        self.parameters["alpha"] = Parameter(
+            name="alpha",
             value=10,
-            description='CLF parameter',
+            description="CLF parameter",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+        )
 
     def g_descloizeaux(self, x, tol):
-        N=len(x) 
-        gx = np.zeros(len(x)) # output array
-        for n in range(0,N):
-          err=2*tol # initialise error
-          m=0
-          while err>tol:
-            m+=1
-            m2=m*m
-            dgx = ( 1-np.exp(-m2*x[n]) )/m2
-            gx[n] += dgx
-            err=dgx/gx[n]
+        N = len(x)
+        gx = np.zeros(len(x))  # output array
+        for n in range(0, N):
+            err = 2 * tol  # initialise error
+            m = 0
+            while err > tol:
+                m += 1
+                m2 = m * m
+                dgx = (1 - np.exp(-m2 * x[n])) / m2
+                gx[n] += dgx
+                err = dgx / gx[n]
         return gx
 
     def calculate(self, f=None):
@@ -195,98 +183,87 @@ class BaseTheoryStickyReptation:
              truncated using a numerical tolerance level.
           2. To transform G(t) to G'(w) and G''(w) a time range with
              a finite number of samples is defined. The time range
-             and number of samples may affect the results. 
-                        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+             and number of samples may affect the results. """
 
-        #---------------------------------------------
+        # ---------------------------------------------
         # FUNCTION INPUT
         ft = f.data_table
         tt = self.tables[f.file_name_short]
-        w = ft.data[:, 0]   # angular frequency [rad/s]
+        w = ft.data[:, 0]  # angular frequency [rad/s]
 
-        Ge    = self.parameters['Ge'   ].value
-        tau_s = self.parameters['tau_s'].value
-        Zs    = self.parameters['Zs'   ].value
-        Ze    = self.parameters['Ze'   ].value
-        alpha = self.parameters['alpha'].value
+        Ge = self.parameters["Ge"].value
+        tau_s = self.parameters["tau_s"].value
+        Zs = self.parameters["Zs"].value
+        Ze = self.parameters["Ze"].value
+        alpha = self.parameters["alpha"].value
         # END FUNCTION INPUT
-        #---------------------------------------------
+        # ---------------------------------------------
 
-
-        #---------------------------------------------
+        # ---------------------------------------------
         # NUMERICAL SETTINGS
         # 1. Double reptation
-        tol   =1e-6          # tolerance to truncate infinite sums
-        # 2. Transform of G(t) to G'(w) and G''(w) 
-        tmin  = 0.1/max(w)   # shortest time outside omega interval
-        tmax  = 10/min(w)    # largest  time outside omega interval
-        ntime = 100          # number of time points
+        tol = 1e-6  # tolerance to truncate infinite sums
+        # 2. Transform of G(t) to G'(w) and G''(w)
+        tmin = 0.1 / max(w)  # shortest time outside omega interval
+        tmax = 10 / min(w)  # largest  time outside omega interval
+        ntime = 100  # number of time points
         # END NUMERICAL SETTINGS
-        #---------------------------------------------
+        # ---------------------------------------------
 
-
-        #---------------------------------------------
+        # ---------------------------------------------
         # CALCULATE RELAXATION MODULUS
         # time range [s] to calculate relaxation modulus G(t)
-        t=np.logspace(np.log10(tmin), np.log10(tmax), ntime) 
+        t = np.logspace(np.log10(tmin), np.log10(tmax), ntime)
 
-        #- - - - - - - - - - - - - - - - - - - - - - -
+        # - - - - - - - - - - - - - - - - - - - - - - -
         # CALCULATE STICKY-ROUSE RELAXATION MODULUS
-        GSR = 0               # initialise output
-        tau_srouse=(tau_s*(Zs)**2) # Sticky-Rouse time of the strand that relaxes after sticker dissociation. 
-        tS = t/tau_srouse;   
-        dsum=0.0
-        for q in range (1, int(Zs)+1):
-          if q<Ze:
-            GSR += 0.2*np.exp(-tS*q**2)
-            dsum+= 0.2
-          else:
-            GSR += np.exp(-tS*q**2)
-            dsum+= 1
-        
-          # Normalise (verified using the asymptotic value of G(t) 
-          #            for short times, t->0.)     
-        GSR *= Zs/(dsum*Ze)
+        GSR = 0  # initialise output
+        tau_srouse = (
+            tau_s * (Zs) ** 2
+        )  # Sticky-Rouse time of the strand that relaxes after sticker dissociation.
+        tS = t / tau_srouse
+        dsum = 0.0
+        for q in range(1, int(Zs) + 1):
+            if q < Ze:
+                GSR += 0.2 * np.exp(-tS * q ** 2)
+                dsum += 0.2
+            else:
+                GSR += np.exp(-tS * q ** 2)
+                dsum += 1
 
-        #- - - - - - - - - - - - - - - - - - - - - - -
+            # Normalise (verified using the asymptotic value of G(t)
+            #            for short times, t->0.)
+        GSR *= Zs / (dsum * Ze)
+
+        # - - - - - - - - - - - - - - - - - - - - - - -
         # CALCULATE DOUBLE-REPTATION RELAXATION MODULUS
-        GREP=np.zeros(len(t))          # initialise output
-        tau_rep=Ze*tau_srouse          # sticky-reptation time
-        tR=t/tau_rep                   # Time in units of reptation time
-        H=Ze/alpha                     # Prefactor in des Cloizeaux model
-        Ut = tR + self.g_descloizeaux(H*tR, tol)/H
+        GREP = np.zeros(len(t))  # initialise output
+        tau_rep = Ze * tau_srouse  # sticky-reptation time
+        tR = t / tau_rep  # Time in units of reptation time
+        H = Ze / alpha  # Prefactor in des Cloizeaux model
+        Ut = tR + self.g_descloizeaux(H * tR, tol) / H
 
-        for n in range(0,len(Ut)):
-          err=2*tol
-          q=-1
-          while err>tol:  # truncate infinite sum when tolerance is met
-            q+=2          # sum only over odd values of q
-            q2=q*q
-            dGrep=np.exp( -q2*Ut[n] )/q2
-            GREP[n] += dGrep
-            err=dGrep/GREP[n]
-        GREP=(GREP*8/np.pi**2)**2
+        for n in range(0, len(Ut)):
+            err = 2 * tol
+            q = -1
+            while err > tol:  # truncate infinite sum when tolerance is met
+                q += 2  # sum only over odd values of q
+                q2 = q * q
+                dGrep = np.exp(-q2 * Ut[n]) / q2
+                GREP[n] += dGrep
+                err = dGrep / GREP[n]
+        GREP = (GREP * 8 / np.pi ** 2) ** 2
 
         # Relaxation modulus G(t) = sum of Sticky Rouse and Reptation
-        G = Ge*(GSR + GREP)
+        G = Ge * (GSR + GREP)
         # END CALCULATE RELAXATION MODULUS
-        #---------------------------------------------
+        # ---------------------------------------------
 
-
-        #---------------------------------------------
+        # ---------------------------------------------
         # GET DYNAMIC MODULI G(w) from G(t)
         f = interpolate.interp1d(
-            t,
-            G,
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+            t, G, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
         g0 = f(0)
         ind1 = np.argmax(t > 0)
         t1 = t[ind1]
@@ -298,18 +275,19 @@ class BaseTheoryStickyReptation:
         G1G2 = np.zeros((ntime, 3))
         G1G2[:, 0] = wp[:]
 
-        coeff = (G[ind1 + 1:] - G[ind1:-1]) / (
-            t[ind1 + 1:] - t[ind1:-1])
+        coeff = (G[ind1 + 1 :] - G[ind1:-1]) / (t[ind1 + 1 :] - t[ind1:-1])
         for i, w in enumerate(wp):
 
-            G1G2[i, 1] = g0 + np.sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
-                coeff, -np.sin(w * t[ind1:-1]) +
-                np.sin(w * t[ind1 + 1:])) / w
+            G1G2[i, 1] = (
+                g0
+                + np.sin(w * t1) * (g1 - g0) / w / t1
+                + np.dot(coeff, -np.sin(w * t[ind1:-1]) + np.sin(w * t[ind1 + 1 :])) / w
+            )
 
-            G1G2[i, 2] = -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
-                coeff,
-                np.cos(w * t[ind1:-1]) -
-                np.cos(w * t[ind1 + 1:])) / w
+            G1G2[i, 2] = (
+                -(1 - np.cos(w * t1)) * (g1 - g0) / w / t1
+                - np.dot(coeff, np.cos(w * t[ind1:-1]) - np.cos(w * t[ind1 + 1 :])) / w
+            )
 
         # STORE THE FUNCTION IN SOME OTHER TEMPORARY ARRAY
         # INTERPOLATE IT SO THAT THE OMEGA RANGE AND POINTS ARE THE SAME AS IN THE EXPERIMENTAL DATA
@@ -317,57 +295,31 @@ class BaseTheoryStickyReptation:
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((ft.num_rows, ft.num_columns))
         f1 = interpolate.interp1d(
-            wp,
-            G1G2[:, 1],
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+            wp, G1G2[:, 1], kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
         f2 = interpolate.interp1d(
-            wp,
-            G1G2[:, 2],
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
-        tt.data[:, 0]= ft.data[:, 0]
-        tt.data[:, 1]= f1(ft.data[:, 0])
-        tt.data[:, 2]= f2(ft.data[:, 0])
+            wp, G1G2[:, 2], kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
+        tt.data[:, 0] = ft.data[:, 0]
+        tt.data[:, 1] = f1(ft.data[:, 0])
+        tt.data[:, 2] = f2(ft.data[:, 0])
 
 
 class CLTheoryStickyReptation(BaseTheoryStickyReptation, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryStickyReptation(BaseTheoryStickyReptation, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

@@ -44,47 +44,29 @@ import numpy as np
 
 
 class ApplicationMWD(CmdBase):
-    """Application to analyze Molecular Weight Distributions
+    """Application to analyze Molecular Weight Distributions"""
 
-    """
     appname = "MWD"
     description = "Experimental Molecular weight distributions"
     extension = "gpc"
 
     def __new__(cls, name="LVE", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"LVE"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationMWD(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationMWD(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationMWD(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationMWD(name, parent)
+        )
 
 
 class BaseApplicationMWD:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html"
     appname = ApplicationMWD.appname
 
     def __init__(self, name="MWD", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWD"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryDiscrMWD import TheoryDiscrMWD
         from RepTate.theories.TheoryGEX import TheoryGEX
         from RepTate.theories.TheoryLogNormal import TheoryLogNormal
@@ -103,7 +85,8 @@ class BaseApplicationMWD:
             log_y=False,
             view_proc=self.view_WM,
             n=1,
-            snames=["W"])
+            snames=["W"],
+        )
         self.views["log-log"] = View(
             name="log-log",
             description="MWD log W vs log M",
@@ -115,7 +98,8 @@ class BaseApplicationMWD:
             log_y=False,
             view_proc=self.view_logWM,
             n=1,
-            snames=["log(W)"])
+            snames=["log(W)"],
+        )
         self.views["lin-lin"] = View(
             name="lin-lin",
             description="MWD lin W vs lin M",
@@ -127,9 +111,10 @@ class BaseApplicationMWD:
             log_y=False,
             view_proc=self.view_WM,
             n=1,
-            snames=["W"])
+            snames=["W"],
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -139,22 +124,32 @@ class BaseApplicationMWD:
 
         # FILES
         ftype = TXTColumnFile(
-            "GPC Files", "gpc", "Molecular Weight Distribution",
-            ['M', 'W(logM)'], ['Mn', 'Mw', 'PDI'], ["g/mol", '-'])
-        #ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
+            "GPC Files",
+            "gpc",
+            "Molecular Weight Distribution",
+            ["M", "W(logM)"],
+            ["Mn", "Mw", "PDI"],
+            ["g/mol", "-"],
+        )
+        # ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension] = ftype
-        ftype = TXTColumnFile("React Files", "reac", "Relaxation modulus",
-                              ['M', 'W(logM)', 'g', 'br/1000C'],
-                              ['Mn', 'Mw', 'PDI'], ["g/mol", '-'])
+        ftype = TXTColumnFile(
+            "React Files",
+            "reac",
+            "Relaxation modulus",
+            ["M", "W(logM)", "g", "br/1000C"],
+            ["Mn", "Mw", "PDI"],
+            ["g/mol", "-"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         self.theories[TheoryDiscrMWD.thname] = TheoryDiscrMWD
-        self.theories[TheoryGEX.thname]=TheoryGEX
-        self.theories[TheoryLogNormal.thname]=TheoryLogNormal
+        self.theories[TheoryGEX.thname] = TheoryGEX
+        self.theories[TheoryLogNormal.thname] = TheoryLogNormal
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def view_WM(self, dt, file_parameters):
@@ -175,35 +170,18 @@ class BaseApplicationMWD:
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-class CLApplicationMWD(BaseApplicationMWD, Application):
-    """[summary]
 
-    [description]
-    """
+class CLApplicationMWD(BaseApplicationMWD, Application):
+    """CL Version"""
 
     def __init__(self, name="MWD", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWD"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="MWD", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"MWD"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

@@ -40,23 +40,10 @@ from RepTate.core.DataTable import DataTable
 from colorama import Fore
 
 class File(object):
-    """Basic class that describes elements of a DataSet
-
-    [description]
-    """
+    """Basic class that describes elements of a DataSet"""
 
     def __init__(self, file_name="", file_type=None, parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-
-        [description]
-
-        Keyword Arguments:
-            - file_name {str} -- Full path
-            - file_type {[type]} -- [description] (default: {None})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - axarr {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         self.file_full_path = os.path.abspath(file_name)
         tmpname = os.path.basename(self.file_full_path)
         self.file_name_short = os.path.splitext(tmpname)[0]
@@ -89,29 +76,17 @@ class File(object):
         self.nextramax = 0
 
     def __str__(self):
-        """[summary]
-
-        [description]
-        """
+        """Return a string"""
         return Fore.YELLOW + 'File: ' + Fore.RESET  + '%s\n'%self.file_name_short + Fore.CYAN  + 'Path: ' + Fore.RESET + '%s\n'%self.file_full_path + Fore.RED + 'Parameters: ' + Fore.RESET + '%s'%self.file_parameters
 
     def mincol(self, col):
-        """Minimum value in data_table column col
-        [description]
-
-        """
+        """Minimum value in data_table column col"""
         return self.data_table.mincol(col)
 
     def minpositivecol(self, col):
-        """Minimum positive value in data_table column col
-        [description]
-
-        """
+        """Minimum positive value in data_table column col"""
         return self.data_table.minpositivecol(col)
 
     def maxcol(self, col):
-        """Maximum value in data_table column col
-        [description]
-
-        """
+        """Maximum value in data_table column col"""
         return self.data_table.maxcol(col)

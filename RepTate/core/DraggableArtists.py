@@ -37,15 +37,10 @@ Module for the definition of interactive graphical objects that the user can mov
 """ 
 # draggable matplotlib artists with the animation blit techniques; see
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from enum import Enum
+import enum
 
-class DragType(Enum):
-    """[summary]
-    
-    [description]
-    """
+class DragType(enum.Enum):
+    """Describes the type of drag that the graphical object can be subjected to"""
     vertical = 1
     horizontal = 2
     both = 3
@@ -53,23 +48,10 @@ class DragType(Enum):
     special = 5
 
 class DraggableArtist(object):
-    """Abstract class for motions of a matplotlib artist
-    
-    [description]
-    """
+    """Abstract class for motions of a matplotlib artist"""
     lock = None
     def __init__(self, artist=None, mode=DragType.none, function=None, parent_theory=None):
-        """Constructor. 
-                
-        [description]
-        
-        Arguments:
-            - artist {matplotlib artist} -- rectangle,line,patch,series to move.
-        
-        Keyword Arguments:
-            - mode {Dragtype} -- vertical,horizontal,all,none. (default: {DragType.none})
-            - function -- function that should interpret the final coordinates of the artist moved (default: {None})
-        """
+        """**Constructor**"""
         self.parent_theory = parent_theory
         self.artist = artist
         self.press = None
@@ -80,22 +62,13 @@ class DraggableArtist(object):
         self.connect()
 
     def connect(self):
-        """[summary]
-        
-        [description]
-        """
+        """Connect events"""
         self.cidpress = self.artist.figure.canvas.mpl_connect('button_press_event', self.on_press)
         self.cidrelease = self.artist.figure.canvas.mpl_connect('button_release_event', self.on_release)
         self.cidmotion = self.artist.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press events"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
         if event.button != 1: return
@@ -114,13 +87,7 @@ class DraggableArtist(object):
         #canvas.blit(axes.bbox)
 
     def on_motion(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Motion event"""
         if DraggableArtist.lock is not self:
             return
         if event.inaxes != self.artist.axes: return
@@ -145,31 +112,15 @@ class DraggableArtist(object):
 
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Do nothing"""
         pass
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Do nothing"""
         pass
 
     def on_release(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            event {[type]} -- [description]
-        """
+        """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
         if event.xdata is None: return
@@ -196,10 +147,7 @@ class DraggableArtist(object):
 
 
     def disconnect(self):
-        """disconnect all the stored connection ids
-        
-        [description]
-        """
+        """disconnect all the stored connection ids"""
         self.artist.figure.canvas.mpl_disconnect(self.cidpress)
         self.artist.figure.canvas.mpl_disconnect(self.cidrelease)
         self.artist.figure.canvas.mpl_disconnect(self.cidmotion)
@@ -209,36 +157,15 @@ class DraggableArtist(object):
 
 
 class DraggableBinSeries(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Dragabble histogram"""
     def __init__(self, artist, mode=DragType.none, logx=False, logy=False, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - logx {[type]} -- [description] (default: {False})
-            - logy {[type]} -- [description] (default: {False})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(artist, mode, function)
         self.logx = logx
         self.logy = logy
     
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return 
         if event.button != 1: return
@@ -270,13 +197,7 @@ class DraggableBinSeries(DraggableArtist):
         axes.draw_artist(self.artist)
 
     def on_motion(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Motion event"""
         if DraggableArtist.lock is not self:
             return
         if event.inaxes != self.artist.axes:
@@ -302,14 +223,7 @@ class DraggableBinSeries(DraggableArtist):
         canvas.update()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Change artist coords"""
         xdata = self.xdata_at_press
         ydata = self.ydata_at_press
         xdataind = xdata[self.index] 
@@ -344,13 +258,7 @@ class DraggableBinSeries(DraggableArtist):
         self.artist.set_data(newxdata, newydata)
 
     def on_release(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
         if event.xdata is None: return
@@ -390,24 +298,9 @@ class DraggableBinSeries(DraggableArtist):
 
 
 class DraggableModesSeries(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable points of a series"""
     def __init__(self, artist, mode=DragType.none, parent_application=None, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - logx {[type]} -- [description] (default: {False})
-            - logy {[type]} -- [description] (default: {False})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableModesSeries, self).__init__(artist, mode, function)
         self.parent_application = parent_application
         self.update_logx_logy()
@@ -417,13 +310,7 @@ class DraggableModesSeries(DraggableArtist):
         self.logy = self.parent_application.current_view.log_y
 
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
         if event.button != 1: return
@@ -453,13 +340,7 @@ class DraggableModesSeries(DraggableArtist):
         #canvas.blit(axes.bbox)
 
     def on_motion(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Motion event"""
         if DraggableArtist.lock is not self:
             return
         if event.inaxes != self.artist.axes: return
@@ -485,14 +366,7 @@ class DraggableModesSeries(DraggableArtist):
         canvas.update()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify artist coords"""
         xdata = self.xdata_at_press
         ydata = self.ydata_at_press
         xdataind = xdata[self.index] 
@@ -528,13 +402,7 @@ class DraggableModesSeries(DraggableArtist):
         self.artist.set_data(newxdata, newydata)
 
     def on_release(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
         if event.xdata is None: return
@@ -583,23 +451,9 @@ class DraggableModesSeries(DraggableArtist):
 ###########################################################
 
 class DraggableSeries(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Full draggable series"""
     def __init__(self, artist, mode=DragType.none, logx=False, logy=False, xref=0, yref=0, function=None, functionendshift=None, index=0):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - logx {[type]} -- [description] (default: {False})
-            - logy {[type]} -- [description] (default: {False})
-        """
+        """**Constructor**"""
         super(DraggableSeries, self).__init__(artist, mode, function)
         self.logx = logx
         self.logy = logy
@@ -612,20 +466,11 @@ class DraggableSeries(DraggableArtist):
         self.dy = 0
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Return data"""
         self.data = self.artist.get_data()
     
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
         if event.button != 1: return
@@ -645,13 +490,7 @@ class DraggableSeries(DraggableArtist):
         #canvas.blit(axes.bbox)
 
     def on_motion(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Motion event"""
         if DraggableArtist.lock is not self:
             return
         if event.inaxes != self.artist.axes: return
@@ -687,14 +526,7 @@ class DraggableSeries(DraggableArtist):
         canvas.update()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify artist coords"""
         if self.logx:
             newx = [x*np.power(10, dx) for x in self.data[0]]
         else:
@@ -706,13 +538,7 @@ class DraggableSeries(DraggableArtist):
         self.artist.set_data(newx, newy)
 
     def on_release(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Release event"""
         if DraggableArtist.lock is not self: return
         if (self.mode==DragType.none):   
             self.functionendshift(0, 0, self.index)
@@ -738,114 +564,46 @@ class DraggableSeries(DraggableArtist):
         # self.artist.figure.canvas.draw()
 
     def disconnect(self):
-        """disconnect all the stored connection ids
-        
-        [description]
-        """
+        """disconnect all the stored connection ids"""
         super().disconnect()
 
 class DraggablePatch(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable Patch"""
     def __init__(self, artist, mode=DragType.none, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggablePatch, self).__init__(artist, mode, function)
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get data of the artist"""
         self.data=self.artist.center
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify artist coords"""
         self.artist.center = (self.data[0]+dx, self.data[1]+dy)
 
 class DraggableRectangle(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable rectangle"""
     def __init__(self, artist, mode=DragType.none, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableRectangle, self).__init__(artist, mode, function)
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get data of the artist"""
         self.data=self.artist.xy
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist coords"""
         self.artist.set_x(self.data[0]+dx)
         self.artist.set_y(self.data[1]+dy)
 
 class DraggableVLine(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable Verticla line"""
     def __init__(self, artist, mode=DragType.none, function=None, parent_theory=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableVLine, self).__init__(artist, mode, function, parent_theory)
     
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
         if event.button != 1: return
@@ -864,51 +622,22 @@ class DraggableVLine(DraggableArtist):
         #canvas.blit(axes.bbox)
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get the data from the artist"""
         self.data = self.artist.get_data()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist coordinates"""
         self.artist.set_data([self.data[0][0] + dx, self.data[0][1] + dx], [0, 1])
 
 
 class DraggableHLine(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable Horizontal line"""
     def __init__(self, artist, mode=DragType.none, function=None, parent_theory=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableHLine, self).__init__(artist, mode, function, parent_theory)
     
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
         if event.button != 1: return
@@ -927,149 +656,63 @@ class DraggableHLine(DraggableArtist):
         #canvas.blit(axes.bbox)
    
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get the artist data"""
         self.data = self.artist.get_data()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist coordinates"""
         self.artist.set_data([0, 1], [self.data[1][0] + dy, self.data[1][1] + dy])
 
 class DraggableVSpan(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable Vertical Span"""
     def __init__(self, artist, mode=DragType.none, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableVSpan, self).__init__(artist, mode, function)
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get the artist data"""
         self.data=self.artist.get_xy()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist coordinates"""
         xmin = self.data[0][0]
         xmax = self.data[2][0]
         self.artist.set_xy([[xmin+dx,0],[xmin+dx,1],[xmax+dx,1],[xmax+dx,0],[xmin+dx,0]])
 
 class DraggableHSpan(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable Horizontal Span"""
     def __init__(self, artist, mode=DragType.none, function=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableHSpan, self).__init__(artist, mode, function)
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get the artist data"""
         self.data=self.artist.get_xy()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist data"""
         ymin = self.data[0][1]
         ymax = self.data[1][1]
         self.artist.set_xy([[0, ymin+dy], [0, ymax+dy], [1, ymax+dy], [1 ,ymin+dy], [0, ymin+dy]])
 
 class DraggableNote(DraggableArtist):
-    """[summary]
-    
-    [description]
-    """
+    """Draggable annotation box"""
     def __init__(self, artist, mode=DragType.none, function=None, function2=None):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - artist {[type]} -- [description]
-        
-        Keyword Arguments:
-            - mode {[type]} -- [description] (default: {DragType})
-            - function {[type]} -- [description] (default: {None})
-            - function2 {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(DraggableNote, self).__init__(artist, mode, function)
         self.cidpress = self.artist.figure.canvas.mpl_connect('button_press_event', self.on_press)
         self.function2=function2
 
     def get_data(self):
-        """[summary]
-        
-        [description]
-        """
+        """Get the artist data"""
         self.data=self.artist.get_position()
 
     def modify_artist(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Modify the artist position"""
         self.artist.set_position([self.press[0]+dx, self.press[1]+dy])
 
     def on_press(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Press event"""
         if not event.dblclick:
             super(DraggableNote, self).on_press(event)
             return
@@ -1082,13 +725,7 @@ class DraggableNote(DraggableArtist):
         self.function2(self.artist)
                     
     def on_release(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
         if event.xdata is None: return

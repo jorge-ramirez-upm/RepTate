@@ -41,58 +41,44 @@ from PyQt5.QtWidgets import QSplashScreen, QApplication, QLabel
 from PyQt5.QtGui import QPixmap, QFont
 import RepTate
 
+
 class SplashScreen(QSplashScreen):
-    """Class to define a splash screen to show loading progress
+    """Class to define a splash screen to show loading progress"""
 
-    [description]
-    """
     def __init__(self):
-        """
-        **Constructor**
-
-        [description]
-        """
-        QSplashScreen.__init__(
-            self,
-            QPixmap(":/Images/Images/logo_with_uni_logo.png"))
+        """**Constructor**"""
+        QSplashScreen.__init__(self, QPixmap(":/Images/Images/logo_with_uni_logo.png"))
         lblVersion = QLabel(self)
 
         verdata = RepTate._version.get_versions()
-        version = verdata['version'].split('+')[0]
-        date = verdata['date'].split('T')[0]
-        build = verdata['version']
+        version = verdata["version"].split("+")[0]
+        date = verdata["date"].split("T")[0]
+        build = verdata["version"]
 
-        lblVersion.setText("RepTate %s %s (build %s)<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %(version, date, build))
+        lblVersion.setText(
+            "RepTate %s %s (build %s)<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href="
+            "https://dx.doi.org/10.1122/8.0000002"
+            ">Cite RepTate</a>" % (version, date, build)
+        )
         font = self.font()
         font.setPixelSize(11)
         font.setWeight(QFont.Bold)
         self.setFont(font)
         lblVersion.adjustSize()
-        #lblVersion.setStyleSheet("QLabel { color : white; }")
-        #lblVersion.move(425 - lblVersion.width(), 195)
+        # lblVersion.setStyleSheet("QLabel { color : white; }")
+        # lblVersion.move(425 - lblVersion.width(), 195)
         QApplication.flush()
 
     def showMessage(self, msg):
-        """Procedure to update message in splash
-
-        [description]
-
-        Arguments:
-            - msg {[type]} -- [description]
-        """
-        align = Qt.Alignment(Qt.AlignBottom |
-                             Qt.AlignRight |
-                             Qt.AlignAbsolute)
-        #color = QtGui.QColor(QtCore.Qt.White)
+        """Procedure to update message in splash"""
+        align = Qt.Alignment(Qt.AlignBottom | Qt.AlignRight | Qt.AlignAbsolute)
+        # color = QtGui.QColor(QtCore.Qt.White)
         color = QColor(0, 0, 0)
         QSplashScreen.showMessage(self, msg, align, color)
         QApplication.processEvents()
 
     def clearMessage(self):
-        """[summary]
-
-        [description]
-        """
+        """Clear message in Splash"""
         QSplashScreen.clearMessage(self)
         QApplication.processEvents()
 

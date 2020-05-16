@@ -45,25 +45,14 @@ import numpy as np
 
 
 class ApplicationTTS(CmdBase):
-    """Application to Analyze Linear Viscoelastic Data
+    """Application to Analyze Linear Viscoelastic Data and perform Time-Temperature Superposition"""
 
-    """
     appname = "TTS"
     description = "Linear Viscoelasticity"
-    extension = 'osc'
+    extension = "osc"
 
     def __new__(cls, name="TTS", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTS"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         if CmdBase.mode == CmdMode.GUI:
             return GUIApplicationTTS(name, parent)
         else:
@@ -71,23 +60,16 @@ class ApplicationTTS(CmdBase):
 
 
 class BaseApplicationTTS:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html"
     appname = ApplicationTTS.appname
 
     def __init__(self, name="TTS", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryTTS import TheoryWLFShift
         from RepTate.theories.TheoryTTS_Automatic import TheoryTTSShiftAutomatic
+
         super().__init__(name, parent)
 
         # VIEWS
@@ -102,7 +84,8 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1G2,
             n=2,
-            snames=["log(G'(w))", "log(G''(w))"])
+            snames=["log(G'(w))", "log(G''(w))"],
+        )
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
             "Storage,Loss moduli",
@@ -113,7 +96,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewG1G2,
-            2, ["G'(w)", "G''(w)"])
+            2,
+            ["G'(w)", "G''(w)"],
+        )
         self.views["etastar"] = View(
             "etastar",
             "Complex Viscosity",
@@ -124,7 +109,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewEtaStar,
-            1, ["eta*(w)"])
+            1,
+            ["eta*(w)"],
+        )
         self.views["logetastar"] = View(
             "logetastar",
             "log Complex Viscosity",
@@ -135,7 +122,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewLogEtaStar,
-            1, ["log(eta*(w))"])
+            1,
+            ["log(eta*(w))"],
+        )
         self.views["delta"] = View(
             "delta",
             "delta",
@@ -146,7 +135,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewDelta,
-            1, ["delta(w)"])
+            1,
+            ["delta(w)"],
+        )
         self.views["tan(delta)"] = View(
             "tan(delta)",
             "tan(delta)",
@@ -157,7 +148,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewTanDelta,
-            1, ["tan(delta((w))"])
+            1,
+            ["tan(delta((w))"],
+        )
         self.views["log(tan(delta))"] = View(
             "log(tan(delta))",
             "log(tan(delta))",
@@ -168,7 +161,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewLogTanDelta,
-            1, ["log(tan(delta((w)))"])
+            1,
+            ["log(tan(delta((w)))"],
+        )
         self.views["log(G*)"] = View(
             "log(G*)",
             "log(G*(omega))",
@@ -179,7 +174,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewLogGstar,
-            1, ["log(G*)"])
+            1,
+            ["log(G*)"],
+        )
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
             "log(tan($\delta$))",
@@ -190,7 +187,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewLogtandeltaGstar,
-            1, ["log(tan($\delta))"])
+            1,
+            ["log(tan($\delta))"],
+        )
         self.views["delta(G*)"] = View(
             "delta(G*)",
             "$\delta$(G*))",
@@ -201,7 +200,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewdeltatanGstar,
-            1, ["delta"])
+            1,
+            ["delta"],
+        )
         self.views["J',J''(w)"] = View(
             "J',J''(w)",
             "J moduli",
@@ -212,7 +213,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewJ1J2,
-            2, ["J'(w)", "J''(w)"])
+            2,
+            ["J'(w)", "J''(w)"],
+        )
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
             "Cole-Cole plot",
@@ -223,7 +226,9 @@ class BaseApplicationTTS:
             False,
             False,
             self.viewColeCole,
-            1, ["$eta'$"])
+            1,
+            ["$eta'$"],
+        )
         self.views["log(G')"] = View(
             name="log(G')",
             description="log Storage modulus",
@@ -235,7 +240,8 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1,
             n=1,
-            snames=["log(G'(w))"])
+            snames=["log(G'(w))"],
+        )
         self.views["G'"] = View(
             "G'",
             "Storage modulus",
@@ -246,7 +252,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewG1,
-            1, ["G'(w)"])
+            1,
+            ["G'(w)"],
+        )
         self.views["log(G'')"] = View(
             name="log(G'')",
             description="log Loss modulus",
@@ -258,7 +266,8 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG2,
             n=1,
-            snames=["log(G''(w))"])
+            snames=["log(G''(w))"],
+        )
         self.views["G''"] = View(
             "G''",
             "Loss modulus",
@@ -269,7 +278,9 @@ class BaseApplicationTTS:
             True,
             True,
             self.viewG2,
-            1, ["G''(w)"])
+            1,
+            ["G''(w)"],
+        )
         self.views["log(G',G''(w),tan(delta))"] = View(
             name="log(G',G''(w),tan(delta))",
             description="log Storage,Loss moduli, tan(delta)",
@@ -281,9 +292,10 @@ class BaseApplicationTTS:
             log_y=False,
             view_proc=self.viewLogG1G2tandelta,
             n=3,
-            snames=["log(G'(w))", "log(G''(w)),log(tan(delta))"])
+            snames=["log(G'(w))", "log(G''(w)),log(tan(delta))"],
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -293,9 +305,13 @@ class BaseApplicationTTS:
 
         # FILES
         ftype = TXTColumnFile(
-            "OSC files", "osc",
+            "OSC files",
+            "osc",
             "Small-angle oscillatory masurements from the Rheometer",
-            ['w', 'G\'', 'G\'\''], ['Mw', 'T'], ['rad/s', 'Pa', 'Pa'])
+            ["w", "G'", "G''"],
+            ["Mw", "T"],
+            ["rad/s", "Pa", "Pa"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
@@ -303,7 +319,7 @@ class BaseApplicationTTS:
         self.theories[TheoryWLFShift.thname] = TheoryWLFShift
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogG1G2(self, dt, file_parameters):
@@ -334,7 +350,7 @@ class BaseApplicationTTS:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2) / dt.data[:, 0]
+        y[:, 0] = np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0]
         return x, y, True
 
     def viewLogEtaStar(self, dt, file_parameters):
@@ -344,7 +360,8 @@ class BaseApplicationTTS:
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(
-            np.sqrt(dt.data[:, 1]**2 + dt.data[:, 2]**2) / dt.data[:, 0])
+            np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0]
+        )
         return x, y, True
 
     def viewDelta(self, dt, file_parameters):
@@ -380,8 +397,7 @@ class BaseApplicationTTS:
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(
-            np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
+        y[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
         return x, y, True
 
     def viewLogtandeltaGstar(self, dt, file_parameters):
@@ -389,8 +405,7 @@ class BaseApplicationTTS:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(
-            np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
         y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
@@ -399,8 +414,7 @@ class BaseApplicationTTS:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(
-            np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
         y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
 
@@ -411,10 +425,8 @@ class BaseApplicationTTS:
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
         x[:, 1] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1] / (
-            np.square(dt.data[:, 1]) + np.square(dt.data[:, 2]))
-        y[:, 1] = dt.data[:, 2] / (
-            np.square(dt.data[:, 1]) + np.square(dt.data[:, 2]))
+        y[:, 0] = dt.data[:, 1] / (np.square(dt.data[:, 1]) + np.square(dt.data[:, 2]))
+        y[:, 1] = dt.data[:, 2] / (np.square(dt.data[:, 1]) + np.square(dt.data[:, 2]))
         return x, y, True
 
     def viewColeCole(self, dt, file_parameters):
@@ -477,34 +489,16 @@ class BaseApplicationTTS:
 
 
 class CLApplicationTTS(BaseApplicationTTS, Application):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="TTS", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="TTS", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

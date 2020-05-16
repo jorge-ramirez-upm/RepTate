@@ -42,17 +42,16 @@ from os.path import dirname, join, abspath
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices, QTextCursor
 from PyQt5.QtCore import QUrl, Qt, QSize
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QInputDialog, QLineEdit, QMenu, QAction, QToolBar, QToolButton, QMessageBox, QFileDialog, QPlainTextEdit, QTextBrowser
+from PyQt5.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
 
+import RepTate
 from RepTate.core.CmdBase import CmdBase, CmdMode, CalcMode
-from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.ApplicationManager import ApplicationManager
 from RepTate.core.File import File
 from RepTate.gui.QAboutReptate import AboutWindow
 from collections import OrderedDict
 import numpy as np
 import time
-import RepTate
 import logging
 
 PATH = dirname(abspath(__file__))
@@ -79,19 +78,11 @@ class QTextEditLogger(logging.Handler):
 
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
-    """Main Reptate window and application manager
-
-    [description]
-    """
+    """Main Reptate window and application manager"""
     html_help_file = 'http://reptate.readthedocs.io/index.html'
 
     def __init__(self, parent=None, loglevel=logging.INFO):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(loglevel=loglevel)
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -395,13 +386,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
         List the theories in the current RepTate instance that provide and need
-        Maxwell modes
-
-        [description]
-
-        Returns:
-            - [type] -- [description]
-        """
+        Maxwell modes"""
         get_dict = {}
         set_dict = {}
         for app in self.applications.values():
@@ -421,13 +406,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         return get_dict, set_dict
 
     def handle_doubleClickTab(self, index):
-        """Edit Application name, tab only, the dictinary key remains unchanged
-
-        [description]
-
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Edit Application name, tab only, the dictinary key remains unchanged"""
         old_name = self.ApplicationtabWidget.tabText(index)
         dlg = QInputDialog(self)
         dlg.setWindowTitle("Change Application Name")
@@ -442,35 +421,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             # self.applications[new_tab_name] = self.applications.pop(old_name)
 
     def show_about(self):
-        """Show about window
-
-        [description]
-        """
+        """Show about window"""
         #dlg = AboutWindow(self, self.version + ' ' + self.date)
         dlg = AboutWindow(self, "RepTate %s %s"%(self.version, self.date), "Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %self.build)
         dlg.show()
 
     def tab_changed(self, index):
-        """Capture when the active application has changed
-
-        [description]
-
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Capture when the active application has changed"""
         #appname = self.ApplicationtabWidget.widget(index).windowTitle
         #items = self.Projecttree.findItems(appname, Qt.MatchContains)
         #self.Projecttree.setCurrentItem(items[0])
         pass
 
     def close_app_tab(self, index):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Close an app"""
         app = self.ApplicationtabWidget.widget(index)
         ds_name_list = [key for key in app.datasets]
         for ds_name in ds_name_list:
@@ -479,14 +443,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.delete(app.name)
 
     def Qopen_app(self, app_name, icon):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - app_name {[type]} -- [description]
-            - icon {[type]} -- [description]
-        """
+        """Open app"""
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset(
         )  #populate with empty dataset at app opening
@@ -497,9 +454,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         return newapp
 
     def handle_new_app(self, app_name=''):
-        """
-        Open a new application window from name
-        """
+        """Open a new application window from name"""
         self.Qopen_app(app_name,
                        ':/Icons/Images/new_icons/%s.png' % app_name)
 
@@ -741,9 +696,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             apps_dic[app.name] = app_dic
 
         current_app_indx = self.ApplicationtabWidget.currentIndex()
+        verdata = RepTate._version.get_versions()
+        version_current = verdata["version"].split("+")[0]
+        date = verdata["date"].split("T")[0]
+        build = verdata["version"]
+
         out = OrderedDict(
             [
-                ('RepTate_version', Version.VERSION + '_' + Version.DATE),
+                ('RepTate_version', version_current + '_' + date + ' (build %s)'%build),
                 ('project_saved_at', '%s on %s' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))),
                 ('napp_saved', napps), ('nfile_saved', nfile_saved),
                 ('nth_saved', nth_saved),

@@ -39,9 +39,11 @@ import os
 import sys
 import logging
 import getopt
-sys.path.append('.')
+
+sys.path.append(".")
 from RepTate.gui.QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 from RepTate.core.CmdBase import CmdBase, CalcMode
@@ -53,16 +55,16 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion")  #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
     app = QApplication(sys.argv)
 
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
@@ -73,12 +75,12 @@ def start_RepTate(argv):
     # Open a particular application
 
     ####################
-    #open linear rheology data to import the Maxwell modes
-    ex.handle_new_app('LVE')
-    dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((os.sep, ) * 3)
-    ex.applications["LVE1"].new_tables_from_files([
-        dow_dir + "DOWLDPEL150R_160C.tts",
-    ])
+    # open linear rheology data to import the Maxwell modes
+    ex.handle_new_app("LVE")
+    dow_dir = "data%sDOW%sLinear_Rheology_TTS%s" % ((os.sep,) * 3)
+    ex.applications["LVE1"].new_tables_from_files(
+        [dow_dir + "DOWLDPEL150R_160C.tts",]
+    )
     ex.applications["LVE1"].datasets["Set1"].new_theory("Maxwell Modes")
     ex.applications["LVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
@@ -86,47 +88,53 @@ def start_RepTate(argv):
     # TEST Rolie-Poly
     # Open a Dataset
 
-    ex.handle_new_app('NLVE')
+    ex.handle_new_app("NLVE")
 
-    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((
-        os.sep, ) * 4)
-    ex.applications["NLVE2"].new_tables_from_files([
-        dow_dir + "My_dow150-160-1 shear.shear",
-        dow_dir + "My_dow150-160-01 shear.shear",
-        dow_dir + "My_dow150-160-001 shear.shear",
-        dow_dir + "My_dow150-160-3 shear.shear",
-        dow_dir + "My_dow150-160-03 shear.shear",
-        dow_dir + "My_dow150-160-003 shear.shear",
-        dow_dir + "My_dow150-160-0003 shear.shear",
-    ])
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((os.sep,) * 4)
+    ex.applications["NLVE2"].new_tables_from_files(
+        [
+            dow_dir + "My_dow150-160-1 shear.shear",
+            dow_dir + "My_dow150-160-01 shear.shear",
+            dow_dir + "My_dow150-160-001 shear.shear",
+            dow_dir + "My_dow150-160-3 shear.shear",
+            dow_dir + "My_dow150-160-03 shear.shear",
+            dow_dir + "My_dow150-160-003 shear.shear",
+            dow_dir + "My_dow150-160-0003 shear.shear",
+        ]
+    )
     # Open a theory
     ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Poly")
     # Minimize the theory
     # Copy Maxwell Modes
-    ex.applications["NLVE2"].datasets["Set1"].theories["RP1"].do_copy_modes("LVE1.Set1.MM1")
+    ex.applications["NLVE2"].datasets["Set1"].theories["RP1"].do_copy_modes(
+        "LVE1.Set1.MM1"
+    )
     ex.applications["NLVE2"].datasets["Set1"].handle_actionMinimize_Error()
 
     #####################
     # TEST Rolie-Poly uniaxial extension
     # Open a Dataset
-    ex.handle_new_app('NLVE')
-    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_extension%s" % ((
-        os.sep, ) * 4)
-    ex.applications["NLVE3"].new_tables_from_files([
-        dow_dir + "My_dow150-160-01.uext",
-        dow_dir + "My_dow150-160-001.uext",
-        dow_dir + "My_dow150-160-0001.uext",
-        dow_dir + "My_dow150-160-03.uext",
-        dow_dir + "My_dow150-160-003.uext",
-        dow_dir + "My_dow150-160-0003.uext",
-    ])
+    ex.handle_new_app("NLVE")
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_extension%s" % ((os.sep,) * 4)
+    ex.applications["NLVE3"].new_tables_from_files(
+        [
+            dow_dir + "My_dow150-160-01.uext",
+            dow_dir + "My_dow150-160-001.uext",
+            dow_dir + "My_dow150-160-0001.uext",
+            dow_dir + "My_dow150-160-03.uext",
+            dow_dir + "My_dow150-160-003.uext",
+            dow_dir + "My_dow150-160-0003.uext",
+        ]
+    )
 
     # Open a theory
     ex.applications["NLVE3"].datasets["Set1"].new_theory("Rolie-Poly")
-    #select uniaxial extension
+    # select uniaxial extension
     ex.applications["NLVE3"].datasets["Set1"].theories["RP1"].select_extensional_flow()
     # Copy Maxwell Modes
-    ex.applications["NLVE3"].datasets["Set1"].theories["RP1"].do_copy_modes("LVE1.Set1.MM1")
+    ex.applications["NLVE3"].datasets["Set1"].theories["RP1"].do_copy_modes(
+        "LVE1.Set1.MM1"
+    )
     # Minimize the theory
     ex.applications["NLVE3"].datasets["Set1"].handle_actionMinimize_Error()
 
@@ -135,5 +143,6 @@ def start_RepTate(argv):
 
     sys.exit(app.exec_())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     start_RepTate(sys.argv[1:])

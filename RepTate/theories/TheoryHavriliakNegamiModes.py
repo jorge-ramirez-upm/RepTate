@@ -41,9 +41,9 @@ from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtWidgets import QToolBar, QSpinBox
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 
@@ -64,50 +64,32 @@ class TheoryHavriliakNegamiModesFrequency(CmdBase):
        - :math:`\\gamma`: Broadness parameter
     
     """
+
     thname = "Havriliak-Negami modes"
     description = "Fit Havriliak-Negami modes"
     citations = ["Havriliak S. and Negami S., Polymer 1967, 8, 161-210"]
     doi = ["http://dx.doi.org/10.1016/0032-3861(67)90021-3"]
-    
+
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryHavriliakNegamiModesFrequency(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI
-                    ) else CLTheoryHavriliakNegamiModesFrequency(
-                        name, parent_dataset, ax)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryHavriliakNegamiModesFrequency(name, parent_dataset, ax)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryHavriliakNegamiModesFrequency(name, parent_dataset, ax)
+        )
 
 
 class BaseTheoryHavriliakNegamiModesFrequency:
-    """[summary] 
-        
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#havriliak-negami-modes'
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#havriliak-negami-modes"
     single_file = True
     thname = TheoryHavriliakNegamiModesFrequency.thname
     citations = TheoryHavriliakNegamiModesFrequency.citations
     doi = TheoryHavriliakNegamiModesFrequency.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-                
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.HavriliakNegamiModesFrequency
         self.has_modes = False
@@ -123,52 +105,63 @@ class BaseTheoryHavriliakNegamiModesFrequency:
             "Unrelaxed permittivity",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["alpha"] = Parameter(
             "alpha",
             1.0,
-            'Asymmetry parameter',
+            "Asymmetry parameter",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["gamma"] = Parameter(
             "gamma",
             1.0,
-            'Broadness parameter',
+            "Broadness parameter",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["logwmin"] = Parameter(
             "logwmin",
             np.log10(wmin),
             "Log of frequency range minimum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+        )
         self.parameters["logwmax"] = Parameter(
             "logwmax",
             np.log10(wmax),
             "Log of frequency range maximum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
             description="Number of Havriliak-Negami modes",
             type=ParameterType.integer,
             opt_type=OptType.const,
-            display_flag=False)
+            display_flag=False,
+        )
         # Interpolate modes from data
         w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         eps = np.abs(
-            np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
-                      self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(
+                w,
+                self.parent_dataset.files[0].data_table.data[:, 0],
+                self.parent_dataset.files[0].data_table.data[:, 1],
+            )
+        )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logDe%02d" % i] = Parameter(
                 "logDe%02d" % i,
                 np.log10(eps[i]),
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt)
+                opt_type=OptType.opt,
+            )
 
         # GRAPHIC MODES
         self.graphicmodes = []
@@ -176,14 +169,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         self.setup_graphic_modes()
 
     def drag_mode(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Drag graphical modes"""
         nmodes = self.parameters["nmodes"].value
         if self.parent_dataset.parent_application.current_view.log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
@@ -203,36 +189,34 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         self.update_parameter_table()
 
     def update_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Do nothing"""
         pass
 
     def setup_graphic_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Setup graphical helpers"""
         nmodes = self.parameters["nmodes"].value
-        w = np.logspace(self.parameters["logwmin"].value,
-                        self.parameters["logwmax"].value, nmodes)
+        w = np.logspace(
+            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+        )
         eps = np.zeros(nmodes)
         for i in range(nmodes):
             eps[i] = np.power(10, self.parameters["logDe%02d" % i].value)
 
         self.graphicmodes = self.ax.plot(w, eps)[0]
-        self.graphicmodes.set_marker('D')
-        self.graphicmodes.set_linestyle('')
+        self.graphicmodes.set_marker("D")
+        self.graphicmodes.set_linestyle("")
         self.graphicmodes.set_visible(self.view_modes)
-        self.graphicmodes.set_markerfacecolor('yellow')
-        self.graphicmodes.set_markeredgecolor('black')
+        self.graphicmodes.set_markerfacecolor("yellow")
+        self.graphicmodes.set_markeredgecolor("black")
         self.graphicmodes.set_markeredgewidth(3)
         self.graphicmodes.set_markersize(8)
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
-            self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application, self.drag_mode)
+            self.graphicmodes,
+            DragType.special,
+            self.parent_dataset.parent_application,
+            self.drag_mode,
+        )
         self.plot_theory_stuff()
 
     def destructor(self):
@@ -241,19 +225,13 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         self.ax.lines.remove(self.graphicmodes)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.view_modes = state
         self.graphicmodes.set_visible(self.view_modes)
         if self.view_modes:
@@ -266,8 +244,9 @@ class BaseTheoryHavriliakNegamiModesFrequency:
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        freq = np.logspace(
+            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+        )
         tau = 1.0 / freq
         eps = np.zeros(nmodes)
         for i in range(nmodes):
@@ -275,13 +254,7 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         return tau, eps, True
 
     def HavriliakNegamiModesFrequency(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -293,27 +266,26 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         alpha = self.parameters["alpha"].value
         gamma = self.parameters["gamma"].value
         nmodes = self.parameters["nmodes"].value
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        freq = np.logspace(
+            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+        )
         tau = 1.0 / freq
 
-        sol = np.zeros(tt.num_rows, dtype='complex128')
+        sol = np.zeros(tt.num_rows, dtype="complex128")
         sol += einf
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
             sol += eps / np.power(
-                1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma)
+                1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma
+            )
 
         tt.data[:, 1] = np.real(sol)
         tt.data[:, 2] = -np.imag(sol)
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot graphical helpers"""
         # if not self.view_modes:
         #     return
         data_table_tmp = DataTable(self.axarr)
@@ -321,14 +293,16 @@ class BaseTheoryHavriliakNegamiModesFrequency:
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
-        freq = np.logspace(self.parameters["logwmin"].value,
-                           self.parameters["logwmax"].value, nmodes)
+        freq = np.logspace(
+            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+        )
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
-                10, self.parameters["logDe%02d" % i].value)
+                10, self.parameters["logDe%02d" % i].value
+            )
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
@@ -342,40 +316,22 @@ class BaseTheoryHavriliakNegamiModesFrequency:
 
 
 class CLTheoryHavriliakNegamiModesFrequency(
-        BaseTheoryHavriliakNegamiModesFrequency, Theory):
-    """[summary]
-    
-    [description]
-    """
+    BaseTheoryHavriliakNegamiModesFrequency, Theory
+):
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryHavriliakNegamiModesFrequency(
-        BaseTheoryHavriliakNegamiModesFrequency, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    BaseTheoryHavriliakNegamiModesFrequency, QTheory
+):
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -384,44 +340,32 @@ class GUITheoryHavriliakNegamiModesFrequency(
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
         # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - value {[type]} -- [description]
-        """
         """Handle a change of the parameter 'nmode'"""
         nmodesold = self.parameters["nmodes"].value
         wminold = self.parameters["logwmin"].value
@@ -444,7 +388,8 @@ class GUITheoryHavriliakNegamiModesFrequency(
                 Gnew[i],
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt)
+                opt_type=OptType.opt,
+            )
 
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()

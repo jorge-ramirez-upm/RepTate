@@ -38,22 +38,16 @@ by Chinmay Das et al.
 import os
 import numpy as np
 from RepTate.core.CmdBase import CmdBase, CmdMode
-from enum import Enum
-from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from RepTate.core.DataTable import DataTable
-from collections import OrderedDict
 import time
 
-import RepTate.gui.bob_LVE  # dialog
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
 from PyQt5.QtWidgets import QApplication, QToolBar, QToolButton, QMenu
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
+from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5.QtCore import QUrl, pyqtSignal, QSize
-from shutil import copy2
 from RepTate.theories.theory_helpers import FlowMode
 
 class TheoryBobNLVE(CmdBase):
@@ -69,18 +63,7 @@ class TheoryBobNLVE(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryBobNLVE(
             name, parent_dataset,
             axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryBobNLVE(
@@ -88,10 +71,7 @@ class TheoryBobNLVE(CmdBase):
 
 
 class BaseTheoryBobNLVE:
-    """[summary]
-    
-    [description]
-    """
+    """Base class for both GUI and CL"""
     html_help_file = 'https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobNLVE.thname
@@ -101,14 +81,7 @@ class BaseTheoryBobNLVE:
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThBobLVE'})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
@@ -147,16 +120,7 @@ class BaseTheoryBobNLVE:
 
 
     def calculate(self, f=None):
-        """Create polymer configuration file and calculate distribution characteristics
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -205,40 +169,20 @@ class BaseTheoryBobNLVE:
         self.Qprint("Fitting not allowed in this theory")
 
 class CLTheoryBobNLVE(BaseTheoryBobNLVE, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         # temp_dir = os.path.join('theories', 'temp')
         # #create temp folder if does not exist

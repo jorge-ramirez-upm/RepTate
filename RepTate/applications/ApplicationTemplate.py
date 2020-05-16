@@ -44,48 +44,27 @@ import numpy as np
 
 
 class ApplicationTemplate(CmdBase):
-    """Application for ...
-
-    [description]
-    """
+    """Application for [THE BASIC DOCUMENTATION OF THE APPLICATION GOES HERE]"""
     appname = 'Template'
     description = 'Template Application'  #used in the command-line Reptate
     extension = "txt"  # drag and drop this extension automatically opens this application
 
     def __new__(cls, name='Template', parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'Template'})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUIApplicationTemplate(name, parent) if (
             CmdBase.mode == CmdMode.GUI) else CLApplicationTemplate(
                 name, parent)
 
 
 class BaseApplicationTemplate:
-    """[summary]
-
-    [description]
-    """
+    """Base Class for both GUI and CL"""
 
     #html_help_file = ''
     appname = ApplicationTemplate.appname
 
     def __init__(self, name='Template', parent=None):
-        """
-        **Constructor**
+        """**Constructor**"""
 
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'Template'})
-            - parent {[type]} -- [description] (default: {None})
-        """
         # IMPORT THEORIES
         # Import theories specific to the Application e.g.:
         # from TheoryTemplate import TheoryA
@@ -138,17 +117,9 @@ class BaseApplicationTemplate:
         self.set_views()
 
     def viewyx(self, dt, file_parameters):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Function that defines how the view is shown. In this example, just the 1st and 2nd columns are shown. 
+        
+        The view must handle objects of type DataTable and can make use of the file parameters"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -157,37 +128,19 @@ class BaseApplicationTemplate:
 
 
 class CLApplicationTemplate(BaseApplicationTemplate, Application):
-    """[summary]
-
-    [description]
-    """
+    """CL Version of the Application"""
 
     def __init__(self, name='Template', parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'Template'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
         #usually this class stays empty
 
 
 class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version of the Application"""
 
     def __init__(self, name='Template', parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'Template'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
         #add the GUI-specific objects here:

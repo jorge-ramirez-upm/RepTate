@@ -34,16 +34,19 @@
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
-sys.path.append('.')
+
+sys.path.append(".")
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 import logging
+
 
 def start_RepTate(argv):
     """
@@ -51,11 +54,11 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+
     app = QApplication(sys.argv)
 
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
@@ -65,28 +68,30 @@ def start_RepTate(argv):
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
-    
+
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('TTS')
-    
+    ex.handle_new_app("TTS")
+
     # Open a Dataset
-    pi_dir = "data%sPI_LINEAR%sosc%s"%((os.sep,)*3)
-    ex.applications["TTS1"].new_tables_from_files([
-                                                   pi_dir + "PI223k-14c_-45C_FS2_PP10.osc",
-                                                   pi_dir + "PI223k-14c_-40C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14c_-30C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14_-10C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14c_-20C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14b_0C_FS4_PP10.osc",
-                                                   pi_dir + "PI223k-14_10C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14b_25C_FS3_PP10.osc",
-                                                   pi_dir + "PI223k-14_25C_FS3_PP10.osc",
-                                                   pi_dir + "PI223k-14c_30C_FS3_PP10.osc",
-                                                   pi_dir + "PI223k-14_40C_FS_PP10.osc",
-                                                   pi_dir + "PI223k-14_50C_FS_PP10.osc",
-                                                   ])
+    pi_dir = "data%sPI_LINEAR%sosc%s" % ((os.sep,) * 3)
+    ex.applications["TTS1"].new_tables_from_files(
+        [
+            pi_dir + "PI223k-14c_-45C_FS2_PP10.osc",
+            pi_dir + "PI223k-14c_-40C_FS_PP10.osc",
+            pi_dir + "PI223k-14c_-30C_FS_PP10.osc",
+            pi_dir + "PI223k-14_-10C_FS_PP10.osc",
+            pi_dir + "PI223k-14c_-20C_FS_PP10.osc",
+            pi_dir + "PI223k-14b_0C_FS4_PP10.osc",
+            pi_dir + "PI223k-14_10C_FS_PP10.osc",
+            pi_dir + "PI223k-14b_25C_FS3_PP10.osc",
+            pi_dir + "PI223k-14_25C_FS3_PP10.osc",
+            pi_dir + "PI223k-14c_30C_FS3_PP10.osc",
+            pi_dir + "PI223k-14_40C_FS_PP10.osc",
+            pi_dir + "PI223k-14_50C_FS_PP10.osc",
+        ]
+    )
 
     # Open a theory
     ex.applications["TTS1"].datasets["Set1"].new_theory("Automatic TTS Shift")
@@ -96,9 +101,9 @@ def start_RepTate(argv):
     ex.applications["TTS1"].datasets["Set1"].new_theory("WLF Shift")
     # Minimize the theory
     ex.applications["TTS1"].datasets["Set1"].handle_actionMinimize_Error()
-                                                   
-    
+
     sys.exit(app.exec_())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     start_RepTate(sys.argv[1:])

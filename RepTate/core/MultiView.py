@@ -35,25 +35,23 @@
 Organise the mmultiple Matplotlib views
 
 """
-import sys
 import enum
 import math
-import numpy as np
-import itertools
 from RepTate.core.CmdBase import CmdBase, CmdMode
-#from UI_Multimatplotlib import Ui_Form
-from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QTabWidget, QWidget, QSizePolicy
-from PyQt5.QtCore import QSize, QMetaObject, Qt
+
+# from UI_Multimatplotlib import Ui_Form
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
+from PyQt5.QtCore import QSize, Qt
 import matplotlib as mpl
+
 mpl.use("Qt5Agg")
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 import matplotlib.gridspec as gridspec
 
-class PlotOrganizationType(enum.Enum):
-    """[summary]
 
-    For Vertical and Horizontal, the number of columns is discarded
+class PlotOrganizationType(enum.Enum):
+    """Defines the way tha the plots are organized in the screen For Vertical and Horizontal, the number of columns is discarded
 
     Vertical:
         -------
@@ -77,32 +75,38 @@ class PlotOrganizationType(enum.Enum):
         The user must provide a GridSpec with the desired organization of plots
 
     """
-    Vertical=0
-    Horizontal=1
-    OptimalRow=2
-    OptimalColumn=3
-    Specified=4
+
+    Vertical = 0
+    Horizontal = 1
+    OptimalRow = 2
+    OptimalColumn = 3
+    Specified = 4
+
 
 class MultiView(QWidget):
-    LEFT=0.15
-    RIGHT=0.98
-    BOTTOM=0.15
-    TOP=0.98
-    WSPACE=0.25
-    HSPACE=0.35
+    """Object that contains several matplotlib charts"""
+    LEFT = 0.15
+    RIGHT = 0.98
+    BOTTOM = 0.15
+    TOP = 0.98
+    WSPACE = 0.25
+    HSPACE = 0.35
     DPI = 300
 
-    def __init__(self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None):
-        #QDialog.__init__(self)
-        #super().__init__(self)
-        #QWidget.__init__()
+    def __init__(
+        self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None
+    ):
+        """**Constructor**"""
+        # QDialog.__init__(self)
+        # super().__init__(self)
+        # QWidget.__init__()
         super().__init__()
         self.parent_application = parent
         self.pot = pot
         self.nplots = nplots
         self.ncols = ncols
         self.setupUi()
-        mpl.rcParams['savefig.dpi'] = self.DPI
+        mpl.rcParams["savefig.dpi"] = self.DPI
 
     def setupUi(self):
         # Remove seaborn dependency
@@ -131,11 +135,16 @@ class MultiView(QWidget):
             "axes.axisbelow": True,
             "image.cmap": "rocket",
             "font.family": ["sans-serif"],
-            "font.sans-serif": ["Arial", "DejaVu Sans", "Liberation Sans",
-                                "Bitstream Vera Sans", "sans-serif"],
+            "font.sans-serif": [
+                "Arial",
+                "DejaVu Sans",
+                "Liberation Sans",
+                "Bitstream Vera Sans",
+                "sans-serif",
+            ],
             "grid.linestyle": "-",
             "lines.solid_capstyle": "round",
-            }
+        }
         mpl.rcParams.update(style_dict)
 
         self.setObjectName("self")
@@ -151,10 +160,12 @@ class MultiView(QWidget):
         self.plotselecttabWidget.setDocumentMode(False)
         self.plotselecttabWidget.setTabsClosable(False)
         self.plotselecttabWidget.setObjectName("plotselecttabWidget")
-        self.plotselecttabWidget.setStyleSheet("QTabBar::tab { color:black; height: 40px; }")
+        self.plotselecttabWidget.setStyleSheet(
+            "QTabBar::tab { color:black; height: 40px; }"
+        )
 
         # Create a tab for all plots
-        if (self.nplots>1):
+        if self.nplots > 1:
             self.tab = QWidget()
             self.tab.setMaximumSize(QSize(0, 0))
             self.plotselecttabWidget.addTab(self.tab, "All")
@@ -164,7 +175,7 @@ class MultiView(QWidget):
         for i in range(self.nplots):
             self.tab = QWidget()
             self.tab.setMaximumSize(QSize(0, 0))
-            self.plotselecttabWidget.addTab(self.tab, "%d"%(i+1))
+            self.plotselecttabWidget.addTab(self.tab, "%d" % (i + 1))
         self.horizontalLayout.addWidget(self.plotselecttabWidget)
         self.plotselecttabWidget.setCurrentIndex(0)
 
@@ -182,12 +193,14 @@ class MultiView(QWidget):
         self.set_bbox()
 
         self.canvas = FigureCanvasQTAgg(self.figure)
-        self.canvas.setFocusPolicy( Qt.ClickFocus )
+        self.canvas.setFocusPolicy(Qt.ClickFocus)
         self.canvas.setFocus()
         self.plotcontainer.addWidget(self.canvas)
         self.init_plot(0)
 
-        connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)
+        connection_id = self.plotselecttabWidget.currentChanged.connect(
+            self.handle_plottabChanged
+        )
         axes = plt.gcf().axes
         for ax_i in axes:
             for side in ["top", "right"]:
@@ -208,7 +221,7 @@ class MultiView(QWidget):
             y0min = min(y0min, bboxnow.y0)
             x1max = max(x1max, bboxnow.x1)
             y1max = max(y1max, bboxnow.y1)
-        self.bboxmax = [x0min, y0min, x1max-x0min, y1max-y0min]
+        self.bboxmax = [x0min, y0min, x1max - x0min, y1max - y0min]
 
     def reorg_fig(self, nplots):
         """Reorganise the views to show nplots"""
@@ -261,17 +274,17 @@ class MultiView(QWidget):
         for ds in self.parent_application.datasets.values():
             ds.nplots = nplots
         self.parent_application.update_all_ds_plots()
-        self.handle_plottabChanged(0) # switch to all plot tab
+        self.handle_plottabChanged(0)  # switch to all plot tab
         self.plotselecttabWidget.blockSignals(False)
 
     def init_plot(self, index):
-        if index == 0: #multiplots
+        if index == 0:  # multiplots
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
-        else: #single plot max-size
+        else:  # single plot max-size
             tab_to_maxi = index - 1
             for i in range(self.nplots):
-                if i == tab_to_maxi: #hide other plots
+                if i == tab_to_maxi:  # hide other plots
                     self.axarr[i].set_visible(True)
                     self.axarr[i].set_position(self.bboxmax)
                 else:
@@ -282,12 +295,16 @@ class MultiView(QWidget):
 
     def handle_plottabChanged(self, index):
         self.parent_application.current_viewtab = index
-        if index == 0: #multiplots
+        if index == 0:  # multiplots
             view_name = self.parent_application.multiviews[0].name
             if CmdBase.mode == CmdMode.GUI:
-                ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
+                ind = self.parent_application.viewComboBox.findText(
+                    view_name, Qt.MatchExactly
+                )
                 self.parent_application.viewComboBox.blockSignals(True)
-                self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
+                self.parent_application.viewComboBox.setCurrentIndex(
+                    ind
+                )  # set the view combobox according to current view
                 self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
                 self.axarr[i].set_position(self.bbox[i])
@@ -297,16 +314,18 @@ class MultiView(QWidget):
                 except:
                     pass
 
-        else: #single plot max-size
-            tab_to_maxi = index - 1 # in 0 1 2
+        else:  # single plot max-size
+            tab_to_maxi = index - 1  # in 0 1 2
             view_name = self.parent_application.multiviews[tab_to_maxi].name
             if CmdBase.mode == CmdMode.GUI:
                 ind = self.parent_application.viewComboBox.findText(view_name)
                 self.parent_application.viewComboBox.blockSignals(True)
-                self.parent_application.viewComboBox.setCurrentIndex(ind) #set the view combobox according to current view
+                self.parent_application.viewComboBox.setCurrentIndex(
+                    ind
+                )  # set the view combobox according to current view
                 self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
-                if i == tab_to_maxi: #hide other plots
+                if i == tab_to_maxi:  # hide other plots
                     self.axarr[i].set_visible(True)
                     self.axarr[i].set_position(self.bboxmax)
                     try:
@@ -324,43 +343,71 @@ class MultiView(QWidget):
         self.parent_application.set_view_tools(view_name)
 
     def organizeHorizontal(self, nplots):
-        gs = gridspec.GridSpec(1, self.nplots,left=self.LEFT,right=self.RIGHT,
-                                  bottom=self.BOTTOM,top=self.TOP,
-                                  wspace=self.WSPACE,hspace=self.HSPACE)
+        gs = gridspec.GridSpec(
+            1,
+            self.nplots,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
         return gs
 
     def organizeVertical(self, nplots):
-        gs = gridspec.GridSpec(self.nplots, 1,left=self.LEFT,right=self.RIGHT,
-                                  bottom=self.BOTTOM,top=self.TOP,
-                                  wspace=self.WSPACE,hspace=self.HSPACE)
+        gs = gridspec.GridSpec(
+            self.nplots,
+            1,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
         return gs
 
     def organizeOptimalRow(self, nplots, ncols):
         row = math.ceil(nplots / ncols)
-        gstmp = gridspec.GridSpec(row, ncols,left=self.LEFT,right=self.RIGHT,
-                                  bottom=self.BOTTOM,top=self.TOP,
-                                  wspace=self.WSPACE,hspace=self.HSPACE)
-        gs=[]
+        gstmp = gridspec.GridSpec(
+            row,
+            ncols,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
+        gs = []
         # First row might be different
-        gs.append(gstmp[0,0:row*ncols-nplots+1])
-        for j in range(row*ncols-nplots+1,ncols):
-            gs.append(gstmp[0,j])
-        for i in range(1,row):
+        gs.append(gstmp[0, 0 : row * ncols - nplots + 1])
+        for j in range(row * ncols - nplots + 1, ncols):
+            gs.append(gstmp[0, j])
+        for i in range(1, row):
             for j in range(ncols):
-                gs.append(gstmp[i,j])
+                gs.append(gstmp[i, j])
         return gs
 
     def organizeOptimalColumn(self, nplots, ncols):
-        row = math.ceil(nplots/ncols)
-        gstmp = gridspec.GridSpec(row, ncols,left=self.LEFT,right=self.RIGHT,
-                                  bottom=self.BOTTOM,top=self.TOP,
-                                  wspace=self.WSPACE,hspace=self.HSPACE)
+        row = math.ceil(nplots / ncols)
+        gstmp = gridspec.GridSpec(
+            row,
+            ncols,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
         gs = []
         # First column might be different
-        gs.append(gstmp[0:row*ncols-nplots+1,0])
-        for j in range(row*ncols-nplots+1,row):
-            gs.append(gstmp[j,0])
-        for i in range(1,ncols):
+        gs.append(gstmp[0 : row * ncols - nplots + 1, 0])
+        for j in range(row * ncols - nplots + 1, row):
+            gs.append(gstmp[j, 0])
+        for i in range(1, ncols):
             for j in range(row):
                 gs.append(gstmp[j, i])
 

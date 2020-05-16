@@ -36,9 +36,10 @@ Module that defines the basic properties of a View, that will be used to represe
 the data graphically.
 
 """
-from enum import Enum
+import enum
 
-class ViewMode(Enum):
+
+class ViewMode(enum.Enum):
     """Defines how to show the experimental/theoretical data view
     TO BE DONE...
     
@@ -47,38 +48,36 @@ class ViewMode(Enum):
         - line: Show lines (default for theories)
         - bar: Show bars 
     """
+
     symbol = 0
     line = 1
     bar = 2
 
-class View(object):
-    """Abstract class to describe a view
- 
-    [description]
-    """
 
-    def __init__(self,
-                 name="",
-                 description="",
-                 x_label="",
-                 y_label="",
-                 x_units="",
-                 y_units="",
-                 log_x=False,
-                 log_y=False,
-                 view_proc=None,
-                 n=1,
-                 snames=[],
-                 inverse_view_proc=None,
-                 index=0,
-                 with_thline=True,
-                 filled=False,
-                 viewmode_data=ViewMode.symbol,
-                 viewmode_theory=ViewMode.line):
-        """
-        **Constructor**
-        
-        [description]
+class View(object):
+    """Abstract class to describe a view"""
+
+    def __init__(
+        self,
+        name="",
+        description="",
+        x_label="",
+        y_label="",
+        x_units="",
+        y_units="",
+        log_x=False,
+        log_y=False,
+        view_proc=None,
+        n=1,
+        snames=[],
+        inverse_view_proc=None,
+        index=0,
+        with_thline=True,
+        filled=False,
+        viewmode_data=ViewMode.symbol,
+        viewmode_theory=ViewMode.line,
+    ):
+        """**Constructor**
         
         Keyword Arguments:
             - name {str} -- View name
@@ -110,5 +109,5 @@ class View(object):
         self.snames = snames
         self.with_thline = with_thline
         self.filled = filled
-        self.viewmode_data=viewmode_data
-        self.viewmode_theory=viewmode_theory
+        self.viewmode_data = viewmode_data
+        self.viewmode_theory = viewmode_theory

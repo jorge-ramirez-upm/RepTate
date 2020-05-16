@@ -44,47 +44,29 @@ import numpy as np
 
 
 class ApplicationNLVE(CmdBase):
-    """Application to Analyze Start up of Nonlinear flow
+    """Application to Analyze Start up of Nonlinear flow"""
 
-    """
     appname = "NLVE"
     description = "Non-Linear Flow"
     extension = "shear uext"
 
     def __new__(cls, name="NLVE", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"NLVE"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationNLVE(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationNLVE(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationNLVE(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationNLVE(name, parent)
+        )
 
 
 class BaseApplicationNLVE:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html"
     appname = ApplicationNLVE.appname
 
     def __init__(self, name="NLVE", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"LVE"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly
         from RepTate.theories.TheoryUCM import TheoryUCM
         from RepTate.theories.TheoryGiesekus import TheoryGiesekus
@@ -108,7 +90,8 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogeta,
             n=1,
-            snames=["log(eta)"])
+            snames=["log(eta)"],
+        )
         self.views["eta(t)"] = View(
             name="eta(t)",
             description="transient viscosity",
@@ -120,7 +103,8 @@ class BaseApplicationNLVE:
             log_y=True,
             view_proc=self.vieweta,
             n=1,
-            snames=["eta"])
+            snames=["eta"],
+        )
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
             description="log transient shear stress vs gamma",
@@ -132,7 +116,8 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogSigmaGamma,
             n=1,
-            snames=["log(sigma)"])
+            snames=["log(sigma)"],
+        )
         self.views["sigma(gamma)"] = View(
             name="sigma(gamma)",
             description="transient shear stress vs gamma",
@@ -144,7 +129,8 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewSigmaGamma,
             n=1,
-            snames=["sigma"])
+            snames=["sigma"],
+        )
         self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
             description="log transient shear stress vs time",
@@ -156,7 +142,8 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewLogSigmaTime,
             n=1,
-            snames=["log(sigma)"])
+            snames=["log(sigma)"],
+        )
         self.views["sigma(t)"] = View(
             name="sigma(t)",
             description="transient shear stress vs time",
@@ -168,7 +155,8 @@ class BaseApplicationNLVE:
             log_y=False,
             view_proc=self.viewSigmaTime,
             n=1,
-            snames=["sigma"])
+            snames=["sigma"],
+        )
         self.views["Flow Curve"] = View(
             name="Flow Curve",
             description="Steady state stress vs flow rate",
@@ -182,9 +170,10 @@ class BaseApplicationNLVE:
             n=1,
             snames=["sigma"],
             with_thline=False,
-            filled=True)
+            filled=True,
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -193,13 +182,23 @@ class BaseApplicationNLVE:
         self.multiplots.reorg_fig(self.nplots)
 
         # FILES
-        ftype = TXTColumnFile("Start-up of shear flow", "shear",
-                              "Shear flow files", ['t', 'sigma_xy'], ['gdot', 'T'],
-                              ['s', 'Pa$\cdot$s'])
+        ftype = TXTColumnFile(
+            "Start-up of shear flow",
+            "shear",
+            "Shear flow files",
+            ["t", "sigma_xy"],
+            ["gdot", "T"],
+            ["s", "Pa$\cdot$s"],
+        )
         self.filetypes[ftype.extension] = ftype
-        ftype = TXTColumnFile("Elongation flow", "uext",
-                              "Elongation flow files", ['t', 'N1'],
-                              ['gdot', 'T'], ['s', 'Pa$\cdot$s'])
+        ftype = TXTColumnFile(
+            "Elongation flow",
+            "uext",
+            "Elongation flow files",
+            ["t", "N1"],
+            ["gdot", "T"],
+            ["s", "Pa$\cdot$s"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
@@ -213,7 +212,7 @@ class BaseApplicationNLVE:
         self.theories[TheorySCCR.thname] = TheorySCCR
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogeta(self, dt, file_parameters):
@@ -269,7 +268,7 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["gdot"])
         except:
             flow_rate = float(file_parameters["edot"])
-        x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  #compute strain
+        x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  # compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
@@ -282,7 +281,7 @@ class BaseApplicationNLVE:
             flow_rate = float(file_parameters["gdot"])
         except:
             flow_rate = float(file_parameters["edot"])
-        x[:, 0] = dt.data[:, 0] * flow_rate  #compute strain
+        x[:, 0] = dt.data[:, 0] * flow_rate  # compute strain
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
@@ -297,39 +296,21 @@ class BaseApplicationNLVE:
         x = np.zeros((1, 1))
         y = np.zeros((1, 1))
         x[0, 0] = flow_rate
-        y[0, 0] = dt.data[-1,1]
+        y[0, 0] = dt.data[-1, 1]
         return x, y, True
 
 
 class CLApplicationNLVE(BaseApplicationNLVE, Application):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="NLVE", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"LVE"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="NLVE", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"LVE"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

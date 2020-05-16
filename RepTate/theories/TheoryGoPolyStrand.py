@@ -36,20 +36,18 @@ Module for the GO-polyStrand model of flow-induced crystallisation in polymers.
 
 """
 import numpy as np
-from scipy.integrate import ode, odeint
+from scipy.integrate import odeint
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from RepTate.gui.Theory_rc import *
-from enum import Enum
 from math import sqrt
-from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 import time
 import RepTate
 
@@ -58,7 +56,6 @@ import RepTate.theories.goLandscape_ctypes_helper as goL
 from RepTate.core.Theory import EndComputationRequested
 from collections import OrderedDict
 
-import RepTate.theories.GOpolySTRAND as GOpolySTRAND
 import RepTate.theories.GOpolySTRAND_initialGuess as GOpolySTRAND_initialGuess
 import RepTate.theories.SchneiderRate as SchneiderRate
 import RepTate.theories.timeArraySplit as timeArraySplit
@@ -129,18 +126,7 @@ class TheoryGoPolyStrand(CmdBase):
     doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryGoPolyStrand(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryGoPolyStrand(
@@ -148,10 +134,8 @@ class TheoryGoPolyStrand(CmdBase):
 
 
 class BaseTheoryGoPolyStrand:
-    """[summary]
-    
-    [description]
-    """
+    """Base class for both GUI and CL"""
+
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
     thname = TheoryGoPolyStrand.thname
@@ -159,14 +143,7 @@ class BaseTheoryGoPolyStrand:
     doi = TheoryGoPolyStrand.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RolieDoublePoly_Crystal
         self.has_modes = True
@@ -366,19 +343,13 @@ class BaseTheoryGoPolyStrand:
         self.ax.lines.remove(self.LVEenvelopeseries)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(show)
 
     def extra_graphic_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Show extra graphics"""
         self.view_LVEenvelope = state
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
@@ -395,13 +366,7 @@ class BaseTheoryGoPolyStrand:
         return tau, G, True
 
     def set_modes_from_mwd(self, m, phi):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Set Modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
         res = Dilution(m, phi, taue, Me, self).res
@@ -443,15 +408,7 @@ class BaseTheoryGoPolyStrand:
 
     def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under *shear* flow
-        with stretching and finite extensibility if selected
-        
-        [description]
-        
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """
+        with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
             raise EndComputationRequested
         tmax = p[-1]
@@ -468,15 +425,7 @@ class BaseTheoryGoPolyStrand:
 
     def sigmadot_uext(self, sigma, t, p):
         """Rolie-Poly differential equation under *uniaxial elongational* flow
-        with stretching and finite extensibility if selecter
-
-        [description]
-
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """
+        with stretching and finite extensibility if selecter"""
         if self.stop_theory_flag:
             raise EndComputationRequested
         tmax = p[-1]
@@ -559,16 +508,7 @@ class BaseTheoryGoPolyStrand:
 
 
     def RolieDoublePoly_Crystal(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Theory RDP for Crystal module"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -798,14 +738,7 @@ class BaseTheoryGoPolyStrand:
 
         
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-        """
+        """Set the value of theory parameters"""
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
@@ -857,38 +790,18 @@ class BaseTheoryGoPolyStrand:
 
 
 class CLTheoryGoPolyStrand(BaseTheoryGoPolyStrand, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -1118,10 +1031,7 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         )
 
     def Qhide_theory_extras(self, show):
-        """Uncheck the LVE button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the LVE button. Called when curent theory is changed"""
         if show:
             self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         else:
@@ -1244,10 +1154,7 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
     #     pass
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory graphical helpers"""
         logtmin = np.log10(self.parent_dataset.minpositivecol(0))
         logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
         ntimes = int((logtmax - logtmin) * 20)

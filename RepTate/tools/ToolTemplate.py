@@ -34,64 +34,45 @@
 
 Template file for creating a new Tool
 """
-import numpy as np
 from RepTate.core.CmdBase import CmdBase, CmdMode
-from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
-from RepTate.core.DataTable import DataTable
 
 
 class ToolTemplate(CmdBase):
-    """[summary]
-
-    [description]
+    """TEMPLATE FOR NEW TOOLS. HERE IS WHERE THE BASIC INFORMATION OF THE TOOL SHOULD APPEAR.
     """
-    toolname = 'TemplateTool'
-    description = 'Template Tool'
+
+    toolname = "TemplateTool"
+    description = "Template Tool"
     citations = []
 
-    def __new__(cls, name='', parent_app=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIToolTemplate(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolTemplate(name, parent_app)
+    def __new__(cls, name="", parent_app=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIToolTemplate(name, parent_app)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLToolTemplate(name, parent_app)
+        )
 
 
 class BaseToolTemplate:
-    """[summary]
+    """Base class for both GUI and CL"""
 
-    [description]
-    """
-    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolTemplate.toolname
     citations = ToolTemplate.citations
 
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
         # self.parameters['param1'] = Parameter(
-            # name='param1',
-            # value=1,
-            # description='parameter 1',
-            # type=ParameterType.real,
-            # opt_type=OptType.const)
+        # name='param1',
+        # value=1,
+        # description='parameter 1',
+        # type=ParameterType.real,
+        # opt_type=OptType.const)
 
     def destructor(self):
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
@@ -101,44 +82,24 @@ If not, you can safely delete it."""
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Template function that returns the square of the y, according to the view
         """
-        return x, y*y
+        return x, y * y
 
 
 class CLToolTemplate(BaseToolTemplate, Tool):
-    """[summary]
+    """CL Version"""
 
-    [description]
-    """
-
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
 
     # This class usually stays empty
 
 
 class GUIToolTemplate(BaseToolTemplate, QTool):
-    """[summary]
+    """GUI Version"""
 
-    [description]
-    """
-
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()

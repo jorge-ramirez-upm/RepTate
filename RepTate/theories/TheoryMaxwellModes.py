@@ -41,9 +41,9 @@ from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QComboBox, QSpinBox, QAction, QStyle
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtWidgets import QToolBar, QSpinBox
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 
@@ -70,27 +70,15 @@ class TheoryMaxwellModesFrequency(CmdBase):
     doi = []
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryMaxwellModesFrequency(
                 name, parent_dataset, ax)
 
 
 class BaseTheoryMaxwellModesFrequency:
-    """[summary] 
-        
-    """
+    """Base class for both GUI and CL"""
+
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesFrequency.thname
@@ -98,14 +86,7 @@ class BaseTheoryMaxwellModesFrequency:
     doi = TheoryMaxwellModesFrequency.doi 
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-                
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesFrequency
         self.has_modes = True
@@ -209,14 +190,7 @@ class BaseTheoryMaxwellModesFrequency:
         return message, success
 
     def drag_mode(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Drag modes around"""
         nmodes = self.parameters["nmodes"].value
         if self.parent_dataset.parent_application.current_view.log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
@@ -236,17 +210,11 @@ class BaseTheoryMaxwellModesFrequency:
         self.update_parameter_table()
 
     def update_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Do nothing"""
         pass
 
     def setup_graphic_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Setup graphic helpers"""
         nmodes = self.parameters["nmodes"].value
         if nmodes>1:
             w = np.logspace(self.parameters["logwmin"].value,
@@ -278,19 +246,13 @@ class BaseTheoryMaxwellModesFrequency:
         self.ax.lines.remove(self.graphicmodes)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.view_modes = state
         self.graphicmodes.set_visible(self.view_modes)
         if self.view_modes:
@@ -316,13 +278,7 @@ class BaseTheoryMaxwellModesFrequency:
         return tau, G, True
 
     def MaxwellModesFrequency(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -349,10 +305,7 @@ class BaseTheoryMaxwellModesFrequency:
             tt.data[:, 2] += G * wT / (1 + wTsq)
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory helpers"""
         # if not self.view_modes:
         #     return
         data_table_tmp = DataTable(self.axarr)
@@ -385,38 +338,18 @@ class BaseTheoryMaxwellModesFrequency:
 
 
 class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -444,30 +377,17 @@ class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
             self.save_modes)
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
         # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - value {[type]} -- [description]
-        """
         """Handle a change of the parameter 'nmodes'"""
         self.set_param_value('nmodes', value)
         if self.autocalculate:
@@ -501,18 +421,7 @@ class TheoryMaxwellModesTime(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryMaxwellModesTime(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryMaxwellModesTime(
@@ -520,24 +429,15 @@ class TheoryMaxwellModesTime(CmdBase):
 
 
 class BaseTheoryMaxwellModesTime:
-    """[summary]
-    
-    [description]
-    """
+    """Base class for both GUI and CL"""
+
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
     single_file = True
     thname = TheoryMaxwellModesTime.thname
     citations = TheoryMaxwellModesTime.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
         self.has_modes = True
@@ -631,14 +531,7 @@ class BaseTheoryMaxwellModesTime:
         return message, success
 
     def drag_mode(self, dx, dy):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Drag modes around"""
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("logtmin", dx[0])
         self.set_param_value("logtmax", dx[nmodes - 1])
@@ -648,17 +541,11 @@ class BaseTheoryMaxwellModesTime:
         self.update_parameter_table()
 
     def update_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Do nothing"""
         pass
 
     def setup_graphic_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """setup graphic helpers"""
         nmodes = self.parameters["nmodes"].value
         if nmodes>1:
             tau = np.logspace(self.parameters["logtmin"].value,
@@ -690,19 +577,13 @@ class BaseTheoryMaxwellModesTime:
         self.ax.lines.remove(self.graphicmodes)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.view_modes = state
         self.graphicmodes.set_visible(self.view_modes)
         if self.view_modes:
@@ -727,13 +608,7 @@ class BaseTheoryMaxwellModesTime:
         return tau, G, True
 
     def MaxwellModesTime(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -764,10 +639,7 @@ class BaseTheoryMaxwellModesTime:
             tt.data[:, 1] += G * expT_tau * gamma
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory helpers"""
         if not self.view_modes:
             return
         data_table_tmp = DataTable(self.axarr)
@@ -800,38 +672,18 @@ class BaseTheoryMaxwellModesTime:
 
 
 class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -859,17 +711,11 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
             self.save_modes)
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
@@ -880,11 +726,7 @@ class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
         # self.do_calculate("")
 
     def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmodes'
-        
-        Arguments:
-            - value {[type]} -- [description]
-        """
+        """Handle a change of the parameter 'nmodes'"""
         self.set_param_value('nmodes', value)
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()

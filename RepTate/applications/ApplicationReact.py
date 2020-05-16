@@ -42,30 +42,15 @@ from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-
 
 class ApplicationReact(CmdBase):
-    """Application for Monte Carlo polymerisation
-
-    """
+    """Application for Monte Carlo polymerisation"""
     appname = 'React'
     description = 'React Application'  #used in the command-line Reptate
     extension = 'reac'
 
     def __new__(cls, name='React', parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUIApplicationReact(
             name,
             parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationReact(
@@ -73,21 +58,13 @@ class ApplicationReact(CmdBase):
 
 
 class BaseApplicationReact:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
     appname = ApplicationReact.appname
 
     def __init__(self, name='React', parent=None, **kwargs):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryLDPEBatch import TheoryTobitaBatch
         from RepTate.theories.TheoryTobitaCSTR import TheoryTobitaCSTR
         from RepTate.theories.TheoryMultiMetCSTR import TheoryMultiMetCSTR
@@ -652,37 +629,19 @@ class BaseApplicationReact:
         return x, y, True
 
 class CLApplicationReact(BaseApplicationReact, Application):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name='React', parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
         #usually this class stays empty
 
 
 class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name='React', parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
 
         super().__init__(name, parent)
 

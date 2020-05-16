@@ -34,12 +34,13 @@
 
 Module to read the contents of the materials database file.
 
-""" 
+"""
 import numpy as np
 import os
-from polymer_data import polymer
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-read_dictionary = np.load(os.path.join(dir_path, 'materials_database.npy'), allow_pickle=True).item()
+read_dictionary = np.load(
+    os.path.join(dir_path, "materials_database.npy"), allow_pickle=True
+).item()
 for k in read_dictionary.keys():
-    print(k, ': ', read_dictionary[k].data, '\n')
+    print(k, ": ", read_dictionary[k].data, "\n")

@@ -36,66 +36,48 @@ Gradient file for creating a new Tool
 """
 import numpy as np
 from RepTate.core.CmdBase import CmdBase, CmdMode
-from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
-from RepTate.core.DataTable import DataTable
-from scipy.integrate import odeint, simps
-from scipy.interpolate import interp1d
+
 
 class ToolGradient(CmdBase):
     """Calculate the derivative of y with respect to x, where y is the ordinate and x is the abcissa in the current view. The gradient function from numpy is used, where the derivative is computed using second order accurate central differences in the interior points and first order accurate one-sides (forward or backwards) differences at the boundaries.
     """
-    toolname = 'Gradient'
-    description = 'Take derivative of current data/view'
+
+    toolname = "Gradient"
+    description = "Take derivative of current data/view"
     citations = []
 
-    def __new__(cls, name='', parent_app=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIToolGradient(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolGradient(name, parent_app)
+    def __new__(cls, name="", parent_app=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIToolGradient(name, parent_app)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLToolGradient(name, parent_app)
+        )
 
 
 class BaseToolGradient:
-    """[summary]
+    """Base class for both GUI and CL"""
 
-    [description]
-    """
-    #html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Gradient.html'
+    # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Gradient.html'
     toolname = ToolGradient.toolname
     citations = ToolGradient.citations
 
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
-        #self.function = self.gradient  # main Tool function
+        # self.function = self.gradient  # main Tool function
         # self.parameters['param1'] = Parameter(
-            # name='param1',
-            # value=1,
-            # description='parameter 1',
-            # type=ParameterType.real,
-            # opt_type=OptType.const)
+        # name='param1',
+        # value=1,
+        # description='parameter 1',
+        # type=ParameterType.real,
+        # opt_type=OptType.const)
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         try:
-            y2 = np.gradient(y,x)
+            y2 = np.gradient(y, x)
             return x, y2
 
         except TypeError as e:
@@ -104,40 +86,20 @@ class BaseToolGradient:
 
 
 class CLToolGradient(BaseToolGradient, Tool):
-    """[summary]
+    """CL Version"""
 
-    [description]
-    """
-
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
 
     # This class usually stays empty
 
 
 class GUIToolGradient(BaseToolGradient, QTool):
-    """[summary]
+    """GUI Version"""
 
-    [description]
-    """
-
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()

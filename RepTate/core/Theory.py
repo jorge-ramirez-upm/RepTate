@@ -45,7 +45,7 @@ from scipy.stats.distributions import t
 
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.DataTable import DataTable
-from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Parameter import ParameterType, OptType
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import pyqtSignal
@@ -1010,19 +1010,7 @@ This routine works when the theory and the experimental data are not measured on
                     print("Parameter %s not found" % s)
 
     def complete_parameters(self, text, line, begidx, endidx):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - text {[type]} -- [description]
-            - line {[type]} -- [description]
-            - begidx {[type]} -- [description]
-            - endidx {[type]} -- [description]
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Complete the parameters command"""
         parameter_names = list(self.parameters.keys())
         if not text:
             completions = parameter_names[:]
@@ -1031,10 +1019,7 @@ This routine works when the theory and the experimental data are not measured on
         return completions
 
     def plot_theory_stuff(self):
-        """[summary]
-
-        [description]
-        """
+        """Plot theory helpers"""
         pass
 
 # SAVE THEORY STUFF
@@ -1094,14 +1079,7 @@ This routine works when the theory and the experimental data are not measured on
 # SPAN STUFF
 
     def change_xmin(self, dx, dy):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Change the min x value of the span"""
         try:
             self.xmin += dx
             self.xminline.set_data([self.xmin, self.xmin], [0, 1])
@@ -1111,14 +1089,7 @@ This routine works when the theory and the experimental data are not measured on
             pass
 
     def change_xmax(self, dx, dy):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Change the max x value of the span"""
         try:
             self.xmax += dx
             self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])
@@ -1128,28 +1099,14 @@ This routine works when the theory and the experimental data are not measured on
             pass
 
     def change_ymin(self, dx, dy):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Change the min y value of the span"""
         self.ymin += dy
         self.yminline.set_data([0, 1], [self.ymin, self.ymin])
         self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax],
                             [1, self.ymin], [0, self.ymin]])
 
     def change_ymax(self, dx, dy):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - dx {[type]} -- [description]
-            - dy {[type]} -- [description]
-        """
+        """Change the max y value of the span"""
         self.ymax += dy
         self.ymaxline.set_data([0, 1], [self.ymax, self.ymax])
         self.yrange.set_xy([[0, self.ymin], [0, self.ymax], [1, self.ymax],
@@ -1227,10 +1184,7 @@ With no arguments: switches ON/OFF the horizontal span. Example: xrange -4 5"""
         self.do_plot(line)
 
     def set_xy_limits_visible(self, xstate=False, ystate=False):
-        """Hide the x- and y-range selectors
-
-        [description]
-        """
+        """Hide the x- and y-range selectors"""
         self.xrange.set_visible(xstate)
         self.xminline.set_visible(xstate)
         self.xmaxline.set_visible(xstate)
@@ -1389,11 +1343,7 @@ that provide this functionality."""
 
         Called on an input line when the command prefix is not recognized.
         Check if there is an = sign in the line. If so, it is a parameter change.
-        Else, we execute the line as Python code.
-
-        Arguments:
-            - line {[type]} -- [description]
-        """
+        Else, we execute the line as Python code."""
         if "=" in line:
             par = line.split("=")
             if (par[0] in self.parameters):
@@ -1410,10 +1360,7 @@ that provide this functionality."""
         pass
 
     def do_hide(self, line=''):
-        """Hide the theory artists and associated tools
-
-        [description]
-        """
+        """Hide the theory artists and associated tools"""
         if self.active:
             self.set_xy_limits_visible(False, False)  # hide xrange and yrange
             for table in self.tables.values():
@@ -1431,10 +1378,7 @@ that provide this functionality."""
                 tt.series[nx][i].set_visible(state)
 
     def do_show(self, line=''):
-        """[summary]
-
-        [description]
-        """
+        """Show theory"""
         self.active = True
         self.set_xy_limits_visible(self.is_xrange_visible,
                                    self.is_yrange_visible)
@@ -1450,13 +1394,7 @@ that provide this functionality."""
         self.parent_dataset.do_plot("")
 
     def Qprint(self, msg, end='<br>'):
-        """[summary]
-
-        [description]
-
-        Arguments:
-            - msg {[type]} -- [description]
-        """
+        """Print a message on the theory log area or on the terminal"""
 
         if CmdBase.mode == CmdMode.GUI:
             if isinstance(msg, list):

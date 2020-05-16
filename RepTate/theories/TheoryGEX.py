@@ -40,39 +40,9 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from RepTate.core.DataTable import DataTable
 
 
 class TheoryGEX(CmdBase):
-    """[summary]
-    
-    [description]
-    """
-    thname = 'GEX'
-    description = 'Generalized Exponential Function distribution'
-    citations = []
-    doi = []
-
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryGEX(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryGEX(
-                name, parent_dataset, axarr)
-
-
-class BaseTheoryGEX:
     """Generalized Exponential Function (GEX) for experimental molecular weight distributions.
     
     * **Function**
@@ -85,62 +55,70 @@ class BaseTheoryGEX:
        - ``a`` : Parameter related to polydispersity and skewness
        - ``b`` : Parameter related to polydispersity and skewness
     """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function'
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+
+    thname = "GEX"
+    description = "Generalized Exponential Function distribution"
+    citations = []
+    doi = []
+
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryGEX(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryGEX(name, parent_dataset, axarr)
+        )
+
+
+class BaseTheoryGEX:
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function"
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryGEX.thname
     citations = TheoryGEX.citations
     doi = TheoryGEX.doi
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.GEX  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['logW0'] = Parameter(
-            name='logW0',
+        self.parameters["logW0"] = Parameter(
+            name="logW0",
             value=5,
-            description='Log Normalization constant',
+            description="Log Normalization constant",
             type=ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters['logM0'] = Parameter(
-            name='logM0',
+            opt_type=OptType.opt,
+        )
+        self.parameters["logM0"] = Parameter(
+            name="logM0",
             value=5,
-            description='Log molecular weight',
+            description="Log molecular weight",
             type=ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters['a'] = Parameter(
-            name='a',
+            opt_type=OptType.opt,
+        )
+        self.parameters["a"] = Parameter(
+            name="a",
             value=1,
-            description='Exponent parameter',
+            description="Exponent parameter",
             type=ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
-        self.parameters['b'] = Parameter(
-            name='b',
+            min_value=0,
+        )
+        self.parameters["b"] = Parameter(
+            name="b",
             value=0.5,
-            description='Exponent parameter',
+            description="Exponent parameter",
             type=ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
 
     def GEX(self, f=None):
-        """GEX function
-
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """GEX function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -152,8 +130,14 @@ class BaseTheoryGEX:
 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = W0 * b / M0 / gamma((a + 1) / b) * np.power(
-            tt.data[:, 0] / M0, a) * np.exp(-np.power(tt.data[:, 0] / M0, b))
+        tt.data[:, 1] = (
+            W0
+            * b
+            / M0
+            / gamma((a + 1) / b)
+            * np.power(tt.data[:, 0] / M0, a)
+            * np.exp(-np.power(tt.data[:, 0] / M0, b))
+        )
 
     def do_error(self, line):
         """Report the error of the current theory
@@ -162,8 +146,8 @@ Report the error of the current theory on all the files, taking into account the
 
 File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
-        if (line == ""):
-            self.Qprint('''<h3>Characteristics of the fitted MWD</h3>''')
+        if line == "":
+            self.Qprint("""<h3>Characteristics of the fitted MWD</h3>""")
             M0 = np.power(10.0, self.parameters["logM0"].value)
             a = self.parameters["a"].value
             b = self.parameters["b"].value
@@ -174,46 +158,40 @@ File error is calculated as the mean square of the residual, averaged over all p
             # table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
             # table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
             # table+='''</table><br>'''
-            table = [['%-12s' % 'Mn (kg/mol)', '%-12s' % 'Mw (kg/mol)', '%-9s' % 'Mw/Mn', '%-9s' % 'Mz/Mw'],]
-            table.append(['%-12.3g' % (Mn / 1000), '%-12.3g' % (Mw / 1000), '%-9.3g' % (Mw / Mn), '%-9.3g' % (Mz / Mw) ])
+            table = [
+                [
+                    "%-12s" % "Mn (kg/mol)",
+                    "%-12s" % "Mw (kg/mol)",
+                    "%-9s" % "Mw/Mn",
+                    "%-9s" % "Mz/Mw",
+                ],
+            ]
+            table.append(
+                [
+                    "%-12.3g" % (Mn / 1000),
+                    "%-12.3g" % (Mw / 1000),
+                    "%-9.3g" % (Mw / Mn),
+                    "%-9.3g" % (Mz / Mw),
+                ]
+            )
             self.Qprint(table)
 
 
 class CLTheoryGEX(BaseTheoryGEX, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryGEX(BaseTheoryGEX, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

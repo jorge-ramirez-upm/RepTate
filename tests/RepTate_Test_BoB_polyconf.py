@@ -37,11 +37,13 @@ Main program that launches the GUI.
 """
 import os
 import sys
-sys.path.append('.')
+
+sys.path.append(".")
 
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 import logging
@@ -53,10 +55,10 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion")  #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
     # app = QApplication(sys.argv)
 
@@ -69,13 +71,13 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('React')
+    ex.handle_new_app("React")
 
     #####################
     # Open a Dataset
-    ex.applications["React1"].new_tables_from_files([
-        "data%sReact%sout1.reac" % ((os.sep, ) * 2),
-    ])
+    ex.applications["React1"].new_tables_from_files(
+        ["data%sReact%sout1.reac" % ((os.sep,) * 2),]
+    )
     # Open a theory
     ex.applications["React1"].datasets["Set1"].new_theory("BOB Architecture")
 
@@ -84,6 +86,6 @@ def start_RepTate(argv):
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     start_RepTate(sys.argv[1:])

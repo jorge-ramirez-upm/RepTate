@@ -69,6 +69,7 @@ class TheoryPolynomial(CmdBase):
     description = "Fit a polynomial of degree n"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
+        """Create an instance of the GUI or CL class"""
         return GUITheoryPolynomial(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPolynomial(
@@ -76,6 +77,8 @@ class TheoryPolynomial(CmdBase):
 
 
 class BaseTheoryPolynomial:
+    """Base class for both GUI and CL"""
+
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
     thname = TheoryPolynomial.thname
@@ -210,7 +213,7 @@ class TheoryPowerLaw(CmdBase):
     description = "Fit Power Law"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
+        """Create an instance of the GUI or CL class"""
         return GUITheoryPowerLaw(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPowerLaw(
@@ -218,7 +221,7 @@ class TheoryPowerLaw(CmdBase):
 
 
 class BaseTheoryPowerLaw:
-    """Fit a power law to the data"""
+    """Base class for both GUI and CL"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
     thname = TheoryPowerLaw.thname
@@ -291,14 +294,14 @@ class TheoryExponential(CmdBase):
     description = "Fit Exponential"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
+        """Create an instance of the GUI or CL class"""
         return GUITheoryExponential(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryExponential(
                 name, parent_dataset, ax)
 
 class BaseTheoryExponential:
-    """Fit an exponential decay to the data"""
+    """Base class for both GUI and CL"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
     thname = TheoryExponential.thname
@@ -372,14 +375,14 @@ class TheoryTwoExponentials(CmdBase):
     description = "Fit two exponentials"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
+        """Create an instance of the GUI or CL class"""
         return GUITheoryTwoExponentials(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTwoExponentials(
                 name, parent_dataset, ax)
 
 class BaseTheoryTwoExponentials:
-    """Fit 2 exponentials decay to the data"""
+    """Base class for both GUI and CL"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
     thname = TheoryTwoExponentials.thname
@@ -476,6 +479,7 @@ class TheoryAlgebraicExpression(CmdBase):
     description = "Fit an algebraic expression with n parameters"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
+        """Create an instance of the GUI or CL class"""
         return GUITheoryAlgebraicExpression(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryAlgebraicExpression(
@@ -483,6 +487,7 @@ class TheoryAlgebraicExpression(CmdBase):
 
 
 class BaseTheoryAlgebraicExpression:
+    """Base class for both GUI and CL"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
     single_file = False
     thname = TheoryAlgebraicExpression.thname

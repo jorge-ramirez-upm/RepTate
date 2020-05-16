@@ -34,9 +34,10 @@
 
 Module that defines the a QTreeWidget that allows to select nothing.
 
-""" 
+"""
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QMessageBox
+from PyQt5.QtWidgets import QTreeWidget
+
 
 class DataSetWidget(QTreeWidget):
     """Subclass of QTreeWidget
@@ -44,74 +45,64 @@ class DataSetWidget(QTreeWidget):
     Subclass of QTreeWidget that allows to select nothing in the DataSet 
     by clicking in the white area of the DataSet, and allows to delete a data table item
     """
+
     def __init__(self, parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(parent)
         self.parent_dataset = parent
 
     def mousePressEvent(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Process mouse"""
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
-    
+
     def keyPressEvent(self, event):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - event {[type]} -- [description]
-        """
+        """Process key"""
         if event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
             self.delete()
         else:
             QTreeWidget.keyPressEvent(self, event)
 
     def delete(self):
-        """Delete the currently selected items
-        
-        [description]
-        """
+        """Delete the currently selected items"""
         selection = self.selectedItems()
         if selection == []:
             return
         index_to_rm = []
         for item in selection:
-            index_to_rm.append(self.indexOfTopLevelItem(item)) #save indices to delete
+            index_to_rm.append(self.indexOfTopLevelItem(item))  # save indices to delete
             file_name_short = item.text(0)
-            
-            for file in self.parent_dataset.files: #remove files and lines
-                if file.file_name_short == file_name_short:  
+
+            for file in self.parent_dataset.files:  # remove files and lines
+                if file.file_name_short == file_name_short:
                     dt = file.data_table
                     for i in range(dt.MAX_NUM_SERIES):
                         for nx in range(self.parent_dataset.nplots):
-                            self.parent_dataset.parent_application.axarr[nx].lines.remove(dt.series[nx][i]) 
+                            self.parent_dataset.parent_application.axarr[
+                                nx
+                            ].lines.remove(dt.series[nx][i])
                     self.parent_dataset.files.remove(file)
                     break
 
-            for th in self.parent_dataset.theories.values(): #remove corresponding theory lines
+            for (
+                th
+            ) in (
+                self.parent_dataset.theories.values()
+            ):  # remove corresponding theory lines
                 try:
                     tt = th.tables[file_name_short]
                     for i in range(tt.MAX_NUM_SERIES):
                         for nx in range(self.parent_dataset.nplots):
-                            self.parent_dataset.parent_application.axarr[nx].lines.remove(tt.series[nx][i])  
+                            self.parent_dataset.parent_application.axarr[
+                                nx
+                            ].lines.remove(tt.series[nx][i])
                     del th.tables[file_name_short]
                 except KeyError:
                     pass
-        for ind in index_to_rm: 
-            self.takeTopLevelItem(ind) #remove the table widget
-        
-        if self.topLevelItemCount() == 0:   
-            self.parent_dataset.parent_application.dataset_actions_disabled(True) #desactivate buttons
+        for ind in index_to_rm:
+            self.takeTopLevelItem(ind)  # remove the table widget
 
+        if self.topLevelItemCount() == 0:
+            self.parent_dataset.parent_application.dataset_actions_disabled(
+                True
+            )  # desactivate buttons

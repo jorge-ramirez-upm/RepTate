@@ -38,16 +38,15 @@ Module that defines the basic class from which all applications are derived.
 import io
 #import logging
 import matplotlib.pyplot as plt
-from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
+from matplotlib.ticker import AutoMinorLocator
 
 from RepTate.core.CmdBase import CmdBase, CmdMode
-from RepTate.core.Theory import Theory
 from RepTate.core.DataSet import DataSet
 from RepTate.theories.TheoryBasic import *
 from RepTate.core.Tool import *
 
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
-from PyQt5.QtWidgets import QMenu, QApplication
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtCore import Qt
 
@@ -81,8 +80,7 @@ class Application(CmdBase):
                  nplot_max=4,
                  ncols=2,
                  **kwargs):
-        """
-        **Constructor**"""
+        """**Constructor**"""
 
         super().__init__()
         self.name = name
@@ -545,6 +543,7 @@ class Application(CmdBase):
             sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
     def delete_multiplot(self):
+        """deletes the multiplot object"""
         del self.multiplots
 
     def set_multiplot(self, nplots, ncols):
@@ -562,15 +561,16 @@ class Application(CmdBase):
         pass
 
     def add_common_theories(self):
+        """Add common theories to the list of available th"""
         for th in self.common_theories.values():
             self.theories[th.thname] = th
 
     def refresh_plot(self):
+        """Refresh the current plot"""
         self.view_switch(self.current_view.name)
 
     def copy_chart(self):
-        """ Copy current chart to clipboard
-        """
+        """ Copy current chart to clipboard"""
         buf = io.BytesIO()
         self.figure.savefig(buf, dpi=150)
         QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
@@ -587,22 +587,6 @@ class Application(CmdBase):
             line_strings.append(str(x[i]) + "\t" + str(y[i]))
         array_string = "\n".join(line_strings)
         QApplication.clipboard().setText(array_string)
-
-    # JR: I THINK THE FOLLOWING FUNCTION IS NOT NEEDED ANYMORE
-    # def handle_close_window(self, evt):
-    #     """[summary]
-
-    #     [description]
-
-    #     Arguments:
-    #         - evt {[type]} -- [description]
-
-    #     Returns:
-    #         [type] -- [description]
-    #     """
-    #     print("\nApplication window %s has been closed\n" % self.name)
-    #     print(
-    #         "Please, return to the RepTate prompt and delete the application")
 
     def new(self, line):
         """Create new empty dataset in the application"""
@@ -989,25 +973,11 @@ Arguments:
             ax = self.axarr[nx]
             if (view.log_x):
                 ax.set_xscale("log")
-                ##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.xaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.xaxis.set_minor_locator(locmin)
-                # ax.xaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_xscale("linear")
                 ax.xaxis.set_minor_locator(AutoMinorLocator())
             if (view.log_y):
                 ax.set_yscale("log")
-                ##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.yaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.yaxis.set_minor_locator(locmin)
-                # ax.yaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())

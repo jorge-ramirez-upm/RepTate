@@ -36,20 +36,16 @@ Module for the Giesekus model for the non-linear flow of entangled polymers.
 
 """
 import numpy as np
-from scipy.integrate import ode, odeint
+from scipy.integrate import odeint
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from RepTate.core.DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from RepTate.gui.Theory_rc import *
-from enum import Enum
-from math import sqrt
-from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 from RepTate.core.Theory import EndComputationRequested
 from RepTate.applications.ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
@@ -79,18 +75,7 @@ class TheoryGiesekus(CmdBase):
     doi = ["http://dx.doi.org/10.1007/BF01973575"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryGiesekus(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryGiesekus(
@@ -98,10 +83,8 @@ class TheoryGiesekus(CmdBase):
 
 
 class BaseTheoryGiesekus:
-    """[summary]
-    
-    [description]
-    """
+    """Base class for both GUI and CL"""
+
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
     thname = TheoryGiesekus.thname
@@ -109,14 +92,7 @@ class BaseTheoryGiesekus:
     doi = TheoryGiesekus.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_giesekus
         self.has_modes = True
@@ -199,14 +175,7 @@ class BaseTheoryGiesekus:
 
     def n1_uext(self, p, times):
         """Upper Convected Maxwell model in uniaxial extension.
-        Returns N1 = (XX -YY) component of stress tensor
-        
-        [description]
-        
-        Arguments:
-            - p {array} -- p = [G, tauD, epsilon_dot] 
-            - times {array} -- time
-        """
+        Returns N1 = (XX -YY) component of stress tensor"""
         _, G, tauD, ed = p
         w = tauD * ed
         sxx = (1 - 2 * w * np.exp(-(1 - 2 * w) * times / tauD)) / (1 - 2 * w)
@@ -216,19 +185,13 @@ class BaseTheoryGiesekus:
 
     def sigma_xy_shear(self, p, times):
         """Upper Convected Maxwell model in shear.
-        Returns XY component of stress tensor
-        
-        [description]
-        
-        Arguments:
-            - p {array} -- p = [G, tauD, gamma_dot] 
-            - times {array} -- time
-        """
+        Returns XY component of stress tensor"""
         _, G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
     def sigma_xy_shearLAOS(self, p, times):
+        """Giesekus model in LAOS"""        
         _, G, tauD, g0, w = p
         eta = G*tauD
 
@@ -298,16 +261,7 @@ class BaseTheoryGiesekus:
         return [dsxx, dsyy, dsxy]
 
     def calculate_giesekus(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calculate Giesekus"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -367,16 +321,7 @@ class BaseTheoryGiesekus:
                     tt.data[:, 1] += self.n1_uext(p, ft.data[:, 0])
 
     def calculate_giesekusLAOS(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calculate Giesekus for LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -422,14 +367,7 @@ class BaseTheoryGiesekus:
                 tt.data[:, 1] += self.sigma_xy_shearLAOS(p, ft.data[:, 0])
  
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-        """
+        """Set value of a theory parameter"""
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
             if CmdBase.mode==CmdMode.GUI:
@@ -474,40 +412,20 @@ class BaseTheoryGiesekus:
 
 
 class CLTheoryGiesekus(BaseTheoryGiesekus, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
             self.function = self.calculate_giesekusLAOS
 
 
 class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory

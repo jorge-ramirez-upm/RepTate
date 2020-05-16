@@ -38,20 +38,23 @@ Main program that launches the GUI.
 import os
 import sys
 import getopt
-sys.path.append('core')
-sys.path.append('gui')
-sys.path.append('console')
-sys.path.append('applications')
-sys.path.append('theories')
-sys.path.append('visual')
-sys.path.append('tools')
+
+sys.path.append("core")
+sys.path.append("gui")
+sys.path.append("console")
+sys.path.append("applications")
+sys.path.append("theories")
+sys.path.append("visual")
+sys.path.append("tools")
 from QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 from time import time, sleep
 from CmdBase import CmdBase, CalcMode
 import logging
+
 
 def start_RepTate(argv):
     """
@@ -59,10 +62,10 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion")  #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
     app = QApplication(sys.argv)
 
@@ -77,45 +80,47 @@ def start_RepTate(argv):
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('NLVE')
+    ex.handle_new_app("NLVE")
 
     #####################
     # TEST Rolie-Poly
     # Open a Dataset
 
-    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((
-        os.sep, ) * 4)
-    ex.applications["NLVE1"].new_tables_from_files([
-        dow_dir + "My_dow150-160-1 shear.shear",
-        dow_dir + "My_dow150-160-01 shear.shear",
-        dow_dir + "My_dow150-160-001 shear.shear",
-        dow_dir + "My_dow150-160-3 shear.shear",
-        dow_dir + "My_dow150-160-03 shear.shear",
-        dow_dir + "My_dow150-160-003 shear.shear",
-        dow_dir + "My_dow150-160-0003 shear.shear",
-    ])
+    dow_dir = "data%sDOW%sNon-Linear_Rheology%sStart-up_Shear%s" % ((os.sep,) * 4)
+    ex.applications["NLVE1"].new_tables_from_files(
+        [
+            dow_dir + "My_dow150-160-1 shear.shear",
+            dow_dir + "My_dow150-160-01 shear.shear",
+            dow_dir + "My_dow150-160-001 shear.shear",
+            dow_dir + "My_dow150-160-3 shear.shear",
+            dow_dir + "My_dow150-160-03 shear.shear",
+            dow_dir + "My_dow150-160-003 shear.shear",
+            dow_dir + "My_dow150-160-0003 shear.shear",
+        ]
+    )
     # Open a theory
     ex.applications["NLVE1"].datasets["Set1"].new_theory("Rolie-Double-Poly")
     # Minimize the theory
     # ex.applications["NLVE1"].datasets["Set1"].handle_actionMinimize_Error()
 
-
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('NLVE')
+    ex.handle_new_app("NLVE")
 
     #####################
     # TEST Rolie-Poly
     # Open a Dataset
 
-    dow_dir = os.path.join('data', 'NLVE_Extension', '')
-    ex.applications["NLVE2"].new_tables_from_files([
-        dow_dir + "Minegishi_spiked_PS_0_572.uext",
-        dow_dir + "Minegishi_spiked_PS_0_013.uext",
-        dow_dir + "Minegishi_spiked_PS_0_047.uext",
-        dow_dir + "Minegishi_spiked_PS_0_097.uext"
-    ])
+    dow_dir = os.path.join("data", "NLVE_Extension", "")
+    ex.applications["NLVE2"].new_tables_from_files(
+        [
+            dow_dir + "Minegishi_spiked_PS_0_572.uext",
+            dow_dir + "Minegishi_spiked_PS_0_013.uext",
+            dow_dir + "Minegishi_spiked_PS_0_047.uext",
+            dow_dir + "Minegishi_spiked_PS_0_097.uext",
+        ]
+    )
     # Open a theory
     ex.applications["NLVE2"].datasets["Set1"].new_theory("Rolie-Double-Poly")
     # Minimize the theory
@@ -124,12 +129,12 @@ def start_RepTate(argv):
     sys.exit(app.exec_())
 
     ####################
-    #open MWD import Mead gpc
-    ex.handle_new_app('MWD')
-    dir = os.path.join('data', 'MWD', '')
-    ex.applications["MWD3"].new_tables_from_files([
-        dir + "Munstedt_PSIV.gpc",
-    ])
+    # open MWD import Mead gpc
+    ex.handle_new_app("MWD")
+    dir = os.path.join("data", "MWD", "")
+    ex.applications["MWD3"].new_tables_from_files(
+        [dir + "Munstedt_PSIV.gpc",]
+    )
     ex.applications["MWD3"].datasets["Set1"].new_theory("Discretize MWD")
 
     # ####################
@@ -146,5 +151,5 @@ def start_RepTate(argv):
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_RepTate(sys.argv[1:])

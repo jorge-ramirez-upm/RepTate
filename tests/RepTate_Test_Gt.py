@@ -34,17 +34,20 @@
 
 Main program that launches the GUI.
 
-""" 
+"""
 import os
 import sys
 import getopt
-sys.path.append('.')
+
+sys.path.append(".")
 from RepTate.gui.QApplicationManager import QApplicationManager
-#from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
+
+# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 from RepTate.core.CmdBase import CmdBase, CalcMode
 import logging
+
 
 def start_RepTate(argv):
     """
@@ -52,33 +55,33 @@ def start_RepTate(argv):
     
     :param list argv: Command line parameters passed to Reptate
     """
-    loglevel=logging.DEBUG
+    loglevel = logging.DEBUG
     GUI = True
-    QApplication.setStyle("Fusion") #comment that line for a native look
-    #for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
-    
+    QApplication.setStyle("Fusion")  # comment that line for a native look
+    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+
     app = QApplication(sys.argv)
-    
+
     # FOR DEBUGGING PURPOSES: Set Single or MultiThread (default)
     CmdBase.calcmode = CalcMode.singlethread
-    
+
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
 
     ex.show()
-    
+
     ########################################################
     # THE FOLLOWING LINES ARE FOR TESTING A PARTICULAR CASE
     # Open a particular application
-    ex.handle_new_app('Gt')
-    
+    ex.handle_new_app("Gt")
+
     #####################
     # TEST MaxwellModesTime
     # Open a Dataset
-    gt_dir = "data%sGt%s"%((os.sep,)*2)
-    ex.applications["Gt1"].new_tables_from_files([
-                                                   gt_dir + "C0224_NVT_450K_1atm.gt",
-                                                   ])
+    gt_dir = "data%sGt%s" % ((os.sep,) * 2)
+    ex.applications["Gt1"].new_tables_from_files(
+        [gt_dir + "C0224_NVT_450K_1atm.gt",]
+    )
     # Open a theory
     ex.applications["Gt1"].datasets["Set1"].new_theory("Maxwell Modes")
     # Minimize the theory
@@ -88,9 +91,8 @@ def start_RepTate(argv):
     # # Minimize the theory
     ex.applications["Gt1"].datasets["Set1"].handle_actionMinimize_Error()
 
-
-
     sys.exit(app.exec_())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     start_RepTate(sys.argv[1:])

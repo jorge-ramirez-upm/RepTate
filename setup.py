@@ -1,12 +1,11 @@
 import os
-import sys
 from setuptools import setup, find_packages
 import versioneer
 import functools
 import glob
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-requirements_file = open(os.path.join(base_dir, 'requirements.txt'))
+requirements_file = open(os.path.join(base_dir, "requirements.txt"))
 requirements = requirements_file.read().splitlines()
 
 
@@ -19,7 +18,7 @@ def get_directory_structure(rootdir):
     def build_tree(dic, dir_tree):
         for key in dic:
             if dic[key] is not None:
-                if dir_tree != '':
+                if dir_tree != "":
                     dir = build_tree(dic[key], dir_tree + os.sep + key)
                 else:
                     dir = build_tree(dic[key], key)
@@ -36,10 +35,11 @@ def get_directory_structure(rootdir):
         parent = functools.reduce(dict.get, folders[:-1], dir)
         parent[folders[-1]] = subdir
 
-    return build_tree(dir, '')
+    return build_tree(dir, "")
 
-list_data_files = get_directory_structure('data')
-list_doc_files = get_directory_structure('docs')
+
+list_data_files = get_directory_structure("data")
+list_doc_files = get_directory_structure("docs")
 
 
 with open("README.rst", "r") as fh:
@@ -47,34 +47,32 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="RepTate",
-	version=versioneer.get_version(),
+    version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     author="Jorge Ramirez, Victor Boudara",
     author_email="reptate.rheology@gmail.com",
-	url='http://github.com/jorge-ramirez-upm/RepTate',
-	packages=find_packages(),
-    package_data={'': ['*.ui', '*.qrc', '*.npy', '*.so', '*.npz']},
+    url="http://github.com/jorge-ramirez-upm/RepTate",
+    packages=find_packages(),
+    package_data={"": ["*.ui", "*.qrc", "*.npy", "*.so", "*.npz"]},
     data_files=list_data_files,
-	install_requires=requirements,
-	entry_points={
-        'console_scripts': [
-            'RepTateCL = RepTate.CL:main'
+    install_requires=requirements,
+    entry_points={
+        "console_scripts": ["RepTateCL = RepTate.CL:main"],
+        "gui_scripts": [
+            "RepTate = RepTate.__main__:main",
+            "MatDB = RepTate.MatDB:main",
+            "UV = RepTate.UV:main",
         ],
-        'gui_scripts': [
-            'RepTate = RepTate.__main__:main',
-            'MatDB = RepTate.MatDB:main',
-            'UV = RepTate.UV:main'
-        ]
     },
-	license='GNU General Public License v3 or later (GPLv3+)',
-	classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Programming Language :: Python :: 3',
-		'Topic :: Scientific/Engineering',
-		'Intended Audience :: Science/Research',
+    license="GNU General Public License v3 or later (GPLv3+)",
+    classifiers=[
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "Programming Language :: Python :: 3",
+        "Topic :: Scientific/Engineering",
+        "Intended Audience :: Science/Research",
         "Operating System :: OS Independent",
-    ]
+    ],
 )

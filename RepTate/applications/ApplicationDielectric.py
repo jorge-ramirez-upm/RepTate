@@ -44,49 +44,35 @@ import numpy as np
 
 
 class ApplicationDielectric(CmdBase):
-    """Application to Analyze Dielectric Spectroscopy Data
+    """Application to Analyze Dielectric Spectroscopy Data"""
 
-    """
     appname = "Dielectric"
     description = "Dielectric Spectroscopy"
     extension = "dls"
 
     def __new__(cls, name="Dielectric", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Dielectric"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationDielectric(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationDielectric(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationDielectric(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationDielectric(name, parent)
+        )
 
 
 class BaseApplicationDielectric:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html'
+    html_help_file = (
+        "http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html"
+    )
     appname = ApplicationDielectric.appname
 
     def __init__(self, name="Dielectric", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Dielectric"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryDebyeModes import TheoryDebyeModesFrequency
-        from RepTate.theories.TheoryHavriliakNegamiModes import TheoryHavriliakNegamiModesFrequency
+        from RepTate.theories.TheoryHavriliakNegamiModes import (
+            TheoryHavriliakNegamiModesFrequency,
+        )
         from RepTate.theories.TheoryKWWModes import TheoryKWWModesFrequency
 
         super().__init__(name, parent)
@@ -103,7 +89,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewLogE1E2,
             n=2,
-            snames=["log(e')", "log(e'')"])
+            snames=["log(e')", "log(e'')"],
+        )
         self.views["semilog(e',e''(w))"] = View(
             name="semilog(e',e''(w))",
             description="semilog Relative permittivity, Dielectric Loss",
@@ -115,7 +102,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewSemiLogE1E2,
             n=2,
-            snames=["e'(w)", "e''(w)"])
+            snames=["e'(w)", "e''(w)"],
+        )
         self.views["e',e''(w)"] = View(
             "e',e''(w)",
             "Relative permittivity, Dielectric Loss",
@@ -126,7 +114,9 @@ class BaseApplicationDielectric:
             True,
             True,
             self.viewE1E2,
-            2, ["e'(w)", "e''(w)"])
+            2,
+            ["e'(w)", "e''(w)"],
+        )
         self.views["log(e')"] = View(
             name="log(e')",
             description="log Relative Permittivity",
@@ -138,7 +128,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewLogE1,
             n=1,
-            snames=["log(e')"])
+            snames=["log(e')"],
+        )
         self.views["semilog(e')"] = View(
             name="semilog(e')",
             description="log Relative Permittivity",
@@ -150,7 +141,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewSemiLogE1,
             n=1,
-            snames=["e'"])
+            snames=["e'"],
+        )
         self.views["e'"] = View(
             "e'",
             "Relative Permittivity",
@@ -161,7 +153,9 @@ class BaseApplicationDielectric:
             True,
             True,
             self.viewE1,
-            1, ["e'"])
+            1,
+            ["e'"],
+        )
         self.views["log(e'')"] = View(
             name="log(e'')",
             description="log Dielectric Loss",
@@ -173,7 +167,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewLogE2,
             n=1,
-            snames=["log(e'')"])
+            snames=["log(e'')"],
+        )
         self.views["semilog(e'')"] = View(
             name="semilog(e'')",
             description="semilog Dielectric Loss",
@@ -185,7 +180,8 @@ class BaseApplicationDielectric:
             log_y=False,
             view_proc=self.viewSemiLogE2,
             n=1,
-            snames=["e''"])
+            snames=["e''"],
+        )
         self.views["e''"] = View(
             "e''",
             "Dielectric Loss",
@@ -196,7 +192,9 @@ class BaseApplicationDielectric:
             True,
             True,
             self.viewE2,
-            1, ["e''"])
+            1,
+            ["e''"],
+        )
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
             "Cole-Cole plot",
@@ -207,9 +205,11 @@ class BaseApplicationDielectric:
             False,
             False,
             self.viewColeCole,
-            1, ["e''"])
+            1,
+            ["e''"],
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -218,23 +218,29 @@ class BaseApplicationDielectric:
         self.multiplots.reorg_fig(self.nplots)
 
         # FILES
-        ftype = TXTColumnFile("Dielectric Spectroscopy files", "dls", "Dielectric Spectroscopy files",
-                              ['w', 'e\'', 'e\'\''], ['Mw', 'T'],
-                              ['rad/s', '-', '-'])
+        ftype = TXTColumnFile(
+            "Dielectric Spectroscopy files",
+            "dls",
+            "Dielectric Spectroscopy files",
+            ["w", "e'", "e''"],
+            ["Mw", "T"],
+            ["rad/s", "-", "-"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         self.theories[TheoryDebyeModesFrequency.thname] = TheoryDebyeModesFrequency
-        self.theories[TheoryHavriliakNegamiModesFrequency.thname] = TheoryHavriliakNegamiModesFrequency
+        self.theories[
+            TheoryHavriliakNegamiModesFrequency.thname
+        ] = TheoryHavriliakNegamiModesFrequency
         self.theories[TheoryKWWModesFrequency.thname] = TheoryKWWModesFrequency
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogE1E2(self, dt, file_parameters):
-        """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
-        """
+        """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -244,8 +250,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE1E2(self, dt, file_parameters):
-        """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`
-        """
+        """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -255,8 +260,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE1E2(self, dt, file_parameters):
-        """Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs frequency :math:`\\omega`
-        """
+        """Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -265,10 +269,8 @@ class BaseApplicationDielectric:
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-
     def viewLogE1(self, dt, file_parameters):
-        """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`
-        """
+        """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -276,8 +278,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE1(self, dt, file_parameters):
-        """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`
-        """
+        """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -285,8 +286,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE1(self, dt, file_parameters):
-        """Relative permittivity :math:`\\epsilon'(\\omega)` vs frequency :math:`\\omega`
-        """
+        """Relative permittivity :math:`\\epsilon'(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -294,8 +294,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewLogE2(self, dt, file_parameters):
-        """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
-        """
+        """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -303,8 +302,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewSemiLogE2(self, dt, file_parameters):
-        """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`
-        """
+        """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -312,8 +310,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewE2(self, dt, file_parameters):
-        """Dielectric Loss :math:`\\epsilon''(\\omega)` vs frequency :math:`\\omega`
-        """
+        """Dielectric Loss :math:`\\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -321,8 +318,7 @@ class BaseApplicationDielectric:
         return x, y, True
 
     def viewColeCole(self, dt, file_parameters):
-        """Cole-Cole plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs relative permittivity :math:`\\epsilon'(\\omega)`
-        """
+        """Cole-Cole plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs relative permittivity :math:`\\epsilon'(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 1]
@@ -331,34 +327,16 @@ class BaseApplicationDielectric:
 
 
 class CLApplicationDielectric(BaseApplicationDielectric, Application):
-    """[summary]
-
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="Dielectric", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Dielectric"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationDielectric(BaseApplicationDielectric, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="Dielectric", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Dielectric"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

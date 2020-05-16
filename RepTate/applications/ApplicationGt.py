@@ -43,57 +43,49 @@ from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
 
-from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
+from PyQt5.QtWidgets import (
+    QSpinBox,
+    QPushButton,
+    QHBoxLayout,
+    QLineEdit,
+    QLabel,
+    QSizePolicy,
+)
 from PyQt5.QtGui import QDoubleValidator
 import RepTate.theories.schwarzl_ctypes_helper as sch
 from math import log10, sin, cos
 
-class ApplicationGt(CmdBase):
-    """Application to Analyze Stress Relaxation Data
 
-    """
+class ApplicationGt(CmdBase):
+    """Application to Analyze Stress Relaxation Data"""
+
     appname = "Gt"
     description = "Relaxation modulus"
     extension = "gt"
 
     def __new__(cls, name="Gt", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Gt"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationGt(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationGt(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationGt(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationGt(name, parent)
+        )
 
 
 class BaseApplicationGt:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html"
     appname = ApplicationGt.appname
 
     def __init__(self, name="Gt", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Gt"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesTime
         from RepTate.theories.TheoryRouse import TheoryRouseTime
         from RepTate.theories.TheoryDTDStars import TheoryDTDStarsTime
-        from RepTate.theories.TheoryShanbhagMaxwellModes import TheoryShanbhagMaxwellModesTime
+        from RepTate.theories.TheoryShanbhagMaxwellModes import (
+            TheoryShanbhagMaxwellModesTime,
+        )
 
         super().__init__(name, parent)
 
@@ -113,7 +105,8 @@ class BaseApplicationGt:
             log_y=False,
             view_proc=self.viewLogGt,
             n=1,
-            snames=["log(G)"])
+            snames=["log(G)"],
+        )
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of G(t)",
@@ -125,11 +118,11 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewiRheo,
             n=2,
-            snames=["G'","G''"])
+            snames=["G'", "G''"],
+        )
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
-            description=
-            "G', G'' from i-Rheo transformation of G(t) with Oversampling",
+            description="G', G'' from i-Rheo transformation of G(t) with Oversampling",
             x_label="$\omega$",
             y_label="G',G''",
             x_units="rad/s",
@@ -138,7 +131,8 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewiRheoOver,
             n=2,
-            snames=["G'","G''"])
+            snames=["G'", "G''"],
+        )
         self.views["Schwarzl G',G''"] = View(
             name="Schwarzl G',G''",
             description="G', G'' from Schwarzl transformation of G(t)",
@@ -150,7 +144,8 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewSchwarzl_Gt,
             n=2,
-            snames=["G'","G''"])
+            snames=["G'", "G''"],
+        )
         self.views["G(t)"] = View(
             name="G(t)",
             description="Relaxation modulus",
@@ -162,18 +157,20 @@ class BaseApplicationGt:
             log_y=True,
             view_proc=self.viewGt,
             n=1,
-            snames=["G"])
+            snames=["G"],
+        )
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling
         self.MAX_OVER = 10000  # max oversampling
 
-        #set multiviews
+        # set multiviews
         self.multiviews = [
-            self.views["log(G(t))"], self.views["i-Rheo G',G''"]
-        ]  #default view order in multiplot views, set only one item for single view
+            self.views["log(G(t))"],
+            self.views["i-Rheo G',G''"],
+        ]  # default view order in multiplot views, set only one item for single view
         self.nplots = len(self.multiviews)
 
-        #set multiviews
+        # set multiviews
         self.nplots = 2
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -182,69 +179,73 @@ class BaseApplicationGt:
         self.multiplots.reorg_fig(self.nplots)
 
         # FILES
-        ftype = TXTColumnFile("G(t) files", "gt", "Relaxation modulus",
-                              ['t', 'Gt'], ['Mw', 'gamma'], ['s', 'Pa'])
+        ftype = TXTColumnFile(
+            "G(t) files",
+            "gt",
+            "Relaxation modulus",
+            ["t", "Gt"],
+            ["Mw", "gamma"],
+            ["s", "Pa"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
         self.theories[TheoryRouseTime.thname] = TheoryRouseTime
         self.theories[TheoryDTDStarsTime.thname] = TheoryDTDStarsTime
-        self.theories[TheoryShanbhagMaxwellModesTime.thname] = TheoryShanbhagMaxwellModesTime
+        self.theories[
+            TheoryShanbhagMaxwellModesTime.thname
+        ] = TheoryShanbhagMaxwellModesTime
 
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewGt(self, dt, file_parameters):
-        """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)
-        """
+        """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         try:
             gamma = float(file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]/gamma
+        y[:, 0] = dt.data[:, 1] / gamma
         return x, y, True
 
     def viewLogGt(self, dt, file_parameters):
-        """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`
-        """
+        """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         try:
             gamma = float(file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(dt.data[:, 1]/gamma)
+        y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters):
         """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus
-        :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`
-        """
+        :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`"""
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         n = len(data_x)
         try:
             gamma = float(file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
-        wp, Gp, wpp, Gpp = sch.do_schwarzl_gt(
-            n, data_y, data_x)  #call the C function
+        wp, Gp, wpp, Gpp = sch.do_schwarzl_gt(n, data_y, data_x)  # call the C function
 
         x[:, 0] = wp[:]
         x[:, 1] = wpp[:]
@@ -253,91 +254,102 @@ class BaseApplicationGt:
         return x, y, True
 
     def viewiRheo(self, dt, file_parameters):
-        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig).
-        """
+        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
-        yunique=data_y[indunique]
+        yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
         try:
             gamma = float(file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
-        if len(data_x)<2:
+        if len(data_x) < 2:
             f = interpolate.interp1d(
                 data_x,
                 data_y,
-                kind='zero',
+                kind="zero",
                 assume_sorted=True,
-                fill_value='extrapolate')
-        elif len(data_x)<3:
+                fill_value="extrapolate",
+            )
+        elif len(data_x) < 3:
             f = interpolate.interp1d(
                 data_x,
                 data_y,
-                kind='linear',
+                kind="linear",
                 assume_sorted=True,
-                fill_value='extrapolate')
-        elif len(data_x)<4:
+                fill_value="extrapolate",
+            )
+        elif len(data_x) < 4:
             f = interpolate.interp1d(
                 data_x,
                 data_y,
-                kind='quadratic',
+                kind="quadratic",
                 assume_sorted=True,
-                fill_value='extrapolate')
+                fill_value="extrapolate",
+            )
         else:
             f = interpolate.interp1d(
                 data_x,
                 data_y,
-                kind='cubic',
+                kind="cubic",
                 assume_sorted=True,
-                fill_value='extrapolate')
+                fill_value="extrapolate",
+            )
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
         t1 = data_x[ind1]
         g1 = data_y[ind1]
         tinf = np.max(data_x)
-        if tinf<=0 or t1<=0:
+        if tinf <= 0 or t1 <= 0:
             return x, y, False
         wp = np.logspace(log10(1 / tinf), log10(1 / t1), n)
         x[:, 0] = wp[:]
         x[:, 1] = wp[:]
 
-        coeff = (data_y[ind1 + 1:] - data_y[ind1:-1]) / (
-            data_x[ind1 + 1:] - data_x[ind1:-1])
+        coeff = (data_y[ind1 + 1 :] - data_y[ind1:-1]) / (
+            data_x[ind1 + 1 :] - data_x[ind1:-1]
+        )
         for i, w in enumerate(wp):
 
-            y[i, 0] = g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
-                coeff, -np.sin(w * data_x[ind1:-1]) +
-                np.sin(w * data_x[ind1 + 1:])) / w
+            y[i, 0] = (
+                g0
+                + sin(w * t1) * (g1 - g0) / w / t1
+                + np.dot(
+                    coeff, -np.sin(w * data_x[ind1:-1]) + np.sin(w * data_x[ind1 + 1 :])
+                )
+                / w
+            )
 
-            y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
-                coeff,
-                np.cos(w * data_x[ind1:-1]) -
-                np.cos(w * data_x[ind1 + 1:])) / w
+            y[i, 1] = (
+                -(1 - cos(w * t1)) * (g1 - g0) / w / t1
+                - np.dot(
+                    coeff, np.cos(w * data_x[ind1:-1]) - np.cos(w * data_x[ind1 + 1 :])
+                )
+                / w
+            )
 
         return x, y, True
 
     def viewiRheoOver(self, dt, file_parameters):
-        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
-        """
+        """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
-        yunique=data_y[indunique]
+        yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
         try:
             gamma = float(file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
         data_y /= gamma
@@ -345,11 +357,8 @@ class BaseApplicationGt:
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            data_x,
-            data_y,
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+            data_x, data_y, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
         t1 = data_x[ind1]
@@ -363,44 +372,42 @@ class BaseApplicationGt:
         xdata = np.zeros(1)
         xdata[0] = data_x[ind1]
         for i in range(ind1 + 1, n):
-            tmp = np.logspace(
-                log10(data_x[i - 1]), log10(data_x[i]),
-                self.OVER + 1)
+            tmp = np.logspace(log10(data_x[i - 1]), log10(data_x[i]), self.OVER + 1)
             xdata = np.append(xdata, tmp[1:])
         ydata = f(xdata)
 
         coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
         for i, w in enumerate(wp):
-            y[i, 0] = g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(
-                coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
+            y[i, 0] = (
+                g0
+                + sin(w * t1) * (g1 - g0) / w / t1
+                + np.dot(coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
+            )
 
-            y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(
-                coeff,
-                np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
+            y[i, 1] = (
+                -(1 - cos(w * t1)) * (g1 - g0) / w / t1
+                - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
+            )
         return x, y, True
 
     def get_xy_data_in_xrange(self, dt):
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
-        #get indices of data in xrange
-        args = np.where(np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view))
+        # get indices of data in xrange
+        args = np.where(
+            np.logical_and(
+                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
+            )
+        )
         x_in_range = dt.data[:, 0][args]
         y_in_range = dt.data[:, 1][args]
         return x_in_range, y_in_range
 
-class CLApplicationGt(BaseApplicationGt, Application):
-    """[summary]
 
-    [description]
-    """
+class CLApplicationGt(BaseApplicationGt, Application):
+    """CL Version"""
 
     def __init__(self, name="Gt", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Gt"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
     def show_sb_oversampling(self):
@@ -411,19 +418,10 @@ class CLApplicationGt(BaseApplicationGt, Application):
 
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
-    """[summary]
-
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="Gt", parent=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Gt"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
         self.add_oversampling_widget()
@@ -447,7 +445,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         hlayout = QHBoxLayout()
 
         hlayout.addStretch()
-        #xmin
+        # xmin
         self.xmin_view = QLineEdit("-inf")
         self.xmin_view.textChanged.connect(self.change_xmin)
         self.xmin_view.setValidator(QDoubleValidator())
@@ -456,9 +454,9 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
         hlayout.addWidget(self.xmin_label)
         hlayout.addWidget(self.xmin_view)
-        #space
+        # space
         hlayout.addSpacing(5)
-        #xmax
+        # xmax
         self.xmax_view = QLineEdit("inf")
         self.xmax_view.textChanged.connect(self.change_xmax)
         self.xmax_view.setValidator(QDoubleValidator())
@@ -467,7 +465,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
         self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
         hlayout.addWidget(self.xmax_label)
         hlayout.addWidget(self.xmax_view)
-        #push button to refresh view
+        # push button to refresh view
         self.pb = QPushButton("GO")
         self.pb.setMaximumWidth(25)
         self.pb.clicked.connect(self.update_all_ds_plots)
@@ -481,7 +479,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
             self.tmin_view = -np.inf
         else:
             try:
-                self.tmin_view = 10**float(text)
+                self.tmin_view = 10 ** float(text)
             except:
                 pass
 
@@ -491,7 +489,7 @@ class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):
             self.tmax_view = np.inf
         else:
             try:
-                self.tmax_view = 10**float(text)
+                self.tmax_view = 10 ** float(text)
             except:
                 pass
 

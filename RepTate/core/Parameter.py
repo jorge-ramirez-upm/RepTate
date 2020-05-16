@@ -34,9 +34,10 @@
 
 Module that defines theory parameters and their properties.
 
-""" 
+"""
 import enum
 import numpy as np
+
 
 class ParameterType(enum.Enum):
     """Types of parameters that can be used in a Theory
@@ -48,12 +49,14 @@ class ParameterType(enum.Enum):
         - discrete_integer: It can take a value only from a discrete set of prescribed integer values
         - bool: The parameter is a flag
     """
+
     real = 0
     integer = 1
     discrete_real = 2
     discrete_integer = 3
     boolean = 4
     string = 5
+
 
 class OptType(enum.Enum):
     """Store the optimization type that can be used in a Theory
@@ -63,21 +66,28 @@ class OptType(enum.Enum):
         - nopt: Not optimized at the next minimization
         - const: Not allowed to be minimized
     """
-    opt = 1 
+
+    opt = 1
     nopt = 2
-    const = 3 
+    const = 3
+
 
 class Parameter(object):
-    """Abstract class to describe theory parameters
-    
-    [description]
-    """
-    def __init__(self, name="", value=0, description="", type=ParameterType.real, 
-                 opt_type=OptType.opt, 
-                 min_value=-np.inf, max_value=np.inf, 
-                 display_flag=True, discrete_values=[]):
-        """
-        **Constructor**
+    """Abstract class to describe theory parameters"""
+
+    def __init__(
+        self,
+        name="",
+        value=0,
+        description="",
+        type=ParameterType.real,
+        opt_type=OptType.opt,
+        min_value=-np.inf,
+        max_value=np.inf,
+        display_flag=True,
+        discrete_values=[],
+    ):
+        """**Constructor**
 
         Arguments:
             - name {str} -- Parameter name
@@ -90,74 +100,61 @@ class Parameter(object):
             - display_flag {bool} -- This parameter will be shown in the Theory table
             - discrete_values {list} -- Allowed values that the parameter can take
         """
-        self.name=name
-        self.description=description
+        self.name = name
+        self.description = description
         self.type = type
-        if (self.type==ParameterType.real):
-            self.value=float(value)
-        elif (self.type==ParameterType.integer):
-            self.value=int(value)
-        elif (self.type==ParameterType.discrete_real):
-            self.value=float(value)
-        elif (self.type==ParameterType.discrete_integer):
-            self.value=int(value)
-        elif (self.type==ParameterType.boolean):
-            if value in [True, 'true', 'True', '1', 't', 'T', 'y', 'yes']:
-                self.value=True
+        if self.type == ParameterType.real:
+            self.value = float(value)
+        elif self.type == ParameterType.integer:
+            self.value = int(value)
+        elif self.type == ParameterType.discrete_real:
+            self.value = float(value)
+        elif self.type == ParameterType.discrete_integer:
+            self.value = int(value)
+        elif self.type == ParameterType.boolean:
+            if value in [True, "true", "True", "1", "t", "T", "y", "yes"]:
+                self.value = True
             else:
-                self.value=False
-        elif (self.type==ParameterType.string):
-            self.value=str(value)
+                self.value = False
+        elif self.type == ParameterType.string:
+            self.value = str(value)
 
         else:
-            pass # NOT IMPLEMENTED YET
-        self.error=np.inf
+            pass  # NOT IMPLEMENTED YET
+        self.error = np.inf
         self.opt_type = opt_type
         self.min_value = min_value
-        self.max_value= max_value
+        self.max_value = max_value
         self.display_flag = display_flag
         self.discrete_values = discrete_values
 
     def copy(self, par2):
-        """Copy the contents of another parameter
-        
-        [description]
-        
-        Arguments:
-            - par2 {[type]} -- [description]
-        """
-        self.name=par2.name
-        self.description=par2.description
+        """Copy the contents of another parameter"""
+        self.name = par2.name
+        self.description = par2.description
         self.type = par2.type
-        self.value=par2.value
+        self.value = par2.value
         self.opt_type = par2.opt_type
         self.min_value = par2.min_value
-        self.max_value= par2.max_value
-        
-    def __str__(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
+        self.max_value = par2.max_value
 
-        .. todo:: Refine this.
-        """
-        return "%s=%g"%(self.name,self.value)
+    def __str__(self):
+        """String representation"""
+        return "%s=%g" % (self.name, self.value)
 
     def __repr__(self):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-
-        .. todo:: Refine this.
-        """
-        return "Parameter(name,value,description,type,opt_type,min_value,max_value,display_flag)\n" + \
-            "Parameter(\"%s\",%g,\"%s\",%s,%s,%g,%g,%s)"%(
-            self.name, self.value, self.description, self.type, 
-            self.opt_type, 
-            self.min_value, self.max_value, self.display_flag)
+        """Another string representation"""
+        return (
+            "Parameter(name,value,description,type,opt_type,min_value,max_value,display_flag)\n"
+            + 'Parameter("%s",%g,"%s",%s,%s,%g,%g,%s)'
+            % (
+                self.name,
+                self.value,
+                self.description,
+                self.type,
+                self.opt_type,
+                self.min_value,
+                self.max_value,
+                self.display_flag,
+            )
+        )
