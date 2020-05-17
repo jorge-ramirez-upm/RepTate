@@ -42,7 +42,7 @@ The most important basic classes in RepTate are children of the CmdBase class.
 Applications
 ------------
 
-Example diagram of the class inheritance of one of the Theories
+Example diagram of the class inheritance of one of the Theories (LVE):
 
 .. graphviz::
 
@@ -59,7 +59,14 @@ Example diagram of the class inheritance of one of the Theories
       "ApplicationLVE" -> "GUIApplicationLVE" [style=dotted, label="GUI", color=red];
    }
 
-The new inheritance relation that I suggest:
+I don't feel very comfortable with this hieararchy for the following reasons:
+
+   - ApplicationLVE is a child of CmdBase but uses none of its functionality. Application LVE is just a metaclass that decides which is the right instance to create, depending on the case (CL or GUI).
+   - BaseApplicationLVE uses functionality of Application but it is not a children of it. In fact, VSCode and other editors complain that some of the members of BaseApplicationLVE do not exist. 
+   
+I never understood well how this structure could work, but the fact is that it does and it was a brilliant solution at the time. In fact, I consider this to be one of the biggest pillars upon which we built RepTate. It was fully your solution, so I want to discuss it with you before applying any changes to this.
+
+Following the considerations above, I suggest the following new inheritance relation:
 
 .. graphviz::
 
@@ -82,6 +89,8 @@ The new inheritance relation that I suggest:
    }
 
 
+Now, the dependencies are clear, and all classes that need to use functionality from another are children of it. ApplicationLVE does not need to be the child of any class because it simply does not use any functionality. It is just a Metaclass. I've tried this implementation for one of the Applications and it seems to work. However, before applying this structure to the overall code, I'd like to know what you think about it. In any case, if I ever try to implement this, I'll do it in a separate branch that we will test thoroughly before merging it to the main.
+
 
 Theories
 --------
@@ -103,7 +112,7 @@ Example diagram of the class inheritance of one of the Theories
       "TheoryPolynomial" -> "GUITheoryPolynomial" [style=dotted, label="GUI", color=red];
    }
 
-The new inheritance relation that I suggest:
+Using a similar reasoning as with Applications, I suggest the following new structure:
 
 .. graphviz::
 
@@ -147,7 +156,7 @@ Example diagram of the class inheritance relation for one of the Tools:
       "ToolBounds" -> "GUIToolBounds" [style=dotted, label="GUI", color=red];
    }
 
-The new inheritance relation that I suggest:
+Using a similar reasoning as with Applications, I suggest the following new structure:
 
 .. graphviz::
 
