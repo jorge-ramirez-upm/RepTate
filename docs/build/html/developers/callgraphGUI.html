@@ -99,61 +99,59 @@
 <div class="section" id="basic-classes">
 <h2>Basic Classes<a class="headerlink" href="#basic-classes" title="Permalink to this headline">¶</a></h2>
 <p>The most important basic classes in RepTate are children of the CmdBase class.</p>
-<div class="graphviz"><img src="../_images/graphviz-6e1202bea2c732ba9340318f36df5455ea38c3f6.png" alt="digraph foo {
-   &quot;CmdBase&quot; [href=&quot;CodeCoreCL.html#cmdbase&quot;]
-   &quot;Application&quot; [href=&quot;CodeCoreCL.html#application&quot;]
-   &quot;ApplicationManager&quot; [href=&quot;CodeCoreCL.html#applicationmanager&quot;]
-   &quot;DataSet&quot; [href=&quot;CodeCoreCL.html#dataset&quot;]
-   &quot;Theory&quot; [href=&quot;CodeCoreCL.html#theory&quot;]
-   &quot;Tool&quot; [href=&quot;CodeCoreCL.html#tool&quot;]
+<div class="graphviz"><object data="../_images/graphviz-0a952320cf78c774214a83ac4216c026e0192f99.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;ApplicationManager&quot; [href=&quot;../developers/CodeCoreCL.html#applicationmanager&quot;, target=&quot;_top&quot;]
+   &quot;DataSet&quot; [href=&quot;../developers/CodeCoreCL.html#dataset&quot;, target=&quot;_top&quot;]
+   &quot;Theory&quot; [href=&quot;../developers/CodeCoreCL.html#theory&quot;, target=&quot;_top&quot;]
+   &quot;Tool&quot; [href=&quot;../developers/CodeCoreCL.html#tool&quot;, target=&quot;_top&quot;]
    &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
    &quot;CmdBase&quot; -&gt; &quot;ApplicationManager&quot;;
    &quot;CmdBase&quot; -&gt; &quot;DataSet&quot;;
    &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
    &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
-   &quot;QApplicationWindow&quot; [href=&quot;CodeCoreGUI.html#qapplicationwindow&quot;]
-   &quot;QTheory&quot; [href=&quot;CodeCoreGUI.html#qtheory&quot;]
-   &quot;QTool&quot; [href=&quot;CodeCoreGUI.html#qtool&quot;]
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;]
+   &quot;QTheory&quot; [href=&quot;../developers/CodeCoreGUI.html#qtheory&quot;, target=&quot;_top&quot;]
+   &quot;QTool&quot; [href=&quot;../developers/CodeCoreGUI.html#qtool&quot;, target=&quot;_top&quot;]
    &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
    &quot;ApplicationManager&quot; -&gt; &quot;QApplicationManager&quot;;
    &quot;DataSet&quot; -&gt; &quot;QDataSet&quot;;
    &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
    &quot;Tool&quot; -&gt; &quot;QTool&quot;;
-   &quot;QWidget&quot; [shape=box,color=red]
-   &quot;QMainWindow&quot; [shape=box,color=red]
+   &quot;QWidget&quot; [shape=box,color=red,href=&quot;https://doc.qt.io/qt-5/qwidget.html&quot;, target=&quot;_top&quot;]
+   &quot;QMainWindow&quot; [shape=box,color=red,href=&quot;https://doc.qt.io/qt-5/qmainwindow.html&quot;, target=&quot;_top&quot;]
    &quot;QWidget&quot; -&gt; &quot;QApplicationWindow&quot; [color=red];
    &quot;QWidget&quot; -&gt; &quot;QDataSet&quot; [color=red];
    &quot;QWidget&quot; -&gt; &quot;QTheory&quot; [color=red];
    &quot;QWidget&quot; -&gt; &quot;QTool&quot; [color=red];
    &quot;QMainWindow&quot; -&gt; &quot;QApplicationManager&quot; [color=red];
-}" usemap="#foo" class="graphviz" /></div>
-<map id="foo" name="foo">
-<area shape="poly" id="node1" href="CodeCoreCL.html#cmdbase" title="CmdBase" alt="" coords="502,29,499,22,490,15,476,10,459,7,440,5,421,7,404,10,390,15,382,22,379,29,382,37,390,43,404,49,421,52,440,53,459,52,476,49,490,43,499,37"/>
-<area shape="poly" id="node2" href="CodeCoreCL.html#application" title="Application" alt="" coords="510,125,507,118,497,111,481,106,462,103,440,101,418,103,399,106,383,111,373,118,370,125,373,133,383,139,399,145,418,148,440,149,462,148,481,145,497,139,507,133"/>
-<area shape="poly" id="node3" href="CodeCoreCL.html#applicationmanager" title="ApplicationManager" alt="" coords="1043,125,1037,118,1021,111,997,106,965,103,931,101,896,103,865,106,840,111,824,118,819,125,824,133,840,139,865,145,896,148,931,149,965,148,997,145,1021,139,1037,133"/>
-<area shape="poly" id="node4" href="CodeCoreCL.html#dataset" title="DataSet" alt="" coords="231,125,228,118,221,111,209,106,195,103,179,101,163,103,148,106,137,111,129,118,127,125,129,133,137,139,148,145,163,148,179,149,195,148,209,145,221,139,228,133"/>
-<area shape="poly" id="node5" href="CodeCoreCL.html#theory" title="Theory" alt="" coords="634,125,631,118,624,111,613,106,599,103,584,101,569,103,555,106,544,111,537,118,535,125,537,133,544,139,555,145,569,148,584,149,599,148,613,145,624,139,631,133"/>
-<area shape="poly" id="node6" href="CodeCoreCL.html#tool" title="Tool" alt="" coords="94,125,92,118,87,111,79,106,68,103,56,101,44,103,34,106,25,111,20,118,18,125,20,133,25,139,34,145,44,148,56,149,68,148,79,145,87,139,92,133"/>
-<area shape="poly" id="node7" href="CodeCoreGUI.html#qapplicationwindow" title="QApplicationWindow" alt="" coords="512,221,506,214,489,207,462,202,428,199,391,197,353,199,319,202,293,207,275,214,269,221,275,229,293,235,319,241,353,244,391,245,428,244,462,241,489,235,506,229"/>
-<area shape="poly" id="node8" href="CodeCoreGUI.html#qtheory" title="QTheory" alt="" coords="654,221,651,214,642,207,629,202,613,199,595,197,577,199,560,202,547,207,539,214,536,221,539,229,547,235,560,241,577,244,595,245,613,244,629,241,642,235,651,229"/>
-<area shape="poly" id="node9" href="CodeCoreGUI.html#qtool" title="QTool" alt="" coords="99,221,97,214,90,207,80,202,67,199,52,197,38,199,25,202,14,207,8,214,5,221,8,229,14,235,25,241,38,244,52,245,67,244,80,241,90,235,97,229"/>
-</map><p><code class="docutils literal notranslate"><span class="pre">CmdBase</span></code> provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).</p>
+}</p></object></div>
+<p><code class="docutils literal notranslate"><span class="pre">CmdBase</span></code> provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).</p>
 </div>
 <div class="section" id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h2>
 <p>Example diagram of the class inheritance of one of the Theories (LVE):</p>
-<div class="graphviz"><img src="../_images/graphviz-8cf03c7277c8a9b0e8e8245391e4d21159381adc.png" alt="digraph foo {
+<div class="graphviz"><object data="../_images/graphviz-38c601fa985988fdae9979c23132f8316875babd.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;]
+   &quot;ApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE&quot;, target=&quot;_top&quot;, shape=box,color=red]
+       &quot;BaseApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE&quot;, target=&quot;_top&quot;]
+       &quot;CLApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE&quot;, target=&quot;_top&quot;]
+       &quot;GUIApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE&quot;, target=&quot;_top&quot;]
    &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
    &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
    &quot;QApplicationWindow&quot; -&gt; &quot;GUIApplicationLVE&quot;;
    &quot;Application&quot; -&gt; &quot;CLApplicationLVE&quot;;
    &quot;BaseApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot;;
    &quot;BaseApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot;;
-   &quot;ApplicationLVE&quot; [shape=box,color=red];
    &quot;CmdBase&quot; -&gt; &quot;ApplicationLVE&quot;
    &quot;ApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot; [style=dotted, label=&quot;CL&quot;, color=red];
    &quot;ApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" class="graphviz" /></div>
+}</p></object></div>
 <p>I don’t feel very comfortable with this hieararchy for the following reasons:</p>
 <blockquote>
 <div><ul class="simple">
@@ -163,14 +161,15 @@
 </div></blockquote>
 <p>I never understood well how this structure could work, but the fact is that it does and it was a brilliant solution at the time. In fact, I consider this to be one of the biggest pillars upon which we built RepTate. It was fully your solution, so I want to discuss it with you before applying any changes to this.</p>
 <p>Following the considerations above, I suggest the following new inheritance relation:</p>
-<div class="graphviz"><img src="../_images/graphviz-46ee5ed8ced6cc317c68e51dbcc25484357412a0.png" alt="digraph foo {
-   &quot;CmdBase&quot; [href=&quot;CodeCoreCL.html#cmdbase&quot;]
-   &quot;Application&quot; [href=&quot;CodeCoreCL.html#application&quot;]
-   &quot;QApplicationWindow&quot; [href=&quot;CodeCoreGUI.html#qapplicationwindow&quot;]
-   &quot;BaseApplicationLVE&quot; [href=&quot;CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE&quot;]
-   &quot;ApplicationLVE&quot; [shape=box,color=red,href=&quot;CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE&quot;]
-   &quot;CLApplicationLVE&quot; [href=&quot;CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE&quot;]
-   &quot;GUIApplicationLVE&quot; [href=&quot;CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE&quot;]
+<div class="graphviz"><object data="../_images/graphviz-0b45450281777da096bfacc4aa3195d1074bf11a.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;]
+   &quot;ApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE&quot;, target=&quot;_top&quot;, shape=box,color=red]
+       &quot;BaseApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE&quot;, target=&quot;_top&quot;]
+       &quot;CLApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE&quot;, target=&quot;_top&quot;]
+       &quot;GUIApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE&quot;, target=&quot;_top&quot;]
    &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
    &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
    &quot;QApplicationWindow&quot; -&gt; &quot;GUIApplicationLVE&quot;;
@@ -179,34 +178,15 @@
    &quot;BaseApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot;;
    &quot;ApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot; [style=dotted, label=&quot;CL&quot;, color=red];
    &quot;ApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" usemap="#foo" class="graphviz" /></div>
-<map id="foo" name="foo">
-<area shape="poly" id="node1" href="CodeCoreCL.html#cmdbase" title="CmdBase" alt="" coords="402,29,399,22,390,15,376,10,359,7,340,5,321,7,304,10,290,15,281,22,278,29,281,37,290,43,304,49,321,52,340,53,359,52,376,49,390,43,399,37"/>
-<area shape="poly" id="node2" href="CodeCoreCL.html#application" title="Application" alt="" coords="410,127,407,119,397,113,381,107,362,104,340,103,318,104,299,107,283,113,273,119,270,127,273,134,283,141,299,146,318,149,340,151,362,149,381,146,397,141,407,134"/>
-<area shape="poly" id="node3" href="CodeCoreGUI.html#qapplicationwindow" title="QApplicationWindow" alt="" coords="248,224,242,217,225,210,198,205,164,201,127,200,89,201,55,205,29,210,11,217,5,224,11,231,29,238,55,243,89,247,127,248,164,247,198,243,225,238,242,231"/>
-<area shape="poly" id="node4" href="CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE" title="BaseApplicationLVE" alt="" coords="671,224,665,217,649,210,623,205,591,201,555,200,519,201,486,205,461,210,444,217,439,224,444,231,461,238,486,243,519,247,555,248,591,247,623,243,649,238,665,231"/>
-<area shape="poly" id="node7" href="CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE" title="GUIApplicationLVE" alt="" coords="422,340,417,333,401,326,375,321,343,317,308,316,273,317,241,321,215,326,199,333,194,340,199,347,215,354,241,359,273,363,308,364,343,363,375,359,401,354,417,347"/>
-<area shape="poly" id="node6" href="CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE" title="CLApplicationLVE" alt="" coords="663,340,658,333,642,326,618,321,588,317,555,316,521,317,491,321,467,326,452,333,446,340,452,347,467,354,491,359,521,363,555,364,588,363,618,359,642,354,658,347"/>
-<area shape="rect" id="node5" href="CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE" title="ApplicationLVE" alt="" coords="271,200,414,248"/>
-</map><p>Now, the dependencies are clear, and all classes that need to use functionality from another are children of it. ApplicationLVE does not need to be the child of any class because it simply does not use any functionality. It is just a Metaclass. I’ve tried this implementation for one of the Applications and it seems to work. However, before applying this structure to the overall code, I’d like to know what you think about it. In any case, if I ever try to implement this, I’ll do it in a separate branch that we will test thoroughly before merging it to the main.</p>
+}</p></object></div>
+<p>Now, the dependencies are clear, and all classes that need to use functionality from another are children of it. ApplicationLVE does not need to be the child of any class because it simply does not use any functionality. It is just a Metaclass. I’ve tried this implementation for one of the Applications and it seems to work. However, before applying this structure to the overall code, I’d like to know what you think about it. In any case, if I ever try to implement this, I’ll do it in a separate branch that we will test thoroughly before merging it to the main.</p>
 </div>
 <div class="section" id="theories">
 <h2>Theories<a class="headerlink" href="#theories" title="Permalink to this headline">¶</a></h2>
 <p>Example diagram of the class inheritance of one of the Theories</p>
-<div class="graphviz"><img src="../_images/graphviz-5717d83deb29b810d038488b5dc88e3f3ad23075.png" alt="digraph foo {
-   &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
-   &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
-   &quot;QTheory&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
-   &quot;Theory&quot; -&gt; &quot;CLTheoryPolynomial&quot;;
-   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
-   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot;;
-   &quot;TheoryPolynomial&quot; [shape=box,color=red];
-   &quot;CmdBase&quot; -&gt; &quot;TheoryPolynomial&quot;
-   &quot;TheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot; [style=dotted, label=&quot;CL&quot;, color=red];
-   &quot;TheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" class="graphviz" /></div>
 <p>Using a similar reasoning as with Applications, I suggest the following new structure:</p>
-<div class="graphviz"><img src="../_images/graphviz-9795de9601b8d9fb71336d574c569df7e88a7a44.png" alt="digraph foo {
+<div class="graphviz"><object data="../_images/graphviz-9795de9601b8d9fb71336d574c569df7e88a7a44.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
    &quot;CmdBase&quot; [href=&quot;CodeCoreCL.html#cmdbase&quot;]
    &quot;Theory&quot; [href=&quot;CodeCoreCL.html#theory&quot;]
    &quot;QTheory&quot; [href=&quot;CodeCoreGUI.html#qtheory&quot;]
@@ -222,20 +202,13 @@
    &quot;BaseTheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
    &quot;TheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot; [style=dotted, label=&quot;CL&quot;, color=red];
    &quot;TheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" usemap="#foo" class="graphviz" /></div>
-<map id="foo" name="foo">
-<area shape="poly" id="node1" href="CodeCoreCL.html#cmdbase" title="CmdBase" alt="" coords="320,29,317,22,309,15,295,10,278,7,259,5,240,7,223,10,209,15,200,22,197,29,200,37,209,43,223,49,240,52,259,53,278,52,295,49,309,43,317,37"/>
-<area shape="poly" id="node2" href="CodeCoreCL.html#theory" title="Theory" alt="" coords="308,127,306,119,299,113,288,107,274,104,259,103,244,104,230,107,219,113,212,119,210,127,212,134,219,141,230,146,244,149,259,151,274,149,288,146,299,141,306,134"/>
-<area shape="poly" id="node3" href="CodeCoreGUI.html#qtheory" title="QTheory" alt="" coords="123,224,120,217,112,210,99,205,82,201,64,200,46,201,30,205,17,210,8,217,5,224,8,231,17,238,30,243,46,247,64,248,82,247,99,243,112,238,120,231"/>
-<area shape="poly" id="node4" href="CodeTheories.html#RepTate.theories.TheoryBasic.BaseTheoryPolynomial" title="BaseTheoryPolynomial" alt="" coords="583,224,577,217,559,210,531,205,495,201,456,200,417,201,382,205,354,210,336,217,330,224,336,231,354,238,382,243,417,247,456,248,495,247,531,243,559,238,577,231"/>
-<area shape="poly" id="node7" href="CodeTheories.html#RepTate.theories.TheoryBasic.CLTheoryPolynomial" title="GUITheoryPolynomial" alt="" coords="313,340,307,333,289,326,262,321,227,317,188,316,150,317,115,321,87,326,70,333,63,340,70,347,87,354,115,359,150,363,188,364,227,363,262,359,289,354,307,347"/>
-<area shape="poly" id="node6" href="CodeTheories.html#RepTate.theories.TheoryBasic.CLTheoryPolynomial" title="CLTheoryPolynomial" alt="" coords="575,340,569,333,552,326,526,321,493,317,456,316,420,317,386,321,360,326,343,333,338,340,343,347,360,354,386,359,420,363,456,364,493,363,526,359,552,354,569,347"/>
-<area shape="rect" id="node5" href="CodeTheories.html#RepTate.theories.TheoryBasic.TheoryPolynomial" title="TheoryPolynomial" alt="" coords="148,200,306,248"/>
-</map></div>
+}</p></object></div>
+</div>
 <div class="section" id="tools">
 <h2>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
 <p>Example diagram of the class inheritance relation for one of the Tools:</p>
-<div class="graphviz"><img src="../_images/graphviz-a84bd38478a06ab94bd882fab3ca9a94a51f4a99.png" alt="digraph foo {
+<div class="graphviz"><object data="../_images/graphviz-a84bd38478a06ab94bd882fab3ca9a94a51f4a99.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
    &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
    &quot;Tool&quot; -&gt; &quot;QTool&quot;;
    &quot;QTool&quot; -&gt; &quot;GUIToolBounds&quot;;
@@ -246,9 +219,10 @@
    &quot;CmdBase&quot; -&gt; &quot;ToolBounds&quot;
    &quot;ToolBounds&quot; -&gt; &quot;CLToolBounds&quot; [style=dotted, label=&quot;CL&quot;, color=red];
    &quot;ToolBounds&quot; -&gt; &quot;GUIToolBounds&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" class="graphviz" /></div>
+}</p></object></div>
 <p>Using a similar reasoning as with Applications, I suggest the following new structure:</p>
-<div class="graphviz"><img src="../_images/graphviz-02c57a30599a81dadd9bce8acc87e5e16b601500.png" alt="digraph foo {
+<div class="graphviz"><object data="../_images/graphviz-02c57a30599a81dadd9bce8acc87e5e16b601500.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
    &quot;CmdBase&quot; [href=&quot;CodeCoreCL.html#cmdbase&quot;]
    &quot;Tool&quot; [href=&quot;CodeCoreCL.html#tool&quot;]
    &quot;QTool&quot; [href=&quot;CodeCoreGUI.html#qtool&quot;]
@@ -264,16 +238,8 @@
    &quot;BaseToolBounds&quot; -&gt; &quot;GUIToolBounds&quot;;
    &quot;ToolBounds&quot; -&gt; &quot;CLToolBounds&quot; [style=dotted, label=&quot;CL&quot;, color=red];
    &quot;ToolBounds&quot; -&gt; &quot;GUIToolBounds&quot; [style=dotted, label=&quot;GUI&quot;, color=red];
-}" usemap="#foo" class="graphviz" /></div>
-<map id="foo" name="foo">
-<area shape="poly" id="node1" href="CodeCoreCL.html#cmdbase" title="CmdBase" alt="" coords="268,29,265,22,257,15,243,10,226,7,207,5,188,7,171,10,157,15,148,22,145,29,148,37,157,43,171,49,188,52,207,53,226,52,243,49,257,43,265,37"/>
-<area shape="poly" id="node2" href="CodeCoreCL.html#tool" title="Tool" alt="" coords="245,127,243,119,238,113,229,107,219,104,207,103,195,104,184,107,176,113,171,119,169,127,171,134,176,141,184,146,195,149,207,151,219,149,229,146,238,141,243,134"/>
-<area shape="poly" id="node3" href="CodeCoreGUI.html#qtool" title="QTool" alt="" coords="99,224,97,217,90,210,80,205,67,201,52,200,38,201,25,205,14,210,8,217,5,224,8,231,14,238,25,243,38,247,52,248,67,247,80,243,90,238,97,231"/>
-<area shape="poly" id="node4" href="CodeTools.html#RepTate.tools.ToolBounds.BaseToolBounds" title="BaseToolBounds" alt="" coords="462,224,457,217,443,210,421,205,393,201,363,200,332,201,305,205,283,210,269,217,264,224,269,231,283,238,305,243,332,247,363,248,393,247,421,243,443,238,457,231"/>
-<area shape="poly" id="node7" href="CodeTools.html#RepTate.tools.ToolBounds.GUIToolBounds" title="GUIToolBounds" alt="" coords="248,340,243,333,229,326,208,321,181,317,151,316,121,317,94,321,72,326,58,333,54,340,58,347,72,354,94,359,121,363,151,364,181,363,208,359,229,354,243,347"/>
-<area shape="poly" id="node6" href="CodeTools.html#RepTate.tools.ToolBounds.CLToolBounds" title="CLToolBounds" alt="" coords="454,340,449,333,436,326,416,321,391,317,363,316,335,317,309,321,289,326,276,333,272,340,276,347,289,354,309,359,335,363,363,364,391,363,416,359,436,354,449,347"/>
-<area shape="rect" id="node5" href="CodeTools.html#RepTate.tools.ToolBounds.ToolBounds" title="ToolBounds" alt="" coords="123,200,239,248"/>
-</map></div>
+}</p></object></div>
+</div>
 </div>
 
 

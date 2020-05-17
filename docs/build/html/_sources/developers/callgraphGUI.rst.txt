@@ -9,27 +9,27 @@ The most important basic classes in RepTate are children of the CmdBase class.
 .. graphviz::
 
    digraph foo {
-      "CmdBase" [href="CodeCoreCL.html#cmdbase"]
-      "Application" [href="CodeCoreCL.html#application"]
-      "ApplicationManager" [href="CodeCoreCL.html#applicationmanager"]
-      "DataSet" [href="CodeCoreCL.html#dataset"]
-      "Theory" [href="CodeCoreCL.html#theory"]
-      "Tool" [href="CodeCoreCL.html#tool"]
+      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
+      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
+      "ApplicationManager" [href="../developers/CodeCoreCL.html#applicationmanager", target="_top"]
+      "DataSet" [href="../developers/CodeCoreCL.html#dataset", target="_top"]
+      "Theory" [href="../developers/CodeCoreCL.html#theory", target="_top"]
+      "Tool" [href="../developers/CodeCoreCL.html#tool", target="_top"]
       "CmdBase" -> "Application";
       "CmdBase" -> "ApplicationManager";
       "CmdBase" -> "DataSet";
       "CmdBase" -> "Theory";
       "CmdBase" -> "Tool";
-      "QApplicationWindow" [href="CodeCoreGUI.html#qapplicationwindow"]
-      "QTheory" [href="CodeCoreGUI.html#qtheory"]
-      "QTool" [href="CodeCoreGUI.html#qtool"]
+      "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top"]
+      "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top"]
+      "QTool" [href="../developers/CodeCoreGUI.html#qtool", target="_top"]
       "Application" -> "QApplicationWindow";
       "ApplicationManager" -> "QApplicationManager";
       "DataSet" -> "QDataSet";
       "Theory" -> "QTheory";
       "Tool" -> "QTool";
-      "QWidget" [shape=box,color=red]
-      "QMainWindow" [shape=box,color=red]
+      "QWidget" [shape=box,color=red,href="https://doc.qt.io/qt-5/qwidget.html", target="_top"]
+      "QMainWindow" [shape=box,color=red,href="https://doc.qt.io/qt-5/qmainwindow.html", target="_top"]
       "QWidget" -> "QApplicationWindow" [color=red];
       "QWidget" -> "QDataSet" [color=red];
       "QWidget" -> "QTheory" [color=red];
@@ -47,13 +47,19 @@ Example diagram of the class inheritance of one of the Theories (LVE):
 .. graphviz::
 
    digraph foo {
+      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
+      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
+      "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top"]
+      "ApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE", target="_top", shape=box,color=red]
+	  "BaseApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE", target="_top"]
+	  "CLApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE", target="_top"]
+	  "GUIApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE", target="_top"]
       "CmdBase" -> "Application";
       "Application" -> "QApplicationWindow";
       "QApplicationWindow" -> "GUIApplicationLVE";
       "Application" -> "CLApplicationLVE";
       "BaseApplicationLVE" -> "GUIApplicationLVE";
       "BaseApplicationLVE" -> "CLApplicationLVE";
-      "ApplicationLVE" [shape=box,color=red];
       "CmdBase" -> "ApplicationLVE"
       "ApplicationLVE" -> "CLApplicationLVE" [style=dotted, label="CL", color=red];
       "ApplicationLVE" -> "GUIApplicationLVE" [style=dotted, label="GUI", color=red];
@@ -71,13 +77,13 @@ Following the considerations above, I suggest the following new inheritance rela
 .. graphviz::
 
    digraph foo {
-      "CmdBase" [href="CodeCoreCL.html#cmdbase"]
-      "Application" [href="CodeCoreCL.html#application"]
-      "QApplicationWindow" [href="CodeCoreGUI.html#qapplicationwindow"]
-      "BaseApplicationLVE" [href="CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE"]
-      "ApplicationLVE" [shape=box,color=red,href="CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE"]
-      "CLApplicationLVE" [href="CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE"]
-      "GUIApplicationLVE" [href="CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE"]
+      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
+      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
+      "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top"]
+      "ApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.ApplicationLVE", target="_top", shape=box,color=red]
+	  "BaseApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.BaseApplicationLVE", target="_top"]
+	  "CLApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.CLApplicationLVE", target="_top"]
+	  "GUIApplicationLVE" [href="../developers/CodeApplications.html#RepTate.applications.ApplicationLVE.GUIApplicationLVE", target="_top"]
       "CmdBase" -> "Application";
       "Application" -> "QApplicationWindow";
       "QApplicationWindow" -> "GUIApplicationLVE";
@@ -100,13 +106,19 @@ Example diagram of the class inheritance of one of the Theories
 .. graphviz::
 
    digraph foo {
+      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
+      "Theory" [href="../developers/CodeCoreCL.html#theory", target="_top"]
+      "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top"]
+      "TheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top", shape=box,color=red]
+	  "BaseTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
+	  "CLTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
+	  "GUITheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic"", target="_top"]
       "CmdBase" -> "Theory";
       "Theory" -> "QTheory";
       "QTheory" -> "GUITheoryPolynomial";
       "Theory" -> "CLTheoryPolynomial";
       "BaseTheoryPolynomial" -> "GUITheoryPolynomial";
       "BaseTheoryPolynomial" -> "CLTheoryPolynomial";
-      "TheoryPolynomial" [shape=box,color=red];
       "CmdBase" -> "TheoryPolynomial"
       "TheoryPolynomial" -> "CLTheoryPolynomial" [style=dotted, label="CL", color=red];
       "TheoryPolynomial" -> "GUITheoryPolynomial" [style=dotted, label="GUI", color=red];
