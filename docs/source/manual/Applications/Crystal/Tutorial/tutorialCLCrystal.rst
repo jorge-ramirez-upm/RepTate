@@ -8,3 +8,5 @@ Flow-Induced Crystallizaion Tutorial: Command Line
 .. hint::
 	.. include:: /manual/Applications/All_Tutorials/tutorialCL_instructions.rst
 
+
+.. todo:: Complete the docs of this tutorial

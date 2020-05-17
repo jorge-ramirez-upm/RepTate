@@ -31,3 +31,4 @@ Flow-Induced Crystallizaion Tutorial: Graphical User Interface
 
 #.  Start RepTate and create a new Flow Induced Crystallyzation Application |logo|:
 
+.. todo:: Complete the docs of this tutorial

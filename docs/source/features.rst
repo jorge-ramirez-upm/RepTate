@@ -76,3 +76,4 @@ Graphical User Interface
 - Calculate integral, find peaks (BETA, only in CL version)
 - Save predictions of theory to a RepTate compatible file
 
+..todo:: Update this list

@@ -9,7 +9,8 @@ Tutorial G(t) Application
    :maxdepth: 2
 
 .. |logo| image:: /app_logo/LVE.png
-    :width: 20pt:height: 20pt
+    :width: 20pt
+    :height: 20pt
     :align: bottom
 
 .. |einstein| image:: /gui_icons/icons8-einstein.png

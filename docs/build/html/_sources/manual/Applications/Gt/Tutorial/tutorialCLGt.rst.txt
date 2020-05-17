@@ -10,3 +10,6 @@ Tutorial G(t) Application Command Line
 
 .. note::
 	Tutorial coming soon...
+	
+.. todo:: Complete docs for this tutorial
+

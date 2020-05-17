@@ -11,3 +11,9 @@ Flow Induced Crystallization Theories
 .. include:: GOPolyStrand.rst
 .. include:: SmoothPolyStrand.rst	     
 
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: Crystal-
+	

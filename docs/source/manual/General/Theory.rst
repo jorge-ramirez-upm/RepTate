@@ -84,21 +84,34 @@ When the theory calculation is done, some interesting information is shown in th
 Fitting the theory
 ------------------
 
+.. todo:: Complete this section
 
 How the fitting is done
 -----------------------
 
+.. todo:: Complete this section
+
 Setting x and y-range limits to the fitting graphically
 -------------------------------------------------------
+
+.. todo:: Complete this section
 
 Fitting options
 ---------------
 
+.. todo:: Complete this section
+
 Saving theory predictions
 -------------------------
+
+.. todo:: Complete this section
 
 Copying/Pasting theory parameters
 ---------------------------------
 
+.. todo:: Complete this section
+
 Showing all theories applied to current DataSet
 -----------------------------------------------
+
+.. todo:: Complete this section

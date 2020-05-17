@@ -5,7 +5,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Code Class Diagrams &#8212; RepTate v1.0.0 2020-05-16 documentation</title>
+    <title>Code Class Diagrams &#8212; RepTate v1.0.0 2020-05-17 documentation</title>
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="CodeTools.html" title="Tools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
       </ul>
     </div>
@@ -55,6 +55,7 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Code Class Diagrams</a><ul>
+<li><a class="reference internal" href="#basic-classes">Basic Classes</a></li>
 <li><a class="reference internal" href="#applications">Applications</a></li>
 <li><a class="reference internal" href="#theories">Theories</a></li>
 <li><a class="reference internal" href="#tools">Tools</a></li>
@@ -95,6 +96,49 @@
             
   <div class="section" id="code-class-diagrams">
 <h1>Code Class Diagrams<a class="headerlink" href="#code-class-diagrams" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-classes">
+<h2>Basic Classes<a class="headerlink" href="#basic-classes" title="Permalink to this headline">¶</a></h2>
+<p>The most important basic classes in RepTate are children of the CmdBase class.</p>
+<div class="graphviz"><img src="../_images/graphviz-6e1202bea2c732ba9340318f36df5455ea38c3f6.png" alt="digraph foo {
+   &quot;CmdBase&quot; [href=&quot;CodeCoreCL.html#cmdbase&quot;]
+   &quot;Application&quot; [href=&quot;CodeCoreCL.html#application&quot;]
+   &quot;ApplicationManager&quot; [href=&quot;CodeCoreCL.html#applicationmanager&quot;]
+   &quot;DataSet&quot; [href=&quot;CodeCoreCL.html#dataset&quot;]
+   &quot;Theory&quot; [href=&quot;CodeCoreCL.html#theory&quot;]
+   &quot;Tool&quot; [href=&quot;CodeCoreCL.html#tool&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;ApplicationManager&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;DataSet&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
+   &quot;QApplicationWindow&quot; [href=&quot;CodeCoreGUI.html#qapplicationwindow&quot;]
+   &quot;QTheory&quot; [href=&quot;CodeCoreGUI.html#qtheory&quot;]
+   &quot;QTool&quot; [href=&quot;CodeCoreGUI.html#qtool&quot;]
+   &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
+   &quot;ApplicationManager&quot; -&gt; &quot;QApplicationManager&quot;;
+   &quot;DataSet&quot; -&gt; &quot;QDataSet&quot;;
+   &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
+   &quot;Tool&quot; -&gt; &quot;QTool&quot;;
+   &quot;QWidget&quot; [shape=box,color=red]
+   &quot;QMainWindow&quot; [shape=box,color=red]
+   &quot;QWidget&quot; -&gt; &quot;QApplicationWindow&quot; [color=red];
+   &quot;QWidget&quot; -&gt; &quot;QDataSet&quot; [color=red];
+   &quot;QWidget&quot; -&gt; &quot;QTheory&quot; [color=red];
+   &quot;QWidget&quot; -&gt; &quot;QTool&quot; [color=red];
+   &quot;QMainWindow&quot; -&gt; &quot;QApplicationManager&quot; [color=red];
+}" usemap="#foo" class="graphviz" /></div>
+<map id="foo" name="foo">
+<area shape="poly" id="node1" href="CodeCoreCL.html#cmdbase" title="CmdBase" alt="" coords="502,29,499,22,490,15,476,10,459,7,440,5,421,7,404,10,390,15,382,22,379,29,382,37,390,43,404,49,421,52,440,53,459,52,476,49,490,43,499,37"/>
+<area shape="poly" id="node2" href="CodeCoreCL.html#application" title="Application" alt="" coords="510,125,507,118,497,111,481,106,462,103,440,101,418,103,399,106,383,111,373,118,370,125,373,133,383,139,399,145,418,148,440,149,462,148,481,145,497,139,507,133"/>
+<area shape="poly" id="node3" href="CodeCoreCL.html#applicationmanager" title="ApplicationManager" alt="" coords="1043,125,1037,118,1021,111,997,106,965,103,931,101,896,103,865,106,840,111,824,118,819,125,824,133,840,139,865,145,896,148,931,149,965,148,997,145,1021,139,1037,133"/>
+<area shape="poly" id="node4" href="CodeCoreCL.html#dataset" title="DataSet" alt="" coords="231,125,228,118,221,111,209,106,195,103,179,101,163,103,148,106,137,111,129,118,127,125,129,133,137,139,148,145,163,148,179,149,195,148,209,145,221,139,228,133"/>
+<area shape="poly" id="node5" href="CodeCoreCL.html#theory" title="Theory" alt="" coords="634,125,631,118,624,111,613,106,599,103,584,101,569,103,555,106,544,111,537,118,535,125,537,133,544,139,555,145,569,148,584,149,599,148,613,145,624,139,631,133"/>
+<area shape="poly" id="node6" href="CodeCoreCL.html#tool" title="Tool" alt="" coords="94,125,92,118,87,111,79,106,68,103,56,101,44,103,34,106,25,111,20,118,18,125,20,133,25,139,34,145,44,148,56,149,68,148,79,145,87,139,92,133"/>
+<area shape="poly" id="node7" href="CodeCoreGUI.html#qapplicationwindow" title="QApplicationWindow" alt="" coords="512,221,506,214,489,207,462,202,428,199,391,197,353,199,319,202,293,207,275,214,269,221,275,229,293,235,319,241,353,244,391,245,428,244,462,241,489,235,506,229"/>
+<area shape="poly" id="node8" href="CodeCoreGUI.html#qtheory" title="QTheory" alt="" coords="654,221,651,214,642,207,629,202,613,199,595,197,577,199,560,202,547,207,539,214,536,221,539,229,547,235,560,241,577,244,595,245,613,244,629,241,642,235,651,229"/>
+<area shape="poly" id="node9" href="CodeCoreGUI.html#qtool" title="QTool" alt="" coords="99,221,97,214,90,207,80,202,67,199,52,197,38,199,25,202,14,207,8,214,5,221,8,229,14,235,25,241,38,244,52,245,67,244,80,241,90,235,97,229"/>
+</map><p><code class="docutils literal notranslate"><span class="pre">CmdBase</span></code> provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).</p>
+</div>
 <div class="section" id="applications">
 <h2>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h2>
 <p>Example diagram of the class inheritance of one of the Theories</p>
@@ -244,7 +288,7 @@
         <li class="right" >
           <a href="CodeTools.html" title="Tools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 
       </ul>
     </div>

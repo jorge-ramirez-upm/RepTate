@@ -1,6 +1,6 @@
-==================================
+===========================
 Stress Relaxation: Theories
-==================================
+===========================
 
 .. contents:: Contents
     :local:
@@ -11,3 +11,11 @@ Stress Relaxation: Theories
 .. include:: Maxwell.rst
 .. include:: Rouse.rst
 .. include:: DTDStars_time.rst
+.. include:: ReSpect.rst
+
+.. rubric:: References
+
+.. bibliography:: ../bibliography.bib
+    :style: unsrt
+    :keyprefix: Gt-
+	

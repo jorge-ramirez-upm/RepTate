@@ -703,6 +703,7 @@ class Application(CmdBase):
             >>> switch NLVE2.Set2.RP2
 
         .. todo:: Find key functions and document them like this one
+
         """
         items=line.split('.')
         listtools = [x.name for x in self.tools]

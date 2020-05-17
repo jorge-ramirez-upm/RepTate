@@ -2,6 +2,15 @@
 Applications
 ============
 
+Here we give a detailed description of all applications, including the following information:
+
+	- A general description (purpose, and type of files)
+	- Views included, with examples
+	- Theories included, with manual
+	- Tutorials for the GUI and CL version
+
+The current version of RepTate includes the following applications:
+
 .. toctree::
    :maxdepth: 1
 
@@ -18,7 +27,3 @@ Applications
    Dielectric/Dielectric
    LAOS/LAOS
    
-- Detailed description of all applications:
-	- Views and theories included
-	- Tutorials
-	- Theories manual

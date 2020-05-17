@@ -81,4 +81,5 @@ F2              Edit Tool Parameter
 ==============  ==============================
 
 
+.. todo:: Update keyboard shortcuts
 

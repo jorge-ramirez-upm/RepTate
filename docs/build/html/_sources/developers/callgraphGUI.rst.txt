@@ -1,6 +1,44 @@
 Code Class Diagrams
 ===================
 
+Basic Classes
+-------------
+
+The most important basic classes in RepTate are children of the CmdBase class. 
+
+.. graphviz::
+
+   digraph foo {
+      "CmdBase" [href="CodeCoreCL.html#cmdbase"]
+      "Application" [href="CodeCoreCL.html#application"]
+      "ApplicationManager" [href="CodeCoreCL.html#applicationmanager"]
+      "DataSet" [href="CodeCoreCL.html#dataset"]
+      "Theory" [href="CodeCoreCL.html#theory"]
+      "Tool" [href="CodeCoreCL.html#tool"]
+      "CmdBase" -> "Application";
+      "CmdBase" -> "ApplicationManager";
+      "CmdBase" -> "DataSet";
+      "CmdBase" -> "Theory";
+      "CmdBase" -> "Tool";
+      "QApplicationWindow" [href="CodeCoreGUI.html#qapplicationwindow"]
+      "QTheory" [href="CodeCoreGUI.html#qtheory"]
+      "QTool" [href="CodeCoreGUI.html#qtool"]
+      "Application" -> "QApplicationWindow";
+      "ApplicationManager" -> "QApplicationManager";
+      "DataSet" -> "QDataSet";
+      "Theory" -> "QTheory";
+      "Tool" -> "QTool";
+      "QWidget" [shape=box,color=red]
+      "QMainWindow" [shape=box,color=red]
+      "QWidget" -> "QApplicationWindow" [color=red];
+      "QWidget" -> "QDataSet" [color=red];
+      "QWidget" -> "QTheory" [color=red];
+      "QWidget" -> "QTool" [color=red];
+      "QMainWindow" -> "QApplicationManager" [color=red];
+   }
+
+``CmdBase`` provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).
+
 Applications
 ------------
 

@@ -10,10 +10,5 @@ Summary
 
 .. autoclass:: RepTate.theories.TheoryBobLVE.TheoryBobLVE()
 
-Publications related to BoB: :cite:`boblve-Das2006`  :cite:`boblve-Das2006b` :cite:`boblve-Chambon2008`.
+Publications related to BoB: :cite:`LVE-Das2006`  :cite:`LVE-Das2006b` :cite:`LVE-Chambon2008`.
 
-.. rubric:: References
-
-.. bibliography:: ../bibliography.bib
-    :style: unsrt
-    :keyprefix: boblve-

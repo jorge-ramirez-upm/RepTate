@@ -63,6 +63,7 @@ class TheorySCCR(CmdBase):
        - ``Ge`` : Entanglement modulus.
        - ``Me`` : Entanglement molecular weight.
        - ``c_nu`` : Constraint release parameter.
+       - ``R_S`` : Retraction rate parameter
     """
 
     thname = "GLaMM"

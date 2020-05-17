@@ -2,6 +2,12 @@
 
 REM Command file for Sphinx documentation
 
+REM Set sphinx options here
+REM For a lot of debug info:
+REM set SPHINXOPTS="-vvv"
+REM To save warnings and errors to file
+REM set SPHINXOPTS="-wsphinxLOG.out"
+
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )

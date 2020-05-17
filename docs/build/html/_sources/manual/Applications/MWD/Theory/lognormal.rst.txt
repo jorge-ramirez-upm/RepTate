@@ -5,4 +5,4 @@ Log-Normal distribution
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryLogNormal.BaseTheoryLogNormal()
+.. autoclass:: RepTate.theories.TheoryLogNormal.TheoryLogNormal

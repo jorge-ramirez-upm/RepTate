@@ -17,7 +17,7 @@ Full quantitative theory for the linear dynamics of entangled linear polymers, b
 
 The parameter :math:`c_\nu` is related to the number of chains that are needed to create one entanglement. :math:`c_\nu=0` means there is no constraint release. The recommended value is :math:`c_\nu=0.1`. This value gives slightly worse fitting than :math:`c_\nu=1`, but is more consistent with start-up shear experiments.
 
-For full details about how the predictions are calculated, refer to :cite:`LM-Likhtman2002`. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of :math:`Z=M_w/M_e` = 2, 3, 4 ... 299, 300, 305, 310, ... 1000, and :math:`c_\nu` = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of :math:`Z` and :math:`c_\nu` in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of :math:`Z` and :math:`c_\nu`, the prediction is interpolated. 
+For full details about how the predictions are calculated, refer to :cite:`LVE-Likhtman2002`. A set of predictions has been precalculated and stored in binary form in the RepTate distribution. There are predictions for different values of :math:`Z=M_w/M_e` = 2, 3, 4 ... 299, 300, 305, 310, ... 1000, and :math:`c_\nu` = 0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10. The molecular weight of the sample is read from the data file. For values of :math:`Z` and :math:`c_\nu` in the precalculated range, RepTate reads the prediction directly from the precalculated data. For other values of :math:`Z` and :math:`c_\nu`, the prediction is interpolated. 
 
 After the calculation is done, the values of the number of entanglements :math:`Z`, the Rouse time :math:`\tau_R` and the reptation time :math:`\tau_D` of the polymer are printed in the Log Window. These values are calculated according to the following formulas:
 
@@ -41,9 +41,4 @@ Recommendations
 
 The user must input the correct density. If available, :math:`\rho` is read from the Materials database. The theory fails to fit correctly the data when the values of :math:`G_e` and :math:`M_e` are linked in this way.    
 
-.. rubric:: References
-
-.. bibliography:: ../bibliography.bib
-    :style: unsrt
-    :keyprefix: LM-
     

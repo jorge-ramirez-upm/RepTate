@@ -23,9 +23,6 @@ Data Files
 ``.laos`` extension
 -------------------
 
-.. warning::
-    NEEDS TO BE DONE
-
 Text files with ``.laos`` extension should be organised as follows:
 
 - ``.laos`` files should contaion **at least** the parameter values for the:

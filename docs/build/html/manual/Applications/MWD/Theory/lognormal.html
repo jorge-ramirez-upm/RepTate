@@ -5,7 +5,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Log-Normal distribution &#8212; RepTate v1.0.0 2020-05-16 documentation</title>
+    <title>Log-Normal distribution &#8212; RepTate v1.0.0 2020-05-17 documentation</title>
     <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-17 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -81,9 +81,26 @@
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="RepTate.theories.TheoryLogNormal.BaseTheoryLogNormal">
-<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryLogNormal.</code><code class="sig-name descname">BaseTheoryLogNormal</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryLogNormal.html#BaseTheoryLogNormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryLogNormal.BaseTheoryLogNormal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for both GUI and CL</p>
+<dt id="RepTate.theories.TheoryLogNormal.TheoryLogNormal">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryLogNormal.</code><code class="sig-name descname">TheoryLogNormal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryLogNormal.html#TheoryLogNormal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryLogNormal.TheoryLogNormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log-Normal distribution: the logarithm of the molecular weight is normally distributed</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><div class="math notranslate nohighlight">
+\[W(M) = W_0 \frac{1}{\sqrt{2\pi\sigma^2}} \frac{1}{M} \exp\left[ - \frac{\left(\ln{M}-\ln{M_0}\right)^2}{2\sigma^2} \right]\]</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">logW0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(W_0)\)</span>: Normalization constant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logM0</span></code> <span class="math notranslate nohighlight">\(\equiv\log_{10}(M_0)\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigma</span></code> <span class="math notranslate nohighlight">\(\equiv\sigma\)</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -104,7 +121,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-16 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-17 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

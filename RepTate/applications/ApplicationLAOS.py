@@ -666,19 +666,21 @@ class BaseApplicationLAOS:
     def chebyshev_decompose_MITlaos(self, F, N, X=None):
         """
         Find Chebyshev Polynomial components of input data vector:
-        f = A0*T0(x) + A1*T1(x) + A2*T2(x) + ...
+
+        .. math::        
+            f = A_0 T_0(x) + A_1 T_1(x) + A_2 T_2(x) + ...
 
         [An]= chebyshev_decompose(F,N,X)
-                *Assumes F occupies the domain [-1 : +1]
+                
+        Assumes F occupies the domain [-1 : +1]
         with an arbitrary number of data points
         Uses trapz.m to calculate integrals
-              INPUT VARIABLES
-              F: vector of data, in domain [-1:1]
-              N: degree of desired Legendre Polynomial decomposition
-              X: Range points associated with F
-              OUTPUT VARIABLE
-              An: vector of Chebyshev coefficients
-                  An(i) = A_{i-1}
+
+        :param F: vector of data, in domain [-1:1]
+        :param N: degree of desired Legendre Polynomial decomposition
+        :param X: Range points associated with F
+        :return: :math:`A_n` vector of Chebyshev coefficients :math:`A_n(i) = A_{i-1}`
+
         """
         M = len(F)
         if X is None:  # Make X (input range) linear spaced and same length as F

@@ -14,6 +14,7 @@ TheoryBasic
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 TheoryDiscrMWD
 --------------
@@ -22,7 +23,7 @@ TheoryDiscrMWD
     :members:
     :undoc-members:
     :show-inheritance:
-
+    :noindex:
     
 TheoryLikhtmanMcLeish2002
 -------------------------
@@ -31,6 +32,7 @@ TheoryLikhtmanMcLeish2002
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 TheoryMaxwellModes
 ------------------
@@ -39,6 +41,7 @@ TheoryMaxwellModes
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
     
 
 TheoryRoliePoly
@@ -48,6 +51,7 @@ TheoryRoliePoly
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
     
 TheoryRouse
 -----------
@@ -56,6 +60,7 @@ TheoryRouse
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
     
 TheoryTTS
 ---------
@@ -64,3 +69,4 @@ TheoryTTS
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:

@@ -56,7 +56,7 @@ File
 FileType
 --------
     
-.. autoclass:: RepTate.core.FileType.FileType
+.. automodule:: RepTate.core.FileType
     :members:
     :undoc-members:
     :show-inheritance:

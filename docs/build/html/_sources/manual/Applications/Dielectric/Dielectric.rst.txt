@@ -11,5 +11,7 @@
 
     general
     Theory/theory
+    Tutorial/tutorialGUIDielectric
+    Tutorial/tutorialCLDielectric
 
 

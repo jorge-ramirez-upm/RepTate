@@ -13,8 +13,7 @@ Summary
 Description
 -----------
 
-.. warning::
-    NEEDS TO BE WRITTEN!
+.. todo:: Complete docs for this theory
       
 Fit of dielectric spectroscopy data with a set of :math:`N` discrete equidistant Debye modes. 
 The number of modes can be selected by pressing the Up/Down arrows in the theory window. 

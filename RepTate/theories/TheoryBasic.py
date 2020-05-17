@@ -321,11 +321,7 @@ class BaseTheoryExponential:
         self.Qprint("%s: a*exp(-x/T)" % self.thname)
 
     def exponential(self, f=None):
-        """Actual function
-    * **Function**
-        .. math::
-            y(x) = a \\exp(-x/T)
-        """
+        """**Function** :math:`y(x) = a \\exp(-x/T)`"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns

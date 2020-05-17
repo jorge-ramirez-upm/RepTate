@@ -1,6 +1,6 @@
-=======================================
-Tutorial Creep Application Command Line
-=======================================
+======================================
+Tutorial LAOS Application Command Line
+======================================
 
 .. toctree::
    :maxdepth: 2
@@ -10,3 +10,5 @@ Tutorial Creep Application Command Line
 
 .. note::
 	Tutorial coming soon...
+	
+.. todo:: Complete docs for this tutorial
