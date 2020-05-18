@@ -44,10 +44,22 @@ from PyQt5.QtCore import pyqtSignal
 
 from collections import OrderedDict
 
-import RepTate.core.Theory as Theory
-
 import logging
+from html.parser import HTMLParser
 
+class MLStripper(HTMLParser):
+    """Remove HTML tags from string"""
+    def __init__(self):
+        self.reset()
+        self.strict = False
+        self.convert_charrefs= True
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
 
 class Tool(CmdBase):
     """Abstract class to describe a Tool"""
@@ -378,7 +390,7 @@ class Tool(CmdBase):
         return text
 
     def strip_tags(self, html_text):
-        s = Theory.MLStripper()
+        s = MLStripper()
         s.feed(html_text)
         return s.get_data()
 
