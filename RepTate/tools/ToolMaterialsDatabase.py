@@ -242,7 +242,10 @@ class BaseToolMaterialsDatabase:
     citations = ToolMaterialsDatabase.citations
 
     def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
+        """**Constructor**
+        
+        ..todo :: Select automatically the material from the datafiles (if available)
+        """
         super().__init__(name, parent_app)
         self.parameters["name"] = Parameter(
             name="name",
@@ -562,14 +565,30 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         )
         self.isofrictional.setCheckable(True)
         self.isofrictional.setChecked(True)
+        self.shiftdata = self.tbMwT.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-vertical-shift-data.png"),
+            "Shift all Files in the current Application"
+        )
         self.verticalLayout.insertWidget(2, self.tbMwT)
         connection_id = self.isofrictional.triggered.connect(self.handle_vert_and_iso)
         connection_id = self.verticalshift.triggered.connect(self.handle_vert_and_iso)
+        connection_id = self.shiftdata.triggered.connect(self.handle_shift_data)
 
         self.change_material()
 
     def handle_vert_and_iso(self):
         self.do_plot()
+
+    def handle_shift_data(self):
+        ans = QMessageBox.question(
+            self,
+            "Shift all data",
+            "Do you want to shift all Tables in all Datasets of the current Application?",
+            buttons=(QMessageBox.Yes | QMessageBox.No),
+        )
+        if ans == QMessageBox.Yes:
+            pass
+
 
     def change_material(self):
         selected_material_name = self.cbmaterial.currentText()
