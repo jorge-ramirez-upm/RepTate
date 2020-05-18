@@ -91,7 +91,7 @@ def start_RepTate(argv):
     GUI = True
 
     parser = argparse.ArgumentParser(
-        description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
+        description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
         epilog="(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)",
     )
     parser.add_argument(

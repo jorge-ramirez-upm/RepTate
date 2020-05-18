@@ -97,11 +97,14 @@ def start_UV(argv):
     GUI = True
 
     parser = argparse.ArgumentParser(
-        description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)",
+        description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2020)",
     )
     parser.add_argument(
         "-d", "--dpi", help="High DPI support on Windows", action="store_true"
+    )
+    parser.add_argument(
+        "-l", "--tool", help="Open the tool L (if available)", default="", metavar="L"
     )
     parser.add_argument(
         "-s",
@@ -110,7 +113,11 @@ def start_UV(argv):
         action="store_true",
     )
     parser.add_argument(
-        "-t", "--theory", help="Open the given theory (if available)", default=""
+        "-t",
+        "--theory",
+        help="Open the theory T (if available)",
+        default="",
+        metavar="T",
     )
     parser.add_argument(
         "-v", "--verbose", help="Write debug information to stdout", action="store_true"
@@ -194,6 +201,13 @@ def start_UV(argv):
     )  # avoid troubles when loading multiple apps/files/theories
     for k in dictfiles.keys():
         ex.new_tables_from_files(dictfiles[k])
+    if args.theory in list(ex.theories.keys()):
+        ex.datasets["Set1"].new_theory(args.theory)
+    if args.tool in (list(ex.availabletools.keys()) + list(ex.extratools.keys())):
+        ex.new_tool(args.tool)
+        ex.update_all_ds_plots()
+        ex.actionInspect_Data.setChecked(True)
+        ex.showDataInspector(True)
     # set the calmode back
     if args.single:
         CmdBase.calcmode = CalcMode.singlethread

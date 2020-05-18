@@ -98,11 +98,14 @@ def start_RepTate(argv):
     GUI = True
 
     parser = argparse.ArgumentParser(
-        description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)",
+        description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2020)",
     )
     parser.add_argument(
         "-d", "--dpi", help="High DPI support on Windows", action="store_true"
+    )
+    parser.add_argument(
+        "-l", "--tool", help="Open the tool L (if available)", default="", metavar="L"
     )
     parser.add_argument(
         "-s",
@@ -111,7 +114,11 @@ def start_RepTate(argv):
         action="store_true",
     )
     parser.add_argument(
-        "-t", "--theory", help="Open the given theory (if available)", default=""
+        "-t",
+        "--theory",
+        help="Open the theory T (if available)",
+        default="",
+        metavar="T",
     )
     parser.add_argument(
         "-v", "--verbose", help="Write debug information to stdout", action="store_true"
@@ -173,6 +180,14 @@ def start_RepTate(argv):
             ex.applications[appname].new_tables_from_files(dictfiles[k])
             if args.theory in list(ex.applications[appname].theories.keys()):
                 ex.applications[appname].datasets["Set1"].new_theory(args.theory)
+            if args.tool in (
+                list(ex.applications[appname].availabletools.keys())
+                + list(ex.applications[appname].extratools.keys())
+            ):
+                ex.applications[appname].new_tool(args.tool)
+                ex.applications[appname].update_all_ds_plots()
+                ex.applications[appname].actionInspect_Data.setChecked(True)
+                ex.applications[appname].showDataInspector(True)
 
         elif np.any([k in key for key in d.keys()]):  # works with spaces in extensions
             for key in d.keys():
@@ -184,6 +199,14 @@ def start_RepTate(argv):
                         ex.applications[appname].datasets["Set1"].new_theory(
                             args.theory
                         )
+                    if args.tool in (
+                        list(ex.applications[appname].availabletools.keys())
+                        + list(ex.applications[appname].extratools.keys())
+                    ):
+                        ex.applications[appname].new_tool(args.tool)
+                        ex.applications[appname].update_all_ds_plots()
+                        ex.applications[appname].actionInspect_Data.setChecked(True)
+                        ex.applications[appname].showDataInspector(True)                       
                     break
         else:
             print("File type %s cannot be opened" % k)

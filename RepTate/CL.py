@@ -93,11 +93,14 @@ def start_RepTate(argv):
     GUI = False
 
     parser = argparse.ArgumentParser(
-        description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)",
+        description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2020)",
     )
     parser.add_argument(
         "-b", "--batch", help="Run in batch mode (no graphics)", action="store_true"
+    )
+    parser.add_argument(
+        "-l", "--tool", help="Open the tool L (if available)", default="", metavar="L"
     )
     parser.add_argument(
         "-s",
@@ -164,6 +167,11 @@ def start_RepTate(argv):
                 th, thname = ds.new(args.theory)
                 if th != None:
                     theoryopen = True
+            if args.tool in (
+                list(app.applications[appname].availabletools.keys())
+                + list(app.applications[appname].extratools.keys())
+            ):
+                app.applications[appname].tool_new(args.tool)
             ds.do_plot()
         elif np.any([k in key for key in d.keys()]):  # works with spaces in extensions
             for key in d.keys():
@@ -179,6 +187,11 @@ def start_RepTate(argv):
                         th, thname = ds.new(args.theory)
                         if th != None:
                             theoryopen = True
+                    if args.tool in (
+                        list(app.applications[appname].availabletools.keys())
+                        + list(app.applications[appname].extratools.keys())
+                    ):
+                        app.applications[appname].tool_new(args.tool)
                     ds.do_plot()
                     break
         else:

@@ -61,8 +61,8 @@ def start_MatDB(argv):
     :param list argv: Command line parameters passed to MatDB
     """
     parser = argparse.ArgumentParser(
-        description="RepTate: Rheologhy of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez - jorge.ramirez@upm.es - UPM , Victor Boudara - U. Leeds (2018)",
+        description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2020)",
     )
     parser.add_argument(
         "-d", "--dpi", help="High DPI support on Windows", action="store_true"

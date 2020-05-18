@@ -119,8 +119,8 @@ class Application(CmdBase):
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
-        self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.availabletools[ToolPowerLaw.toolname] = ToolPowerLaw
+        self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
 
         # MATPLOTLIB STUFF
@@ -701,6 +701,7 @@ class Application(CmdBase):
 
             >>> switch LVE1.Set1.LM1
             >>> switch NLVE2.Set2.RP2
+            >>> switch PL1
 
         .. todo:: Find key functions and document them like this one
 
@@ -736,7 +737,8 @@ class Application(CmdBase):
         for ds in setlist:
             thnames = self.datasets[ds].get_tree()
             thlist += [ds + '.' + t for t in thnames]
-        switchlist = setlist + thlist
+        toollist = [x.name for x in self.tools]
+        switchlist = setlist + thlist + toollist
         if not text:
             completions = switchlist[:]
         else:
@@ -857,7 +859,7 @@ class Application(CmdBase):
         for t in list(self.extratools.values()):
             print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
 
-    def do_tool_new(self, line):
+    def tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         extratooltypes = list(self.extratools.keys())
@@ -871,15 +873,20 @@ class Application(CmdBase):
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
                 to = self.extratools[line](to_id, self)
-            self.tools.append(to)
-            if self.mode == CmdMode.GUI:
-                return to
+            if (self.mode == CmdMode.batch):
+                to.prompt = ''
             else:
-                if (self.mode == CmdMode.batch):
-                    to.prompt = ''
-                else:
-                    to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
-                to.cmdloop()
+                to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
+            self.tools.append(to)
+        else:
+            to=None
+        return to
+
+    def do_tool_new(self, line):
+        """Create a new empty dataset in this application."""
+        to = self.tool_new(line)
+        if to != None:
+            to.cmdloop()
         else:
             print("Tool \"%s\" does not exists" % line)
 
@@ -921,20 +928,6 @@ class Application(CmdBase):
                 print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
             else:
                 print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
-
-    def do_tool_switch(self, line):
-        """Change the active tool"""
-        listtools = [x.name for x in self.tools]
-        try:
-            idx = listtools.index(line)
-            self.tools[idx].cmdloop()
-        except AttributeError as e:
-            print("Tool\"%s\" not found" % line)
-
-    def complete_tool_switch(self, text, line, begidx, endidx):
-        """Complete the tool switch command"""
-        completions = self.complete_tool_delete(text, line, begidx, endidx)
-        return completions
 
     def do_tool_activate(self, name):
         """Enable/Disable a given tool"""

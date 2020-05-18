@@ -19,7 +19,7 @@
             "request": "launch",
             "module": "RepTate.CL",
             "console": "integratedTerminal",
-            "args": ["-v","data/DOW/Non-Linear_Rheology/Start-up_Shear/*.shear"]
+            "args": ["-v","data/PI_LINEAR/PI*tts","-l","PowerLaw"]
         },
         {
             "name": "UV",
