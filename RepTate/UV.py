@@ -206,7 +206,6 @@ def start_UV(argv):
     if args.tool in (list(ex.availabletools.keys()) + list(ex.extratools.keys())):
         ex.new_tool(args.tool)
         ex.update_all_ds_plots()
-        ex.actionInspect_Data.setChecked(True)
         ex.showDataInspector(True)
     # set the calmode back
     if args.single:

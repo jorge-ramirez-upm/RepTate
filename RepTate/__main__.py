@@ -170,6 +170,7 @@ def start_RepTate(argv):
         CalcMode.singlethread
     )  # avoid troubles when loading multiple apps/files/theories
     d = {ex.extension: ex.appname for ex in list(ex.available_applications.values())}
+    toolopen = False    
     for k in dictfiles.keys():
         if k == "rept":
             ex.open_project(dictfiles[k][0])
@@ -186,8 +187,8 @@ def start_RepTate(argv):
             ):
                 ex.applications[appname].new_tool(args.tool)
                 ex.applications[appname].update_all_ds_plots()
-                ex.applications[appname].actionInspect_Data.setChecked(True)
                 ex.applications[appname].showDataInspector(True)
+                toolopen = True
 
         elif np.any([k in key for key in d.keys()]):  # works with spaces in extensions
             for key in d.keys():
@@ -205,8 +206,8 @@ def start_RepTate(argv):
                     ):
                         ex.applications[appname].new_tool(args.tool)
                         ex.applications[appname].update_all_ds_plots()
-                        ex.applications[appname].actionInspect_Data.setChecked(True)
-                        ex.applications[appname].showDataInspector(True)                       
+                        ex.applications[appname].showDataInspector(True)
+                        toolopen = True
                     break
         else:
             print("File type %s cannot be opened" % k)
