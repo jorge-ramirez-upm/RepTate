@@ -7,298 +7,116 @@ Applications
 ApplicationCreep
 ----------------
 
-.. autoclass:: RepTate.applications.ApplicationCreep.ApplicationCreep
+.. automodule:: RepTate.applications.ApplicationCreep
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCreep.BaseApplicationCreep
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCreep.CLApplicationCreep
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCreep.GUIApplicationCreep
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationCrystal
 ------------------
 
-.. autoclass:: RepTate.applications.ApplicationCrystal.ApplicationCrystal
+.. automodule:: RepTate.applications.ApplicationCrystal
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCrystal.CLApplicationCrystal
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationCrystal.GUIApplicationCrystal
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationDielectric
 ---------------------
 
-.. autoclass:: RepTate.applications.ApplicationDielectric.ApplicationDielectric
+.. automodule:: RepTate.applications.ApplicationDielectric
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationDielectric.BaseApplicationDielectric
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationDielectric.CLApplicationDielectric
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationDielectric.GUIApplicationDielectric
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationGt
 -------------
 
-.. autoclass:: RepTate.applications.ApplicationGt.ApplicationGt
+.. automodule:: RepTate.applications.ApplicationGt
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationGt.BaseApplicationGt
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationGt.CLApplicationGt
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationGt.GUIApplicationGt
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationLAOS
 ---------------
 
-.. autoclass:: RepTate.applications.ApplicationLAOS.ApplicationLAOS
+.. automodule:: RepTate.applications.ApplicationLAOS
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLAOS.BaseApplicationLAOS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLAOS.CLApplicationLAOS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLAOS.GUIApplicationLAOS
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationLVE
 --------------
 
-.. autoclass:: RepTate.applications.ApplicationLVE.ApplicationLVE
+.. automodule:: RepTate.applications.ApplicationLVE
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLVE.BaseApplicationLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLVE.CLApplicationLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationLVE.GUIApplicationLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationMWD
 --------------
 
-.. autoclass:: RepTate.applications.ApplicationMWD.ApplicationMWD
+.. automodule:: RepTate.applications.ApplicationMWD
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationMWD.BaseApplicationMWD
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationMWD.CLApplicationMWD
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationMWD.GUIApplicationMWD
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationNLVE
 ---------------
     
-.. autoclass:: RepTate.applications.ApplicationNLVE.ApplicationNLVE
+.. automodule:: RepTate.applications.ApplicationNLVE
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationNLVE.BaseApplicationNLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationNLVE.CLApplicationNLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationNLVE.GUIApplicationNLVE
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationReact
 ----------------
     
-.. autoclass:: RepTate.applications.ApplicationReact.ApplicationReact
+.. automodule:: RepTate.applications.ApplicationReact
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationReact.BaseApplicationReact
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationReact.CLApplicationReact
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationReact.GUIApplicationReact
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationSANS
 ---------------
     
-.. autoclass:: RepTate.applications.ApplicationSANS.ApplicationSANS
+.. automodule:: RepTate.applications.ApplicationSANS
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationSANS.BaseApplicationSANS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationSANS.CLApplicationSANS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationSANS.GUIApplicationSANS
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationTTS
 --------------
     
-.. autoclass:: RepTate.applications.ApplicationTTS.ApplicationTTS
+.. automodule:: RepTate.applications.ApplicationTTS
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTS.BaseApplicationTTS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTS.CLApplicationTTS
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTS.GUIApplicationTTS
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationTTSFactors
 ---------------------
     
-.. autoclass:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors
+.. automodule:: RepTate.applications.ApplicationTTSFactors
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTSFactors.CLApplicationTTSFactors
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationTTSFactors.GUIApplicationTTSFactors
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ApplicationUniversalViewer
 --------------------------
     
-.. autoclass:: RepTate.applications.ApplicationUniversalViewer.ApplicationUniversalViewer
+.. automodule:: RepTate.applications.ApplicationUniversalViewer
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationUniversalViewer.BaseApplicationUniversalViewer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationUniversalViewer.CLApplicationUniversalViewer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.applications.ApplicationUniversalViewer.GUIApplicationUniversalViewer
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:

@@ -7,86 +7,80 @@ Tools
 ToolBounds
 ----------
 
-.. autoclass:: RepTate.tools.ToolBounds.ToolBounds 
+.. automodule:: RepTate.tools.ToolBounds
     :members:
     :undoc-members:
     :show-inheritance:
-
-.. autoclass:: RepTate.tools.ToolBounds.BaseToolBounds 
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.tools.ToolBounds.CLToolBounds 
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. autoclass:: RepTate.tools.ToolBounds.GUIToolBounds 
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    :noindex:
 
 ToolEvaluate
 ------------
 
-.. autoclass:: RepTate.tools.ToolEvaluate.ToolEvaluate 
+.. automodule:: RepTate.tools.ToolEvaluate
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolFindPeaks
 -------------
 
-.. autoclass:: RepTate.tools.ToolFindPeaks.ToolFindPeaks 
+.. automodule:: RepTate.tools.ToolFindPeaks
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolGradient
 ------------
 
-.. autoclass:: RepTate.tools.ToolGradient.ToolGradient 
+.. automodule:: RepTate.tools.ToolGradient
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolIntegral
 ------------
 
-.. autoclass:: RepTate.tools.ToolIntegral.ToolIntegral 
+.. automodule:: RepTate.tools.ToolIntegral
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolInterpolate
 ---------------
 
-.. autoclass:: RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate 
+.. automodule:: RepTate.tools.ToolInterpolate
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolMaterialsDatabase
 ---------------------
 
-.. autoclass:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase 
+.. automodule:: RepTate.tools.ToolMaterialsDatabase
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolPowerLaw
 ------------
 
-.. autoclass:: RepTate.tools.ToolPowerLaw.ToolPowerLaw 
+.. automodule:: RepTate.tools.ToolPowerLaw
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
 
 ToolSmooth
 ----------
 
-.. autoclass:: RepTate.tools.ToolSmooth.ToolSmooth 
+.. automodule:: RepTate.tools.ToolSmooth
     :members:
     :undoc-members:
     :show-inheritance:
+    :noindex:
