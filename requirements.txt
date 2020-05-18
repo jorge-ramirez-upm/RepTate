@@ -1,5 +1,5 @@
 colorama
-matplotlib
+matplotlib>=3.2.1
 openpyxl
 pyreadline;platform_system=='Windows'
 readline;platform_system=='Linux'
