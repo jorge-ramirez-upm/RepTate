@@ -189,10 +189,12 @@ class SymbolMode(enum.Enum):
         "Variable empty symbols",
         "Variable filled symbols",
     ]
-    symbol1 = "."
-    symbol1_name = "point"
+    # symbol1 = "."
+    # symbol1_name = "point"
+    symbol1 = "o"
+    symbol1_name = "circle"
     allmarkers = [
-        ".",
+        # ".",
         "o",
         "v",
         "^",
@@ -218,7 +220,7 @@ class SymbolMode(enum.Enum):
         "_",
     ]
     allmarkernames = [
-        "point",
+        # "point",
         "circle",
         "triangle_down",
         "triangle_up",
@@ -244,7 +246,7 @@ class SymbolMode(enum.Enum):
         "hline",
     ]
     filledmarkers = [
-        ".",
+        # ".",
         "o",
         "v",
         "^",
@@ -262,7 +264,7 @@ class SymbolMode(enum.Enum):
         "d",
     ]
     filledmarkernames = [
-        "point",
+        # "point",
         "circle",
         "triangle_down",
         "triangle_up",
@@ -322,7 +324,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
         self.current_file = None
         self.num_files = 0
         # Marker settings
-        self.marker_size = 12
+        self.marker_size = 6
         self.line_width = 1
         self.colormode = ColorMode.variable.value
         self.color1 = ColorMode.color1.value
