@@ -242,7 +242,7 @@ class BaseApplicationUniversalViewer:
                 x_units, y_units = self.config.get(
                     "view%d" % nv, "units", fallback="-,-"
                 ).split(",")
-                n = self.config.getint("view%d" % nv, "n")
+                n = self.config.getint("view%d" % nv, "n", fallback=1)
                 self.viewclasses[name] = ViewParseExpression(
                     name,
                     n,
@@ -251,9 +251,9 @@ class BaseApplicationUniversalViewer:
                     yexpr=yexpr,
                     parent=self,
                 )
-                log_x = self.config.getboolean("view%d" % nv, "logx")
-                log_y = self.config.getboolean("view%d" % nv, "logy")
-                snames = self.config.get("view%d" % nv, "snames").split(",")
+                log_x = self.config.getboolean("view%d" % nv, "logx", fallback=False)
+                log_y = self.config.getboolean("view%d" % nv, "logy", fallback=False)
+                snames = self.config.get("view%d" % nv, "snames", fallback=',,,,,,,,,,,,').split(",")
                 self.views[name] = View(
                     name=name,
                     description=name,
