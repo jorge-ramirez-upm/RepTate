@@ -35,6 +35,7 @@
 Organise the mmultiple Matplotlib views
 
 """
+import sys
 import enum
 import math
 from RepTate.core.CmdBase import CmdBase, CmdMode
@@ -91,7 +92,8 @@ class MultiView(QWidget):
     TOP = 0.98
     WSPACE = 0.25
     HSPACE = 0.35
-    DPI = 300
+    SAVE_DPI = 300
+    FIG_DPI = plt.matplotlib.rcParams['figure.dpi']
 
     def __init__(
         self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None
@@ -106,11 +108,12 @@ class MultiView(QWidget):
         self.nplots = nplots
         self.ncols = ncols
         self.setupUi()
-        mpl.rcParams["savefig.dpi"] = self.DPI
+        mpl.rcParams["savefig.dpi"] = self.SAVE_DPI
 
     def setupUi(self):
-        # if sys.platform == "darwin"
-        plt.matplotlib.rcParams['figure.dpi'] /= 2
+        if sys.platform == "darwin":
+            # high dpi Mac display font twice as big
+            plt.matplotlib.rcParams['figure.dpi'] = self.FIG_DPI / 2
 
         # Remove seaborn dependency
         dark_gray = ".15"
