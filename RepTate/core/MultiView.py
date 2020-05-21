@@ -109,6 +109,9 @@ class MultiView(QWidget):
         mpl.rcParams["savefig.dpi"] = self.DPI
 
     def setupUi(self):
+        # if sys.platform == "darwin"
+        plt.matplotlib.rcParams['figure.dpi'] /= 2
+
         # Remove seaborn dependency
         dark_gray = ".15"
         light_gray = ".8"
