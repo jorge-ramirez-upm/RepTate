@@ -1346,7 +1346,7 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               os.path.join(os.getcwd(), "data"), "Text (*.txt)")
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
         if fpath == '':
             return
             
@@ -2657,7 +2657,7 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               os.path.join(os.getcwd(), "data"), "Text (*.txt)")
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
         if fpath == '':
             return
             

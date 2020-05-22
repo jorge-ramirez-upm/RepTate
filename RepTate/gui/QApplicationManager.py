@@ -359,7 +359,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_actionShow_offline_help(self):
-        PATH = join(os.getcwd(), "docs", "build", "html", "index.html")
+        PATH = join(RepTate.root_dir, "docs", "build", "html", "index.html")
         QDesktopServices.openUrl(QUrl.fromLocalFile(PATH))
 
     def handle_about_matplotlib(self):
@@ -501,7 +501,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getOpenFileName(self,
-                "Open RepTate Project", join(os.getcwd(), "data"), "RepTate Project (*.rept)")
+                "Open RepTate Project", join(RepTate.root_dir, "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return
         self.open_project(fpath)
@@ -513,7 +513,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getSaveFileName(self,
-                "Save RepTate Project", join(os.getcwd(), "data"), "RepTate Project (*.rept)")
+                "Save RepTate Project", join(RepTate.root_dir, "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return False
         self.save_reptate(fpath)

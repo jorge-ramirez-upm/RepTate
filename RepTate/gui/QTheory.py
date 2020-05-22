@@ -38,6 +38,7 @@ Module that defines the GUI counterpart of the class Theory.
 import sys
 import os
 from PyQt5.uic import loadUiType
+import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.Theory import Theory, ErrorCalculationMethod
 from os.path import dirname, join, abspath
@@ -667,7 +668,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def save_modes(self):
         """Save Maxwell modes to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Maxwell modes to a text file", os.path.join(os.getcwd(), "data"), "Text (*.txt)"
+            self, "Save Maxwell modes to a text file", os.path.join(RepTate.root_dir, "data"), "Text (*.txt)"
         )
         if fpath == "":
             return

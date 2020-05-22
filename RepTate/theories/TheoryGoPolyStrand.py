@@ -916,7 +916,7 @@ class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):
         #Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save Parameters to FowSolve",
-                                               os.path.join(os.getcwd(), "data"), "FlowSolve (*.fsrep)")
+                                               os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)")
         if fpath == '':
             return
 

@@ -287,6 +287,7 @@ import os
 import re
 import subprocess
 import sys
+import RepTate
 
 
 class VersioneerConfig:
@@ -299,7 +300,7 @@ def get_root():
     We require that all commands are run from the project root, i.e. the
     directory that contains setup.py, setup.cfg, and versioneer.py .
     """
-    root = os.path.realpath(os.path.abspath(os.getcwd()))
+    root = RepTate.root_dir
     setup_py = os.path.join(root, "setup.py")
     versioneer_py = os.path.join(root, "versioneer.py")
     if not (os.path.exists(setup_py) or os.path.exists(versioneer_py)):

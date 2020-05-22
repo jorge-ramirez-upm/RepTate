@@ -380,7 +380,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             # file browser window
-            dir_start = join(os.getcwd(), "data")
+            dir_start = join(self.data_dir, "data")
             dilogue_name = "Select Folder"
             folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
             if isdir(folder):

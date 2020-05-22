@@ -33,6 +33,7 @@
 import os
 import numpy as np
 import ctypes as ct
+import RepTate
 import RepTate.theories.react_ctypes_helper as rch
 
 # BoB form
@@ -308,8 +309,7 @@ def handle_save_mix_configuration(parent_theory):
     dialog = EditMixSaveParamDialog(parent_theory)
     if not dialog.exec_():
         return
-
-    dir_start = os.path.join(os.getcwd(), "data", "React", "multipolyconf.dat")
+    dir_start = os.path.join(RepTate.root_dir, "data", "React", "multipolyconf.dat")
     dilogue_name = "Save"
     out_file = QFileDialog.getSaveFileName(
         parent_theory, dilogue_name, dir_start)
@@ -344,7 +344,7 @@ def handle_save_bob_configuration(parent_theory):
             "mon_mass"
         ].value
 
-        dir_start = os.path.join(os.getcwd(), "data", "React", "polyconf.dat")
+        dir_start = os.path.join(RepTate.root_dir, "data", "React", "polyconf.dat")
         dilogue_name = "Save"
         out_file = QFileDialog.getSaveFileName(
             parent_theory, dilogue_name, dir_start)

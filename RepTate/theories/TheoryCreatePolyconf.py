@@ -37,8 +37,9 @@ by Chinmay Das et al.
 """
 import os
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
 import enum
+import RepTate
+from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -811,7 +812,7 @@ FunH
         """Select a polyconf file for BoB to read"""
         # file browser window
         options = QFileDialog.Options()
-        dir_start = os.path.join(os.getcwd(), "data", "React")
+        dir_start = os.path.join(RepTate.root_dir, "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(
@@ -945,7 +946,7 @@ FunH
         Return a string with a filename"""
         options = QFileDialog.Options()
         options |= QFileDialog.DontConfirmOverwrite
-        dir_start = os.path.join("data", "React", "BoB_polyconf.dat")
+        dir_start = os.path.join(RepTate.root_dir, "data", "React", "BoB_polyconf.dat")
         dilogue_name = "Save BoB Polymer Configuration"
         ext_filter = "Data Files (*.dat)"
         out_file = QFileDialog.getSaveFileName(
