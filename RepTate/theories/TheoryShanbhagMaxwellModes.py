@@ -37,6 +37,7 @@ based on the codes pyRespect-time (10.1002/mats.201900005) and pyRespect-frequen
 
 """
 import sys
+import os
 import numpy as np
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.DataTable import DataTable
@@ -1345,7 +1346,7 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               "data/", "Text (*.txt)")
+                                               os.path.join(os.getcwd(), "data"), "Text (*.txt)")
         if fpath == '':
             return
             
@@ -2656,7 +2657,7 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               "data/", "Text (*.txt)")
+                                               os.path.join(os.getcwd(), "data"), "Text (*.txt)")
         if fpath == '':
             return
             

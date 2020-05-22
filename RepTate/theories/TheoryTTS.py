@@ -579,7 +579,7 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
         connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
         connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
         # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
-        self.dir_start = "data/"
+        self.dir_start = os.path.join(os.getcwd(), "data")
 
     def print_activation_energy(self):
         # Evaluate activation ennergy from Arrhenius fit

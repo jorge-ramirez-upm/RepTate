@@ -35,11 +35,18 @@
 Module that defines the About window.
 
 """
+import sys
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUiType
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_AboutReptateWindow, QDialog = loadUiType(join(PATH, "AboutDialog.ui"))
 
 

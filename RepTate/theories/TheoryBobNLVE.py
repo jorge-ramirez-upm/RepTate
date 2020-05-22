@@ -236,7 +236,7 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         options = QFileDialog.Options()
-        dir_start = "data/React/"
+        dir_start = os.path.join(os.getcwd(), "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(

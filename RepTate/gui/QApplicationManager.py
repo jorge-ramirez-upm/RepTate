@@ -37,8 +37,9 @@ ApplicationManager.
 
 """
 #import logging
+import sys
 import os
-from os.path import dirname, join, abspath
+from os.path import dirname, join, abspath, join, isfile, basename
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices, QTextCursor
 from PyQt5.QtCore import QUrl, Qt, QSize
@@ -54,7 +55,13 @@ import numpy as np
 import time
 import logging
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
 
 class QTextEditLogger(logging.Handler):
@@ -352,7 +359,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_actionShow_offline_help(self):
-        QDesktopServices.openUrl(QUrl.fromLocalFile('docs/build/html/index.html'))
+        PATH = join(os.getcwd(), "docs", "build", "html", "index.html")
+        QDesktopServices.openUrl(QUrl.fromLocalFile(PATH))
 
     def handle_about_matplotlib(self):
         """Show matplotlib web site"""
@@ -493,7 +501,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getOpenFileName(self,
-                "Open RepTate Project", "data/", "RepTate Project (*.rept)")
+                "Open RepTate Project", join(os.getcwd(), "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return
         self.open_project(fpath)
@@ -505,7 +513,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getSaveFileName(self,
-                "Save RepTate Project", "data/", "RepTate Project (*.rept)")
+                "Save RepTate Project", join(os.getcwd(), "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return False
         self.save_reptate(fpath)
@@ -534,7 +542,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
                     file_dic = OrderedDict(
                         [
-                            ('fname', os.path.basename(f.file_full_path)),
+                            ('fname', basename(f.file_full_path)),
                             ('is_active', f.active),
                             ('fparam', param_dic),
                             ('ftable', f.data_table.data.tolist()),
@@ -715,7 +723,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # zip output file
         import json, zipfile, tempfile
         with tempfile.TemporaryDirectory() as tmpdirname:
-            tmp = os.path.join(tmpdirname, 'tmp')
+            tmp = join(tmpdirname, 'tmp')
             json.dump(out, open(tmp, 'w'), indent=4)
             with zipfile.ZipFile(fpath, 'w', compression=zipfile.ZIP_DEFLATED) as z:
                 z.write(tmp, self.REPTATE_PROJ_JSON)
@@ -876,14 +884,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def open_project(self, project_path):
         """Open file and load project"""
         import json, zipfile, tempfile
-        if not os.path.isfile(project_path):
+        if not isfile(project_path):
             return
         self.load_path = project_path
         try:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 with zipfile.ZipFile(project_path) as z:
                     z.extract(self.REPTATE_PROJ_JSON, tmpdirname)
-                    data = json.load(open(os.path.join(tmpdirname, self.REPTATE_PROJ_JSON)), object_pairs_hook=OrderedDict)
+                    data = json.load(open(join(tmpdirname, self.REPTATE_PROJ_JSON)), object_pairs_hook=OrderedDict)
         except:
             print("File \"%s\" seems to be corrupted" % project_path)
             return

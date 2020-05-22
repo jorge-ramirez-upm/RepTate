@@ -35,7 +35,8 @@
 Module that defines the GUI counterpart of the class Theory.
 
 """
-# from PyQt5.QtCore import *
+import sys
+import os
 from PyQt5.uic import loadUiType
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.Theory import Theory, ErrorCalculationMethod
@@ -66,7 +67,13 @@ import RepTate
 import time
 import ast
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, "frozen", False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_TheoryTab, QWidget = loadUiType(join(PATH, "theorytab.ui"))
 from RepTate.gui.fittingoptions import Ui_Dialog
 import RepTate.gui.errorcalculationoptions
@@ -660,7 +667,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def save_modes(self):
         """Save Maxwell modes to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Maxwell modes to a text file", "data/", "Text (*.txt)"
+            self, "Save Maxwell modes to a text file", os.path.join(os.getcwd(), "data"), "Text (*.txt)"
         )
         if fpath == "":
             return
@@ -698,4 +705,3 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
             f.write("\n#end")
 
         QMessageBox.information(self, "Success", 'Wrote Maxwell modes "%s"' % fpath)
-

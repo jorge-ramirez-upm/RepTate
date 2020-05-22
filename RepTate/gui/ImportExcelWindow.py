@@ -49,7 +49,13 @@ from PyQt5.QtWidgets import (
 from openpyxl import load_workbook
 import xlrd
 
-PATH = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = os.path.dirname(os.path.abspath(__file__))
 Ui_ImportExcelMainWindow, QMainWindowImportExcel = loadUiType(
     os.path.join(PATH, "import_excel_dialog.ui")
 )

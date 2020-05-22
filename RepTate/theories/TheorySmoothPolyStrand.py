@@ -35,6 +35,7 @@
 Module for the Smooth Poly STRAND model of polymer FIC (uses the Rolie-Double-Poly theory for the non-linear flow of entangled polymers).
 
 """
+import os
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.CmdBase import CmdBase, CmdMode
@@ -941,7 +942,7 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
         #Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save Parameters to FowSolve",
-                                               "data/", "FlowSolve (*.fsrep)")
+                                               os.path.join(os.getcwd(), "data"), "FlowSolve (*.fsrep)")
         if fpath == '':
             return
 

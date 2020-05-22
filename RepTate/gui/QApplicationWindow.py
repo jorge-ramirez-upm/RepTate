@@ -36,6 +36,8 @@ Module that defines the basic GUI class from which all GUI applications are deri
 It is the GUI counterpart of Application.
 
 """
+import sys
+import os
 import re
 import traceback
 from numpy import *
@@ -70,7 +72,13 @@ from RepTate.gui.markerSettings import Ui_Dialog
 #except AttributeError:
 #    _fromUtf8 = lambda s: s
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
 Ui_EditAnnotation, QDialog = loadUiType(join(PATH,'annotationedit.ui'))
 Ui_AddDummyFiles, QDialog = loadUiType(join(PATH,'dummyfilesDialog.ui'))
@@ -313,7 +321,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
-        self.dir_start = 'Data/' # default folder opened
+        self.dir_start = join(os.getcwd(), "data") # default folder opened
 
         # Accept Drag and drop events
         self.setAcceptDrops(True)
@@ -590,7 +598,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.multiplots.reorg_fig(new_nplots)
 
     def save_view(self):
-        dir_start = "data/"
+        dir_start = join(os.getcwd(), "data")
         dilogue_name = "Select Folder for Saving data in Current View as txt"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
         if isdir(folder):
@@ -1243,7 +1251,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
-        dir_start = "data/"
+        dir_start = join(os.getcwd(), "data")
         dilogue_name = "Select Folder for Saving shift factors of current dataset as txt"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
         if isdir(folder):
