@@ -1,0 +1,40 @@
+# This workflows will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+name: Run Pyinstaller on windows, 7zip the resulting folder and upload it as a Github artifact
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Build executable
+      run: |
+        scripts\CreateWindowsInstaller.cmd
+    - name: Compress
+      run: |
+        cd dist
+        7z.exe a RepTate.zip RepTate
+    - name: Delete unnecessary files
+      run: |
+        Remove-Item -path .\dist\RepTate.nsi
+        Remove-Item -path .\dist\RepTate -recurse
+    - name: Upload zip and installation files for later copy
+      uses: actions/upload-artifact@v1
+      with: 
+        name: package
+        path: dist/
