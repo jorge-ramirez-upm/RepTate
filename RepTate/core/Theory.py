@@ -181,6 +181,12 @@ class Theory(CmdBase):
         self.is_fitting = False
         self.has_modes = False
 
+        # LOGGING STUFF
+        self.logger = logging.getLogger(self.parent_dataset.logger.name + '.' + self.name)
+        self.logger.debug('New ' + self.thname + ' Theory')
+        np.seterr(all="call")
+        np.seterrcall(self.write)
+
         ax = self.ax
 
         # XRANGE for FIT
@@ -250,11 +256,6 @@ class Theory(CmdBase):
          # flag for requesting end of computations
         self.stop_theory_flag = False
 
-        # LOGGING STUFF
-        self.logger = logging.getLogger(self.parent_dataset.logger.name + '.' + self.name)
-        self.logger.debug('New ' + self.thname + ' Theory')
-        np.seterr(all="call")
-        np.seterrcall(self.write)
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
