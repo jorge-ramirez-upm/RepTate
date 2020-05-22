@@ -35,9 +35,11 @@
 Module for the Pom-Pom model for the non-linear flow of entangled polymers.
 
 """
+import os
 import numpy as np
 from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
+import RepTate
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
@@ -573,7 +575,7 @@ class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
 
         # Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)"
+            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
         )
         if fpath == "":
             return

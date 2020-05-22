@@ -34,8 +34,9 @@
 
 MaterialsDatabase Viewer
 """
-import numpy as np
+import sys
 import os
+import numpy as np
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
@@ -60,14 +61,20 @@ from pathlib import Path
 import RepTate.tools.polymer_data as polymer_data
 from colorama import Fore
 
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = os.path.dirname(os.path.abspath(__file__))
+
 # The following two lines are temporary. They can be removed after the database is pickeld with RepTate.ttols.polymer_data instead of polymer_data
-import sys
-
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
+# sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(PATH)
 materials_database = np.load(
-    os.path.join(dir_path, "materials_database.npy"), allow_pickle=True
+    os.path.join(PATH, "materials_database.npy"), allow_pickle=True
 ).item()
 home_path = str(Path.home())
 file_user_database = os.path.join(home_path, "user_database.npy")

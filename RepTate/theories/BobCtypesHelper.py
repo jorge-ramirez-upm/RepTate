@@ -78,10 +78,10 @@ class BobCtypesHelper:
         # load the sharedlibrary
         if sys.maxsize > 2 ** 32:
             # 64-bit system
-            self.lib_path = dir_path + os.sep + "bob2p5_lib_%s.so" % (sys.platform)
+            self.lib_path = os.path.join(dir_path, "bob2p5_lib_%s.so" % (sys.platform))
         else:
             # 32-bit system
-            self.lib_path = dir_path + os.sep + "bob2p5_lib_%s_i686.so" % (sys.platform)
+            self.lib_path = os.path.join(dir_path, "bob2p5_lib_%s_i686.so" % (sys.platform))
         try:
             self.bob_lib = CDLL(self.lib_path)
         except:

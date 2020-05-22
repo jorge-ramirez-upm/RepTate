@@ -11,10 +11,10 @@ dir_path = os.path.dirname(
 )  # get the directory path of current file
 if sys.maxsize > 2 ** 32:
     # 64-bit system
-    lib_path = dir_path + os.sep + "dtd_lib_%s.so" % (sys.platform)
+    lib_path = os.path.join(dir_path, "dtd_lib_%s.so" % (sys.platform))
 else:
     # 32-bit system
-    lib_path = dir_path + os.sep + "dtd_lib_%s_i686.so" % (sys.platform)
+    lib_path = os.path.join(dir_path, "dtd_lib_%s_i686.so" % (sys.platform))
 try:
     dtd_lib = CDLL(lib_path)
 except:

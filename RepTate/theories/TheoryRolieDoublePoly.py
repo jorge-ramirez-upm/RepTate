@@ -35,6 +35,7 @@
 Module for the Rolie-Double-Poly theory for the non-linear flow of entangled polymers.
 
 """
+import os
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.CmdBase import CmdBase, CmdMode
@@ -662,7 +663,7 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
 
         # Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", "data/", "FlowSolve (*.fsrep)"
+            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
         )
         if fpath == "":
             return

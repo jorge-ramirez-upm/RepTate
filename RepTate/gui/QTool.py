@@ -54,7 +54,13 @@ from PyQt5.QtGui import QIcon, QCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 sys.path.append(PATH)
 Ui_ToolTab, QWidget = loadUiType(join(PATH, "Tooltab.ui"))
 

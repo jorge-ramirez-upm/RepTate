@@ -37,6 +37,7 @@ by Chinmay Das et al.
 """
 import os
 import numpy as np
+import RepTate
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -236,7 +237,7 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         options = QFileDialog.Options()
-        dir_start = "data/React/"
+        dir_start = os.path.join(RepTate.root_dir, "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(

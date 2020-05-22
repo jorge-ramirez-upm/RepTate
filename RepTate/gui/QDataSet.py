@@ -35,8 +35,9 @@
 Module that defines the GUI counterpart of Dataset.
 
 """
-from os.path import dirname, join, abspath
+import sys
 import os
+from os.path import dirname, join, abspath, isdir
 from PyQt5.QtGui import (
     QPixmap,
     QColor,
@@ -77,7 +78,13 @@ from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import matplotlib.patheffects as pe
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH, "DataSet.ui"))
 
 
@@ -373,10 +380,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             # file browser window
-            dir_start = "data/"
+            dir_start = join(self.data_dir, "data")
             dilogue_name = "Select Folder"
             folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
-            if os.path.isdir(folder):
+            if isdir(folder):
                 dialog = QInputDialog(self)
                 dialog.setWindowTitle("Add label to filename(s)?")
                 dialog.setLabelText(

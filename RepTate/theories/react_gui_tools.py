@@ -30,8 +30,10 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
+import os
 import numpy as np
 import ctypes as ct
+import RepTate
 import RepTate.theories.react_ctypes_helper as rch
 
 # BoB form
@@ -307,15 +309,10 @@ def handle_save_mix_configuration(parent_theory):
     dialog = EditMixSaveParamDialog(parent_theory)
     if not dialog.exec_():
         return
-
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    dir_start = "data/React/multipolyconf.dat"
+    dir_start = os.path.join(RepTate.root_dir, "data", "React", "multipolyconf.dat")
     dilogue_name = "Save"
-    ext_filter = "Data Files (*.dat)"
     out_file = QFileDialog.getSaveFileName(
-        parent_theory, dilogue_name, dir_start, options=options
-    )
+        parent_theory, dilogue_name, dir_start)
     if out_file[0] == "":
         parent_theory.Qprint("Invalid filename")
         return
@@ -347,14 +344,10 @@ def handle_save_bob_configuration(parent_theory):
             "mon_mass"
         ].value
 
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        dir_start = "data/React/polyconf.dat"
+        dir_start = os.path.join(RepTate.root_dir, "data", "React", "polyconf.dat")
         dilogue_name = "Save"
-        ext_filter = "Data Files (*.dat)"
         out_file = QFileDialog.getSaveFileName(
-            parent_theory, dilogue_name, dir_start, options=options
-        )
+            parent_theory, dilogue_name, dir_start)
         if out_file[0] == "":
             return
         # output polymers
