@@ -431,10 +431,12 @@ class BaseApplicationReact:
     def view_logwM(self, dt, file_parameters):
         """Logarithm of the molecular weight distribution :math:`\\log(w(M))` vs molecular weight :math:`M` (in logarithmic scale)
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 1])
+        cond = (dt.data[:, 1] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = dt.data[cond, 0]
+        y[:, 0] = np.log10(dt.data[cond, 1])
         return x, y, True
 
     def view_gM(self, dt, file_parameters):
@@ -451,10 +453,12 @@ class BaseApplicationReact:
         """Logarithm of the :math:`g`-factor as a function of the molecular weight.
         The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 2])
+        cond = (dt.data[:, 2] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = dt.data[cond, 0]
+        y[:, 0] = np.log10(dt.data[cond, 2])
         return x, y, True
 
     def view_br_1000C(self, dt, file_parameters):
@@ -502,19 +506,20 @@ class BaseApplicationReact:
             y[:] = np.nan
             return x, y, True
 
-        nrows = len(data[:, 0])
-        x = np.zeros((nrows, 3))
-        y = np.zeros((nrows, 3))
+        cond = (data[:, 0] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 3))
+        y = np.zeros((npoints, 3))
 
-        maxs = np.nanmax(data[:, 1])
-        x[:, 0] = data[:, 0]
-        y[:, 0] = data[:, 1]
+        maxs = np.nanmax(data[cond, 1])
+        x[:, 0] = data[cond, 0]
+        y[:, 0] = data[cond, 1]
         # comb limit
-        x[:, 1] = data[:, 0]
-        y[:, 1] = data[:, 0]
+        x[:, 1] = data[cond, 0]
+        y[:, 1] = data[cond, 0]
         # Cayley tree limit
-        x[:, 2] = data[:, 0]
-        y[:, 2] = np.log(data[:, 0]) / np.log(2) + 1
+        x[:, 2] = data[cond, 0]
+        y[:, 2] = np.log(data[cond, 0]) / np.log(2) + 1
         # avoid large numbers
         y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)
 

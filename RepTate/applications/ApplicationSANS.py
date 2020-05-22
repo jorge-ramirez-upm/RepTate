@@ -154,10 +154,12 @@ class BaseApplicationSANS:
     def viewLogSANS(self, dt, file_parameters):
         """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
+        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = np.log10(dt.data[cond, 0])
+        y[:, 0] = np.log10(np.abs(dt.data[cond, 1]))
         return x, y, True
 
     def viewSANS(self, dt, file_parameters):

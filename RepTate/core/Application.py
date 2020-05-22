@@ -69,7 +69,7 @@ class Application(CmdBase):
     """Main abstract class that represents an application
 
     """
-    name = "Template"
+    appname = "Template"
     description = "Abstract class that defines basic functionality"
     extension = ""
     doc_header = 'Application commands (type help <topic>):'
@@ -157,7 +157,7 @@ class Application(CmdBase):
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + '.' + self.name)
-        self.logger.debug('New LVE app')
+        self.logger.debug('New %s app'%self.appname)
 
     def resizeplot(self, event=""):
         """Rescale plot graphics when the window is resized"""
