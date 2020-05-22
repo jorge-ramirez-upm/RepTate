@@ -145,7 +145,7 @@ def start_RepTate(argv):
     QApplication.setStyle("Fusion")  # comment that line for a native look
     # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
-    if args.dpi:
+    if args.dpi or sys.platform == "darwin":
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
         QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
         QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
