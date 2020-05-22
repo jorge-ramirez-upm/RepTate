@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "RepTate",
             "console": "integratedTerminal",
-            "args": ["-s","-v", "data/PI_LINEAR/PI*tts","-l","Materials Database"]
+            "args": ["-s","-v", "data/Crystal/InitialTest_gdot0.05.shearxs"]
 //            "args": ["-s","-v", "data/LAOS/SlugSlime-omega03p00-Run31.laos", "-t", "Algebraic Expression"]
         },
         {

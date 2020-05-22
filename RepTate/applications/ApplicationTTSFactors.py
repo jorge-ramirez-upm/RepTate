@@ -187,10 +187,12 @@ class BaseApplicationTTSFactors:
     def viewLogaT(self, dt, file_parameters):
         """Logarithm of the horizontal shift factor
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 1])
+        cond = (dt.data[:, 1] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = dt.data[cond, 0]
+        y[:, 0] = np.log10(dt.data[cond, 1])
         return x, y, True
 
     def viewaT(self, dt, file_parameters):
@@ -205,10 +207,12 @@ class BaseApplicationTTSFactors:
     def viewLogbT(self, dt, file_parameters):
         """Logarithm of the vertical shift factor
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 2])
+        cond = (dt.data[:, 2] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = dt.data[cond, 0]
+        y[:, 0] = np.log10(dt.data[cond, 2])
         return x, y, True
 
     def viewbT(self, dt, file_parameters):
@@ -223,21 +227,25 @@ class BaseApplicationTTSFactors:
     def viewLogaTbT(self, dt, file_parameters):
         """Logarithm of the vertical shift factor
         """
-        x = np.zeros((dt.num_rows, 2))
-        y = np.zeros((dt.num_rows, 2))
-        x[:, 0] = dt.data[:, 0]
-        x[:, 1] = dt.data[:, 0]
-        y[:, 0] = np.log10(dt.data[:, 1])
-        y[:, 1] = np.log10(dt.data[:, 2])
+        cond = (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 2))
+        y = np.zeros((npoints, 2))
+        x[:, 0] = dt.data[cond, 0]
+        x[:, 1] = dt.data[cond, 0]
+        y[:, 0] = np.log10(dt.data[cond, 1])
+        y[:, 1] = np.log10(dt.data[cond, 2])
         return x, y, True
 
     def viewLogaT_invT(self, dt, file_parameters):
         """Logarithm of the horizontal shift factor
         """
-        x = np.zeros((dt.num_rows, 1))
-        y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = 1 / (dt.data[:, 0] + 273.15)
-        y[:, 0] = np.log10(dt.data[:, 1])
+        cond = (dt.data[:, 1] > 0)
+        npoints=cond.sum()
+        x = np.zeros((npoints, 1))
+        y = np.zeros((npoints, 1))
+        x[:, 0] = 1 / (dt.data[cond, 0] + 273.15)
+        y[:, 0] = np.log10(dt.data[cond, 1])
         return x, y, True
 
 
