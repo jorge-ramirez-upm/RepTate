@@ -123,7 +123,7 @@ class ApplicationManager(CmdBase):
         home_path = str(Path.home())
         logfile = os.path.join(home_path, "RepTate.log")
         fh = logging.handlers.RotatingFileHandler(
-            logfile, maxBytes=20000, backupCount=2
+            logfile, maxBytes=100000, backupCount=5
         )
         fh.setLevel(loglevel)
         ch = logging.StreamHandler()
