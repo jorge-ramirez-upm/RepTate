@@ -87,20 +87,21 @@ class Tool(CmdBase):
         self.active = True  # defines if the Tool is plotted
         self.applytotheory = True  # Do we also apply the tool to the theory?
 
+        # LOGGING STUFF
+        self.logger = logging.getLogger(
+            self.parent_application.logger.name + "." + self.name
+        )
+        self.logger.debug("New " + self.toolname + " Tool")
+        # np.seterr(all="call")
+        # np.seterrcall(self.write)
+        np.seterr(all="ignore")
+
         self.do_cite("")
 
         if CmdBase.mode == CmdMode.GUI:
             self.print_signal.connect(
                 self.print_qtextbox
             )  # Asynchronous print when using multithread
-
-        # LOGGING STUFF
-        self.logger = logging.getLogger(
-            self.parent_application.logger.name + "." + self.name
-        )
-        self.logger.debug("New " + self.toolname + " Tool")
-        np.seterr(all="call")
-        np.seterrcall(self.write)
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""

@@ -184,8 +184,9 @@ class Theory(CmdBase):
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_dataset.logger.name + '.' + self.name)
         self.logger.debug('New ' + self.thname + ' Theory')
-        np.seterr(all="call")
-        np.seterrcall(self.write)
+        # np.seterr(all="call")
+        # np.seterrcall(self.write)
+        np.seterr(all="ignore")
 
         ax = self.ax
 
@@ -255,7 +256,6 @@ class Theory(CmdBase):
             self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
          # flag for requesting end of computations
         self.stop_theory_flag = False
-
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
