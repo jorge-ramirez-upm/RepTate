@@ -48,6 +48,7 @@ import time
 
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
+from RepTate.gui import bob_gen_poly # dialog
 from PyQt5.QtWidgets import (
     QDialog,
     QFormLayout,
