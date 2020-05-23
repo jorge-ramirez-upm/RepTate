@@ -42,6 +42,7 @@ import logging
 import logging.handlers
 from pathlib import Path
 import os
+from PyQt5.QtCore import QStandardPaths
 
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.applications.ApplicationTTS import ApplicationTTS
@@ -118,10 +119,17 @@ class ApplicationManager(CmdBase):
         self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
 
         # LOGGING STUFF
+        # Setup AppName and platform-dependent path to AppData
+        path_to_AppData = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        try:
+            os.mkdir(path_to_AppData)
+        except FileExistsError:
+            pass
+
         self.logger = logging.getLogger("RepTate")
         self.logger.setLevel(loglevel)
-        home_path = str(Path.home())
-        logfile = os.path.join(home_path, "RepTate.log")
+        # home_path = str(Path.home())
+        logfile = os.path.join(path_to_AppData, "RepTate.log")
         fh = logging.handlers.RotatingFileHandler(
             logfile, maxBytes=100000, backupCount=5
         )

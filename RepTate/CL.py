@@ -44,6 +44,7 @@ import numpy as np
 
 from RepTate.core.ApplicationManager import ApplicationManager
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QStandardPaths
 from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 
 
@@ -137,6 +138,7 @@ def start_RepTate(argv):
         sys.exit()
 
     qapp = QApplication(sys.argv)  # Needed, because some internal functions use Qt
+    qapp.setApplicationName("RepTate")
     app = ApplicationManager(loglevel=loglevel)
 
     # Handle files & open apps accordingly

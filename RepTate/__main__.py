@@ -152,11 +152,9 @@ def start_RepTate(argv):
         QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
     app = QApplication(sys.argv)
-    # if args.dpi:
-    #    app.setAttribute(Qt.AA_EnableHighDpiScaling)
+    app.setApplicationName("RepTate")
 
     splash = SplashScreen()
-    # splash.showMessage("Loading RepTate...\n")
     splash.show()
 
     ex = QApplicationManager(loglevel=loglevel)
