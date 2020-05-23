@@ -350,11 +350,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
             self.parent_application.logger.name + "." + self.name
         )
         self.logger.debug("New DataSet")
-        np.seterrcall(self)
+        np.seterrcall(self.write)
 
-    def write(self, msg):
+    def write(self, type, flag):
         """Write numpy error logs to the logger"""
-        self.logger.debug(msg)
+        self.logger.info('numpy: %s (flag %s)'%(type, flag))
 
     # DATASET STUFF ##########################################################################################################
 
