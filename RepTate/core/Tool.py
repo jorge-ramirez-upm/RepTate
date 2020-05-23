@@ -93,8 +93,8 @@ class Tool(CmdBase):
         )
         self.logger.debug("New " + self.toolname + " Tool")
         # np.seterr(all="call")
-        # np.seterrcall(self.write)
-        np.seterr(all="ignore")
+        #np.seterr(all="ignore")
+        np.seterrcall(self.write)
 
         self.do_cite("")
 
