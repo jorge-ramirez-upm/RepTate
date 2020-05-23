@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'fittingoptions.ui'
+# Form implementation generated from reading ui file 'RepTate/gui/fittingoptions.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.0
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(419, 763)
+        Dialog.resize(419, 780)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/Images/Images/new_icons/icons8-minimum-value.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
@@ -38,7 +38,7 @@ class Ui_Dialog(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.groupBox = QtWidgets.QGroupBox(self.ls)
         font = QtGui.QFont()
-        font.setPointSize(8)
+        font.setPointSize(13)
         font.setBold(False)
         font.setWeight(50)
         self.groupBox.setFont(font)
@@ -55,6 +55,7 @@ class Ui_Dialog(object):
         self.verticalLayout_2.addWidget(self.label_4)
         self.label_5 = QtWidgets.QLabel(self.groupBox)
         font = QtGui.QFont()
+        font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         self.label_5.setFont(font)
@@ -877,7 +878,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(0)
         self.pushOK.clicked.connect(Dialog.accept)
         self.pushCancel.clicked.connect(Dialog.reject)
         self.LSftolcheckBox.toggled['bool'].connect(self.LSftollineEdit.setEnabled)
@@ -894,6 +895,8 @@ class Ui_Dialog(object):
         self.SHGOmaxevcheckBox.toggled['bool'].connect(self.SHGOmaxevlineEdit.setEnabled)
         self.SHGOmaxtimecheckBox.toggled['bool'].connect(self.SHGOmaxtimelineEdit.setEnabled)
         self.SHGOminhgrdcheckBox.toggled['bool'].connect(self.SHGOminhgrdlineEdit.setEnabled)
+        self.SHGOmaxfevcheckBox.toggled['bool'].connect(self.SHGOmaxfevlineEdit.setEnabled)
+        self.basinseedcheckBox.toggled['bool'].connect(self.basinseedlineEdit.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):

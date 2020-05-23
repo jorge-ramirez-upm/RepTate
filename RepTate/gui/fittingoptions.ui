@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>763</height>
+    <height>780</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,7 +42,7 @@
       <enum>QTabWidget::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -65,7 +65,7 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>13</pointsize>
            <weight>50</weight>
            <bold>false</bold>
           </font>
@@ -106,6 +106,7 @@
            <widget class="QLabel" name="label_5">
             <property name="font">
              <font>
+              <pointsize>13</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -2103,8 +2104,8 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>361</y>
+     <x>74</x>
+     <y>767</y>
     </hint>
     <hint type="destinationlabel">
      <x>164</x>
@@ -2119,8 +2120,8 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>164</x>
-     <y>361</y>
+     <x>374</x>
+     <y>767</y>
     </hint>
     <hint type="destinationlabel">
      <x>164</x>
@@ -2135,12 +2136,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>427</y>
+     <x>99</x>
+     <y>417</y>
     </hint>
     <hint type="destinationlabel">
-     <x>239</x>
-     <y>428</y>
+     <x>326</x>
+     <y>419</y>
     </hint>
    </hints>
   </connection>
@@ -2151,12 +2152,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>466</y>
+     <x>100</x>
+     <y>460</y>
     </hint>
     <hint type="destinationlabel">
-     <x>240</x>
-     <y>466</y>
+     <x>330</x>
+     <y>462</y>
     </hint>
    </hints>
   </connection>
@@ -2167,12 +2168,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
+     <x>101</x>
      <y>504</y>
     </hint>
     <hint type="destinationlabel">
-     <x>241</x>
-     <y>505</y>
+     <x>332</x>
+     <y>506</y>
     </hint>
    </hints>
   </connection>
@@ -2183,12 +2184,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
+     <x>122</x>
      <y>620</y>
     </hint>
     <hint type="destinationlabel">
-     <x>262</x>
-     <y>620</y>
+     <x>335</x>
+     <y>621</y>
     </hint>
    </hints>
   </connection>
@@ -2263,8 +2264,8 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>401</y>
+     <x>120</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
@@ -2295,8 +2296,8 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>362</y>
+     <x>123</x>
+     <y>382</y>
     </hint>
     <hint type="destinationlabel">
      <x>254</x>
@@ -2311,12 +2312,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>401</y>
+     <x>120</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
-     <x>251</x>
-     <y>401</y>
+     <x>355</x>
+     <y>427</y>
     </hint>
    </hints>
   </connection>
@@ -2327,12 +2328,12 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>86</x>
-     <y>439</y>
+     <x>127</x>
+     <y>472</y>
     </hint>
     <hint type="destinationlabel">
-     <x>258</x>
-     <y>440</y>
+     <x>355</x>
+     <y>472</y>
     </hint>
    </hints>
   </connection>
@@ -2343,12 +2344,44 @@ The program finds the gridpoint at which the lowest value of the objective funct
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>478</y>
+     <x>126</x>
+     <y>517</y>
     </hint>
     <hint type="destinationlabel">
-     <x>257</x>
-     <y>479</y>
+     <x>355</x>
+     <y>517</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>SHGOmaxfevcheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SHGOmaxfevlineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>basinseedcheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>basinseedlineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>88</x>
+     <y>650</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>650</y>
     </hint>
    </hints>
   </connection>
