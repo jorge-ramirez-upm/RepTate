@@ -150,7 +150,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.setupUi(self)
         # self.show()
         self.filepath = ""
-        self.dir_start = "~"
+        self.dir_start = os.path.join(RepTate.root_dir, "data")
         self.is_xlsx = True
         self.wb = None
         self.sheet = None

@@ -55,7 +55,7 @@ from PyQt5.QtWidgets import (
     QFormLayout,
     QInputDialog,
 )
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, QStandardPaths
 from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
 from pathlib import Path
 import RepTate.tools.polymer_data as polymer_data
@@ -76,12 +76,24 @@ sys.path.append(PATH)
 materials_database = np.load(
     os.path.join(PATH, "materials_database.npy"), allow_pickle=True
 ).item()
+
+# search user material database in the (old) location "HOME"
 home_path = str(Path.home())
-file_user_database = os.path.join(home_path, "user_database.npy")
+file_user_database_old = os.path.join(home_path, "user_database.npy")
+if os.path.exists(file_user_database_old):
+    materials_user_database_old = np.load(file_user_database_old, allow_pickle=True).item()
+else:
+    materials_user_database_old = {}
+
+# search user material database in the (new) location "AppData"
+AppData_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+file_user_database = os.path.join(AppData_path, "user_database.npy")
 if os.path.exists(file_user_database):
     materials_user_database = np.load(file_user_database, allow_pickle=True).item()
 else:
     materials_user_database = {}
+
+materials_user_database.update(materials_user_database_old)
 materials_db = [materials_user_database, materials_database]
 
 
@@ -687,9 +699,11 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             self.change_material()
 
     def save_usermaterials(self):
-        home_path = str(Path.home())
-        file_user_database = os.path.join(home_path, "user_database.npy")
+        AppData_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        file_user_database = os.path.join(AppData_path, "user_database.npy")
         np.save(file_user_database, materials_user_database)
+        msg = "Saved user database in '%s'" % file_user_database
+        QMessageBox.information(self, 'Saved', msg)
 
     def copy_material(self):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL

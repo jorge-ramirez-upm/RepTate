@@ -5,6 +5,7 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.pythonPath": "C:\\WPy64-3741\\python-3.7.4.amd64\\python.exe",
-    "restructuredtext.confPath": "${workspaceFolder}\\docs\\source"
+    "python.pythonPath": "/usr/local/bin/python3",
+    "restructuredtext.confPath": "${workspaceFolder}\\docs\\source",
+    "python.formatting.provider": "black"
 }
