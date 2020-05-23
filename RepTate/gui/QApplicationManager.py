@@ -901,8 +901,12 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         except KeyError:
             print("Could not find data in \"%s\"" % project_path)
             return
+        # switch to single thread
         calc_mode_tmp = CmdBase.calcmode
         CmdBase.calcmode = CalcMode.singlethread
+        # turn off numpy error messages
+        old_np_settings = np.seterr(all='ignore') 
+
         napps = int(data['napp_saved'])
         nth_saved = int(data['nth_saved'])
         nfile_saved = int(data['nfile_saved'])
@@ -988,4 +992,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         self.ApplicationtabWidget.setCurrentIndex(app_indx_now)
         CmdBase.calcmode = calc_mode_tmp
+        # restore numpy error messages settings
+        np.seterr(**old_np_settings) 
 #################

@@ -185,8 +185,7 @@ class Theory(CmdBase):
         self.logger = logging.getLogger(self.parent_dataset.logger.name + '.' + self.name)
         self.logger.debug('New ' + self.thname + ' Theory')
         # np.seterr(all="call")
-        # np.seterrcall(self.write)
-        np.seterr(all="ignore")
+        np.seterrcall(self.write)
 
         ax = self.ax
 

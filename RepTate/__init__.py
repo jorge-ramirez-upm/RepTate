@@ -1,5 +1,6 @@
 import sys
 import os
+import numpy as np
 from ._version import get_versions
 
 __version__ = get_versions()["version"]
@@ -13,3 +14,6 @@ if getattr(sys, "frozen", False):
     root_dir = sys._MEIPASS
 else:
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# setup NumPy log level
+np.seterr(all="call")
