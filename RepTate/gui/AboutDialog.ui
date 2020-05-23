@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>757</width>
+    <width>771</width>
     <height>449</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>771</width>
+    <height>449</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -20,10 +32,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
-   <property name="spacing">
-    <number>0</number>
-   </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -39,7 +48,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -84,7 +93,7 @@
          <string notr="true">background-image: url(:/Images/Images/logo_with_uni_logo.png);</string>
         </property>
         <property name="text">
-         <string>fdfdf</string>
+         <string/>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
@@ -93,7 +102,13 @@
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
         <property name="margin">
-         <number>4</number>
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>0</number>
+        </property>
+        <property name="openExternalLinks">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -115,15 +130,12 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -147,17 +159,25 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="margin">
+         <number>-3</number>
+        </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;RepTate&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;R&lt;/span&gt;heology of &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;ntangled &lt;span style=&quot; font-weight:600;&quot;&gt;P&lt;/span&gt;olymers: &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;oolkit for the &lt;span style=&quot; font-weight:600;&quot;&gt;A&lt;/span&gt;nalysis of &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;heory and &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;xperiment), was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the &lt;a href=&quot;http://www.leeds.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Leeds&lt;/span&gt;&lt;/a&gt; and the &lt;a href=&quot;http://www.reading.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;University of Reading&lt;/span&gt;&lt;/a&gt;, as part of the muPP2 project, funded by the EPSRC. This new version is a port (and enhancement) of the original RepTate code to python, using pyqt and matplotlib for the visuals, and numpy and scipy for numerical calculations. It has been developed by &lt;a href=&quot;mailto: jorge.ramirez@upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Jorge Ramírez&lt;/span&gt;&lt;/a&gt; (&lt;a href=&quot;www.upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Universidad Politécnica de Madrid&lt;/span&gt;&lt;/a&gt;) and Victor Boudara (University of Leeds). The program and source code are released under the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPLv3 license&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;This project is dedicated to the memory of our great friend and collaborator Alexei.&lt;br/&gt;OLD web site: &lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.reptate.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#000000;&quot;&gt;Project page: &lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/jorge-ramirez-upm/RepTate&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Documentation: &lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate &quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://reptate.readthedocs.io/&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;Icons:&lt;a href=&quot; https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://icons8.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <widget class="QTextBrowser" name="textBrowser">
+        <property name="autoFillBackground">
+         <bool>true</bool>
         </property>
-        <property name="textFormat">
-         <enum>Qt::RichText</enum>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:2px; margin-right:2px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;RepTate&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;R&lt;/span&gt;heology of &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;ntangled &lt;span style=&quot; font-weight:600;&quot;&gt;P&lt;/span&gt;olymers: &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;oolkit for the &lt;span style=&quot; font-weight:600;&quot;&gt;A&lt;/span&gt;nalysis of &lt;span style=&quot; font-weight:600;&quot;&gt;T&lt;/span&gt;heory and &lt;span style=&quot; font-weight:600;&quot;&gt;E&lt;/span&gt;xperiment), was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the &lt;a href=&quot;http://www.leeds.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;University of Leeds&lt;/span&gt;&lt;/a&gt; and the &lt;a href=&quot;http://www.reading.ac.uk/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;University of Reading&lt;/span&gt;&lt;/a&gt;, as part of the muPP2 project, funded by the EPSRC. This new version is a port (and enhancement) of the original RepTate code to Python 3, using PyQt5 and Matplotlib for the visuals, and NumPy and SciPy for numerical calculations. It is developed by &lt;a href=&quot;mailto: jorge.ramirez@upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;Jorge Ramírez&lt;/span&gt;&lt;/a&gt; (&lt;a href=&quot;http://www.upm.es&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;Universidad Politécnica de Madrid&lt;/span&gt;&lt;/a&gt;) and Victor Boudara (&lt;a href=&quot;http://www.leeds.ac.uk&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;University of Leeds&lt;/span&gt;&lt;/a&gt;). The program and source code are released under the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;GPLv3+ license&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This project is dedicated to the memory of our great friend and collaborator Alexei.&lt;br /&gt;Project page: &lt;a href=&quot;https://github.com/jorge-ramirez-upm/RepTate&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://github.com/jorge-ramirez-upm/RepTate&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;Documentation: &lt;a href=&quot;https://reptate.readthedocs.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;http://reptate.readthedocs.io/&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;OLD web site: &lt;a href=&quot;http://www.reptate.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://www.reptate.com&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;Icons: &lt;a href=&quot;https://icons8.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0068da;&quot;&gt;https://icons8.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-        <property name="wordWrap">
+        <property name="openExternalLinks">
          <bool>true</bool>
         </property>
        </widget>

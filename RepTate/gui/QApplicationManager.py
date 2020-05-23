@@ -431,7 +431,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def show_about(self):
         """Show about window"""
         #dlg = AboutWindow(self, self.version + ' ' + self.date)
-        dlg = AboutWindow(self, "RepTate %s %s"%(self.version, self.date), "Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %self.build)
+        dlg = AboutWindow(self, "RepTate %s %s"%(self.version, self.date), "Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=\"https://dx.doi.org/10.1122/8.0000002\">Cite RepTate</a>" %self.build)
         dlg.show()
 
     def tab_changed(self, index):
