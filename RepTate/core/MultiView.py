@@ -45,7 +45,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
 from PyQt5.QtCore import QSize, Qt
 import matplotlib as mpl
 
-mpl.use("Qt5Agg")
+# mpl.use("Qt5Agg") # comment this as Mac uses "macosx" backend and Windows seems unaffected
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 import matplotlib.gridspec as gridspec
@@ -111,10 +111,6 @@ class MultiView(QWidget):
         mpl.rcParams["savefig.dpi"] = self.SAVE_DPI
 
     def setupUi(self):
-        if sys.platform == "darwin":
-            # high dpi Mac display font twice as big
-            plt.matplotlib.rcParams['figure.dpi'] = self.FIG_DPI / 2
-
         # Remove seaborn dependency
         dark_gray = ".15"
         light_gray = ".8"
