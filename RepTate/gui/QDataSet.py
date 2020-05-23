@@ -71,6 +71,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QCheckBox,
 )
+import RepTate
 from RepTate.core.DataSet import DataSet
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Theory import MinimizationMethod, ErrorCalculationMethod
@@ -380,7 +381,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             # file browser window
-            dir_start = join(self.data_dir, "data")
+            dir_start = join(RepTate.root_dir, "data")
             dilogue_name = "Select Folder"
             folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
             if isdir(folder):
