@@ -30,6 +30,7 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
+import sys
 import os
 import numpy as np
 import ctypes as ct
@@ -62,6 +63,10 @@ from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PyQt5.QtCore import QSize, Qt
 import psutil
 
+if sys.platform == "darwin" or sys.platform == "linux":
+    CHARCODE = "utf-8"
+else:
+    CHARCODE = "latin-1"
 
 def launch_mix_dialog(parent_theory):
     """Launch a dialog box to select the React-Mix theory parameters"""
@@ -317,7 +322,7 @@ def handle_save_mix_configuration(parent_theory):
         parent_theory.Qprint("Invalid filename")
         return
     # output polymers
-    b_out_file = out_file[0].encode("utf-8")
+    b_out_file = out_file[0].encode(CHARCODE)
 
     c_weights = (ct.c_double * parent_theory.n_inmix)()
     c_dists = (ct.c_int * parent_theory.n_inmix)()
@@ -351,7 +356,8 @@ def handle_save_bob_configuration(parent_theory):
         if out_file[0] == "":
             return
         # output polymers
-        b_out_file = out_file[0].encode("utf-8")
+        b_out_file = out_file[0].encode(CHARCODE)
+
         rch.polyconfwrite(ct.c_int(ndist), ct.c_char_p(b_out_file))
         message = "<hr>Saved %d polymers in %s" % (
             rch.react_dist[ndist].contents.nsaved,

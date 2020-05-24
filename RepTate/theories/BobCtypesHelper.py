@@ -48,6 +48,10 @@ from ctypes import (
 import sys
 import os
 
+if sys.platform == "darwin" or sys.platform == "linux":
+    CHARCODE = "utf-8"
+else:
+    CHARCODE = "latin-1"
 
 class BobError(Exception):
     """Class for BoB exceptions"""
@@ -99,12 +103,12 @@ class BobCtypesHelper:
                 self.parent_theory.from_file_filename_counter
             ]
             for i, c in enumerate(s):
-                pointer_to_str[i] = c.encode("utf-8")
+                pointer_to_str[i] = c.encode(CHARCODE)
             self.parent_theory.from_file_filename_counter += 1
         elif case == 1:
             s = self.parent_theory.protoname[self.parent_theory.protoname_counter]
             for i, c in enumerate(s):
-                pointer_to_str[i] = c.encode("utf-8")
+                pointer_to_str[i] = c.encode(CHARCODE)
             self.parent_theory.protoname_counter += 1
 
     def get_next_item_from_inp_file(self, *arg):
@@ -218,7 +222,7 @@ class BobCtypesHelper:
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
         for i in range(n_arg):
-            argv[i] = arg_list[i].encode("utf-8")
+            argv[i] = arg_list[i].encode(CHARCODE)
 
         # virtual inp and proto file
         self.parent_theory.inp_counter = 0
@@ -271,7 +275,7 @@ class BobCtypesHelper:
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
         for i in range(n_arg):
-            argv[i] = arg_list[i].encode("utf-8")
+            argv[i] = arg_list[i].encode(CHARCODE)
 
         # run bob LVE and get size of results
         # call C function, return False if error in BoB
@@ -296,7 +300,7 @@ class BobCtypesHelper:
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
         for i in range(n_arg):
-            argv[i] = arg_list[i].encode("utf-8")
+            argv[i] = arg_list[i].encode(CHARCODE)
 
         # run bob and get size of results
         # call C function, return False if error in BoB
