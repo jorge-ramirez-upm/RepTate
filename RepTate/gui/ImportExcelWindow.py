@@ -48,6 +48,7 @@ from PyQt5.QtWidgets import (
 )
 from openpyxl import load_workbook
 import xlrd
+import RepTate
 
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the PyInstaller bootloader
