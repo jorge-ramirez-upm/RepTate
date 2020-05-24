@@ -241,26 +241,22 @@ class BaseApplicationDielectric:
 
     def viewLogE1E2(self, dt, file_parameters):
         """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 2))
-        y = np.zeros((npoints, 2))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        x[:, 1] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
-        y[:, 1] = np.log10(dt.data[cond, 2])
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
+        y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewSemiLogE1E2(self, dt, file_parameters):
         """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 2))
-        y = np.zeros((npoints, 2))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        x[:, 1] = np.log10(dt.data[cond, 0])
-        y[:, 0] = dt.data[cond, 1]
-        y[:, 1] = dt.data[cond, 2]
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
+        y[:, 0] = dt.data[:, 1]
+        y[:, 1] = dt.data[:, 2]
         return x, y, True
 
     def viewE1E2(self, dt, file_parameters):
@@ -275,22 +271,18 @@ class BaseApplicationDielectric:
 
     def viewLogE1(self, dt, file_parameters):
         """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
     def viewSemiLogE1(self, dt, file_parameters):
         """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = dt.data[cond, 1]
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = dt.data[:, 1]
         return x, y, True
 
     def viewE1(self, dt, file_parameters):
@@ -303,22 +295,18 @@ class BaseApplicationDielectric:
 
     def viewLogE2(self, dt, file_parameters):
         """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 2])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewSemiLogE2(self, dt, file_parameters):
         """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
-        cond = (dt.data[:, 0] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = dt.data[cond, 2]
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = dt.data[:, 2]
         return x, y, True
 
     def viewE2(self, dt, file_parameters):

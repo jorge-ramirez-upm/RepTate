@@ -325,14 +325,12 @@ class BaseApplicationTTS:
     def viewLogG1G2(self, dt, file_parameters):
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 2))
-        y = np.zeros((npoints, 2))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        x[:, 1] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
-        y[:, 1] = np.log10(dt.data[cond, 2])
+        x = np.zeros((dt.num_rows, 2))
+        y = np.zeros((dt.num_rows, 2))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
+        y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
@@ -358,13 +356,11 @@ class BaseApplicationTTS:
     def viewLogEtaStar(self, dt, file_parameters):
         """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(
-            np.sqrt(dt.data[cond, 1] ** 2 + dt.data[cond, 2] ** 2) / dt.data[cond, 0]
+            np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0]
         )
         return x, y, True
 
@@ -389,45 +385,37 @@ class BaseApplicationTTS:
     def viewLogTanDelta(self, dt, file_parameters):
         """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 2] / dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
         """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(np.sqrt(np.square(dt.data[cond, 1]) + np.square(dt.data[cond, 2])))
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
         return x, y, True
 
     def viewLogtandeltaGstar(self, dt, file_parameters):
         """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
-        cond = (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[cond, 1]) + np.square(dt.data[cond, 2])))
-        y[:, 0] = np.log10(dt.data[cond, 2] / dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
+        y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
     def viewdeltatanGstar(self, dt, file_parameters):
         """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[cond, 1]) + np.square(dt.data[cond, 2])))
-        y[:, 0] = np.arctan2(dt.data[cond, 2], dt.data[cond, 1]) * 180 / np.pi
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
+        y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
 
     def viewJ1J2(self, dt, file_parameters):
@@ -453,12 +441,10 @@ class BaseApplicationTTS:
     def viewLogG1(self, dt, file_parameters):
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
     def viewG1(self, dt, file_parameters):
@@ -473,12 +459,10 @@ class BaseApplicationTTS:
     def viewLogG2(self, dt, file_parameters):
         """Logarithm of the loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 2])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
     def viewG2(self, dt, file_parameters):
@@ -493,16 +477,14 @@ class BaseApplicationTTS:
     def viewLogG1G2tandelta(self, dt, file_parameters):
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))`, loss modulus :math:`\\log(G''(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0) * (dt.data[:, 2] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 3))
-        y = np.zeros((npoints, 3))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        x[:, 1] = np.log10(dt.data[cond, 0])
-        x[:, 2] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
-        y[:, 1] = np.log10(dt.data[cond, 2])
-        y[:, 2] = np.log10(dt.data[cond, 2] / dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 3))
+        y = np.zeros((dt.num_rows, 3))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        x[:, 1] = np.log10(dt.data[:, 0])
+        x[:, 2] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
+        y[:, 1] = np.log10(dt.data[:, 2])
+        y[:, 2] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
 

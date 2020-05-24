@@ -164,12 +164,10 @@ class BaseApplicationMWD:
     def view_logWM(self, dt, file_parameters):
         """:math:`\\log(W(M))` vs :math:`\\log(M)`
         """
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
 

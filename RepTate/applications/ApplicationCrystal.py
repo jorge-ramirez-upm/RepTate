@@ -312,16 +312,14 @@ class BaseApplicationCrystal:
 
     def viewLogeta(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
         try:
             flow_rate = float(file_parameters["gdot"])
         except:
             flow_rate = float(file_parameters["edot"])
-        y[:, 0] = np.log10(dt.data[cond, 1] / flow_rate)
+        y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
 
     def vieweta(self, dt, file_parameters):
@@ -362,12 +360,10 @@ class BaseApplicationCrystal:
 
     def viewLogSigmaTime(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
     def viewSigmaTime(self, dt, file_parameters):
@@ -380,16 +376,14 @@ class BaseApplicationCrystal:
 
     def viewLogSigmaGamma(self, dt, file_parameters):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
         try:
             flow_rate = float(file_parameters["gdot"])
         except:
             flow_rate = float(file_parameters["edot"])
-        x[:, 0] = np.log10(dt.data[cond, 0] * flow_rate)  # compute strain
-        y[:, 0] = np.log10(dt.data[cond, 1])
+        x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  # compute strain
+        y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
     def viewSigmaGamma(self, dt, file_parameters):

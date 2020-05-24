@@ -218,18 +218,16 @@ class BaseApplicationGt:
 
     def viewLogGt(self, dt, file_parameters):
         """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
         try:
             gamma = float(file_parameters["gamma"])
             if gamma == 0:
                 gamma = 1
         except:
             gamma = 1
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1] / gamma)
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
 
     def viewSchwarzl_Gt(self, dt, file_parameters):

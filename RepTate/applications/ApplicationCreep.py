@@ -214,12 +214,10 @@ class BaseApplicationCreep:
 
     def viewLogStraint(self, dt, file_parameters):
         """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(np.abs(dt.data[cond, 1]))
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
         return x, y, True
 
     def viewStraint(self, dt, file_parameters):
@@ -232,13 +230,11 @@ class BaseApplicationCreep:
 
     def viewLogJt(self, dt, file_parameters):
         """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t`"""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
+        x = np.zeros((dt.num_rows, 1))
+        y = np.zeros((dt.num_rows, 1))
         sigma = float(file_parameters["stress"])
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(np.abs(dt.data[cond, 1]) / sigma)
+        x[:, 0] = np.log10(dt.data[:, 0])
+        y[:, 0] = np.log10(np.abs(dt.data[:, 1]) / sigma)
         return x, y, True
 
     def viewJt(self, dt, file_parameters):

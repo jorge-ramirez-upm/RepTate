@@ -126,19 +126,6 @@ class BaseApplicationTemplate:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewlogylogx(self, dt, file_parameters):
-        """Function that defines how the view is shown. In this example, just the log of the 1st and 2nd columns are shown. 
-        
-        The view must handle objects of type DataTable and can make use of the file parameters.
-        Take care to filter zeros and negative values for the np.log10 operation to work correctly."""
-        cond = (dt.data[:, 0] > 0) * (dt.data[:, 1] > 0)
-        npoints=cond.sum()
-        x = np.zeros((npoints, 1))
-        y = np.zeros((npoints, 1))
-        x[:, 0] = np.log10(dt.data[cond, 0])
-        y[:, 0] = np.log10(dt.data[cond, 1])
-        return x, y, True
-
 
 class CLApplicationTemplate(BaseApplicationTemplate, Application):
     """CL Version of the Application"""
