@@ -41,6 +41,7 @@ import RepTate
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
+from RepTate.gui import bob_LVE
 import time
 
 import ctypes

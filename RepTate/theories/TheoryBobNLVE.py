@@ -50,6 +50,7 @@ from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QC
 from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5.QtCore import QUrl, pyqtSignal, QSize
 from RepTate.theories.theory_helpers import FlowMode
+from RepTate.gui import bob_LVE
 
 class TheoryBobNLVE(CmdBase):
     """Predict the nonlinear rheology of "branch-on-branch" polymers, read from a polymer configuration file,
