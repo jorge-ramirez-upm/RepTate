@@ -37,34 +37,20 @@ by Chinmay Das et al.
 """
 import os
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from enum import Enum
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-from collections import OrderedDict
+import RepTate
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 import time
 
-import bob_LVE  # dialog
 import ctypes
-from BobCtypesHelper import BobCtypesHelper, BobError
+from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
 from PyQt5.QtWidgets import QApplication, QToolBar, QToolButton, QMenu
 from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
+from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5.QtCore import QUrl, pyqtSignal, QSize
-from shutil import copy2
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
+from RepTate.theories.theory_helpers import FlowMode
+from RepTate.gui import bob_LVE
 
 class TheoryBobNLVE(CmdBase):
     """Predict the nonlinear rheology of "branch-on-branch" polymers, read from a polymer configuration file,
@@ -79,18 +65,7 @@ class TheoryBobNLVE(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryBobNLVE(
             name, parent_dataset,
             axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryBobNLVE(
@@ -98,11 +73,8 @@ class TheoryBobNLVE(CmdBase):
 
 
 class BaseTheoryBobNLVE:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve'
+    """Base class for both GUI and CL"""
+    html_help_file = 'https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobNLVE.thname
     citations = TheoryBobNLVE.citations
@@ -111,14 +83,7 @@ class BaseTheoryBobNLVE:
     signal_param_dialog = pyqtSignal(object)
 
     def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'ThBobLVE'})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
@@ -157,16 +122,7 @@ class BaseTheoryBobNLVE:
 
 
     def calculate(self, f=None):
-        """Create polymer configuration file and calculate distribution characteristics
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -215,40 +171,20 @@ class BaseTheoryBobNLVE:
         self.Qprint("Fitting not allowed in this theory")
 
 class CLTheoryBobNLVE(BaseTheoryBobNLVE, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         # temp_dir = os.path.join('theories', 'temp')
         # #create temp folder if does not exist
@@ -302,7 +238,7 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         options = QFileDialog.Options()
-        dir_start = "data/React/"
+        dir_start = os.path.join(RepTate.root_dir, "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(

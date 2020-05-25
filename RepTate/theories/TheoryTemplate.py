@@ -39,66 +39,48 @@ from CmdBase import CmdBase, CmdMode
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
-from DataTable import DataTable
 
 
 class TheoryTemplate(CmdBase):
-    """[summary]
-    
-    [description]
-    """
-    thname = 'TemplateTheory'
-    description = 'Template Theory'
+    """The basic documentation of the theory goes here. Please, add as much information as possible 
+    (references, equations, qualitative descriptions, etc. """
+
+    thname = "TemplateTheory"
+    description = "Template Theory"
     citations = []
     doi = []
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryTemplate(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTemplate(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryTemplate(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryTemplate(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryTemplate:
-    """[summary]
-    
-    [description]
-    """
-    #help_file = ''
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    # html_help_file = ''
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryTemplate.thname
     citations = TheoryTemplate.citations
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['param1'] = Parameter(
-            name='param1',
+        self.parameters["param1"] = Parameter(
+            name="param1",
             value=1,
-            description='parameter 1',
+            description="parameter 1",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+        )
 
     def get_modes(self):
         """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
@@ -119,16 +101,7 @@ If not, you can safely delete it."""
         pass
 
     def calculate(self, f=None):
-        """Template function that returns the square of y
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """THIS IS THE FUNCTION THAT CALCULATES THE THEORY"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -139,40 +112,20 @@ If not, you can safely delete it."""
 
 
 class CLTheoryTemplate(BaseTheoryTemplate, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryTemplate(BaseTheoryTemplate, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

@@ -35,18 +35,23 @@
 Template file for creating a new theory
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from TheoryRolieDoublePoly import Dilution, GcorrMode, GetMwdRepate, EditMWDDialog, EditModesDialog
 from math import sqrt
 from collections import OrderedDict
+from RepTate.theories.theory_helpers import (
+    Dilution,
+    GcorrMode,
+    GetMwdRepTate,
+    EditMWDDialog,
+    EditModesDialog,
+)
 
 
 class TheoryRDPLVE(CmdBase):
@@ -69,51 +74,33 @@ class TheoryRDPLVE(CmdBase):
        - ``phi0i`` : Volume fraction of component :math:`i`
        - ``tauD0i`` : Reptation time of component :math:`i`
 
-    
-    [description]
     """
-    thname = 'RDP LVE'
-    description = 'Linear ViscoElastic predictions of the Rolie-Double-Poly model'
+
+    thname = "RDP LVE"
+    description = "Linear ViscoElastic predictions of the Rolie-Double-Poly model"
     citations = []
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryRDPLVE(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryRDPLVE(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryRDPLVE(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryRDPLVE(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryRDPLVE:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
+    single_file = (
+        True  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryRDPLVE.thname
     citations = TheoryRDPLVE.citations
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
@@ -123,7 +110,8 @@ class BaseTheoryRDPLVE:
             description="Plateau modulus",
             type=ParameterType.real,
             opt_type=OptType.const,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -131,7 +119,8 @@ class BaseTheoryRDPLVE:
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
-            display_flag=False)
+            display_flag=False,
+        )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -139,7 +128,8 @@ class BaseTheoryRDPLVE:
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
-            display_flag=False)
+            display_flag=False,
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -147,18 +137,20 @@ class BaseTheoryRDPLVE:
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False,
-            min_value=1)
+            min_value=1,
+        )
         nmode = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
-                value=1. / nmode,
+                value=1.0 / nmode,
                 description="Volume fraction of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-                max_value=1)
+                max_value=1,
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -166,30 +158,31 @@ class BaseTheoryRDPLVE:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                min_value=0)
+                min_value=0,
+            )
         self.with_gcorr = GcorrMode.none
         self.MWD_m = [100, 1000]
-        self.MWD_phi =  [0.5, 0.5]
+        self.MWD_phi = [0.5, 0.5]
         self.Zeff = []
         self.MAX_MODES = 200
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
-        self.MWD_m = extra_data['MWD_m']
-        self.MWD_phi = extra_data['MWD_phi']
-        self.Zeff = extra_data['Zeff']
+        self.MWD_m = extra_data["MWD_m"]
+        self.MWD_phi = extra_data["MWD_phi"]
+        self.Zeff = extra_data["Zeff"]
 
         # G button
-        if extra_data['with_gcorr']:
+        if extra_data["with_gcorr"]:
             self.with_gcorr == GcorrMode.with_gcorr
             self.with_gcorr_button.setChecked(True)
 
     def get_extra_data(self):
         """Set extra_data when saving project"""
-        self.extra_data['MWD_m'] = self.MWD_m
-        self.extra_data['MWD_phi'] = self.MWD_phi
-        self.extra_data['Zeff'] = self.Zeff
-        self.extra_data['with_gcorr'] = self.with_gcorr == GcorrMode.with_gcorr
+        self.extra_data["MWD_m"] = self.MWD_m
+        self.extra_data["MWD_phi"] = self.MWD_phi
+        self.extra_data["Zeff"] = self.Zeff
+        self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
 
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
@@ -211,13 +204,7 @@ class BaseTheoryRDPLVE:
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
 
     def set_modes_from_mwd(self, m, phi):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
         res = Dilution(m, phi, taue, Me, self).res
@@ -232,24 +219,19 @@ class BaseTheoryRDPLVE:
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
         self.parent_dataset.handle_actionCalculate_Theory()
 
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-        """
-        if (name == "nmodes"):
+        """Set the value of a theory parameter"""
+        if name == "nmodes":
             oldn = self.parameters["nmodes"].value
         message, success = super().set_param_value(name, value)
         if not success:
             return message, success
-        if (name == "nmodes"):
+        if name == "nmodes":
             for i in range(self.parameters["nmodes"].value):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,
@@ -258,7 +240,8 @@ class BaseTheoryRDPLVE:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    min_value=0)
+                    min_value=0,
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -266,25 +249,16 @@ class BaseTheoryRDPLVE:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    min_value=0)
-            if (oldn > self.parameters["nmodes"].value):
+                    min_value=0,
+                )
+            if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]
                     del self.parameters["tauD%02d" % i]
-        return '', True
-
+        return "", True
 
     def calculate(self, f=None):
-        """Template function that returns the square of y
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -292,62 +266,43 @@ class BaseTheoryRDPLVE:
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        nmodes = self.parameters['nmodes'].value
+        nmodes = self.parameters["nmodes"].value
         taud = []
         phi = []
         for i in range(nmodes):
-            taud.append(self.parameters['tauD%02d' % i].value)
-            phi.append(self.parameters['phi%02d' % i].value)
+            taud.append(self.parameters["tauD%02d" % i].value)
+            phi.append(self.parameters["phi%02d" % i].value)
 
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters['GN0'].value
+            G = self.parameters["GN0"].value
             if self.with_gcorr == GcorrMode.with_gcorr:
                 # G = G * sqrt(self.fZ(self.Zeff[i]))
                 G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
-                tau = 1. / (1. / taud[i] + 1. / taud[j])
+                tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
                 wT = tt.data[:, 0] * tau
-                wTsq = wT**2
+                wTsq = wT ** 2
                 tt.data[:, 1] += G * phi[i] * phi[j] * wTsq / (1 + wTsq)
                 tt.data[:, 2] += G * phi[i] * phi[j] * wT / (1 + wTsq)
 
-class CLTheoryRDPLVE(BaseTheoryRDPLVE, Theory):
-    """[summary]
-    
-    [description]
-    """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+class CLTheoryRDPLVE(BaseTheoryRDPLVE, Theory):
+    """CL Version"""
+
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         # add widgets specific to the theory
         tb = QToolBar()
@@ -357,41 +312,43 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
         self.get_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes (MWD app)")
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Get Modes (MWD app)",
+        )
         self.get_modes_data_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes (MWD data)")
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Get Modes (MWD data)",
+        )
         self.edit_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
-            "Edit Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
+        )
         # self.plot_modes_action = menu.addAction(
         #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
         #     "Plot Modes")
         self.save_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
-        #Modulus correction button
+        # Modulus correction button
         self.with_gcorr_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
-            'Modulus Correction')
+            QIcon(":/Icon8/Images/new_icons/icons8-circled-g-filled.png"),
+            "Modulus Correction",
+        )
         self.with_gcorr_button.setCheckable(True)
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(
-            self.get_modes_reptate)
+        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
         connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes)
-        connection_id = self.edit_modes_action.triggered.connect(
-            self.edit_modes_window)
+            self.edit_mwd_modes
+        )
+        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
+            self.handle_with_gcorr_button
+        )
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
 
     def handle_with_gcorr_button(self, checked):
         if checked:
@@ -399,7 +356,9 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint('<font color=orange><b>Modulus correction needs Z from MWD</b></font>')
+                self.Qprint(
+                    "<font color=orange><b>Modulus correction needs Z from MWD</b></font>"
+                )
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
@@ -407,10 +366,7 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
         self.parent_dataset.handle_actionCalculate_Theory()
 
     def Qhide_theory_extras(self, show):
-        """Called when curent theory is changed
-        
-        [description]
-        """
+        """Called when current theory is changed"""
         self.parent_dataset.actionMinimize_Error.setDisabled(show)
         self.parent_dataset.actionShow_Limits.setDisabled(show)
         self.parent_dataset.actionVertical_Limits.setDisabled(show)
@@ -428,13 +384,14 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
                 for th in ds.theories.values():
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
-                    if th.thname == 'Discretize MWD':
-                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
-                                               th_tab_name)] = th.get_mwd
+                    if th.thname == "Discretize MWD":
+                        get_dict[
+                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
+                        ] = th.get_mwd
 
         if get_dict:
-            d = GetMwdRepate(self, get_dict, 'Select Discretized MWD')
-            if (d.exec_() and d.btngrp.checkedButton() != None):
+            d = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
+            if d.exec_() and d.btngrp.checkedButton() != None:
                 _, success1 = self.set_param_value("tau_e", d.taue_text.text())
                 _, success2 = self.set_param_value("Me", d.Me_text.text())
                 if not success1 * success2:
@@ -449,8 +406,8 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
         else:
             # no theory Discretise MWD found
             QMessageBox.warning(
-                    self, 'Get MW distribution',
-                    'No \"Discretize MWD\" theory found')
+                self, "Get MW distribution", 'No "Discretize MWD" theory found'
+            )
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -470,15 +427,18 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
             # self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value("phi%02d" % i,
-                                                     d.table.item(i, 0).text())
-                msg, success2 = self.set_param_value("tauD%02d" % i,
-                                                     d.table.item(i, 1).text())
+                msg, success1 = self.set_param_value(
+                    "phi%02d" % i, d.table.item(i, 0).text()
+                )
+                msg, success2 = self.set_param_value(
+                    "tauD%02d" % i, d.table.item(i, 1).text()
+                )
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
-                    self, 'Error',
-                    'Some parameter(s) could not be updated.\nPlease try again.'
+                    self,
+                    "Error",
+                    "Some parameter(s) could not be updated.\nPlease try again.",
                 )
             else:
                 self.handle_actionCalculate_Theory()
@@ -499,8 +459,7 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
                     m.append(float(d.table.item(i, 0).text()))
                     phi.append(float(d.table.item(i, 1).text()))
                 except ValueError:
-                    self.Qprint("Could not understand line %d, try again" %
-                                (i + 1))
+                    self.Qprint("Could not understand line %d, try again" % (i + 1))
                     return
             self.MWD_m = np.copy(m)
             self.MWD_phi = np.copy(phi)

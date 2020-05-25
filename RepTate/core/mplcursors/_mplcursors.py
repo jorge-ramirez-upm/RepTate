@@ -29,18 +29,8 @@ _default_bindings = dict(
 )
 _default_annotation_kwargs = dict(
     textcoords="offset points",
-    bbox=dict(
-        boxstyle="round,pad=.5",
-        fc="yellow",
-        alpha=.5,
-        ec="k",
-    ),
-    arrowprops=dict(
-        arrowstyle="->",
-        connectionstyle="arc3",
-        shrinkB=0,
-        ec="k",
-    ),
+    bbox=dict(boxstyle="round,pad=.5", fc="yellow", alpha=0.5, ec="k",),
+    arrowprops=dict(arrowstyle="->", connectionstyle="arc3", shrinkB=0, ec="k",),
 )
 _default_annotation_positions = [
     dict(position=(-15, 15), ha="right", va="bottom"),
@@ -71,25 +61,30 @@ def _get_rounded_intersection_area(bbox_1, bbox_2):
     """
     # The rounding allows sorting areas without floating point issues.
     bbox = bbox_1.intersection(bbox_1, bbox_2)
-    return (round(bbox.width * bbox.height / 1e-8) * 1e-8
-            if bbox else 0)
+    return round(bbox.width * bbox.height / 1e-8) * 1e-8 if bbox else 0
 
 
 def _is_alive(artist):
     """Check whether an artist is still present on an axes.
     """
-    return bool(artist and artist.axes
-                and (artist.container in artist.axes.containers
-                     if isinstance(artist, _pick_info.ContainerArtist)
-                     else artist.axes.findobj(lambda obj: obj is artist)))
+    return bool(
+        artist
+        and artist.axes
+        and (
+            artist.container in artist.axes.containers
+            if isinstance(artist, _pick_info.ContainerArtist)
+            else artist.axes.findobj(lambda obj: obj is artist)
+        )
+    )
 
 
 def _reassigned_axes_event(event, ax):
     """Reassign *event* to *ax*.
     """
     event = copy.copy(event)
-    event.xdata, event.ydata = (
-        ax.transData.inverted().transform_point((event.x, event.y)))
+    event.xdata, event.ydata = ax.transData.inverted().transform_point(
+        (event.x, event.y)
+    )
     return event
 
 
@@ -110,16 +105,18 @@ class Cursor:
 
     _keep_alive = WeakKeyDictionary()
 
-    def __init__(self,
-                 artists,
-                 *,
-                 multiple=False,
-                 highlight=False,
-                 hover=False,
-                 bindings=None,
-                 annotation_kwargs=None,
-                 annotation_positions=None,
-                 highlight_kwargs=None):
+    def __init__(
+        self,
+        artists,
+        *,
+        multiple=False,
+        highlight=False,
+        hover=False,
+        bindings=None,
+        annotation_kwargs=None,
+        annotation_positions=None,
+        highlight_kwargs=None
+    ):
         """Construct a cursor.
 
         Parameters
@@ -202,37 +199,50 @@ class Cursor:
                 raise ValueError("'hover' and 'multiple' are incompatible")
             connect_pairs += [
                 ("motion_notify_event", self._hover_handler),
-                ("button_press_event", self._hover_handler)]
+                ("button_press_event", self._hover_handler),
+            ]
         else:
-            connect_pairs += [
-                ("button_press_event", self._nonhover_handler)]
+            connect_pairs += [("button_press_event", self._nonhover_handler)]
         self._disconnectors = [
             partial(canvas.mpl_disconnect, canvas.mpl_connect(*pair))
             for pair in connect_pairs
-            for canvas in {artist.figure.canvas for artist in artists}]
+            for canvas in {artist.figure.canvas for artist in artists}
+        ]
 
-        bindings = dict(ChainMap(bindings if bindings is not None else {},
-                                 _default_bindings))
+        bindings = dict(
+            ChainMap(bindings if bindings is not None else {}, _default_bindings)
+        )
         unknown_bindings = set(bindings) - set(_default_bindings)
         if unknown_bindings:
-            raise ValueError("Unknown binding(s): {}".format(
-                ", ".join(sorted(unknown_bindings))))
+            raise ValueError(
+                "Unknown binding(s): {}".format(", ".join(sorted(unknown_bindings)))
+            )
         duplicate_bindings = [
-            k for k, v in Counter(list(bindings.values())).items() if v > 1]
+            k for k, v in Counter(list(bindings.values())).items() if v > 1
+        ]
         if duplicate_bindings:
-            raise ValueError("Duplicate binding(s): {}".format(
-                ", ".join(sorted(map(str, duplicate_bindings)))))
+            raise ValueError(
+                "Duplicate binding(s): {}".format(
+                    ", ".join(sorted(map(str, duplicate_bindings)))
+                )
+            )
         self.bindings = bindings
 
         self.annotation_kwargs = (
-            annotation_kwargs if annotation_kwargs is not None
-            else copy.deepcopy(_default_annotation_kwargs))
+            annotation_kwargs
+            if annotation_kwargs is not None
+            else copy.deepcopy(_default_annotation_kwargs)
+        )
         self.annotation_positions = (
-            annotation_positions if annotation_positions is not None
-            else copy.deepcopy(_default_annotation_positions))
+            annotation_positions
+            if annotation_positions is not None
+            else copy.deepcopy(_default_annotation_positions)
+        )
         self.highlight_kwargs = (
-            highlight_kwargs if highlight_kwargs is not None
-            else copy.deepcopy(_default_highlight_kwargs))
+            highlight_kwargs
+            if highlight_kwargs is not None
+            else copy.deepcopy(_default_highlight_kwargs)
+        )
 
     @property
     def artists(self):
@@ -258,8 +268,10 @@ class Cursor:
         """
         for sel in self._selections:
             if sel.annotation.axes is None:
-                raise RuntimeError("Annotation unexpectedly removed; "
-                                   "use 'cursor.remove_selection' instead")
+                raise RuntimeError(
+                    "Annotation unexpectedly removed; "
+                    "use 'cursor.remove_selection' instead"
+                )
         return tuple(self._selections)
 
     @property
@@ -301,11 +313,14 @@ class Cursor:
             figure.canvas.draw()  # Needed by draw_artist below anyways.
         renderer = pi.artist.axes.get_renderer_cache()
         ann = pi.artist.axes.annotate(
-            _pick_info.get_ann_text(*pi), xy=pi.target,
+            _pick_info.get_ann_text(*pi),
+            xy=pi.target,
             xytext=(np.nan, np.nan),
-            ha=_MarkedStr("center"), va=_MarkedStr("center"),
+            ha=_MarkedStr("center"),
+            va=_MarkedStr("center"),
             visible=self.visible,
-            **self.annotation_kwargs)
+            **self.annotation_kwargs
+        )
         ann.draggable(use_blit=True)
         extras = []
         if self._highlight:
@@ -322,33 +337,44 @@ class Cursor:
             fig_bbox = figure.get_window_extent()
             ax_bbox = axes.get_window_extent()
             overlaps = []
-            for idx, annotation_position in enumerate(
-                    self.annotation_positions):
+            for idx, annotation_position in enumerate(self.annotation_positions):
                 ann.set(**annotation_position)
                 # Work around matplotlib/matplotlib#7614: position update is
                 # missing.
                 ann.update_positions(renderer)
                 bbox = ann.get_window_extent(renderer)
                 overlaps.append(
-                    (_get_rounded_intersection_area(fig_bbox, bbox),
-                     _get_rounded_intersection_area(ax_bbox, bbox),
-                     # Avoid needlessly jumping around by breaking ties using
-                     # the last used position as default.
-                     idx == self._last_auto_position))
+                    (
+                        _get_rounded_intersection_area(fig_bbox, bbox),
+                        _get_rounded_intersection_area(ax_bbox, bbox),
+                        # Avoid needlessly jumping around by breaking ties using
+                        # the last used position as default.
+                        idx == self._last_auto_position,
+                    )
+                )
             auto_position = max(range(len(overlaps)), key=overlaps.__getitem__)
             ann.set(**self.annotation_positions[auto_position])
             self._last_auto_position = auto_position
         else:
             if isinstance(ann.get_ha(), _MarkedStr):
-                ann.set_ha({-1: "right", 0: "center", 1: "left"}[
-                    np.sign(np.nan_to_num(ann.xyann[0]))])
+                ann.set_ha(
+                    {-1: "right", 0: "center", 1: "left"}[
+                        np.sign(np.nan_to_num(ann.xyann[0]))
+                    ]
+                )
             if isinstance(ann.get_va(), _MarkedStr):
-                ann.set_va({-1: "top", 0: "center", 1: "bottom"}[
-                    np.sign(np.nan_to_num(ann.xyann[1]))])
+                ann.set_va(
+                    {-1: "top", 0: "center", 1: "bottom"}[
+                        np.sign(np.nan_to_num(ann.xyann[1]))
+                    ]
+                )
 
-        if (extras
-                or len(self.selections) > 1 and not self._multiple
-                or not figure.canvas.supports_blit):
+        if (
+            extras
+            or len(self.selections) > 1
+            and not self._multiple
+            or not figure.canvas.supports_blit
+        ):
             # Either:
             #  - there may be more things to draw, or
             #  - annotation removal will make a full redraw necessary, or
@@ -376,8 +402,10 @@ class Cursor:
         `Selection` in order to ensure cleanup upon deselection.
         """
         hl = _pick_info.make_highlight(
-            artist, *args,
-            **ChainMap({"highlight_kwargs": self.highlight_kwargs}, kwargs))
+            artist,
+            *args,
+            **ChainMap({"highlight_kwargs": self.highlight_kwargs}, kwargs)
+        )
         if hl:
             artist.axes.add_artist(hl)
             return hl
@@ -447,8 +475,10 @@ class Cursor:
             # Filter away events where the mouse is pressed, in particular to
             # avoid conflicts between hover and draggable.
             self._on_select_button_press(event)
-        elif (event.name == "button_press_event"
-              and event.button == self.bindings["deselect"]):
+        elif (
+            event.name == "button_press_event"
+            and event.button == self.bindings["deselect"]
+        ):
             # Still allow removing the annotation by right clicking.
             self._on_deselect_button_press(event)
 
@@ -458,20 +488,23 @@ class Cursor:
         #     double click (to prevent double selection), or
         #   - another widget is active, and this is a double click (to bypass
         #     the widget lock).
-        return (self.enabled
-                and event.canvas.widgetlock.locked() == event.dblclick)
+        return self.enabled and event.canvas.widgetlock.locked() == event.dblclick
 
     def _on_select_button_press(self, event):
         if not self._filter_mouse_event(event):
             return
         # Work around lack of support for twinned axes.
-        per_axes_event = {ax: _reassigned_axes_event(event, ax)
-                          for ax in {artist.axes for artist in self.artists}}
+        per_axes_event = {
+            ax: _reassigned_axes_event(event, ax)
+            for ax in {artist.axes for artist in self.artists}
+        }
         pis = []
         for artist in self.artists:
-            if (artist.axes is None  # Removed or figure-level artist.
-                    or event.canvas is not artist.figure.canvas
-                    or not artist.axes.contains(event)[0]):  # Cropped by axes.
+            if (
+                artist.axes is None  # Removed or figure-level artist.
+                or event.canvas is not artist.figure.canvas
+                or not artist.axes.contains(event)[0]
+            ):  # Cropped by axes.
                 continue
             pi = _pick_info.compute_pick(artist, per_axes_event[artist.axes])
             if pi:
@@ -544,10 +577,8 @@ def cursor(pickables=None, **kwargs):
     if pickables is None:
         # Do not import pyplot ourselves to avoid forcing the backend.
         plt = sys.modules.get("matplotlib.pyplot")
-        pickables = [
-            plt.figure(num) for num in plt.get_fignums()] if plt else []
-    elif (isinstance(pickables, Container)
-          or not isinstance(pickables, Iterable)):
+        pickables = [plt.figure(num) for num in plt.get_fignums()] if plt else []
+    elif isinstance(pickables, Container) or not isinstance(pickables, Iterable):
         pickables = [pickables]
 
     def iter_unpack_figures(pickables):
@@ -560,8 +591,13 @@ def cursor(pickables=None, **kwargs):
     def iter_unpack_axes(pickables):
         for entry in pickables:
             if isinstance(entry, Axes):
-                for artists in [entry.collections, entry.images, entry.lines,
-                                entry.patches, entry.texts]:
+                for artists in [
+                    entry.collections,
+                    entry.images,
+                    entry.lines,
+                    entry.patches,
+                    entry.texts,
+                ]:
                     yield from artists
                 containers.extend(entry.containers)
             elif isinstance(entry, Container):

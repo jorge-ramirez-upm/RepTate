@@ -1,0 +1,304 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tobita LDPE &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Tobita CSTR" href="tobitaCSTR.html" />
+    <link rel="prev" title="React Theories" href="theory.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tobitaCSTR.html" title="Tobita CSTR"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="theory.html" title="React Theories"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="theory.html" accesskey="U">React Theories</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tobita LDPE</a><ul>
+<li><a class="reference internal" href="#reaction-theory">Reaction theory</a></li>
+<li><a class="reference internal" href="#simulation-parameters">Simulation parameters</a></li>
+<li><a class="reference internal" href="#polymer-storage-and-saving-to-bob">Polymer storage and saving to BoB</a></li>
+<li><a class="reference internal" href="#memory-issues">Memory issues</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="theory.html"
+                        title="previous chapter">React Theories</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tobitaCSTR.html"
+                        title="next chapter">Tobita CSTR</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/React/Theory/tobitaLDPE.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tobita-ldpe">
+<h1>Tobita LDPE<a class="headerlink" href="#tobita-ldpe" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#reaction-theory" id="id2">Reaction theory</a></p></li>
+<li><p><a class="reference internal" href="#simulation-parameters" id="id3">Simulation parameters</a></p></li>
+<li><p><a class="reference internal" href="#polymer-storage-and-saving-to-bob" id="id4">Polymer storage and saving to BoB</a></p></li>
+<li><p><a class="reference internal" href="#memory-issues" id="id5">Memory issues</a></p></li>
+</ul>
+</div>
+<div class="section" id="reaction-theory">
+<h2><a class="toc-backref" href="#id2">Reaction theory</a><a class="headerlink" href="#reaction-theory" title="Permalink to this headline">¶</a></h2>
+<p>The LDPE batch reaction theory uses an algorithm described in the paper by H.
+Tobita <a class="bibtex reference internal" href="#ldpe-tobita2001" id="id1">[1]</a>. It is designed for a batch
+reaction - in which the reagents are well mixed at the beginning and monomer
+is consumed as the reaction proceeds. It is equivalent to the “plug-flow”
+approximation for a tubular reactor. One possibility when modelling a real
+tubular reactor is to mix several batch reactions with different conversions.</p>
+<p>The algorithm is based upon a set of processes occuring in the reactor during
+free-radical polymerisation. These processes are:</p>
+<ul class="simple">
+<li><p>initiation of free radicals (rate <span class="math notranslate nohighlight">\(R_{\mathrm{I}}\)</span> per unit volume);</p></li>
+<li><p>propagation or polymerisation (rate <span class="math notranslate nohighlight">\(R_{\mathrm{p}}\)</span>);</p></li>
+<li><p>chain transfer to small molecules (rate <span class="math notranslate nohighlight">\(R_{\mathrm{f}}\)</span>);</p></li>
+<li><p>termination by disproportionation (rate <span class="math notranslate nohighlight">\(R_{\mathrm{td}}\)</span>);</p></li>
+<li><p>termination by combination (rate <span class="math notranslate nohighlight">\(R_{\mathrm{tc}}\)</span>);</p></li>
+<li><p>chain transfer reactions leading to long-chain branching (rate <span class="math notranslate nohighlight">\(R_{\mathrm{b}}\)</span>);</p></li>
+<li><p>chain transfer reactions leading to scission (rate <span class="math notranslate nohighlight">\(R_{\mathrm{s}}\)</span>).</p></li>
+</ul>
+<p>The rates of each of these processes can be related, via
+standard reaction kinetics theory, to the reaction rate constants and the
+concentrations of various species in the reactor. In a batch reactor, the
+rates of each of these processes vary with reaction time, as monomers are
+consumed and polymers are made (this algorithm assumes that the monomer
+concentration decreases with reaction - i.e. it is batch rather than semi-batch).</p>
+<p>Tobita makes the further assumption that the timescale over which a single
+(linear) chain strand is formed within a molecule is much shorter than the
+reactor timescale. This is the “stationary state hypothesis”, and under
+these conditions, we balance the rate of creation of free radicals with the
+rate at which they are “terminated” and write</p>
+<div class="math notranslate nohighlight">
+\[R_{\mathrm{I}}=R_{\mathrm{td}}+R_{\mathrm{tc}}.\]</div>
+<p>Hence, there are five parameters which control the results of the reaction:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\tau &amp;= \dfrac{R_{\mathrm{td}}+R_{\mathrm{f}}}{R_{\mathrm{p}}},\\
+\beta &amp;= \dfrac{R_{\mathrm{tc}}}{R_{\mathrm{p}}},\\
+C_\text{b} &amp;= \dfrac{R_{\mathrm{b}}}{R_{\mathrm{p}}},\\
+C_\text{s} &amp;= \dfrac{R_{\mathrm{s}}}{R_{\mathrm{p}}},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_\text{b}\)</span> is the ratio of the
+branching and polymerisation rate constants and
+<span class="math notranslate nohighlight">\(C_\text{s}\)</span> the ratio of the
+scission and polymerisation rate constants.
+The fifth parameter <cite>fin_conv</cite> is the monomer conversion at the end of the reaction.</p>
+</div>
+<div class="section" id="simulation-parameters">
+<h2><a class="toc-backref" href="#id3">Simulation parameters</a><a class="headerlink" href="#simulation-parameters" title="Permalink to this headline">¶</a></h2>
+<p>In addition to these parameters, there are four more which control the
+generation of molecules, the way that the data are displayed, and the output
+to a BoB polymer configuration file. There are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">num_to_make</span></code>:</dt><dd><p>controls the number of molecules made in the
+simulation - more molecules mean better statistics, but take up more memory
+and take longer to simulate! It is a good idea, when trying to match data, to
+start with just a few molecules - say 1000 to 10000 - and then increase this
+number when you are satisfied the parameters are close to where you want them.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mon_mass</span></code>:</dt><dd><p>this is the mass, in a.m.u., of a monomer (usually set to
+28).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Me</span></code>:</dt><dd><p>the entanglement molecular weight - needed for output to a BoB
+polymer configuration file, but has no effect on the display within the React module.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">nbins</span></code>:</dt><dd><p>this is the number of bins - equally spaced in <span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span>
+- used for analysis of the molecules. More bins means more resolution in the
+<span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span> axis, but also more noise because there are fewer molecules per
+bin. Thus, the quality of the curves produced is a compromise between these
+two factors. Usually 50 bins is quite adequate for a reasonable number of molecules.</p>
+</dd>
+</dl>
+<p>When a molecule is generated, it is straightforward to assess its molecular
+weight and number of branches.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <cite>g</cite>-factor is calculated based on the
+assumption of ideal random walk statistics (as opposed to self-avoiding walk
+statistics). Ideal chain radius of gyration is fast to calculate:
+self-avoiding walk radius is not.
+It is often found that the <cite>g</cite>-factor
+calculated in these two ways is (somewhat surprisingly) similar, but it is
+still a possible source of error!</p>
+</div>
+</div>
+<div class="section" id="polymer-storage-and-saving-to-bob">
+<h2><a class="toc-backref" href="#id4">Polymer storage and saving to BoB</a><a class="headerlink" href="#polymer-storage-and-saving-to-bob" title="Permalink to this headline">¶</a></h2>
+<p>When a molecule is generated using the algorithm, the theory makes a decision
+as to whether to “save” the molecule (that is, to store a complete record of
+the molecule, including the connectivity of all the arms) or not (for an
+unsaved molecule, the theory still retains a record of the total molecular
+weight, number of branches and <cite>g</cite>-factor).</p>
+<p>“Saved” molecules are retained for
+possible output into a BoB polymer configuration file. The decision as to
+whether to save a molecule, or not, is based upon whether there have been a
+given number of molecules of similar molecular weight already generated.
+The <span class="math notranslate nohighlight">\(\log_{10}\text{MW}\)</span> axis is split into a set of evenly-spaced bins,
+and each bin keeps track of how many polymers have been made with molecular
+weight in the range of that bin.
+Once the number made exceeds a given maximum, polymers of
+that molecular weight are no longer saved.
+However, the algorithm still keeps
+track of the number of polymers made in a given bin - when saving a polymer
+configuration file for BoB, the weights of the saved molecules are adjusted
+accordingly, to account for the unsaved molecules.</p>
+<p>You can modify the parameters used for saving molecules by clicking on the
+<a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a>
+button. This opens a form with four parameters:</p>
+<ul class="simple">
+<li><p>the maximum molecular weight of the bins,</p></li>
+<li><p>the minimum molecular weight of the bins (it is wise to make sure
+these span the MW range of the polymers you are making),</p></li>
+<li><p>the number of bins,</p></li>
+<li><p>the maximum number of polymers stored per bin.</p></li>
+</ul>
+<p>In particular, increasing either of the last two parameters
+increases the number of polymers saved.</p>
+<p>Clicking the <a class="reference internal" href="../../../../_images/icons8-save-BoB.png"><img alt="save" class="align-bottom" src="../../../../_images/icons8-save-BoB.png" style="width: 20pt; height: 20pt;" /></a>
+button opens a save dialogue box which allows you to save a polymer
+configuration file containing the connectivity for the saved polymer. The
+format of this file, and the use of it within a BoB calculation, is given in
+the BoB documentation.</p>
+</div>
+<div class="section" id="memory-issues">
+<h2><a class="toc-backref" href="#id5">Memory issues</a><a class="headerlink" href="#memory-issues" title="Permalink to this headline">¶</a></h2>
+<p>React stores polymer information (total molecular weight, number of branches
+and <cite>g</cite>-factor) in a polymer record, and connectivity information in arm
+records.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is a fixed amount of computer memory allocated for this. React is designed to
+cope smoothly with running out of memory - it should kindly ask you to allocate more memory!
+The dialog will propose you to increase the amount of computer memory allocated to React
+and give you an estimate the extra amount or RAM needed.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>There are some things that contribute to using a lot of memory:</p>
+<ul class="simple">
+<li><p>Some choices of reaction parameters lead to extremely large molecules,
+with lots of arms being generated on each molecule. For non-zero values of the
+parameter <span class="math notranslate nohighlight">\(\beta\)</span>, gelation (i.e. infinite molecules) is possible. If a
+molecule looks like being particularly large, you will get a warning message!</p></li>
+<li><p>If you make too many molecules, you will run out of memory.</p></li>
+<li><p>If you save too many molecules, you will run out of arm records (adjust
+the parameters by clicking on the <a class="reference internal" href="../../../../_images/icons8-BoB-settings.png"><img alt="bob_param" class="align-bottom" src="../../../../_images/icons8-BoB-settings.png" style="width: 20pt; height: 20pt;" /></a> button.</p></li>
+<li><p>If you have other theories open which are already using a lot of
+storage, there might not be enough memory left for your current calculation
+(close un-needed theories, or adjust their parameters so they don’t use as
+much storage).</p></li>
+</ul>
+</div>
+<p><strong>You will get brief hints along these lines in the theory log if you run out of parameters.</strong></p>
+<p class="rubric">References</p>
+<p id="bibtex-bibliography-manual/Applications/React/Theory/tobitaLDPE-0"><dl class="citation">
+<dt class="bibtex label" id="ldpe-tobita2001"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Hidetaka Tobita. Simultaneous long-chain branching and random scission: I. Monte Carlo simulation. <em>J. Polym. Sci. Part B Polym. Phys.</em>, 39(4):391–403, 2001. <a class="reference external" href="https://doi.org/10.1002/1099-0488(20010115)39:4&lt;391::AID-POLB1011&gt;3.0.CO;2-3">doi:10.1002/1099-0488(20010115)39:4&lt;391::AID-POLB1011&gt;3.0.CO;2-3</a>.</p>
+</dd>
+</dl>
+</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tobitaCSTR.html" title="Tobita CSTR"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="theory.html" title="React Theories"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="theory.html" >React Theories</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

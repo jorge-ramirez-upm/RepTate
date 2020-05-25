@@ -37,24 +37,24 @@ based on the codes pyRespect-time (10.1002/mats.201900005) and pyRespect-frequen
 
 """
 import sys
+import os
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from DataTable import DataTable
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from PyQt5.QtWidgets import QWidget, QToolBar, QToolButton, QMenu, QComboBox, QSpinBox, QAction, QStyle, QMessageBox, QFileDialog
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
-from DraggableArtists import DragType, DraggableModesSeries
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.DataTable import DataTable
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from scipy.optimize import nnls, minimize, least_squares
 from scipy.interpolate import interp1d
 from scipy.integrate import cumtrapz, quad
-from enum import Enum
-import Version
+import enum
+import RepTate
 import time
 
-class PredictionMode(Enum):
+class PredictionMode(enum.Enum):
     """Define which prediction we want to see
     
     Parameters can be:
@@ -88,42 +88,23 @@ class TheoryShanbhagMaxwellModesFrequency(CmdBase):
     doi = ['http://dx.doi.org/10.3933/ApplRheol-23-24628']
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryShanbhagMaxwellModesFrequency(name, parent_dataset, ax) if (
             CmdBase.mode == CmdMode.GUI) else CLTheoryShanbhagMaxwellModesFrequency(
                 name, parent_dataset, ax)
 
 
 class BaseTheoryShanbhagMaxwellModesFrequency:
-    """[summary] 
-        
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes'
+    """Base class for both GUI and CL"""
+
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
     thname = TheoryShanbhagMaxwellModesFrequency.thname
     citations = TheoryShanbhagMaxwellModesFrequency.citations
     doi = TheoryShanbhagMaxwellModesFrequency.doi 
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-                
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.ShanBhagMaxwellModesFrequency
         self.has_modes = True
@@ -227,10 +208,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.n = 0
 
     def setup_graphic_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Setup graphic helpers"""
         self.contspectrum = self.ax.plot([], [])[0]
         self.contspectrum.set_marker('*')
         self.contspectrum.set_linestyle('--')
@@ -263,19 +241,13 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.ax.lines.remove(self.discspectrum)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.view_modes = state
         self.contspectrum.set_visible(self.view_modes)
         self.discspectrum.set_visible(self.view_modes)
@@ -938,13 +910,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
 
 
     def ShanBhagMaxwellModesFrequency(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Function that calculates the spectrum"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -1191,6 +1157,11 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Qprint("Fitting not allowed in this theory")
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
@@ -1238,10 +1209,7 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.Qprint(tab_data)
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory helpers"""
         if not self.view_modes:
              return
 
@@ -1278,38 +1246,18 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
 
 
 class CLTheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequency, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequency, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -1398,15 +1346,18 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               "data/", "Text (*.txt)")
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
         if fpath == '':
             return
             
         with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
 
             header = '# Continuous spectrum\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)
@@ -1424,17 +1375,11 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
 
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
@@ -1444,13 +1389,6 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
         self.set_param_value("plateau", checked)
 
     def handle_spinboxValueChanged(self, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - value {[type]} -- [description]
-        """
         """Handle a change of the parameter 'nmodes'"""
         self.set_param_value('nmodes', value)
         if self.autocalculate:
@@ -1486,18 +1424,7 @@ class TheoryShanbhagMaxwellModesTime(CmdBase):
     doi = ['http://dx.doi.org/10.1002/mats.201900005']
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheoryShanbhagMaxwellModesTime(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryShanbhagMaxwellModesTime(
@@ -1505,25 +1432,16 @@ class TheoryShanbhagMaxwellModesTime(CmdBase):
 
 
 class BaseTheoryShanbhagMaxwellModesTime:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes'
+    """Base class for both GUI and CL"""
+
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
     thname = TheoryShanbhagMaxwellModesTime.thname
     citations = TheoryShanbhagMaxwellModesTime.citations
     doi = TheoryShanbhagMaxwellModesTime.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
         self.has_modes = True
@@ -1624,10 +1542,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.tfit = None
 
     def setup_graphic_modes(self):
-        """[summary]
-        
-        [description]
-        """
+        """Setup graphic helpers"""
         self.contspectrum = self.ax.plot([], [])[0]
         self.contspectrum.set_marker('*')
         self.contspectrum.set_linestyle('--')
@@ -1660,19 +1575,13 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.ax.lines.remove(self.discspectrum)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.view_modes = state
         self.contspectrum.set_visible(self.view_modes)
         self.discspectrum.set_visible(self.view_modes)
@@ -2327,13 +2236,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
 
 
     def MaxwellModesTime(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -2561,6 +2464,11 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.Qprint("Fitting not allowed in this theory")
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
@@ -2608,10 +2516,7 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.Qprint(tab_data)
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory helpers"""
         if not self.view_modes:
             return
 
@@ -2646,38 +2551,18 @@ class BaseTheoryShanbhagMaxwellModesTime:
 
 
 class CLTheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -2772,15 +2657,19 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
         """Save Spectrum to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save spectrum to a text file",
-                                               "data/", "Text (*.txt)")
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
         if fpath == '':
             return
             
         with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
 
             header = '# Continuous spectrum\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
+
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)
@@ -2797,15 +2686,9 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
                                 'Wrote spectrum \"%s\"' % fpath)
 
     def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
     def modesaction_change(self, checked):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of modes"""
         self.graphicmodes_visible(checked)

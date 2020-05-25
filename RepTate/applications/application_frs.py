@@ -35,25 +35,17 @@
 Module for handling FRS experiments and simulations.
 
 """
-from Application import Application
+from RepTate.core.Application import Application
 
 
 class ApplicationFRS_I(Application):
-    """Application to FRS Intensity simulations
-    
-    [description]
-    """
+    """Application to FRS Intensity simulations"""
+
     name = "FRS_I"
     description = "FRS Intensity"
 
     def __init__(self, name="FRS_I", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"FRS_I"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super(ApplicationFRS_I, self).__init__(name, parent)
 
         # VIEWS
@@ -68,7 +60,8 @@ class ApplicationFRS_I(Application):
             log_y=True,
             view_proc=self.viewIt,
             n=1,
-            snames=["I(t)"])
+            snames=["I(t)"],
+        )
         self.views["log[I(t)]"] = View(
             name="log[I(t)]",
             description="log FRS Intensity decay",
@@ -80,34 +73,29 @@ class ApplicationFRS_I(Application):
             log_y=False,
             view_proc=self.viewLogIt,
             n=1,
-            snames=["log(I(t))"])
+            snames=["log(I(t))"],
+        )
 
-        #set multiviews
-        self.multiviews = [self.views['I(t)']]
+        # set multiviews
+        self.multiviews = [self.views["I(t)"]]
         self.nplots = len(self.multiviews)
 
         # FILES
-        ftype = TXTColumnFile("I(t) FRS files", "FRS_INTENSITY",
-                              "I(t) decay from FRS", ['t', 'I'],
-                              ['d', 'Na', 'ka', 'Ns', 'ka', 'Keq', 'beta'],
-                              ['s', 'Pa'])
+        ftype = TXTColumnFile(
+            "I(t) FRS files",
+            "FRS_INTENSITY",
+            "I(t) decay from FRS",
+            ["t", "I"],
+            ["d", "Na", "ka", "Ns", "ka", "Keq", "beta"],
+            ["s", "Pa"],
+        )
         self.filetypes[ftype.extension] = ftype
 
-        #Theories
+        # Theories
         self.add_common_theories()
 
     def viewIt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Intensity as a function of time"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -115,17 +103,7 @@ class ApplicationFRS_I(Application):
         return x, y, True
 
     def viewLogIt(self, dt, file_parameters):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - dt {[type]} -- [description]
-            - file_parameters {[type]} -- [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Log I vs log t"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])

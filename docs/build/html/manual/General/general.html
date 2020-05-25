@@ -1,0 +1,606 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>General Description of RepTate &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Applications" href="../Applications/applications.html" />
+    <link rel="prev" title="User Manual" href="../manual.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Applications/applications.html" title="Applications"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../manual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">General Description of RepTate</a><ul>
+<li><a class="reference internal" href="#main-reptate-window">Main RepTate Window</a></li>
+<li><a class="reference internal" href="#operating-with-datasets">Operating with Datasets</a><ul>
+<li><a class="reference internal" href="#structure-of-data-files">Structure of data files</a></li>
+<li><a class="reference internal" href="#adding-files-to-datasets">Adding files to datasets</a></li>
+<li><a class="reference internal" href="#importing-data-from-excel-files">Importing data from Excel files</a></li>
+<li><a class="reference internal" href="#sorting-files-in-a-dataset">Sorting Files in a Dataset</a></li>
+<li><a class="reference internal" href="#viewing-hiding-files">Viewing/Hiding Files</a></li>
+<li><a class="reference internal" href="#showing-editing-file-parameters">Showing/Editing file parameters</a></li>
+<li><a class="reference internal" href="#creating-new-datasets">Creating new datasets</a></li>
+<li><a class="reference internal" href="#adding-dummy-files-to-datasets">Adding <em>Dummy</em> files to datasets</a></li>
+<li><a class="reference internal" href="#reloading-the-data">Reloading the data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#operating-with-views">Operating with Views</a><ul>
+<li><a class="reference internal" href="#plot-area">Plot Area</a></li>
+<li><a class="reference internal" href="#changing-the-plot-properties">Changing the Plot Properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspecting-the-data">Inspecting the Data</a><ul>
+<li><a class="reference internal" href="#view-the-current-file-data">View the current file data</a></li>
+<li><a class="reference internal" href="#copy-paste-data">Copy/Paste data</a></li>
+<li><a class="reference internal" href="#shift-the-data">Shift the data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fitting-a-theory">Fitting a theory</a><ul>
+<li><a class="reference internal" href="#opening-a-new-theory">Opening a new Theory</a></li>
+<li><a class="reference internal" href="#viewing-editing-parameter-values-and-options">Viewing/Editing Parameter values and options</a></li>
+<li><a class="reference internal" href="#calculating-the-theory">Calculating the theory</a></li>
+<li><a class="reference internal" href="#fitting-the-theory">Fitting the theory</a></li>
+<li><a class="reference internal" href="#how-the-fitting-is-done">How the fitting is done</a></li>
+<li><a class="reference internal" href="#setting-x-and-y-range-limits-to-the-fitting-graphically">Setting x and y-range limits to the fitting graphically</a></li>
+<li><a class="reference internal" href="#fitting-options">Fitting options</a></li>
+<li><a class="reference internal" href="#saving-theory-predictions">Saving theory predictions</a></li>
+<li><a class="reference internal" href="#copying-pasting-theory-parameters">Copying/Pasting theory parameters</a></li>
+<li><a class="reference internal" href="#showing-all-theories-applied-to-current-dataset">Showing all theories applied to current DataSet</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-tools">Using the Tools</a></li>
+<li><a class="reference internal" href="#working-with-projects">Working with projects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../manual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../Applications/applications.html"
+                        title="next chapter">Applications</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/manual/General/general.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="general-description-of-reptate">
+<h1>General Description of RepTate<a class="headerlink" href="#general-description-of-reptate" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#main-reptate-window" id="id32">Main RepTate Window</a></p></li>
+<li><p><a class="reference internal" href="#operating-with-datasets" id="id33">Operating with Datasets</a></p>
+<ul>
+<li><p><a class="reference internal" href="#structure-of-data-files" id="id34">Structure of data files</a></p></li>
+<li><p><a class="reference internal" href="#adding-files-to-datasets" id="id35">Adding files to datasets</a></p></li>
+<li><p><a class="reference internal" href="#importing-data-from-excel-files" id="id36">Importing data from Excel files</a></p></li>
+<li><p><a class="reference internal" href="#sorting-files-in-a-dataset" id="id37">Sorting Files in a Dataset</a></p></li>
+<li><p><a class="reference internal" href="#viewing-hiding-files" id="id38">Viewing/Hiding Files</a></p></li>
+<li><p><a class="reference internal" href="#showing-editing-file-parameters" id="id39">Showing/Editing file parameters</a></p></li>
+<li><p><a class="reference internal" href="#creating-new-datasets" id="id40">Creating new datasets</a></p></li>
+<li><p><a class="reference internal" href="#adding-dummy-files-to-datasets" id="id41">Adding <em>Dummy</em> files to datasets</a></p></li>
+<li><p><a class="reference internal" href="#reloading-the-data" id="id42">Reloading the data</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#operating-with-views" id="id43">Operating with Views</a></p>
+<ul>
+<li><p><a class="reference internal" href="#plot-area" id="id44">Plot Area</a></p></li>
+<li><p><a class="reference internal" href="#changing-the-plot-properties" id="id45">Changing the Plot Properties</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#inspecting-the-data" id="id46">Inspecting the Data</a></p>
+<ul>
+<li><p><a class="reference internal" href="#view-the-current-file-data" id="id47">View the current file data</a></p></li>
+<li><p><a class="reference internal" href="#copy-paste-data" id="id48">Copy/Paste data</a></p></li>
+<li><p><a class="reference internal" href="#shift-the-data" id="id49">Shift the data</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#fitting-a-theory" id="id50">Fitting a theory</a></p>
+<ul>
+<li><p><a class="reference internal" href="#opening-a-new-theory" id="id51">Opening a new Theory</a></p></li>
+<li><p><a class="reference internal" href="#viewing-editing-parameter-values-and-options" id="id52">Viewing/Editing Parameter values and options</a></p></li>
+<li><p><a class="reference internal" href="#calculating-the-theory" id="id53">Calculating the theory</a></p></li>
+<li><p><a class="reference internal" href="#fitting-the-theory" id="id54">Fitting the theory</a></p></li>
+<li><p><a class="reference internal" href="#how-the-fitting-is-done" id="id55">How the fitting is done</a></p></li>
+<li><p><a class="reference internal" href="#setting-x-and-y-range-limits-to-the-fitting-graphically" id="id56">Setting x and y-range limits to the fitting graphically</a></p></li>
+<li><p><a class="reference internal" href="#fitting-options" id="id57">Fitting options</a></p></li>
+<li><p><a class="reference internal" href="#saving-theory-predictions" id="id58">Saving theory predictions</a></p></li>
+<li><p><a class="reference internal" href="#copying-pasting-theory-parameters" id="id59">Copying/Pasting theory parameters</a></p></li>
+<li><p><a class="reference internal" href="#showing-all-theories-applied-to-current-dataset" id="id60">Showing all theories applied to current DataSet</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-the-tools" id="id61">Using the Tools</a></p></li>
+<li><p><a class="reference internal" href="#working-with-projects" id="id62">Working with projects</a></p></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<p>RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory &amp; Experiment) is a software package for viewing, exchanging and analysing experimental data. Several of the classical and latest theories of polymer dynamics are included in RepTate, so they can be tested and fitted to the experimental data.</p>
+<p>The software is designed in a modular way, so it is easy to extend to analyze new types of data and fit with new theories.</p>
+<p>RepTate makes extensive use of the following packages and libraries:</p>
+<ul class="simple">
+<li><p>Matplotlib: Text <a class="bibtex reference internal" href="#general-hunter-2007" id="id1">[1]</a>.</p></li>
+<li><p>Scipy: Text <a class="bibtex reference internal" href="#general-jones-2018" id="id2">[2]</a>.</p></li>
+<li><p>Numpy: Text <a class="bibtex reference internal" href="#general-oliphant-2006" id="id3">[3]</a>.</p></li>
+<li><p>Qt and Pyqt: Text <a class="bibtex reference internal" href="#general-pyqt-2018" id="id4">[4]</a>, Text <a class="bibtex reference internal" href="#general-qt-2018" id="id5">[5]</a>.</p></li>
+</ul>
+<div class="section" id="main-reptate-window">
+<h2><a class="toc-backref" href="#id32">Main RepTate Window</a><a class="headerlink" href="#main-reptate-window" title="Permalink to this headline">¶</a></h2>
+<p>The main RepTate window is called the <em>Application Manager</em> and is a multiple document interface (MDI) (see <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). All the applications can be opened from the Application Manager and will reside inside it. At the top of the Application Manager there is a toolbar that allows to open different applications (label <strong>1</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>), load and save RepTate projects, read the help and exit RepTate. Currently open applications can are shown as tabs below the toolbar (label <strong>2</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). By default, tabs are named after the application name and a number. The name can be changed by double-clicking on the tab.</p>
+<div class="figure align-center" id="id15">
+<span id="figmainwindow"></span><a class="reference internal image-reference" href="../../_images/RepTate_Window.png"><img alt="../../_images/RepTate_Window.png" src="../../_images/RepTate_Window.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Main RepTate window showing the most important elements in the user interface.</span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</div>
+<p>Applications have three main separate areas:</p>
+<ul class="simple">
+<li><p>The plot, in the center, is where the experimental data files and theoretical fits are shown (label <strong>4</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>).</p></li>
+<li><p>A vertical region at the right of the window, that allows to:</p>
+<ul>
+<li><p>Select the current <em>View</em> (way of representing the data, label <strong>3</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>)</p></li>
+<li><p>Open data <em>Files</em> and arrange them into different <em>Datasets</em> (label <strong>5</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Different <em>Datasets</em> are shown as tabs, named by default as “Set” + number. The name of a <em>Dataset</em> can be changed by double-clicking on the tab.</p></li>
+<li><p>Create a <em>Theory</em> associated to a given Dataset and fit it (minimize the error with respect to the Files within that Dataset, label <strong>7</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Currently open theories are named after the theory name + a number. The name can be changed by double-clicking on the tab.</p></li>
+</ul>
+</li>
+</ul>
+<p>Files in the current <em>DataSet</em> are shown in a table, along with the main parameters that describe each file (label <strong>6</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>). Files can be added to a <em>Dataset</em> with the “Open Data File” button <a class="reference internal" href="../../_images/icons8-open-view-in-new-tab.png"><img alt="open" class="align-bottom" src="../../_images/icons8-open-view-in-new-tab.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+O) or by dragging them from the file explorer and dropping them on the RepTate window. In the <em>Theory</em> area, the parameters of the current theory are shown in a table, with their current value and error. A blue box below the table shows information during the calculation and fitting procedure (label <strong>8</strong> in <a class="reference internal" href="#figmainwindow"><span class="std std-numref">Fig. 1</span></a>)</p>
+<p>By clicling on the “Data Inspection” button <a class="reference internal" href="../../_images/icons8-microscope.png"><img alt="inspection" class="align-bottom" src="../../_images/icons8-microscope.png" style="width: 15pt; height: 15pt;" /></a> (label <strong>1</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>), a new region on the left of the plot area is shown where the user can inspect the contents of a file, shift data and use the Tools. Two separate areas are shown:</p>
+<div class="figure align-center" id="id16">
+<span id="figextendedwindow"></span><a class="reference internal image-reference" href="../../_images/RepTate_Extended_Window.png"><img alt="../../_images/RepTate_Extended_Window.png" src="../../_images/RepTate_Extended_Window.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Extended RepTate window showing file data and Tools.</span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p>A region (label <strong>3</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) where the file contents are shown in a table. Above the table (label <strong>2</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) there is a toolbar that allows the user to do some operations on the data (copy, paste, shift, etc).</p></li>
+<li><p>A region (label <strong>4</strong> in <a class="reference internal" href="#figextendedwindow"><span class="std std-numref">Fig. 2</span></a>) that lets the user apply different Tools to the current Dataset.</p></li>
+</ul>
+<p>The data inspection and Tools region is hidden by default.</p>
+</div>
+<div class="section" id="operating-with-datasets">
+<h2><a class="toc-backref" href="#id33">Operating with Datasets</a><a class="headerlink" href="#operating-with-datasets" title="Permalink to this headline">¶</a></h2>
+<p>When an new application is opened, a new tab is created in the Main RepTate window, showing an empty application with an empty dataset, no theories and the default view. New data files must be added to the dataset in order to use all the functionality of RepTate.</p>
+<div class="section" id="structure-of-data-files">
+<h3><a class="toc-backref" href="#id34">Structure of data files</a><a class="headerlink" href="#structure-of-data-files" title="Permalink to this headline">¶</a></h3>
+<p>Only text files that have the right extension and contain the expected data can be added to the current application. The general structure of the text files that can be read by RepTate is as follows (see the example below for a quick reference):</p>
+<ul class="simple">
+<li><p>[<strong>Required</strong>] The first line contains a <strong>list of parameters</strong> that describe the contents of the data in the file, as a list of variables and values separated by semicolons. Typically, the parameters will describe the conditions (temperature, pressure, etc) at which the experiment was done, plus some additional parameters to characterize the material (chemistry, molecular weight, etc) and the author of the data. Some parameters are needed by some applications and theories (for example, the temperature in the TTS module) and RepTate will show a warning if their values are missing. The values of the parameters can be real numbers, integers or strings.</p></li>
+<li><p>[<strong>Optional</strong>] Some <strong>additional text lines</strong> may be present in the file with further info about the experimental data (the date and location where the data was taken, the equipment, etc). These lines ignored by RepTate.</p></li>
+<li><p>[<strong>Required</strong>] The <strong>data</strong> itself must be stored in the file as <strong>columns separated by spaces or tabs</strong>. The number of columns must be greater or equal than the number of columns required by the application, and in the expected order. Additional columns are discarded. For more information, check the documentation for each particular application.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var1=value1;var2=value2;var3=value3;...
+Some text
+# Some text
+1.90165E+0      7.38023E+1      1.35152E+4
+3.01392E+0      1.99063E+1      2.14834E+4
+4.51700E+0      3.72861E+1      3.17756E+4
+...             ...             ...
+</pre></div>
+</div>
+<p>For more info about valid extensions and data structure inside the files, check the documentation for each application.</p>
+</div>
+<div class="section" id="adding-files-to-datasets">
+<h3><a class="toc-backref" href="#id35">Adding files to datasets</a><a class="headerlink" href="#adding-files-to-datasets" title="Permalink to this headline">¶</a></h3>
+<p>There are two ways to add Files to the current application:</p>
+<ul class="simple">
+<li><p>By dragging and dropping them from the system file explorer to the Application window (see <a class="reference internal" href="#figdragdrop"><span class="std std-numref">Fig. 3</span></a>).</p></li>
+<li><p>By pressing the Open Data File button <a class="reference internal" href="../../_images/icons8-open-view-in-new-tab.png"><img alt="open" class="align-bottom" src="../../_images/icons8-open-view-in-new-tab.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+O). A file dialog is shown where one file or more files of the right type can be selected.</p></li>
+</ul>
+<div class="figure align-center" id="id17">
+<span id="figdragdrop"></span><a class="reference internal image-reference" href="../../_images/dragdropfiles.gif"><img alt="../../_images/dragdropfiles.gif" src="../../_images/dragdropfiles.gif" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Dragging and dropping some files to the RepTate window.</span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="importing-data-from-excel-files">
+<h3><a class="toc-backref" href="#id36">Importing data from Excel files</a><a class="headerlink" href="#importing-data-from-excel-files" title="Permalink to this headline">¶</a></h3>
+<p>This feature is experimental and will be improved in the future. In the current version, when the user selects the button “Import from Excel” <a class="reference internal" href="../../_images/icons8-microsoft-excel.png"><img alt="excel" class="align-bottom" src="../../_images/icons8-microsoft-excel.png" style="width: 15pt; height: 15pt;" /></a>, under the button <a class="reference internal" href="../../_images/icons8-open-view-in-new-tab.png"><img alt="open" class="align-bottom" src="../../_images/icons8-open-view-in-new-tab.png" style="width: 15pt; height: 15pt;" /></a> menu, a dialog is shown that allows the user to (see <a class="reference internal" href="#figimportexcel"><span class="std std-numref">Fig. 4</span></a>):</p>
+<ul class="simple">
+<li><p>select the Excel file</p></li>
+<li><p>set the file parameters</p></li>
+<li><p>select Excel Sheet that contains the data</p></li>
+<li><p>set the number of rows in the Excel sheet that must be skipped</p></li>
+<li><p>set the columns in the Excel sheet that correspond to the columns that the RepTate application expects to read.</p></li>
+</ul>
+<div class="figure align-center" id="id18">
+<span id="figimportexcel"></span><a class="reference internal image-reference" href="../../_images/ImportfromExcel.png"><img alt="../../_images/ImportfromExcel.png" src="../../_images/ImportfromExcel.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Importing data from an Excel file into the LVE application.</span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="sorting-files-in-a-dataset">
+<h3><a class="toc-backref" href="#id37">Sorting Files in a Dataset</a><a class="headerlink" href="#sorting-files-in-a-dataset" title="Permalink to this headline">¶</a></h3>
+<p>The files in a Dataset can be sorted by name or parameter value, in increasing and decreasing order, by clicking in the corresponding column header. Clicking several times on the same header will invert the sorting order. A small arrow next to a column header name will indicate how the files in the current Dataset are sorted (see <a class="reference internal" href="#figsortfiles"><span class="std std-numref">Fig. 5</span></a>).</p>
+<div class="figure align-center" id="id19">
+<span id="figsortfiles"></span><a class="reference internal image-reference" href="../../_images/SortingFiles.png"><img alt="../../_images/SortingFiles.png" src="../../_images/SortingFiles.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">A Dataset with files sorted by decreasing value of the <em>gdot</em> parameter.</span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the files in a Dataset are sorted, the colours assigned to each file are also changed. The order of the colours is assigned by the selected palette. The number of colours in some palettes is limited and, therefore, if the number of files exceed the number of colours available, some files may end up having the same colour.</p>
+</div>
+<div class="section" id="viewing-hiding-files">
+<h3><a class="toc-backref" href="#id38">Viewing/Hiding Files</a><a class="headerlink" href="#viewing-hiding-files" title="Permalink to this headline">¶</a></h3>
+<p>Each file in a Dataset can be in the enabled (checked) or disabled state (unchecked, see <a class="reference internal" href="#figdisablefile"><span class="std std-numref">Fig. 6</span></a>). When files are disabled, they are not shown in the current view and they are not considered during theory calculation and fitting.</p>
+<div class="figure align-center" id="id20">
+<span id="figdisablefile"></span><a class="reference internal image-reference" href="../../_images/disablingfiles.gif"><img alt="../../_images/disablingfiles.gif" src="../../_images/disablingfiles.gif" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Enabling/disabling files in a Dataset.</span><a class="headerlink" href="#id20" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="showing-editing-file-parameters">
+<h3><a class="toc-backref" href="#id39">Showing/Editing file parameters</a><a class="headerlink" href="#showing-editing-file-parameters" title="Permalink to this headline">¶</a></h3>
+<p>By double-clicking on a file name in the Dataset area, it is possible to view/edit the parameters of the file. A dialog will open, where all the file parameters are shown and all their values can be viewed/edited.</p>
+</div>
+<div class="section" id="creating-new-datasets">
+<h3><a class="toc-backref" href="#id40">Creating new datasets</a><a class="headerlink" href="#creating-new-datasets" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes, it is convenient to load data into separate data sets, because the data correspond to different materials or the experiments have been done in different conditions. In order to create a new empty dataset, the user must click on the “Create an empty DataSet” button <a class="reference internal" href="../../_images/icons8-add-row.png"><img alt="newdataset" class="align-bottom" src="../../_images/icons8-add-row.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+N) in the DataSet toolbar. By default, new DataSets are named Set <em>i</em>, where <em>i</em> is an integer that starts from 1 and increments as new DataSets are opened. The DataSet name can be changed by double-clicking on the DataSet tab.</p>
+<p>When there are more than one Dataset in the current application, the user can switch Datasets by clicking on the corresponding tab. By default, RepTate only plots the data in the currently active Dataset. If the button “View all Datasets simultaneously” button <a class="reference internal" href="../../_images/icons8-binoculars.png"><img alt="viewall" class="align-bottom" src="../../_images/icons8-binoculars.png" style="width: 20pt; height: 20pt;" /></a> is clicked, all the data in all open Datasets is shown.</p>
+</div>
+<div class="section" id="adding-dummy-files-to-datasets">
+<h3><a class="toc-backref" href="#id41">Adding <em>Dummy</em> files to datasets</a><a class="headerlink" href="#adding-dummy-files-to-datasets" title="Permalink to this headline">¶</a></h3>
+<p>In some cases, the user may want to explore the results of a given theory but he/she does not have any experimental data files available. Since the theories are only applied to the active files of the Dataset that owns the theory, it is convenient to be able to create <em>empty</em> files with parameters that span some range of values of interest (for example, the user may be interested in exploring the results of some theory when the molecular weight of the samples is changed). In RepTate, this can be done by adding <em>Dummy files</em>, in the submenu under the “Open Data File” button.</p>
+<p>When the “Add Dummy files” button is clicked, a dialog is shown allowing the user to configure how the files are going to be generated (see <a class="reference internal" href="#figdummyfiles"><span class="std std-numref">Fig. 7</span></a>):</p>
+<ul class="simple">
+<li><p>The parameter(s) that are going to be changed systematically in the dummy files. By default, the possible parameters are selected from the list of <em>important</em> parameters, defined for every application. By ticking the check-box next to a parameter, it is selected.</p></li>
+<li><p>The range of values over which the parameter will be swept, which is defined by a minimum value, a maximum value, the number of points and scale (linear or logarithmic) that will be used to separate the points between the minumum and the maximum.</p></li>
+<li><p>The data in the dummy files is arbitrary. The user can select the range, number of points and scale (linear or log) in the dummy file for the first column (which frequently will act as the <em>x</em>-coordinate in views), as well as the default <em>y</em> value for the remaining columns.</p></li>
+<li><p>The user can also input the chemistry, which may be interesting if a certain material is available in the Materials Database.</p></li>
+</ul>
+<div class="figure align-center" id="id21">
+<span id="figdummyfiles"></span><a class="reference internal image-reference" href="../../_images/DummyFiles.png"><img alt="../../_images/DummyFiles.png" src="../../_images/DummyFiles.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Dialog for adding <em>Dummy</em> files to a DataSet.</span><a class="headerlink" href="#id21" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="reloading-the-data">
+<h3><a class="toc-backref" href="#id42">Reloading the data</a><a class="headerlink" href="#reloading-the-data" title="Permalink to this headline">¶</a></h3>
+<p>Some times, the user may be representing some data that is being updated in real time (because an experiment or simulation is running at the same time as the RepTate session). In this cases, it is interesting to update the data in RepTate by reading again the file. This can be done by clicking the button “Reload Data Files &amp; Theories” <a class="reference internal" href="../../_images/icons8-file-reload.png"><img alt="filereload" class="align-bottom" src="../../_images/icons8-file-reload.png" style="width: 20pt; height: 20pt;" /></a> (Ctrl+R).</p>
+</div>
+</div>
+<div class="section" id="operating-with-views">
+<h2><a class="toc-backref" href="#id43">Operating with Views</a><a class="headerlink" href="#operating-with-views" title="Permalink to this headline">¶</a></h2>
+<p>The data read from the files can be represented in several different ways, which are different for each application. In RepTate, the way some experimental or theory data are represented is referred to as the <strong>View</strong>.</p>
+<p>There are two different ways to select a View:</p>
+<ul class="simple">
+<li><p>From the drop-down box at the top-right corner of the Application window. By clicking on the box, a menu is shown with all the Views that are defined in the current application. By hovering the mouse over the View names, some additional information may be displayed.</p></li>
+<li><p>By right-clicking on the plot area, a menu is displayed. By selecting the submenu “Select View”, the user can select the view from a list (the contents of the list are exactly the same as in the drop-down box).</p></li>
+</ul>
+<p>At the left of the drop-down box, there is a small up-down selector that allows the user to change the number of graphs that are shown in the plot area. When there are more than one graph, a small set of tabs is shown on the left of the Plot area (see <a class="reference internal" href="#figmanyviews"><span class="std std-numref">Fig. 8</span></a>). The number of tabs is equal to the number of Views + 1. The tab 0 shows all views and the other tabs show a single view.</p>
+<div class="figure align-center" id="id22">
+<span id="figmanyviews"></span><a class="reference internal image-reference" href="../../_images/ManyViews.png"><img alt="../../_images/ManyViews.png" src="../../_images/ManyViews.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Plot area showing 4 different views and the tabs to switch from all to particular views (left).</span><a class="headerlink" href="#id22" title="Permalink to this image">¶</a></p>
+</div>
+<p>Most Applications in RepTate show just one graph by default.</p>
+<p>The data, as represented by the current View/Views, can be saved to a text file by clicking on the button <a class="reference internal" href="../../_images/icons8-saveView1.png"><img alt="saveview" class="align-bottom" src="../../_images/icons8-saveView1.png" style="width: 20pt; height: 20pt;" /></a> at the right of the View combo box.</p>
+<div class="section" id="plot-area">
+<h3><a class="toc-backref" href="#id44">Plot Area</a><a class="headerlink" href="#plot-area" title="Permalink to this headline">¶</a></h3>
+<p>The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the “View all Datasets simultaneously” button <a class="reference internal" href="../../_images/icons8-binoculars.png"><img alt="viewall" class="align-bottom" src="../../_images/icons8-binoculars.png" style="width: 20pt; height: 20pt;" /></a> is clicked). Several operations can be done in the plot area:</p>
+<ul class="simple">
+<li><p>By clicking on a data point, a label is shown with  its (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>) coordinates, with respect to the current View (label <strong>1</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 9</span></a>). The label can be hidden by clicking on it again.</p></li>
+<li><p>By right-clicking on the plot area and dragging the mouse, the user can zoom to an specific region of the plot.</p></li>
+<li><p>By using the mouse wheel, the user can zoom in or out in the plot.</p></li>
+<li><dl class="simple">
+<dt>By right-clicking on the plot, a menu is shown with the following operations (label <strong>3</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 9</span></a>):</dt><dd><ul>
+<li><p>The chart can be copied to the clipboard as an image. The image can be pasted on any other program (such as Microsoft Word or Powerpoint)</p></li>
+<li><p>The chart can be saved to an image file, using different formats (png, pdf, etc).</p></li>
+<li><p>An annotation label can be added to the plot (label <strong>2</strong> in <a class="reference internal" href="#figplotarea"><span class="std std-numref">Fig. 9</span></a>). LaTeX commands can be used in the text of the annotation. Annotation labels can be moved around by dragging them with the mouse and edited by double-clicking on them.</p></li>
+<li><p>The view can be reset to the default zoom.</p></li>
+<li><p>The view can be changed to any of the available views in the current application.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="figure align-center" id="id23">
+<span id="figplotarea"></span><a class="reference internal image-reference" href="../../_images/Plot_Area.png"><img alt="../../_images/Plot_Area.png" src="../../_images/Plot_Area.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Plot area showing data point coordinates (1), annotations (2) and pop-up menu (3).</span><a class="headerlink" href="#id23" title="Permalink to this image">¶</a></p>
+</div>
+<p>Additional view options can be set by clicking on the “Show/Hide Figure Toolbar” button <a class="reference internal" href="../../_images/icons8-sine-100.png"><img alt="figuretoolbar" class="align-bottom" src="../../_images/icons8-sine-100.png" style="width: 20pt; height: 20pt;" /></a> on the Dataset area. The x-y ranges can be fixed by clicking on the “Lock XY axes” in the Dataset area.</p>
+</div>
+<div class="section" id="changing-the-plot-properties">
+<h3><a class="toc-backref" href="#id45">Changing the Plot Properties</a><a class="headerlink" href="#changing-the-plot-properties" title="Permalink to this headline">¶</a></h3>
+<p>Most of the visual aspects of the plot (lines, symbols, axes labels, legend, etc) can be changed, by clicking the “Plot Settings” button <a class="reference internal" href="../../_images/icons8-color-wheel-2.png"><img alt="plotsettings" class="align-bottom" src="../../_images/icons8-color-wheel-2.png" style="width: 20pt; height: 20pt;" /></a> (Ctrl+M) in the Dataset area. A dialog is shown with different tabs, each one dedicated to a different aspect of the plot.</p>
+<ul class="simple">
+<li><p><strong>Data</strong>: in this tab, the user can select how the experimental data loaded in the Dataset is shown on the current view (see <a class="reference internal" href="#figplotstyledata"><span class="std std-numref">Fig. 10</span></a>). By default, the experimental data is always shown as symbols, and the user can select the symbol type, size and colour. The different files in the Dataset can be shown with the same or different symbols and the colour can be set by selecting from a list of available colour palettes. Alternatively, the color can be fixed for all files or selected from a gradient, interpolating from Colour1 (which is used for the first file in the current Dataset) to Colour2 (for the last file).</p></li>
+</ul>
+<div class="figure align-center" id="id24">
+<span id="figplotstyledata"></span><a class="reference internal image-reference" href="../../_images/PlotStyleData.png"><img alt="../../_images/PlotStyleData.png" src="../../_images/PlotStyleData.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Changing the Plot properties of the data.</span><a class="headerlink" href="#id24" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p><strong>Theory</strong>: the line type, width and colour can be selected (fixed or the same colour as the data).</p></li>
+<li><p><strong>Legend</strong>: here, the user can select if he/she wants to show the legend in the current plot, along with its location, font and other properties</p></li>
+</ul>
+<p>such as the label that will be used to represent the data (see <a class="reference internal" href="#figplotstylelegend"><span class="std std-numref">Fig. 11</span></a>). For example, if the files in the current Dataset have
+the parameter <em>Mw</em> defined with a value, it can be used as the legend label by filling the <em>Legend Labels</em> field with the text “Mw = [Mw]”.</p>
+<ul class="simple">
+<li><p><strong>Annotations</strong>: here, the default properties of annotations (colour, font, opacity, etc) can be set. All new notations will have these properties. Individual annotation properties can be changed by double-clicking on the text of a particular annotation.</p></li>
+</ul>
+<div class="figure align-center" id="id25">
+<span id="figplotstylelegend"></span><a class="reference internal image-reference" href="../../_images/PlotStyleLegend.png"><img alt="../../_images/PlotStyleLegend.png" src="../../_images/PlotStyleLegend.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Changing the style of the legend.</span><a class="headerlink" href="#id25" title="Permalink to this image">¶</a></p>
+</div>
+<ul class="simple">
+<li><p><strong>Axes</strong>: the font of the labels and the colour of the labels and axes can be changed. Also, the user can choose whether to show grid lines or not.</p></li>
+</ul>
+<p>As an example, a plot of LVE data with different graphical settings is shown in <a class="reference internal" href="#figplotstylelegend"><span class="std std-numref">Fig. 11</span></a>.</p>
+<div class="figure align-center" id="id26">
+<span id="figplotstylechanged"></span><a class="reference internal image-reference" href="../../_images/PlotStyleChanged.png"><img alt="../../_images/PlotStyleChanged.png" src="../../_images/PlotStyleChanged.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Example of a plot of LVE data where some of the default graphical properties have been changed.</span><a class="headerlink" href="#id26" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="inspecting-the-data">
+<h2><a class="toc-backref" href="#id46">Inspecting the Data</a><a class="headerlink" href="#inspecting-the-data" title="Permalink to this headline">¶</a></h2>
+<p>When the user clicks the button “Inspect contents of data files” <a class="reference internal" href="../../_images/icons8-microscope.png"><img alt="inspection" class="align-bottom" src="../../_images/icons8-microscope.png" style="width: 15pt; height: 15pt;" /></a> (Ctrl+I) in the Dataset area, a new panel is shown on the left side of the application window. In this panel, some operations can be done on the data, like checking the contents, copy and pasting data, shifting the curves around by dragging them with the mouse or applying Tools to the data.</p>
+<div class="section" id="view-the-current-file-data">
+<h3><a class="toc-backref" href="#id47">View the current file data</a><a class="headerlink" href="#view-the-current-file-data" title="Permalink to this headline">¶</a></h3>
+<p>When a file in the current Dataset is selected with the mouse, the corresponding plot is highlighted and the contents of the file are shown in the data inspection table (if the data inspection table is shown, see <a class="reference internal" href="#figdatainspection"><span class="std std-numref">Fig. 13</span></a>).</p>
+<div class="figure align-center" id="id27">
+<span id="figdatainspection"></span><a class="reference internal image-reference" href="../../_images/DataInpection.png"><img alt="../../_images/DataInpection.png" src="../../_images/DataInpection.png" style="width: 70%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Inspecting the contents of the selected file.</span><a class="headerlink" href="#id27" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="copy-paste-data">
+<h3><a class="toc-backref" href="#id48">Copy/Paste data</a><a class="headerlink" href="#copy-paste-data" title="Permalink to this headline">¶</a></h3>
+<p>The data shown in the inspection data table can be copied as text (columns separated by tabs) by selecting the corresponding cells, columns or rows from the table and pressing the button “Copy” in the data inspaction area. The copied data can be pasted in another application like Excel or Matlab, or even to a different file by pressing the button “Paste” in the data inspection area.</p>
+</div>
+<div class="section" id="shift-the-data">
+<h3><a class="toc-backref" href="#id49">Shift the data</a><a class="headerlink" href="#shift-the-data" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it may be convenient to compare features of two different data files that are represented in the same plot. For example, one may be interested in comparing the different terminal regions of G’ data of samples of the same polymer with different molecular weight. RepTate allows the user to shift the data vertically and/or horizontally by pressing the buttons “Shift the selected curve vertically” <a class="reference internal" href="../../_images/icons8-vertical-timeline-slider.png"><img alt="shiftvertical" class="align-bottom" src="../../_images/icons8-vertical-timeline-slider.png" style="width: 15pt; height: 15pt;" /></a> and/or “Shift the selected curve horizontally” <a class="reference internal" href="../../_images/icons8-timeline-slider.png"><img alt="shifthorizontal" class="align-bottom" src="../../_images/icons8-timeline-slider.png" style="width: 15pt; height: 15pt;" /></a>, respectively, in the data inspection area. Once the user finishes shifting the curves, he/she can check, save and reset the values of the shift factors by clicking on the corresponding buttons in the data inspection area. The whole procedure is summarized in <a class="reference internal" href="#figshiftfiles"><span class="std std-numref">Fig. 14</span></a>.</p>
+<div class="figure align-center" id="id28">
+<span id="figshiftfiles"></span><a class="reference internal image-reference" href="../../_images/shiftingfiles.gif"><img alt="../../_images/shiftingfiles.gif" src="../../_images/shiftingfiles.gif" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Shifting some curves horizontally and viewing the shift factors.</span><a class="headerlink" href="#id28" title="Permalink to this image">¶</a></p>
+</div>
+<p>When the axis with respect to which the shifting is being carried out is in logarithmic scale, the shift factor represents the decimal logarithm of the factor by which one should multiply the data in order to obtain the observed shift. When the axis is in linear scale, the shift factor is just the linear shift needed to obtain the observed shift.</p>
+</div>
+</div>
+<div class="section" id="fitting-a-theory">
+<h2><a class="toc-backref" href="#id50">Fitting a theory</a><a class="headerlink" href="#fitting-a-theory" title="Permalink to this headline">¶</a></h2>
+<p>One of the most important features of RepTate is the ability to easily fit a theory to a set of experimental data files. The available theories in each RepTate application are described and discussed in the documentation corresponding to each application. Here, we give a short summary of the general ideas about how theories are handled in RepTate.</p>
+<p>It is important to note that, in RepTate, theories <em>belong</em> to Datasets, <em>i.e.</em> they are applied only to the data files in the Dataset under which the theory was created.</p>
+<div class="section" id="opening-a-new-theory">
+<h3><a class="toc-backref" href="#id51">Opening a new Theory</a><a class="headerlink" href="#opening-a-new-theory" title="Permalink to this headline">¶</a></h3>
+<p>Below the Dataset table that contains the files, there is a toolbar for operating with theories. First, the user should select a theory from the list available in the drop-down menu. Once the right theory is selected, a new instance of the theory can be created by clicking on the “Create Selected Theory” button <a class="reference internal" href="../../_images/icons8-einstein.png"><img alt="newtheory" class="align-bottom" src="../../_images/icons8-einstein.png" style="width: 15pt; height: 15pt;" /></a> (Alt+N). New theories are shown as tabs below the theory toolbar. By default, theories are named after a combination of capital letters selected after the theory name + an index number. The name of any theory can be changed by double clicking on the corresponding tab.</p>
+</div>
+<div class="section" id="viewing-editing-parameter-values-and-options">
+<h3><a class="toc-backref" href="#id52">Viewing/Editing Parameter values and options</a><a class="headerlink" href="#viewing-editing-parameter-values-and-options" title="Permalink to this headline">¶</a></h3>
+<p>When a new theory instance is created, a new tab opens in which two clearly separate areas can be seen (see <a class="reference internal" href="#figtheoryarea"><span class="std std-numref">Fig. 15</span></a>):</p>
+<ul class="simple">
+<li><p>A table that lists the parameters of the theory, with their current value and, if the theory has been fitted to some experimental data, the error of the fitting.</p></li>
+<li><p>A text area with a light blue background that shows all the relevant information during the calculation and fitting of the theory, as well as any citation information that is relevant to the current theory.</p></li>
+</ul>
+<div class="figure align-center" id="id29">
+<span id="figtheoryarea"></span><a class="reference internal image-reference" href="../../_images/TheoryArea.png"><img alt="../../_images/TheoryArea.png" src="../../_images/TheoryArea.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">A theory with the parameters table and the log area (with cyan background).</span><a class="headerlink" href="#id29" title="Permalink to this image">¶</a></p>
+</div>
+<p>Theory parameters can be shown in the table in three possible states:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Checked: the parameter value will be optimized during the fitting procedure.</dt><dd><ul>
+<li><p>Unchecked: the value of the parameter will not be optimized (it will remain constant during the next fitting procedure).</p></li>
+<li><p>Grayed out or partially checked: the parameter cannot be optimized. This is intended for parameters, like exponents of scaling factors, that take well known values. Typically, <em>grayed</em> parameters take their value from a set of prescribed discrete values.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>Theory parameters have properties, and some of these properties are very important during theory fitting. In order to check and edit the properties of parameters, the user can double-click on any parameter name. Then, a dialog is shown with a tablist, with a tab for each parameter of the theory and the current properties of each parameter (see <a class="reference internal" href="#figparameterproperties"><span class="std std-numref">Fig. 16</span></a>). The most important properties of a parameter are:</p>
+<ul class="simple">
+<li><p><strong>name</strong>: the short name of the parameter. It is hardcoded into the theory and cannot be changed.</p></li>
+<li><p><strong>description</strong>: a short description of the parameter. It is hardcoded into the theory and cannot be changed.</p></li>
+<li><p><strong>type</strong>: the numerical type of the value of the parameter. It can be <em>real</em>, <em>integer</em>, <em>discrete_real</em> (its value is selected from a discrete list of real values), <em>discrete_integer</em> (discrete list of integer values) and <em>boolean</em>.</p></li>
+<li><p><strong>opt_type</strong>: indicates whether the parameter value will be optimized during the fitting procedure or not. Possible states are: <em>opt</em> (will be optimized), <em>nopt</em> (will not be optimized) and <em>const</em> (cannot be optimized).</p></li>
+<li><p><strong>min_value</strong>: minimum value that the parameter can adopt. If the parameter is not bounded, the minimum value is <em>-inf</em>.</p></li>
+<li><p><strong>max_value</strong>: maximum value that the parameter can adopt. If the parameter is not bounded, the maximum value is <em>inf</em>. The bounds should not be exceeded during minimization. If the user inputs manually a value that is outside the bounds, RepTate will issue a warning and set the parameter value to the bound that has been exceeded.</p></li>
+<li><p><strong>display_flag</strong>: whether the parameter will be shown in the parameter table or not.</p></li>
+<li><p><strong>discrete_values</strong>: comma-separated list of values that the parameter can adopt. Only relevant if the parameter type is either <em>discrete_real</em> or <em>discrete_integer</em>.</p></li>
+</ul>
+<div class="figure align-center" id="id30">
+<span id="figparameterproperties"></span><a class="reference internal image-reference" href="../../_images/ParameterProperties.png"><img alt="../../_images/ParameterProperties.png" src="../../_images/ParameterProperties.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Dialog for viewing/editing parameter properties.</span><a class="headerlink" href="#id30" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="calculating-the-theory">
+<h3><a class="toc-backref" href="#id53">Calculating the theory</a><a class="headerlink" href="#calculating-the-theory" title="Permalink to this headline">¶</a></h3>
+<p>When the button “Calculate Theory” <a class="reference internal" href="../../_images/icons8-abacus.png"><img alt="calculatetheory" class="align-bottom" src="../../_images/icons8-abacus.png" style="width: 15pt; height: 15pt;" /></a> (Alt+C) is pressed, the theory is calculated using the current values of the theory parameters and for all the files in the current dataset. Since the theory may use some of the file parameters, the result of applyting the theory to each files will be different. By default, the theory is calculated exactly in the same <em>x</em> points as the corresponding data file. This can be changed by editing the file parameters and selecting “Extra Theory Range”.</p>
+<p>When the theory calculation is done, some interesting information is shown in the theory log area (see <a class="reference internal" href="#figtheorycalclog"><span class="std std-numref">Fig. 17</span></a>). By default, the information displayed contains:</p>
+<ul class="simple">
+<li><p>A table with the list of files that theory has been applied to, with the error (calculated as the residual sum of squares, RSS) and the number of points of each file.</p></li>
+<li><p>The total error (the weighted sum of the RSS errors of all the files) and the total number of points.</p></li>
+<li><p>The Bayesian Information Criterion (BIC), defined as <span class="math notranslate nohighlight">\(BIC = n \log(RSS/n)+ p\log(n)\)</span>, where <em>n</em> is the number of data points and <em>p</em> is the number of free fitting parameters. In general, the model with the lowest BIC value should be preferred.</p></li>
+<li><p>Some additional information may be shown by some theories (for example, in <a class="reference internal" href="#figtheorycalclog"><span class="std std-numref">Fig. 17</span></a>, the Likhtman-McLeish theory shows some tube related values for each file).</p></li>
+<li><p>The time it took to calculate the theory, in seconds.</p></li>
+<li><p>The relevant literature that the user should cite if he/she intends to use the results from the theory. The journal articles are shown as links that can be clicked in order to visit the publisher web.</p></li>
+</ul>
+<div class="figure align-center" id="id31">
+<span id="figtheorycalclog"></span><a class="reference internal image-reference" href="../../_images/TheoryCalcLog.png"><img alt="../../_images/TheoryCalcLog.png" src="../../_images/TheoryCalcLog.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Example of the information displayed after a theory calculation is finished.</span><a class="headerlink" href="#id31" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="fitting-the-theory">
+<h3><a class="toc-backref" href="#id54">Fitting the theory</a><a class="headerlink" href="#fitting-the-theory" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="how-the-fitting-is-done">
+<h3><a class="toc-backref" href="#id55">How the fitting is done</a><a class="headerlink" href="#how-the-fitting-is-done" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id7">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="setting-x-and-y-range-limits-to-the-fitting-graphically">
+<h3><a class="toc-backref" href="#id56">Setting x and y-range limits to the fitting graphically</a><a class="headerlink" href="#setting-x-and-y-range-limits-to-the-fitting-graphically" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id8">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="fitting-options">
+<h3><a class="toc-backref" href="#id57">Fitting options</a><a class="headerlink" href="#fitting-options" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id9">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="saving-theory-predictions">
+<h3><a class="toc-backref" href="#id58">Saving theory predictions</a><a class="headerlink" href="#saving-theory-predictions" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id10">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="copying-pasting-theory-parameters">
+<h3><a class="toc-backref" href="#id59">Copying/Pasting theory parameters</a><a class="headerlink" href="#copying-pasting-theory-parameters" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id11">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="showing-all-theories-applied-to-current-dataset">
+<h3><a class="toc-backref" href="#id60">Showing all theories applied to current DataSet</a><a class="headerlink" href="#showing-all-theories-applied-to-current-dataset" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id12">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+</div>
+<div class="section" id="using-the-tools">
+<h2><a class="toc-backref" href="#id61">Using the Tools</a><a class="headerlink" href="#using-the-tools" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Opening a New Tool</p></li>
+<li><p>How the Tooks work</p></li>
+<li><p>Shuffling the Tools</p></li>
+</ul>
+<div class="admonition-todo admonition" id="id13">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+</div>
+<div class="section" id="working-with-projects">
+<h2><a class="toc-backref" href="#id62">Working with projects</a><a class="headerlink" href="#working-with-projects" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Saving the current RepTate session to a project file</p></li>
+<li><p>Opening an existing RepTate project file</p></li>
+<li><p>Sharing projects with collaborators</p></li>
+</ul>
+<div class="admonition-todo admonition" id="id14">
+<p class="admonition-title">Todo</p>
+<p>Complete this section</p>
+</div>
+<p class="rubric">References</p>
+<p id="bibtex-bibliography-manual/General/general-0"><dl class="citation">
+<dt class="bibtex label" id="general-hunter-2007"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>J. D. Hunter. Matplotlib: a 2d graphics environment. <em>Computing In Science &amp; Engineering</em>, 9(3):90–95, 2007. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">doi:10.1109/MCSE.2007.55</a>.</p>
+</dd>
+<dt class="bibtex label" id="general-jones-2018"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Eric Jones, Travis Oliphant, Pearu Peterson, and others. SciPy: open source scientific tools for Python. 2001–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://www.scipy.org/">http://www.scipy.org/</a>.</p>
+</dd>
+<dt class="bibtex label" id="general-oliphant-2006"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Travis E. Oliphant. <em>Guide to NumPy</em>. Provo, UT, March 2006. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="http://web.mit.edu/dvp/Public/numpybook.pdf">http://web.mit.edu/dvp/Public/numpybook.pdf</a>.</p>
+</dd>
+<dt class="bibtex label" id="general-pyqt-2018"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p>Riverbank Computing. Pyqt. 2009–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</p>
+</dd>
+<dt class="bibtex label" id="general-qt-2018"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dd><p>The Qt Company. Qt. 1991–. [Online; accessed 2018-05-04]. URL: <a class="reference external" href="https://en.wikipedia.org/wiki/PyQt">https://en.wikipedia.org/wiki/PyQt</a>.</p>
+</dd>
+</dl>
+</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../Applications/applications.html" title="Applications"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../manual.html" title="User Manual"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" >User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

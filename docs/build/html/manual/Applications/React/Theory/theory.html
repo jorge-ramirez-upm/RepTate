@@ -1,0 +1,165 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>React Theories &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Tobita LDPE" href="tobitaLDPE.html" />
+    <link rel="prev" title="React: General description" href="../general.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tobitaLDPE.html" title="Tobita LDPE"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../general.html" title="React: General description"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" accesskey="U"> React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../general.html"
+                        title="previous chapter">React: General description</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tobitaLDPE.html"
+                        title="next chapter">Tobita LDPE</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/React/Theory/theory.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="react-theories">
+<h1>React Theories<a class="headerlink" href="#react-theories" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tobitaLDPE.html">Tobita LDPE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tobitaLDPE.html#reaction-theory">Reaction theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaLDPE.html#simulation-parameters">Simulation parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaLDPE.html#polymer-storage-and-saving-to-bob">Polymer storage and saving to BoB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaLDPE.html#memory-issues">Memory issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tobitaCSTR.html">Tobita CSTR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tobitaCSTR.html#reaction-theory">Reaction theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaCSTR.html#simulation-parameters">Simulation parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaCSTR.html#polymer-storage-and-saving-to-bob">Polymer storage and saving to BoB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tobitaCSTR.html#memory-issues">Memory issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mixture.html">React mixture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture.html#mixture-theory">Mixture theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture.html#saving-to-bob">Saving to BoB</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MetalloceneCSTR.html">Metallocene CSTR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MetalloceneCSTR.html#reaction-theory">Reaction theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MetalloceneCSTR.html#simulation-parameters">Simulation parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MetalloceneCSTR.html#polymer-storage-and-saving-to-bob">Polymer storage and saving to BoB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MetalloceneCSTR.html#memory-issues">Memory issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BoB_polyconf.html">Create Polymer Configuaration with BoB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="BoB_polyconf.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dieneCSTR.html">Diene CSTR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dieneCSTR.html#reaction-theory">Reaction theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dieneCSTR.html#simulation-parameters">Simulation parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dieneCSTR.html#polymer-storage-and-saving-to-bob">Polymer storage and saving to BoB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dieneCSTR.html#memory-issues">Memory issues</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tobitaLDPE.html" title="Tobita LDPE"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../general.html" title="React: General description"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../React.html" > React: Monte-Carlo polymerisation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

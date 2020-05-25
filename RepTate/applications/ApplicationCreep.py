@@ -35,68 +35,61 @@
 Module for the analysis of data from Creep experiments
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from View import View
-from FileType import TXTColumnFile
-from QApplicationWindow import QApplicationWindow
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
 
-from PyQt5.QtWidgets import QSpinBox, QPushButton, QHBoxLayout, QLineEdit, QLabel, QSizePolicy
+from PyQt5.QtWidgets import (
+    QSpinBox,
+    QPushButton,
+    QHBoxLayout,
+    QLineEdit,
+    QLabel,
+    QSizePolicy,
+)
 from PyQt5.QtGui import QDoubleValidator
-from math import log10, sin, cos
+from math import log10
+
 
 class ApplicationCreep(CmdBase):
-    """Application to Analyze Data from Creep experiments
-    
-    """
+    """Application to Analyze Data from Creep experiments"""
+
     appname = "Creep"
     description = "Creep Experiments"
     extension = "creep"
 
     def __new__(cls, name="Creep", parent=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Creep"})
-            - parent {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationCreep(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationCreep(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationCreep(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationCreep(name, parent)
+        )
 
 
 class BaseApplicationCreep:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html'
+    """Base Class for both GUI and CL"""
+
+    html_help_file = (
+        "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
+    )
     appname = ApplicationCreep.appname
 
     def __init__(self, name="Creep", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Creep"})
-            - parent {[type]} -- [description] (default: {None})
-        """
-        from TheoryRetardationModes import TheoryRetardationModesTime
+        """**Constructor**"""
+        from RepTate.theories.TheoryRetardationModes import TheoryRetardationModesTime
+
         super().__init__(name, parent)
 
         # time range for view conversion to frequency domain
         self.eta = 10000
         self.tmin_view = -np.inf
         self.tmax_view = np.inf
-        
+
         # VIEWS
         self.views["log(gamma(t))"] = View(
             name="log(gamma(t))",
@@ -109,7 +102,8 @@ class BaseApplicationCreep:
             log_y=False,
             view_proc=self.viewLogStraint,
             n=1,
-            snames=["log(gamma)"])
+            snames=["log(gamma)"],
+        )
         self.views["gamma(t)"] = View(
             name="gamma(t)",
             description="strain",
@@ -120,8 +114,9 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewStraint,
-            n=1, 
-            snames=["gamma"])
+            n=1,
+            snames=["gamma"],
+        )
         self.views["log(J(t))"] = View(
             name="log(J(t))",
             description="creep compliance",
@@ -132,8 +127,9 @@ class BaseApplicationCreep:
             log_x=False,
             log_y=False,
             view_proc=self.viewLogJt,
-            n=1, 
-            snames=["log(J)"])
+            n=1,
+            snames=["log(J)"],
+        )
         self.views["J(t)"] = View(
             name="J(t)",
             description="creep compliance",
@@ -144,8 +140,9 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewJt,
-            n=1, 
-            snames=["J"])
+            n=1,
+            snames=["J"],
+        )
         self.views["t/J(t)"] = View(
             name="t/J(t)",
             description="t/creep compliance",
@@ -156,8 +153,9 @@ class BaseApplicationCreep:
             log_x=True,
             log_y=True,
             view_proc=self.viewt_Jt,
-            n=1, 
-            snames=["t/J"])
+            n=1,
+            snames=["t/J"],
+        )
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of J(t)",
@@ -169,11 +167,11 @@ class BaseApplicationCreep:
             log_y=True,
             view_proc=self.viewiRheo,
             n=2,
-            snames=["G'","G''"])
+            snames=["G'", "G''"],
+        )
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
-            description=
-            "G', G'' from i-Rheo transformation of J(t) with Oversampling",
+            description="G', G'' from i-Rheo transformation of J(t) with Oversampling",
             x_label="$\omega$",
             y_label="G',G''",
             x_units="rad/s",
@@ -182,12 +180,13 @@ class BaseApplicationCreep:
             log_y=True,
             view_proc=self.viewiRheoOver,
             n=2,
-            snames=["G'","G''"])
+            snames=["G'", "G''"],
+        )
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling
         self.MAX_OVER = 10000  # max oversampling
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -196,22 +195,25 @@ class BaseApplicationCreep:
         self.multiplots.reorg_fig(self.nplots)
 
         # FILES
-        ftype = TXTColumnFile("Creep files", "creep", "Creep files",
-                              ['t', 'strain'], ['stress', 'Mw', 'T'],
-                              ['s', '-', 'Pa', 'C'])
+        ftype = TXTColumnFile(
+            "Creep files",
+            "creep",
+            "Creep files",
+            ["t", "strain"],
+            ["stress", "Mw", "T"],
+            ["s", "-", "Pa", "C"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        self.theories[
-            TheoryRetardationModesTime.thname] = TheoryRetardationModesTime
+        self.theories[TheoryRetardationModesTime.thname] = TheoryRetardationModesTime
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogStraint(self, dt, file_parameters):
-        """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`
-        """
+        """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -219,8 +221,7 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewStraint(self, dt, file_parameters):
-        """Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)
-        """
+        """Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -228,54 +229,47 @@ class BaseApplicationCreep:
         return x, y, True
 
     def viewLogJt(self, dt, file_parameters):
-        """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t` 
-        """
+        """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        sigma = float(file_parameters['stress'])
+        sigma = float(file_parameters["stress"])
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(np.abs(dt.data[:, 1])/sigma)
+        y[:, 0] = np.log10(np.abs(dt.data[:, 1]) / sigma)
         return x, y, True
 
     def viewJt(self, dt, file_parameters):
-        """Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)
-        """
+        """Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        sigma = float(file_parameters['stress'])
+        sigma = float(file_parameters["stress"])
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 1]/sigma
+        y[:, 0] = dt.data[:, 1] / sigma
         return x, y, True
 
     def viewt_Jt(self, dt, file_parameters):
-        """Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)
-        """
+        """Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        sigma = float(file_parameters['stress'])
+        sigma = float(file_parameters["stress"])
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 0]/dt.data[:, 1]*sigma
+        y[:, 0] = dt.data[:, 0] / dt.data[:, 1] * sigma
         return x, y, True
 
     def viewiRheo(self, dt, file_parameters):
-        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig).
-        """
+        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
-        sigma = float(file_parameters['stress'])
-        yunique=data_y[indunique]/sigma
+        sigma = float(file_parameters["stress"])
+        yunique = data_y[indunique] / sigma
         t = xunique
         j = yunique
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            t,
-            j,
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+            t, j, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
         j0 = f([0])[0]
         ind1 = np.argmax(t > 0)
         t1 = t[ind1]
@@ -285,35 +279,39 @@ class BaseApplicationCreep:
         x[:, 0] = w[:]
         x[:, 1] = w[:]
 
-        aux=1j*w*j0 + (1-np.exp(-1j*w*t1))*(j1-j0)/t1 + np.exp(-1j*w*tN)/self.eta
-        for i in range(ind1+1,n):
-            aux += (np.exp(-1j*w*t[i-1])-np.exp(-1j*w*t[i]))*(j[i]-j[i-1])/(t[i]-t[i-1])
-        Gstar=1j*w/aux
-        
-        y[:,0]=Gstar.real
-        y[:,1]=Gstar.imag
-        
+        aux = (
+            1j * w * j0
+            + (1 - np.exp(-1j * w * t1)) * (j1 - j0) / t1
+            + np.exp(-1j * w * tN) / self.eta
+        )
+        for i in range(ind1 + 1, n):
+            aux += (
+                (np.exp(-1j * w * t[i - 1]) - np.exp(-1j * w * t[i]))
+                * (j[i] - j[i - 1])
+                / (t[i] - t[i - 1])
+            )
+        Gstar = 1j * w / aux
+
+        y[:, 0] = Gstar.real
+        y[:, 1] = Gstar.imag
+
         return x, y, True
-        
+
     def viewiRheoOver(self, dt, file_parameters):
-        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig).
-        """
+        """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         data_x, data_y = self.get_xy_data_in_xrange(dt)
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
-        sigma = float(file_parameters['stress'])
-        yunique=data_y[indunique]/sigma
+        sigma = float(file_parameters["stress"])
+        yunique = data_y[indunique] / sigma
         t = xunique
         j = yunique
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            t,
-            j,
-            kind='cubic',
-            assume_sorted=True,
-            fill_value='extrapolate')
+            t, j, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+        )
         j0 = f([0])[0]
         ind1 = np.argmax(t > 0)
         t1 = t[ind1]
@@ -327,44 +325,47 @@ class BaseApplicationCreep:
         tover = np.zeros(1)
         tover[0] = t[ind1]
         for i in range(ind1 + 1, n):
-            tmp = np.logspace(
-                log10(t[i - 1]), log10(t[i]), self.OVER + 1)
+            tmp = np.logspace(log10(t[i - 1]), log10(t[i]), self.OVER + 1)
             tover = np.append(tover, tmp[1:])
         jover = f(tover)
         nover = len(tover)
 
-        aux=1j*w*j0 + (1-np.exp(-1j*w*t1))*(j1-j0)/t1 + np.exp(-1j*w*tN)/self.eta
-        for i in range(1,nover):
-            aux += (np.exp(-1j*w*tover[i-1])-np.exp(-1j*w*tover[i]))*(jover[i]-jover[i-1])/(tover[i]-tover[i-1])
-        Gstar=1j*w/aux
+        aux = (
+            1j * w * j0
+            + (1 - np.exp(-1j * w * t1)) * (j1 - j0) / t1
+            + np.exp(-1j * w * tN) / self.eta
+        )
+        for i in range(1, nover):
+            aux += (
+                (np.exp(-1j * w * tover[i - 1]) - np.exp(-1j * w * tover[i]))
+                * (jover[i] - jover[i - 1])
+                / (tover[i] - tover[i - 1])
+            )
+        Gstar = 1j * w / aux
 
-        y[:,0]=Gstar.real
-        y[:,1]=Gstar.imag
+        y[:, 0] = Gstar.real
+        y[:, 1] = Gstar.imag
 
         return x, y, True
 
     def get_xy_data_in_xrange(self, dt):
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
-        #get indices of data in xrange
-        args = np.where(np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view))
+        # get indices of data in xrange
+        args = np.where(
+            np.logical_and(
+                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
+            )
+        )
         x_in_range = dt.data[:, 0][args]
         y_in_range = dt.data[:, 1][args]
         return x_in_range, y_in_range
-        
+
+
 class CLApplicationCreep(BaseApplicationCreep, Application):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="Creep", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Creep"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
     def show_sb_oversampling(self):
@@ -373,25 +374,17 @@ class CLApplicationCreep(BaseApplicationCreep, Application):
     def hide_sb_oversampling(self):
         pass
 
+
 class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="Creep", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"Creep"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
         self.add_oversampling_widget()
         self.set_oversampling_widget_visible(False)
-        
+
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
 
@@ -405,12 +398,12 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.viewLayout.insertWidget(2, self.sb_oversampling)
 
     def add_xrange_widget_view(self):
-        """Add widgets below the view combobox to select the 
+        """Add widgets below the view combobox to select the
         x-range applied to view transformation"""
         hlayout = QHBoxLayout()
-        
+
         hlayout.addStretch()
-        #eta
+        # eta
         self.eta_view = QLineEdit("4")
         self.eta_view.textChanged.connect(self.change_eta)
         self.eta_view.setValidator(QDoubleValidator())
@@ -419,9 +412,9 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.eta_label = QLabel("<b>log(eta)</b>")
         hlayout.addWidget(self.eta_label)
         hlayout.addWidget(self.eta_view)
-        #space
+        # space
         hlayout.addSpacing(5)
-        #xmin
+        # xmin
         self.xmin_view = QLineEdit("-inf")
         self.xmin_view.textChanged.connect(self.change_xmin)
         self.xmin_view.setValidator(QDoubleValidator())
@@ -430,9 +423,9 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
         hlayout.addWidget(self.xmin_label)
         hlayout.addWidget(self.xmin_view)
-        #space
+        # space
         hlayout.addSpacing(5)
-        #xmax
+        # xmax
         self.xmax_view = QLineEdit("inf")
         self.xmax_view.textChanged.connect(self.change_xmax)
         self.xmax_view.setValidator(QDoubleValidator())
@@ -441,7 +434,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
         hlayout.addWidget(self.xmax_label)
         hlayout.addWidget(self.xmax_view)
-        #push button to refresh view
+        # push button to refresh view
         self.pb = QPushButton("GO")
         self.pb.setMaximumWidth(25)
         self.pb.clicked.connect(self.update_all_ds_plots)
@@ -455,7 +448,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
             self.eta = -np.inf
         else:
             try:
-                self.eta = 10**float(text)
+                self.eta = 10 ** float(text)
             except:
                 pass
 
@@ -465,7 +458,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
             self.tmin_view = -np.inf
         else:
             try:
-                self.tmin_view = 10**float(text)
+                self.tmin_view = 10 ** float(text)
             except:
                 pass
 
@@ -475,7 +468,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
             self.tmax_view = np.inf
         else:
             try:
-                self.tmax_view = 10**float(text)
+                self.tmax_view = 10 ** float(text)
             except:
                 pass
 
@@ -497,7 +490,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.eta_view.setVisible(state)
         self.xmin_view.setVisible(state)
         self.xmax_view.setVisible(state)
-        
+
     def set_view_tools(self, view_name):
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
@@ -512,4 +505,3 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
                 self.set_oversampling_widget_visible(False)
             except AttributeError:
                 pass
-        

@@ -1,0 +1,9 @@
+colorama
+matplotlib>=3.2.1
+openpyxl
+pyreadline;platform_system=='Windows'
+readline;platform_system=='Linux'
+PyQt5
+scipy
+xlrd
+psutil

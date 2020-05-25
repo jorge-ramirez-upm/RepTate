@@ -33,11 +33,10 @@
 """Module TheoryArrhenius
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 
 
 class TheoryArrhenius(CmdBase):
@@ -52,119 +51,83 @@ class TheoryArrhenius(CmdBase):
        - :math:`T_{ref}`: Reference Temperature for the shift factors
        - :math:`R`: Gas Constant
     """
-    thname = 'ArrheniusTheory'
-    description = 'Arrhenius Theory'
+
+    thname = "ArrheniusTheory"
+    description = "Arrhenius Theory"
     citations = []
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryArrhenius(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryArrhenius(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryArrhenius(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryArrhenius(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryArrhenius:
-    """[summary]
-    
-    [description]
-    """
-    #help_file = ''
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    # html_help_file = ''
+    single_file = (
+        True  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryArrhenius.thname
     citations = TheoryArrhenius.citations
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['Tref'] = Parameter(
-            name='Tref',
+        self.parameters["Tref"] = Parameter(
+            name="Tref",
             value=0,
-            description='Reference Temperature (°C)',
+            description="Reference Temperature (°C)",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['Ea'] = Parameter(
-            name='Ea',
+            opt_type=OptType.const,
+        )
+        self.parameters["Ea"] = Parameter(
+            name="Ea",
             value=100,
-            description='Activation Energy',
+            description="Activation Energy",
             type=ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+        )
 
     def calculate(self, f=None):
-        """Arrhenius function
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Arrhenius function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = np.exp(self.parameters['Ea'].value / 8.314 * (1 / (ft.data[:, 0] + 273.15) - 1 / (self.parameters['Tref'].value + 273.15)) )
+        tt.data[:, 1] = np.exp(
+            self.parameters["Ea"].value
+            / 8.314
+            * (
+                1 / (ft.data[:, 0] + 273.15)
+                - 1 / (self.parameters["Tref"].value + 273.15)
+            )
+        )
 
 
 class CLTheoryArrhenius(BaseTheoryArrhenius, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryArrhenius(BaseTheoryArrhenius, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

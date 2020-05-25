@@ -35,57 +35,40 @@
 Module for the analysis of data from SANS experiments
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationSANS(CmdBase):
-    """Application to Analyze Data from SANS experiments
-    
-    """
+    """Application to Analyze Data from SANS experiments"""
+
     appname = "SANS"
     description = "Small Angle Neutron Scattering Experiments"
     extension = "sans"
 
     def __new__(cls, name="SANS", parent=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"SANS"})
-            - parent {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUIApplicationSANS(
-            name,
-            parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationSANS(
-                name, parent)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIApplicationSANS(name, parent)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLApplicationSANS(name, parent)
+        )
 
 
 class BaseApplicationSANS:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html'
+    """Base Class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html"
     appname = ApplicationSANS.appname
 
     def __init__(self, name="SANS", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"SANS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
-        from TheoryDebye import TheoryDebye
+        """**Constructor**"""
+        from RepTate.theories.TheoryDebye import TheoryDebye
+
         super().__init__(name, parent)
 
         # VIEWS
@@ -100,7 +83,8 @@ class BaseApplicationSANS:
             log_y=False,
             view_proc=self.viewLogSANS,
             n=1,
-            snames=["log(I)"])
+            snames=["log(I)"],
+        )
         self.views["I(q)"] = View(
             name="I(q)",
             description="Intensity",
@@ -111,8 +95,9 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewSANS,
-            n=1, 
-            snames=["I"])
+            n=1,
+            snames=["I"],
+        )
         self.views["Zimm"] = View(
             name="Zimm",
             description="Zimm plot (1/I(q) vs q^2)",
@@ -123,8 +108,9 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewZimm,
-            n=1, 
-            snames=["1/I"])
+            n=1,
+            snames=["1/I"],
+        )
         self.views["Kratky"] = View(
             name="Kratky",
             description="Kratky plot (q^2*I(q) vs q)",
@@ -135,10 +121,11 @@ class BaseApplicationSANS:
             log_x=False,
             log_y=False,
             view_proc=self.viewKratky,
-            n=1, 
-            snames=["q2*I"])
+            n=1,
+            snames=["q2*I"],
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -147,17 +134,21 @@ class BaseApplicationSANS:
         self.multiplots.reorg_fig(self.nplots)
 
         # FILES
-        ftype = TXTColumnFile("SANS files", "sans", "SANS files",
-                              ['q', 'I(q)'], ['Mw', 'Phi'],
-                              ['1/A', '-'])
+        ftype = TXTColumnFile(
+            "SANS files",
+            "sans",
+            "SANS files",
+            ["q", "I(q)"],
+            ["Mw", "Phi"],
+            ["1/A", "-"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        self.theories[
-            TheoryDebye.thname] = TheoryDebye
+        self.theories[TheoryDebye.thname] = TheoryDebye
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogSANS(self, dt, file_parameters):
@@ -179,12 +170,12 @@ class BaseApplicationSANS:
         return x, y, True
 
     def viewKratky(self, dt, file_parameters):
-        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q` 
+        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        y[:, 0] = dt.data[:, 0]*dt.data[:, 0]*dt.data[:, 1]
+        y[:, 0] = dt.data[:, 0] * dt.data[:, 0] * dt.data[:, 1]
         return x, y, True
 
     def viewZimm(self, dt, file_parameters):
@@ -192,39 +183,22 @@ class BaseApplicationSANS:
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = dt.data[:, 0]*dt.data[:, 0]
-        y[:, 0] = 1.0/dt.data[:, 1]
+        x[:, 0] = dt.data[:, 0] * dt.data[:, 0]
+        y[:, 0] = 1.0 / dt.data[:, 1]
         return x, y, True
 
+
 class CLApplicationSANS(BaseApplicationSANS, Application):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="SANS", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"SANS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationSANS(BaseApplicationSANS, QApplicationWindow):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="SANS", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"SANS"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

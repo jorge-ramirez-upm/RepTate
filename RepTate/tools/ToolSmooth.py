@@ -35,69 +35,64 @@
 Smooth data by applying a Savitzky-Golay filter
 """
 import traceback
-import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Tool import Tool
-from QTool import QTool
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.Tool import Tool
+from RepTate.gui.QTool import QTool
 from scipy.signal import savgol_filter
+
 
 class ToolSmooth(CmdBase):
     """Smooths the current view data by applying a Savitzky-Golay filter. The smoothing procedure is controlled by means of two parameters: the **window** length (a positive, odd integer), which represents the number of convolution coefficients of the filter, and the **order** of the polynomial used to fit the samples (must be smaller than the window length).
     """
-    toolname = 'Smooth'
-    description = 'Smooth Tool'
+
+    toolname = "Smooth"
+    description = "Smooth Tool"
     citations = []
 
-    def __new__(cls, name='', parent_app=None):
-        """
-        """
-        return GUIToolSmooth(name, parent_app) if (CmdBase.mode == CmdMode.GUI) else CLToolSmooth(name, parent_app)
+    def __new__(cls, name="", parent_app=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUIToolSmooth(name, parent_app)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLToolSmooth(name, parent_app)
+        )
 
 
 class BaseToolSmooth:
-    """[summary]
-    
-    [description]
-    """
-    #help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
+    """Base class for both GUI and CL"""
+
+    # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolSmooth.toolname
     citations = ToolSmooth.citations
 
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
-        self.parameters['window'] = Parameter(
-            name='window',
+        self.parameters["window"] = Parameter(
+            name="window",
             value=11,
-            description='Length of filter window. Positive odd integer, smaller than the size of y and larger than order',
-            type=ParameterType.integer)
-        self.parameters['order'] = Parameter(
-            name='order',
+            description="Length of filter window. Positive odd integer, smaller than the size of y and larger than order",
+            type=ParameterType.integer,
+        )
+        self.parameters["order"] = Parameter(
+            name="order",
             value=3,
-            description='Order of smoothing polynomial (must be smaller than window)',
-            type=ParameterType.integer)
+            description="Order of smoothing polynomial (must be smaller than window)",
+            type=ParameterType.integer,
+        )
 
-    def calculate(self, x, y, ax=None, color=None):
-        """Smooth the x, y data
-        """
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        """Smooth the x, y data"""
         window = self.parameters["window"].value
         order = self.parameters["order"].value
-        if (window % 2 == 0):
+        if window % 2 == 0:
             self.Qprint("Invalid window (must be an odd number)")
             return x, y
-        if (window >= len(y)):
+        if window >= len(y):
             self.Qprint("Invalid window (must be smaller than the length of the data)")
             return x, y
-        if (window<=order):
+        if window <= order:
             self.Qprint("Invalid order (must be smaller than the window)")
             return x, y
 
@@ -105,46 +100,25 @@ class BaseToolSmooth:
             y2 = savgol_filter(y, window, order)
             return x, y2
         except Exception as e:
-            self.Qprint("in ToolSmooth.calculate(): %s"%traceback.format_exc())
+            self.Qprint("in ToolSmooth.calculate(): %s" % traceback.format_exc())
             return x, y
-        
 
 
 class CLToolSmooth(BaseToolSmooth, Tool):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
 
     # This class usually stays empty
 
 
 class GUIToolSmooth(BaseToolSmooth, QTool):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_app=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_app=None):
+        """**Constructor**"""
         super().__init__(name, parent_app)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
@@ -157,20 +131,22 @@ class GUIToolSmooth(BaseToolSmooth, QTool):
         try:
             new_value = int(value)
         except ValueError:
-            return "Value must be a integer", False        
+            return "Value must be a integer", False
         message, success = super().set_param_value(name, value)
         if success:
-            if name == 'window':
-                order = self.parameters['order'].value
-                if (new_value <= order or new_value < 0 or new_value%2==0):
+            if name == "window":
+                order = self.parameters["order"].value
+                if new_value <= order or new_value < 0 or new_value % 2 == 0:
                     p.value = old_value
-                    message = "window must be a positive, odd integer, larger than order"
+                    message = (
+                        "window must be a positive, odd integer, larger than order"
+                    )
                     success = False
-            elif name == 'order':
-                window = self.parameters['window'].value
-                if (new_value >= window or new_value<0):
+            elif name == "order":
+                window = self.parameters["window"].value
+                if new_value >= window or new_value < 0:
                     p.value = old_value
                     message = "order must be >=0 and smaller than window"
                     success = False
-           
+
         return message, success

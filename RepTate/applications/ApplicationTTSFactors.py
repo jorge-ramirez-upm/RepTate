@@ -35,34 +35,23 @@
 Module for handling time-temperature superposition factors and fit theories.
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationTTSFactors(CmdBase):
-    """Application handling time-temperature superposition factors and fit theories
+    """Application handling time-temperature superposition factors and fit theories"""
 
-    """
     appname = "TTSF"
     description = "TTS shift factors"
-    extension = 'ttsf'
+    extension = "ttsf"
 
     def __new__(cls, name="TTSF", parent=None):
-        """[summary]
-
-        [description]
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTSFactors"})
-            - parent {[type]} -- [description] (default: {None})
-
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         if CmdBase.mode == CmdMode.GUI:
             return GUIApplicationTTSFactors(name, parent)
         else:
@@ -70,24 +59,19 @@ class ApplicationTTSFactors(CmdBase):
 
 
 class BaseApplicationTTSFactors:
-    """[summary]
+    """Base Class for both GUI and CL"""
 
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html'
+    html_help_file = (
+        "http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html"
+    )
     appname = ApplicationTTSFactors.appname
 
     def __init__(self, name="TTSF", parent=None):
-        """
-        **Constructor**
+        """**Constructor**"""
+        from RepTate.theories.TheoryWLF import TheoryWLF
+        from RepTate.theories.TheoryArrhenius import TheoryArrhenius
 
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTSFactors"})
-            - parent {[type]} -- [description] (default: {None})
-        """
-        from TheoryWLF import TheoryWLF
-        from TheoryArrhenius import TheoryArrhenius
-        #from TheoryArrhenius import TheoryArrhenius
+        # from TheoryArrhenius import TheoryArrhenius
         super().__init__(name, parent)
 
         # VIEWS
@@ -102,7 +86,8 @@ class BaseApplicationTTSFactors:
             log_y=False,
             view_proc=self.viewLogaT,
             n=1,
-            snames=["log(aT)"])
+            snames=["log(aT)"],
+        )
         self.views["aT"] = View(
             name="aT",
             description="Horizontal shift factor",
@@ -114,7 +99,8 @@ class BaseApplicationTTSFactors:
             log_y=True,
             view_proc=self.viewaT,
             n=1,
-            snames=["aT"])
+            snames=["aT"],
+        )
         self.views["log(bT)"] = View(
             name="log(bT)",
             description="log Vertical shift factor",
@@ -126,7 +112,8 @@ class BaseApplicationTTSFactors:
             log_y=False,
             view_proc=self.viewLogbT,
             n=1,
-            snames=["log(bT)"])
+            snames=["log(bT)"],
+        )
         self.views["bT"] = View(
             name="bT",
             description="Vertical shift factor",
@@ -138,7 +125,8 @@ class BaseApplicationTTSFactors:
             log_y=True,
             view_proc=self.viewbT,
             n=1,
-            snames=["bT"])
+            snames=["bT"],
+        )
 
         self.views["log(aT, bT)"] = View(
             name="log(aT, bT)",
@@ -151,7 +139,8 @@ class BaseApplicationTTSFactors:
             log_y=False,
             view_proc=self.viewLogaTbT,
             n=2,
-            snames=["log(aT)", "log(bT)"])
+            snames=["log(aT)", "log(bT)"],
+        )
 
         self.views["log(aT) vs 1/T"] = View(
             name="log(aT) vs 1/T",
@@ -164,9 +153,10 @@ class BaseApplicationTTSFactors:
             log_y=False,
             view_proc=self.viewLogaT_invT,
             n=1,
-            snames=["log(aT)"])
+            snames=["log(aT)"],
+        )
 
-        #set multiviews
+        # set multiviews
         self.nplots = 1
         self.multiviews = []
         for i in range(self.nplot_max):
@@ -176,18 +166,22 @@ class BaseApplicationTTSFactors:
 
         # FILES
         ftype = TXTColumnFile(
-            "TTS factors", "ttsf",
+            "TTS factors",
+            "ttsf",
             "TTS shift factors",
-            ['T', 'aT', 'bT'], ['Mw'], ['°C', '-', '-'])
+            ["T", "aT", "bT"],
+            ["Mw"],
+            ["°C", "-", "-"],
+        )
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
         self.theories[TheoryWLF.thname] = TheoryWLF
         self.theories[TheoryArrhenius.thname] = TheoryArrhenius
-        #self.theories[TheoryWLFShiftTest.thname] = TheoryWLFShiftTest
+        # self.theories[TheoryWLFShiftTest.thname] = TheoryWLFShiftTest
         self.add_common_theories()
 
-        #set the current view
+        # set the current view
         self.set_views()
 
     def viewLogaT(self, dt, file_parameters):
@@ -207,7 +201,7 @@ class BaseApplicationTTSFactors:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-        
+
     def viewLogbT(self, dt, file_parameters):
         """Logarithm of the vertical shift factor
         """
@@ -236,45 +230,28 @@ class BaseApplicationTTSFactors:
         y[:, 0] = np.log10(dt.data[:, 1])
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
-        
+
     def viewLogaT_invT(self, dt, file_parameters):
         """Logarithm of the horizontal shift factor
         """
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        x[:, 0] = 1/(dt.data[:, 0] + 273.15)
+        x[:, 0] = 1 / (dt.data[:, 0] + 273.15)
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
+
 class CLApplicationTTSFactors(BaseApplicationTTSFactors, Application):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="TTSFactors", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTSFactors"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
 
 
 class GUIApplicationTTSFactors(BaseApplicationTTSFactors, QApplicationWindow):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="TTSFactors", parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {"TTSFactors"})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)

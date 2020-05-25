@@ -38,40 +38,41 @@ Module that defines the basic class from which all applications are derived.
 import io
 #import logging
 import matplotlib.pyplot as plt
-from matplotlib.ticker import AutoMinorLocator, LogLocator, NullFormatter
+from matplotlib.ticker import AutoMinorLocator
 
-from CmdBase import CmdBase, CmdMode
-from Theory import Theory
-from DataSet import DataSet
-from TheoryBasic import *
-from Tool import *
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.DataSet import DataSet
+from RepTate.theories.TheoryBasic import *
+from RepTate.core.Tool import *
 
-from MultiView import MultiView, PlotOrganizationType
-from PyQt5.QtWidgets import QMenu, QApplication
+from RepTate.core.MultiView import MultiView, PlotOrganizationType
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtCore import Qt
 
 from collections import OrderedDict
-from TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials
-from ToolIntegral import ToolIntegral
-from ToolFindPeaks import ToolFindPeaks
-from ToolGradient import ToolGradient
-from ToolSmooth import ToolSmooth
-from ToolBounds import ToolBounds
-from ToolEvaluate import ToolEvaluate
-from ToolInterpolate import ToolInterpolateExtrapolate
-from ToolMaterialsDatabase import ToolMaterialsDatabase
-from mplcursors import cursor
+from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials, TheoryAlgebraicExpression
+from RepTate.tools.ToolIntegral import ToolIntegral
+from RepTate.tools.ToolFindPeaks import ToolFindPeaks
+from RepTate.tools.ToolGradient import ToolGradient
+from RepTate.tools.ToolSmooth import ToolSmooth
+from RepTate.tools.ToolBounds import ToolBounds
+from RepTate.tools.ToolEvaluate import ToolEvaluate
+from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
+from RepTate.tools.ToolPowerLaw import ToolPowerLaw
+from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
+from RepTate.core.mplcursors import cursor
 from colorama import Fore, Style
 import logging
 
 class Application(CmdBase):
     """Main abstract class that represents an application
-    
+
     """
-    name = "Template"
+    appname = "Template"
     description = "Abstract class that defines basic functionality"
     extension = ""
+    doc_header = 'Application commands (type help <topic>):'
 
     def __init__(self,
                  name="ApplicationTemplate",
@@ -79,8 +80,7 @@ class Application(CmdBase):
                  nplot_max=4,
                  ncols=2,
                  **kwargs):
-        """
-        **Constructor**"""
+        """**Constructor**"""
 
         super().__init__()
         self.name = name
@@ -110,6 +110,7 @@ class Application(CmdBase):
         self.common_theories[TheoryPowerLaw.thname] = TheoryPowerLaw
         self.common_theories[TheoryExponential.thname] = TheoryExponential
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
+        self.common_theories[TheoryAlgebraicExpression.thname] = TheoryAlgebraicExpression
 
         # Tools available everywhere
         self.availabletools[ToolBounds.toolname] = ToolBounds
@@ -118,9 +119,10 @@ class Application(CmdBase):
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
+        self.availabletools[ToolPowerLaw.toolname] = ToolPowerLaw
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
-        
+
         # MATPLOTLIB STUFF
         self.set_multiplot(self.nplots, self.ncols)
         # self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
@@ -132,7 +134,7 @@ class Application(CmdBase):
         # self.canvas = self.multiplots.canvas
         self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
         self.ax_opts = self.ax_opt_defaults.copy()
-        
+
         connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
         connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
         connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
@@ -144,18 +146,18 @@ class Application(CmdBase):
         self._pressed_button = None # To store active button during interaction
         self._axes = None # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
-        self._was_zooming = False 
+        self._was_zooming = False
 
         if (CmdBase.mode == CmdMode.cmdline):
             # self.figure.show()
-            self.multiplots.setWindowFlags(self.multiplots.windowFlags() 
+            self.multiplots.setWindowFlags(self.multiplots.windowFlags()
                                            & ~Qt.WindowCloseButtonHint)
             self.multiplots.show()
         self.datacursor_ = None
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + '.' + self.name)
-        self.logger.debug('New LVE app')
+        self.logger.debug('New %s app'%self.appname)
 
     def resizeplot(self, event=""):
         """Rescale plot graphics when the window is resized"""
@@ -223,7 +225,7 @@ class Application(CmdBase):
             ax.set_ylim(ylim)
 
         if x_axes or y_axes:
-            self.figure.canvas.draw() 
+            self.figure.canvas.draw()
 
     def _axes_to_update(self, event):
         """Returns two sets of Axes to update according to event.
@@ -352,7 +354,7 @@ class Application(CmdBase):
             if event.x != self._event.x or event.y != self._event.y:
                 self.figure.canvas.draw()
 
-            self._event = event    
+            self._event = event
 
     def _pan_update_limits(self, ax, axis_id, event, last_event):
         """Compute limits with applied pan."""
@@ -432,7 +434,7 @@ class Application(CmdBase):
                     else:
                         ax.set_xlim(max_, min_)
                 else:
-                    min_now, max_now = ax.get_xlim() 
+                    min_now, max_now = ax.get_xlim()
                     if ax.get_xscale() == 'log':
                         fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
                         if not ax.xaxis_inverted():
@@ -460,7 +462,7 @@ class Application(CmdBase):
                     else:
                         ax.set_ylim(max_, min_)
                 else:
-                    min_now, max_now = ax.get_ylim() 
+                    min_now, max_now = ax.get_ylim()
                     if ax.get_yscale() == 'log':
                         fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
                         if not ax.yaxis_inverted():
@@ -496,9 +498,9 @@ class Application(CmdBase):
             canvas.update()
 
     def update_datacursor_artists(self):
-        """Update the datacursor instance 
+        """Update the datacursor instance
         Called at the end of ds.do_plot() and when plot-tab is changed"""
-        try: 
+        try:
             self.datacursor_.remove()
         except AttributeError:
             pass
@@ -527,11 +529,11 @@ class Application(CmdBase):
                                     artists.append(dt.series[self.current_viewtab - 1][j])
                                     if th:
                                         artists.append(th.tables[f.file_name_short].series[self.current_viewtab - 1][j])
-                self.datacursor_ = cursor(pickables=artists) 
+                self.datacursor_ = cursor(pickables=artists)
                 self.datacursor_.bindings["deselect"] = 1
         else:
             axs = [self.axarr[i] for i in range(self.nplots)]
-            self.datacursor_ = cursor(pickables=axs) 
+            self.datacursor_ = cursor(pickables=axs)
             self.datacursor_.bindings["deselect"] = 1
         @self.datacursor_.connect("add")
         def _(sel):
@@ -541,6 +543,7 @@ class Application(CmdBase):
             sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
     def delete_multiplot(self):
+        """deletes the multiplot object"""
         del self.multiplots
 
     def set_multiplot(self, nplots, ncols):
@@ -558,15 +561,16 @@ class Application(CmdBase):
         pass
 
     def add_common_theories(self):
+        """Add common theories to the list of available th"""
         for th in self.common_theories.values():
             self.theories[th.thname] = th
-                                                
+
     def refresh_plot(self):
+        """Refresh the current plot"""
         self.view_switch(self.current_view.name)
 
     def copy_chart(self):
-        """ Copy current chart to clipboard
-        """
+        """ Copy current chart to clipboard"""
         buf = io.BytesIO()
         self.figure.savefig(buf, dpi=150)
         QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
@@ -583,22 +587,6 @@ class Application(CmdBase):
             line_strings.append(str(x[i]) + "\t" + str(y[i]))
         array_string = "\n".join(line_strings)
         QApplication.clipboard().setText(array_string)
-
-    # JR: I THINK THE FOLLOWING FUNCTION IS NOT NEEDED ANYMORE
-    # def handle_close_window(self, evt):
-    #     """[summary]
-        
-    #     [description]
-        
-    #     Arguments:
-    #         - evt {[type]} -- [description]
-        
-    #     Returns:
-    #         [type] -- [description]
-    #     """
-    #     print("\nApplication window %s has been closed\n" % self.name)
-    #     print(
-    #         "Please, return to the RepTate prompt and delete the application")
 
     def new(self, line):
         """Create new empty dataset in the application"""
@@ -704,14 +692,24 @@ class Application(CmdBase):
                 self.datasets[ds].do_tree(str(offset+1))
 
     def do_switch(self, line):
-        """Set focus to an open set/theory/tool. 
-By hitting TAB, all the currently accessible elements are shown.
-Arguments:
-    - name {str} -- Name of the set/theory/tool to switch the focus to."""
+        """Set focus to an open set/theory/tool.
+        By hitting TAB, all the currently accessible elements are shown.
+        
+        :param line: Name of the set/theory/tool to switch the focus to.- 
+
+        :Example:
+
+            >>> switch LVE1.Set1.LM1
+            >>> switch NLVE2.Set2.RP2
+            >>> switch PL1
+
+        .. todo:: Find key functions and document them like this one
+
+        """
         items=line.split('.')
         listtools = [x.name for x in self.tools]
         if len(items)>1:
-            name=items[0]            
+            name=items[0]
             if name in self.datasets.keys():
                 ds = self.datasets[name]
                 ds.cmdqueue.append('switch '+'.'.join(items[1:]))
@@ -719,7 +717,7 @@ Arguments:
             else:
                 print("DataSet \"%s\" not found" % name)
         else:
-            name=items[0]         
+            name=items[0]
             if name in self.datasets.keys():
                 ds = self.datasets[name]
                 ds.cmdloop()
@@ -739,7 +737,8 @@ Arguments:
         for ds in setlist:
             thnames = self.datasets[ds].get_tree()
             thlist += [ds + '.' + t for t in thnames]
-        switchlist = setlist + thlist
+        toollist = [x.name for x in self.tools]
+        switchlist = setlist + thlist + toollist
         if not text:
             completions = switchlist[:]
         else:
@@ -792,11 +791,11 @@ Arguments:
                 c = Fore.RED + "*" + Fore.RESET
             else:
                 c = " "
-            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name + 
+            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
                     Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
     def do_available(self, line):
-        """Views and Tools available in the current application"""
+        """Tools/File Types/Views/Theories available in the current application"""
         self.do_available_tools()
         self.do_available_filetypes()
         self.do_available_views()
@@ -860,7 +859,7 @@ Arguments:
         for t in list(self.extratools.values()):
             print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
 
-    def do_tool_new(self, line):
+    def tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         extratooltypes = list(self.extratools.keys())
@@ -874,21 +873,26 @@ Arguments:
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
                 to = self.extratools[line](to_id, self)
-            self.tools.append(to)
-            if self.mode == CmdMode.GUI:
-                return to
+            if (self.mode == CmdMode.batch):
+                to.prompt = ''
             else:
-                if (self.mode == CmdMode.batch):
-                    to.prompt = ''
-                else:
-                    to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
-                to.cmdloop()
+                to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
+            self.tools.append(to)
+        else:
+            to=None
+        return to
+
+    def do_tool_new(self, line):
+        """Create a new empty dataset in this application."""
+        to = self.tool_new(line)
+        if to != None:
+            to.cmdloop()
         else:
             print("Tool \"%s\" does not exists" % line)
 
     def complete_tool_new(self, text, line, begidx, endidx):
         """Complete new tool command"""
-        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys()) 
+        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys())
         if not text:
             completions = tool_names[:]
         else:
@@ -904,7 +908,7 @@ Arguments:
             del self.tools[idx]
         except AttributeError as e:
             print("Tool \"%s\" not found" % name)
-            
+
     def complete_tool_delete(self, text, line, begidx, endidx):
         """Complete delete tool command"""
         listtools = [x.name for x in self.tools]
@@ -913,7 +917,7 @@ Arguments:
         else:
             completions = [f for f in listtools if f.startswith(text)]
         return completions
-        
+
     def do_list_tools(self, line=""):
         """List opened tools in the current application"""
         if len(self.tools)>0:
@@ -924,20 +928,6 @@ Arguments:
                 print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
             else:
                 print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
-
-    def do_tool_switch(self, line):
-        """Change the active tool"""
-        listtools = [x.name for x in self.tools]
-        try:
-            idx = listtools.index(line)
-            self.tools[idx].cmdloop()
-        except AttributeError as e:
-            print("Tool\"%s\" not found" % line)
-
-    def complete_tool_switch(self, text, line, begidx, endidx):
-        """Complete the tool switch command"""
-        completions = self.complete_tool_delete(text, line, begidx, endidx)
-        return completions
 
     def do_tool_activate(self, name):
         """Enable/Disable a given tool"""
@@ -985,39 +975,25 @@ Arguments:
             ax = self.axarr[nx]
             if (view.log_x):
                 ax.set_xscale("log")
-                ##ax.xaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.xaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.xaxis.set_minor_locator(locmin)
-                # ax.xaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_xscale("linear")
                 ax.xaxis.set_minor_locator(AutoMinorLocator())
             if (view.log_y):
                 ax.set_yscale("log")
-                ##ax.yaxis.set_minor_locator(LogLocator(subs=range(10)))
-                # locmaj = LogLocator(base=10.0, subs=(1.0, ), numticks=100)
-                # ax.yaxis.set_major_locator(locmaj)
-                # locmin = LogLocator(
-                    # base=10.0, subs=np.arange(2, 10) * .1, numticks=100)
-                # ax.yaxis.set_minor_locator(locmin)
-                # ax.yaxis.set_minor_formatter(NullFormatter())
             else:
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())
 
             ax.set_xlabel(view.x_label + ' [' + view.x_units + ']')
             ax.set_ylabel(view.y_label + ' [' + view.y_units + ']')
-            
+
             if not self.ax_opts['label_size_auto']:
                 ax.xaxis.label.set_size(self.ax_opts['fontsize'])
                 ax.yaxis.label.set_size(self.ax_opts['fontsize'])
 
             ax.xaxis.label.set_color(self.ax_opts['color_label'])
             ax.yaxis.label.set_color(self.ax_opts['color_label'])
-            
+
             ax.xaxis.label.set_style(self.ax_opts['style'])
             ax.yaxis.label.set_style(self.ax_opts['style'])
 
@@ -1030,7 +1006,7 @@ Arguments:
             ax_thick = self.ax_opts['axis_thickness']
             ax.tick_params(which='major', width=1.00*ax_thick, length=5*ax_thick)
             ax.tick_params(which='minor', width=0.75*ax_thick, length=2.5*ax_thick)
-            
+
             if not self.ax_opts['tick_label_size_auto']:
                 ax.tick_params(which='major', labelsize=self.ax_opts['tick_label_size'])
                 ax.tick_params(which='minor', labelsize=self.ax_opts['tick_label_size']*.8)
@@ -1041,7 +1017,7 @@ Arguments:
                 ax.spines[pos].set_linewidth(ax_thick)
                 ax.spines[pos].set_color(self.ax_opts['color_ax'])
             ax.tick_params(which='both', color=self.ax_opts['color_ax'], labelcolor=self.ax_opts['color_ax'])
-            
+
             if autoscale:
                 self.axarr[nx].relim(True)
                 self.axarr[nx].autoscale(True)
@@ -1072,3 +1048,31 @@ Arguments:
     def complete_figure_save(self, text, line, begidx, endidx):
         """Complete the figure_save command"""
         return self.complete_cd(text, line, begidx, endidx)
+
+# TUTORIAL
+
+    def do_tutorial(self, line=""):
+        """Show a short tutorial about the commands in RepTate applications"""
+        print("")
+        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        print('Visit the page:')
+        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        print("""
+Basic use:
+==========""")
+        print(Fore.RED + "available" + Fore.RESET)
+        self.do_help("available")
+        print(Fore.RED + "new" + Fore.RESET)
+        self.do_help("new")
+        print(Fore.RED + "tool_new" + Fore.RESET)
+        self.do_help("tool_new")
+        print(Fore.RED + "view" + Fore.RESET)
+        self.do_help("view")
+        print(Fore.RED + "tree" + Fore.RESET)
+        self.do_help("tree")
+        print(Fore.RED + "switch" + Fore.RESET)
+        self.do_help("switch")
+        print(Fore.RED + "plot" + Fore.RESET)
+        self.do_help("plot")
+        print("")
+        

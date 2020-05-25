@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'fittingoptions.ui'
+# Form implementation generated from reading ui file 'RepTate/gui/fittingoptions.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.0
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(419, 763)
+        Dialog.resize(419, 780)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/Images/Images/new_icons/icons8-minimum-value.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
@@ -37,12 +37,6 @@ class Ui_Dialog(object):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.ls)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.groupBox = QtWidgets.QGroupBox(self.ls)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(False)
-        font.setWeight(50)
-        self.groupBox.setFont(font)
-        self.groupBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setContentsMargins(-1, 2, -1, 2)
@@ -894,6 +888,8 @@ class Ui_Dialog(object):
         self.SHGOmaxevcheckBox.toggled['bool'].connect(self.SHGOmaxevlineEdit.setEnabled)
         self.SHGOmaxtimecheckBox.toggled['bool'].connect(self.SHGOmaxtimelineEdit.setEnabled)
         self.SHGOminhgrdcheckBox.toggled['bool'].connect(self.SHGOminhgrdlineEdit.setEnabled)
+        self.basinseedcheckBox.toggled['bool'].connect(self.basinseedlineEdit.setEnabled)
+        self.SHGOmaxfevcheckBox.toggled['bool'].connect(self.SHGOmaxfevlineEdit.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):

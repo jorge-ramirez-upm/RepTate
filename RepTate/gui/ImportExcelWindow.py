@@ -32,34 +32,126 @@
 # --------------------------------------------------------------------------------------------------------
 """Module for importing data form Excel spreadsheets
 
-""" 
+"""
 import sys
 import os
 import numpy as np
-from PyQt5 import QtGui
 from PyQt5.uic import loadUiType
 from PyQt5.QtCore import Qt, QItemSelectionModel
-from PyQt5.QtWidgets import QApplication, QSizePolicy, QFileDialog, QTableWidgetItem, QTableWidget, QAbstractItemView, QMessageBox
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QTableWidgetItem,
+    QTableWidget,
+    QAbstractItemView,
+    QMessageBox,
+)
 from openpyxl import load_workbook
 import xlrd
+import RepTate
 
-PATH = os.path.dirname(os.path.abspath(__file__))
-Ui_ImportExcelMainWindow, QMainWindowImportExcel = loadUiType(os.path.join(PATH,'import_excel_dialog.ui'))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = os.path.dirname(os.path.abspath(__file__))
+Ui_ImportExcelMainWindow, QMainWindowImportExcel = loadUiType(
+    os.path.join(PATH, "import_excel_dialog.ui")
+)
+
 
 class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
-    list_AZ = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-     'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ',
-      'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA',
-       'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ',
-        'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ']
+    list_AZ = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "AA",
+        "AB",
+        "AC",
+        "AD",
+        "AE",
+        "AF",
+        "AG",
+        "AH",
+        "AI",
+        "AJ",
+        "AK",
+        "AL",
+        "AM",
+        "AN",
+        "AO",
+        "AP",
+        "AQ",
+        "AR",
+        "AS",
+        "AT",
+        "AU",
+        "AV",
+        "AW",
+        "AX",
+        "AY",
+        "AZ",
+        "BA",
+        "BB",
+        "BC",
+        "BD",
+        "BE",
+        "BF",
+        "BG",
+        "BH",
+        "BI",
+        "BJ",
+        "BK",
+        "BL",
+        "BM",
+        "BN",
+        "BO",
+        "BP",
+        "BQ",
+        "BR",
+        "BS",
+        "BT",
+        "BU",
+        "BV",
+        "BW",
+        "BX",
+        "BY",
+        "BZ",
+    ]
     MAX_ROW = 100
     MAX_COL = len(list_AZ)
+
     def __init__(self, parent=None, headers=["w", "G'", "G''"], file_param=["Mw", "T"]):
         super().__init__()
         self.setupUi(self)
         # self.show()
         self.filepath = ""
-        self.dir_start = "~"
+        self.dir_start = os.path.join(RepTate.root_dir, "data")
         self.is_xlsx = True
         self.wb = None
         self.sheet = None
@@ -72,13 +164,13 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.col1_cb.activated.connect(self.handle_col1_cb_activated)
         self.col2_cb.activated.connect(self.handle_col2_cb_activated)
         self.col3_cb.activated.connect(self.handle_col3_cb_activated)
-        
+
         self.headers = headers
         self.ncol = len(self.headers)
         self.file_param = file_param
         self.populate_file_param(file_param)
         self.update_cols_cb()
-    
+
     def handle_col1_cb_activated(self):
         if self.wb == None:
             return
@@ -87,7 +179,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         selected_idx[0] = self.col1_cb.currentIndex()
         self.qtables[sheet] = [table, selected_idx]
         self.update_data_preview_table()
-    
+
     def handle_col2_cb_activated(self):
         if self.wb == None:
             return
@@ -96,7 +188,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         selected_idx[1] = self.col2_cb.currentIndex()
         self.qtables[sheet] = [table, selected_idx]
         self.update_data_preview_table()
-    
+
     def handle_col3_cb_activated(self):
         if self.wb == None:
             return
@@ -111,18 +203,18 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.col2_cb.clear()
         self.col1.setText("Select Column <b>%s</b>" % self.headers[0])
         self.col2.setText("Select Column <b>%s</b>" % self.headers[1])
-        self.col1_cb.addItems(self.list_AZ[:self.max_col])
-        self.col2_cb.addItems(self.list_AZ[:self.max_col])
+        self.col1_cb.addItems(self.list_AZ[: self.max_col])
+        self.col2_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.setCurrentIndex(1)
         if self.ncol > 2:
             self.col3_cb.clear()
             self.col3.setText("Select Column <b>%s</b>" % self.headers[2])
-            self.col3_cb.addItems(self.list_AZ[:self.max_col])
+            self.col3_cb.addItems(self.list_AZ[: self.max_col])
             self.col3_cb.setCurrentIndex(2)
         else:
             self.col3.hide()
             self.col3_cb.hide()
-    
+
     def handle_tab_changed(self, idx):
         table, selected_idx = self.qtables[self.qtabs.tabText(idx)]
         ncols = table.columnCount()
@@ -143,18 +235,18 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             return
         self.nskip = self.skip_sb.value()
         self.update_data_preview_table()
-    
+
     def col2num(self, col):
         num = 0
         for c in col:
-            num = num * 26 + (ord(c) - ord('A')) + 1
+            num = num * 26 + (ord(c) - ord("A")) + 1
         return num
 
     def update_data_preview_table(self):
         idx = self.qtabs.currentIndex()
         sname = self.qtabs.tabText(idx)
         col1 = self.col2num(self.col1_cb.currentText()) - 1
-        col2 = self.col2num(self.col2_cb.currentText()) - 1 
+        col2 = self.col2num(self.col2_cb.currentText()) - 1
         if self.ncol > 2:
             col3 = self.col2num(self.col3_cb.currentText()) - 1
         table, _ = self.qtables[sname]
@@ -182,7 +274,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             return (x, y, z, True)
         flag_nan = False
         col1 = self.col2num(self.col1_cb.currentText()) - 1
-        col2 = self.col2num(self.col2_cb.currentText()) - 1 
+        col2 = self.col2num(self.col2_cb.currentText()) - 1
         if self.ncol > 2:
             col3 = self.col2num(self.col3_cb.currentText()) - 1
         sname = self.qtabs.tabText(self.qtabs.currentIndex())
@@ -224,7 +316,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             except (ValueError, TypeError):
                 y.append(np.nan)
                 flag_nan = True
-            
+
             if len(self.headers) > 2:
                 # y values
                 if self.is_xlsx:
@@ -240,7 +332,16 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 except (ValueError, TypeError):
                     z.append(np.nan)
                     flag_nan = True
-        res_dic = {"file": self.selected_file_label.text(), "sheet": sname, "x":x, "y":y, "z":z, "flag_nan": flag_nan, "col1": self.col1_cb.currentText(),"col2": self.col2_cb.currentText()}
+        res_dic = {
+            "file": self.selected_file_label.text(),
+            "sheet": sname,
+            "x": x,
+            "y": y,
+            "z": z,
+            "flag_nan": flag_nan,
+            "col1": self.col1_cb.currentText(),
+            "col2": self.col2_cb.currentText(),
+        }
         if len(self.headers) > 2:
             res_dic["col3"] = self.col3_cb.currentText()
         return res_dic
@@ -253,12 +354,13 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.file_param_txt.setText(txt)
 
     def handle_get_file(self):
-        # file browser window  
+        # file browser window
         options = QFileDialog.Options()
         dilogue_name = "Select Excel Data File"
         ext_filter = "Excel file (*.xls *xlsx)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, self.dir_start, ext_filter, options=options)
+            self, dilogue_name, self.dir_start, ext_filter, options=options
+        )
         self.handle_read_new_file(selected_file)
 
     def handle_read_new_file(self, path):
@@ -280,10 +382,12 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 self.sheet_names = self.wb.sheet_names()
         except:
             # password protected?
-            QMessageBox.warning(self, 'Open Excel File', 'Error: Could not read the Excel file.')
+            QMessageBox.warning(
+                self, "Open Excel File", "Error: Could not read the Excel file."
+            )
             return
         self.qtables = {}
-        
+
         for sname in self.sheet_names:
             if self.is_xlsx:
                 sheet = self.wb[sname]
@@ -330,20 +434,24 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.nskip = 0
 
     def dragEnterEvent(self, e):
-        if e.mimeData().hasFormat('text/uri-list'):
+        if e.mimeData().hasFormat("text/uri-list"):
             e.accept()
         else:
             e.ignore()
-    
+
     def dropEvent(self, e):
         path = e.mimeData().urls()[0].toLocalFile()
-        if os.path.splitext(path)[-1] == ".xls" or os.path.splitext(path)[-1] == ".xlsx":
+        if (
+            os.path.splitext(path)[-1] == ".xls"
+            or os.path.splitext(path)[-1] == ".xlsx"
+        ):
             self.handle_read_new_file(path)
         else:
             pass
             # print("not a readable file")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     GUI = Window()
     sys.exit(app.exec_())

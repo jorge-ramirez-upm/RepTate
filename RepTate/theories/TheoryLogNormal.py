@@ -33,44 +33,13 @@
 """Module TheoryLogNormal
 """
 import numpy as np
-from math import gamma, pi
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 
 
 class TheoryLogNormal(CmdBase):
-    """[summary]
-    
-    [description]
-    """
-    thname = 'LogNormal'
-    description = 'LogNormal distribution'
-    citations = []
-    doi = []
-
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryLogNormal(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryLogNormal(
-                name, parent_dataset, axarr)
-
-
-class BaseTheoryLogNormal:
     """Log-Normal distribution: the logarithm of the molecular weight is normally distributed
     
     * **Function**
@@ -82,55 +51,62 @@ class BaseTheoryLogNormal:
        - ``logM0`` :math:`\\equiv\\log_{10}(M_0)`
        - ``sigma`` :math:`\\equiv\\sigma`
     """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution'
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+
+    thname = "LogNormal"
+    description = "LogNormal distribution"
+    citations = []
+    doi = []
+
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryLogNormal(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryLogNormal(name, parent_dataset, axarr)
+        )
+
+
+class BaseTheoryLogNormal:
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution"
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryLogNormal.thname
     citations = TheoryLogNormal.citations
     doi = TheoryLogNormal.doi
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.LogNormal  # main theory function
         self.has_modes = False  # True if the theory has modes
-        self.parameters['logW0'] = Parameter(
-            name='logW0',
+        self.parameters["logW0"] = Parameter(
+            name="logW0",
             value=5,
-            description='Normalization constant',
-            type=ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters['logM0'] = Parameter(
-            name='logM0',
-            value=5,
-            description='Log mean molecular weight',
-            type=ParameterType.real,
-            opt_type=OptType.opt)
-        self.parameters['sigma'] = Parameter(
-            name='sigma',
-            value=1,
-            description='Standard deviation',
+            description="Normalization constant",
             type=ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+        )
+        self.parameters["logM0"] = Parameter(
+            name="logM0",
+            value=5,
+            description="Log mean molecular weight",
+            type=ParameterType.real,
+            opt_type=OptType.opt,
+        )
+        self.parameters["sigma"] = Parameter(
+            name="sigma",
+            value=1,
+            description="Standard deviation",
+            type=ParameterType.real,
+            opt_type=OptType.opt,
+            min_value=0,
+        )
 
     def LogNormal(self, f=None):
-        """LogNormal function
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """LogNormal function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -141,62 +117,66 @@ class BaseTheoryLogNormal:
 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = W0 / sigma / np.sqrt(2 * pi) / tt.data[:, 0] * np.exp(
-            -(np.log(tt.data[:, 0]) - np.log(M0))**2 / 2 / sigma**2)
+        tt.data[:, 1] = (
+            W0
+            / sigma
+            / np.sqrt(2 * np.pi)
+            / tt.data[:, 0]
+            * np.exp(-((np.log(tt.data[:, 0]) - np.log(M0)) ** 2) / 2 / sigma ** 2)
+        )
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
-        if (line == ""):
-            self.Qprint('''<h3>Characteristics of the fitted MWD</h3>''')
+        if line == "":
+            self.Qprint("""<h3>Characteristics of the fitted MWD</h3>""")
             M0 = np.power(10.0, self.parameters["logM0"].value)
             sigma = self.parameters["sigma"].value
-            Mn = M0 * np.exp(sigma**2 / 2)
-            Mw = M0 * np.exp(3 * sigma**2 / 2)
-            Mz = M0 * np.exp(5 * sigma**2 / 2)
+            Mn = M0 * np.exp(sigma ** 2 / 2)
+            Mw = M0 * np.exp(3 * sigma ** 2 / 2)
+            Mz = M0 * np.exp(5 * sigma ** 2 / 2)
             # table='''<table border="1" width="100%">'''
             # table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
             # table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
             # table+='''</table><br>'''
-            table = [['%-12s' % 'Mn (kg/mol)', '%-12s' % 'Mw (kg/mol)', '%-9s' % 'Mw/Mn', '%-9s' % 'Mz/Mw'],]
-            table.append(['%-12.3g' % (Mn / 1000), '%-12.3g' % (Mw / 1000), '%-9.3g' % (Mw / Mn), '%-9.3g' % (Mz / Mw)])
+            table = [
+                [
+                    "%-12s" % "Mn (kg/mol)",
+                    "%-12s" % "Mw (kg/mol)",
+                    "%-9s" % "Mw/Mn",
+                    "%-9s" % "Mz/Mw",
+                ],
+            ]
+            table.append(
+                [
+                    "%-12.3g" % (Mn / 1000),
+                    "%-12.3g" % (Mw / 1000),
+                    "%-9.3g" % (Mw / Mn),
+                    "%-9.3g" % (Mz / Mw),
+                ]
+            )
             self.Qprint(table)
 
 
 class CLTheoryLogNormal(BaseTheoryLogNormal, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryLogNormal(BaseTheoryLogNormal, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

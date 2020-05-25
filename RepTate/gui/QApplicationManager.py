@@ -37,25 +37,31 @@ ApplicationManager.
 
 """
 #import logging
+import sys
 import os
-from os.path import dirname, join, abspath
+from os.path import dirname, join, abspath, join, isfile, basename
 from PyQt5.uic import loadUiType
 from PyQt5.QtGui import QIcon, QDesktopServices, QTextCursor
 from PyQt5.QtCore import QUrl, Qt, QSize
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QInputDialog, QLineEdit, QMenu, QAction, QToolBar, QToolButton, QMessageBox, QFileDialog, QPlainTextEdit, QTextBrowser
+from PyQt5.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
 
-from CmdBase import CmdBase, CmdMode, CalcMode
-from QApplicationWindow import QApplicationWindow
-from ApplicationManager import ApplicationManager
-from File import File
-from QAboutReptate import AboutWindow
+import RepTate
+from RepTate.core.CmdBase import CmdBase, CmdMode, CalcMode
+from RepTate.core.ApplicationManager import ApplicationManager
+from RepTate.core.File import File
+from RepTate.gui.QAboutReptate import AboutWindow
 from collections import OrderedDict
 import numpy as np
 import time
-import Version
 import logging
 
-PATH = dirname(abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
 Ui_MainWindow, QMainWindow = loadUiType(join(PATH, 'ReptateMainWindow.ui'))
 
 class QTextEditLogger(logging.Handler):
@@ -79,19 +85,11 @@ class QTextEditLogger(logging.Handler):
 
 
 class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
-    """Main Reptate window and application manager
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/index.html'
+    """Main Reptate window and application manager"""
+    html_help_file = 'http://reptate.readthedocs.io/index.html'
 
     def __init__(self, parent=None, loglevel=logging.INFO):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(loglevel=loglevel)
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -99,10 +97,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         if CmdBase.calcmode == CalcMode.singlethread:
-            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date +
+            self.setWindowTitle('RepTate ' + self.version + ' ' + self.date +
                                 ' - SINGLE THREAD!!')
         else:
-            self.setWindowTitle('RepTate v' + self.version + ' ' + self.date)
+            self.setWindowTitle('RepTate ' + self.version + ' ' + self.date)
 
         # Add Apps
         self.toolBarApps.addAction(self.actionMWD)
@@ -142,27 +140,27 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.toolBarHelpAbout.addSeparator()
 
         self.toolBarHelpAbout.addAction(self.actionShow_Logger)
-        
+
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionAbout)
         menu = QMenu()
         menu.addAction(self.actionAbout_Qt)
         menu.addAction(self.actionAboutMatplotlib)
-        menu.addAction(self.actionAboutNumpy)        
+        menu.addAction(self.actionAboutNumpy)
         menu.addAction(self.actionAboutScipy)
         menu.addSeparator()
         menu.addAction(self.actionCite_RepTate)
         menu.addAction(self.actionCheckRepTateVersion)
         tbut.setMenu(menu)
         self.toolBarHelpAbout.addWidget(tbut)
-        
+
         self.toolBarHelpAbout.insertSeparator(self.actionAbout_Qt)
         #self.toolBar.insertSeparator(self.actionQuit)
         self.toolBarProject.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu)
         self.toolBarHelpAbout.setContextMenuPolicy(Qt.PreventContextMenu)
-        
+
         # # ApplicationXY button
         # #choose the button icon
         # icon = QIcon(':/Icon8/Images/new_icons/XY.png')
@@ -211,14 +209,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.actionShow_app_help.triggered.connect(self.handle_show_app_help)
         self.actionShow_th_help.triggered.connect(self.handle_show_th_help)
         self.actionShow_offline_help.triggered.connect(self.handle_actionShow_offline_help)
-        
+
         # additional about buttons
         self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
         self.actionAboutNumpy.triggered.connect(self.handle_about_numpy)
         self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
         self.actionCite_RepTate.triggered.connect(self.handle_cite_RepTate)
         self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
-        
+
         connection_id = self.LoggerdockWidget.visibilityChanged.connect(self.handle_loggerVisibilityChanged)
         connection_id = self.actionShow_Logger.triggered.connect(self.showLogger)
 
@@ -246,13 +244,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         elif loglevel==logging.ERROR:
             self.tbutlog.setDefaultAction(self.actionLogError)
         elif loglevel==logging.CRITICAL:
-            self.tbutlog.setDefaultAction(self.actionLogCritical)            
+            self.tbutlog.setDefaultAction(self.actionLogCritical)
         self.tbutlog.setMenu(menu)
         tb.addWidget(self.tbutlog)
 
         tb.addAction(self.actionCopyLogText)
         self.LoggerdochorizontalLayout.addWidget(tb)
-        
+
         self.logTextBox = QTextEditLogger(self)
         formatter = logging.Formatter('<font color=blue>%(asctime)s</font> <b>%(name)s <font color=red>%(levelname)s</font></b>: %(message)s',
                                 "%Y%m%d %H%M%S")
@@ -260,7 +258,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         logging.getLogger('RepTate').addHandler(self.logTextBox)
         logging.getLogger('RepTate').setLevel(loglevel)
         import matplotlib
-        matplotlib._log.addHandler(self.logTextBox) 
+        matplotlib._log.addHandler(self.logTextBox)
         self.logTextBox.setLevel(loglevel)
         self.LoggerdochorizontalLayout.addWidget(self.logTextBox.widget)
 
@@ -333,20 +331,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def handle_show_reptate_help(self):
         """Show RepTate documentation"""
         try:
-            help_file = self.help_file
+            html_help_file = self.html_help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
             return
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_show_app_help(self):
         """Show RepTate current application (if any) manual, or all applications"""
         try:
-            help_file = self.ApplicationtabWidget.currentWidget().help_file
+            html_help_file = self.ApplicationtabWidget.currentWidget().html_help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/manual/Applications/applications.html'
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            html_help_file = 'http://reptate.readthedocs.io/manual/Applications/applications.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_show_th_help(self):
         """Show RepTate current theory (if any) manual, or all theories"""
@@ -354,19 +352,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             app = self.ApplicationtabWidget.currentWidget()
             ds = app.DataSettabWidget.currentWidget()
             th = ds.theories[ds.current_theory]
-            help_file = th.help_file
+            html_help_file = th.html_help_file
         except Exception as e:
             print('in "handle_show_help":', e)
-            help_file = 'http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html'
-        QDesktopServices.openUrl(QUrl.fromUserInput((help_file)))
+            html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html'
+        QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_actionShow_offline_help(self):
-        QDesktopServices.openUrl(QUrl.fromLocalFile('docs/build/html/index.html'))
+        PATH = join(RepTate.root_dir, "docs", "build", "html", "index.html")
+        QDesktopServices.openUrl(QUrl.fromLocalFile(PATH))
 
     def handle_about_matplotlib(self):
         """Show matplotlib web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://matplotlib.org/index.html')))
-        
+
     def handle_about_numpy(self):
         """Show numpy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('http://www.numpy.org/')))
@@ -374,7 +373,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def handle_about_scipy(self):
         """Show scipy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://scipy.org/')))
-        
+
     def handle_cite_RepTate(self):
         """Visit the web site of the RepTatepaper"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://dx.doi.org/10.1122/8.0000002')))
@@ -383,25 +382,19 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """Query Github for the latest RepTate release"""
         newversion, version_github, version_current = self.check_version()
         if newversion:
-            ans = QMessageBox.question(self, 'New RepTate version found', 
-                "The version of RepTate on Github (%s) is more recent than the one you are running (%s).Do you want to check the new features?"%(version_github, version_current), 
+            ans = QMessageBox.question(self, 'New RepTate version found',
+                "The version of RepTate on Github (%s) is more recent than the one you are running (%s).Do you want to check the new features?"%(version_github, version_current),
                 QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
             if ans == QMessageBox.Yes:
                 QDesktopServices.openUrl(QUrl.fromUserInput(('https://github.com/jorge-ramirez-upm/RepTate/releases')))
         else:
-            QMessageBox.information(self, 'You are running the latest version of RepTate', 
+            QMessageBox.information(self, 'You are running the latest version of RepTate',
                 "The version of RepTate you are running (%s) is up to date with respect to the version on Github (%s)"%(version_current, version_github))
 
     def list_theories_Maxwell(self, th_exclude=None):
         """Redefinition for the GUI mode that lists the tab names.
         List the theories in the current RepTate instance that provide and need
-        Maxwell modes
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        Maxwell modes"""
         get_dict = {}
         set_dict = {}
         for app in self.applications.values():
@@ -421,13 +414,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         return get_dict, set_dict
 
     def handle_doubleClickTab(self, index):
-        """Edit Application name, tab only, the dictinary key remains unchanged
-        
-        [description]
-        
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Edit Application name, tab only, the dictinary key remains unchanged"""
         old_name = self.ApplicationtabWidget.tabText(index)
         dlg = QInputDialog(self)
         dlg.setWindowTitle("Change Application Name")
@@ -442,35 +429,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             # self.applications[new_tab_name] = self.applications.pop(old_name)
 
     def show_about(self):
-        """Show about window
-        
-        [description]
-        """
+        """Show about window"""
         #dlg = AboutWindow(self, self.version + ' ' + self.date)
-        dlg = AboutWindow(self, "%s %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=""https://dx.doi.org/10.1122/8.0000002"">Cite RepTate</a>" %(Version.VERSION, Version.DATE))
+        dlg = AboutWindow(self, "RepTate %s %s"%(self.version, self.date), "Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2020)<br><a href=\"https://dx.doi.org/10.1122/8.0000002\">Cite RepTate</a>" %self.build)
         dlg.show()
 
     def tab_changed(self, index):
-        """Capture when the active application has changed
-        
-        [description]
-        
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Capture when the active application has changed"""
         #appname = self.ApplicationtabWidget.widget(index).windowTitle
         #items = self.Projecttree.findItems(appname, Qt.MatchContains)
         #self.Projecttree.setCurrentItem(items[0])
         pass
 
     def close_app_tab(self, index):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - index {[type]} -- [description]
-        """
+        """Close an app"""
         app = self.ApplicationtabWidget.widget(index)
         ds_name_list = [key for key in app.datasets]
         for ds_name in ds_name_list:
@@ -479,14 +451,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         self.delete(app.name)
 
     def Qopen_app(self, app_name, icon):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - app_name {[type]} -- [description]
-            - icon {[type]} -- [description]
-        """
+        """Open app"""
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset(
         )  #populate with empty dataset at app opening
@@ -497,9 +462,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         return newapp
 
     def handle_new_app(self, app_name=''):
-        """
-        Open a new application window from name
-        """
+        """Open a new application window from name"""
         self.Qopen_app(app_name,
                        ':/Icons/Images/new_icons/%s.png' % app_name)
 
@@ -538,7 +501,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getOpenFileName(self,
-                "Open RepTate Project", "data/", "RepTate Project (*.rept)")
+                "Open RepTate Project", join(RepTate.root_dir, "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return
         self.open_project(fpath)
@@ -550,7 +513,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getSaveFileName(self,
-                "Save RepTate Project", "data/", "RepTate Project (*.rept)")
+                "Save RepTate Project", join(RepTate.root_dir, "data"), "RepTate Project (*.rept)")
         if fpath == '':
             return False
         self.save_reptate(fpath)
@@ -579,7 +542,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
                     file_dic = OrderedDict(
                         [
-                            ('fname', os.path.basename(f.file_full_path)),
+                            ('fname', basename(f.file_full_path)),
                             ('is_active', f.active),
                             ('fparam', param_dic),
                             ('ftable', f.data_table.data.tolist()),
@@ -601,7 +564,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                     nth_saved += 1
                     th = ds.TheorytabWidget.widget(k)
                     param_dic = OrderedDict([(pname, th.parameters[pname].value) for pname in th.parameters])
-                    th_table_dic = OrderedDict( 
+                    th_table_dic = OrderedDict(
                         [ (f.file_name_short, th.tables[f.file_name_short].data.tolist()) for f in ds.files]
                     )
                     # save extra_tables
@@ -640,7 +603,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                         ]
                     )
                     theories_dic[th.name] = th_dic
-                
+
                 # Save figure markers
                 ds_markers = OrderedDict(
                     [
@@ -687,16 +650,16 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                         ('tool_param', param_dic),
                         ('tool_txtbox', str(tool.toolTextBox.toHtml() + '<br><i>Saved at %s on %s<i><br>' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))))
                     ]
-                ) 
+                )
                 #add to global tools dic
                 tools_dic[tool.name] = tool_dic
-            
+
             # all tools plus extra
             tools = {
                 'tools_dic': tools_dic,
                 'cur_tab_index': app.TooltabWidget.currentIndex()
             }
-            
+
             # annotations
             ann_dict = OrderedDict()
             for k, ann in enumerate(app.graphicnotes):
@@ -713,7 +676,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 ann_opts["alpha"] = ann.get_alpha()
                 ann_opts["family"] = ann.get_fontfamily()[0]
                 ann_opts["zorder"] = ann.get_zorder()
-            
+
                 ann_dict["annotation_%02d" % (k + 1)] = {
                     "ann_text": ann_text,
                     "ann_x": ann_x,
@@ -726,8 +689,8 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 [
                     ('app_tabname', self.ApplicationtabWidget.tabText(i)),
                     ('app_indx', i),
-                    ('appname', app.appname), 
-                    ('current_view_names', [v.name for v in app.multiviews]), 
+                    ('appname', app.appname),
+                    ('current_view_names', [v.name for v in app.multiviews]),
                     ('current_ds_indx', app.DataSettabWidget.currentIndex()),
                     ('datasets', datasets_dic),
                     ('tools', tools),
@@ -741,9 +704,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             apps_dic[app.name] = app_dic
 
         current_app_indx = self.ApplicationtabWidget.currentIndex()
+        verdata = RepTate._version.get_versions()
+        version_current = verdata["version"].split("+")[0]
+        date = verdata["date"].split("T")[0]
+        build = verdata["version"]
+
         out = OrderedDict(
             [
-                ('RepTate_version', Version.VERSION + '_' + Version.DATE),
+                ('RepTate_version', version_current + '_' + date + ' (build %s)'%build),
                 ('project_saved_at', '%s on %s' % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))),
                 ('napp_saved', napps), ('nfile_saved', nfile_saved),
                 ('nth_saved', nth_saved),
@@ -755,24 +723,24 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         # zip output file
         import json, zipfile, tempfile
         with tempfile.TemporaryDirectory() as tmpdirname:
-            tmp = os.path.join(tmpdirname, 'tmp')
+            tmp = join(tmpdirname, 'tmp')
             json.dump(out, open(tmp, 'w'), indent=4)
             with zipfile.ZipFile(fpath, 'w', compression=zipfile.ZIP_DEFLATED) as z:
                 z.write(tmp, self.REPTATE_PROJ_JSON)
 
-        if napps > 1: 
+        if napps > 1:
             txtapp = 'Applications'
         else:
             txtapp = 'Application'
-        if nth_saved > 1: 
+        if nth_saved > 1:
             txtth = 'theories'
         else:
             txtth = 'theory'
-        if nfile_saved > 1: 
+        if nfile_saved > 1:
             txtfiles = 'files'
         else:
             txtfiles = 'file'
-        if ntool_saved > 1: 
+        if ntool_saved > 1:
             txttool = 'tools'
         else:
             txttool = 'tool'
@@ -798,7 +766,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             fparams = file_dic['fparam'] # dict
             ftable = np.asarray(file_dic['ftable'])
 
-            
+
             f_ext = fname.split('.')[-1]
             ft = ds.parent_application.filetypes[f_ext]
             f = File(fname, ft, ds, ds.parent_application.axarr)
@@ -845,7 +813,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 val = extra_data[key]
                 if type(val) == list:
                     extra_data[key] = np.asarray(val)
-            
+
             if thname == 'SCCR':
                 thname = 'GLaMM' # backward compatibility
             new_th = ds.new_theory(thname, th_tabname, calculate=False, show=False)
@@ -868,7 +836,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             new_th.update_parameter_table()
             new_th.thTextBox.insertHtml(th_textbox)
             new_th.autocalculate = autocal
-    
+
     def restore_marker_settings(self, ds, marker_dic):
         """Restore the dataset marker settings"""
         ds.marker_size = marker_dic['marker_size']
@@ -903,7 +871,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             for pname in tool_param:
                 to.set_param_value(pname, tool_param[pname])
         app.TooltabWidget.setCurrentIndex(tools['cur_tab_index'])
-    
+
     def restore_annotations(self, app, annotations):
         """Restore the annotations"""
         for ann in annotations.values():
@@ -916,14 +884,14 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
     def open_project(self, project_path):
         """Open file and load project"""
         import json, zipfile, tempfile
-        if not os.path.isfile(project_path):
+        if not isfile(project_path):
             return
         self.load_path = project_path
         try:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 with zipfile.ZipFile(project_path) as z:
                     z.extract(self.REPTATE_PROJ_JSON, tmpdirname)
-                    data = json.load(open(os.path.join(tmpdirname, self.REPTATE_PROJ_JSON)), object_pairs_hook=OrderedDict)
+                    data = json.load(open(join(tmpdirname, self.REPTATE_PROJ_JSON)), object_pairs_hook=OrderedDict)
         except:
             print("File \"%s\" seems to be corrupted" % project_path)
             return
@@ -933,37 +901,41 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         except KeyError:
             print("Could not find data in \"%s\"" % project_path)
             return
+        # switch to single thread
         calc_mode_tmp = CmdBase.calcmode
         CmdBase.calcmode = CalcMode.singlethread
+        # turn off numpy error messages
+        old_np_settings = np.seterr(all='ignore') 
+
         napps = int(data['napp_saved'])
         nth_saved = int(data['nth_saved'])
         nfile_saved = int(data['nfile_saved'])
         ntool_saved = int(data['ntool_saved'])
-        if napps > 1: 
+        if napps > 1:
             txtapp = 'Applications'
         else:
             txtapp = 'Application'
-        if nth_saved > 1: 
+        if nth_saved > 1:
             txtth = 'theories'
         else:
             txtth = 'theory'
-        if nfile_saved > 1: 
+        if nfile_saved > 1:
             txtfiles = 'files'
         else:
             txtfiles = 'file'
-        if ntool_saved > 1: 
+        if ntool_saved > 1:
             txttool = 'tools'
         else:
             txttool = 'tool'
-        ans = QMessageBox.question(self, 'Load Project', 
-            'Will load %d %s, %d %s, %d %s, and %d %s.\nDo you want to continue?' % (napps, 
-            txtapp, nth_saved, txtth, nfile_saved, txtfiles, ntool_saved, txttool), 
+        ans = QMessageBox.question(self, 'Load Project',
+            'Will load %d %s, %d %s, %d %s, and %d %s.\nDo you want to continue?' % (napps,
+            txtapp, nth_saved, txtth, nfile_saved, txtfiles, ntool_saved, txttool),
             QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
         if ans != QMessageBox.Yes:
             return
         for app_dic in apps_dic.values():
             app_tabname = app_dic['app_tabname']
-            app_indx = app_dic['app_indx'] 
+            app_indx = app_dic['app_indx']
             appname = app_dic['appname']
             current_view_names = app_dic['current_view_names']
             current_ds_indx = app_dic['current_ds_indx']
@@ -973,13 +945,13 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             annotations = app_dic['annotations']
 
             new_app_tab, ind = self.restore_app(appname, app_tabname)
-   
+
             try:
                 new_app_tab.ax_opts = app_dic['axis_options']
             except:
                 #backward compatibility
                 pass
-            
+
             try:
                 new_app_tab.legend_opts = app_dic['legend_opts']
             except:
@@ -1004,10 +976,10 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
                 self.restore_marker_settings(new_ds_tab, ds_markers)
             self.restore_tools(new_app_tab, tools)
             new_app_tab.DataInspectordockWidget.setVisible(show_inspector)
-            
+
             # restore annotations
             self.restore_annotations(new_app_tab, annotations)
-            
+
             # set app views
             new_app_tab.multiviews = [new_app_tab.views[v] for v in current_view_names]
             new_app_tab.viewComboBox.setCurrentText(current_view_names[0])
@@ -1015,9 +987,11 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             #set current ds_tab index
             new_app_tab.DataSettabWidget.setCurrentIndex(current_ds_indx)
             # new_app_tab.update_all_ds_plots() # not needed ?
-            
+
             QApplication.processEvents()
 
         self.ApplicationtabWidget.setCurrentIndex(app_indx_now)
         CmdBase.calcmode = calc_mode_tmp
+        # restore numpy error messages settings
+        np.seterr(**old_np_settings) 
 #################

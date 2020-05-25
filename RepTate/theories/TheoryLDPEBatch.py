@@ -35,24 +35,18 @@
 
 TobitaBatch file for creating a new theory
 """
-import os
-import sys
 import numpy as np
 import time
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QSizePolicy, QFileDialog, QLineEdit, QGroupBox, QFormLayout
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5.QtCore import Qt, pyqtSignal
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QApplication
 
 import ctypes as ct
-import react_ctypes_helper as rch
-import react_gui_tools as rgt
+import RepTate.theories.react_ctypes_helper as rch
+import RepTate.theories.react_gui_tools as rgt
 
 
 class TheoryTobitaBatch(CmdBase):
@@ -65,38 +59,33 @@ class TheoryTobitaBatch(CmdBase):
     approximation for a tubular reactor. One possibility when modelling a real
     tubular reactor is to mix several batch reactions with different conversions.
     """
-    thname = 'Tobita Batch'
-    description = 'The LDPE batch reaction theory'
-    citations = ['Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403']
-    doi = ["http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"]
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryTobitaBatch(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTobitaBatch(
-                name, parent_dataset, axarr)
+    thname = "Tobita Batch"
+    description = "The LDPE batch reaction theory"
+    citations = ["Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403"]
+    doi = [
+        "http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"
+    ]
+
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryTobitaBatch(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryTobitaBatch(name, parent_dataset, axarr)
+        )
 
 
-class BaseTheoryTobitaBatch():
-    """[summary]
-    
-    [description]
-    """
-    # help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+class BaseTheoryTobitaBatch:
+    """Base class for both GUI and CL"""
+
+    # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
+    html_help_file = (
+        "http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html"
+    )
+    single_file = (
+        True  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryTobitaBatch.thname
     citations = TheoryTobitaBatch.citations
     doi = TheoryTobitaBatch.doi
@@ -105,15 +94,8 @@ class BaseTheoryTobitaBatch():
     signal_request_polymer = pyqtSignal(object)
     signal_request_arm = pyqtSignal(object)
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
         self.reactname = "LDPE batch %d" % (rch.tb_global.tobbatchnumber)
@@ -126,66 +108,74 @@ class BaseTheoryTobitaBatch():
         self.autocalculate = False
         self.do_priority_seniority = False
 
-        self.parameters['tau'] = Parameter(
-            name='tau',
+        self.parameters["tau"] = Parameter(
+            name="tau",
             value=0.002,
-            description='Ratio (term. by dispropor. + chain transf. to small mol.) to polym. rates',
+            description="Ratio (term. by dispropor. + chain transf. to small mol.) to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['beta'] = Parameter(
-            name='beta',
+            opt_type=OptType.const,
+        )
+        self.parameters["beta"] = Parameter(
+            name="beta",
             value=0.0,
-            description='Ratio term. by combin. to polym. rates',
+            description="Ratio term. by combin. to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['Cb'] = Parameter(
-            name='Cb',
+            opt_type=OptType.const,
+        )
+        self.parameters["Cb"] = Parameter(
+            name="Cb",
             value=0.02,
-            description='Ratio long-chain-branch. to polym. rates',
+            description="Ratio long-chain-branch. to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['Cs'] = Parameter(
-            name='Cs',
+            opt_type=OptType.const,
+        )
+        self.parameters["Cs"] = Parameter(
+            name="Cs",
             value=0.0005,
-            description='Ratio scission to polym. rates',
+            description="Ratio scission to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['fin_conv'] = Parameter(
-            name='fin_conv',
+            opt_type=OptType.const,
+        )
+        self.parameters["fin_conv"] = Parameter(
+            name="fin_conv",
             value=0.4,
-            description='Monomer conversion at the end of the reaction',
+            description="Monomer conversion at the end of the reaction",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['num_to_make'] = Parameter(
-            name='num_to_make',
+            opt_type=OptType.const,
+        )
+        self.parameters["num_to_make"] = Parameter(
+            name="num_to_make",
             value=1000,
-            description='Number of molecules made in the simulation',
+            description="Number of molecules made in the simulation",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['mon_mass'] = Parameter(
-            name='mon_mass',
+            opt_type=OptType.const,
+        )
+        self.parameters["mon_mass"] = Parameter(
+            name="mon_mass",
             value=28,
-            description=
-            'Mass, in a.m.u., of a monomer (usually set to 28 for PE)',
+            description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['Me'] = Parameter(
-            name='Me',
+            opt_type=OptType.const,
+        )
+        self.parameters["Me"] = Parameter(
+            name="Me",
             value=1000,
-            description='Entanglement molecular weight',
+            description="Entanglement molecular weight",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['nbin'] = Parameter(
-            name='nbin',
+            opt_type=OptType.const,
+        )
+        self.parameters["nbin"] = Parameter(
+            name="nbin",
             value=100,
-            description='Number of molecular weight bins',
+            description="Number of molecular weight bins",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+        )
 
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
-        self.do_xrange('', visible=self.xrange.get_visible())
+        self.do_xrange("", visible=self.xrange.get_visible())
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -198,21 +188,21 @@ class BaseTheoryTobitaBatch():
         # fin_conv, tau, beta, Cb, Cs, monmass, Me:double
 
         # get parameters
-        tau = self.parameters['tau'].value
-        beta = self.parameters['beta'].value
-        Cb = self.parameters['Cb'].value
-        Cs = self.parameters['Cs'].value
-        fin_conv = self.parameters['fin_conv'].value
-        numtomake = np.round(self.parameters['num_to_make'].value)
-        monmass = self.parameters['mon_mass'].value
-        Me = self.parameters['Me'].value
-        nbins = int(np.round(self.parameters['nbin'].value))
+        tau = self.parameters["tau"].value
+        beta = self.parameters["beta"].value
+        Cb = self.parameters["Cb"].value
+        Cs = self.parameters["Cs"].value
+        fin_conv = self.parameters["fin_conv"].value
+        numtomake = np.round(self.parameters["num_to_make"].value)
+        monmass = self.parameters["mon_mass"].value
+        Me = self.parameters["Me"].value
+        nbins = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 
         c_ndist = ct.c_int()
 
-        #resize theory datatable
+        # resize theory datatable
         ft = f.data_table
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -224,9 +214,10 @@ class BaseTheoryTobitaBatch():
             success = rch.request_dist(ct.byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:  # no dist available
-                #launch dialog asking for more dist
+                # launch dialog asking for more dist
                 self.signal_request_dist.emit(
-                    self)  #use signal to open QDialog in the main GUI window
+                    self
+                )  # use signal to open QDialog in the main GUI window
                 return
             else:
                 self.dist_exists = True
@@ -245,8 +236,13 @@ class BaseTheoryTobitaBatch():
             rch.return_dist_polys(ct.c_int(ndist))
         # initialise tobita batch
         rch.tobbatchstart(
-            ct.c_double(fin_conv), ct.c_double(tau), ct.c_double(beta),
-            ct.c_double(Cs), ct.c_double(Cb), ct.c_int(ndist))
+            ct.c_double(fin_conv),
+            ct.c_double(tau),
+            ct.c_double(beta),
+            ct.c_double(Cs),
+            ct.c_double(Cb),
+            ct.c_int(ndist),
+        )
         rch.react_dist[ndist].contents.npoly = 0
 
         c_m = ct.c_int()
@@ -254,11 +250,13 @@ class BaseTheoryTobitaBatch():
         # make numtomake polymers
         i = 0
         rate_print = np.trunc(numtomake / 20)
-        self.Qprint('Making polymers:')
-        self.Qprint('0% ', end='')
+        self.Qprint("Making polymers:")
+        self.Qprint("0% ", end="")
         while i < numtomake:
             if self.stop_theory_flag:
-                self.Qprint('<br><big><font color=red><b>Polymer creation stopped by user</b></font></big>')
+                self.Qprint(
+                    "<br><big><font color=red><b>Polymer creation stopped by user</b></font></big>"
+                )
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
@@ -266,34 +264,37 @@ class BaseTheoryTobitaBatch():
             if success:  # check availability of polymers
                 # put it in list
 
-                if rch.react_dist[
-                        ndist].contents.npoly == 0:  # case of first polymer made
+                if (
+                    rch.react_dist[ndist].contents.npoly == 0
+                ):  # case of first polymer made
                     rch.react_dist[ndist].contents.first_poly = m
                     rch.set_br_poly_nextpoly(
-                        ct.c_int(m),
-                        ct.c_int(0))  # br_poly[m].contents.nextpoly = 0
+                        ct.c_int(m), ct.c_int(0)
+                    )  # br_poly[m].contents.nextpoly = 0
                 else:  # next polymer, put to top of list
                     rch.set_br_poly_nextpoly(
-                        ct.c_int(m),
-                        ct.c_int(rch.react_dist[ndist].contents.first_poly)
+                        ct.c_int(m), ct.c_int(rch.react_dist[ndist].contents.first_poly)
                     )  # br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
                     rch.react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
-                if rch.tobbatch(ct.c_int(m), ct.c_int(
-                        ndist)):  # routine returns false if arms ran out
+                if rch.tobbatch(
+                    ct.c_int(m), ct.c_int(ndist)
+                ):  # routine returns false if arms ran out
                     rch.react_dist[ndist].contents.npoly += 1
                     i += 1
                     # check for error
                     if rch.tb_global.tobitabatcherrorflag:
                         self.Qprint(
-                            '<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
+                            "<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>"
                         )
                         i = numtomake
                 else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
-                    while self.success_increase_memory is None:  # wait for the end of QDialog
+                    while (
+                        self.success_increase_memory is None
+                    ):  # wait for the end of QDialog
                         time.sleep(
                             0.5
                         )  # TODO: find a better way to wait for the dialog thread to finish
@@ -305,9 +306,9 @@ class BaseTheoryTobitaBatch():
 
                 # update on number made
                 if i % rate_print == 0:
-                    self.Qprint('-', end='')
+                    self.Qprint("-", end="")
                     # needed to use Qprint if in single-thread
-                    QApplication.processEvents()  
+                    QApplication.processEvents()
 
             else:  # polymer wasn't available
                 self.success_increase_memory = None
@@ -322,14 +323,15 @@ class BaseTheoryTobitaBatch():
                     i = numtomake
         # end make polymers loop
         if not rch.tb_global.tobitabatcherrorflag:
-            self.Qprint('&nbsp;100%')
+            self.Qprint("&nbsp;100%")
 
         calc = 0
         # do analysis of polymers made
-        if (rch.react_dist[ndist].contents.npoly >=
-                100) and (not rch.tb_global.tobitabatcherrorflag):
+        if (rch.react_dist[ndist].contents.npoly >= 100) and (
+            not rch.tb_global.tobitabatcherrorflag
+        ):
             rch.molbin(ndist)
-            #resize theory datatable
+            # resize theory datatable
             ft = f.data_table
             ft = f.data_table
             tt = self.tables[f.file_name_short]
@@ -339,7 +341,8 @@ class BaseTheoryTobitaBatch():
 
             for i in range(1, rch.react_dist[ndist].contents.nummwdbins + 1):
                 tt.data[i - 1, 0] = np.power(
-                    10, rch.react_dist[ndist].contents.lgmid[i])
+                    10, rch.react_dist[ndist].contents.lgmid[i]
+                )
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
@@ -352,17 +355,17 @@ class BaseTheoryTobitaBatch():
 
         self.simexists = True
         # self.Qprint(
-            # '%d arm records left in memory' % rch.pb_global.arms_left)
+        # '%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
-    
+
     def show_theory_extras(self, checked):
         rgt.show_theory_extras(self, checked)
 
     def destructor(self):
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
-    
-    def do_fit(self, line=''):
+
+    def do_fit(self, line=""):
         """No fitting allowed in this theory"""
         if self.xrange.get_visible():
             if self.xmin > self.xmax:
@@ -378,43 +381,25 @@ class BaseTheoryTobitaBatch():
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
     def do_error(self, line):
+        """This theory does not calculate the error"""
         pass
 
+
 class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
 

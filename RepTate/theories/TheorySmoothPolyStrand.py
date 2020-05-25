@@ -35,390 +35,32 @@
 Module for the Smooth Poly STRAND model of polymer FIC (uses the Rolie-Double-Poly theory for the non-linear flow of entangled polymers).
 
 """
+import os
 import numpy as np
-from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QHBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox, QLabel, QLineEdit, QRadioButton, QButtonGroup, QFileDialog
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices, QDoubleValidator
+from scipy.integrate import odeint
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.DataTable import DataTable
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from Theory_rc import *
-from enum import Enum
+from RepTate.gui.Theory_rc import *
 from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
 import time
-import Version
+import RepTate
 
-import rp_blend_ctypes_helper as rpch
-import QuiescentSmoothStrand
-from Theory import EndComputationRequested
+import RepTate.theories.rp_blend_ctypes_helper as rpch
+import RepTate.theories.QuiescentSmoothStrand as QuiescentSmoothStrand
+from RepTate.core.Theory import EndComputationRequested
 from collections import OrderedDict
 
-import SmoothPolySTRAND
-import SchneiderRate
-import timeArraySplit
-
-class Dilution():
-    def __init__(self, m, phi, taue, Me, parent_theory):
-        super().__init__()
-        self.parent_theory = parent_theory
-        self.res = self.relax_times_from_mwd(m, phi, taue, Me)
-
-    def find_down_indx(self, tauseff, taud):
-        """Find index i such that taud[i] < tauseff < taud[i+1]
-        or returns -1 if tauseff < taud[0]
-        or returns n-1 if tauseff > taud[n-1] (should not happen)
-        """
-        n = len(taud)
-        down = n - 1
-        while tauseff < taud[down]:
-            if down == 0:
-                down = -1
-                break
-            down -= 1
-        return down
-
-    def find_dilution(self, phi, taud, taus, interp=True):
-        """Find the dilution factor phi_dil for a chain with bare stretch relax time `taus`"""
-        n = len(phi)
-        temp = -1
-        phi_dil = 1
-        tauseff = taus / phi_dil
-        #m[0] < m[1] <  ... < m[n]
-        while True:
-            down = self.find_down_indx(tauseff, taud)
-            if down == -1:
-                #case tauseff < taud[0]
-                phi_dil = 1
-                break
-            elif down == n - 1:
-                #(just in case) tauseff > taud[n-1]
-                phi_dil = phi[n - 1]
-                break
-            else:
-                #change tauseff and check if 'down' is still the same
-                if (temp == down):
-                    break
-                temp = down
-                phi_dil = 1.0
-                for k in range(down):
-                    phi_dil -= phi[k]
-                if interp:
-                    # x=0 if tauseff close to td[down], x=1 if tauseff close to td[down+1]
-                    x = (tauseff - taud[down]) / (taud[down + 1] - taud[down])
-                    # linear interpolation of phi_dil
-                    phi_dil = phi_dil - x * phi[down]
-                else:
-                    phi_dil -= phi[down]
-            tauseff = taus / phi_dil
-        return phi_dil
-
-    def sort_list(self, m, phi):
-        """Ensure m[0] <= m[1] <=  ... <= m[n]"""
-        if all(m[i] <= m[i + 1] for i in range(len(m) - 1)):
-            #list aready sorted
-            return m, phi
-        args = np.argsort(m)
-        m = list(np.array(m)[args])
-        phi = list(np.array(phi)[args])
-        return m, phi
-
-    def relax_times_from_mwd(self, m, phi, taue, Me):
-        """Guess relaxation times of linear rheology (taud) from molecular weight distribution.
-        (i) Count short chains (M < 2*Me) as solvent
-        (ii) The effective dilution at a given timescale t is equal to the sum of
-        the volume fractions of all chains with relaxation time greater than t
-        (iii) CLF makes use of the most diluted tube available at the CLF timescale
-        """
-        #m[0] < m[1] <  ... < m[n]
-        m, phi = self.sort_list(m, phi)
-
-        taus = []
-        taus_short = []
-        taud = []
-        phi_short = []
-        m_short = []
-        phi_u = 0
-        nshort = 0
-
-        n = len(m)
-        for i in range(n):
-            z = m[i] / Me
-            ts = z * z * taue
-            if m[i] < 2. * Me:
-                #short chains not entangled: use upper-convected Maxwell model
-                nshort += 1
-                phi_u += phi[i]
-                taus_short.append(ts)
-                phi_short.append(phi[i])
-                m_short.append(m[i])
-            else:
-                taus.append(ts)
-
-        #remove the short chains from the list of M and phi
-        m = m[nshort:]
-        phi = phi[nshort:]
-
-        n = len(m)  # new size
-        if n == 0:
-            self.parent_theory.Qprint("All chains as solvent")
-            return [False]
-        if n == 1:
-            return [True, phi, taus, [3 * z * ts,]]
-
-        Zeff = [0] * n
-        #renormalize the fraction of entangled chains
-        Me /= (1 - phi_u)
-        taue /= ((1 - phi_u) * (1 - phi_u))
-        for i in range(n):
-            phi[i] /= (1 - phi_u)
-            z = m[i] / Me
-            taud.append(3. * z * z * z * taue)
-
-        vphi = []
-        interp = (n>2) # true if more than two species
-        for i in range(n):
-            #find dilution for the entangled chains
-            if i == 0:
-                phi_dil = 1
-            else:
-                phi_dil = self.find_dilution(phi, taud, taus[i], interp=interp)
-            vphi.append(phi_dil)
-
-        for i in range(n):
-            z = m[i] / Me
-            if z * vphi[i] < 1 and z > 1:
-                # case where long chains are effectively untentangled
-                # CR-Rouse approximated as last taud having z*vphi > 1
-                taud_sticky_rep = taud[i - 1]
-                for j in range(i, n):
-                    taud[j] = taud_sticky_rep
-                    Zeff[j] = 1.0
-                break
-            taud[i] = taud[i] * self.parent_theory.fZ(z * vphi[i])
-            Zeff[i] = z * vphi[i]
-        self.parent_theory.Zeff = np.array(Zeff)
-
-        return [True, phi, taus, taud]
-
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
-
-class GcorrMode(Enum):
-    """Primitive path fluctuations reduce the terminal modulus due to shortened tube.
-    Defines if we include that correction.
-
-    Parameters can be:
-        - none: No finite extensibility
-        - with_gcorr: With finite extensibility
-    """
-    none = 0
-    with_gcorr = 1
-
-
-class NoquMode(Enum):
-    """Primitive path fluctuations reduce the terminal modulus due to shortened tube.
-    Defines if we include that correction.
-
-    Parameters can be:
-        - none: No finite extensibility
-        - with_gcorr: With finite extensibility
-    """
-    none = 0
-    with_noqu = 1
-
-class SingleSpeciesMode(Enum):
-    """Uses a single average species to compute the nucleation rate.
-    Defines if we include that approximation.
-
-    Parameters can be:
-        - none: use all modes
-        - with_single: Just use a single mode
-    """
-    none = 0
-    with_single = 1
-
-
-    
-class FeneMode(Enum):
-    """Defines the finite extensibility function
-    
-    Parameters can be:
-        - none: No finite extensibility
-        - with_fene: With finite extensibility
-    """
-    none = 0
-    with_fene = 1
-
-
-class GetMwdRepate(QDialog):
-    def __init__(self, parent=None, th_dict={}, title="title"):
-        super().__init__(parent)
-
-        self.setWindowTitle(title)
-        layout = QVBoxLayout(self)
-
-        validator = QDoubleValidator()
-        hlayout = QHBoxLayout()
-        hlayout.addWidget(QLabel("Me"))
-        self.Me_text = QLineEdit("%.3g" % parent.parameters["Me"].value)
-        self.Me_text.setValidator(validator)
-        hlayout.addWidget(self.Me_text)
-
-        hlayout.addWidget(QLabel("taue"))
-        self.taue_text = QLineEdit("%.3g" % parent.parameters["tau_e"].value)
-        self.taue_text.setValidator(validator)
-        hlayout.addWidget(self.taue_text)
-
-        layout.addLayout(hlayout)
-
-        self.btngrp = QButtonGroup()
-
-        for item in th_dict.keys():
-            rb = QRadioButton(item, self)
-            layout.addWidget(rb)
-            self.btngrp.addButton(rb)
-        # default button selection
-        rb = self.btngrp.buttons()[0]
-        rb.setChecked(True)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-
-
-class EditMWDDialog(QDialog):
-    def __init__(self, parent=None, m=None, phi=None, MAX_MODES=0):
-        super().__init__(parent)
-
-        self.setWindowTitle("Input Molecular weight distribution")
-        layout = QVBoxLayout(self)
-
-        validator = QDoubleValidator()
-        hlayout = QHBoxLayout()
-        hlayout.addWidget(QLabel("Me"))
-        self.Me_text = QLineEdit("%.4g" % parent.parameters["Me"].value)
-        self.Me_text.setValidator(validator)
-        hlayout.addWidget(self.Me_text)
-
-        hlayout.addWidget(QLabel("taue"))
-        self.taue_text = QLineEdit("%.4g" % parent.parameters["tau_e"].value)
-        self.taue_text.setValidator(validator)
-        hlayout.addWidget(self.taue_text)
-
-        layout.addLayout(hlayout)
-        nmodes = len(phi)
-
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(nmodes)  #initial value
-        layout.addWidget(self.spinbox)
-
-        self.table = SpreadsheetWidget()  #allows copy/paste
-        self.table.setRowCount(nmodes)
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["M", "phi"])
-        for i in range(nmodes):
-            self.table.setItem(i, 0, QTableWidgetItem("%g" % m[i]))
-            self.table.setItem(i, 1, QTableWidgetItem("%g" % phi[i]))
-
-        layout.addWidget(self.table)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept_)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def accept_(self):
-        sum = 0
-        for i in range(self.table.rowCount()):
-            sum += float(self.table.item(i, 1).text())
-        if abs(sum - 1) < 0.02:
-            self.accept()
-        else:
-            QMessageBox.warning(self, 'Error', 'phi must add up to 1')
-
-    def handle_spinboxValueChanged(self, value):
-        nrow_old = self.table.rowCount()
-        self.table.setRowCount(value)
-        for i in range(nrow_old, value):  #create extra rows with defaut values
-            self.table.setItem(i, 0, QTableWidgetItem("0"))
-            self.table.setItem(i, 1, QTableWidgetItem("1000"))
-
-
-class EditModesDialog(QDialog):
-    def __init__(self, parent=None, param_dic={}, MAX_MODES=0):
-        super().__init__(parent)
-
-        self.setWindowTitle("Edit volume fractions and relaxation times")
-        layout = QVBoxLayout(self)
-        self.nparam = len(param_dic)
-        pnames = list(param_dic.keys())
-        nmodes = len(param_dic[pnames[0]])
-
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(nmodes)  #initial value
-        layout.addWidget(self.spinbox)
-
-        self.table = SpreadsheetWidget()  #allows copy/paste
-        self.table.setRowCount(nmodes)
-        self.table.setColumnCount(self.nparam)
-        self.table.setHorizontalHeaderLabels(pnames)
-        for i in range(nmodes):
-            for j in range(self.nparam):
-                self.table.setItem(i, j,
-                                   QTableWidgetItem(
-                                       "%g" % param_dic[pnames[j]][i]))
-        layout.addWidget(self.table)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept_)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def accept_(self):
-        sum = 0
-        for i in range(self.table.rowCount()):
-            sum += float(self.table.item(i, 0).text())
-        if abs(sum - 1) < 0.02:
-            self.accept()
-        else:
-            QMessageBox.warning(self, 'Error', 'phi must add up to 1')
-
-    def handle_spinboxValueChanged(self, value):
-        nrow_old = self.table.rowCount()
-        self.table.setRowCount(value)
-        for i in range(nrow_old, value):  #create extra rows with defaut values
-            for j in range(self.nparam):
-                self.table.setItem(i, j, QTableWidgetItem("0"))
-
+import RepTate.theories.SmoothPolySTRAND as SmoothPolySTRAND
+import RepTate.theories.SchneiderRate as SchneiderRate
+import RepTate.theories.timeArraySplit as timeArraySplit
+from RepTate.theories.theory_helpers import FlowMode, EditModesVolFractionsDialog, FeneMode, GcorrMode, NoquMode, SingleSpeciesMode, Dilution, EditMWDDialog
 
 class TheorySmoothPolyStrand(CmdBase):
     """Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
@@ -488,18 +130,7 @@ class TheorySmoothPolyStrand(CmdBase):
     doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUITheorySmoothPolyStrand(
             name, parent_dataset,
             ax) if (CmdBase.mode == CmdMode.GUI) else CLTheorySmoothPolyStrand(
@@ -507,25 +138,16 @@ class TheorySmoothPolyStrand(CmdBase):
 
 
 class BaseTheorySmoothPolyStrand:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
+    """Base class for both GUI and CL"""
+
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
     thname = TheorySmoothPolyStrand.thname
     citations = TheorySmoothPolyStrand.citations
     doi = TheorySmoothPolyStrand.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RolieDoublePoly_Crystal
         self.has_modes = True
@@ -623,7 +245,6 @@ class BaseTheorySmoothPolyStrand:
             description="Plateau modulus",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0)
         self.parameters["Me"] = Parameter(
             name="Me",
@@ -631,7 +252,6 @@ class BaseTheorySmoothPolyStrand:
             description="Entanglement molecular mass",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         self.parameters["tau_e"] = Parameter(
@@ -640,7 +260,6 @@ class BaseTheorySmoothPolyStrand:
             description="Entanglement relaxation time",
             type=ParameterType.real,
             opt_type=OptType.const,
-            bracketed=True,
             min_value=0,
             display_flag=False)
         nmode = self.parameters["nmodes"].value
@@ -652,7 +271,6 @@ class BaseTheorySmoothPolyStrand:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -661,7 +279,6 @@ class BaseTheorySmoothPolyStrand:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                bracketed=True,
                 min_value=0)
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
@@ -669,7 +286,6 @@ class BaseTheorySmoothPolyStrand:
                 description="Rouse time of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.opt,
-                bracketed=True,
                 min_value=0)
 
         self.view_LVEenvelope = False
@@ -741,19 +357,13 @@ class BaseTheorySmoothPolyStrand:
         self.ax.lines.remove(self.LVEenvelopeseries)
 
     def show_theory_extras(self, show=False):
-        """Called when the active theory is changed
-        
-        [description]
-        """
+        """Called when the active theory is changed"""
         if CmdBase.mode == CmdMode.GUI:
             self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(show)
 
     def extra_graphic_visible(self, state):
-        """[summary]
-        
-        [description]
-        """
+        """Change visibility of theory helpers"""
         self.view_LVEenvelope = state
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
@@ -770,13 +380,7 @@ class BaseTheorySmoothPolyStrand:
         return tau, G, True
 
     def set_modes_from_mwd(self, m, phi):
-        """[summary]
-        
-        [description]
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
         res = Dilution(m, phi, taue, Me, self).res
@@ -818,15 +422,7 @@ class BaseTheorySmoothPolyStrand:
 
     def sigmadot_shear(self, sigma, t, p):
         """Rolie-Poly differential equation under *shear* flow
-        with stretching and finite extensibility if selected
-        
-        [description]
-        
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy, sxy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """
+        with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
             raise EndComputationRequested
         tmax = p[-1]
@@ -843,15 +439,7 @@ class BaseTheorySmoothPolyStrand:
 
     def sigmadot_uext(self, sigma, t, p):
         """Rolie-Poly differential equation under *uniaxial elongational* flow
-        with stretching and finite extensibility if selecter
-
-        [description]
-
-        Arguments:
-            - sigma {array} -- vector of state variables, sigma = [sxx, syy]
-            - t {float} -- time
-            - p {array} -- vector of the parameters, p = [tauD, tauR, beta, delta, gammadot]
-        """
+        with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
             raise EndComputationRequested
         tmax = p[-1]
@@ -933,16 +521,7 @@ class BaseTheorySmoothPolyStrand:
 
 
     def RolieDoublePoly_Crystal(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -1185,14 +764,7 @@ class BaseTheorySmoothPolyStrand:
 
         
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-        """
+        """Set the value of theory parameters"""
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
@@ -1209,7 +781,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -1218,7 +789,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    bracketed=True,
                     min_value=0)
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
@@ -1227,7 +797,6 @@ class BaseTheorySmoothPolyStrand:
                     type=ParameterType.real,
                     opt_type=OptType.opt,
                     display_flag=True,
-                    bracketed=True,
                     min_value=0)
             if (oldn > self.parameters["nmodes"].value):
                 for i in range(self.parameters["nmodes"].value, oldn):
@@ -1247,38 +816,18 @@ class BaseTheorySmoothPolyStrand:
 
 
 class CLTheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -1393,14 +942,17 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
         #Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(self,
                                                "Save Parameters to FowSolve",
-                                               "data/", "FlowSolve (*.fsrep)")
+                                               os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)")
         if fpath == '':
             return
 
         with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
             header = '#flowGen input\n'
-            header += '# Generated with RepTate v%s %s\n' % (Version.VERSION,
-                                                             Version.DATE)
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
             header += '# At %s on %s\n' % (time.strftime("%X"),
                                            time.strftime("%a %b %d, %Y"))
             f.write(header)
@@ -1503,10 +1055,7 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
         )
 
     def Qhide_theory_extras(self, show):
-        """Uncheck the LVE button. Called when curent theory is changed
-        
-        [description]
-        """
+        """Uncheck the LVE button. Called when curent theory is changed"""
         if show:
             self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         else:
@@ -1580,7 +1129,7 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
         param_dic["phi"] = phi
         param_dic["tauD"] = taud
         param_dic["tauR"] = taur
-        d = EditModesDialog(self, param_dic, self.MAX_MODES)
+        d = EditModesVolFractionsDialog(self, param_dic, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
@@ -1629,10 +1178,7 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
     #     pass
 
     def plot_theory_stuff(self):
-        """[summary]
-        
-        [description]
-        """
+        """Plot theory helpers"""
         logtmin = np.log10(self.parent_dataset.minpositivecol(0))
         logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
         ntimes = int((logtmax - logtmin) * 20)

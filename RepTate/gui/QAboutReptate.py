@@ -34,28 +34,28 @@
 
 Module that defines the About window.
 
-""" 
+"""
+import sys
 from os.path import dirname, join, abspath
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUiType
 
-PATH = dirname(abspath(__file__))
-Ui_AboutReptateWindow, QDialog = loadUiType(join(PATH,'AboutDialog.ui'))
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle, the PyInstaller bootloader
+    # extends the sys module by a flag frozen=True and sets the app 
+    # path into variable _MEIPASS'.
+    PATH = sys._MEIPASS
+else:
+    PATH = dirname(abspath(__file__))
+Ui_AboutReptateWindow, QDialog = loadUiType(join(PATH, "AboutDialog.ui"))
+
 
 class AboutWindow(QDialog, Ui_AboutReptateWindow):
-    """About window in the GUI
-    
-    [description]
-    """
-    def __init__(self, parent, version):
-        """
-        **Constructor**
-        
-        Arguments:
-            - parent {[type]} -- [description]
-            - version {[type]} -- [description]
-        """
+    """About window in the GUI"""
+
+    def __init__(self, parent, version, text):
+        """**Constructor**"""
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)
-        self.label.setText('RepTate v'+version)
-    
+        self.setWindowTitle(version)
+        self.label.setText(text)

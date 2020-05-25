@@ -1,0 +1,733 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutorial: Adding new functionality to RepTate &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorial: Interfacing Python and C code" href="python_c_interface.html" />
+    <link rel="prev" title="RepTate for developers" href="developers.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="python_c_interface.html" title="Tutorial: Interfacing Python and C code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="developers.html" title="RepTate for developers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial: Adding new functionality to RepTate</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#new-application">New application</a><ul>
+<li><a class="reference internal" href="#create-a-new-application-file">Create a new application file</a></li>
+<li><a class="reference internal" href="#edit-reptate-s-applicationmanager">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">ApplicationManager</span></code></a></li>
+<li><a class="reference internal" href="#edit-reptate-s-qapplicationmanager">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">QApplicationManager</span></code></a></li>
+<li><a class="reference internal" href="#note-on-default-theories">Note on default theories</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#new-file-type">New file type</a></li>
+<li><a class="reference internal" href="#new-view">New view</a><ul>
+<li><a class="reference internal" href="#about-the-old-view">About the “old” view</a></li>
+<li><a class="reference internal" href="#definition-of-a-new-view">Definition of a new view</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#new-theory">New theory</a><ul>
+<li><a class="reference internal" href="#create-a-new-theory-file">Create a new theory file</a></li>
+<li><a class="reference internal" href="#edit-applicationxy-py">Edit <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code></a></li>
+<li><a class="reference internal" href="#edit-the-theory">Edit the theory</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#new-icons">New Icons</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="developers.html"
+                        title="previous chapter">RepTate for developers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="python_c_interface.html"
+                        title="next chapter">Tutorial: Interfacing Python and C code</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/functionality.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-adding-new-functionality-to-reptate">
+<h1>Tutorial: Adding new functionality to RepTate<a class="headerlink" href="#tutorial-adding-new-functionality-to-reptate" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#goals" id="id2">Goals</a></p></li>
+<li><p><a class="reference internal" href="#new-application" id="id3">New application</a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-a-new-application-file" id="id4">Create a new application file</a></p></li>
+<li><p><a class="reference internal" href="#edit-reptate-s-applicationmanager" id="id5">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">ApplicationManager</span></code></a></p></li>
+<li><p><a class="reference internal" href="#edit-reptate-s-qapplicationmanager" id="id6">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">QApplicationManager</span></code></a></p></li>
+<li><p><a class="reference internal" href="#note-on-default-theories" id="id7">Note on default theories</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#new-file-type" id="id8">New file type</a></p></li>
+<li><p><a class="reference internal" href="#new-view" id="id9">New view</a></p>
+<ul>
+<li><p><a class="reference internal" href="#about-the-old-view" id="id10">About the “old” view</a></p></li>
+<li><p><a class="reference internal" href="#definition-of-a-new-view" id="id11">Definition of a new view</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#new-theory" id="id12">New theory</a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-a-new-theory-file" id="id13">Create a new theory file</a></p></li>
+<li><p><a class="reference internal" href="#edit-applicationxy-py" id="id14">Edit <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code></a></p></li>
+<li><p><a class="reference internal" href="#edit-the-theory" id="id15">Edit the theory</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#new-icons" id="id16">New Icons</a></p></li>
+</ul>
+</div>
+<div class="section" id="goals">
+<span id="goals-section"></span><h2><a class="toc-backref" href="#id2">Goals</a><a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we will present how to create a new RepTate application.
+We will show the important steps needed to build a new RepTate application.
+To do so, we will need to modify some already existing RepTate code, as well
+as writing new custom code.</p>
+<p>As an example, let us say that we want to create a new RepTate application that:</p>
+<ol class="arabic simple">
+<li><p>accepts text files (<code class="docutils literal notranslate"><span class="pre">.xy</span></code>) which are supposed to be composed of:</p>
+<ul class="simple">
+<li><p>a first line (header) containing the <code class="docutils literal notranslate"><span class="pre">date</span></code> and temperature <code class="docutils literal notranslate"><span class="pre">T</span></code></p></li>
+<li><p>two columns containing data <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span></p></li>
+</ul>
+</li>
+<li><p>allows to view the data:</p>
+<ul class="simple">
+<li><p>without transformation, <span class="math notranslate nohighlight">\(x\)</span> vs <span class="math notranslate nohighlight">\(y\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(x\)</span> vs <span class="math notranslate nohighlight">\(\sqrt{y}\)</span></p></li>
+</ul>
+</li>
+<li><p>has a theory: a simple line fitting with two parameters <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that
+<span class="math notranslate nohighlight">\(y = ax+b\)</span>.</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Each time we need to modify or add some line of Python code, the line number is indicated
+on the left hand side for information.
+This should correspond to the same line numbering for the “template” files, but might
+be different for the files in the <code class="docutils literal notranslate"><span class="pre">core/</span></code> or <code class="docutils literal notranslate"><span class="pre">gui/</span></code> folders.</p>
+</div>
+</div>
+<div class="section" id="new-application">
+<h2><a class="toc-backref" href="#id3">New application</a><a class="headerlink" href="#new-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-a-new-application-file">
+<h3><a class="toc-backref" href="#id4">Create a new application file</a><a class="headerlink" href="#create-a-new-application-file" title="Permalink to this headline">¶</a></h3>
+<p>To create a new RepTate application, we will use the template
+application file <code class="docutils literal notranslate"><span class="pre">ApplicationTemplate.py</span></code> that can be found in the
+<code class="docutils literal notranslate"><span class="pre">applications/</span></code> folder.</p>
+<ol class="arabic">
+<li><p>Make a copy of this file and rename it with a sensible name that
+relates to the application purpose. According to the
+<a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, we name it <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code>.</p></li>
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> with your favourite text editor and
+replace <strong>all</strong> the occurrences of “Template” by “XY”. For example,</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">ApplicationTemplate</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+</pre></div>
+</td></tr></table></div>
+<p>becomes</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">ApplicationXY</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p>Give a brief description of the purpose of the application,
+e.g. “Application reading XY files”.
+The first lines of <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> should now look like</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>33
+34
+35
+36
+37</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Module ApplicationXY</span>
+
+<span class="sd">Application reading XY files</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+</ol>
+<p>The file <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> is ready for the next round of modifications
+that are (i) file types accepted by the application, (ii) the views,
+and (iii) the theories, as defined in the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section.
+But first, we have to let RepTate know about our new application.</p>
+</div>
+<div class="section" id="edit-reptate-s-applicationmanager">
+<h3><a class="toc-backref" href="#id5">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">ApplicationManager</span></code></a><a class="headerlink" href="#edit-reptate-s-applicationmanager" title="Permalink to this headline">¶</a></h3>
+<p>We need to add a reference to this new application into
+RepTate’s <code class="docutils literal notranslate"><span class="pre">ApplicationManager</span></code>, so it knows it exists. To do so:</p>
+<ol class="arabic">
+<li><p>Insert this line in the top part of the file <code class="docutils literal notranslate"><span class="pre">core/ApplicationManager.py</span></code>,
+e.g.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>56</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ApplicationXY</span> <span class="kn">import</span> <span class="n">ApplicationXY</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p>Insert the following line to add an entry to the <code class="docutils literal notranslate"><span class="pre">ApplicationManager</span></code> dictionary</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>115</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">available_applications</span><span class="p">[</span><span class="n">ApplicationXY</span><span class="o">.</span><span class="n">appname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApplicationXY</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our new application is ready to be used in Command Line RepTate!</p>
+</div>
+</div>
+<div class="section" id="edit-reptate-s-qapplicationmanager">
+<h3><a class="toc-backref" href="#id6">Edit RepTate’s <code class="docutils literal notranslate"><span class="pre">QApplicationManager</span></code></a><a class="headerlink" href="#edit-reptate-s-qapplicationmanager" title="Permalink to this headline">¶</a></h3>
+<p>In order to have our new application available in the Graphical
+User Interface (GUI) version of RepTate (and not just available in the
+Command-Line version of RepTate), we need to create a new “button”
+that will launch our new application when clicked.
+We will edit the file <code class="docutils literal notranslate"><span class="pre">gui/QApplicationManager.py</span></code> in this purpose.</p>
+<ol class="arabic">
+<li><p>Add a button in the main RepTate tool-bar by inserting the following lines in
+the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">gui/QApplicationManager.py</span></code>.
+The icon name (filename) should correspond to the <code class="docutils literal notranslate"><span class="pre">appmane</span></code>, here <code class="docutils literal notranslate"><span class="pre">XY.png</span></code>. See
+the section <a class="reference internal" href="#new-icons"><span class="std std-ref">New Icons</span></a> to create and use your onwn icon in RepTate.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>142
+143
+144
+145
+146
+147
+148</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1"># ApplicationXY button</span>
+ <span class="c1">#choose the button icon</span>
+ <span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icon8/Images/new_icons/XY.png&#39;</span><span class="p">)</span>
+ <span class="n">tool_tip</span> <span class="o">=</span> <span class="s1">&#39;XY&#39;</span>  <span class="c1"># text that appear on hover</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">tool_tip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+ <span class="c1">#insert the new button before the &quot;MWD&quot; button</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">toolBarApps</span><span class="o">.</span><span class="n">insertAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionMWD</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p>The new button has been successfully inserted into the application tool bar.
+However, if we click on it, nothing happens because it is not linked to any action.
+We need to “wire” (connect) this new button to a “function”.
+In the same file <code class="docutils literal notranslate"><span class="pre">gui/QApplicationManager.py</span></code>, below the previous lines,
+add</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>149
+150</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1">#connect button</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">actionXY</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_new_app</span><span class="p">(</span><span class="s1">&#39;XY&#39;</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The application name (<code class="docutils literal notranslate"><span class="pre">appname</span></code>), defined at line 79 of <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code>, should then be “XY”.
+Additionally, the icon name defining the logo of the new application should be named “XY.png”,
+see the definition of the <code class="docutils literal notranslate"><span class="pre">handle_new_app</span></code> method.</p>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our new application is ready to be used in GUI RepTate!</p>
+</div>
+</div>
+<div class="section" id="note-on-default-theories">
+<h3><a class="toc-backref" href="#id7">Note on default theories</a><a class="headerlink" href="#note-on-default-theories" title="Permalink to this headline">¶</a></h3>
+<p>By default, some “basic theories” are included with the application
+(e.g. polynomial, power-law, exponential). To remove all these
+“basic theories” from your new application, comment the following line
+in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code></p>
+<blockquote>
+<div><div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>135</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">add_common_theories</span><span class="p">()</span>  <span class="c1"># Add basic theories to the application</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="new-file-type">
+<span id="file-type"></span><h2><a class="toc-backref" href="#id8">New file type</a><a class="headerlink" href="#new-file-type" title="Permalink to this headline">¶</a></h2>
+<p>RepTate applications are designed to accept a only a
+predefined file extension. As defined in the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section,
+we want our new application <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> to accept <code class="docutils literal notranslate"><span class="pre">.xy</span></code> files.
+To do so, we modify <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> as follows.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">ApplicationXY</span></code>, before <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">__new__</span></code>, add</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>53</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span>  <span class="c1"># drag and drop this extension automatically opens this application</span>
+</pre></div>
+</td></tr></table></div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code> add</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>120
+121
+122
+123
+124
+125
+126
+127</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># set the type of files that ApplicationTemplate can open</span>
+<span class="n">ftype</span> <span class="o">=</span> <span class="n">TXTColumnFile</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;XY data&#39;</span><span class="p">,</span>  <span class="c1"># name the type of data</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span>  <span class="c1"># file extension</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;XY data from XY-experiment&#39;</span><span class="p">,</span>
+    <span class="n">col_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">],</span>  <span class="c1"># name the variables for legend</span>
+    <span class="n">basic_file_parameters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span>  <span class="c1"># parameter in file header</span>
+    <span class="n">col_units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">])</span>  <span class="c1"># units of X and Y (here none)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="new-view">
+<h2><a class="toc-backref" href="#id9">New view</a><a class="headerlink" href="#new-view" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="about-the-old-view">
+<h3><a class="toc-backref" href="#id10">About the “old” view</a><a class="headerlink" href="#about-the-old-view" title="Permalink to this headline">¶</a></h3>
+<p>At the moment, only one view is allowed in our new <code class="docutils literal notranslate"><span class="pre">ApplicationXY</span></code>.
+That view is located in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of
+<code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># VIEWS</span>
+<span class="c1"># set the views that can be selected in the view combobox</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;y(x)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;y(x)&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;y as a function of x&#39;</span><span class="p">,</span>
+    <span class="n">x_label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
+    <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;y(x)&#39;</span><span class="p">,</span>
+    <span class="n">x_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+    <span class="n">y_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+    <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">viewyx</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y(x)&#39;</span><span class="p">])</span>
+</pre></div>
+</td></tr></table></div>
+<p>The important attributes of the view called “y(x)” are:</p>
+<ul class="simple">
+<li><p>the x- and y-label to be used in the plot,</p></li>
+<li><p>the units that are appended to the x- and y-labels,</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">log_x</span></code> and <code class="docutils literal notranslate"><span class="pre">log_y</span></code> define whether the axes should be in
+in log-scale (base 10)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.viewyx</span></code> is the method that defines what operations
+are done on the data before plotting them (see below),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> defines the number of series the view is plotting.</p></li>
+</ul>
+<p>In the line below, you can define the default number of view,
+i.e., the number of views that appear when you open the appliction.
+In case the new application would benefit from having multiple views
+shown at the same time (similar to the React or Stress Relaxation applications),
+this number can be increased (up to 4)</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>110
+111
+112</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># set multiviews</span>
+<span class="c1"># default view order in multiplot views, set nplots=1 for single view</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">nplots</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</td></tr></table></div>
+<p>The definition of the method <code class="docutils literal notranslate"><span class="pre">viewyx</span></code> is
+given by</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>140
+141
+142
+143
+144
+145
+146</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">viewyx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
+</pre></div>
+</td></tr></table></div>
+<p>The two lines <code class="docutils literal notranslate"><span class="pre">x[:,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">dt.data[:,</span> <span class="pre">0]</span></code> and <code class="docutils literal notranslate"><span class="pre">y[:,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">dt.data[:,</span> <span class="pre">1]</span></code>
+tell us that <code class="docutils literal notranslate"><span class="pre">viewyx</span></code> does not perform any operations on the data.
+It simply copies the input data into <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> arrays. It means that
+we already have one of the views required from the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section.</p>
+</div>
+<div class="section" id="definition-of-a-new-view">
+<h3><a class="toc-backref" href="#id11">Definition of a new view</a><a class="headerlink" href="#definition-of-a-new-view" title="Permalink to this headline">¶</a></h3>
+<p>To define a new view that shows <span class="math notranslate nohighlight">\(x\)</span> vs <span class="math notranslate nohighlight">\(\sqrt{y}\)</span>, as
+requested in the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, we add a view to
+<code class="docutils literal notranslate"><span class="pre">self.views</span></code> dictionary. The new view is called “sqrt(y)”.
+In the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, add</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;sqrt(y) as a function of x&#39;</span><span class="p">,</span>
+    <span class="n">x_label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
+    <span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;$y^{1/2}$&#39;</span><span class="p">,</span>
+    <span class="n">x_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+    <span class="n">y_units</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
+    <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">view_proc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">view_sqrt_y</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">snames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sqrt(y)&#39;</span><span class="p">])</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">x_label</span></code> and <code class="docutils literal notranslate"><span class="pre">y_label</span></code> support LaTeX-like syntax.</p>
+</div>
+<p>We also need to define the new method <code class="docutils literal notranslate"><span class="pre">view_sqrt_y</span></code>.
+In <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, add the definition</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>158
+159
+160
+161
+162
+163
+164</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">view_sqrt_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">file_parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Documentation&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="kc">True</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The new view is ready!</p>
+</div>
+</div>
+</div>
+<div class="section" id="new-theory">
+<h2><a class="toc-backref" href="#id12">New theory</a><a class="headerlink" href="#new-theory" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-a-new-theory-file">
+<h3><a class="toc-backref" href="#id13">Create a new theory file</a><a class="headerlink" href="#create-a-new-theory-file" title="Permalink to this headline">¶</a></h3>
+<p>To create a new RepTate application, we will use the template
+theory file <code class="docutils literal notranslate"><span class="pre">TheoryTemplate.py</span></code> that can be found in RepTate
+<code class="docutils literal notranslate"><span class="pre">theories/</span></code> folder.</p>
+<ol class="arabic">
+<li><p>Make a copy of this file and rename it with a sensible name that
+relates to the theory purpose. According to the
+<a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, we name it <code class="docutils literal notranslate"><span class="pre">TheoryLine.py</span></code>.</p></li>
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">TheoryLine.py</span></code> with your favourite text editor and
+replace <strong>all</strong> the occurrences of “Template” by “Line”. For example,</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>45</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryTemplate</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+</pre></div>
+</td></tr></table></div>
+<p>becomes</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>45</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryLine</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p>Give a brief description of the purpose of the application,
+e.g. ” Theory fitting a line to the data”.
+The first lines of <code class="docutils literal notranslate"><span class="pre">TheoryLine.py</span></code> should now look like</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Module TheoryLine</span>
+
+<span class="sd">Theory fitting a line to the data</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+</ol>
+<p>The file <code class="docutils literal notranslate"><span class="pre">TheoryLine.py</span></code> is ready for the next round of modifications
+that are (i) define the parameters, (ii) define the theory “function”.
+But first, we have to let ApplicationXY (developed just above) know about
+our new theory.</p>
+</div>
+<div class="section" id="edit-applicationxy-py">
+<h3><a class="toc-backref" href="#id14">Edit <code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code></a><a class="headerlink" href="#edit-applicationxy-py" title="Permalink to this headline">¶</a></h3>
+<p>We need to add a reference to this new theory into
+<code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code>, so it knows it exists. To do so:</p>
+<ol class="arabic">
+<li><p>Insert the following line in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of
+<code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, after the “<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">IMPORT</span> <span class="pre">THEORIES</span></code>” comment</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>89
+90
+91</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="c1"># IMPORT THEORIES</span>
+ <span class="c1"># Import theories specific to the Application e.g.:</span>
+ <span class="kn">from</span> <span class="nn">TheoryLine</span> <span class="kn">import</span> <span class="n">TheoryLine</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>We choose to place the theories <code class="docutils literal notranslate"><span class="pre">import</span></code>
+inside the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>
+rather than in the very top of the file
+<code class="docutils literal notranslate"><span class="pre">ApplicationXY.py</span></code> as this prevents RepTate from loading
+all theories at start. Instead, theories are loaded only when an application
+using them is opened.</p>
+</div>
+</li>
+<li><p>Insert the following line, also in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of
+<code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationXY</span></code>, after the <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">THEORIES</span></code>, and before
+<code class="docutils literal notranslate"><span class="pre">self.add_common_theories()</span></code>, the line</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>134</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">theories</span><span class="p">[</span><span class="n">TheoryLine</span><span class="o">.</span><span class="n">thname</span><span class="p">]</span> <span class="o">=</span> <span class="n">TheoryLine</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+</ol>
+</div>
+<div class="section" id="edit-the-theory">
+<h3><a class="toc-backref" href="#id15">Edit the theory</a><a class="headerlink" href="#edit-the-theory" title="Permalink to this headline">¶</a></h3>
+<p>According to the <a class="reference internal" href="#goals-section"><span class="std std-ref">Goals</span></a> section, the theory should define a straight line
+<span class="math notranslate nohighlight">\(y=ax+b\)</span>, hence there are two parameters. We will (i) write a short documentation of
+our new theory, (ii) define the parameters, and (iii) write the main function that
+calculates the theory values.</p>
+<ol class="arabic">
+<li><p>Add a Python docstring to (auto)-document the theory. Place some description of the goal of the theory
+as well as a description of the parameters. This will help future reader of the file understand
+the purpose of the theory and it will be automatically integrated to the
+online RepTate documentation (<a class="reference external" href="http://reptate.readthedocs.io/">reptate.readthedocs</a>).</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">TheoryLine</span><span class="p">(</span><span class="n">CmdBase</span><span class="p">):</span>
+     <span class="sd">&quot;&quot;&quot;Fit a straight line.</span>
+
+<span class="sd">     * **Function**</span>
+<span class="sd">         .. math::</span>
+<span class="sd">             y = a x + b</span>
+
+<span class="sd">     * **Parameters**</span>
+<span class="sd">     - :math:`a`: slope of the line</span>
+<span class="sd">     - :math:`b`: the :math:`y`:-intercept</span>
+
+<span class="sd">     &quot;&quot;&quot;</span>
+</pre></div>
+</td></tr></table></div>
+</li>
+<li><p>To define the theory parameters, <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, we modify the
+<code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseTheoryLine</span></code> to have only these two
+parameter definitions</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>
+     <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;parameter a&#39;</span><span class="p">,</span>
+     <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+     <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+ <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span>
+     <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;parameter b&#39;</span><span class="p">,</span>
+     <span class="nb">type</span><span class="o">=</span><span class="n">ParameterType</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+     <span class="n">opt_type</span><span class="o">=</span><span class="n">OptType</span><span class="o">.</span><span class="n">opt</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The important attributes of the parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: the initial value of the parameter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: defines if he parameter is real, integer or discrete</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">opt_type</span></code>: optimisation type is either <code class="docutils literal notranslate"><span class="pre">const</span></code> for constant parameter
+(cannot be optimised),
+<code class="docutils literal notranslate"><span class="pre">opt</span></code> if the parameter is optimised by default,
+<code class="docutils literal notranslate"><span class="pre">nopt</span></code> if the parameter can
+be optimised but is not by default.</p></li>
+</ul>
+</li>
+<li><p>Modify the method <code class="docutils literal notranslate"><span class="pre">calculate</span></code> of <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseTheoryLine</span></code></p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>143
+144
+145
+146
+147
+148
+149
+150
+151</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="n">ft</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">data_table</span>
+ <span class="n">tt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">file_name_short</span><span class="p">]</span>
+ <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_columns</span>
+ <span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">num_rows</span>
+ <span class="n">tt</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tt</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">tt</span><span class="o">.</span><span class="n">num_columns</span><span class="p">))</span>
+ <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+ <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+ <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># x values</span>
+ <span class="n">tt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">ft</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span>  <span class="c1"># y values</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<ul class="simple">
+<li><p>The file type of <code class="docutils literal notranslate"><span class="pre">ApplicationXY</span></code> defined in section <a class="reference internal" href="#file-type"><span class="std std-ref">New file type</span></a>
+tells us that there are <strong>two</strong> columns in the data files. Hence, the theory
+data also have two columns to populate. For example of application/theory using
+more than two data columns, see <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseApplicationLVE</span></code> of <code class="docutils literal notranslate"><span class="pre">ApplicationLVE.py</span></code>
+and <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">BaseTheoryMaxwellModesFrequency</span></code>
+of <code class="docutils literal notranslate"><span class="pre">TheoryMaxwellModes.py</span></code>.</p></li>
+<li><p>The information from the data file header, in our example <code class="docutils literal notranslate"><span class="pre">date</span></code> and
+<code class="docutils literal notranslate"><span class="pre">T</span></code>, can be called via, e.g. <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">=</span> <span class="pre">float(f.file_parameters[&quot;T&quot;])</span></code>.
+Parameters are stored as strings, hence the <code class="docutils literal notranslate"><span class="pre">float</span></code> conversion.</p></li>
+</ul>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The new “Line” theory is ready to be used in our new ApplicationXY!</p>
+</div>
+</div>
+</div>
+<div class="section" id="new-icons">
+<span id="id1"></span><h2><a class="toc-backref" href="#id16">New Icons</a><a class="headerlink" href="#new-icons" title="Permalink to this headline">¶</a></h2>
+<p>Application icons are stored in a compiled resource file
+<code class="docutils literal notranslate"><span class="pre">gui/MainWindow_rc.py</span></code>.
+In order to add a new icon to this resource file, that can later be used as
+a button icon for instance, we need to</p>
+<ol class="arabic">
+<li><p>Modify the file <code class="docutils literal notranslate"><span class="pre">gui/MainWindow.qrc</span></code> by opening it in a text editor
+and add the relative path of the new image or icon we want to
+have in the resource file.
+For instance:</p>
+<ul class="simple">
+<li><p>copy and paste you favourite icon <code class="docutils literal notranslate"><span class="pre">my_favourite_icon.png</span></code>
+in the <code class="docutils literal notranslate"><span class="pre">gui/Images/new_icons/</span></code> folder.</p></li>
+<li><p>add the line <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;Images/new_icons/my_favourite_icon.png&lt;/file&gt;</span></code>
+to the file <code class="docutils literal notranslate"><span class="pre">gui/MainWindow.qrc</span></code></p></li>
+</ul>
+</li>
+<li><p>Re-compile the file <code class="docutils literal notranslate"><span class="pre">MainWindow_rc.py</span></code> into a resource file
+<code class="docutils literal notranslate"><span class="pre">MainWindow_rc.py</span></code> by running the following command in a
+terminal (assuming the current working directory is <code class="docutils literal notranslate"><span class="pre">gui/</span></code>)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pyrcc5 MainWindow.qrc -o MainWindow_rc.py
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Your new icon <code class="docutils literal notranslate"><span class="pre">my_favourite_icon.png</span></code> is now ready to be used
+by Qt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="s1">&#39;:/Icons/Images/new_icons/my_favourite_icon.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="python_c_interface.html" title="Tutorial: Interfacing Python and C code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="developers.html" title="RepTate for developers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

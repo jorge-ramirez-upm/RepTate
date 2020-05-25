@@ -34,58 +34,44 @@
 """Module TheoryMultiMetCSTR
 
 """
-import os
 import numpy as np
 import time
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QApplication
 
 import ctypes as ct
-import react_ctypes_helper as rch
-import react_gui_tools as rgt
+import RepTate.theories.react_ctypes_helper as rch
+import RepTate.theories.react_gui_tools as rgt
 
 
 class TheoryMultiMetCSTR(CmdBase):
-    """[summary]
-    
-    [description]
-    """
-    thname = 'Multi-Met CSTR'
-    description = 'Multiple Metallocene CSTR Reaction Theory'
-    citations = ['Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051']
+    """THEORY DOCUMENTATION IS MISSING"""
+
+    thname = "Multi-Met CSTR"
+    description = "Multiple Metallocene CSTR Reaction Theory"
+    citations = ["Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051"]
     doi = ["http://dx.doi.org/10.1021/ma030354l"]
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryMultiMetCSTR(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryMultiMetCSTR(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryMultiMetCSTR(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryMultiMetCSTR(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryMultiMetCSTR:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html'
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html"
+    single_file = (
+        True  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryMultiMetCSTR.thname
     citations = TheoryMultiMetCSTR.citations
     doi = TheoryMultiMetCSTR.doi
@@ -95,18 +81,10 @@ class BaseTheoryMultiMetCSTR:
     signal_request_arm = pyqtSignal(object)
     signal_mulmet_dialog = pyqtSignal(object)
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
-        self.reactname = "MultiMetCSTR %d" % (
-            rch.MMCSTR_global.mulmetCSTRnumber)
+        self.reactname = "MultiMetCSTR %d" % (rch.MMCSTR_global.mulmetCSTRnumber)
         rch.MMCSTR_global.mulmetCSTRnumber += 1
         self.function = self.Calc
         self.simexists = False
@@ -116,31 +94,34 @@ class BaseTheoryMultiMetCSTR:
         self.autocalculate = False
         self.do_priority_seniority = False
 
-        self.parameters['num_to_make'] = Parameter(
-            name='num_to_make',
+        self.parameters["num_to_make"] = Parameter(
+            name="num_to_make",
             value=1000,
-            description='Number of molecules made in the simulation',
+            description="Number of molecules made in the simulation",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['mon_mass'] = Parameter(
-            name='mon_mass',
+            opt_type=OptType.const,
+        )
+        self.parameters["mon_mass"] = Parameter(
+            name="mon_mass",
             value=28,
-            description=
-            'Mass, in a.m.u., of a monomer (usually set to 28 for PE)',
+            description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['Me'] = Parameter(
-            name='Me',
+            opt_type=OptType.const,
+        )
+        self.parameters["Me"] = Parameter(
+            name="Me",
             value=1000,
-            description='Entanglement molecular weight',
+            description="Entanglement molecular weight",
             type=ParameterType.real,
-            opt_type=OptType.const)
-        self.parameters['nbin'] = Parameter(
-            name='nbin',
+            opt_type=OptType.const,
+        )
+        self.parameters["nbin"] = Parameter(
+            name="nbin",
             value=50,
-            description='Number of molecular weight bins',
+            description="Number of molecular weight bins",
             type=ParameterType.real,
-            opt_type=OptType.const)
+            opt_type=OptType.const,
+        )
         self.NUMCAT_MAX = 30
         # default parameters value
         self.init_param_values()
@@ -149,7 +130,7 @@ class BaseTheoryMultiMetCSTR:
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.signal_mulmet_dialog.connect(rgt.launch_mulmet_dialog)
-        self.do_xrange('', visible=self.xrange.get_visible())
+        self.do_xrange("", visible=self.xrange.get_visible())
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -158,18 +139,18 @@ class BaseTheoryMultiMetCSTR:
 
     def set_extra_data(self, extra_data):
         """Called when loading a project, set saved parameter values"""
-        self.numcat = extra_data['numcat']
-        self.time_const = extra_data['time_const']
-        self.monomer_conc = extra_data['monomer_conc']
-        self.pvalues = extra_data['pvalues']
+        self.numcat = extra_data["numcat"]
+        self.time_const = extra_data["time_const"]
+        self.monomer_conc = extra_data["monomer_conc"]
+        self.pvalues = extra_data["pvalues"]
         rgt.set_extra_data(self, extra_data)
-    
+
     def get_extra_data(self):
         """Called when saving project. Save parameters in extra_data dict"""
-        self.extra_data['numcat'] = self.numcat
-        self.extra_data['time_const'] = self.time_const
-        self.extra_data['monomer_conc'] = self.monomer_conc
-        self.extra_data['pvalues'] = self.pvalues
+        self.extra_data["numcat"] = self.numcat
+        self.extra_data["time_const"] = self.time_const
+        self.extra_data["monomer_conc"] = self.monomer_conc
+        self.extra_data["pvalues"] = self.pvalues
         rgt.get_extra_data(self)
 
     def init_param_values(self):
@@ -179,43 +160,33 @@ class BaseTheoryMultiMetCSTR:
         self.monomer_conc = 2.0
 
         self.pvalues = [
-            ['0' for j in range(5)] for i in range(self.NUMCAT_MAX)
-        ]  #initially self.numcat=2 lines of parameters
-        self.pvalues[0][0] = '4e-4'  #cat conc
-        self.pvalues[0][1] = '101.1'  #Kp
-        self.pvalues[0][2] = '0.1'  #K=
-        self.pvalues[0][3] = '0.2'  #Ks
-        self.pvalues[0][4] = '5'  #KpLCB
+            ["0" for j in range(5)] for i in range(self.NUMCAT_MAX)
+        ]  # initially self.numcat=2 lines of parameters
+        self.pvalues[0][0] = "4e-4"  # cat conc
+        self.pvalues[0][1] = "101.1"  # Kp
+        self.pvalues[0][2] = "0.1"  # K=
+        self.pvalues[0][3] = "0.2"  # Ks
+        self.pvalues[0][4] = "5"  # KpLCB
 
-        self.pvalues[1][0] = '1e-3'
-        self.pvalues[1][1] = '90.17'
-        self.pvalues[1][2] = '1.5'
-        self.pvalues[1][3] = '0.3'
-
+        self.pvalues[1][0] = "1e-3"
+        self.pvalues[1][1] = "90.17"
+        self.pvalues[1][2] = "1.5"
+        self.pvalues[1][3] = "0.3"
 
     def Calc(self, f=None):
-        """MultiMetCSTR function that returns the square of y
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """MultiMetCSTR function that returns the square of y"""
 
         # get parameters
-        numtomake = np.round(self.parameters['num_to_make'].value)
-        monmass = self.parameters['mon_mass'].value
-        Me = self.parameters['Me'].value
-        nbins = int(np.round(self.parameters['nbin'].value))
+        numtomake = np.round(self.parameters["num_to_make"].value)
+        monmass = self.parameters["mon_mass"].value
+        Me = self.parameters["Me"].value
+        nbins = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 
         c_ndist = ct.c_int()
 
-        #resize theory datatable
+        # resize theory datatable
         ft = f.data_table
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -223,14 +194,15 @@ class BaseTheoryMultiMetCSTR:
         tt.num_rows = 1
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        #request a dist
+        # request a dist
         if not self.dist_exists:
             success = rch.request_dist(ct.byref(c_ndist))
             self.ndist = c_ndist.value
             if not success:
-                #launch dialog asking for more dist
+                # launch dialog asking for more dist
                 self.signal_request_dist.emit(
-                    self)  #use signal to open QDialog in the main GUI window
+                    self
+                )  # use signal to open QDialog in the main GUI window
                 return
             else:
                 self.dist_exists = True
@@ -250,7 +222,7 @@ class BaseTheoryMultiMetCSTR:
             rch.return_dist_polys(ct.c_int(ndist))
         self.simexists = False
 
-        #launch form
+        # launch form
         self.success_dialog = None
         self.signal_mulmet_dialog.emit(self)
         while self.success_dialog is None:  # wait for the end of QDialog
@@ -272,57 +244,69 @@ class BaseTheoryMultiMetCSTR:
             ks[i] = ct.c_double(float(self.pvalues[i][3]))
             kplcb[i] = ct.c_double(float(self.pvalues[i][4]))
 
-        #initialise metallocene CSTR
-        rch.mulmetCSTRstart(kp, kdb, ks, kplcb, conc,
-                            ct.c_double(self.time_const),
-                            ct.c_double(self.monomer_conc),
-                            ct.c_int(self.numcat), ct.c_int(ndist),
-                            ct.c_int(self.NUMCAT_MAX))
+        # initialise metallocene CSTR
+        rch.mulmetCSTRstart(
+            kp,
+            kdb,
+            ks,
+            kplcb,
+            conc,
+            ct.c_double(self.time_const),
+            ct.c_double(self.monomer_conc),
+            ct.c_int(self.numcat),
+            ct.c_int(ndist),
+            ct.c_int(self.NUMCAT_MAX),
+        )
 
         c_m = ct.c_int()
 
         # make numtomake polymers
         i = 0
         rate_print = np.trunc(numtomake / 20)
-        self.Qprint('Making polymers:')
-        self.Qprint('0% ', end='')
+        self.Qprint("Making polymers:")
+        self.Qprint("0% ", end="")
         while i < numtomake:
             if self.stop_theory_flag:
-                self.Qprint('<br><big><font color=red><b>Polymer creation stopped by user</b></font></big>')
+                self.Qprint(
+                    "<br><big><font color=red><b>Polymer creation stopped by user</b></font></big>"
+                )
                 break
             # get a polymer
             success = rch.request_poly(ct.byref(c_m))
             m = c_m.value
             if success:  # check availability of polymers
                 # put it in list
-                if rch.react_dist[
-                        ndist].contents.npoly == 0:  # case of first polymer made
+                if (
+                    rch.react_dist[ndist].contents.npoly == 0
+                ):  # case of first polymer made
                     rch.react_dist[ndist].contents.first_poly = m
                     rch.set_br_poly_nextpoly(
-                        ct.c_int(m),
-                        ct.c_int(0))  #br_poly[m].contents.nextpoly = 0
+                        ct.c_int(m), ct.c_int(0)
+                    )  # br_poly[m].contents.nextpoly = 0
                 else:  # next polymer, put to top of list
                     rch.set_br_poly_nextpoly(
-                        ct.c_int(m),
-                        ct.c_int(rch.react_dist[ndist].contents.first_poly)
-                    )  #br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
+                        ct.c_int(m), ct.c_int(rch.react_dist[ndist].contents.first_poly)
+                    )  # br_poly[m].contents.nextpoly = rch.react_dist[ndist].contents.first_poly
                     rch.react_dist[ndist].contents.first_poly = m
 
                 # make a polymer
-                if rch.mulmetCSTR(ct.c_int(m), ct.c_int(
-                        ndist)):  # routine returns false if arms ran out
+                if rch.mulmetCSTR(
+                    ct.c_int(m), ct.c_int(ndist)
+                ):  # routine returns false if arms ran out
                     rch.react_dist[ndist].contents.npoly += 1
                     i += 1
                     # check for error
                     if rch.MMCSTR_global.mulmetCSTRerrorflag:
                         self.Qprint(
-                            '<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>'
+                            "<br><big><font color=red><b>Polymers too large: gelation occurs for these parameters</b></font></big>"
                         )
                         i = numtomake
                 else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
-                    while self.success_increase_memory is None:  # wait for the end of QDialog
+                    while (
+                        self.success_increase_memory is None
+                    ):  # wait for the end of QDialog
                         time.sleep(
                             0.5
                         )  # TODO: find a better way to wait for the dialog thread to finish
@@ -334,9 +318,9 @@ class BaseTheoryMultiMetCSTR:
 
                 # update on number made
                 if i % rate_print == 0:
-                    self.Qprint('-', end='')
+                    self.Qprint("-", end="")
                     # needed to use Qprint if in single-thread
-                    QApplication.processEvents()  
+                    QApplication.processEvents()
 
             else:  # polymer wasn't available
                 self.success_increase_memory = None
@@ -351,16 +335,17 @@ class BaseTheoryMultiMetCSTR:
                     i = numtomake
         # end make polymers loop
         if not rch.MMCSTR_global.mulmetCSTRerrorflag:
-            self.Qprint('&nbsp;100%')
+            self.Qprint("&nbsp;100%")
 
         calc = 0
         # do analysis of polymers made
-        if (rch.react_dist[ndist].contents.npoly >=
-                100) and (not rch.MMCSTR_global.mulmetCSTRerrorflag):
+        if (rch.react_dist[ndist].contents.npoly >= 100) and (
+            not rch.MMCSTR_global.mulmetCSTRerrorflag
+        ):
             rch.molbin(ndist)
             ft = f.data_table
 
-            #resize theory data table
+            # resize theory data table
             ft = f.data_table
             tt = self.tables[f.file_name_short]
             tt.num_columns = ft.num_columns + 2
@@ -369,11 +354,12 @@ class BaseTheoryMultiMetCSTR:
 
             for i in range(1, rch.react_dist[ndist].contents.nummwdbins + 1):
                 tt.data[i - 1, 0] = np.power(
-                    10, rch.react_dist[ndist].contents.lgmid[i])
+                    10, rch.react_dist[ndist].contents.lgmid[i]
+                )
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
                 tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
-            
+
             rch.end_print(self, ndist, self.do_priority_seniority)
             rch.prio_and_senio(self, f, ndist, self.do_priority_seniority)
 
@@ -383,15 +369,15 @@ class BaseTheoryMultiMetCSTR:
         self.simexists = True
         # self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
-    
+
     def show_theory_extras(self, checked):
         rgt.show_theory_extras(self, checked)
 
     def destructor(self):
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
-    
-    def do_fit(self, line=''):
+
+    def do_fit(self, line=""):
         """No fitting allowed in this theory"""
         if self.xrange.get_visible():
             if self.xmin > self.xmax:
@@ -407,43 +393,25 @@ class BaseTheoryMultiMetCSTR:
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
     def do_error(self, line):
+        """This theory does not calculate the error"""
         pass
 
-class CLTheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, Theory):
-    """[summary]
-    
-    [description]
-    """
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+class CLTheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, Theory):
+    """CL Version"""
+
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         rgt.initialise_tool_bar(self)
 

@@ -35,12 +35,11 @@
 RouseTime file for creating a new theory
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-import rouse_ctypes_helper as rh
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+import RepTate.theories.rouse_ctypes_helper as rh
 
 
 class TheoryRouseTime(CmdBase):
@@ -64,50 +63,34 @@ class TheoryRouseTime(CmdBase):
             - :math:`N=M_w/M_0`: number of segments par chain
             - :math:`M_w`: weight-average molecular mass
     """
+
     thname = "Rouse"
     description = "Rouse model"
     citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryRouseTime(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryRouseTime(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryRouseTime(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryRouseTime(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryRouseTime:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time'
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryRouseTime.thname
     citations = TheoryRouseTime.citations
     doi = TheoryRouseTime.doi
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
@@ -117,21 +100,24 @@ class BaseTheoryRouseTime:
             "Modulus c*kB*T/N",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
             "segment relaxation time",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
             "segment molar mass",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0.01)
+            min_value=0.01,
+        )
 
         # f = self.theory_files()[0]
         # t_data = f.data_table.data[:, 0]
@@ -156,18 +142,8 @@ class BaseTheoryRouseTime:
         #     ParameterType.real,
         #     opt_type=OptType.const)
 
-
     def calculate(self, f=None):
-        """RouseTime function that returns the square of y
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """RouseTime function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         # logtmin = self.parameters["logtmin"].value
@@ -187,8 +163,8 @@ class BaseTheoryRouseTime:
             return
         try:
             gamma = float(f.file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
 
@@ -196,45 +172,24 @@ class BaseTheoryRouseTime:
         params = [G0, tau0, Mw / M0, t]
 
         tt.data[:, 0] = t
-        tt.data[:, 1] = gamma*rh.approx_rouse_time(params)
+        tt.data[:, 1] = gamma * rh.approx_rouse_time(params)
 
 
 class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:
@@ -267,49 +222,34 @@ class TheoryRouseFrequency(CmdBase):
             - :math:`N=M_w/M_0`: number of segments par chain
             - :math:`M_w`: weight-average molecular mass
     """
+
     thname = "Rouse"
     description = "Rouse model"
     citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryRouseFrequency(name, parent_dataset, axarr) if (
-            CmdBase.mode == CmdMode.GUI) else CLTheoryRouseFrequency(
-                name, parent_dataset, axarr)
+    def __new__(cls, name="", parent_dataset=None, axarr=None):
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryRouseFrequency(name, parent_dataset, axarr)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryRouseFrequency(name, parent_dataset, axarr)
+        )
 
 
 class BaseTheoryRouseFrequency:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency'
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
+    single_file = (
+        False  # False if the theory can be applied to multiple files simultaneously
+    )
     thname = TheoryRouseFrequency.thname
     citations = TheoryRouseFrequency.citations
     doi = TheoryRouseFrequency.doi
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
         self.has_modes = False
@@ -331,21 +271,24 @@ class BaseTheoryRouseFrequency:
             "Modulus c*kB*T/N",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
             "Segment relaxation time",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
             "Segment molar mass",
             ParameterType.real,
             opt_type=OptType.opt,
-            min_value=0)
+            min_value=0,
+        )
 
     def calculate(self, f=None):
         """RouseFrequency function"""
@@ -373,42 +316,20 @@ class BaseTheoryRouseFrequency:
 
 
 class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # This class usually stays empty
 
 
 class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {''})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+    def __init__(self, name="", parent_dataset=None, axarr=None):
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
     # add widgets specific to the theory here:

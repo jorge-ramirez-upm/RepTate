@@ -34,23 +34,23 @@
 
 Reads the linlin data from the compact *.npz file
 
-""" 
+"""
 import os
 import numpy as np
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-f=np.load(os.path.join(dir_path, "..", "theories", "linlin.npz"), allow_pickle=True)
-Z=f['Z']
-cnu=f['cnu']
-data=f['data']
+f = np.load(os.path.join(dir_path, "..", "theories", "linlin.npz"), allow_pickle=True)
+Z = f["Z"]
+cnu = f["cnu"]
+data = f["data"]
 
-Z0=100
-cnu0=1.0
-indZ = (np.where(Z==Z0))[0][0]
-indcnu = (np.where(cnu==cnu0))[0][0]
+Z0 = 100
+cnu0 = 1.0
+indZ = (np.where(Z == Z0))[0][0]
+indcnu = (np.where(cnu == cnu0))[0][0]
 
-table=data[indZ]
-ind1=1+indcnu*2
-ind2=ind1+1
+table = data[indZ]
+ind1 = 1 + indcnu * 2
+ind2 = ind1 + 1
 for i in range(len(table)):
     print(table[i][0], table[i][ind1], table[i][ind2])

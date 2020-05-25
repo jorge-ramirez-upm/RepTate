@@ -1,0 +1,134 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>About RepTate &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Features" href="features.html" />
+    <link rel="prev" title="RepTate documentation" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="features.html" title="Features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="RepTate documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">RepTate documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="features.html"
+                        title="next chapter">Features</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/about.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="about-reptate">
+<h1>About RepTate<a class="headerlink" href="#about-reptate" title="Permalink to this headline">¶</a></h1>
+<p>RepTate (Rheology of Entangled Polymers: Toolkit for Analysis of Theory &amp; Experiment) is a software package for viewing, exchanging and analysing rheological data. Several of the classical and latest theories of polymer dynamics are included in RepTate, so they can be tested and fitted to the experimental data.</p>
+<p>RepTate was originally developed as a part of the Microscale Polymer Processing (muPP2) project funded by the EPSRC, back in 2006. The original Delphi code was developed by Jorge Ramirez and Alexei Likhtman and many collaborators at the University of Leeds. Some improvements and advanced features were added to the code while the authors were at the University of Reading. Many members of the muPP2 project (Richard Graham, Dietmar Auhl, Daniel Read, Kamakshi Jagannathan and Bart Vorselaars) added particular modules and theories to RepTate. We would also like to acknowledge the invaluable contributions and suggestions made by many muPP2 colleagues, in particular, Tom McLeish, Choon Chai, Ian Robinson, Sathish K. Sukumaran, Suneel Kunamaneni and Dietmar Auhl.</p>
+<p>The new RepTate is the result of a joint collaboration between Jorge Ramirez (Universidad Politecnica de Madrid), Victor Boudara and Daniel Read (University of Leeds) and has been developed in Python, which guarantees full compatibility in different OSs (Windows, Mac and Linux), using NumPy and SciPy for the numerics, Matplotlib for the plots, PyQt for the graphical user interface (GUI) and codes in C for some of the theories. In addition, there is a command line interface (CL) that allows to run calculations as batch processes. This will be useful when complicated theories that need long CPU times are implemented.</p>
+<p>The main idea of RepTate is to create a platform which makes comparing theory and experiment much easier than ever before. In particular, we wanted a powerful and user-friendly software which</p>
+<ul class="simple">
+<li><p>can be installed on the same computer as the rheometer and does not require a theoretician in order to compare your latest experimental result with the latest theory;</p></li>
+<li><p>allows to introduce new data representation (view) in a few lines of code;</p></li>
+<li><p>allows to add new theory in a few lines of code (in addition to the theory calculation itself).</p></li>
+</ul>
+<p>New collaborations are always welcome - for example you are welcome to contact us if you would like to implement a new theory or module. Contributions leading to improved help, documentation or tutorials are especially welcome.</p>
+<p>RepTate works under Windows, Linux and Mac OS, and RepTate is free and distributed as open source under the <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html">GPLv3+</a> licence (RepTate’s source code repository is located here: <a class="reference external" href="https://github.com/jorge-ramirez-upm/RepTate">https://github.com/jorge-ramirez-upm/RepTate</a>).</p>
+<p>For installation instructions and downloads, follow this link:</p>
+<p><a class="reference external" href="https://reptate.readthedocs.io/installation.html">https://reptate.readthedocs.io/installation.html</a></p>
+<p>If you want to know more about the features of RepTate, or want to learn how to use the software, check the documentation. Additionally, you can check the news page to see the latest features and a history of changes in RepTate.</p>
+<p>A paper about RepTate is in preparation, and will be submitted sometime during 2018.</p>
+<p>If you have any comments or suggestions, you can contact the developers.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="features.html" title="Features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="RepTate documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

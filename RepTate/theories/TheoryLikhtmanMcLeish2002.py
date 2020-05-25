@@ -39,13 +39,14 @@ polymers.
 import os
 import numpy as np
 from scipy import interp
-from CmdBase import CmdBase, CmdMode
-from Theory import Theory
-from QTheory import QTheory
-from Parameter import Parameter, ParameterType, OptType
-from PyQt5.QtWidgets import QToolBar, QAction, QStyle, QLabel, QLineEdit, QMessageBox
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from PyQt5.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
 from PyQt5.QtGui import QIcon, QDoubleValidator
 from PyQt5.QtCore import QSize
+
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
@@ -56,50 +57,32 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
        - ``Me`` : Entanglement molecular weight.
        - ``c_nu`` : Constraint release parameter.
     """
-    
+
     thname = "Likhtman-McLeish"
     description = "Likhtman-McLeish theory for linear entangled polymers"
     citations = ["Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"]
     doi = ["http://dx.doi.org/10.1021/ma0200219"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax) if (
-            CmdBase.mode == CmdMode.GUI) else CLTheoryLikhtmanMcLeish2002(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryLikhtmanMcLeish2002(name, parent_dataset, ax)
+        )
 
 
 class BaseTheoryLikhtmanMcLeish2002:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory'
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory"
     single_file = False
     thname = TheoryLikhtmanMcLeish2002.thname
     citations = TheoryLikhtmanMcLeish2002.citations
     doi = TheoryLikhtmanMcLeish2002.doi
-    
+
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
 
@@ -110,7 +93,8 @@ class BaseTheoryLikhtmanMcLeish2002:
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=1e-7,
-            max_value=1e2)
+            max_value=1e2,
+        )
         self.parameters["Ge"] = Parameter(
             "Ge",
             1e6,
@@ -118,7 +102,8 @@ class BaseTheoryLikhtmanMcLeish2002:
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=1e3,
-            max_value=1e7)
+            max_value=1e7,
+        )
         self.parameters["Me"] = Parameter(
             "Me",
             5,
@@ -126,34 +111,38 @@ class BaseTheoryLikhtmanMcLeish2002:
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0.4,
-            max_value=50.0)
+            max_value=50.0,
+        )
         self.parameters["c_nu"] = Parameter(
             name="c_nu",
             value=0.1,
             description="Constraint Release parameter",
             type=ParameterType.discrete_real,
             opt_type=OptType.const,
-            discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10])
+            discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10],
+        )
         self.parameters["linkMeGe"] = Parameter(
             name="linkMeGe",
             value=False,
             description="Link values of Ge & Me through rho and T",
             type=ParameterType.boolean,
             opt_type=OptType.const,
-            display_flag=False)
+            display_flag=False,
+        )
         self.parameters["rho0"] = Parameter(
             name="rho0",
             value=1.0,
             description="Density of the polymer melt (kg/m3)",
             type=ParameterType.real,
             opt_type=OptType.const,
-            display_flag=False)
-            
+            display_flag=False,
+        )
+
         dir_path = os.path.dirname(os.path.realpath(__file__))
         f = np.load(os.path.join(dir_path, "linlin.npz"), allow_pickle=True)
-        self.Zarray = f['Z']
-        self.cnuarray = f['cnu']
-        self.data = f['data']
+        self.Zarray = f["Z"]
+        self.cnuarray = f["cnu"]
+        self.data = f["data"]
 
         if not self.get_material_parameters():
             # Estimate initial values of the theory
@@ -163,20 +152,14 @@ class BaseTheoryLikhtmanMcLeish2002:
 
             Gpp_Gp = Gpp / Gp
             ind = len(Gpp_Gp) - np.argmax(np.flipud(Gpp_Gp) < 0.8)
-            if (ind < len(w)):
+            if ind < len(w):
                 taue = 1.0 / w[ind]
                 Ge = Gp[ind]
                 self.set_param_value("tau_e", taue)
                 self.set_param_value("Ge", Ge)
 
     def LikhtmanMcLeish2002(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        """
+        """Get the theory results from precalculated data"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -192,15 +175,17 @@ class BaseTheoryLikhtmanMcLeish2002:
         linkMeGe = self.parameters["linkMeGe"].value
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
-        if (linkMeGe):
-            Ge = 1000.0*rho0*T*8.314/Me # *5/4 (Pity... With this factor it works much better)
+        if linkMeGe:
+            Ge = (
+                1000.0 * rho0 * T * 8.314 / Me
+            )  # *5/4 (Pity... With this factor it works much better)
 
         indcnu = (np.where(self.cnuarray == cnu))[0][0]
         indcnu1 = 1 + indcnu * 2
         indcnu2 = indcnu1 + 1
 
         Z = Mw / Me
-        if (Z < 3):
+        if Z < 3:
             # self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
             Z = 3
         if Z < self.Zarray[0]:
@@ -219,106 +204,106 @@ class BaseTheoryLikhtmanMcLeish2002:
         vec = np.unique(vec)
         table = np.zeros((len(vec), 3))
         table[:, 0] = vec
-        w1 = (Z - self.Zarray[indZ0]) / (
-            self.Zarray[indZ1] - self.Zarray[indZ0])
+        w1 = (Z - self.Zarray[indZ0]) / (self.Zarray[indZ1] - self.Zarray[indZ0])
         table[:, 1] = (1.0 - w1) * interp(
-            vec, table0[:, 0], table0[:, indcnu1]) + w1 * interp(
-                vec, table1[:, 0], table1[:, indcnu1])
+            vec, table0[:, 0], table0[:, indcnu1]
+        ) + w1 * interp(vec, table1[:, 0], table1[:, indcnu1])
         table[:, 2] = (1.0 - w1) * interp(
-            vec, table0[:, 0], table0[:, indcnu2]) + w1 * interp(
-                vec, table1[:, 0], table1[:, indcnu2])
+            vec, table0[:, 0], table0[:, indcnu2]
+        ) + w1 * interp(vec, table1[:, 0], table1[:, indcnu2])
 
-        tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue,
-                               Ge * table[:, 1])
-        tt.data[:, 2] = interp(tt.data[:, 0], table[:, 0] / taue,
-                               Ge * table[:, 2])
+        tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 1])
+        tt.data[:, 2] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 2])
 
     def do_error(self, line):
+        """Report the error of the current theory
+
+Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+
+File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
         taue = self.parameters["tau_e"].value
         Me = self.parameters["Me"].value
-        tab_data = [['%-18s' % 'File', '%-18s' % 'Z', '%-18s' % 'tauR', '%-18s' % 'tauD'],]
+        tab_data = [
+            ["%-18s" % "File", "%-18s" % "Z", "%-18s" % "tauR", "%-18s" % "tauD"],
+        ]
         C1 = 1.69
         C2 = 4.17
         C3 = -1.55
         for f in self.theory_files():
-            Z = float(f.file_parameters["Mw"])/Me
-            tauR = taue*Z**2
+            Z = float(f.file_parameters["Mw"]) / Me
+            tauR = taue * Z ** 2
             if Z != 0:
-                tauD = 3*taue*Z**3*(1.0-2*C1/np.sqrt(Z)+C2/Z+C3/np.power(Z, 1.5))
+                tauD = (
+                    3
+                    * taue
+                    * Z ** 3
+                    * (1.0 - 2 * C1 / np.sqrt(Z) + C2 / Z + C3 / np.power(Z, 1.5))
+                )
             else:
                 tauD = 0
-            tab_data.append(['%-18s'% f.file_name_short, '%18.4g' % Z,  '%18.4g' % tauR,  '%    18.4g' % tauD ])
+            tab_data.append(
+                [
+                    "%-18s" % f.file_name_short,
+                    "%18.4g" % Z,
+                    "%18.4g" % tauR,
+                    "%    18.4g" % tauD,
+                ]
+            )
         self.Qprint(tab_data)
-                               
+
+
 class CLTheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.linkMeGeaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/linkGeMe.png'), 'Link Me-Ge')
+            QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge"
+        )
         self.linkMeGeaction.setCheckable(True)
         self.linkMeGeaction.setChecked(False)
         lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
         tb.addWidget(lbl)
-        self.txtrho = QLineEdit("%.4g"%self.parameters["rho0"].value)
+        self.txtrho = QLineEdit("%.4g" % self.parameters["rho0"].value)
         self.txtrho.setReadOnly(True)
         self.txtrho.setDisabled(True)
-        dvalidator = QDoubleValidator()  #prevent letters etc.
-        dvalidator.setBottom(0)  #minimum allowed value
-        dvalidator.setTop(10)  #maximum allowed value
+        dvalidator = QDoubleValidator()  # prevent letters etc.
+        dvalidator.setBottom(0)  # minimum allowed value
+        dvalidator.setTop(10)  # maximum allowed value
         self.txtrho.setValidator(dvalidator)
         tb.addWidget(self.txtrho)
         self.thToolsLayout.insertWidget(0, tb)
-        
-        connection_id = self.linkMeGeaction.triggered.connect(self.linkMeGeaction_change)
+
+        connection_id = self.linkMeGeaction.triggered.connect(
+            self.linkMeGeaction_change
+        )
         connection_id = self.txtrho.textEdited.connect(self.handle_txtrho_edited)
 
     def linkMeGeaction_change(self, checked):
-        self.set_param_value('linkMeGe', checked)
+        self.set_param_value("linkMeGe", checked)
         if checked:
             self.txtrho.setReadOnly(False)
             self.txtrho.setDisabled(False)
-            p = self.parameters['Ge']
-            p.opt_type=OptType.const
+            p = self.parameters["Ge"]
+            p.opt_type = OptType.const
         else:
             self.txtrho.setReadOnly(True)
             self.txtrho.setDisabled(True)
-            p = self.parameters['Ge']
-            p.opt_type=OptType.opt
+            p = self.parameters["Ge"]
+            p.opt_type = OptType.opt
         self.update_parameter_table()
         if self.autocalculate:
             self.handle_actionCalculate_Theory()
@@ -327,16 +312,18 @@ class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
         try:
             val = float(new_text)
         except ValueError:
-            QMessageBox.warning(self, 'Error', 'Could not convert "%s" to float' % new_text)
+            QMessageBox.warning(
+                self, "Error", 'Could not convert "%s" to float' % new_text
+            )
             self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
         else:
-            self.set_param_value('rho0', val)
+            self.set_param_value("rho0", val)
             if self.autocalculate:
                 self.handle_actionCalculate_Theory()
 
     def set_extra_data(self, _):
         """Restore the check state of button and text value"""
         self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
-        checked = self.parameters['linkMeGe'].value
+        checked = self.parameters["linkMeGe"].value
         self.linkMeGeaction.setChecked(checked)
         self.linkMeGeaction_change(checked)

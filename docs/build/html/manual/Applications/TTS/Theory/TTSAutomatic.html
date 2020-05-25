@@ -1,0 +1,146 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Automatic TTS Shift &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Automatic TTS Shift</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/TTS/Theory/TTSAutomatic.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="automatic-tts-shift">
+<h1>Automatic TTS Shift<a class="headerlink" href="#automatic-tts-shift" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryTTS_Automatic.</code><code class="sig-name descname">TheoryTTSShiftAutomatic</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryTTS_Automatic.html#TheoryTTSShiftAutomatic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatic Time-temperature superposition of experimental data.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul>
+<li><p>This theory has no parameters.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This theory attempts to perform an automatic Time-temperature superposition shift of experimental data without assuming any preconceived behaviour.</p>
+<p>When a dataset is loaded, the program creates a database of the datafiles according the molecular weight <span class="math notranslate nohighlight">\(M_w\)</span> and the volume fraction <span class="math notranslate nohighlight">\(\phi\)</span> of the samples in the file. Then, it allows the user to select the temperature to which he or she wants to shift the data (from a dropdown box). The list of allowed values of temperature is limited to those values of <span class="math notranslate nohighlight">\(T\)</span> that are present in all the different samples loaded in the datafile.</p>
+<p>The fitting procedure goes sample by sample, starting from the file that is at the selected reference temperature. Then, it walks over the other files of the same sample, in ascending order of the difference between their temperature and the reference temperature, and finds the right horizontal and vertical shift factors so that the overlap between each file and the previously shifted files is optimal. For each file, the program stores the optimal shift factors.</p>
+<p>Once the procedure is over, the theory output window will show a list of the samples and, for each one, will output the temperature of each file and the corresponding optimal shift factors. For the time being, the user will have to copy this data and use it externally in order to extract the temperature dependence of the shift factors (WLF, Arrhenius or any other). In the future, we may implement a new application within RepTate to interpret and fit those data.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Try to shift simultaneously different samples of the same material.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Load all the <a href="#id1"><span class="problematic" id="id2">*</span></a>.osc files in the same dataset.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The theory is in <strong>beta</strong> state. It may fail if there is a large number of files to shift. If that happens, inspect the data files and search for files that contain corrupt data or data that is impossible to fit to the data in other files of the same sample. If the error persists, try to fit a reduced number of files.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

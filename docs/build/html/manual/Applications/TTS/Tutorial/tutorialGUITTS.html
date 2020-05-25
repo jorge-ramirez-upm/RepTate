@@ -1,0 +1,153 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TTS Tutorial: Graphical User Interface &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="TTS Factors: Time-Temperature Superposition Shift Factors" href="../../TTSFactors/TTSFactors.html" />
+    <link rel="prev" title="TTS Tutorial: Command Line" href="tutorialCLTTS.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../TTSFactors/TTSFactors.html" title="TTS Factors: Time-Temperature Superposition Shift Factors"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLTTS.html" title="TTS Tutorial: Command Line"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../TTS.html" accesskey="U"> TTS: Time-Temperature Superposition</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorialCLTTS.html"
+                        title="previous chapter">TTS Tutorial: Command Line</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../TTSFactors/TTSFactors.html"
+                        title="next chapter"> TTS Factors: Time-Temperature Superposition Shift Factors</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/TTS/Tutorial/tutorialGUITTS.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tts-tutorial-graphical-user-interface">
+<h1>TTS Tutorial: Graphical User Interface<a class="headerlink" href="#tts-tutorial-graphical-user-interface" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<ol class="arabic">
+<li><p>Start RepTate and create a new LVE Application <a class="reference internal" href="../../../../_images/TTS.png"><img alt="logo" class="align-bottom" src="../../../../_images/TTS.png" style="width: 20pt; height: 20pt;" /></a>:</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_app.png"><img alt="New application" class="align-center" src="../../../../_images/TTS_app.png" style="width: 75%;" /></a>
+</li>
+<li><p>Drag and drop files with <code class="docutils literal notranslate"><span class="pre">.osc</span></code> extension, e.g. the set of <code class="docutils literal notranslate"><span class="pre">PI_*.osc</span></code> files in the <code class="docutils literal notranslate"><span class="pre">data/PI_LINEAR/osc/</span></code>
+folder. See <a class="reference internal" href="../general.html#tts-data-description"><span class="std std-ref">Data Files</span></a> for a description of the data file organization.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_data.png"><img alt="Load data" class="align-center" src="../../../../_images/TTS_data.png" style="width: 75%;" /></a>
+</li>
+<li><p>Select a theory, e.g. “WLF Shift” <a class="reference internal" href="../../../../_images/TTS_theoryWLF.png"><img alt="theory" class="align-bottom" src="../../../../_images/TTS_theoryWLF.png" style="height: 20pt;" /></a>, and press <a class="reference internal" href="../../../../_images/icons8-einstein.png"><img alt="einstein" class="align-bottom" src="../../../../_images/icons8-einstein.png" style="width: 20pt; height: 20pt;" /></a> to create it (calculation is done with default parameter values).
+Press “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_shift.png"><img alt="New theory" class="align-center" src="../../../../_images/TTS_shift.png" style="width: 75%;" /></a>
+</li>
+<li><p>Change a parameter, e.g. set the reference temperature to <span class="math notranslate nohighlight">\(T_0=-40^\circ\)</span>C, and press “Minimize Error” <a class="reference internal" href="../../../../_images/icons8-minimum-value.png"><img alt="fit" class="align-bottom" src="../../../../_images/icons8-minimum-value.png" style="width: 20pt; height: 20pt;" /></a>.</p>
+<a class="reference internal image-reference" href="../../../../_images/TTS_T-40.png"><img alt="New theory" class="align-center" src="../../../../_images/TTS_T-40.png" style="width: 75%;" /></a>
+</li>
+<li><p>To save the theory line(s), click the <a class="reference internal" href="../../../../_images/icons8-save_TH.png"><img alt="th_save" class="align-bottom" src="../../../../_images/icons8-save_TH.png" style="width: 20pt; height: 20pt;" /></a> button.
+A dialog will ask for a folder where the theory files will be saved.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the “Vertical Shift” button <a class="reference internal" href="../../../../_images/icons8-vertical-shift.png"><img alt="arrow_up" class="align-bottom" src="../../../../_images/icons8-vertical-shift.png" style="height: 20pt;" /></a> is checked,
+vertical shift of the data is allowed.</p>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>When the “Shift to Isofrictional State” button <a class="reference internal" href="../../../../_images/icons8-iso.png"><img alt="iso" class="align-bottom" src="../../../../_images/icons8-iso.png" style="height: 20pt;" /></a> is checked …</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../TTSFactors/TTSFactors.html" title="TTS Factors: Time-Temperature Superposition Shift Factors"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorialCLTTS.html" title="TTS Tutorial: Command Line"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../TTS.html" > TTS: Time-Temperature Superposition</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

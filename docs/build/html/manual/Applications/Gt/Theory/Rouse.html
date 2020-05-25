@@ -1,0 +1,143 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Rouse Time &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../../../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rouse Time</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/Gt/Theory/Rouse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rouse-time">
+<h1>Rouse Time<a class="headerlink" href="#rouse-time" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RepTate.theories.TheoryRouse.TheoryRouseTime">
+<em class="property">class </em><code class="sig-prename descclassname">RepTate.theories.TheoryRouse.</code><code class="sig-name descname">TheoryRouseTime</code><a class="reference internal" href="../../../../_modules/RepTate/theories/TheoryRouse.html#TheoryRouseTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#RepTate.theories.TheoryRouse.TheoryRouseTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit Rouse modes to a time dependent relaxation function</p>
+<ul>
+<li><dl>
+<dt><strong>Function</strong></dt><dd><p>Continuous Rouse model (valid for “large” <span class="math notranslate nohighlight">\(N\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[G(t) = G_0 \dfrac 1 N \sum_{p=1}^N \exp\left(\dfrac{-2p^2t}{N^2\tau_0}\right)\]</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Parameters</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_0 = ck_\mathrm  B T\)</span>: “modulus”</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_0\)</span>: relaxation time of an elementary segment</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_0\)</span>: molar mass of an elementary segment</p></li>
+</ul>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(c\)</span>: number of segments per unit volume</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_\mathrm  B\)</span>: Boltzmann constant</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: temperature</p></li>
+<li><p><span class="math notranslate nohighlight">\(N=M_w/M_0\)</span>: number of segments par chain</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_w\)</span>: weight-average molecular mass</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

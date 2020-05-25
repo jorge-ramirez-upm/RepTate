@@ -36,25 +36,14 @@ Module for the actual object that contains the data, both for experiments and th
 
 """ 
 import numpy as np
-import matplotlib.pyplot as plt
 
 class DataTable(object):
-    """Class that stores data and series
-    
-    [description]
-    """
+    """Class that stores data and series"""
     MAX_NUM_SERIES=3
     PICKRADIUS = 10
 
     def __init__(self, axarr=None, _name=''):
-        """
-        **Constructor**
-        
-        [description]
-        
-        Keyword Arguments:
-            - axarr {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         self.num_columns=0
         self.num_rows=0
         self.column_names=[]
@@ -66,7 +55,7 @@ class DataTable(object):
         if axarr != None:
             for nx in range(len(axarr)): #create series for each plot
                 series_nx = []
-                for i in range(self.MAX_NUM_SERIES): 
+                for i in range(DataTable.MAX_NUM_SERIES): 
                     ss = axarr[nx].plot([], [], label='', picker=self.PICKRADIUS)
                     if i == 0:
                         ss[0]._name = _name #define artist name
@@ -76,35 +65,25 @@ class DataTable(object):
                 self.series.append(series_nx)
 
     def __str__(self):
-        """[summary]
-        
-        [description]
+        """Returns a string describing the data
 
         .. todo:: Refine this. It doesn't work
+
         """
         return self.data
         
     def mincol(self, col):
         """Minimum value in table column col
         
-        [description]
-
+        .. todo:: Example **todo** in the code
         """
         return np.min(self.data[:,col])
         
     def minpositivecol(self, col):
-        """Minimum positive value in table column col
-        
-        [description]
-
-        """
+        """Minimum positive value in table column col"""
         return (self.data[self.data[:,col]>0,col]).min()
 
     def maxcol(self, col):
-        """Maximum value in table column col
-        
-        [description]
-
-        """
+        """Maximum value in table column col"""
         return np.max(self.data[:,col])
         

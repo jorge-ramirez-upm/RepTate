@@ -1,0 +1,421 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Code Class Diagrams &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Code and Documentation TODO items" href="todo.html" />
+    <link rel="prev" title="Tools" href="CodeTools.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="todo.html" title="Code and Documentation TODO items"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CodeTools.html" title="Tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" accesskey="U">RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Code Class Diagrams</a><ul>
+<li><a class="reference internal" href="#inheritance-diagrams">Inheritance Diagrams</a><ul>
+<li><a class="reference internal" href="#basic-classes">Basic Classes</a></li>
+<li><a class="reference internal" href="#applications">Applications</a><ul>
+<li><a class="reference internal" href="#note-for-victor">Note for Victor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#theories">Theories</a><ul>
+<li><a class="reference internal" href="#note-for-victor-regarding-theories">Note for Victor regarding theories</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tools">Tools</a><ul>
+<li><a class="reference internal" href="#note-for-victor-regarding-tools">Note for Victor regarding tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#container-diagrams">Container Diagrams</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CodeTools.html"
+                        title="previous chapter">Tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="todo.html"
+                        title="next chapter">Code and Documentation TODO items</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/developers/callgraphGUI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="code-class-diagrams">
+<h1>Code Class Diagrams<a class="headerlink" href="#code-class-diagrams" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="inheritance-diagrams">
+<h2>Inheritance Diagrams<a class="headerlink" href="#inheritance-diagrams" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-classes">
+<h3>Basic Classes<a class="headerlink" href="#basic-classes" title="Permalink to this headline">¶</a></h3>
+<p>The following scheme shows the class inheritance diagram of the most imporatant classes in RepTate. Most of them are children of the CmdBase class. In the diagram:</p>
+<blockquote>
+<div><ul>
+<li><p>Empty ellipses represent <strong>core classes</strong>. Their source code can be found in the <code class="docutils literal notranslate"><span class="pre">code</span></code> folder and are they provide the basic functionality to work from the command line (CL version).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Grey filled rounded boxes represent the <strong>gui classes</strong>. Each core class has a gui counterpart. Each gui class is derived from a core class and a PyQt object (either QWidget or QMainWindow).</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Green filled boxes represent <strong>PyQt5</strong> classes. Many PyQt5 classes are used within the RepTate code. In the diagram, only two of the most important are shown.</p></li>
+<li><p>Arrows represent inheritance. The arrow goes <strong>from the parent class to the child class</strong>.</p></li>
+</ul>
+</div></blockquote>
+<div class="graphviz"><object data="../_images/graphviz-252493ef6bb4f02bb159fffb0aed1c75fac8fcbf.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;ApplicationManager&quot; [href=&quot;../developers/CodeCoreCL.html#applicationmanager&quot;, target=&quot;_top&quot;]
+   &quot;DataSet&quot; [href=&quot;../developers/CodeCoreCL.html#dataset&quot;, target=&quot;_top&quot;]
+   &quot;Theory&quot; [href=&quot;../developers/CodeCoreCL.html#theory&quot;, target=&quot;_top&quot;]
+   &quot;Tool&quot; [href=&quot;../developers/CodeCoreCL.html#tool&quot;, target=&quot;_top&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;ApplicationManager&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;DataSet&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;QApplicationManager&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationmanager&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;QDataSet&quot; [href=&quot;../developers/CodeCoreGUI.html#qdataset&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;QTheory&quot; [href=&quot;../developers/CodeCoreGUI.html#qtheory&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;QTool&quot; [href=&quot;../developers/CodeCoreGUI.html#qtool&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
+   &quot;ApplicationManager&quot; -&gt; &quot;QApplicationManager&quot;;
+   &quot;DataSet&quot; -&gt; &quot;QDataSet&quot;;
+   &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
+   &quot;Tool&quot; -&gt; &quot;QTool&quot;;
+   &quot;QWidget&quot; [shape=box,fillcolor=palegreen,href=&quot;https://doc.qt.io/qt-5/qwidget.html&quot;, target=&quot;_top&quot;, style=&quot;filled&quot;]
+   &quot;QMainWindow&quot; [shape=box,fillcolor=palegreen,href=&quot;https://doc.qt.io/qt-5/qmainwindow.html&quot;, target=&quot;_top&quot;, style=&quot;filled&quot;]
+   &quot;QWidget&quot; -&gt; &quot;QApplicationWindow&quot; [color=green];
+   &quot;QWidget&quot; -&gt; &quot;QDataSet&quot; [color=green];
+   &quot;QWidget&quot; -&gt; &quot;QTheory&quot; [color=green];
+   &quot;QWidget&quot; -&gt; &quot;QTool&quot; [color=green];
+   &quot;QMainWindow&quot; -&gt; &quot;QApplicationManager&quot; [color=green];
+}</p></object></div>
+<p><code class="docutils literal notranslate"><span class="pre">CmdBase</span></code> provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).</p>
+</div>
+<div class="section" id="applications">
+<h3>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h3>
+<p>When developing a new application, it is important to keep in mind the class hierarchical structure of application classes in RepTate. In the following scheme, an example diagram of the class inheritance a particular application (<strong>LVE</strong>) is shown). In the diagram:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>All classes represented by an empty ellipse are CL classes. They must provide the basic functionality of the class (everything that the class needs to work during a CL or a batch session of RepTate).</p></li>
+<li><p>Classes represented by a filled rounded box are gui classes. They must provide all the GUI functionality of the class (buttons, menus, special features, etc). Simple applications will inherit all the needed GUI functionality from <strong>QApplicationWindow</strong>. More advanced apps will need special implementation of advanced features.</p></li>
+<li><p>Classes represented by red empty boxes are <strong>metaclasses</strong>. Essentially, it is a class with no functionality. Its only purpose is to select which of the two versions of the application (either CL or GUI) is created, depending on the particular context.</p></li>
+</ul>
+</div></blockquote>
+<div class="graphviz"><object data="../_images/graphviz-3590bb8d0b3dc2fac6cbb13dfbffc831029288f2.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;ApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;, shape=box,color=red]
+        &quot;BaseApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;]
+        &quot;CLApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;]
+        &quot;GUIApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
+   &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
+   &quot;QApplicationWindow&quot; -&gt; &quot;GUIApplicationLVE&quot;;
+   &quot;Application&quot; -&gt; &quot;CLApplicationLVE&quot;;
+   &quot;BaseApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot;;
+   &quot;BaseApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;ApplicationLVE&quot;
+   &quot;ApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;ApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+<div class="section" id="note-for-victor">
+<h4>Note for Victor<a class="headerlink" href="#note-for-victor" title="Permalink to this headline">¶</a></h4>
+<p>I don’t feel very comfortable with this hieararchy for the following reasons:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ApplicationLVE is a child of CmdBase but uses none of its functionality. Application LVE is just a metaclass that decides which is the right instance to create, depending on the case (CL or GUI).</p></li>
+<li><p>BaseApplicationLVE uses functionality of Application but it is not a children of it. In fact, VSCode and other editors complain that some of the members of BaseApplicationLVE do not exist.</p></li>
+</ul>
+</div></blockquote>
+<p>I never understood well how this structure could work, but the fact is that it does and it was a brilliant solution at the time. In fact, I consider this to be one of the biggest pillars upon which we built RepTate. It was fully your solution, so I want to discuss it with you before applying any changes to this.</p>
+<p>Following the considerations above, I suggest the following new inheritance relation:</p>
+<div class="graphviz"><object data="../_images/graphviz-0ece92a2b6b64eda57b74ed168225cac1881278a.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Application&quot; [href=&quot;../developers/CodeCoreCL.html#application&quot;, target=&quot;_top&quot;]
+   &quot;QApplicationWindow&quot; [href=&quot;../developers/CodeCoreGUI.html#qapplicationwindow&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;ApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;, shape=box,color=red]
+        &quot;BaseApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;]
+        &quot;CLApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;]
+        &quot;GUIApplicationLVE&quot; [href=&quot;../developers/CodeApplications.html#applicationlve&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Application&quot;;
+   &quot;Application&quot; -&gt; &quot;QApplicationWindow&quot;;
+   &quot;QApplicationWindow&quot; -&gt; &quot;GUIApplicationLVE&quot;;
+   &quot;Application&quot; -&gt; &quot;BaseApplicationLVE&quot;;
+   &quot;BaseApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot;;
+   &quot;BaseApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot;;
+   &quot;ApplicationLVE&quot; -&gt; &quot;CLApplicationLVE&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;ApplicationLVE&quot; -&gt; &quot;GUIApplicationLVE&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+<p>Now, the dependencies are clear, and all classes that need to use functionality from another are children of it. ApplicationLVE does not need to be the child of any class because it simply does not use any functionality. It is just a Metaclass. I’ve tried this implementation for one of the Applications and it seems to work. However, before applying this structure to the overall code, I’d like to know what you think about it. In any case, if I ever try to implement this, I’ll do it in a separate branch that we will test thoroughly before merging it to the main.</p>
+</div>
+</div>
+<div class="section" id="theories">
+<h3>Theories<a class="headerlink" href="#theories" title="Permalink to this headline">¶</a></h3>
+<p>Example diagram of the class inheritance of one of the Theories</p>
+<div class="graphviz"><object data="../_images/graphviz-3b901755664041c1d0ddf463b93fd9d20de8f494.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Theory&quot; [href=&quot;../developers/CodeCoreCL.html#theory&quot;, target=&quot;_top&quot;]
+   &quot;QTheory&quot; [href=&quot;../developers/CodeCoreGUI.html#qtheory&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;TheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;, shape=box, color=red]
+   &quot;BaseTheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;]
+   &quot;CLTheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;]
+   &quot;GUITheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
+   &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
+   &quot;QTheory&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
+   &quot;Theory&quot; -&gt; &quot;CLTheoryPolynomial&quot;;
+   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
+   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;TheoryPolynomial&quot;
+   &quot;TheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;TheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+<div class="section" id="note-for-victor-regarding-theories">
+<h4>Note for Victor regarding theories<a class="headerlink" href="#note-for-victor-regarding-theories" title="Permalink to this headline">¶</a></h4>
+<p>Using a similar reasoning as with Applications, I suggest the following new structure:</p>
+<div class="graphviz"><object data="../_images/graphviz-3cc975157180b64837a6411aaa9a06ff4e7090ac.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Theory&quot; [href=&quot;../developers/CodeCoreCL.html#theory&quot;, target=&quot;_top&quot;]
+   &quot;QTheory&quot; [href=&quot;../developers/CodeCoreGUI.html#qtheory&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;TheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;, shape=box, color=red]
+   &quot;BaseTheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;]
+   &quot;CLTheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;]
+   &quot;GUITheoryPolynomial&quot; [href=&quot;../developers/CodeTheories.html#theorybasic&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Theory&quot;;
+   &quot;Theory&quot; -&gt; &quot;QTheory&quot;;
+   &quot;QTheory&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
+   &quot;Theory&quot; -&gt; &quot;BaseTheoryPolynomial&quot;;
+   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot;;
+   &quot;BaseTheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot;;
+   &quot;TheoryPolynomial&quot; -&gt; &quot;CLTheoryPolynomial&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;TheoryPolynomial&quot; -&gt; &quot;GUITheoryPolynomial&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+</div>
+</div>
+<div class="section" id="tools">
+<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h3>
+<p>Example diagram of the class inheritance relation for one of the Tools:</p>
+<div class="graphviz"><object data="../_images/graphviz-169e1e742c1dab03a84782e8c176958f39d6a043.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Tool&quot; [href=&quot;../developers/CodeCoreCL.html#tool&quot;, target=&quot;_top&quot;]
+   &quot;QTool&quot; [href=&quot;../developers/CodeCoreGUI.html#qtool&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;ToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;, shape=box, color=red]
+   &quot;BaseToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;]
+   &quot;CLToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;]
+   &quot;GUIToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
+   &quot;Tool&quot; -&gt; &quot;QTool&quot;;
+   &quot;QTool&quot; -&gt; &quot;GUIToolBounds&quot;;
+   &quot;Tool&quot; -&gt; &quot;CLToolBounds&quot;;
+   &quot;BaseToolBounds&quot; -&gt; &quot;GUIToolBounds&quot;;
+   &quot;BaseToolBounds&quot; -&gt; &quot;CLToolBounds&quot;;
+   &quot;CmdBase&quot; -&gt; &quot;ToolBounds&quot;
+   &quot;ToolBounds&quot; -&gt; &quot;CLToolBounds&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;ToolBounds&quot; -&gt; &quot;GUIToolBounds&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+<div class="section" id="note-for-victor-regarding-tools">
+<h4>Note for Victor regarding tools<a class="headerlink" href="#note-for-victor-regarding-tools" title="Permalink to this headline">¶</a></h4>
+<p>Using a similar reasoning as with Applications, I suggest the following new structure:</p>
+<div class="graphviz"><object data="../_images/graphviz-12fb56e35588462fd38d2d5901863f440ef84504.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+   &quot;CmdBase&quot; [href=&quot;../developers/CodeCoreCL.html#cmdbase&quot;, target=&quot;_top&quot;]
+   &quot;Tool&quot; [href=&quot;../developers/CodeCoreCL.html#tool&quot;, target=&quot;_top&quot;]
+   &quot;QTool&quot; [href=&quot;../developers/CodeCoreGUI.html#qtool&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;ToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;, shape=box, color=red]
+   &quot;BaseToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;]
+   &quot;CLToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;]
+   &quot;GUIToolBounds&quot; [href=&quot;../developers/CodeTools.html#toolbounds&quot;, target=&quot;_top&quot;, shape=&quot;box&quot;, style=&quot;rounded,filled&quot;]
+   &quot;CmdBase&quot; -&gt; &quot;Tool&quot;;
+   &quot;Tool&quot; -&gt; &quot;QTool&quot;;
+   &quot;QTool&quot; -&gt; &quot;GUIToolBounds&quot;;
+   &quot;Tool&quot; -&gt; &quot;BaseToolBounds&quot;;
+   &quot;BaseToolBounds&quot; -&gt; &quot;CLToolBounds&quot;;
+   &quot;BaseToolBounds&quot; -&gt; &quot;GUIToolBounds&quot;;
+   &quot;ToolBounds&quot; -&gt; &quot;CLToolBounds&quot; [style=dotted, label=&quot;CL&quot;, color=red, fontcolor=red];
+   &quot;ToolBounds&quot; -&gt; &quot;GUIToolBounds&quot; [style=dotted, label=&quot;GUI&quot;, color=red, fontcolor=red];
+}</p></object></div>
+</div>
+</div>
+</div>
+<div class="section" id="container-diagrams">
+<h2>Container Diagrams<a class="headerlink" href="#container-diagrams" title="Permalink to this headline">¶</a></h2>
+<p>The structure RepTate, which can be clearly seen when running a CL or a GUI session, is also reflected in the code. Essentially:</p>
+<blockquote>
+<div><ul>
+<li><p>A RepTate session may contain one or more open applications of the same or different type (<em>i.e.</em> LVE, NLVE, LAOS, etc).</p></li>
+<li><p>Each application can have one or more open datasets (<em>i.e.</em> Set1, Set2, etc). Datasets are intended to group experimental data that are related in some way. For example:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>SAOS measurements of samples of the same material, measured at same temperature, but having different molecular weight.</p></li>
+<li><p>Start-up of shear flow measurements of samples of the same material and same molecular weight, measured at the same temperature, but with different shear rates.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Each Dataset may contain one or several Data files, which are typically loaded from disk.</p></li>
+<li><p>Inside each dataset, there may be one or more open theories of the same or different kind (<em>i.e.</em> Maxwell, Rouse, etc). Each theory is <strong>only applied to the files in the same Dataset that contains the theory</strong>.</p></li>
+<li><p>Finally, each Application may have open tools of the same or different type (<em>i.e.</em> Find Peaks, Materials Database, etc). The tools are applied to <strong>all the files in all the Datasets</strong> contained in the same Application as the Tool.</p></li>
+</ul>
+</div></blockquote>
+<p>The following diagram shows a typical example of use of RepTate, representing the above structure in a schematic way. In the diagram:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The green box represents a RepTate session.</p></li>
+<li><p>In the session, there are three open applications (TTS1, LVE2 and NLVE3), represented by red rounded boxes.</p></li>
+<li><p>Each application contains one or more datasets, represented by yellow folders. Some applications also have a tool, represented by a cyan arrow.</p></li>
+<li><p>Each dataset contains data files, represented in grey. In addition, some datasets have opened one or more theories, which are shown as purple boxes.</p></li>
+</ul>
+</div></blockquote>
+<div class="graphviz"><object data="../_images/graphviz-e2ed69a5f46c93b71d6b820f3a5eebd750e5faf5.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph foo {
+       rankdir=LR
+       &quot;RepTate&quot; [shape=&quot;box&quot;,style=&quot;filled&quot;,fillcolor=mediumseagreen]
+       &quot;TTS1&quot; [shape=&quot;box&quot;,style=&quot;rounded,filled&quot;,fillcolor=indianred1]
+       &quot;LVE2&quot; [shape=&quot;box&quot;,style=&quot;rounded,filled&quot;,fillcolor=indianred1]
+       &quot;NLVE3&quot; [shape=&quot;box&quot;,style=&quot;rounded,filled&quot;,fillcolor=indianred1]
+       &quot;Set1&quot; [shape=&quot;folder&quot;,style=&quot;filled&quot;,fillcolor=khaki]
+       &quot;Set2&quot; [shape=&quot;folder&quot;,style=&quot;filled&quot;,fillcolor=khaki]
+       &quot;Set3&quot; [shape=&quot;folder&quot;,style=&quot;filled&quot;,fillcolor=khaki]
+       &quot;Set4&quot; [shape=&quot;folder&quot;,style=&quot;filled&quot;,fillcolor=khaki]
+       &quot;WLF Shift&quot; [shape=&quot;signature&quot;,style=&quot;filled&quot;,fillcolor=magenta1]
+       &quot;Maxwell Modes&quot; [shape=&quot;signature&quot;,style=&quot;filled&quot;,fillcolor=magenta1]
+       &quot;Likhtman-McLeish&quot; [shape=&quot;signature&quot;,style=&quot;filled&quot;,fillcolor=magenta1]
+       &quot;PI88K 25C.osc&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;PI88K 10C.osc&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;PI94_T25.tts&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;PI225_T25.tts&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;dow150.shear&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;dow170.shear&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;hdpe320.shear&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;hdpe270.shear&quot; [shape=&quot;note&quot;,style=&quot;filled&quot;]
+       &quot;Materials Database&quot; [shape=&quot;cds&quot;,style=&quot;filled&quot;, fillcolor=cyan]
+       &quot;Find Peaks&quot; [shape=&quot;cds&quot;,style=&quot;filled&quot;, fillcolor=cyan]
+   &quot;RepTate&quot; -&gt; &quot;TTS1&quot;;
+   &quot;RepTate&quot; -&gt; &quot;LVE2&quot;;
+   &quot;RepTate&quot; -&gt; &quot;NLVE3&quot;;
+   &quot;TTS1&quot; -&gt; &quot;Set1&quot;;
+   &quot;Set1&quot; -&gt; &quot;PI88K 25C.osc&quot;;
+   &quot;Set1&quot; -&gt; &quot;PI88K 10C.osc&quot;;
+   &quot;Set1&quot; -&gt; &quot;WLF Shift&quot;;
+   &quot;LVE2&quot; -&gt; &quot;Set2&quot;;
+   &quot;Set2&quot; -&gt; &quot;PI94_T25.tts&quot;;
+   &quot;Set2&quot; -&gt; &quot;PI225_T25.tts&quot;;
+   &quot;Set2&quot; -&gt; &quot;Maxwell Modes&quot;;
+   &quot;Set2&quot; -&gt; &quot;Likhtman-McLeish&quot;;
+   &quot;LVE2&quot; -&gt; &quot;Materials Database&quot;;
+   &quot;NLVE3&quot; -&gt; &quot;Set3&quot;;
+   &quot;Set3&quot; -&gt; &quot;dow150.shear&quot;;
+   &quot;Set3&quot; -&gt; &quot;dow170.shear&quot;;
+   &quot;NLVE3&quot; -&gt; &quot;Set4&quot;;
+   &quot;Set4&quot; -&gt; &quot;hdpe320.shear&quot;;
+   &quot;Set4&quot; -&gt; &quot;hdpe270.shear&quot;;
+   &quot;NLVE3&quot; -&gt; &quot;Find Peaks&quot;
+}</p></object></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="todo.html" title="Code and Documentation TODO items"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CodeTools.html" title="Tools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="developers.html" >RepTate for developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

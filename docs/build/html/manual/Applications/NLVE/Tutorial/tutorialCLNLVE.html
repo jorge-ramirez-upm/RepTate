@@ -1,0 +1,242 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>NLVE Tutorial: Command Line &#8212; RepTate v1.0.0 2020-05-25 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../../_static/bizstyle.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/Reptate64.ico"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Crystal: Flow Induced Crystallization" href="../../Crystal/Crystal.html" />
+    <link rel="prev" title="Tutorial Rolie-Double-Poly" href="tutorial_RolieDoublePoly.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../Crystal/Crystal.html" title="Crystal: Flow Induced Crystallization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_RolieDoublePoly.html" title="Tutorial Rolie-Double-Poly"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" accesskey="U"> NLVE: Start-up of Flow</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/RepTatelogo.jpg" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial_RolieDoublePoly.html"
+                        title="previous chapter">Tutorial Rolie-Double-Poly</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../Crystal/Crystal.html"
+                        title="next chapter"> Crystal: Flow Induced Crystallization</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/manual/Applications/NLVE/Tutorial/tutorialCLNLVE.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="nlve-tutorial-command-line">
+<h1>NLVE Tutorial: Command Line<a class="headerlink" href="#nlve-tutorial-command-line" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Tutorial command line (CL) files can be found in the <cite>tests/</cite> folder. They can be run in batch mode or in interactive mode.</p>
+<ul>
+<li><p>To run them in <em>interactive</em> mode, introduce the lines in the file (except the comments, which start with <code class="docutils literal notranslate"><span class="pre">#</span></code> and the line <code class="docutils literal notranslate"><span class="pre">console</span> <span class="pre">batch</span></code>) one by one and wait for the results.</p></li>
+<li><p>To run them in <em>batch</em> mode, you can execute the tutorial of your choice, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span><span class="o">/</span><span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Linux or Mac</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RepTateCL</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span> <span class="n">tutorial</span>\<span class="n">TEST_WLFShift</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># Windows</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>(the difference is the use of backslash <code class="docutils literal notranslate"><span class="pre">\</span></code> instead of slash <code class="docutils literal notranslate"><span class="pre">/</span></code>) and the output will be shown in the command line. In batch mode, no graphs or plots are shown.</p>
+</div>
+<p><strong>Rolie-Poly start-up flow</strong></p>
+<ol class="arabic">
+<li><p>First create LVE application to fit Maxwell Modes:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate&gt; new LVE
+</pre></div>
+</div>
+</li>
+<li><p>Open the LVE data and plot:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; open data/DOW/Linear_Rheology_TTS\DOWLDPEL150R_160C.tts
+RepTate/LVE1/DataSet01&gt; plot
+</pre></div>
+</div>
+</li>
+<li><p>Open new Maxwell mode theory, set the number of modes to 8 and minimize the error:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01&gt; theory_new Maxwell Modes
+RepTate/LVE1/DataSet01/Maxwell Modes01&gt; nmodes=8
+RepTate/LVE1/DataSet01/Maxwell Modes01&gt; fit
+</pre></div>
+</div>
+<p>The output is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Parameter Fitting
+Initial Error      Final Error
+8.72273            0.0103711
+
+288 function evaluations
+Parameter          Value ± Error
+logG00             2.196 ± 0.03803
+logG01             2.996 ± 0.01574
+logG02             3.547 ± 0.01288
+logG03             3.938 ± 0.0119
+logG04             4.247 ± 0.01391
+logG05             4.508 ± 0.01319
+logG06             4.687 ± 0.02296
+logG07             5.054 ± 0.01338
+logwmax            2.561 ± 0.04225
+logwmin            -2.913 ± 0.02537
+nmodes             8
+
+File               Error (RSS)        # Pts
+DOWLDPEL150R_160C  4.051e-05          256
+
+TOTAL ERROR:   4.0512e-05 (256 Pts)
+Bayesian IC:      -2533.7
+
+---Fitted in 0.*** seconds---
+</pre></div>
+</div>
+</li>
+<li><p>Return to the <em>Application Manager</em>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/LVE1/DataSet01/Maxwell Modes01&gt; up
+RepTate/LVE1&gt; up
+RepTate/&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Create a new NLVE Application:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/&gt; new NLVE
+</pre></div>
+</div>
+</li>
+<li><p>Add files to the dataset (master curve tts files):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01&gt; open data/DOW/Non-Linear_Rheology/Start-up_Shear/My_dow150-160-*shear.shear
+</pre></div>
+</div>
+</li>
+<li><p>Plot the files using the default LVE Application view:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01&gt; plot
+</pre></div>
+</div>
+</li>
+<li><p>Create new theory:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01&gt; theory_new Rolie-Poly
+</pre></div>
+</div>
+</li>
+<li><p>Copy the Maxwell modes previously calculated:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01/Rolie-Poly01&gt; copy_modes
+Found 1 theories that provide modes
+0: LVE1.DataSet01.Maxwell Modes01
+Select theory (number between 0 and 0&gt; 0
+</pre></div>
+</div>
+</li>
+<li><p>Calculate the theory with the new modes:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01/Rolie-Poly01&gt; calculate
+</pre></div>
+</div>
+</li>
+<li><p>Save theory predictions:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01/Rolie-Poly01&gt; save
+</pre></div>
+</div>
+</li>
+<li><p>Exit RepTate (the y answer is needed):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RepTate/NLVE2/DataSet01/Rolie-Poly01&gt; quit
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../Crystal/Crystal.html" title="Crystal: Flow Induced Crystallization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_RolieDoublePoly.html" title="Tutorial Rolie-Double-Poly"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">RepTate v1.0.0 2020-05-25 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../manual.html" >User Manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../applications.html" >Applications</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../NLVE.html" > NLVE: Start-up of Flow</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2020, Universidad Politécnica de Madrid, University of Leeds.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

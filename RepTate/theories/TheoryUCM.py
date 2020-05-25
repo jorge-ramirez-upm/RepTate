@@ -36,74 +36,17 @@ Module for the Upper Convected Maxwell model
 
 """
 import numpy as np
-from scipy.integrate import ode, odeint
-from CmdBase import CmdBase, CmdMode
-from Parameter import Parameter, ParameterType, OptType
-from Theory import Theory
-from QTheory import QTheory
-from DataTable import DataTable
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QStyle, QSpinBox, QTableWidget, QDialog, QVBoxLayout, QDialogButtonBox, QTableWidgetItem, QMessageBox
-from PyQt5.QtCore import QSize, QUrl
-from PyQt5.QtGui import QIcon, QDesktopServices
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.Theory import Theory
+from RepTate.gui.QTheory import QTheory
+from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from Theory_rc import *
-from enum import Enum
-from math import sqrt
-from SpreadsheetWidget import SpreadsheetWidget
-from ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
-
-class FlowMode(Enum):
-    """Defines the flow geometry used
-    
-    Parameters can be:
-        - shear: Shear flow
-        - uext: Uniaxial extension flow
-    """
-    shear = 0
-    uext = 1
-
-
-class EditModesDialog(QDialog):
-    def __init__(self, parent=None, times=None, G=None, MAX_MODES=0):
-        super(EditModesDialog, self).__init__(parent)
-
-        self.setWindowTitle("Edit Maxwell modes")
-        layout = QVBoxLayout(self)
-        nmodes = len(times)
-
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(nmodes)  #initial value
-        layout.addWidget(self.spinbox)
-
-        self.table = SpreadsheetWidget()  #allows copy/paste
-        self.table.setRowCount(nmodes)
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["tauD", "G"])
-        for i in range(nmodes):
-            tau = "%g" % times[i]
-            mod = "%g" % G[i]
-            self.table.setItem(i, 0, QTableWidgetItem(tau))
-            self.table.setItem(i, 1, QTableWidgetItem(mod))
-
-        layout.addWidget(self.table)
-
-        # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def handle_spinboxValueChanged(self, value):
-        nrow_old = self.table.rowCount()
-        self.table.setRowCount(value)
-        for i in range(nrow_old, value):  #create extra rows with defaut values
-            self.table.setItem(i, 0, QTableWidgetItem("10"))
-            self.table.setItem(i, 1, QTableWidgetItem("1000"))
+from RepTate.gui.Theory_rc import *
+from RepTate.applications.ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
+from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
 class TheoryUCM(CmdBase):
@@ -143,50 +86,32 @@ class TheoryUCM(CmdBase):
         [none]
 
     """
+
     thname = "UCM"
     description = "Upper-convected Maxwell constitutive equation"
     citations = ["Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"]
     doi = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
-        return GUITheoryUCM(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryUCM(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI or CL class"""
+        return (
+            GUITheoryUCM(name, parent_dataset, ax)
+            if (CmdBase.mode == CmdMode.GUI)
+            else CLTheoryUCM(name, parent_dataset, ax)
+        )
 
 
 class BaseTheoryUCM:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model'
+    """Base class for both GUI and CL"""
+
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model"
     single_file = False
     thname = TheoryUCM.thname
     citations = TheoryUCM.citations
-    doi = TheoryUCM.doi 
+    doi = TheoryUCM.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_UCM
         self.has_modes = True
@@ -196,7 +121,8 @@ class BaseTheoryUCM:
             description="Number of modes",
             type=ParameterType.integer,
             opt_type=OptType.const,
-            display_flag=False)
+            display_flag=False,
+        )
 
         for i in range(self.parameters["nmodes"].value):
             self.parameters["G%02d" % i] = Parameter(
@@ -206,7 +132,8 @@ class BaseTheoryUCM:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                min_value=0)
+                min_value=0,
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=10.0,
@@ -214,7 +141,8 @@ class BaseTheoryUCM:
                 type=ParameterType.real,
                 opt_type=OptType.nopt,
                 display_flag=False,
-                min_value=0)
+                min_value=0,
+            )
 
         self.MAX_MODES = 40
         self.init_flow_mode()
@@ -223,13 +151,13 @@ class BaseTheoryUCM:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
-            if f.file_type.extension == 'shear':
+            if f.file_type.extension == "shear":
                 self.flow_mode = FlowMode.shear
             else:
                 self.flow_mode = FlowMode.uext
         except Exception as e:
             print("in UCM init:", e)
-            self.flow_mode = FlowMode.shear  #default mode: shear
+            self.flow_mode = FlowMode.shear  # default mode: shear
 
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
@@ -252,28 +180,14 @@ class BaseTheoryUCM:
 
     def sigma_xy_shear(self, p, times):
         """Upper Convected Maxwell model in shear.
-        Returns XY component of stress tensor
-        
-        [description]
-        
-        Arguments:
-            - p {array} -- p = [G, tauD, gamma_dot] 
-            - times {array} -- time
-        """
+        Returns XY component of stress tensor"""
         G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
     def n1_uext(self, p, times):
         """Upper Convected Maxwell model in uniaxial extension.
-        Returns N1 = (XX -YY) component of stress tensor
-        
-        [description]
-        
-        Arguments:
-            - p {array} -- p = [G, tauD, epsilon_dot] 
-            - times {array} -- time
-        """
+        Returns N1 = (XX -YY) component of stress tensor"""
         G, tauD, ed = p
         w = tauD * ed
         sxx = (1 - 2 * w * np.exp(-(1 - 2 * w) * times / tauD)) / (1 - 2 * w)
@@ -282,16 +196,7 @@ class BaseTheoryUCM:
         return G * (sxx - syy)
 
     def calculate_UCM(self, f=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - f {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -317,6 +222,7 @@ class BaseTheoryUCM:
                 tt.data[:, 1] += self.n1_uext(p, times)
 
     def calculate_UCMLAOS(self, f=None):
+        """Calculate the theory for LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
@@ -327,7 +233,7 @@ class BaseTheoryUCM:
         g0 = float(f.file_parameters["gamma"])
         w = float(f.file_parameters["omega"])
         tt.data[:, 0] = times
-        tt.data[:, 1] = g0*np.sin(w*times)
+        tt.data[:, 1] = g0 * np.sin(w * times)
 
         nmodes = self.parameters["nmodes"].value
         for i in range(nmodes):
@@ -335,28 +241,27 @@ class BaseTheoryUCM:
                 break
             G = self.parameters["G%02d" % i].value
             tauD = self.parameters["tauD%02d" % i].value
-            eta = G*tauD
-            tt.data[:, 2] += eta*g0*w*(
-                                tauD*w*np.sin(w*times)
-                                -np.exp(-times/tauD)
-                                +np.cos(w*times))/(1+w**2*tauD**2)
+            eta = G * tauD
+            tt.data[:, 2] += (
+                eta
+                * g0
+                * w
+                * (
+                    tauD * w * np.sin(w * times)
+                    - np.exp(-times / tauD)
+                    + np.cos(w * times)
+                )
+                / (1 + w ** 2 * tauD ** 2)
+            )
 
     def set_param_value(self, name, value):
-        """[summary]
-        
-        [description]
-        
-        Arguments:
-            - name {[type]} -- [description]
-            - value {[type]} -- [description]
-        """
-        if (name == "nmodes"):
+        """Set the value of a theory parameter"""
+        if name == "nmodes":
             oldn = self.parameters["nmodes"].value
-        message, success = super(BaseTheoryUCM, self).set_param_value(
-            name, value)
+        message, success = super(BaseTheoryUCM, self).set_param_value(name, value)
         if not success:
             return message, success
-        if (name == "nmodes"):
+        if name == "nmodes":
             for i in range(self.parameters["nmodes"].value):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,
@@ -365,7 +270,8 @@ class BaseTheoryUCM:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    min_value=0)
+                    min_value=0,
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=10.0,
@@ -373,49 +279,31 @@ class BaseTheoryUCM:
                     type=ParameterType.real,
                     opt_type=OptType.nopt,
                     display_flag=False,
-                    min_value=0)
+                    min_value=0,
+                )
 
-            if (oldn > self.parameters["nmodes"].value):
+            if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
-        return '', True
+        return "", True
 
 
 class CLTheoryUCM(BaseTheoryUCM, Theory):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
             self.function = self.calculate_UCMLAOS
 
+
 class GUITheoryUCM(BaseTheoryUCM, QTheory):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name="", parent_dataset=None, ax=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {""})
-            - parent_dataset {[type]} -- [description] (default: {None})
-            - ax {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
@@ -427,11 +315,11 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
             self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
             menu = QMenu()
             self.shear_flow_action = menu.addAction(
-                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-                "Shear Flow")
+                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
+            )
             self.extensional_flow_action = menu.addAction(
-                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-                "Extensional Flow")
+                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
+            )
             if self.flow_mode == FlowMode.shear:
                 self.tbutflow.setDefaultAction(self.shear_flow_action)
             else:
@@ -440,9 +328,11 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
             tb.addWidget(self.tbutflow)
 
             connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow)
+                self.select_shear_flow
+            )
             connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow)
+                self.select_extensional_flow
+            )
         else:
             self.function = self.calculate_UCMLAOS
 
@@ -450,31 +340,27 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu()
         self.get_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
+        )
         self.edit_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
-            "Edit Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
+        )
         self.plot_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Plot Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
+        )
         self.save_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(
-            self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(
-            self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(
-            self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
+        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear
@@ -498,15 +384,18 @@ class GUITheoryUCM(BaseTheoryUCM, QTheory):
             self.set_param_value("nmodes", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value("tauD%02d" % i,
-                                                     d.table.item(i, 0).text())
-                msg, success2 = self.set_param_value("G%02d" % i,
-                                                     d.table.item(i, 1).text())
+                msg, success1 = self.set_param_value(
+                    "tauD%02d" % i, d.table.item(i, 0).text()
+                )
+                msg, success2 = self.set_param_value(
+                    "G%02d" % i, d.table.item(i, 1).text()
+                )
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
-                    self, 'Error',
-                    'Some parameter(s) could not be updated.\nPlease try again.'
+                    self,
+                    "Error",
+                    "Some parameter(s) could not be updated.\nPlease try again.",
                 )
             else:
                 self.handle_actionCalculate_Theory()

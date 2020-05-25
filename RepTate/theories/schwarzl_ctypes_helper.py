@@ -38,17 +38,18 @@ import sys
 import os
 
 dir_path = os.path.dirname(
-    os.path.realpath(__file__))  # get the directory path of current file
-if sys.maxsize > 2**32:
+    os.path.realpath(__file__)
+)  # get the directory path of current file
+if sys.maxsize > 2 ** 32:
     # 64-bit system
-    lib_path = dir_path + os.sep + 'schwarzl_lib_%s.so' % (sys.platform)
+    lib_path = os.path.join(dir_path, "schwarzl_lib_%s.so" % (sys.platform))
 else:
     # 32-bit system
-    lib_path = dir_path + os.sep + 'schwarzl_lib_%s_i686.so' % (sys.platform)
+    lib_path = os.path.join(dir_path, "schwarzl_lib_%s_i686.so" % (sys.platform))
 try:
     schwarzl_lib = CDLL(lib_path)
 except:
-    print('OS %s not recognized in Schwarzl CH module' % (sys.platform))
+    print("OS %s not recognized in Schwarzl CH module" % (sys.platform))
 
 schwarzl_gt = schwarzl_lib.schwarzl_gt
 schwarzl_gt.restype = None

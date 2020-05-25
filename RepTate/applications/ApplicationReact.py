@@ -35,37 +35,22 @@
 React module
 
 """
-from CmdBase import CmdBase, CmdMode
-from Application import Application
-from QApplicationWindow import QApplicationWindow
-from View import View
-from FileType import TXTColumnFile
+from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
-
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 
 
 class ApplicationReact(CmdBase):
-    """Application for Monte Carlo polymerisation
-    
-    """
+    """Application for Monte Carlo polymerisation"""
     appname = 'React'
     description = 'React Application'  #used in the command-line Reptate
     extension = 'reac'
 
     def __new__(cls, name='React', parent=None):
-        """[summary]
-        
-        [description]
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        
-        Returns:
-            - [type] -- [description]
-        """
+        """Create an instance of the GUI or CL class"""
         return GUIApplicationReact(
             name,
             parent) if (CmdBase.mode == CmdMode.GUI) else CLApplicationReact(
@@ -73,27 +58,19 @@ class ApplicationReact(CmdBase):
 
 
 class BaseApplicationReact:
-    """[summary]
-    
-    [description]
-    """
-    help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
+    """Base Class for both GUI and CL"""
+
+    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
     appname = ApplicationReact.appname
 
     def __init__(self, name='React', parent=None, **kwargs):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
-        from TheoryLDPEBatch import TheoryTobitaBatch
-        from TheoryTobitaCSTR import TheoryTobitaCSTR
-        from TheoryMultiMetCSTR import TheoryMultiMetCSTR
-        from TheoryReactMix import TheoryReactMix
-        from TheoryCreatePolyconf import TheoryCreatePolyconf
-        from TheoryDieneCSTR import TheoryDieneCSTR
+        """**Constructor**"""
+        from RepTate.theories.TheoryLDPEBatch import TheoryTobitaBatch
+        from RepTate.theories.TheoryTobitaCSTR import TheoryTobitaCSTR
+        from RepTate.theories.TheoryMultiMetCSTR import TheoryMultiMetCSTR
+        from RepTate.theories.TheoryReactMix import TheoryReactMix
+        from RepTate.theories.TheoryCreatePolyconf import TheoryCreatePolyconf
+        from RepTate.theories.TheoryDieneCSTR import TheoryDieneCSTR
 
         super().__init__(name, parent)
 
@@ -386,10 +363,10 @@ class BaseApplicationReact:
             n=1,
             snames=["av_strand_length"],
             with_thline=False)
-        
+
         self.extra_view_names = [
             '<senio(prio)> log-log', '<senio(prio)> lin-log', '<senio(prio)> lin-lin',
-            '<prio(senio)> log-log', '<prio(senio)> lin-log', '<prio(senio)> lin-lin', 
+            '<prio(senio)> log-log', '<prio(senio)> lin-log', '<prio(senio)> lin-lin',
             'p(senio) log-log', 'p(senio) lin-log',
             'p(prio) log-log', 'p(prio) lin-log',
             '<mass br(senio)> log-log', '<mass br(senio)> lin-lin',
@@ -488,7 +465,7 @@ class BaseApplicationReact:
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 3]
         return x, y, True
-    
+
     def thview_avprio_v_senio(self, dt, file_parameters):
         try:
             data = dt.extra_tables['avprio_v_senio']
@@ -497,7 +474,7 @@ class BaseApplicationReact:
             y = np.zeros((1, 3))
             y[:] = np.nan
             return x, y, True
-        
+
         nrows = len(data[:, 0])
         x = np.zeros((nrows, 3))
         y = np.zeros((nrows, 3))
@@ -512,10 +489,10 @@ class BaseApplicationReact:
         x[:, 2] = data[:, 0]
         y[:, 2] = np.power(2, data[:, 0] - 1)
         # avoid large numbers
-        y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)   
+        y[:, 2] = np.where(y[:, 2] <= maxp , y[:, 2], np.nan)
 
         return x, y, True
-    
+
     def thview_avsenio_v_prio(self, dt, file_parameters):
         try:
             data = dt.extra_tables['avsenio_v_prio']
@@ -524,7 +501,7 @@ class BaseApplicationReact:
             y = np.zeros((1, 3))
             y[:] = np.nan
             return x, y, True
-        
+
         nrows = len(data[:, 0])
         x = np.zeros((nrows, 3))
         y = np.zeros((nrows, 3))
@@ -539,7 +516,7 @@ class BaseApplicationReact:
         x[:, 2] = data[:, 0]
         y[:, 2] = np.log(data[:, 0]) / np.log(2) + 1
         # avoid large numbers
-        y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)   
+        y[:, 1] = np.where(y[:, 1] <= maxs , y[:, 1], np.nan)
 
         return x, y, True
 
@@ -652,37 +629,19 @@ class BaseApplicationReact:
         return x, y, True
 
 class CLApplicationReact(BaseApplicationReact, Application):
-    """[summary]
-    
-    [description]
-    """
+    """CL Version"""
 
     def __init__(self, name='React', parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
         super().__init__(name, parent)
         #usually this class stays empty
 
 
 class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
-    """[summary]
-    
-    [description]
-    """
+    """GUI Version"""
 
     def __init__(self, name='React', parent=None):
-        """
-        **Constructor**
-        
-        Keyword Arguments:
-            - name {[type]} -- [description] (default: {'React'})
-            - parent {[type]} -- [description] (default: {None})
-        """
+        """**Constructor**"""
 
         super().__init__(name, parent)
 
