@@ -95,6 +95,7 @@ def start_MatDB(argv):
         QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
     app = QApplication(sys.argv)
+    app.setApplicationName("RepTate")
 
     CmdBase.mode = CmdMode.GUI
     tmpex = QApplicationManager(loglevel=loglevel)
