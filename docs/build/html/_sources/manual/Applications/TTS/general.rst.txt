@@ -12,7 +12,7 @@ TTS: General description
 Purpose
 -------
 
-.. autoclass:: RepTate.applications.ApplicationTTS.ApplicationTTS()	
+.. automodule:: RepTate.applications.ApplicationTTS.ApplicationTTS()	
 
 .. _TTS_Data_Description:
 

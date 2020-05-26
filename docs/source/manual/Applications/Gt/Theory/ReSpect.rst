@@ -8,7 +8,7 @@ ReSpect
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryShanbhagMaxwellModes.TheoryShanbhagMaxwellModesTime
+.. automodule:: RepTate.theories.TheoryShanbhagMaxwellModes.TheoryShanbhagMaxwellModesTime
 
 
 .. todo:: Complete docs for this theory

@@ -8,7 +8,7 @@ Likhtman-McLeish theory
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002()
+.. automodule:: RepTate.theories.TheoryLikhtmanMcLeish2002.TheoryLikhtmanMcLeish2002
    
 Description
 -----------

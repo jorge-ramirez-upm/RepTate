@@ -8,7 +8,7 @@ Core classes (Graphical User Interface)
 QApplicationManager
 -------------------
     
-.. autoclass:: RepTate.gui.QApplicationManager.QApplicationManager
+.. automodule:: RepTate.gui.QApplicationManager.QApplicationManager
     :members:
     :undoc-members:
     :show-inheritance:
@@ -16,7 +16,7 @@ QApplicationManager
 QApplicationWindow
 -------------------
     
-.. autoclass:: RepTate.gui.QApplicationWindow.QApplicationWindow
+.. automodule:: RepTate.gui.QApplicationWindow.QApplicationWindow
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ QApplicationWindow
 QDataSet
 --------
     
-.. autoclass:: RepTate.gui.QDataSet.QDataSet
+.. automodule:: RepTate.gui.QDataSet.QDataSet
     :members:
     :undoc-members:
     :show-inheritance:
@@ -32,7 +32,7 @@ QDataSet
 QTheory
 -------
     
-.. autoclass:: RepTate.gui.QTheory.QTheory
+.. automodule:: RepTate.gui.QTheory.QTheory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,7 +40,7 @@ QTheory
 QTool
 -----
     
-.. autoclass:: RepTate.gui.QTool.QTool
+.. automodule:: RepTate.gui.QTool.QTool
     :members:
     :undoc-members:
     :show-inheritance:

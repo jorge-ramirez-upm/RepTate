@@ -12,7 +12,7 @@ G(t): General description
 Purpose
 -------
 
-.. autoclass:: RepTate.applications.ApplicationGt.ApplicationGt()	
+.. automodule:: RepTate.applications.ApplicationGt.ApplicationGt()	
 
 
 ----------

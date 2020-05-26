@@ -8,7 +8,7 @@ Core classes (Command Line)
 Application
 -----------
 
-.. autoclass:: RepTate.core.Application.Application
+.. automodule:: RepTate.core.Application.Application
     :members:
     :undoc-members:
     :show-inheritance:
@@ -16,7 +16,7 @@ Application
 ApplicationManager
 ------------------
 
-.. autoclass:: RepTate.core.ApplicationManager.ApplicationManager
+.. automodule:: RepTate.core.ApplicationManager.ApplicationManager
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ ApplicationManager
 CmdBase
 -------
 
-.. autoclass:: RepTate.core.CmdBase.CmdBase
+.. automodule:: RepTate.core.CmdBase.CmdBase
     :members:
     :undoc-members:
     :show-inheritance:
@@ -32,7 +32,7 @@ CmdBase
 DataSet
 -------
 
-.. autoclass:: RepTate.core.DataSet.DataSet
+.. automodule:: RepTate.core.DataSet.DataSet
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,7 +40,7 @@ DataSet
 DataTable
 ---------
 
-.. autoclass:: RepTate.core.DataTable.DataTable
+.. automodule:: RepTate.core.DataTable.DataTable
     :members:
     :undoc-members:
     :show-inheritance:
@@ -48,7 +48,7 @@ DataTable
 File
 ----
     
-.. autoclass:: RepTate.core.File.File
+.. automodule:: RepTate.core.File.File
     :members:
     :undoc-members:
     :show-inheritance:
@@ -64,7 +64,7 @@ FileType
 Parameter
 ---------
     
-.. autoclass:: RepTate.core.Parameter.Parameter
+.. automodule:: RepTate.core.Parameter.Parameter
     :members:
     :undoc-members:
     :show-inheritance:
@@ -72,7 +72,7 @@ Parameter
 Theory
 ------
     
-.. autoclass:: RepTate.core.Theory.Theory
+.. automodule:: RepTate.core.Theory.Theory
     :members:
     :undoc-members:
     :show-inheritance:
@@ -80,7 +80,7 @@ Theory
 Tool
 ------
     
-.. autoclass:: RepTate.core.Tool.Tool
+.. automodule:: RepTate.core.Tool.Tool
     :members:
     :undoc-members:
     :show-inheritance:
@@ -88,7 +88,7 @@ Tool
 View
 ----
     
-.. autoclass:: RepTate.core.View.View
+.. automodule:: RepTate.core.View.View
     :members:
     :undoc-members:
     :show-inheritance:

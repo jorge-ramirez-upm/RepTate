@@ -8,4 +8,4 @@ Rolie-Double-Poly equations
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryRolieDoublePoly.TheoryRolieDoublePoly()
+.. automodule:: RepTate.theories.TheoryRolieDoublePoly.TheoryRolieDoublePoly()

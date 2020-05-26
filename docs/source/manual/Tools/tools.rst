@@ -14,49 +14,49 @@ The following tools are available in all applications. In general, the aim of th
 Bounds
 ------
 
-.. autoclass:: RepTate.tools.ToolBounds.ToolBounds()
+.. automodule:: RepTate.tools.ToolBounds.ToolBounds()
 
 -------------------
 Evaluate Expression
 -------------------
 
-.. autoclass:: RepTate.tools.ToolEvaluate.ToolEvaluate()
+.. automodule:: RepTate.tools.ToolEvaluate.ToolEvaluate()
 
 -------------------
 Find Peaks
 -------------------
 
-.. autoclass:: RepTate.tools.ToolFindPeaks.ToolFindPeaks()
+.. automodule:: RepTate.tools.ToolFindPeaks.ToolFindPeaks()
 
 -------------------
 Gradient
 -------------------
 
-.. autoclass:: RepTate.tools.ToolGradient.ToolGradient()
+.. automodule:: RepTate.tools.ToolGradient.ToolGradient()
 
 -------------------
 Integral
 -------------------
 
-.. autoclass:: RepTate.tools.ToolIntegral.ToolIntegral()
+.. automodule:: RepTate.tools.ToolIntegral.ToolIntegral()
 
 -------------------
 Smooth
 -------------------
 
-.. autoclass:: RepTate.tools.ToolSmooth.ToolSmooth()
+.. automodule:: RepTate.tools.ToolSmooth.ToolSmooth()
 
 
 -------------------
 Power Law
 -------------------
 
-.. autoclass:: RepTate.tools.ToolPowerLaw.ToolPowerLaw()
+.. automodule:: RepTate.tools.ToolPowerLaw.ToolPowerLaw()
 
 ------------------
 Materials Database
 ------------------
 
-.. autoclass:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase()
+.. automodule:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase()
 
 .. todo:: Give a short example of use of all the Tools

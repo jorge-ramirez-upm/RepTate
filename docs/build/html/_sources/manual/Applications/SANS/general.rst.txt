@@ -12,7 +12,7 @@ SANS: General description
 Purpose
 -------
 
-.. autoclass:: RepTate.applications.ApplicationSANS.ApplicationSANS()	
+.. automodule:: RepTate.applications.ApplicationSANS.ApplicationSANS()	
 
 ----------
 Data Files

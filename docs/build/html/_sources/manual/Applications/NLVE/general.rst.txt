@@ -12,7 +12,7 @@ NLVE: General description
 Purpose
 -------
 
-.. autoclass:: RepTate.applications.ApplicationNLVE.ApplicationNLVE()	
+.. automodule:: RepTate.applications.ApplicationNLVE.ApplicationNLVE()	
 
 ----------
 Data Files

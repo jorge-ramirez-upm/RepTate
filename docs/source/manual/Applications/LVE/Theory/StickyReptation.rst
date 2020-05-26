@@ -8,7 +8,7 @@ Sticky Reptation
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryStickyReptation.TheoryStickyReptation()
+.. automodule:: RepTate.theories.TheoryStickyReptation.TheoryStickyReptation()
    
 
 Description

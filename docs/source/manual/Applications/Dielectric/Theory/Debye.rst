@@ -8,7 +8,7 @@ Debye modes
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryDebyeModes.TheoryDebyeModesFrequency()
+.. automodule:: RepTate.theories.TheoryDebyeModes.TheoryDebyeModesFrequency()
 
 Description
 -----------

@@ -14,7 +14,7 @@ React: General description
 Purpose
 -------
 
-.. autoclass:: RepTate.applications.ApplicationReact.ApplicationReact()	
+.. automodule:: RepTate.applications.ApplicationReact.ApplicationReact()	
 
 ----------
 Data Files

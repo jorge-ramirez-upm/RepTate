@@ -8,7 +8,7 @@ Maxwell modes
 Summary
 -------
 
-.. autoclass:: RepTate.theories.TheoryMaxwellModes.TheoryMaxwellModesFrequency()
+.. automodule:: RepTate.theories.TheoryMaxwellModes.TheoryMaxwellModesFrequency()
 
 Description
 -----------
