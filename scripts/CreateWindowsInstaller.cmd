@@ -34,6 +34,10 @@ curl -s -f -L -o %BUILDFOLDER%\%PYTHONFILENAME% https://www.python.org/ftp/pytho
 
 REM CREATE WHEEL CORRESPONDING TO OUR APPLICATIOn
 del %BUILDFOLDER%\*.whl
+REM install needed packages first
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install tqdm
+python -m pip install --user --upgrade twine
 python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
 
 REM PACK ALL NEEDED FOLDERS AND FILES FOR TCL/TK

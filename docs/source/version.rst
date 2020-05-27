@@ -2,6 +2,22 @@
 Version History
 ===============
 
+Release 1.1.0 - 20200527
+========================
+- NEW DSM theory in the LVE App (thanks to J. Ethier & J. Schieber)
+- NEW Tool Powerlaw
+- NEW TTS Shift any data from the Materials Database tool
+- NEW Basic Theory (Algebraic Expression). It can use file parameters
+- NEW Stand-alone applications (Materials Database and Universal Viewer)
+- NEW logging functionality
+- Corrected small bugs, simplified code structure and documentation
+- Open files, theories, tools and projects from the command line
+- Created pypi package
+- Some tools can now use file parameters
+- Materials Database shows info about current files
+- Added colors and simplified the command line notation
+- Added better version control
+
 Release 1.0.0 - 20200330
 ========================
 - NEW Crystal application for flow induced crystallization
