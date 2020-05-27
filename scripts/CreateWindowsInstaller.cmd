@@ -40,6 +40,10 @@ python -m pip install tqdm
 python -m pip install --user --upgrade twine
 python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
 
+REM Upload The binary package to pypi
+REM python -m twine upload %BUILDFOLDER%\*.whl
+
+
 REM PACK ALL NEEDED FOLDERS AND FILES FOR TCL/TK
 if not exist %OUTPUTFOLDER% mkdir %OUTPUTFOLDER%
 if not exist %OUTPUTFOLDER%\tcl mkdir %OUTPUTFOLDER%\tcl
