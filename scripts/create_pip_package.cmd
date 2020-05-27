@@ -8,6 +8,7 @@ REM   index-servers=pypi
 REM   [pypi] 
 REM   repository = https://upload.pypi.org/legacy/ 
 REM   username = USERNAME
+set BUILDFOLDER=build
 
 REM install needed packages first
 python -m pip install --upgrade pip setuptools wheel
@@ -18,10 +19,10 @@ REM remove old stuff
 rmdir /Q/S RepTate_test.egg-info
 
 REM compile package
-python setup.py bdist_wheel
+python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
 
 REM upload to PyPi
-python -m twine upload dist/*.whl
+python -m twine upload %BUILDFOLDER%/*.whl
 
 REM Create conda stuff (to be done...)
 REM conda install conda-build
