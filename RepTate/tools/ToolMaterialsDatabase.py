@@ -54,6 +54,7 @@ from PyQt5.QtWidgets import (
     QGroupBox,
     QFormLayout,
     QInputDialog,
+    QTreeWidgetItemIterator
 )
 from PyQt5.QtCore import QSize, QStandardPaths
 from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
@@ -263,7 +264,6 @@ class BaseToolMaterialsDatabase:
     def __init__(self, name="", parent_app=None):
         """**Constructor**
         
-        ..todo :: Select automatically the material from the datafiles (if available)
         """
         super().__init__(name, parent_app)
         self.parameters["name"] = Parameter(
@@ -343,9 +343,19 @@ class BaseToolMaterialsDatabase:
             name="C_inf", description="Characteristic ratio"
         )
 
+        # Search for the chemistry in the first file of the first dataset (OR CURRENT DATASET?)
+        self.init_chem = None
+        if len(parent_app.datasets)>0:
+            ds = parent_app.datasets[list(parent_app.datasets)[0]]
+            if len(ds.files)>0:
+                f = ds.files[0]
+                if 'chem' in f.file_parameters:
+                    self.init_chem=f.file_parameters['chem']
+
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Calculate some results related to the selected material or the file material"""
-        self.calculate_stuff("", file_parameters)
+        if (CmdBase.mode == CmdMode.GUI):
+            self.calculate_stuff("", file_parameters)
         return x, y
 
     def do_calculate_stuff(self, line=""):
@@ -442,7 +452,8 @@ class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
         super().__init__(name, parent_app)
-        self.do_material("PI")
+        if self.init_chem is not None:
+            self.do_material(self.init_chem)
 
     def do_database(self, line):
         """Print information about the location of the Material database files"""
@@ -593,20 +604,85 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         connection_id = self.verticalshift.triggered.connect(self.handle_vert_and_iso)
         connection_id = self.shiftdata.triggered.connect(self.handle_shift_data)
 
+        init_chem_index = self.cbmaterial.findText(self.init_chem)
+        if init_chem_index>-1:
+            self.cbmaterial.setCurrentIndex(init_chem_index)
         self.change_material()
 
     def handle_vert_and_iso(self):
         self.do_plot()
 
     def handle_shift_data(self):
+        Tr = float(self.editT.text())
+        chem = self.cbmaterial.currentText()
+        msg = "Selected T=%g\nSelected material=%s\n"%(Tr, chem)
+        msg += "Do you want to shift all Tables in the current Dataset "
+        msg += "to the chosen temperature using the WLF parameters for the chosen material?"
         ans = QMessageBox.question(
             self,
             "Shift all data",
-            "Do you want to shift all Tables in all Datasets of the current Application?",
+            msg,
             buttons=(QMessageBox.Yes | QMessageBox.No),
         )
-        if ans == QMessageBox.Yes:
-            pass
+        if ans != QMessageBox.Yes:
+            return
+        
+        # Calculate shift factors 
+
+        B1 = self.parameters["B1"].value
+        B2 = self.parameters["B2"].value
+        logalpha = self.parameters["logalpha"].value
+        alpha = np.power(10.0, logalpha)
+        CTg = self.parameters["CTg"].value
+        iso = self.isofrictional.isChecked()
+        vert = self.verticalshift.isChecked()
+
+        # Get current dataset
+        ds = self.parent_application.DataSettabWidget.currentWidget()
+        if not ds:
+            return
+
+        # Loop over files
+        for f in ds.files:
+            # Get file Current Temperature
+            Tf = f.file_parameters["T"]
+            Mw = f.file_parameters["Mw"]
+
+            if iso:
+                B2corrected = B2 + CTg / Mw  # - 68.7 * dx12
+                Trcorrected = Tr - CTg / Mw  # + 68.7 * dx12
+            else:
+                B2corrected = B2
+                Trcorrected = Tr
+
+            aT = np.power(10.0, -B1 * (Tf - Trcorrected) / (B2corrected + Trcorrected) / (B2corrected + Tf))
+            if vert:
+                bT = (1 + alpha * Tf) * (Tr + 273.15) / (1 + alpha * Tr) / (Tf + 273.15)
+            else:
+                bT = 1
+
+            # Loop over file type columns
+            for i, c in enumerate(f.file_type.col_names):
+                if c in ["t", "time"]: # Shift horizontally to the left
+                    f.data_table.data[:, i] = f.data_table.data[:, i]/aT
+                elif c in ["w"]: # Shift horizontally to the right
+                    f.data_table.data[:, i] = f.data_table.data[:, i]*aT
+                elif c in ["G'", "G''", "Gt", "sigma_xy", "N1", "sigma"]: # Shift vertically up
+                    f.data_table.data[:, i] = f.data_table.data[:, i]*bT
+        
+            # Change file parameter T to target Temperature
+            f.file_parameters["T"] = Tr
+
+            it = QTreeWidgetItemIterator(ds.DataSettreeWidget)
+            while it.value():
+                if (it.value().text(0)==f.file_name_short):
+                    for i in range(ds.DataSettreeWidget.columnCount()):
+                        if "T" == ds.DataSettreeWidget.headerItem().text(i):
+                            it.value().setText(i, str(f.file_parameters["T"]))
+                it+=1;
+
+        self.do_plot()
+        
 
 
     def change_material(self):
