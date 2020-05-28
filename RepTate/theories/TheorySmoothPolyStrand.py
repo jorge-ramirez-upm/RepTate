@@ -60,7 +60,7 @@ from collections import OrderedDict
 import RepTate.theories.SmoothPolySTRAND as SmoothPolySTRAND
 import RepTate.theories.SchneiderRate as SchneiderRate
 import RepTate.theories.timeArraySplit as timeArraySplit
-from RepTate.theories.theory_helpers import FlowMode, EditModesVolFractionsDialog, FeneMode, GcorrMode, NoquMode, SingleSpeciesMode, Dilution, EditMWDDialog
+from RepTate.theories.theory_helpers import FlowMode, EditModesVolFractionsDialog, FeneMode, GcorrMode, NoquMode, SingleSpeciesMode, Dilution, EditMWDDialog, GetMwdRepTate
 
 class TheorySmoothPolyStrand(CmdBase):
     """Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
@@ -1097,7 +1097,7 @@ class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
                                                th_tab_name)] = th.get_mwd
 
         if get_dict:
-            d = GetMwdRepate(self, get_dict, 'Select Discretized MWD')
+            d = GetMwdRepTate(self, get_dict, 'Select Discretized MWD')
             if (d.exec_() and d.btngrp.checkedButton() != None):
                 _, success1 = self.set_param_value("tau_e", d.taue_text.text())
                 _, success2 = self.set_param_value("Me", d.Me_text.text())
