@@ -647,8 +647,14 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
             # Get file Current Temperature
             Tf = f.file_parameters["T"]
             Mw = f.file_parameters["Mw"]
+            if "iso" in f.file_parameters:
+                iso_file = (f.file_parameters["iso"].upper() == "TRUE")
+            elif "isof" in f.file_parameters:
+                iso_file = (f.file_parameters["isof"].upper() == "TRUE")
+            else:
+                iso_file=False
 
-            if iso:
+            if iso and not iso_file:
                 B2corrected = B2 + CTg / Mw  # - 68.7 * dx12
                 Trcorrected = Tr - CTg / Mw  # + 68.7 * dx12
             else:

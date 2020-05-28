@@ -49,7 +49,7 @@ from RepTate.gui.QTheory import QTheory
 from PyQt5.QtWidgets import QToolBar, QFileDialog, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-
+import RepTate
 
 class TheoryWLFShift(CmdBase):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
