@@ -214,41 +214,6 @@ def start_UV(argv):
     else:
         CmdBase.calcmode = CalcMode.multithread
 
-    def my_excepthook(type, value, tb):
-        """Catch exceptions and print error message. Open email client to report bug to devlopers"""
-        tb_msg = ""
-        for e in traceback.format_tb(tb):
-            tb_msg += str(e)
-        tb_msg += "%s: %s\n" % (type.__name__, str(value))
-        # print(tb_msg) # JR: Not needed anymore
-        l = logging.getLogger("RepTate")
-        if CmdBase.mode == CmdMode.GUI:
-            l.error(tb_msg.replace("\n", "<br>"))
-        else:
-            l.error(tb_msg)
-        msg = (
-            'Sorry, something went wrong:\n "%s: %s".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?'
-            % (type.__name__, str(value))
-        )
-        ans = QMessageBox.critical(
-            ex, "Critical Error", msg, QMessageBox.Yes | QMessageBox.No
-        )
-        if ans == QMessageBox.Yes:
-            address = "reptate.rheology@gmail.com"
-            subject = "Something went wrong"
-            body = (
-                "%s\nIf you can, please describe below what you were doing with RepTate when the error happened (apps and theories or tools open if any) and send the message\nPlease, do NOT include confidential information\n%s\nError Traceback:\n %s"
-                % ("-" * 60, "-" * 60 + "\n" * 10 + "-" * 60, tb_msg)
-            )
-            QDesktopServices.openUrl(
-                QUrl(
-                    "mailto:?to=%s&subject=%s&body=%s" % (address, subject, body),
-                    QUrl.TolerantMode,
-                )
-            )
-
-    sys.excepthook = my_excepthook
-
     ex.showMaximized()
     sys.exit(app.exec_())
 
