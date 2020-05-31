@@ -53,7 +53,7 @@ class TheoryStickyReptation(CmdBase):
        - ``alpha`` : dimensionless constant.
     """
 
-    thname = "StickyReptation"
+    thname = "Sticky Reptation"
     description = "Sticky Reptation"
     citations = ["L. Leibler et al., Macromolecules, 1991, 24, 4701-4704"]
     doi = ["http://dx.doi.org/10.1021/ma00016a034"]
@@ -202,7 +202,7 @@ class BaseTheoryStickyReptation:
         # ---------------------------------------------
         # NUMERICAL SETTINGS
         # 1. Double reptation
-        tol = 1e-6  # tolerance to truncate infinite sums
+        tol = 1e-3  # tolerance to truncate infinite sums
         # 2. Transform of G(t) to G'(w) and G''(w)
         tmin = 0.1 / max(w)  # shortest time outside omega interval
         tmax = 10 / min(w)  # largest  time outside omega interval
