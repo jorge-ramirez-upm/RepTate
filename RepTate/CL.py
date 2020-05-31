@@ -204,23 +204,6 @@ def start_RepTate(argv):
     else:
         CmdBase.calcmode = CalcMode.multithread
 
-    def my_excepthook(type, value, tb):
-        """Catch exceptions and print error message. Open email client to report bug to devlopers"""
-        tb_msg = ""
-        for e in traceback.format_tb(tb):
-            tb_msg += str(e)
-        tb_msg += "%s: %s\n" % (type.__name__, str(value))
-        app.logger.critical(tb_msg)
-        msg = (
-            'Sorry, something went wrong:\n "%s: %s".\nTry to save your work and quit RepTate.'
-            % (type.__name__, str(value))
-        )
-        app.logger.critical(msg)
-        msg = "Report bug to reptate.rheology@gmail.com: Describe the error, attach logfile and datafiles"
-        app.logger.critical(msg)
-
-    sys.excepthook = my_excepthook
-
     if fileopen and theoryopen:
         app.cmdqueue.append("switch %s.%s.%s" % (appname, dsname, thname))
     elif fileopen:
