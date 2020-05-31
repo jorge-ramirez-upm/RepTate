@@ -62,6 +62,7 @@ from RepTate.core.DraggableArtists import DragType, DraggableSeries, DraggableNo
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 from collections import OrderedDict
 from RepTate.gui.ImportExcelWindow import ImportExcelWindow
+from RepTate.gui.ImportFromPastedWindow import ImportFromPastedWindow
 
 #To recompile the symbol-settings dialog:
 #pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
@@ -454,6 +455,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         menu.addAction(self.actionAddDummyFiles)
         menu.addAction(self.actionAdd_File_With_Function)
         menu.addAction(self.action_import_from_excel)
+        menu.addAction(self.action_import_from_pasted)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         # view all sets / theories
@@ -516,6 +518,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
         connection_id = self.actionAdd_File_With_Function.triggered.connect(self.addFileFunction)
         connection_id = self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
+        connection_id = self.action_import_from_pasted.triggered.connect(self.handle_action_import_from_pasted)
         connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
         connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
@@ -566,6 +569,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # dialog import data from excel
         self.excel_import_gui = None
+        # dialog import pasted data
+        self.pasted_import_gui = None
 
         self.legend_draggable = True
         self.default_legend_labels = True
@@ -1640,6 +1645,30 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             if res_dic["flag_nan"]:
                 QMessageBox.warning(self, 'Open Excel File', 'Some values could not be read from the file and were set to "nan"')
 
+    def handle_action_import_from_pasted(self):
+        for ftype in self.filetypes.values():
+            break
+        if self.pasted_import_gui is None:
+            self.pasted_import_gui = ImportFromPastedWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
+            self.count_pasted_data = 1
+
+        if self.pasted_import_gui.exec_():
+            res_dic = self.pasted_import_gui.get_data()
+            ds = self.DataSettabWidget.currentWidget()
+            if ds is None:
+                self.createNew_Empty_Dataset()
+                ds = self.DataSettabWidget.currentWidget()
+            fname = "pasted_data_%d" % (self.count_pasted_data)
+            fparam = {}
+            for pname in ftype.basic_file_parameters:
+                fparam[pname] = 0
+            fparam.update(res_dic["param_read"])
+            f, success = ds.new_dummy_file(fname=fname + "_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparam, file_type=ftype)
+            if success:
+                self.addTableToCurrentDataSet(f, ftype.extension)
+                self.count_pasted_data += 1
+            if res_dic["flag_nan"]:
+                QMessageBox.warning(self, 'Import From Pasted Data', 'Some values could not be read from the file and were set to "nan"')
 
     def addDummyFiles(self):
         """Add dummy files to dataset"""

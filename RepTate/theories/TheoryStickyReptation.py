@@ -83,6 +83,7 @@ class BaseTheoryStickyReptation:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
+        self.autocalculate = False
         self.parameters["Ge"] = Parameter(
             name="Ge",
             value=10605.97,

@@ -577,6 +577,18 @@
     <string>Create a Dummy File using a mathematical expression</string>
    </property>
   </action>
+  <action name="action_import_from_pasted">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-paste.png</normaloff>:/Images/Images/new_icons/icons8-paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste data</string>
+   </property>
+   <property name="toolTip">
+    <string>Import from pasted data</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="Reptate.qrc"/>
