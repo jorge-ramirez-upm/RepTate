@@ -672,7 +672,8 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
         self.cbTemp.clear()
         for t in a:
             self.cbTemp.addItem(str(t))
-        self.set_param_value("T", float(self.cbTemp.currentText()))
+        if self.cbTemp.count() > 0:
+            self.set_param_value("T", float(self.cbTemp.currentText()))
         self.update_parameter_table()
 
     def do_vertical_shift(self):
