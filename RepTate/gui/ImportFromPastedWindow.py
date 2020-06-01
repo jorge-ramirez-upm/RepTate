@@ -60,15 +60,16 @@ class ImportFromPastedWindow(QMainWindowImportPasted, Ui_ImportPastedMainWindow)
         self.headers = headers
         self.file_param = file_param
         self.num_cols = len(headers)
-        txt = (
-            "Paste TAB or SPACE separated data.<br>The first columns should contain values for <b>%s</b>."
-            % (", ".join(headers))
-        )
+        txt = ""
         if file_param:
             txt += (
-                "<br>Parameters values can be added to the first line as <b>%s=val;</b>"
+                "<br>Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>"
                 % ("=val;".join(file_param))
             )
+        txt += (
+            "The first <b>%d</b> columns should contain values for <b>%s</b>.<br>Paste TAB or SPACE separated data."
+            % (len(headers),", ".join(headers))
+        )
         self.label_columns.setText(txt)
 
     def set_fname_dialog(self, fname):
