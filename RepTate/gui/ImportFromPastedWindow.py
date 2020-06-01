@@ -63,7 +63,7 @@ class ImportFromPastedWindow(QMainWindowImportPasted, Ui_ImportPastedMainWindow)
         txt = ""
         if file_param:
             txt += (
-                "<br>Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>"
+                "Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>"
                 % ("=val;".join(file_param))
             )
         txt += (
