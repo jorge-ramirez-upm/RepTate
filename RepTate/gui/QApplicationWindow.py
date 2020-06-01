@@ -1652,18 +1652,22 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.pasted_import_gui = ImportFromPastedWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
             self.count_pasted_data = 1
 
+        fname = "pasted_data_%d" % (self.count_pasted_data)
+        self.pasted_import_gui.set_fname_dialog(fname)
         if self.pasted_import_gui.exec_():
             res_dic = self.pasted_import_gui.get_data()
+            if res_dic["nrows"] == 0:
+                QMessageBox.warning(self, 'Import From Pasted Data', 'Could not read pasted data')
+                return
             ds = self.DataSettabWidget.currentWidget()
             if ds is None:
                 self.createNew_Empty_Dataset()
                 ds = self.DataSettabWidget.currentWidget()
-            fname = "pasted_data_%d" % (self.count_pasted_data)
             fparam = {}
             for pname in ftype.basic_file_parameters:
                 fparam[pname] = 0
             fparam.update(res_dic["param_read"])
-            f, success = ds.new_dummy_file(fname=fname + "_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparam, file_type=ftype)
+            f, success = ds.new_dummy_file(fname=res_dic["fname"] + "_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], z2val=res_dic["z2"], fparams=fparam, file_type=ftype)
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
                 self.count_pasted_data += 1

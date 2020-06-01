@@ -583,7 +583,7 @@
      <normaloff>:/Images/Images/new_icons/icons8-paste.png</normaloff>:/Images/Images/new_icons/icons8-paste.png</iconset>
    </property>
    <property name="text">
-    <string>Paste data</string>
+    <string>Paste Data</string>
    </property>
    <property name="toolTip">
     <string>Import from pasted data</string>
