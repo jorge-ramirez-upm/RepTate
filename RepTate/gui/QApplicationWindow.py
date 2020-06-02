@@ -1612,7 +1612,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for ftype in self.filetypes.values():
             break
         if self.excel_import_gui is None:
-            self.excel_import_gui = ImportExcelWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
+            self.excel_import_gui = ImportExcelWindow(parent=self, ftype=ftype)
         if self.excel_import_gui.exec_():
             res_dic = self.excel_import_gui.get_data()
             if res_dic["x"] == []:
