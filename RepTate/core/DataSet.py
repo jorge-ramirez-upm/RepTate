@@ -354,7 +354,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
-        self.logger.info('numpy: %s (flag %s)'%(type, flag))
+        self.logger.info("numpy: %s (flag %s)" % (type, flag))
 
     # DATASET STUFF ##########################################################################################################
 
@@ -915,7 +915,14 @@ Arguments:
         return completions
 
     def new_dummy_file(
-        self, fname="", xrange=[], yval=0, zval=[], fparams={}, file_type=None
+        self,
+        fname="",
+        xrange=[],
+        yval=0,
+        zval=None,
+        z2val=None,
+        fparams={},
+        file_type=None,
     ):
         """Create File from xrange and file parameters
         xrange: list of x points
@@ -954,9 +961,16 @@ Arguments:
         else:
             for i in range(1, dt.num_columns):
                 dt.data[:, i] = yval
-        if zval != [] and dt.num_columns > 2:
-            dt.data[:, 2] = zval[:]
-
+        if dt.num_columns > 2:
+            if zval is None:
+                dt.data[:, 2] = np.nan
+            else:
+                dt.data[:, 2] = zval[:]
+        if dt.num_columns > 3:
+            if z2val is None:
+                dt.data[:, 3] = np.nan
+            else:
+                dt.data[:, 3] = z2val[:]
         unique = True
         for file in self.files:
             if (
@@ -1363,4 +1377,3 @@ Basic use:
         print(Fore.RED + "reload_data" + Fore.RESET)
         self.do_help("reload_data")
         print("")
-
