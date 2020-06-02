@@ -79,7 +79,7 @@
            <bool>false</bool>
           </property>
           <property name="placeholderText">
-           <string>Paste data here</string>
+           <string>Paste TAB or SPACE separated data</string>
           </property>
           <property name="openLinks">
            <bool>false</bool>

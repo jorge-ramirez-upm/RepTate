@@ -1649,7 +1649,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for ftype in self.filetypes.values():
             break
         if self.pasted_import_gui is None:
-            self.pasted_import_gui = ImportFromPastedWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
+            self.pasted_import_gui = ImportFromPastedWindow(parent=self, ftype=ftype)
             self.count_pasted_data = 1
 
         fname = "pasted_data_%d" % (self.count_pasted_data)

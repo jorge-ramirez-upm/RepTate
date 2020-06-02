@@ -54,21 +54,26 @@ Ui_ImportPastedMainWindow, QMainWindowImportPasted = loadUiType(
 
 
 class ImportFromPastedWindow(QMainWindowImportPasted, Ui_ImportPastedMainWindow):
-    def __init__(self, parent=None, headers=["w", "G'", "G''"], file_param=["Mw", "T"]):
+    def __init__(self, parent=None, ftype=None):
         super().__init__()
         self.setupUi(self)
-        self.headers = headers
-        self.file_param = file_param
-        self.num_cols = len(headers)
+        self.col_names = ftype.col_names
+        self.col_units = ftype.col_units
+        self.file_param = ftype.basic_file_parameters
+        self.num_cols = len(self.col_names)
         txt = ""
-        if file_param:
+        if self.file_param:
             txt += (
                 "Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>"
-                % ("=val;".join(file_param))
+                % ("=val;".join(self.file_param))
             )
-        txt += (
-            "The first <b>%d</b> columns should contain values for <b>%s</b>.<br>Paste TAB or SPACE separated data."
-            % (len(headers),", ".join(headers))
+        col_labels = [
+            "%s [%s]" % (name, unit)
+            for name, unit in zip(self.col_names, self.col_units)
+        ]
+        txt += "The first <b>%d</b> columns should contain values for:<br><b>%s</b>" % (
+            len(self.col_names),
+            ", ".join(col_labels),
         )
         self.label_columns.setText(txt)
 
