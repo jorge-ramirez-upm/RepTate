@@ -1616,7 +1616,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.excel_import_gui = ImportExcelWindow(parent=self, ftype=ftype)
         if self.excel_import_gui.exec_():
             res_dic = self.excel_import_gui.get_data()
-            if res_dic["x"] == []:
+            if res_dic["error"]:
+                QMessageBox.warning(self, "Import Error", res_dic["errmsg"])
                 return
             params = self.excel_import_gui.file_param_txt.text().split(";")
             fparams = {}

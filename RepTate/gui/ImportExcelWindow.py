@@ -272,7 +272,8 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         y = []
         z = []
         if self.wb == None:
-            return (x, y, z, True)
+            msg = "Could not import data. Select an Excel file first."
+            return {"error": True, "errmsg": msg}
         flag_nan = False
         col1 = self.col2num(self.col1_cb.currentText()) - 1
         col2 = self.col2num(self.col2_cb.currentText()) - 1
@@ -282,11 +283,18 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         if self.is_xlsx:
             sheet = self.wb[sname]
             max_row = sheet.max_row
-            offset = 1
+            max_col = sheet.max_column
         else:
             sheet = self.wb.sheet_by_name(sname)
             max_row = sheet.nrows
-            offset = 0
+            max_col = sheet.ncols
+        
+        if max_col < min(3, self.ncol):
+            # not enough data columns in the spreadsheet tab
+            # min(3, ) as the Excel import is configured for 3 data columns max.  
+            msg = "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)" %(self.ncol, max_col)
+            return {"error": True, "errmsg": msg}
+
         for k in range(self.nskip, max_row):
             # x values
             if self.is_xlsx:
@@ -334,6 +342,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                     z.append(np.nan)
                     flag_nan = True
         res_dic = {
+            "error": False,
             "file": self.selected_file_label.text(),
             "sheet": sname,
             "x": x,
