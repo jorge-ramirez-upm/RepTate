@@ -109,4 +109,7 @@ cd ..\..
 REM INVOKE makensis
 cd ..
 makensis -DREPTATEVERSION=%REPTATEVERSION% -DREPTATEDATE=%REPTATEDATE% -DREPTATEBUILD=%REPTATEBUILD% RepTate.nsi 
+REM Create ZIP (portable package)
+c:\Progra~1\7-zip\7z.exe a RepTate%REPTATEVERSION%_%REPTATEDATE%.zip RepTate
 cd ..
+
