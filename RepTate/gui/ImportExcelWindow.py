@@ -318,7 +318,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 flag_nan = True
 
             if len(self.headers) > 2:
-                # y values
+                # z values
                 if self.is_xlsx:
                     cellz = sheet.cell(row=k + 1, column=col3 + 1)
                 else:

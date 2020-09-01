@@ -62,10 +62,10 @@ Section "RepTate ${REPTATEVERSION}" SectionRepTate
 
 	;Create shortcuts
 	CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\Scripts\RepTate.exe" "" "$INSTDIR\icons\Reptate64.ico"
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk" "$INSTDIR\Scripts\RepTateCL.exe" "" "$INSTDIR\icons\Calculator.ico"
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\MatDB.lnk" "$INSTDIR\Scripts\MatDB.exe" "" "$INSTDIR\icons\DataTable3D.ico"
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\UV.lnk" "$INSTDIR\Scripts\UV.exe" "" "$INSTDIR\icons\UView_Icon.ico"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTate.lnk" "$INSTDIR\pythonw.exe" "-m RepTate" "$INSTDIR\icons\Reptate64.ico"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\RepTateCL.lnk" "$INSTDIR\python.exe" "-m RepTate.CL" "$INSTDIR\icons\Calculator.ico"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\MatDB.lnk" "$INSTDIR\pythonw.exe" "-m RepTate.MatDB" "$INSTDIR\icons\DataTable3D.ico"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\UV.lnk" "$INSTDIR\pythonw.exe" "-m RepTate.UV" "$INSTDIR\icons\UView_Icon.ico"
 	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall RepTate.lnk" "$INSTDIR\Uninstall RepTate.exe"
 
 	!insertmacro MUI_STARTMENU_WRITE_END
