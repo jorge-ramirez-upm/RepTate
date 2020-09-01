@@ -50,6 +50,7 @@ from PyQt5.QtWidgets import (
     QLineEdit,
     QLabel,
     QSizePolicy,
+    QMessageBox,
 )
 from PyQt5.QtGui import QDoubleValidator
 from math import log10
@@ -257,7 +258,10 @@ class BaseApplicationCreep:
 
     def viewiRheo(self, dt, file_parameters):
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
-        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
+        if error_msg is not None:
+            QMessageBox.warning(self, 'Error', error_msg)
+            return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
         sigma = float(file_parameters["stress"])
@@ -299,7 +303,10 @@ class BaseApplicationCreep:
 
     def viewiRheoOver(self, dt, file_parameters):
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
-        data_x, data_y = self.get_xy_data_in_xrange(dt)
+        error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
+        if error_msg is not None:
+            QMessageBox.warning(self, 'Error', error_msg)
+            return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
         sigma = float(file_parameters["stress"])
@@ -350,15 +357,23 @@ class BaseApplicationCreep:
 
     def get_xy_data_in_xrange(self, dt):
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
-        # get indices of data in xrange
-        args = np.where(
-            np.logical_and(
-                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
-            )
-        )
-        x_in_range = dt.data[:, 0][args]
-        y_in_range = dt.data[:, 1][args]
-        return x_in_range, y_in_range
+        success = self.set_xmin()
+        success *= self.set_xmax()
+        success *= self.set_eta()
+        if success:
+            # get indices of data in xrange
+            filtered = np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view)
+            non_zeros = np.count_nonzero(filtered)
+            if non_zeros < 1:
+                # too few data between tmin and tmax
+                return "Too few data points (%d) between t_min and t_max" % non_zeros, None, None
+            args = np.where(filtered)
+            x_in_range = dt.data[:, 0][args]
+            y_in_range = dt.data[:, 1][args]
+            return None, x_in_range, y_in_range
+        else:
+            return "Check values of eta, t_min and t_max ", None, None
+
 
 
 class CLApplicationCreep(BaseApplicationCreep, Application):
@@ -391,6 +406,7 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
     def add_oversampling_widget(self):
         """Add spinbox for the oversampling ratio"""
         self.sb_oversampling = QSpinBox()
+        self.sb_oversampling.setToolTip("Value of the oversampling ratio")
         self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
         self.sb_oversampling.setValue(self.OVER)
         self.sb_oversampling.valueChanged.connect(self.change_oversampling)
@@ -405,8 +421,8 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         hlayout.addStretch()
         # eta
         self.eta_view = QLineEdit("4")
-        self.eta_view.textChanged.connect(self.change_eta)
-        self.eta_view.setValidator(QDoubleValidator())
+        self.eta_view.setToolTip("Value of steady state viscosity")
+        self.eta_view.editingFinished.connect(self.set_eta)
         self.eta_view.setMaximumWidth(35)
         self.eta_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.eta_label = QLabel("<b>log(eta)</b>")
@@ -416,8 +432,8 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         hlayout.addSpacing(5)
         # xmin
         self.xmin_view = QLineEdit("-inf")
-        self.xmin_view.textChanged.connect(self.change_xmin)
-        self.xmin_view.setValidator(QDoubleValidator())
+        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
+        self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
         self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
@@ -427,8 +443,8 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         hlayout.addSpacing(5)
         # xmax
         self.xmax_view = QLineEdit("inf")
-        self.xmax_view.textChanged.connect(self.change_xmax)
-        self.xmax_view.setValidator(QDoubleValidator())
+        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
+        self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
         self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
@@ -442,35 +458,55 @@ class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
         self.hlayout_view = hlayout
         self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
 
-    def change_eta(self, text):
-        """Update the value of eta"""
-        if text in "-np.inf -inf":
+    def set_eta(self):
+        """Update the value of eta. Return success status"""
+        text = self.eta_view.text()
+        if text in ["-np.inf", "-inf"]:
             self.eta = -np.inf
         else:
             try:
                 self.eta = 10 ** float(text)
+                self.eta_view.setStyleSheet("QLineEdit { background: white;}")
+                return True
             except:
-                pass
+                self.eta_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
 
-    def change_xmin(self, text):
-        """Update the value of t_min"""
-        if text in "-np.inf -inf":
+    def set_xmin(self):
+        """Update the value of t_min. Return success status"""
+        text = self.xmin_view.text()
+        if text in ["np.inf", "inf"]:
             self.tmin_view = -np.inf
         else:
             try:
                 self.tmin_view = 10 ** float(text)
+                if self.tmin_view >= self.tmax_view:
+                    self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
+                    return False
+                else:
+                    self.xmin_view.setStyleSheet("QLineEdit { background: white;}")
             except:
-                pass
+                self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
+        return True
 
-    def change_xmax(self, text):
-        """Update the value of t_max"""
-        if text in "np.inf inf":
+    def set_xmax(self):
+        """Update the value of t_max. Return success status"""
+        text = self.xmax_view.text()
+        if text in ["np.inf", "inf"]:
             self.tmax_view = np.inf
         else:
             try:
                 self.tmax_view = 10 ** float(text)
+                if self.tmin_view >= self.tmax_view:
+                    self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
+                    return False
+                else:
+                    self.xmax_view.setStyleSheet("QLineEdit { background: white;}")
             except:
-                pass
+                self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
+        return True
 
     def change_oversampling(self, val):
         """Change the value of the oversampling ratio.

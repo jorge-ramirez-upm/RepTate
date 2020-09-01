@@ -1609,13 +1609,15 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.new_tables_from_files(paths_to_open)
 
     def handle_action_import_from_excel(self):
+        """Import new data from an Excel file"""
         for ftype in self.filetypes.values():
             break
         if self.excel_import_gui is None:
-            self.excel_import_gui = ImportExcelWindow(parent=self, headers=ftype.col_names, file_param=ftype.basic_file_parameters)
+            self.excel_import_gui = ImportExcelWindow(parent=self, ftype=ftype)
         if self.excel_import_gui.exec_():
             res_dic = self.excel_import_gui.get_data()
-            if res_dic["x"] == []:
+            if res_dic["error"]:
+                QMessageBox.warning(self, "Import Error", res_dic["errmsg"])
                 return
             params = self.excel_import_gui.file_param_txt.text().split(";")
             fparams = {}
@@ -1642,10 +1644,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             f, success = ds.new_dummy_file(fname=fname+"_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparams, file_type=ftype)
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
+            ds.set_table_icons(ds.table_icon_list) # update the ds table marker icon
             if res_dic["flag_nan"]:
                 QMessageBox.warning(self, 'Open Excel File', 'Some values could not be read from the file and were set to "nan"')
 
     def handle_action_import_from_pasted(self):
+        """Import data from pasted text"""
         for ftype in self.filetypes.values():
             break
         if self.pasted_import_gui is None:
@@ -1671,6 +1675,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
                 self.count_pasted_data += 1
+            ds.set_table_icons(ds.table_icon_list) # update the ds table marker icon
             if res_dic["flag_nan"]:
                 QMessageBox.warning(self, 'Import From Pasted Data', 'Some values could not be read from the file and were set to "nan"')
 

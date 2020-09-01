@@ -46,8 +46,8 @@ def my_excepthook(type, value, tb):
             address = "reptate.rheology@gmail.com"
             subject = "[RepTate] Something went wrong"
             body = (
-                "Please describe the actions leading to the Error (apps, theories or tools opened).\nDo NOT include confidential information.\n%s\nError Traceback:\n %s"
-                % ("*" * 91 + "\n" * 10 + "*" * 91, tb_msg)
+                "Please describe the actions leading to the Error (apps, theories or tools opened).\nDo NOT include confidential information.\n%s\nRepTate v%s\nError Traceback:\n %s"
+                % ("*" * 91 + "\n" * 10 + "*" * 91, __version__, tb_msg)
             )
             QDesktopServices.openUrl(
                 QUrl(

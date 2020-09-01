@@ -7,3 +7,4 @@ pyreadline>=2.1
 pyqt5>=5.14
 matplotlib>=3.2.1
 scipy>=1.4.1
+colorama>=0.4.3

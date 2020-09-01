@@ -146,7 +146,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
     MAX_ROW = 100
     MAX_COL = len(list_AZ)
 
-    def __init__(self, parent=None, headers=["w", "G'", "G''"], file_param=["Mw", "T"]):
+    def __init__(self, parent=None, ftype=None):
         super().__init__()
         self.setupUi(self)
         # self.show()
@@ -165,10 +165,11 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         self.col2_cb.activated.connect(self.handle_col2_cb_activated)
         self.col3_cb.activated.connect(self.handle_col3_cb_activated)
 
-        self.headers = headers
-        self.ncol = len(self.headers)
-        self.file_param = file_param
-        self.populate_file_param(file_param)
+        self.col_names = ftype.col_names
+        self.col_units = ftype.col_units
+        self.ncol = len(self.col_names)
+        self.file_param = ftype.basic_file_parameters
+        self.populate_file_param(self.file_param)
         self.update_cols_cb()
 
     def handle_col1_cb_activated(self):
@@ -201,14 +202,14 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
     def update_cols_cb(self):
         self.col1_cb.clear()
         self.col2_cb.clear()
-        self.col1.setText("Select Column <b>%s</b>" % self.headers[0])
-        self.col2.setText("Select Column <b>%s</b>" % self.headers[1])
+        self.col1.setText("Select Column <b>%s [%s]</b>" % (self.col_names[0], self.col_units[0]))
+        self.col2.setText("Select Column <b>%s [%s]</b>" % (self.col_names[1], self.col_units[1]))
         self.col1_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.setCurrentIndex(1)
         if self.ncol > 2:
             self.col3_cb.clear()
-            self.col3.setText("Select Column <b>%s</b>" % self.headers[2])
+            self.col3.setText("Select Column <b>%s [%s]</b>" % (self.col_names[2], self.col_units[2]))
             self.col3_cb.addItems(self.list_AZ[: self.max_col])
             self.col3_cb.setCurrentIndex(2)
         else:
@@ -253,13 +254,13 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         nrows = table.rowCount()
         ncols = table.columnCount()
         header_labels = [self.list_AZ[i] for i in range(ncols)]
-        header_labels[col1] = self.headers[0]
-        header_labels[col2] = self.headers[1]
+        header_labels[col1] = self.col_names[0]
+        header_labels[col2] = self.col_names[1]
         indexes = [table.model().index(k, col1) for k in range(self.nskip, nrows)]
         indexes += [table.model().index(k, col2) for k in range(self.nskip, nrows)]
         if self.ncol > 2:
             indexes += [table.model().index(k, col3) for k in range(self.nskip, nrows)]
-            header_labels[col3] = self.headers[2]
+            header_labels[col3] = self.col_names[2]
         table.setHorizontalHeaderLabels(header_labels)
         flag = QItemSelectionModel.Select
         table.selectionModel().clearSelection()
@@ -271,7 +272,8 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         y = []
         z = []
         if self.wb == None:
-            return (x, y, z, True)
+            msg = "Could not import data. Select an Excel file first."
+            return {"error": True, "errmsg": msg}
         flag_nan = False
         col1 = self.col2num(self.col1_cb.currentText()) - 1
         col2 = self.col2num(self.col2_cb.currentText()) - 1
@@ -281,11 +283,18 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         if self.is_xlsx:
             sheet = self.wb[sname]
             max_row = sheet.max_row
-            offset = 1
+            max_col = sheet.max_column
         else:
             sheet = self.wb.sheet_by_name(sname)
             max_row = sheet.nrows
-            offset = 0
+            max_col = sheet.ncols
+        
+        if max_col < min(3, self.ncol):
+            # not enough data columns in the spreadsheet tab
+            # min(3, ) as the Excel import is configured for 3 data columns max.  
+            msg = "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)" %(self.ncol, max_col)
+            return {"error": True, "errmsg": msg}
+
         for k in range(self.nskip, max_row):
             # x values
             if self.is_xlsx:
@@ -317,7 +326,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 y.append(np.nan)
                 flag_nan = True
 
-            if len(self.headers) > 2:
+            if len(self.col_names) > 2:
                 # z values
                 if self.is_xlsx:
                     cellz = sheet.cell(row=k + 1, column=col3 + 1)
@@ -333,6 +342,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                     z.append(np.nan)
                     flag_nan = True
         res_dic = {
+            "error": False,
             "file": self.selected_file_label.text(),
             "sheet": sname,
             "x": x,
@@ -342,7 +352,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             "col1": self.col1_cb.currentText(),
             "col2": self.col2_cb.currentText(),
         }
-        if len(self.headers) > 2:
+        if len(self.col_names) > 2:
             res_dic["col3"] = self.col3_cb.currentText()
         return res_dic
 
