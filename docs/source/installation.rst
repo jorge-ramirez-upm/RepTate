@@ -142,6 +142,35 @@ For example, something like::
 
 tells you that you need to install the ``openpyxl`` package. Note that, in other Python distributions, the standard command to install packages is ``pip``. 
 
+Incompatibility with other Python packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some users have reported incompatibility between RepTate and other popular packages, such as Spyder. In that case, we recommend to create a separate Python environment to run RepTate. In miniconda, this can be achieved by following the instructions below:
+
+#. Create a Python environnement. In the Anaconda prompt::
+
+	conda create --name Env_Reptate
+
+#. Connection to the environnement::
+
+	conda activate Env_Reptate
+
+#. Install pip::
+
+	conda install pip
+
+#. Install Reptate::
+
+	pip install RepTate
+
+#. Launch Reptate::
+
+	python -m RepTate
+
+#. In this environnement, if Spyder is no longer working we can launch it from the basis environnemet or windows cmd::
+
+	conda deactivate
+	spyder
 
 Install Git
 ~~~~~~~~~~~
