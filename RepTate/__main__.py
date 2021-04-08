@@ -154,6 +154,11 @@ def start_RepTate(argv):
     app = QApplication(sys.argv)
     app.setApplicationName("RepTate")
 
+    if args.dpi and sys.platform == "win32":
+        import matplotlib
+        #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = int (np.round(app.desktop().physicalDpiX()/10))
+        matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = 34
+
     splash = SplashScreen()
     splash.show()
 
