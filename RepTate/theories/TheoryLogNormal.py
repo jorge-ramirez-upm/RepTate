@@ -44,7 +44,7 @@ class TheoryLogNormal(CmdBase):
     
     * **Function**
         .. math::
-            W(M) = W_0 \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\frac{1}{M} \\exp\\left[ - \\frac{\\left(\\ln{M}-\\ln{M_0}\\right)^2}{2\\sigma^2} \\right]
+            W(M) = W_0 \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\left[ - \\frac{\\left(\\ln{M}-(\\ln{M_0} + \\sigma^2)\\right)^2}{2\\sigma^2} \\right]
     
     * **Parameters**
        - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
@@ -117,13 +117,8 @@ class BaseTheoryLogNormal:
 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        tt.data[:, 1] = (
-            W0
-            / sigma
-            / np.sqrt(2 * np.pi)
-            / tt.data[:, 0]
-            * np.exp(-((np.log(tt.data[:, 0]) - np.log(M0)) ** 2) / 2 / sigma ** 2)
-        )
+        # tt.data[:, 1] = (W0/ sigma/ np.sqrt(2 * np.pi)/ tt.data[:, 0]* np.exp(-((np.log(tt.data[:, 0]) - np.log(M0)) ** 2) / 2 / sigma ** 2))
+        tt.data[:, 1] = W0 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-((np.log(tt.data[:, 0]) - (np.log(M0) + sigma**2)) ** 2) / 2 / sigma ** 2)
 
     def do_error(self, line):
         """Report the error of the current theory
