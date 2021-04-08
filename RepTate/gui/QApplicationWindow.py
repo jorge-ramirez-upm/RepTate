@@ -41,6 +41,7 @@ import os
 import re
 import traceback
 from numpy import *
+from numpy.random import *
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
@@ -1767,7 +1768,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             if success:
                 cols = ftype.col_names
                 self.safe_dict={}
-                safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt']
+                safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt', 'rand', 'size']
                 for k in safe_list:
                     self.safe_dict[k] = globals().get(k, None)
                 self.safe_dict['x']=xrange

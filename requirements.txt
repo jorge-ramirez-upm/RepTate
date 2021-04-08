@@ -1,3 +1,4 @@
+# GIT needs to be installed for development purposes
 colorama
 matplotlib>=3.2.1
 openpyxl
