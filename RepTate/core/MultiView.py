@@ -135,7 +135,7 @@ class MultiView(QWidget):
             "ytick.minor.size": 3,
             "axes.grid": False,
             "axes.axisbelow": True,
-            "image.cmap": "rocket",
+            "image.cmap": "coolwarm",
             "font.family": ["sans-serif"],
             "font.sans-serif": [
                 "Arial",
