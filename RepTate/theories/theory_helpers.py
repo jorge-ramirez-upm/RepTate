@@ -515,7 +515,6 @@ class Dilution:
                     Zeff[j] = 1.0
                 break
             taud[i] = taud[i] * self.parent_theory.fZ(z * vphi[i])
-            taus[i] = taus[i] / vphi[i]
             Zeff[i] = z * vphi[i]
         self.parent_theory.Zeff = np.array(Zeff)
 
