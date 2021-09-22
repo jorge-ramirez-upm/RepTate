@@ -2487,7 +2487,7 @@ File error is calculated as the mean square of the residual, averaged over all p
 
             yth2=np.copy(yexp)
             for i in range(xexp.shape[1]):
-                fint = interp1d(xth[:,i],yth[:,i],'cubic') # Get the theory at the same points as the data
+                fint = interp1d(xth[:,i],yth[:,i],'cubic', bounds_error=False, fill_value="extrapolate") # Get the theory at the same points as the data
                 yth2[:,i] = np.copy(fint(xexp[:,i]))
             xth = np.copy(xexp)
             yth = np.copy(yth2)
