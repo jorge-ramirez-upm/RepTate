@@ -47,7 +47,7 @@ class TheoryGEX(CmdBase):
     
     * **Function**
         .. math::
-            W(M) = W_0 \\frac{b}{M_0 \\Gamma\\left(\\frac{a}{b}\\right)} \\left(\\frac{M}{M_0}\\right)^{a-1} \\exp\\left[ -\\left(\\frac{M}{M_0}\\right)^b \\right]
+            W(M) = W_0 \\frac{b}{M_0 \\Gamma\\left(\\frac{a+1}{b}\\right)} \\left(\\frac{M}{M_0}\\right)^{a} \\exp\\left[ -\\left(\\frac{M}{M_0}\\right)^b \\right]
     
     * **Parameters**
        - ``logW0`` :math:`\\equiv\\log_{10}(W_0)`: Normalization constant.
