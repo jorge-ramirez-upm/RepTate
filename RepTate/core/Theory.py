@@ -727,7 +727,7 @@ This routine works when the theory and the experimental data are not measured on
                     x = np.append(x, xcond)
                     y = np.append(y, ycond)
 
-        # 2. Create the array of theory parameters that will be chenged during the fitting (checked parameters)
+        # 2. Create the array of theory parameters that will be changed during the fitting (checked parameters)
         #    It also creates the arrays with the upper and lower bounds for parameters
         initial_guess = [] # Take the initial guess for the fit from the current value of the parameter
         self.param_min = []     # list of min values for fitting parameters
