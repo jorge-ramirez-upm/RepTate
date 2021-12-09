@@ -188,7 +188,7 @@ class BaseApplicationNLVE:
             "Shear flow files",
             ["t", "sigma_xy"],
             ["gdot", "T"],
-            ["s", "Pa$\cdot$s"],
+            ["s", "Pa"],
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
@@ -197,7 +197,7 @@ class BaseApplicationNLVE:
             "Elongation flow files",
             ["t", "N1"],
             ["gdot", "T"],
-            ["s", "Pa$\cdot$s"],
+            ["s", "Pa"],
         )
         self.filetypes[ftype.extension] = ftype
 
