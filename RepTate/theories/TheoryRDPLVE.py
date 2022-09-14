@@ -50,7 +50,7 @@ from RepTate.theories.theory_helpers import (
     GcorrMode,
     GetMwdRepTate,
     EditMWDDialog,
-    EditModesDialog,
+    EditModesVolFractionsDialog,
 )
 
 
