@@ -420,7 +420,7 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
         param_dic = OrderedDict()
         param_dic["phi"] = phi
         param_dic["tauD"] = taud
-        d = EditModesDialog(self, param_dic, self.MAX_MODES)
+        d = EditModesVolFractionsDialog(self, param_dic, self.MAX_MODES)
         if d.exec_():
             nmodes = d.table.rowCount()
             self.set_param_value("nmodes", nmodes)
