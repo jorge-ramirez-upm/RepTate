@@ -362,8 +362,8 @@ class BaseTheoryPomPom:
                 ) / (1 + flow_rate * tauB)
 
                 k = np.ones(len(t))
-                k[Axx_arr < 1e240] = (Axx_arr - Ayy_arr) / (
-                    Axx_arr + 2 * Ayy_arr
+                k[Axx_arr < 1e240] = (Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]) / (
+                    Axx_arr[Axx_arr < 1e240] + 2 * Ayy_arr[Axx_arr < 1e240]
                 )  # k=1 if Axx > 1e240
 
                 tt.data[:, 1] += 3 * G * l * l * k
