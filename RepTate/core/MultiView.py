@@ -86,6 +86,7 @@ class PlotOrganizationType(enum.Enum):
 
 class MultiView(QWidget):
     """Object that contains several matplotlib charts"""
+
     LEFT = 0.15
     RIGHT = 0.98
     BOTTOM = 0.15
@@ -93,7 +94,7 @@ class MultiView(QWidget):
     WSPACE = 0.25
     HSPACE = 0.35
     SAVE_DPI = 300
-    FIG_DPI = plt.matplotlib.rcParams['figure.dpi']
+    FIG_DPI = plt.matplotlib.rcParams["figure.dpi"]
 
     def __init__(
         self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None
@@ -330,16 +331,16 @@ class MultiView(QWidget):
                 if i == tab_to_maxi:  # hide other plots
                     self.axarr[i].set_visible(True)
                     self.axarr[i].set_position(self.bboxmax)
-                    try:
-                        plt.subplot(self.axarr[i])
-                    except:
-                        pass
+                    # try:
+                    #     plt.subplot(self.axarr[i])
+                    # except:
+                    #     pass
                 else:
                     self.axarr[i].set_visible(False)
-                    try:
-                        plt.delaxes(self.axarr[i])
-                    except:
-                        pass
+                    # try:
+                    #     plt.delaxes(self.axarr[i])
+                    # except:
+                    #     pass
         self.parent_application.update_datacursor_artists()
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)
