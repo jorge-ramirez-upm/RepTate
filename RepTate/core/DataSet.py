@@ -754,7 +754,7 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                         else:
                             tt.series[nx][i].set_visible(False)
                             tt.series[nx][i].set_label("")
-        self.parent_application.update_datacursor_artists()
+        # self.parent_application.update_datacursor_artists()
         self.parent_application.update_plot()
 
     def do_sort(self, line):
