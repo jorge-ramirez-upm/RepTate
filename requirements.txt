@@ -4,7 +4,7 @@ matplotlib>=3.2.1
 openpyxl
 pyreadline3;platform_system=='Windows'
 readline;platform_system=='Linux'
-PyQt5
+PySide6
 scipy
 xlrd
 psutil

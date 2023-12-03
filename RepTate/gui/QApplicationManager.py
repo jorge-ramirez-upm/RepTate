@@ -40,10 +40,10 @@ ApplicationManager.
 import sys
 import os
 from os.path import dirname, join, abspath, join, isfile, basename
-from PyQt5.uic import loadUiType
-from PyQt5.QtGui import QIcon, QDesktopServices, QTextCursor
-from PyQt5.QtCore import QUrl, Qt, QSize
-from PyQt5.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
+from PySide6.QtUiTools  import loadUiType
+from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
+from PySide6.QtCore import QUrl, Qt, QSize
+from PySide6.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
 
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CmdMode, CalcMode
@@ -107,7 +107,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionTTS)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionTTSFactors)
         tbut.setMenu(menu)
         self.toolBarApps.addWidget(tbut)
@@ -130,7 +130,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionShow_reptate_help)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionShow_app_help)
         menu.addAction(self.actionShow_th_help)
         menu.addAction(self.actionShow_offline_help)
@@ -144,7 +144,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionAbout)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionAbout_Qt)
         menu.addAction(self.actionAboutMatplotlib)
         menu.addAction(self.actionAboutNumpy)
@@ -226,7 +226,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
         self.tbutlog = QToolButton()
         self.tbutlog.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionLogNotSet)
         menu.addAction(self.actionLogDebug)
         menu.addAction(self.actionLogInfo)

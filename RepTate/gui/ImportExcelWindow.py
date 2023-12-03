@@ -36,9 +36,9 @@
 import sys
 import os
 import numpy as np
-from PyQt5.uic import loadUiType
-from PyQt5.QtCore import Qt, QItemSelectionModel
-from PyQt5.QtWidgets import (
+from PySide6.QtUiTools  import loadUiType
+from PySide6.QtCore import Qt, QItemSelectionModel
+from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QTableWidgetItem,
@@ -464,4 +464,4 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     GUI = Window()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

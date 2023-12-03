@@ -45,10 +45,10 @@ import time
 
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
-from PyQt5.QtWidgets import QApplication, QToolBar, QToolButton, QMenu
-from PyQt5.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
-from PyQt5.QtGui import QDesktopServices, QIcon
-from PyQt5.QtCore import QUrl, pyqtSignal, QSize
+from PySide6.QtWidgets import QApplication, QToolBar, QToolButton, QMenu
+from PySide6.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
+from PySide6.QtGui import QDesktopServices, QIcon
+from PySide6.QtCore import QUrl, Signal, QSize
 from RepTate.theories.theory_helpers import FlowMode
 from RepTate.gui import bob_LVE
 
@@ -80,7 +80,7 @@ class BaseTheoryBobNLVE:
     citations = TheoryBobNLVE.citations
     doi = TheoryBobNLVE.doi 
 
-    signal_param_dialog = pyqtSignal(object)
+    signal_param_dialog = Signal(object)
 
     def __init__(self, name='ThBobLVE', parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -199,7 +199,7 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
 
         self.tbutflow = QToolButton()
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         self.shear_flow_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
         self.extensional_flow_action = menu.addAction(
@@ -337,7 +337,7 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
 
     def launch_param_dialog(self):
         """Show a dialog to get the filename of the polymer configuration.
-        This function is called via a pyqtSignal for multithread compatibility"""
+        This function is called via a Signal for multithread compatibility"""
         if not self.dialog.exec_():
             self.success_dialog = False
             return

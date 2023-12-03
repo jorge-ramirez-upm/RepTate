@@ -2,11 +2,11 @@
 
 # Form implementation generated from reading ui file 'gui/bob_gen_poly.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PySide6 UI code generator 5.10
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -68,14 +68,14 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
         self.m0 = QtWidgets.QLineEdit(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.m0.setFont(font)
         self.m0.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.m0.setObjectName("m0")
@@ -83,14 +83,14 @@ class Ui_Dialog(object):
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_4)
         self.ne = QtWidgets.QLineEdit(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.ne.setFont(font)
         self.ne.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.ne.setObjectName("ne")
@@ -112,7 +112,7 @@ class Ui_Dialog(object):
         self.ratio = QtWidgets.QLineEdit(self.groupBox_3)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.ratio.setFont(font)
         self.ratio.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.ratio.setObjectName("ratio")
@@ -123,7 +123,7 @@ class Ui_Dialog(object):
         self.cb_type = QtWidgets.QComboBox(self.groupBox_3)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.cb_type.setFont(font)
         self.cb_type.setObjectName("cb_type")
         self.component.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.cb_type)
@@ -134,7 +134,7 @@ class Ui_Dialog(object):
         self.number = QtWidgets.QLineEdit(self.groupBox_3)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.number.setFont(font)
         self.number.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.number.setObjectName("number")
@@ -162,7 +162,7 @@ class Ui_Dialog(object):
         self.polymer_tab = QtWidgets.QTabWidget(self.groupBox)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.polymer_tab.setFont(font)
         self.polymer_tab.setUsesScrollButtons(True)
         self.polymer_tab.setTabsClosable(True)
@@ -182,7 +182,7 @@ class Ui_Dialog(object):
         self.label_6 = QtWidgets.QLabel(self.Memory)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label_6.setFont(font)
         self.label_6.setWordWrap(False)
         self.label_6.setObjectName("label_6")
@@ -190,7 +190,7 @@ class Ui_Dialog(object):
         self.n_polymers = QtWidgets.QLineEdit(self.Memory)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.n_polymers.setFont(font)
         self.n_polymers.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.n_polymers.setObjectName("n_polymers")
@@ -198,7 +198,7 @@ class Ui_Dialog(object):
         self.label_7 = QtWidgets.QLabel(self.Memory)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label_7.setFont(font)
         self.label_7.setWordWrap(False)
         self.label_7.setObjectName("label_7")
@@ -206,7 +206,7 @@ class Ui_Dialog(object):
         self.n_segments = QtWidgets.QLineEdit(self.Memory)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.n_segments.setFont(font)
         self.n_segments.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.n_segments.setObjectName("n_segments")

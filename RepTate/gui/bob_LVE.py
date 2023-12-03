@@ -2,11 +2,11 @@
 
 # Form implementation generated from reading ui file 'gui/bob_LVE.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PySide6 UI code generator 5.10
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -85,14 +85,14 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label)
         self.m0 = QtWidgets.QLineEdit(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.m0.setFont(font)
         self.m0.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.m0.setObjectName("m0")
@@ -100,14 +100,14 @@ class Ui_Dialog(object):
         self.label_4 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_4)
         self.ne = QtWidgets.QLineEdit(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(False)
-        font.setWeight(50)
+        font.setWeight(QtGui.QFont.Weight.Normal)
         self.ne.setFont(font)
         self.ne.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.ne.setObjectName("ne")

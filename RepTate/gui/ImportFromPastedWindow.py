@@ -37,8 +37,8 @@ import sys
 import os
 import io
 import numpy as np
-from PyQt5.uic import loadUiType
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtUiTools  import loadUiType
+from PySide6.QtWidgets import QApplication
 import RepTate
 
 if getattr(sys, "frozen", False):
@@ -146,4 +146,4 @@ class ImportFromPastedWindow(QMainWindowImportPasted, Ui_ImportPastedMainWindow)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

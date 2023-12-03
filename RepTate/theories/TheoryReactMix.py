@@ -40,7 +40,7 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtCore import pyqtSignal
+from PySide6.QtCore import Signal
 
 import ctypes as ct
 import RepTate.theories.react_ctypes_helper as rch
@@ -77,7 +77,7 @@ class BaseTheoryReactMix:
     citations = TheoryReactMix.citations
     doi = TheoryReactMix.doi
 
-    signal_mix_dialog = pyqtSignal(object)
+    signal_mix_dialog = Signal(object)
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""

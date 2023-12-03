@@ -42,7 +42,7 @@ import logging
 import logging.handlers
 from pathlib import Path
 import os
-from PyQt5.QtCore import QStandardPaths
+from PySide6.QtCore import QStandardPaths
 
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.applications.ApplicationTTS import ApplicationTTS

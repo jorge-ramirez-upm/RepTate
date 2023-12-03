@@ -6,7 +6,7 @@ RepTate Rheology Software
 -------------------------
 
 - Dual user interface: 
-    - Graphical User Interface (GUI), using PyQt5
+    - Graphical User Interface (GUI), using PySide6
     - Command Line Interface (CL) for batch processing   
 - Works on Windows, Linux and Mac
 - Free and open source

@@ -44,9 +44,9 @@ from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
+from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 from scipy.optimize import nnls, minimize, least_squares
 from scipy.interpolate import interp1d
 from scipy.integrate import cumtrapz, quad
@@ -1266,7 +1266,7 @@ class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequ
 
         self.tbutpredmode = QToolButton()
         self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         self.cont_pred_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
             "Fit from Spectrum")
@@ -2571,7 +2571,7 @@ class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QThe
 
         self.tbutpredmode = QToolButton()
         self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         self.cont_pred_action = menu.addAction(
             QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
             "Fit from Spectrum")

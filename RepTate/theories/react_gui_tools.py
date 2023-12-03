@@ -38,7 +38,7 @@ import RepTate
 import RepTate.theories.react_ctypes_helper as rch
 
 # BoB form
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog,
     QToolBar,
     QVBoxLayout,
@@ -59,8 +59,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QFrame,
 )
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QIcon
-from PyQt5.QtCore import QSize, Qt
+from PySide6.QtGui import QIntValidator, QDoubleValidator, QIcon
+from PySide6.QtCore import QSize, Qt
 import psutil
 
 if sys.platform == "darwin" or sys.platform == "linux":

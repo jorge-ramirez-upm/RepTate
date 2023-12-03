@@ -33,9 +33,9 @@ def my_excepthook(type, value, tb):
     )
     l = logging.getLogger("RepTate")
     if CmdBase.mode == CmdMode.GUI:
-        from PyQt5.QtWidgets import QMessageBox
-        from PyQt5.QtGui import QDesktopServices
-        from PyQt5.QtCore import QUrl
+        from PySide6.QtWidgets import QMessageBox
+        from PySide6.QtGui import QDesktopServices
+        from PySide6.QtCore import QUrl
         # l = logging.getLogger("RepTate")
         l.error(tb_msg)
         msg += "\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?"

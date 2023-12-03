@@ -46,9 +46,9 @@ from RepTate.theories.TheoryBasic import *
 from RepTate.core.Tool import *
 
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QImage, QColor
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QImage, QColor
+from PySide6.QtCore import Qt
 
 from collections import OrderedDict
 from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials, TheoryAlgebraicExpression

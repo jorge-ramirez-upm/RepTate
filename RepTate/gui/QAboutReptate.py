@@ -37,8 +37,8 @@ Module that defines the About window.
 """
 import sys
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import QDialog
-from PyQt5.uic import loadUiType
+from PySide6.QtWidgets import QDialog
+from PySide6.QtUiTools  import loadUiType
 
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the PyInstaller bootloader

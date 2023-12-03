@@ -35,7 +35,7 @@
 Module that defines the a DataSetWidgetItem that allows to sort items in the DataSet
 
 """
-from PyQt5.QtWidgets import QTreeWidgetItem
+from PySide6.QtWidgets import QTreeWidgetItem
 
 
 class DataSetWidgetItem(QTreeWidgetItem):

@@ -35,12 +35,12 @@
 Module that defines the GUI counterpart of the class Tool.
 
 """
-# from PyQt5.QtCore import *
+# from PySide6.QtCore import *
 import sys
-from PyQt5.uic import loadUiType
+from PySide6.QtUiTools  import loadUiType
 from RepTate.core.Tool import Tool
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget,
     QTreeWidget,
     QTreeWidgetItem,
@@ -49,8 +49,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QToolBar,
 )
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QIcon, QCursor
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QIcon, QCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
 
@@ -70,7 +70,9 @@ class QTool(Ui_ToolTab, QWidget, Tool):
 
     def __init__(self, name="QTool", parent_app=None):
         """**Constructor**"""
-        super().__init__(name=name, parent_app=parent_app)
+        QWidget.__init__(self)
+        Tool.__init__(self, name=name, parent_app=parent_app)
+        #super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
 
         self.tb = QToolBar()

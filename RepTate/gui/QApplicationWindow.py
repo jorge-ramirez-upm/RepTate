@@ -45,13 +45,13 @@ from numpy.random import *
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 #import logging
-from PyQt5.QtGui import QIcon, QColor, QCursor, QStandardItem, QIntValidator, QDoubleValidator
-from PyQt5.uic import loadUiType
+from PySide6.QtGui import QIcon, QColor, QCursor, QStandardItem, QIntValidator, QDoubleValidator
+from PySide6.QtUiTools  import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGroupBox, QFormLayout, QLineEdit, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QTableWidgetItem, QRadioButton
+from PySide6 import QtCore
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QGroupBox, QFormLayout, QLineEdit, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QTableWidgetItem, QRadioButton
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
 from RepTate.core.DataTable import DataTable
@@ -429,7 +429,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         vblayout2.addWidget(tb)
         self.TooltabWidget = QTabWidget()
         self.TooltabWidget.setTabsClosable(True)
-        self.TooltabWidget.setTabShape(1)
+        self.TooltabWidget.setTabShape(QTabWidget.TabShape.Triangular)
         self.TooltabWidget.setMovable(1)
         self.qtabbar = self.TooltabWidget.tabBar()
         vblayout2.addWidget(self.TooltabWidget)
@@ -450,9 +450,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         #tb.addAction(self.actionNew_Dataset_From_File)
         tbut = QToolButton()
-        tbut.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         tbut.setDefaultAction(self.actionNew_Dataset_From_File)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionAddDummyFiles)
         menu.addAction(self.actionAdd_File_With_Function)
         menu.addAction(self.action_import_from_excel)
@@ -461,9 +461,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addWidget(tbut)
         # view all sets / theories
         tbut2 = QToolButton()
-        tbut2.setPopupMode(QToolButton.MenuButtonPopup)
+        tbut2.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         tbut2.setDefaultAction(self.actionView_All_Sets)
-        menu2 = QMenu()
+        menu2 = QMenu(self)
         menu2.addAction(self.actionView_All_SetTheories)
         tbut2.setMenu(menu2)
         tb.addWidget(tbut2)
@@ -1554,7 +1554,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
         newitem = DataSetWidgetItem(ds.DataSettreeWidget, lnew)
-        newitem.setCheckState(0, 2)
+        #newitem.setCheckState(0, 2)
+        newitem.setCheckState(0, Qt.CheckState.Checked)
         self.dataset_actions_disabled(False) #activate buttons
 
     def handle_createNew_Empty_Dataset(self):

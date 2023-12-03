@@ -42,8 +42,8 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from PyQt5.QtWidgets import QToolBar, QSpinBox, QComboBox
-from PyQt5.QtCore import QSize
+from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
+from PySide6.QtCore import QSize
 
 """
              _                             _       _ 

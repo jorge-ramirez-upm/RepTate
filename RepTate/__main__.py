@@ -47,9 +47,9 @@ from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 
 # from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
-from PyQt5.QtWidgets import QApplication, QMessageBox
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtCore import QUrl, Qt, QCoreApplication
+from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtGui import QDesktopServices
+from PySide6.QtCore import QUrl, Qt, QCoreApplication
 from RepTate.gui.SplashScreen import SplashScreen
 
 # from time import time, sleep
@@ -143,7 +143,7 @@ def start_RepTate(argv):
         loglevel = logging.INFO
 
     QApplication.setStyle("Fusion")  # comment that line for a native look
-    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+    # for a list of available styles: "from PySide6.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
     if args.dpi or sys.platform == "darwin":
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
@@ -223,7 +223,7 @@ def start_RepTate(argv):
         CmdBase.calcmode = CalcMode.multithread
 
     ex.showMaximized()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

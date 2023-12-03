@@ -45,9 +45,9 @@ from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 from RepTate.applications.ApplicationCreep import ApplicationCreep
-from PyQt5.QtWidgets import QApplication, QMessageBox, QShortcut
-from PyQt5.QtGui import QDesktopServices, QIcon, QKeySequence
-from PyQt5.QtCore import QUrl, Qt, QCoreApplication
+from PySide6.QtWidgets import QApplication, QMessageBox, QShortcut
+from PySide6.QtGui import QDesktopServices, QIcon, QKeySequence
+from PySide6.QtCore import QUrl, Qt, QCoreApplication
 
 
 def main():
@@ -86,7 +86,7 @@ def start_MatDB(argv):
         loglevel = logging.INFO
 
     QApplication.setStyle("Fusion")  # comment that line for a native look
-    # for a list of available styles: "from PyQt5.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
+    # for a list of available styles: "from PySide6.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
     if args.dpi:
         os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
@@ -112,7 +112,7 @@ def start_MatDB(argv):
     CmdBase.calcmode = CalcMode.singlethread
 
     ex.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

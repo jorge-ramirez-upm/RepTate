@@ -40,8 +40,8 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QApplication
 
 import ctypes as ct
 import RepTate.theories.react_ctypes_helper as rch
@@ -76,10 +76,10 @@ class BaseTheoryMultiMetCSTR:
     citations = TheoryMultiMetCSTR.citations
     doi = TheoryMultiMetCSTR.doi
 
-    signal_request_dist = pyqtSignal(object)
-    signal_request_polymer = pyqtSignal(object)
-    signal_request_arm = pyqtSignal(object)
-    signal_mulmet_dialog = pyqtSignal(object)
+    signal_request_dist = Signal(object)
+    signal_request_polymer = Signal(object)
+    signal_request_arm = Signal(object)
+    signal_mulmet_dialog = Signal(object)
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""

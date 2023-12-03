@@ -43,7 +43,7 @@ from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.DataTable import DataTable
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QToolBar,
     QToolButton,
     QMenu,
@@ -51,9 +51,9 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QFileDialog,
 )
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from math import sqrt
 import RepTate
@@ -589,7 +589,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
         if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
             self.tbutflow = QToolButton()
             self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-            menu = QMenu()
+            menu = QMenu(self)
             self.shear_flow_action = menu.addAction(
                 QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
             )
@@ -613,7 +613,7 @@ class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):
 
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         self.get_modes_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
         )

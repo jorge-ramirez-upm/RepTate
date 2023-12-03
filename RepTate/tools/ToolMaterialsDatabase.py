@@ -41,12 +41,11 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QComboBox,
     QLabel,
     QToolBar,
     QLineEdit,
-    QAction,
     QMessageBox,
     QDialog,
     QDialogButtonBox,
@@ -56,8 +55,8 @@ from PyQt5.QtWidgets import (
     QInputDialog,
     QTreeWidgetItemIterator
 )
-from PyQt5.QtCore import QSize, QStandardPaths
-from PyQt5.QtGui import QStandardItem, QFont, QIcon, QColor, QDoubleValidator
+from PySide6.QtCore import QSize, QStandardPaths
+from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
 from pathlib import Path
 import RepTate.tools.polymer_data as polymer_data
 from colorama import Fore

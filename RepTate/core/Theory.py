@@ -47,9 +47,9 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import ParameterType, OptType
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox
+from PySide6.QtGui import QTextCursor
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QMessageBox
 
 from collections import OrderedDict
 from math import log
@@ -132,7 +132,7 @@ class Theory(CmdBase):
     """ nfev {int} -- Number of function evaluations """
     doc_header = 'Theory commands (type help <topic>):'
 
-    print_signal = pyqtSignal(str)
+    print_signal = Signal(str)
 
     def __init__(self, name="Theory", parent_dataset=None, axarr=None):
         """

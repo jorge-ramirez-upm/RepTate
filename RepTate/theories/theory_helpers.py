@@ -37,7 +37,7 @@ Module that contains classes that are used in several theories
 """
 import enum
 import numpy as np
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QSpinBox,
     QDialog,
     QVBoxLayout,
@@ -50,8 +50,8 @@ from PyQt5.QtWidgets import (
     QButtonGroup,
     QRadioButton,
 )
-from PyQt5.QtGui import QDoubleValidator
-from PyQt5.QtCore import Qt
+from PySide6.QtGui import QDoubleValidator
+from PySide6.QtCore import Qt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 
 """

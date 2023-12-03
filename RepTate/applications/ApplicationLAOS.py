@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
-from PyQt5.QtWidgets import QSpinBox
+from PySide6.QtWidgets import QSpinBox
 
 
 class ApplicationLAOS(CmdBase):

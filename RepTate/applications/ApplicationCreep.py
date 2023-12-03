@@ -43,7 +43,7 @@ from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
 
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QSpinBox,
     QPushButton,
     QHBoxLayout,
@@ -52,7 +52,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
     QMessageBox,
 )
-from PyQt5.QtGui import QDoubleValidator
+from PySide6.QtGui import QDoubleValidator
 from math import log10
 
 

@@ -39,9 +39,9 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtWidgets import QToolBar
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
+from PySide6.QtWidgets import QToolBar
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 
 
 class TheoryDebye(CmdBase):

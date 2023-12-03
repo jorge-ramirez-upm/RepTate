@@ -37,12 +37,12 @@ Module that defines the GUI counterpart of the class Theory.
 """
 import sys
 import os
-from PyQt5.uic import loadUiType
+from PySide6.QtUiTools  import loadUiType
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.Theory import Theory, ErrorCalculationMethod
 from os.path import dirname, join, abspath
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget,
     QTabWidget,
     QTreeWidgetItem,
@@ -60,8 +60,8 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QApplication,
 )
-from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QCursor
+from PySide6.QtCore import Qt, QObject, QThread, Signal
+from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
 import RepTate
@@ -167,7 +167,7 @@ class EditThParametersDialog(QDialog):
 
 
 class CalculationThread(QObject):
-    sig_done = pyqtSignal()
+    sig_done = Signal()
 
     def __init__(self, fthread, *args):
         super().__init__()
@@ -211,7 +211,9 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
         """**Constructor**"""
-        super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
+        QWidget.__init__(self)
+        Theory.__init__(self, name=name, parent_dataset=parent_dataset, axarr=axarr)
+        #super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
 
         # build the therory widget

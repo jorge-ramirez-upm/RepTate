@@ -41,17 +41,17 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
-from PyQt5.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from math import sqrt, exp, pow
 import time
 from RepTate.core.Theory import EndComputationRequested
 import RepTate.theories.sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
-from PyQt5.QtCore import pyqtSignal
+from PySide6.QtCore import Signal
 from RepTate.theories.theory_helpers import FlowMode
 
 
@@ -89,7 +89,7 @@ class BaseTheorySCCR:
     citations = TheorySCCR.citations
     doi = TheorySCCR.doi
 
-    signal_get_MW = pyqtSignal(object)
+    signal_get_MW = Signal(object)
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -471,7 +471,7 @@ class GUITheorySCCR(BaseTheorySCCR, QTheory):
 
         self.tbutflow = QToolButton()
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu()
+        menu = QMenu(self)
         self.shear_flow_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
         )

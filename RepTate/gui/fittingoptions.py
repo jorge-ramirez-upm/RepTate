@@ -2,12 +2,12 @@
 
 # Form implementation generated from reading ui file 'RepTate/gui/fittingoptions.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.2
+# Created by: PySide6 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
@@ -26,7 +26,7 @@ class Ui_Dialog(object):
         self.tabWidget.setStyleSheet("")
         self.tabWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.North)
-        self.tabWidget.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.tabWidget.setTabShape(QtWidgets.QTabWidget.TabShape.Triangular)
         self.tabWidget.setUsesScrollButtons(True)
         self.tabWidget.setDocumentMode(False)
         self.tabWidget.setTabsClosable(False)
@@ -50,7 +50,7 @@ class Ui_Dialog(object):
         self.label_5 = QtWidgets.QLabel(self.groupBox)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
@@ -215,7 +215,7 @@ class Ui_Dialog(object):
         self.label_7 = QtWidgets.QLabel(self.groupBox_8)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.verticalLayout_7.addWidget(self.label_7)
@@ -318,7 +318,7 @@ class Ui_Dialog(object):
         self.label_9 = QtWidgets.QLabel(self.groupBox_7)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.verticalLayout_11.addWidget(self.label_9)
@@ -443,7 +443,7 @@ class Ui_Dialog(object):
         self.label_11 = QtWidgets.QLabel(self.groupBox_9)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_11.setFont(font)
         self.label_11.setObjectName("label_11")
         self.verticalLayout_14.addWidget(self.label_11)
@@ -637,7 +637,7 @@ class Ui_Dialog(object):
         self.label_13 = QtWidgets.QLabel(self.groupBox_12)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_13.setFont(font)
         self.label_13.setObjectName("label_13")
         self.verticalLayout_17.addWidget(self.label_13)
@@ -840,7 +840,7 @@ class Ui_Dialog(object):
         self.label_15 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.verticalLayout_3.addWidget(self.label_15)

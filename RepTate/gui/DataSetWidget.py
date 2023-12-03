@@ -35,8 +35,8 @@
 Module that defines the a QTreeWidget that allows to select nothing.
 
 """
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QTreeWidget
 
 
 class DataSetWidget(QTreeWidget):

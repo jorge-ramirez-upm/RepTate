@@ -49,7 +49,7 @@ import time
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
 from RepTate.gui import bob_gen_poly # dialog
-from PyQt5.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog,
     QFormLayout,
     QWidget,
@@ -61,8 +61,8 @@ from PyQt5.QtWidgets import (
     QApplication,
     QToolBar,
 )
-from PyQt5.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
-from PyQt5.QtCore import QUrl, pyqtSignal, QSize, Qt, QVariant
+from PySide6.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
+from PySide6.QtCore import QUrl, Signal, QSize, Qt, QVariant
 
 
 class DistributionType(enum.Enum):
@@ -274,7 +274,7 @@ class BaseTheoryCreatePolyconf:
     citations = TheoryCreatePolyconf.citations
     doi = TheoryCreatePolyconf.doi
 
-    signal_param_dialog = pyqtSignal(object)
+    signal_param_dialog = Signal(object)
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -874,7 +874,7 @@ FunH
     def launch_param_dialog(self):
         """Show the dialog to set-up number of the polymer components in the mix
         and all the relevant parameters for each component.
-        This function is called via a pyqtSignal for multithread compatibility"""
+        This function is called via a Signal for multithread compatibility"""
         if self.dialog.exec_():
             # # create temporary file for BoB input
             # temp_dir = os.path.join('theories', 'temp')

@@ -39,8 +39,8 @@ import numpy as np
 
 from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import ParameterType
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtCore import pyqtSignal
+from PySide6.QtGui import QTextCursor
+from PySide6.QtCore import Signal
 
 from collections import OrderedDict
 
@@ -73,7 +73,7 @@ class Tool(CmdBase):
     doi = []
     doc_header = "Tool commands (type help <topic>):"
 
-    print_signal = pyqtSignal(str)
+    print_signal = Signal(str)
 
     def __init__(self, name="Tool", parent_app=None):
         """**Constructor**"""

@@ -38,18 +38,19 @@ Module that defines the GUI counterpart of Dataset.
 import sys
 import os
 from os.path import dirname, join, abspath, isdir
-from PyQt5.QtGui import (
+from PySide6.QtGui import (
     QPixmap,
     QColor,
     QPainter,
     QIcon,
+    QAction,    
     QIntValidator,
     QDoubleValidator,
     QStandardItem,
 )
-from PyQt5.uic import loadUiType
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import (
+from PySide6.QtUiTools  import loadUiType
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtWidgets import (
     QWidget,
     QTreeWidgetItem,
     QTabWidget,
@@ -59,8 +60,8 @@ from PyQt5.QtWidgets import (
     QInputDialog,
     QToolButton,
     QMenu,
-    QAction,
     QTableWidgetItem,
+    QAbstractItemView,
     QDialog,
     QVBoxLayout,
     QDialogButtonBox,
@@ -224,7 +225,8 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))
-        self.DataSettreeWidget.setSelectionMode(1)  # QAbstractItemView::SingleSelection
+        #self.DataSettreeWidget.setSelectionMode(1)  # QAbstractItemView::SingleSelection
+        self.DataSettreeWidget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)  # QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
         w = self.DataSettreeWidget.width()
@@ -271,7 +273,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut0 = QToolButton()
         tbut0.setPopupMode(QToolButton.MenuButtonPopup)
         tbut0.setDefaultAction(self.actionMinimize_Error)
-        menu0 = QMenu()
+        menu0 = QMenu(self)
         menu0.addAction(self.actionFitting_Options)
         menu0.addAction(self.actionError_Calc_Options)
         tbut0.setMenu(menu0)
@@ -283,7 +285,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.MenuButtonPopup)
         tbut.setDefaultAction(self.actionShow_Limits)
-        menu = QMenu()
+        menu = QMenu(self)
         menu.addAction(self.actionVertical_Limits)
         menu.addAction(self.actionHorizontal_Limits)
         tbut.setMenu(menu)
@@ -296,7 +298,7 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
             self,
         )
         tbut2.setDefaultAction(self.action_save_theory_data)
-        menu2 = QMenu()
+        menu2 = QMenu(self)
         menu2.addAction(self.actionCopy_Parameters)
         menu2.addAction(self.actionPaste_Parameters)
         tbut2.setMenu(menu2)

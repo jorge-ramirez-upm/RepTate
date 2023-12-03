@@ -41,13 +41,14 @@ import math
 from RepTate.core.CmdBase import CmdBase, CmdMode
 
 # from UI_Multimatplotlib import Ui_Form
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
-from PyQt5.QtCore import QSize, Qt
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
+from PySide6.QtCore import QSize, Qt
 import matplotlib as mpl
 
 # mpl.use("Qt5Agg") # comment this as Mac uses "macosx" backend and Windows seems unaffected
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+#from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qtagg import FigureCanvas
 import matplotlib.gridspec as gridspec
 
 
@@ -158,7 +159,7 @@ class MultiView(QWidget):
         self.plotselecttabWidget = QTabWidget(self)
         self.plotselecttabWidget.setMaximumSize(QSize(22, 1000))
         self.plotselecttabWidget.setTabPosition(QTabWidget.West)
-        self.plotselecttabWidget.setTabShape(QTabWidget.Triangular)
+        self.plotselecttabWidget.setTabShape(QTabWidget.TabShape.Triangular)
         self.plotselecttabWidget.setUsesScrollButtons(False)
         self.plotselecttabWidget.setDocumentMode(False)
         self.plotselecttabWidget.setTabsClosable(False)
@@ -195,7 +196,8 @@ class MultiView(QWidget):
 
         self.set_bbox()
 
-        self.canvas = FigureCanvasQTAgg(self.figure)
+        #self.canvas = FigureCanvasQTAgg(self.figure)
+        self.canvas = FigureCanvas(self.figure)
         self.canvas.setFocusPolicy(Qt.ClickFocus)
         self.canvas.setFocus()
         self.plotcontainer.addWidget(self.canvas)

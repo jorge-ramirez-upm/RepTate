@@ -43,8 +43,8 @@ import logging
 import numpy as np
 
 from RepTate.core.ApplicationManager import ApplicationManager
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QStandardPaths
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QStandardPaths
 from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
 
 

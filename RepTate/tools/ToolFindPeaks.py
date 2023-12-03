@@ -40,7 +40,7 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
-from PyQt5.QtGui import QIcon
+from PySide6.QtGui import QIcon
 
 
 class ToolFindPeaks(CmdBase):

@@ -43,9 +43,9 @@ from RepTate.core.CmdBase import CmdBase, CmdMode
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from PyQt5.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
-from PyQt5.QtGui import QIcon, QDoubleValidator
-from PyQt5.QtCore import QSize
+from PySide6.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
+from PySide6.QtGui import QIcon, QDoubleValidator
+from PySide6.QtCore import QSize
 
 
 class TheoryLikhtmanMcLeish2002(CmdBase):
