@@ -493,7 +493,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.setIconSize(QtCore.QSize(16, 16))
         self.mpl_toolbar.setFixedHeight(36)
         self.mpl_toolbar.layout().setSpacing(0)
-        self.mpl_toolbar.addAction(self.actionTrack_data)
+        # self.mpl_toolbar.addAction(self.actionTrack_data)
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
