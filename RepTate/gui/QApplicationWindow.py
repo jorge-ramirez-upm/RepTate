@@ -530,6 +530,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         connection_id = self.viewComboBox.currentIndexChanged.connect(self.handle_change_view)
         connection_id = self.actionSave_View.triggered.connect(self.save_view)
         connection_id = self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
+        self.sp_nviews.setVisible(False) # JR: Hide the spinbox for now (not working properly)
 
         connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
         connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
