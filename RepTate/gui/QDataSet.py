@@ -43,12 +43,12 @@ from PySide6.QtGui import (
     QColor,
     QPainter,
     QIcon,
-    QAction,    
+    QAction,
     QIntValidator,
     QDoubleValidator,
     QStandardItem,
 )
-from PySide6.QtUiTools  import loadUiType
+from PySide6.QtUiTools import loadUiType
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
     QWidget,
@@ -80,9 +80,9 @@ from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import matplotlib.patheffects as pe
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app 
+    # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
     PATH = sys._MEIPASS
 else:
@@ -225,8 +225,10 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
 
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))
-        #self.DataSettreeWidget.setSelectionMode(1)  # QAbstractItemView::SingleSelection
-        self.DataSettreeWidget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)  # QAbstractItemView::SingleSelection
+        # self.DataSettreeWidget.setSelectionMode(1)  # QAbstractItemView::SingleSelection
+        self.DataSettreeWidget.setSelectionMode(
+            QAbstractItemView.SelectionMode.SingleSelection
+        )  # QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
         w = self.DataSettreeWidget.width()
@@ -958,9 +960,9 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
             if file_name in self.inactive_files:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 0)
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.Unchecked)
             else:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, 2)
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.Checked)
 
     def resizeEvent(self, evt=None):
         """Resize dataset"""

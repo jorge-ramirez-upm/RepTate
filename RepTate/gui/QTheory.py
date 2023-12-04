@@ -37,7 +37,7 @@ Module that defines the GUI counterpart of the class Theory.
 """
 import sys
 import os
-from PySide6.QtUiTools  import loadUiType
+from PySide6.QtUiTools import loadUiType
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.Theory import Theory, ErrorCalculationMethod
@@ -213,7 +213,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         """**Constructor**"""
         QWidget.__init__(self)
         Theory.__init__(self, name=name, parent_dataset=parent_dataset, axarr=axarr)
-        #super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
+        # super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
 
         # build the therory widget
@@ -411,7 +411,7 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         menu.exec_(QCursor.pos())
 
     def change_thtextbox_fontsize(self, factor):
-        """Change the thTextBox font size by a factor `factor` """
+        """Change the thTextBox font size by a factor `factor`"""
         font = self.thTextBox.currentFont()
         if factor < 1:
             font_size = ceil(font.pointSize() * factor)
@@ -443,7 +443,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.theory_buttons_disabled(True)
 
         if CmdBase.calcmode == CalcMode.multithread:
-            self.worker = CalculationThread(self.do_calculate, "",)
+            self.worker = CalculationThread(
+                self.do_calculate,
+                "",
+            )
             self.worker.sig_done.connect(self.end_thread_calc)
             self.thread_calc = QThread()
             self.worker.moveToThread(self.thread_calc)
@@ -489,7 +492,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
         self.theory_buttons_disabled(True)
 
         if CmdBase.calcmode == CalcMode.multithread:
-            self.worker = CalculationThread(self.do_fit, "",)
+            self.worker = CalculationThread(
+                self.do_fit,
+                "",
+            )
             self.worker.sig_done.connect(self.end_thread_fit)
             self.thread_fit = QThread()
             self.worker.moveToThread(self.thread_fit)
@@ -578,7 +584,8 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
-        Or edit all parameters fittingoptionsdialog if parameter name is double clicked"""
+        Or edit all parameters fittingoptionsdialog if parameter name is double clicked
+        """
         if column == 0:
             p_name = item.text(0)
             d = EditThParametersDialog(self, p_name)
@@ -670,7 +677,10 @@ class QTheory(Ui_TheoryTab, QWidget, Theory):
     def save_modes(self):
         """Save Maxwell modes to a text file"""
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Maxwell modes to a text file", os.path.join(RepTate.root_dir, "data"), "Text (*.txt)"
+            self,
+            "Save Maxwell modes to a text file",
+            os.path.join(RepTate.root_dir, "data"),
+            "Text (*.txt)",
         )
         if fpath == "":
             return
