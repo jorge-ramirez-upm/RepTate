@@ -36,7 +36,7 @@
 import sys
 import os
 import numpy as np
-from PySide6.QtUiTools  import loadUiType
+from PySide6.QtUiTools import loadUiType
 from PySide6.QtCore import Qt, QItemSelectionModel
 from PySide6.QtWidgets import (
     QApplication,
@@ -50,9 +50,9 @@ from openpyxl import load_workbook
 import xlrd
 import RepTate
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app 
+    # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
     PATH = sys._MEIPASS
 else:
@@ -202,14 +202,20 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
     def update_cols_cb(self):
         self.col1_cb.clear()
         self.col2_cb.clear()
-        self.col1.setText("Select Column <b>%s [%s]</b>" % (self.col_names[0], self.col_units[0]))
-        self.col2.setText("Select Column <b>%s [%s]</b>" % (self.col_names[1], self.col_units[1]))
+        self.col1.setText(
+            "Select Column <b>%s [%s]</b>" % (self.col_names[0], self.col_units[0])
+        )
+        self.col2.setText(
+            "Select Column <b>%s [%s]</b>" % (self.col_names[1], self.col_units[1])
+        )
         self.col1_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.setCurrentIndex(1)
         if self.ncol > 2:
             self.col3_cb.clear()
-            self.col3.setText("Select Column <b>%s [%s]</b>" % (self.col_names[2], self.col_units[2]))
+            self.col3.setText(
+                "Select Column <b>%s [%s]</b>" % (self.col_names[2], self.col_units[2])
+            )
             self.col3_cb.addItems(self.list_AZ[: self.max_col])
             self.col3_cb.setCurrentIndex(2)
         else:
@@ -288,11 +294,14 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
             sheet = self.wb.sheet_by_name(sname)
             max_row = sheet.nrows
             max_col = sheet.ncols
-        
+
         if max_col < min(3, self.ncol):
             # not enough data columns in the spreadsheet tab
-            # min(3, ) as the Excel import is configured for 3 data columns max.  
-            msg = "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)" %(self.ncol, max_col)
+            # min(3, ) as the Excel import is configured for 3 data columns max.
+            msg = (
+                "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)"
+                % (self.ncol, max_col)
+            )
             return {"error": True, "errmsg": msg}
 
         for k in range(self.nskip, max_row):

@@ -44,14 +44,44 @@ from numpy import *
 from numpy.random import *
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
-#import logging
-from PySide6.QtGui import QIcon, QColor, QCursor, QStandardItem, QIntValidator, QDoubleValidator
-from PySide6.QtUiTools  import loadUiType
+
+# import logging
+from PySide6.QtGui import (
+    QIcon,
+    QColor,
+    QCursor,
+    QStandardItem,
+    QIntValidator,
+    QDoubleValidator,
+)
+from PySide6.QtUiTools import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QGroupBox, QFormLayout, QLineEdit, QWidget, QToolBar, QToolButton, QMenu, QFileDialog, QMessageBox, QInputDialog, QLineEdit, QColorDialog, QDialog, QDialogButtonBox, QTreeWidgetItem, QTabWidget, QComboBox, QVBoxLayout, QSplitter, QTableWidgetItem, QRadioButton
+from PySide6.QtWidgets import (
+    QGroupBox,
+    QFormLayout,
+    QLineEdit,
+    QWidget,
+    QToolBar,
+    QToolButton,
+    QMenu,
+    QFileDialog,
+    QMessageBox,
+    QInputDialog,
+    QLineEdit,
+    QColorDialog,
+    QDialog,
+    QDialogButtonBox,
+    QTreeWidgetItem,
+    QTabWidget,
+    QComboBox,
+    QVBoxLayout,
+    QSplitter,
+    QTableWidgetItem,
+    QRadioButton,
+)
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
 from RepTate.core.DataTable import DataTable
@@ -65,26 +95,27 @@ from collections import OrderedDict
 from RepTate.gui.ImportExcelWindow import ImportExcelWindow
 from RepTate.gui.ImportFromPastedWindow import ImportFromPastedWindow
 
-#To recompile the symbol-settings dialog:
-#pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
+# To recompile the symbol-settings dialog:
+# pyuic5 gui/markerSettings.ui -o gui/markerSettings.py
 from RepTate.gui.markerSettings import Ui_Dialog
 
 # I think the following lines are not needed anymore
-#try:
+# try:
 #    _fromUtf8 = QtCore.QString.fromUtf8
-#except AttributeError:
+# except AttributeError:
 #    _fromUtf8 = lambda s: s
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app 
+    # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
     PATH = sys._MEIPASS
 else:
     PATH = dirname(abspath(__file__))
-Ui_AppWindow, QMainWindow = loadUiType(join(PATH,'QApplicationWindow.ui'))
-Ui_EditAnnotation, QDialog = loadUiType(join(PATH,'annotationedit.ui'))
-Ui_AddDummyFiles, QDialog = loadUiType(join(PATH,'dummyfilesDialog.ui'))
+Ui_AppWindow, QMainWindow = loadUiType(join(PATH, "QApplicationWindow.ui"))
+Ui_EditAnnotation, QDialog = loadUiType(join(PATH, "annotationedit.ui"))
+Ui_AddDummyFiles, QDialog = loadUiType(join(PATH, "dummyfilesDialog.ui"))
+
 
 class AddDummyFiles(QDialog, Ui_AddDummyFiles):
     def __init__(self, parent=None, filetype=None):
@@ -94,8 +125,8 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
         self.setupUi(self)
 
         for p in filetype.basic_file_parameters:
-            item = QTreeWidgetItem(self.parameterTreeWidget,[p,"0","1","10"])
-            item.setCheckState(0, 0)
+            item = QTreeWidgetItem(self.parameterTreeWidget, [p, "0", "1", "10"])
+            item.setCheckState(0, Qt.Unchecked)
             item.setIcon(0, QIcon())
             item.setFlags(item.flags() | Qt.ItemIsEditable)
             cb = QComboBox(self.parameterTreeWidget)
@@ -103,13 +134,16 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
             self.parameterTreeWidget.setItemWidget(item, 4, cb)
 
         for i in range(4):
-            self.parameterTreeWidget.setColumnWidth(i,60)
+            self.parameterTreeWidget.setColumnWidth(i, 60)
 
-        connection_id = self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+        connection_id = self.parameterTreeWidget.itemDoubleClicked.connect(
+            self.handle_itemDoubleClicked
+        )
 
     def handle_itemDoubleClicked(self, item, column):
-        if (column>0 and column<4):
+        if column > 0 and column < 4:
             self.parameterTreeWidget.editItem(item, column)
+
 
 class AddFileFunction(QDialog):
     def __init__(self, parent=None, filetype=None):
@@ -123,8 +157,7 @@ class AddFileFunction(QDialog):
         mainLayout.addWidget(self.parametersGroupBox)
         mainLayout.addWidget(self.columnsGroupBox)
         mainLayout.addWidget(self.labelGroupBox)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok
-                                     | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         mainLayout.addWidget(buttonBox)
@@ -133,13 +166,12 @@ class AddFileFunction(QDialog):
 
     def createParametersGroupBox(self, filetype):
         """Create a form to set the new values of important file parameters"""
-        self.parametersGroupBox = QGroupBox(
-            "Parameters of \"%s\" file" % filetype.name)
+        self.parametersGroupBox = QGroupBox('Parameters of "%s" file' % filetype.name)
         layout = QFormLayout()
         parameters = filetype.basic_file_parameters
         self.param_dict = {}
         self.p_new = []
-        for i, pname in enumerate(parameters):  #loop over the Parameters
+        for i, pname in enumerate(parameters):  # loop over the Parameters
             self.p_new.append(QLineEdit())
             self.p_new[i].setValidator(QDoubleValidator())
             self.p_new[i].setText("0")
@@ -149,13 +181,12 @@ class AddFileFunction(QDialog):
 
     def createColumnsGroupBox(self, filetype):
         """Create a form to set the new values the file columns"""
-        self.columnsGroupBox = QGroupBox(
-            "Columns of \"%s\" file" % filetype.name)
+        self.columnsGroupBox = QGroupBox('Columns of "%s" file' % filetype.name)
         layout = QFormLayout()
         cols = filetype.col_names
         self.col_dict = {}
         self.c_new = []
-        for i, cname in enumerate(cols):  #loop over the Parameters
+        for i, cname in enumerate(cols):  # loop over the Parameters
             self.c_new.append(QLineEdit())
             self.c_new[i].setText("x")
             layout.addRow("%s" % cname, self.c_new[i])
@@ -164,8 +195,7 @@ class AddFileFunction(QDialog):
 
     def createLabelGroupBox(self):
         """Set the range and scale (linear or logarithmic) of the label x"""
-        self.labelGroupBox = QGroupBox(
-            "Range of label x")
+        self.labelGroupBox = QGroupBox("Range of label x")
         layout = QFormLayout()
         self.lab_dict = {}
         self.l_new = []
@@ -205,11 +235,11 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         self.annotation = annotation
         self.textLineEdit.setText(annotation.get_text())
         x, y = annotation.get_position()
-        self.xLineEdit.setText('%.4g'%x)
-        self.yLineEdit.setText('%.4g'%y)
+        self.xLineEdit.setText("%.4g" % x)
+        self.yLineEdit.setText("%.4g" % y)
         color = annotation.get_color()
-        col = QColor(color[0]*255, color[1]*255, color[2]*255)
-        self.labelFontColor.setStyleSheet("background: %s"%col.name())
+        col = QColor(color[0] * 255, color[1] * 255, color[2] * 255)
+        self.labelFontColor.setStyleSheet("background: %s" % col.name())
         self.rotationSpinBox.setValue(annotation.get_rotation())
         self.hacomboBox.setCurrentText(annotation.get_horizontalalignment())
         self.vacomboBox.setCurrentText(annotation.get_verticalalignment())
@@ -228,16 +258,19 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
 
     def showColorDialog(self):
         """Show the color picker and return the picked QtColor or `None`"""
-        wtitle = "Select color for the annotation \"%s\""%self.annotation.get_text()
-        color = QColorDialog.getColor(title=wtitle,
-            options=QColorDialog.DontUseNativeDialog)
+        wtitle = 'Select color for the annotation "%s"' % self.annotation.get_text()
+        color = QColorDialog.getColor(
+            title=wtitle, options=QColorDialog.DontUseNativeDialog
+        )
         if not color.isValid():
             color = None
         return color
 
     def apply_changes(self):
         self.annotation.set_text(self.textLineEdit.text())
-        self.annotation.set_position((float(self.xLineEdit.text()),float(self.yLineEdit.text())))
+        self.annotation.set_position(
+            (float(self.xLineEdit.text()), float(self.yLineEdit.text()))
+        )
         if self.color:
             self.annotation.set_color(self.color.getRgbF())
         self.annotation.set_rotation(self.rotationSpinBox.value())
@@ -251,9 +284,11 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         self.annotation.figure.canvas.draw()
 
     def delete(self):
-        btns = (QMessageBox.Yes | QMessageBox.No)
-        msg = "Do you want to delete the the annotation \"%s\""%self.annotation.get_text()
-        title = 'Delete annotation'
+        btns = QMessageBox.Yes | QMessageBox.No
+        msg = (
+            'Do you want to delete the the annotation "%s"' % self.annotation.get_text()
+        )
+        title = "Delete annotation"
         ans = QMessageBox.question(self, title, msg, buttons=btns)
         if ans == QMessageBox.Yes:
             self.annotation.remove()
@@ -265,7 +300,7 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         """
         self.color = self.showColorDialog()
         if self.color:
-            self.labelFontColor.setStyleSheet("background: %s"%self.color.name())
+            self.labelFontColor.setStyleSheet("background: %s" % self.color.name())
 
 
 class ViewShiftFactors(QDialog):
@@ -278,27 +313,30 @@ class ViewShiftFactors(QDialog):
         nfiles = len(fnames)
         ncurves = len(factorsx[0])
 
-        self.table = SpreadsheetWidget()  #allows copy/paste
+        self.table = SpreadsheetWidget()  # allows copy/paste
         self.table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.table.setRowCount(nfiles)
-        self.table.setColumnCount(2*ncurves)
-        hlabels=[]
+        self.table.setColumnCount(2 * ncurves)
+        hlabels = []
         for i in range(ncurves):
-            hlabels.append("x%d"%(i+1))
+            hlabels.append("x%d" % (i + 1))
         self.table.setHorizontalHeaderLabels(hlabels)
         self.table.setVerticalHeaderLabels(fnames)
         for i in range(nfiles):
             for j in range(ncurves):
-                self.table.setItem(i, 2*j, QTableWidgetItem("%g"%factorsx[i][j]))
-                self.table.setItem(i, 2*j+1, QTableWidgetItem("%g"%factorsy[i][j]))
+                self.table.setItem(i, 2 * j, QTableWidgetItem("%g" % factorsx[i][j]))
+                self.table.setItem(
+                    i, 2 * j + 1, QTableWidgetItem("%g" % factorsy[i][j])
+                )
         self.table.resizeRowsToContents()
         self.table.resizeColumnsToContents()
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
         buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
+        )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -307,12 +345,13 @@ class ViewShiftFactors(QDialog):
 
 class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     """GUI Application"""
-    def __init__(self, name='Application Template', parent=None, **kwargs):
+
+    def __init__(self, name="Application Template", parent=None, **kwargs):
         """**Constructor**"""
 
         super().__init__(name, parent, **kwargs)
 
-        if CmdBase.mode!=CmdMode.GUI:
+        if CmdBase.mode != CmdMode.GUI:
             return None
 
         QMainWindow.__init__(self)
@@ -324,14 +363,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
-        self.dir_start = join(RepTate.root_dir, "data") # default folder opened
+        self.dir_start = join(RepTate.root_dir, "data")  # default folder opened
 
         # Accept Drag and drop events
         self.setAcceptDrops(True)
 
         # DataSet Tabs behaviour ##########
         self.DataSettabWidget.setTabsClosable(True)
-        #self.DataSettabWidget.setTabBarAutoHide(True)
+        # self.DataSettabWidget.setTabBarAutoHide(True)
         self.DataSettabWidget.setUsesScrollButtons(True)
         self.DataSettabWidget.setMovable(True)
 
@@ -344,7 +383,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         vblayout.setSpacing(0)
 
         tb = QToolBar()
-        tb.setIconSize(QtCore.QSize(24,24))
+        tb.setIconSize(QtCore.QSize(24, 24))
         tb.addAction(self.actionCopy)
         tb.addAction(self.actionPaste)
         tb.addSeparator()
@@ -355,7 +394,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionResetShiftFactors)
         vblayout.addWidget(tb)
         # Shift factors stuff
-        self.shiftTable = SpreadsheetWidget(self) # has a 'copy' method
+        self.shiftTable = SpreadsheetWidget(self)  # has a 'copy' method
         self.shiftTable.setColumnCount(2)
         self.shiftTable.setRowCount(DataTable.MAX_NUM_SERIES)
         # disable Paste
@@ -368,7 +407,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for j in range(2):
                 item = QTableWidgetItem()
                 item.setText("0")
-                item.setBackground(QColor(255,255,205))
+                item.setBackground(QColor(255, 255, 205))
                 self.shiftTable.setItem(i, j, item)
         self.shiftTable.resizeRowsToContents()
         iHeight = 0
@@ -384,7 +423,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.shiftTable.setVisible(False)
         vblayout.addWidget(self.shiftTable)
 
-        #custom QTable to have the copy/paste/delete features
+        # custom QTable to have the copy/paste/delete features
         self.inspector_table = SpreadsheetWidget(self)
         self.inspector_table.delete_disabled = False
         vblayout.addWidget(self.inspector_table)
@@ -403,14 +442,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         vblayout2.setSpacing(0)
 
         tb = QToolBar()
-        tb.setIconSize(QtCore.QSize(24,24))
+        tb.setIconSize(QtCore.QSize(24, 24))
         tb.addAction(self.actionNew_Tool)
         self.cbtool = QComboBox()
         model = self.cbtool.model()
         self.cbtool.setToolTip("Choose a Tool")
 
-        item = QStandardItem('Select:')
-        item.setForeground(QColor('grey'))
+        item = QStandardItem("Select:")
+        item.setForeground(QColor("grey"))
         model.appendRow(item)
         i = 1
         for tool_name in self.availabletools.keys():
@@ -421,7 +460,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.cbtool.insertSeparator(i)
         for tool_name in self.extratools.keys():
             item = QStandardItem(tool_name)
-            item.setForeground(QColor('blue'))
+            item.setForeground(QColor("blue"))
             item.setToolTip(self.extratools[tool_name].description)
             model.appendRow(item)
 
@@ -445,10 +484,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # Dataset Toolbar
         tb = QToolBar()
-        tb.setIconSize(QtCore.QSize(24,24))
+        tb.setIconSize(QtCore.QSize(24, 24))
         tb.addAction(self.actionNew_Empty_Dataset)
 
-        #tb.addAction(self.actionNew_Dataset_From_File)
+        # tb.addAction(self.actionNew_Dataset_From_File)
         tbut = QToolButton()
         tbut.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         tbut.setDefaultAction(self.actionNew_Dataset_From_File)
@@ -473,16 +512,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         tb.addAction(self.actionInspect_Data)
         tb.addAction(self.actionShowFigureTools)
         self.ViewDataTheoryLayout.insertWidget(1, tb)
-        self.ViewDataTheorydockWidget.Width=500
+        self.ViewDataTheorydockWidget.Width = 500
         self.ViewDataTheorydockWidget.setTitleBarWidget(QWidget())
-        self.actionAutoscale = tb.addAction(QIcon(':/Images/Images/new_icons/icons8-padlock-96.png'), "Lock XY axes")
+        self.actionAutoscale = tb.addAction(
+            QIcon(":/Images/Images/new_icons/icons8-padlock-96.png"), "Lock XY axes"
+        )
         self.actionAutoscale.setCheckable(True)
-
 
         # Tests TableWidget
         self.inspector_table.setRowCount(30)
         self.inspector_table.setColumnCount(10)
-        self.inspector_table.setHorizontalHeaderLabels(['x','y','z','a','b','c','d','e','f','g'])
+        self.inspector_table.setHorizontalHeaderLabels(
+            ["x", "y", "z", "a", "b", "c", "d", "e", "f", "g"]
+        )
 
         # Hide Data Inspector
         self.DataInspectordockWidget.hide()
@@ -497,7 +539,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.mpl_toolbar.setVisible(False)
         self.mplvl.addWidget(self.mpl_toolbar)
 
-
         # self.canvas.draw()
         # self.update_Qplot()
         # LEGEND STUFF
@@ -505,57 +546,105 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
         # EVENT HANDLING
         # Matplotlib events
-        #connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
-        connection_id = self.figure.canvas.mpl_connect('pick_event', self.onpick)
-        #connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
-        #connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
-        #connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
-        #connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+        # connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
+        connection_id = self.figure.canvas.mpl_connect("pick_event", self.onpick)
+        # connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
+        # connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
+        # connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        # connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
-        connection_id = self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
-        connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
-        connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
-        connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
+        connection_id = self.actionShowFigureTools.triggered.connect(
+            self.viewMPLToolbar
+        )
+        connection_id = self.actionInspect_Data.triggered.connect(
+            self.showDataInspector
+        )
+        connection_id = self.actionNew_Empty_Dataset.triggered.connect(
+            self.handle_createNew_Empty_Dataset
+        )
+        connection_id = self.actionNew_Dataset_From_File.triggered.connect(
+            self.openDataset
+        )
         connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
-        connection_id = self.actionAdd_File_With_Function.triggered.connect(self.addFileFunction)
-        connection_id = self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
-        connection_id = self.action_import_from_pasted.triggered.connect(self.handle_action_import_from_pasted)
-        connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
-        connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
+        connection_id = self.actionAdd_File_With_Function.triggered.connect(
+            self.addFileFunction
+        )
+        connection_id = self.action_import_from_excel.triggered.connect(
+            self.handle_action_import_from_excel
+        )
+        connection_id = self.action_import_from_pasted.triggered.connect(
+            self.handle_action_import_from_pasted
+        )
+        connection_id = self.actionReload_Data.triggered.connect(
+            self.handle_actionReload_Data
+        )
+        connection_id = self.actionAutoscale.triggered.connect(
+            self.handle_actionAutoscale
+        )
 
         connection_id = self.actionNew_Tool.triggered.connect(self.handle_actionNewTool)
-        connection_id = self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
+        connection_id = self.TooltabWidget.tabCloseRequested.connect(
+            self.handle_toolTabCloseRequested
+        )
         connection_id = self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
 
-        connection_id = self.viewComboBox.currentIndexChanged.connect(self.handle_change_view)
+        connection_id = self.viewComboBox.currentIndexChanged.connect(
+            self.handle_change_view
+        )
         connection_id = self.actionSave_View.triggered.connect(self.save_view)
         connection_id = self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
-        self.sp_nviews.setVisible(False) # JR: Hide the spinbox for now (not working properly)
+        self.sp_nviews.setVisible(
+            False
+        )  # JR: Hide the spinbox for now (not working properly)
 
-        connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
-        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
-        connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
-        connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
-        connection_id = self.actionView_All_SetTheories.triggered.connect(self.handle_actionView_All_SetTheories)
-        connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
-        connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
-        connection_id = self.actionViewShiftFactors.triggered.connect(self.handle_actionViewShiftTriggered)
-        connection_id = self.actionSaveShiftFactors.triggered.connect(self.handle_actionSaveShiftTriggered)
-        connection_id = self.actionResetShiftFactors.triggered.connect(self.handle_actionResetShiftTriggered)
-        connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
+        connection_id = self.DataSettabWidget.tabCloseRequested.connect(
+            self.close_data_tab_handler
+        )
+        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(
+            self.handle_doubleClickTab
+        )
+        connection_id = self.DataSettabWidget.currentChanged.connect(
+            self.handle_currentChanged
+        )
+        connection_id = self.actionView_All_Sets.toggled.connect(
+            self.handle_actionView_All_Sets
+        )
+        connection_id = self.actionView_All_SetTheories.triggered.connect(
+            self.handle_actionView_All_SetTheories
+        )
+        connection_id = self.actionShiftVertically.triggered.connect(
+            self.handle_actionShiftTriggered
+        )
+        connection_id = self.actionShiftHorizontally.triggered.connect(
+            self.handle_actionShiftTriggered
+        )
+        connection_id = self.actionViewShiftFactors.triggered.connect(
+            self.handle_actionViewShiftTriggered
+        )
+        connection_id = self.actionSaveShiftFactors.triggered.connect(
+            self.handle_actionSaveShiftTriggered
+        )
+        connection_id = self.actionResetShiftFactors.triggered.connect(
+            self.handle_actionResetShiftTriggered
+        )
+        connection_id = self.DataInspectordockWidget.visibilityChanged.connect(
+            self.handle_inspectorVisibilityChanged
+        )
 
-        connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
+        connection_id = self.actionMarkerSettings.triggered.connect(
+            self.handle_actionMarkerSettings
+        )
 
         connection_id = self.actionCopy.triggered.connect(self.inspector_table.copy)
         connection_id = self.actionPaste.triggered.connect(self.inspector_table.paste)
 
         # Annotation stuff
-        #connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
+        # connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
         self.graphicnotes = []
         self.artistnotes = []
-        #plt.connect('motion_notify_event', self.mpl_motion_event)
+        # plt.connect('motion_notify_event', self.mpl_motion_event)
 
-        #Setting up the marker-settings dialog
+        # Setting up the marker-settings dialog
         # self.marker_dic = {'square': 's', 'plus (filled)': 'P', 'point': '.', 'triangle_right': '>', 'hline': '_', 'vline': '|', 'pentagon': 'p', 'tri_left': '3', 'tri_up': '2', 'circle': 'o', 'diamond': 'D', 'star': '*', 'hexagon1': 'h', 'octagon': '8', 'hexagon2': 'H', 'tri_right': '4', 'x (filled)': 'X', 'thin_diamond': 'd', 'tri_down': '1', 'triangle_left': '<', 'plus': '+', 'triangle_down': 'v', 'triangle_up': '^', 'x': 'x'}
         self.dialog = QDialog()
         self.dialog.ui = Ui_Dialog()
@@ -566,8 +655,36 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.color1 = None
         self.color2 = None
         self.color_th = None
-        self.legend_opts = {'loc':'best', 'ncol':1, 'fontsize':12, 'title_fontsize':12, 'markerfirst':True, 'frameon':True, 'fancybox':True, 'shadow':True, 'framealpha':None, 'facecolor':None, 'edgecolor':None, 'mode':None, 'title':None, 'borderpad': None, 'labelspacing':None, 'handletextpad':None, 'columnspacing':None}
-        self.annotation_opts = {'alpha': 1.0, 'color': QColor(0, 0, 0).getRgbF(), 'family':'sans-serif', 'horizontalalignment':'center', 'rotation': 0.0, 'fontsize':16, 'style': 'normal',  'verticalalignment': 'center', 'fontweight':'normal'}
+        self.legend_opts = {
+            "loc": "best",
+            "ncol": 1,
+            "fontsize": 12,
+            "title_fontsize": 12,
+            "markerfirst": True,
+            "frameon": True,
+            "fancybox": True,
+            "shadow": True,
+            "framealpha": None,
+            "facecolor": None,
+            "edgecolor": None,
+            "mode": None,
+            "title": None,
+            "borderpad": None,
+            "labelspacing": None,
+            "handletextpad": None,
+            "columnspacing": None,
+        }
+        self.annotation_opts = {
+            "alpha": 1.0,
+            "color": QColor(0, 0, 0).getRgbF(),
+            "family": "sans-serif",
+            "horizontalalignment": "center",
+            "rotation": 0.0,
+            "fontsize": 16,
+            "style": "normal",
+            "verticalalignment": "center",
+            "fontweight": "normal",
+        }
 
         # dialog import data from excel
         self.excel_import_gui = None
@@ -578,27 +695,51 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.default_legend_labels = True
         self.legend_labels = ""
         # self.populate_markers()
-        self.fparam_backup = [] #temporary storage of the file parameters
-        self.dialog.ui.spinBox.setSingleStep(3) #increment in the marker size dialog
-        connection_id = self.dialog.ui.pickColor1.clicked.connect(self.handle_pickColor1)
-        connection_id = self.dialog.ui.pickColor2.clicked.connect(self.handle_pickColor2)
-        connection_id = self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
-        connection_id = self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
-        connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
-        connection_id = self.dialog.ui.pickFontColor.clicked.connect(self.handle_pickFontColor)
-        connection_id = self.dialog.ui.pickFontColor_ax.clicked.connect(self.handle_pickFontColor_ax)
-        connection_id = self.dialog.ui.pickFontColor_label.clicked.connect(self.handle_pickFontColor_label)
-        connection_id = self.dialog.ui.reset_all_pb.clicked.connect(self.handle_reset_all_pb)
-        connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
-        connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
-        connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
+        self.fparam_backup = []  # temporary storage of the file parameters
+        self.dialog.ui.spinBox.setSingleStep(3)  # increment in the marker size dialog
+        connection_id = self.dialog.ui.pickColor1.clicked.connect(
+            self.handle_pickColor1
+        )
+        connection_id = self.dialog.ui.pickColor2.clicked.connect(
+            self.handle_pickColor2
+        )
+        connection_id = self.dialog.ui.pickThColor.clicked.connect(
+            self.handle_pickThColor
+        )
+        connection_id = self.dialog.ui.pickFaceColor.clicked.connect(
+            self.handle_pickFaceColor
+        )
+        connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(
+            self.handle_pickEdgeColor
+        )
+        connection_id = self.dialog.ui.pickFontColor.clicked.connect(
+            self.handle_pickFontColor
+        )
+        connection_id = self.dialog.ui.pickFontColor_ax.clicked.connect(
+            self.handle_pickFontColor_ax
+        )
+        connection_id = self.dialog.ui.pickFontColor_label.clicked.connect(
+            self.handle_pickFontColor_label
+        )
+        connection_id = self.dialog.ui.reset_all_pb.clicked.connect(
+            self.handle_reset_all_pb
+        )
+        connection_id = self.dialog.ui.rbEmpty.clicked.connect(
+            self.populate_cbSymbolType
+        )
+        connection_id = self.dialog.ui.rbFilled.clicked.connect(
+            self.populate_cbSymbolType
+        )
+        connection_id = self.dialog.ui.pushApply.clicked.connect(
+            self.handle_apply_button_pressed
+        )
 
         self.dataset_actions_disabled(True)
         self.sp_nviews.setMaximum(self.nplot_max)
         # connection_id = self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
-        #xaxis = self.ax.get_xticklabels()
-        #print (xaxis)
+        # xaxis = self.ax.get_xticklabels()
+        # print (xaxis)
 
     def sp_nviews_valueChanged(self, new_nplots):
         """Change the current number of views displayed in the app"""
@@ -620,25 +761,38 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                         max_row_len = 0
                         max_view_name_len = 0
                         for nx, view in enumerate(self.multiviews):
-                            max_view_name_len = max(max_view_name_len, len(view.name) + 3)
+                            max_view_name_len = max(
+                                max_view_name_len, len(view.name) + 3
+                            )
                             data_view = []
                             for i in range(view.n):
                                 x, y = series[nx][i].get_data()
                                 if i > 0 and np.array_equal(x, data_view[0][0]):
                                     # if x1=x2, only use y
-                                    data_view.append([y,])
+                                    data_view.append(
+                                        [
+                                            y,
+                                        ]
+                                    )
                                 else:
-                                    data_view.append([x,y])
-                                max_row_len = max(max_row_len, len(series[nx][i].get_data()[0]) )
+                                    data_view.append([x, y])
+                                max_row_len = max(
+                                    max_row_len, len(series[nx][i].get_data()[0])
+                                )
                             all_views_data[view.name] = data_view
 
                         nviews = len(self.multiviews)
-                        with open(join(folder, f.file_name_short) + '_VIEW.txt', 'w') as fout:
+                        with open(
+                            join(folder, f.file_name_short) + "_VIEW.txt", "w"
+                        ) as fout:
                             # header with file parameters
-                            fout.write('#view(s)=[%s];' % (', '.join([v.name for v in self.multiviews])))
+                            fout.write(
+                                "#view(s)=[%s];"
+                                % (", ".join([v.name for v in self.multiviews]))
+                            )
                             for pname in f.file_parameters:
-                                fout.write('%s=%s;' % (pname, f.file_parameters[pname]))
-                            fout.write('\n')
+                                fout.write("%s=%s;" % (pname, f.file_parameters[pname]))
+                            fout.write("\n")
 
                             # column titles
                             field_width = []
@@ -651,21 +805,31 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                                         # case where there is x and y series
                                         fw1 = max(len(view.x_label), 15)
                                         fw2 = max(len(view.snames[snames_index]), 15)
-                                        fout.write('{0:<{1}s}\t'.format(view.x_label, fw1))
-                                        fout.write('{0:<{1}s}\t'.format(view.snames[snames_index], fw2))
+                                        fout.write(
+                                            "{0:<{1}s}\t".format(view.x_label, fw1)
+                                        )
+                                        fout.write(
+                                            "{0:<{1}s}\t".format(
+                                                view.snames[snames_index], fw2
+                                            )
+                                        )
                                         field_width.append(fw1)
                                         field_width.append(fw2)
                                     else:
                                         # case where there is y series only
                                         fw = max(len(view.snames[snames_index]), 15)
-                                        fout.write('{0:{1}s}\t'.format(view.snames[snames_index], fw))
+                                        fout.write(
+                                            "{0:{1}s}\t".format(
+                                                view.snames[snames_index], fw
+                                            )
+                                        )
                                         field_width.append(fw)
                                     snames_index += 1
-                            fout.write('\n')
+                            fout.write("\n")
 
                             # data lines
                             for i in range(max_row_len):
-                                fw_index = 0 # field_width index
+                                fw_index = 0  # field_width index
                                 for view_name in all_views_data:
                                     data_view = all_views_data[view_name]
                                     for xy in data_view:
@@ -675,24 +839,39 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                                             fw2 = field_width[fw_index + 1]
                                             fw_index += 2
                                             try:
-                                                fout.write('{0:<{1}.8e}\t'.format(xy[0][i], fw1))
-                                                fout.write('{0:<{1}.8e}\t'.format(xy[1][i], fw2))
+                                                fout.write(
+                                                    "{0:<{1}.8e}\t".format(
+                                                        xy[0][i], fw1
+                                                    )
+                                                )
+                                                fout.write(
+                                                    "{0:<{1}.8e}\t".format(
+                                                        xy[1][i], fw2
+                                                    )
+                                                )
                                             except:
-                                                fout.write('{0:{1}s}\t'.format('', fw1))
-                                                fout.write('{0:{1}s}\t'.format('', fw2))
+                                                fout.write("{0:{1}s}\t".format("", fw1))
+                                                fout.write("{0:{1}s}\t".format("", fw2))
                                         else:
                                             # case where there is y series only
                                             fw = field_width[fw_index]
                                             fw_index += 1
                                             try:
-                                                fout.write('{0:<{1}.8e}\t'.format(xy[0][i], fw1))
+                                                fout.write(
+                                                    "{0:<{1}.8e}\t".format(
+                                                        xy[0][i], fw1
+                                                    )
+                                                )
                                             except:
-                                                fout.write('{0:{1}s}\t'.format('', fw))
-                                fout.write('\n')
+                                                fout.write("{0:{1}s}\t".format("", fw))
+                                fout.write("\n")
                         nfout += 1
 
-            QMessageBox.warning(self, "Saving views", "Wrote %d file(s) ending \"_VIEW.txt\" in \"%s/\"" % (nfout, folder))
-
+            QMessageBox.warning(
+                self,
+                "Saving views",
+                'Wrote %d file(s) ending "_VIEW.txt" in "%s/"' % (nfout, folder),
+            )
 
     def handle_actionNewTool(self):
         """Create new tool"""
@@ -703,7 +882,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             tool_name = self.cbtool.currentText()
         # reset the combobox selection
         self.cbtool.setCurrentIndex(0)
-        if tool_name != '':
+        if tool_name != "":
             self.new_tool(tool_name)
             self.update_all_ds_plots()
 
@@ -714,19 +893,19 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # add new tool tab
         if tool_tab_id == "":
             tool_tab_id = newtool.name
-            tool_tab_id = ''.join(
-                c for c in tool_tab_id
-                if c.isupper())  #get the upper case letters of tool_name
-            tool_tab_id = "%s%d" % (tool_tab_id, self.num_tools)  #append number
+            tool_tab_id = "".join(
+                c for c in tool_tab_id if c.isupper()
+            )  # get the upper case letters of tool_name
+            tool_tab_id = "%s%d" % (tool_tab_id, self.num_tools)  # append number
         index = self.TooltabWidget.addTab(newtool, tool_tab_id)
-        self.TooltabWidget.setCurrentIndex(index)  #set new tool tab as curent tab
-        self.TooltabWidget.setTabToolTip(index, tool_name)  #set new-tab tool tip
+        self.TooltabWidget.setCurrentIndex(index)  # set new tool tab as curent tab
+        self.TooltabWidget.setTabToolTip(index, tool_name)  # set new-tab tool tip
         return newtool
 
     def handle_toolTabCloseRequested(self, index):
         """Delete a Tool tab"""
         tool_name = self.TooltabWidget.widget(index).name
-        self.do_tool_delete(tool_name)  #call DataSet.do_theory_delete
+        self.do_tool_delete(tool_name)  # call DataSet.do_theory_delete
         self.TooltabWidget.removeTab(index)
         self.update_all_ds_plots()
 
@@ -734,13 +913,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         self.tools.insert(f, self.tools.pop(t))
         self.update_all_ds_plots()
 
-
     def handle_actionAutoscale(self, checked):
         self.autoscale = not checked
         if self.autoscale:
-            self.actionAutoscale.setIcon(QIcon(':/Images/Images/new_icons/icons8-padlock-96.png'))
+            self.actionAutoscale.setIcon(
+                QIcon(":/Images/Images/new_icons/icons8-padlock-96.png")
+            )
         else:
-            self.actionAutoscale.setIcon(QIcon(':/Images/Images/new_icons/icons8-lock-96.png'))
+            self.actionAutoscale.setIcon(
+                QIcon(":/Images/Images/new_icons/icons8-lock-96.png")
+            )
 
     def dataset_actions_disabled(self, state):
         """Disable buttons when there is no file in the dataset"""
@@ -758,7 +940,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             ds.actionNew_Theory.setDisabled(state)
             ds.cbtheory.setDisabled(state)
 
-    def add_annotation(self, action_trig=False, text=None, x=0, y=0, annotation_opts={}):
+    def add_annotation(
+        self, action_trig=False, text=None, x=0, y=0, annotation_opts={}
+    ):
         if self.current_viewtab == 0:
             ax = self.axarr[0]
         else:
@@ -769,18 +953,29 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 return
             if self._annotation_done:
                 return
-            text, ok = QInputDialog.getText(self, 'Annotation (LaTeX allowed)', 'Enter the annotation text:')
+            text, ok = QInputDialog.getText(
+                self, "Annotation (LaTeX allowed)", "Enter the annotation text:"
+            )
             if ok:
-                ann = ax.annotate(text, xy=(self._event.xdata, self._event.ydata), xytext=(self._event.xdata, self._event.ydata), **self.annotation_opts)
+                ann = ax.annotate(
+                    text,
+                    xy=(self._event.xdata, self._event.ydata),
+                    xytext=(self._event.xdata, self._event.ydata),
+                    **self.annotation_opts
+                )
                 self.graphicnotes.append(ann)
-                self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
+                self.artistnotes.append(
+                    DraggableNote(ann, DragType.both, None, self.edit_annotation)
+                )
                 self.canvas.draw()
             self._annotation_done = True
         else:
             # annotation from project loading
             ann = ax.annotate(text, xy=(x, y), **annotation_opts)
             self.graphicnotes.append(ann)
-            self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
+            self.artistnotes.append(
+                DraggableNote(ann, DragType.both, None, self.edit_annotation)
+            )
             self.canvas.draw()
 
     def edit_annotation(self, artist):
@@ -794,22 +989,25 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         else:
             ax = self.axarr[self.current_viewtab - 1]
 
-        if not (self.dialog.ui.cb_show_legend.isChecked() and self.DataSettabWidget.currentWidget()):
+        if not (
+            self.dialog.ui.cb_show_legend.isChecked()
+            and self.DataSettabWidget.currentWidget()
+        ):
             # remove legend when button unchecked or when no dataset
             try:
                 self.legend.remove()
             except:
-                pass # no legend to remove
+                pass  # no legend to remove
         else:
-            L=[]
-            N=[]
+            L = []
+            N = []
             ds = self.DataSettabWidget.currentWidget()
             if self.default_legend_labels:
                 # set default legend from app parameters
                 self.legend_labels = r""
                 ftype = list(self.filetypes.values())[0]
                 for p in ftype.basic_file_parameters:
-                    self.legend_labels += p + ' = [' + p + '] '
+                    self.legend_labels += p + " = [" + p + "] "
             params = re.findall(r"\[([A-Za-z0-9_]+)\]", self.legend_labels)
             for j, file in enumerate(ds.files):
                 if file.active:
@@ -821,10 +1019,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                         if p in file.file_parameters:
                             val = file.file_parameters[p]
                             try:
-                                val = "%g" % float(val) #format number
+                                val = "%g" % float(val)  # format number
                             except ValueError:
                                 pass
-                            label = label.replace('['+p+']', str(val))
+                            label = label.replace("[" + p + "]", str(val))
                     N.append(label)
             try:
                 self.legend = ax.legend(L, N, **self.legend_opts)
@@ -839,13 +1037,13 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             try:
                 self.canvas.draw()
             except Exception as e:
-                txt=""
-                txt+="Exception: %s\n"%traceback.format_exc()
-                txt+="\nPlease, check the TITLE and/or LEGEND below:\n\n"
-                if (self.legend_opts["title"]!=None):
-                    txt+="TITLE: "+self.legend_opts["title"]+"\n"
-                txt+="FIRST LEGEND ITEM: "+N[0]
-                QMessageBox.warning(self, 'Wrong Title or labels in legend', txt)
+                txt = ""
+                txt += "Exception: %s\n" % traceback.format_exc()
+                txt += "\nPlease, check the TITLE and/or LEGEND below:\n\n"
+                if self.legend_opts["title"] != None:
+                    txt += "TITLE: " + self.legend_opts["title"] + "\n"
+                txt += "FIRST LEGEND ITEM: " + N[0]
+                QMessageBox.warning(self, "Wrong Title or labels in legend", txt)
 
     def populate_cbPalette(self):
         """Populate the list color palettes in the marker-settings dialog"""
@@ -864,20 +1062,22 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         with filled or empty markers, depending on the user's choice
         """
         self.dialog.ui.cbSymbolType.clear()
-        if self.dialog.ui.rbFilled.isChecked(): #combobox with fillable symbols only
+        if self.dialog.ui.rbFilled.isChecked():  # combobox with fillable symbols only
             for m in SymbolMode.filledmarkernames.value:
-                ipath = ':/Markers/Images/Matplotlib_markers/marker_%s.png'%m
+                ipath = ":/Markers/Images/Matplotlib_markers/marker_%s.png" % m
                 self.dialog.ui.cbSymbolType.addItem(QIcon(ipath), m)
-        else: #combobox with all symbols only
+        else:  # combobox with all symbols only
             for m in SymbolMode.allmarkernames.value:
-                ipath = ':/Markers/Images/Matplotlib_markers/marker_%s.png'%m
+                ipath = ":/Markers/Images/Matplotlib_markers/marker_%s.png" % m
                 self.dialog.ui.cbSymbolType.addItem(QIcon(ipath), m)
 
     def handle_pickColor1(self):
         """Call the color picker and save the selected color to `color1` in RGB format"""
         color = self.showColorDialog()
-        if color: #check for none
-            self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%color.name())
+        if color:  # check for none
+            self.dialog.ui.labelPickedColor1.setStyleSheet(
+                "background: %s" % color.name()
+            )
             self.color1 = color.getRgbF()
 
     def handle_pickColor2(self):
@@ -885,7 +1085,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         RGB format used for gradient color type"""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s"%color.name())
+            self.dialog.ui.labelPickedColor2.setStyleSheet(
+                "background: %s" % color.name()
+            )
             self.color2 = color.getRgbF()
 
     def handle_pickThColor(self):
@@ -893,7 +1095,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         RGB format used for gradient color type"""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s"%color.name())
+            self.dialog.ui.labelThPickedColor.setStyleSheet(
+                "background: %s" % color.name()
+            )
             self.color_th = color.getRgbF()
 
     def handle_pickFaceColor(self):
@@ -901,40 +1105,44 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s"%color.name())
-            self.legend_opts['facecolor']=color.getRgbF()
+            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s" % color.name())
+            self.legend_opts["facecolor"] = color.getRgbF()
 
     def handle_pickEdgeColor(self):
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s"%color.name())
-            self.legend_opts['edgecolor']=color.getRgbF()
+            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s" % color.name())
+            self.legend_opts["edgecolor"] = color.getRgbF()
 
     def handle_pickFontColor(self):
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelFontColor.setStyleSheet("background: %s"%color.name())
-            self.annotation_opts['color']=color.getRgbF()
+            self.dialog.ui.labelFontColor.setStyleSheet("background: %s" % color.name())
+            self.annotation_opts["color"] = color.getRgbF()
 
     def handle_pickFontColor_ax(self):
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s"%color.name())
-            self.ax_opts['color_ax'] = color.getRgbF()
+            self.dialog.ui.labelFontColor_ax.setStyleSheet(
+                "background: %s" % color.name()
+            )
+            self.ax_opts["color_ax"] = color.getRgbF()
 
     def handle_pickFontColor_label(self):
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
         if color:
-            self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s"%color.name())
-            self.ax_opts['color_label'] = color.getRgbF()
+            self.dialog.ui.labelFontColor_label.setStyleSheet(
+                "background: %s" % color.name()
+            )
+            self.ax_opts["color_label"] = color.getRgbF()
 
     def handle_reset_all_pb(self):
         self.ax_opts = self.ax_opt_defaults.copy()
@@ -944,9 +1152,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """Show the color picker and return the picked QtColor or `None`"""
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            wtitle = "Select color for %s"%ds.name
-            color = QColorDialog.getColor(title=wtitle,
-                options=QColorDialog.DontUseNativeDialog)
+            wtitle = "Select color for %s" % ds.name
+            color = QColorDialog.getColor(
+                title=wtitle, options=QColorDialog.DontUseNativeDialog
+            )
             if not color.isValid():
                 color = None
             return color
@@ -961,34 +1170,33 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for file in ds.files:
             self.fparam_backup.append([file.color, file.marker, file.size, file.filled])
 
-        #preset the colors in the labels
-        col = QColor(ds.color1[0]*255, ds.color1[1]*255, ds.color1[2]*255)
-        self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s"%col.name())
-        col = QColor(ds.color2[0]*255, ds.color2[1]*255, ds.color2[2]*255)
-        self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s"%col.name())
-        col = QColor(ds.th_color[0]*255, ds.th_color[1]*255, ds.th_color[2]*255)
-        self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s"%col.name())
-        #preset the spinbox
+        # preset the colors in the labels
+        col = QColor(ds.color1[0] * 255, ds.color1[1] * 255, ds.color1[2] * 255)
+        self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s" % col.name())
+        col = QColor(ds.color2[0] * 255, ds.color2[1] * 255, ds.color2[2] * 255)
+        self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s" % col.name())
+        col = QColor(ds.th_color[0] * 255, ds.th_color[1] * 255, ds.th_color[2] * 255)
+        self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s" % col.name())
+        # preset the spinbox
         self.dialog.ui.spinBox.setValue(ds.marker_size)
         self.dialog.ui.spinBoxLineW.setValue(ds.line_width)
         self.dialog.ui.sbThLineWidth.setValue(ds.th_line_width)
-        #preset radioButtons
-            #symbols
+        # preset radioButtons
+        # symbols
         is_fixed = ds.symbolmode == SymbolMode.fixed.value
         self.dialog.ui.rbFixedSymbol.setChecked(is_fixed)
         # self.dialog.ui.rbVariableSymbol.setChecked(not is_fixed)
         self.dialog.ui.cbSymbolType.setDisabled(not is_fixed)
-        #preset the color combobox
+        # preset the color combobox
         ind = self.dialog.ui.cbPalette.findText(ds.palette_name)
         self.dialog.ui.cbPalette.setCurrentIndex(ind)
-        #preset radiobutton theory
+        # preset radiobutton theory
         if ds.th_line_mode == ThLineMode.as_data.value:
             self.dialog.ui.rbThSameColor.click()
         else:
             self.dialog.ui.rbThFixedColor.click()
 
-
-            #colors
+            # colors
         # self.dialog.ui.rbFixedColor.setChecked(False)
         # self.dialog.ui.rbGradientColor.setChecked(False)
         # self.dialog.ui.rbPalette.setChecked(False)
@@ -1000,154 +1208,194 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.dialog.ui.rbPalette.click()
 
         # Legend stuff
-        self.dialog.ui.locationComboBox.setCurrentText(self.legend_opts['loc'])
-        self.dialog.ui.colSpinBox.setValue(self.legend_opts['ncol'])
-        self.dialog.ui.fontsizeSpinBox.setValue(self.legend_opts['fontsize'])
-        self.dialog.ui.markerfirstCheckBox.setChecked(self.legend_opts['markerfirst'])
-        self.dialog.ui.frameonCheckBox.setChecked(self.legend_opts['frameon'])
-        self.dialog.ui.fancyboxCheckBox.setChecked(self.legend_opts['fancybox'])
-        self.dialog.ui.shadowCheckBox.setChecked(self.legend_opts['shadow'])
-        if (self.legend_opts['framealpha']==None):
+        self.dialog.ui.locationComboBox.setCurrentText(self.legend_opts["loc"])
+        self.dialog.ui.colSpinBox.setValue(self.legend_opts["ncol"])
+        self.dialog.ui.fontsizeSpinBox.setValue(self.legend_opts["fontsize"])
+        self.dialog.ui.markerfirstCheckBox.setChecked(self.legend_opts["markerfirst"])
+        self.dialog.ui.frameonCheckBox.setChecked(self.legend_opts["frameon"])
+        self.dialog.ui.fancyboxCheckBox.setChecked(self.legend_opts["fancybox"])
+        self.dialog.ui.shadowCheckBox.setChecked(self.legend_opts["shadow"])
+        if self.legend_opts["framealpha"] == None:
             self.dialog.ui.framealphaCheckBox.setChecked(False)
             self.dialog.ui.framealphaSpinBox.setValue(0.0)
         else:
             self.dialog.ui.framealphaCheckBox.setChecked(True)
-            self.dialog.ui.framealphaSpinBox.setValue(self.legend_opts['framealpha'])
-        if (self.legend_opts['facecolor']==None):
+            self.dialog.ui.framealphaSpinBox.setValue(self.legend_opts["framealpha"])
+        if self.legend_opts["facecolor"] == None:
             self.dialog.ui.facecolorCheckBox.setChecked(False)
         else:
             self.dialog.ui.facecolorCheckBox.setChecked(True)
-            col = QColor(self.legend_opts['facecolor'][0]*255, self.legend_opts['facecolor'][1]*255, self.legend_opts['facecolor'][2]*255)
-            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s"%col.name())
-        if (self.legend_opts['edgecolor']==None):
+            col = QColor(
+                self.legend_opts["facecolor"][0] * 255,
+                self.legend_opts["facecolor"][1] * 255,
+                self.legend_opts["facecolor"][2] * 255,
+            )
+            self.dialog.ui.labelFaceColor.setStyleSheet("background: %s" % col.name())
+        if self.legend_opts["edgecolor"] == None:
             self.dialog.ui.edgecolorCheckBox.setChecked(False)
         else:
             self.dialog.ui.edgecolorCheckBox.setChecked(True)
-            col = QColor(self.legend_opts['edgecolor'][0]*255, self.legend_opts['edgecolor'][1]*255, self.legend_opts['edgecolor'][2]*255)
-            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s"%col.name())
-        self.dialog.ui.modeCheckBox.setChecked(self.legend_opts['mode']=='expand')
-        if (self.legend_opts['title']==None):
+            col = QColor(
+                self.legend_opts["edgecolor"][0] * 255,
+                self.legend_opts["edgecolor"][1] * 255,
+                self.legend_opts["edgecolor"][2] * 255,
+            )
+            self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s" % col.name())
+        self.dialog.ui.modeCheckBox.setChecked(self.legend_opts["mode"] == "expand")
+        if self.legend_opts["title"] == None:
             self.dialog.ui.legendtitleCheckBox.setChecked(False)
         else:
             self.dialog.ui.legendtitleCheckBox.setChecked(True)
-            self.dialog.ui.legendtitleStr.setText(self.legend_opts['title'])
-        if (self.legend_opts['borderpad']==None):
+            self.dialog.ui.legendtitleStr.setText(self.legend_opts["title"])
+        if self.legend_opts["borderpad"] == None:
             self.dialog.ui.borderpadCheckBox.setChecked(False)
         else:
             self.dialog.ui.borderpadCheckBox.setChecked(True)
-            self.dialog.ui.borderpadSpinBox.setValue(self.legend_opts['borderpad'])
-        if (self.legend_opts['labelspacing']==None):
+            self.dialog.ui.borderpadSpinBox.setValue(self.legend_opts["borderpad"])
+        if self.legend_opts["labelspacing"] == None:
             self.dialog.ui.labelspacingCheckBox.setChecked(False)
         else:
             self.dialog.ui.labelspacingCheckBox.setChecked(True)
-            self.dialog.ui.labelspacingSpinBox.setValue(self.legend_opts['labelspacing'])
-        if (self.legend_opts['handletextpad']==None):
+            self.dialog.ui.labelspacingSpinBox.setValue(
+                self.legend_opts["labelspacing"]
+            )
+        if self.legend_opts["handletextpad"] == None:
             self.dialog.ui.handletextpadCheckBox.setChecked(False)
         else:
             self.dialog.ui.handletextpadCheckBox.setChecked(True)
-            self.dialog.ui.handletextpadSpinBox.setValue(self.legend_opts['handletextpad'])
-        if (self.legend_opts['columnspacing']==None):
+            self.dialog.ui.handletextpadSpinBox.setValue(
+                self.legend_opts["handletextpad"]
+            )
+        if self.legend_opts["columnspacing"] == None:
             self.dialog.ui.columnspacingCheckBox.setChecked(False)
         else:
             self.dialog.ui.columnspacingCheckBox.setChecked(True)
-            self.dialog.ui.columnspacingSpinBox.setValue(self.legend_opts['columnspacing'])
-        if (self.default_legend_labels == True):
+            self.dialog.ui.columnspacingSpinBox.setValue(
+                self.legend_opts["columnspacing"]
+            )
+        if self.default_legend_labels == True:
             self.dialog.ui.legendlabelCheckBox.setChecked(False)
             str = ""
             ftype = list(self.filetypes.values())[0]
             for p in ftype.basic_file_parameters:
-                str += p + ' = [' + p + '] '
+                str += p + " = [" + p + "] "
             self.dialog.ui.legendlabelStr.setText(str)
         else:
             self.dialog.ui.legendlabelCheckBox.setChecked(True)
             self.dialog.ui.legendlabelStr.setText(self.legend_labels)
         self.dialog.ui.draggableCheckBox.setChecked(self.legend_draggable)
 
-
         # Annotation stuff
-        self.dialog.ui.rotationSpinBox.setValue(self.annotation_opts['rotation'])
-        self.dialog.ui.hacomboBox.setCurrentText(self.annotation_opts['horizontalalignment'])
-        self.dialog.ui.vacomboBox.setCurrentText(self.annotation_opts['verticalalignment'])
-        col = QColor(self.annotation_opts['color'][0]*255, self.annotation_opts['color'][1]*255, self.annotation_opts['color'][2]*255)
-        self.dialog.ui.labelFontColor.setStyleSheet("background: %s"%col.name())
-        self.dialog.ui.fontweightComboBox.setCurrentText(self.annotation_opts['fontweight'])
-        self.dialog.ui.fontstyleComboBox.setCurrentText(self.annotation_opts['style'])
-        self.dialog.ui.fontsizeannotationSpinBox.setValue(self.annotation_opts['fontsize'])
-        self.dialog.ui.framealphaannotationSpinBox.setValue(self.annotation_opts['alpha'])
-        self.dialog.ui.fontfamilyComboBox.setCurrentText(self.annotation_opts['family'])
-        #Axis stuff
+        self.dialog.ui.rotationSpinBox.setValue(self.annotation_opts["rotation"])
+        self.dialog.ui.hacomboBox.setCurrentText(
+            self.annotation_opts["horizontalalignment"]
+        )
+        self.dialog.ui.vacomboBox.setCurrentText(
+            self.annotation_opts["verticalalignment"]
+        )
+        col = QColor(
+            self.annotation_opts["color"][0] * 255,
+            self.annotation_opts["color"][1] * 255,
+            self.annotation_opts["color"][2] * 255,
+        )
+        self.dialog.ui.labelFontColor.setStyleSheet("background: %s" % col.name())
+        self.dialog.ui.fontweightComboBox.setCurrentText(
+            self.annotation_opts["fontweight"]
+        )
+        self.dialog.ui.fontstyleComboBox.setCurrentText(self.annotation_opts["style"])
+        self.dialog.ui.fontsizeannotationSpinBox.setValue(
+            self.annotation_opts["fontsize"]
+        )
+        self.dialog.ui.framealphaannotationSpinBox.setValue(
+            self.annotation_opts["alpha"]
+        )
+        self.dialog.ui.fontfamilyComboBox.setCurrentText(self.annotation_opts["family"])
+        # Axis stuff
         self.set_axis_marker_settings()
 
-        success = self.dialog.exec_() #this blocks the rest of the app as opposed to .show()
+        success = (
+            self.dialog.exec_()
+        )  # this blocks the rest of the app as opposed to .show()
         if success == 1:
             self.handle_apply_button_pressed()
         else:
             ds.do_plot()
 
     def set_axis_marker_settings(self):
-        col = QColor(self.ax_opts['color_label'][0]*255, self.ax_opts['color_label'][1]*255, self.ax_opts['color_label'][2]*255)
-        self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s"%col.name())
-        col = QColor(self.ax_opts['color_ax'][0]*255, self.ax_opts['color_ax'][1]*255, self.ax_opts['color_ax'][2]*255)
-        self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s"%col.name())
-        self.dialog.ui.fontweightComboBox_ax.setCurrentText(self.ax_opts['fontweight'])
-        self.dialog.ui.fontstyleComboBox_ax.setCurrentText(self.ax_opts['style'])
-        self.dialog.ui.fontsizeSpinBox_ax.setValue(self.ax_opts['fontsize'])
-        self.dialog.ui.fontfamilyComboBox_ax.setCurrentText(self.ax_opts['family'])
-        self.dialog.ui.axis_thickness_cb.setValue(self.ax_opts['axis_thickness'])
-        self.dialog.ui.tick_label_size_cb.setValue(self.ax_opts['tick_label_size'])
-        self.dialog.ui.grid_cb.setChecked(bool(self.ax_opts['grid']))
-        self.dialog.ui.label_size_auto_cb.setChecked(bool(self.ax_opts['label_size_auto']))
-        self.dialog.ui.tick_label_size_auto_cb.setChecked(bool(self.ax_opts['tick_label_size_auto']))
+        col = QColor(
+            self.ax_opts["color_label"][0] * 255,
+            self.ax_opts["color_label"][1] * 255,
+            self.ax_opts["color_label"][2] * 255,
+        )
+        self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s" % col.name())
+        col = QColor(
+            self.ax_opts["color_ax"][0] * 255,
+            self.ax_opts["color_ax"][1] * 255,
+            self.ax_opts["color_ax"][2] * 255,
+        )
+        self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s" % col.name())
+        self.dialog.ui.fontweightComboBox_ax.setCurrentText(self.ax_opts["fontweight"])
+        self.dialog.ui.fontstyleComboBox_ax.setCurrentText(self.ax_opts["style"])
+        self.dialog.ui.fontsizeSpinBox_ax.setValue(self.ax_opts["fontsize"])
+        self.dialog.ui.fontfamilyComboBox_ax.setCurrentText(self.ax_opts["family"])
+        self.dialog.ui.axis_thickness_cb.setValue(self.ax_opts["axis_thickness"])
+        self.dialog.ui.tick_label_size_cb.setValue(self.ax_opts["tick_label_size"])
+        self.dialog.ui.grid_cb.setChecked(bool(self.ax_opts["grid"]))
+        self.dialog.ui.label_size_auto_cb.setChecked(
+            bool(self.ax_opts["label_size_auto"])
+        )
+        self.dialog.ui.tick_label_size_auto_cb.setChecked(
+            bool(self.ax_opts["tick_label_size_auto"])
+        )
 
     def handle_apply_button_pressed(self):
         """Apply the selected marker properties to all the files in the current dataset"""
         ds = self.DataSettabWidget.currentWidget()
         if ds:
-            #find the color mode
-            if self.dialog.ui.rbFixedColor.isChecked(): #fixed color?
+            # find the color mode
+            if self.dialog.ui.rbFixedColor.isChecked():  # fixed color?
                 ds.colormode = ColorMode.fixed.value
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
-            elif self.dialog.ui.rbPalette.isChecked(): #color from palette?
+            elif self.dialog.ui.rbPalette.isChecked():  # color from palette?
                 ds.colormode = ColorMode.variable.value
                 ds.palette_name = self.dialog.ui.cbPalette.currentText()
                 # ds.palette = ColorMode.colorpalettes.value[palette_name]
-            else: # color from gradient
+            else:  # color from gradient
                 ds.colormode = ColorMode.gradient.value
                 ds.color1 = self.color1 if self.color1 else ColorMode.color1.value
                 ds.color2 = self.color2 if self.color2 else ColorMode.color2.value
 
-            #find Theory color mode
+            # find Theory color mode
             if self.dialog.ui.rbThSameColor.isChecked():
                 ds.th_line_mode = ThLineMode.as_data.value
             else:
                 ds.th_line_mode = ThLineMode.fixed.value
                 ds.th_color = self.color_th if self.color_th else ThLineMode.color.value
 
-            #find the shape mode
-            if self.dialog.ui.rbVariableSymbol.isChecked(): #variable symbols?
-                if self.dialog.ui.rbFilled.isChecked(): #filled?
+            # find the shape mode
+            if self.dialog.ui.rbVariableSymbol.isChecked():  # variable symbols?
+                if self.dialog.ui.rbFilled.isChecked():  # filled?
                     ds.symbolmode = SymbolMode.variablefilled.value
-                else: #empty
+                else:  # empty
                     ds.symbolmode = SymbolMode.variable.value
-            else: #single symbol
+            else:  # single symbol
                 ind = self.dialog.ui.cbSymbolType.currentIndex()
-                if self.dialog.ui.rbFilled.isChecked(): #filled?
+                if self.dialog.ui.rbFilled.isChecked():  # filled?
                     ds.symbolmode = SymbolMode.fixedfilled.value
                     ds.symbol1 = SymbolMode.filledmarkers.value[ind]
                     ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
-                else: #empty
+                else:  # empty
                     ds.symbolmode = SymbolMode.fixed.value
                     ds.symbol1 = SymbolMode.allmarkers.value[ind]
                     ds.symbol1_name = self.dialog.ui.cbSymbolType.currentText()
 
-
-            #get the marker size
+            # get the marker size
             ds.marker_size = self.dialog.ui.spinBox.value()
-            #get the line width
+            # get the line width
             ds.line_width = self.dialog.ui.spinBoxLineW.value()
-            #get the theory linestyle
+            # get the theory linestyle
             ds.th_linestyle = self.dialog.ui.cbTheoryLine.currentText()
-            #get the theory line width
+            # get the theory line width
             ds.th_line_width = self.dialog.ui.sbThLineWidth.value()
 
             # ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
@@ -1155,50 +1403,62 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             # ds.DataSettreeWidget.blockSignals(False)
 
             # Legend stuff
-            self.legend_opts['loc'] = self.dialog.ui.locationComboBox.currentText()
-            self.legend_opts['ncol'] = self.dialog.ui.colSpinBox.value()
-            self.legend_opts['title_fontsize'] = self.legend_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox.value()
-            self.legend_opts['markerfirst'] = self.dialog.ui.markerfirstCheckBox.isChecked()
-            self.legend_opts['frameon'] = self.dialog.ui.frameonCheckBox.isChecked()
-            self.legend_opts['fancybox'] = self.dialog.ui.fancyboxCheckBox.isChecked()
-            self.legend_opts['shadow'] = self.dialog.ui.shadowCheckBox.isChecked()
-            if (self.dialog.ui.framealphaCheckBox.isChecked()):
-                self.legend_opts['framealpha'] = self.dialog.ui.framealphaSpinBox.value()
+            self.legend_opts["loc"] = self.dialog.ui.locationComboBox.currentText()
+            self.legend_opts["ncol"] = self.dialog.ui.colSpinBox.value()
+            self.legend_opts["title_fontsize"] = self.legend_opts[
+                "fontsize"
+            ] = self.dialog.ui.fontsizeSpinBox.value()
+            self.legend_opts[
+                "markerfirst"
+            ] = self.dialog.ui.markerfirstCheckBox.isChecked()
+            self.legend_opts["frameon"] = self.dialog.ui.frameonCheckBox.isChecked()
+            self.legend_opts["fancybox"] = self.dialog.ui.fancyboxCheckBox.isChecked()
+            self.legend_opts["shadow"] = self.dialog.ui.shadowCheckBox.isChecked()
+            if self.dialog.ui.framealphaCheckBox.isChecked():
+                self.legend_opts[
+                    "framealpha"
+                ] = self.dialog.ui.framealphaSpinBox.value()
             else:
-                self.legend_opts['framealpha'] = None
-            if (self.dialog.ui.facecolorCheckBox.isChecked()):
+                self.legend_opts["framealpha"] = None
+            if self.dialog.ui.facecolorCheckBox.isChecked():
                 pass
             else:
-                self.legend_opts['facecolor'] = None
-            if (self.dialog.ui.edgecolorCheckBox.isChecked()):
+                self.legend_opts["facecolor"] = None
+            if self.dialog.ui.edgecolorCheckBox.isChecked():
                 pass
             else:
-                self.legend_opts['edgecolor'] = None
-            if (self.dialog.ui.modeCheckBox.isChecked()):
-                self.legend_opts['mode'] = 'expand'
+                self.legend_opts["edgecolor"] = None
+            if self.dialog.ui.modeCheckBox.isChecked():
+                self.legend_opts["mode"] = "expand"
             else:
-                self.legend_opts['mode'] = None
-            if (self.dialog.ui.legendtitleCheckBox.isChecked()):
-                self.legend_opts['title'] = r""+self.dialog.ui.legendtitleStr.text()
+                self.legend_opts["mode"] = None
+            if self.dialog.ui.legendtitleCheckBox.isChecked():
+                self.legend_opts["title"] = r"" + self.dialog.ui.legendtitleStr.text()
             else:
-                self.legend_opts['title'] = None
-            if (self.dialog.ui.borderpadCheckBox.isChecked()):
-                self.legend_opts['borderpad'] = self.dialog.ui.borderpadSpinBox.value()
+                self.legend_opts["title"] = None
+            if self.dialog.ui.borderpadCheckBox.isChecked():
+                self.legend_opts["borderpad"] = self.dialog.ui.borderpadSpinBox.value()
             else:
-                self.legend_opts['borderpad'] = None
-            if (self.dialog.ui.labelspacingCheckBox.isChecked()):
-                self.legend_opts['labelspacing'] = self.dialog.ui.labelspacingSpinBox.value()
+                self.legend_opts["borderpad"] = None
+            if self.dialog.ui.labelspacingCheckBox.isChecked():
+                self.legend_opts[
+                    "labelspacing"
+                ] = self.dialog.ui.labelspacingSpinBox.value()
             else:
-                self.legend_opts['labelspacing'] = None
-            if (self.dialog.ui.handletextpadCheckBox.isChecked()):
-                self.legend_opts['handletextpad'] = self.dialog.ui.handletextpadSpinBox.value()
+                self.legend_opts["labelspacing"] = None
+            if self.dialog.ui.handletextpadCheckBox.isChecked():
+                self.legend_opts[
+                    "handletextpad"
+                ] = self.dialog.ui.handletextpadSpinBox.value()
             else:
-                self.legend_opts['handletextpad'] = None
-            if (self.dialog.ui.columnspacingCheckBox.isChecked()):
-                self.legend_opts['columnspacing'] = self.dialog.ui.columnspacingSpinBox.value()
+                self.legend_opts["handletextpad"] = None
+            if self.dialog.ui.columnspacingCheckBox.isChecked():
+                self.legend_opts[
+                    "columnspacing"
+                ] = self.dialog.ui.columnspacingSpinBox.value()
             else:
-                self.legend_opts['columnspacing'] = None
-            if (self.dialog.ui.legendlabelCheckBox.isChecked()):
+                self.legend_opts["columnspacing"] = None
+            if self.dialog.ui.legendlabelCheckBox.isChecked():
                 self.default_legend_labels = False
                 self.legend_labels = self.dialog.ui.legendlabelStr.text()
             else:
@@ -1206,27 +1466,47 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             self.legend_draggable = self.dialog.ui.draggableCheckBox.isChecked()
 
             # Annotation stuff
-            self.annotation_opts['alpha'] = self.dialog.ui.framealphaannotationSpinBox.value()
-            self.annotation_opts['family'] = self.dialog.ui.fontfamilyComboBox.currentText()
-            self.annotation_opts['horizontalalignment'] = self.dialog.ui.hacomboBox.currentText()
-            self.annotation_opts['rotation'] = self.dialog.ui.rotationSpinBox.value()
-            self.annotation_opts['fontsize'] = self.dialog.ui.fontsizeannotationSpinBox.value()
-            self.annotation_opts['style'] = self.dialog.ui.fontstyleComboBox.currentText()
-            self.annotation_opts['verticalalignment'] = self.dialog.ui.vacomboBox.currentText()
-            self.annotation_opts['fontweight'] = self.dialog.ui.fontweightComboBox.currentText()
+            self.annotation_opts[
+                "alpha"
+            ] = self.dialog.ui.framealphaannotationSpinBox.value()
+            self.annotation_opts[
+                "family"
+            ] = self.dialog.ui.fontfamilyComboBox.currentText()
+            self.annotation_opts[
+                "horizontalalignment"
+            ] = self.dialog.ui.hacomboBox.currentText()
+            self.annotation_opts["rotation"] = self.dialog.ui.rotationSpinBox.value()
+            self.annotation_opts[
+                "fontsize"
+            ] = self.dialog.ui.fontsizeannotationSpinBox.value()
+            self.annotation_opts[
+                "style"
+            ] = self.dialog.ui.fontstyleComboBox.currentText()
+            self.annotation_opts[
+                "verticalalignment"
+            ] = self.dialog.ui.vacomboBox.currentText()
+            self.annotation_opts[
+                "fontweight"
+            ] = self.dialog.ui.fontweightComboBox.currentText()
 
-            #Axis stuff
-            self.ax_opts['family'] = self.dialog.ui.fontfamilyComboBox_ax.currentText()
-            self.ax_opts['fontsize'] = self.dialog.ui.fontsizeSpinBox_ax.value()
-            self.ax_opts['style'] = self.dialog.ui.fontstyleComboBox_ax.currentText()
-            self.ax_opts['fontweight'] = self.dialog.ui.fontweightComboBox_ax.currentText()
-            self.ax_opts['axis_thickness'] = self.dialog.ui.axis_thickness_cb.value()
-            self.ax_opts['tick_label_size'] = self.dialog.ui.tick_label_size_cb.value()
-            self.ax_opts['grid'] = int(self.dialog.ui.grid_cb.isChecked())
-            self.ax_opts['label_size_auto'] = int(self.dialog.ui.label_size_auto_cb.isChecked())
-            self.ax_opts['tick_label_size_auto'] = int(self.dialog.ui.tick_label_size_auto_cb.isChecked())
+            # Axis stuff
+            self.ax_opts["family"] = self.dialog.ui.fontfamilyComboBox_ax.currentText()
+            self.ax_opts["fontsize"] = self.dialog.ui.fontsizeSpinBox_ax.value()
+            self.ax_opts["style"] = self.dialog.ui.fontstyleComboBox_ax.currentText()
+            self.ax_opts[
+                "fontweight"
+            ] = self.dialog.ui.fontweightComboBox_ax.currentText()
+            self.ax_opts["axis_thickness"] = self.dialog.ui.axis_thickness_cb.value()
+            self.ax_opts["tick_label_size"] = self.dialog.ui.tick_label_size_cb.value()
+            self.ax_opts["grid"] = int(self.dialog.ui.grid_cb.isChecked())
+            self.ax_opts["label_size_auto"] = int(
+                self.dialog.ui.label_size_auto_cb.isChecked()
+            )
+            self.ax_opts["tick_label_size_auto"] = int(
+                self.dialog.ui.tick_label_size_auto_cb.isChecked()
+            )
             self.resizeplot()
-            ds.do_plot() # update plot and legend
+            ds.do_plot()  # update plot and legend
 
     def handle_inspectorVisibilityChanged(self, visible):
         """Handle the hide/show event of the data inspector"""
@@ -1252,47 +1532,48 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for i in range(nfiles):
                 f = ds.files[i]
                 for j in range(ncurves):
-                    f.xshift[j] = float(d.table.item(i, 2*j).text())
-                    f.yshift[j] = float(d.table.item(i, 2*j+1).text())
+                    f.xshift[j] = float(d.table.item(i, 2 * j).text())
+                    f.yshift[j] = float(d.table.item(i, 2 * j + 1).text())
 
     def handle_actionSaveShiftTriggered(self):
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
         dir_start = self.dir_start
-        dilogue_name = "Select Folder for Saving shift factors of current dataset as txt"
+        dilogue_name = (
+            "Select Folder for Saving shift factors of current dataset as txt"
+        )
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
         if isdir(folder):
-            with open(join(folder, 'Shift_Factors.txt'), 'w') as fout:
+            with open(join(folder, "Shift_Factors.txt"), "w") as fout:
                 f0 = ds.files[0]
                 fparam = f0.file_type.basic_file_parameters
                 for pname in f0.file_parameters:
                     if pname not in fparam:
-                        fout.write('%s=%s;' % (pname, f0.file_parameters[pname]))
-                fout.write('\n')
+                        fout.write("%s=%s;" % (pname, f0.file_parameters[pname]))
+                fout.write("\n")
                 for p in fparam:
-                    fout.write('%s '%p)
+                    fout.write("%s " % p)
                 ncurves = len(f0.xshift)
                 for i in range(ncurves):
-                    fout.write('x%d y%d '%(i+1,i+1))
-                fout.write('\n')
+                    fout.write("x%d y%d " % (i + 1, i + 1))
+                fout.write("\n")
                 for i, f in enumerate(ds.files):
                     if f.active:
                         for p in fparam:
-                            fout.write('%s '%f.file_parameters[p])
+                            fout.write("%s " % f.file_parameters[p])
                         for j in range(ncurves):
-                            fout.write('%g %g '%(f.xshift[j], f.yshift[j]))
-                        fout.write('\n')
-
+                            fout.write("%g %g " % (f.xshift[j], f.yshift[j]))
+                        fout.write("\n")
 
     def handle_actionResetShiftTriggered(self):
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
         for file in ds.files:
-            file.xshift = [0]*DataTable.MAX_NUM_SERIES
-            file.yshift = [0]*DataTable.MAX_NUM_SERIES
-            file.isshifted = [False]*DataTable.MAX_NUM_SERIES
+            file.xshift = [0] * DataTable.MAX_NUM_SERIES
+            file.yshift = [0] * DataTable.MAX_NUM_SERIES
+            file.isshifted = [False] * DataTable.MAX_NUM_SERIES
             ds.do_plot()
         for i in range(DataTable.MAX_NUM_SERIES):
             for j in range(2):
@@ -1301,7 +1582,12 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def handle_actionShiftTriggered(self):
         """Allow the current 'selected_file' to be dragged"""
-        self.shiftTable.setVisible((self.actionShiftHorizontally.isChecked() or self.actionShiftVertically.isChecked()))
+        self.shiftTable.setVisible(
+            (
+                self.actionShiftHorizontally.isChecked()
+                or self.actionShiftVertically.isChecked()
+            )
+        )
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -1320,9 +1606,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             curve.disconnect()
         self.curves.clear()
 
-        for i, curve in enumerate(ds.selected_file.data_table.series[0]): #drag allowed on axarr[0] only
-            x, y, success = self.current_view.view_proc(ds.selected_file.data_table, ds.selected_file.file_parameters)
-            cur = DraggableSeries(curve, mode, self.current_view.log_x, self.current_view.log_y, xref=x[0], yref=y[0], function=self.update_shifts, functionendshift=self.finish_shifts, index=i)
+        for i, curve in enumerate(
+            ds.selected_file.data_table.series[0]
+        ):  # drag allowed on axarr[0] only
+            x, y, success = self.current_view.view_proc(
+                ds.selected_file.data_table, ds.selected_file.file_parameters
+            )
+            cur = DraggableSeries(
+                curve,
+                mode,
+                self.current_view.log_x,
+                self.current_view.log_y,
+                xref=x[0],
+                yref=y[0],
+                function=self.update_shifts,
+                functionendshift=self.finish_shifts,
+                index=i,
+            )
             self.curves.append(cur)
 
     def update_shifts(self, dx, dy, index):
@@ -1330,17 +1630,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if not ds.selected_file:
             return
         item = self.shiftTable.item(index, 0)
-        item.setText("%g"%(ds.selected_file.xshift[index]+dx))
+        item.setText("%g" % (ds.selected_file.xshift[index] + dx))
         item = self.shiftTable.item(index, 1)
-        item.setText("%g"%(ds.selected_file.yshift[index]+dy))
-
+        item.setText("%g" % (ds.selected_file.yshift[index] + dy))
 
     def finish_shifts(self, dx, dy, index):
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
-        ds.selected_file.xshift[index]+=dx
-        ds.selected_file.yshift[index]+=dy
+        ds.selected_file.xshift[index] += dx
+        ds.selected_file.yshift[index] += dy
         ds.selected_file.isshifted[index] = True
 
     def disconnect_curve_drag(self):
@@ -1349,8 +1648,8 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         for curve in self.curves:
             curve.disconnect()
         self.curves.clear()
-        #self.actionShiftHorizontally.setChecked(False)
-        #self.actionShiftVertically.setChecked(False)
+        # self.actionShiftHorizontally.setChecked(False)
+        # self.actionShiftVertically.setChecked(False)
 
     def handle_actionReload_Data(self):
         """Reload the data files in the current DataSet"""
@@ -1428,7 +1727,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.Qshow_all()
                 ds.highlight_series()
         else:
-            #trigger a false change of tab to hide other dataset files from figure
+            # trigger a false change of tab to hide other dataset files from figure
             self.handle_currentChanged(self.DataSettabWidget.currentIndex())
         self.update_Qplot()
 
@@ -1440,19 +1739,23 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         ds = self.DataSettabWidget.widget(index)
         if ds:
             disable_buttons = True if not ds.files else False
-            self.dataset_actions_disabled(disable_buttons) # disable/activate buttons buttons
+            self.dataset_actions_disabled(
+                disable_buttons
+            )  # disable/activate buttons buttons
             ntab = self.DataSettabWidget.count()
             for i in range(ntab):
-                if i!=index:
-                    ds_to_hide = self.DataSettabWidget.widget(i) #hide files of all datasets except current one
+                if i != index:
+                    ds_to_hide = self.DataSettabWidget.widget(
+                        i
+                    )  # hide files of all datasets except current one
                     ds_to_hide.do_hide_all("")
                     ds_to_hide.set_no_limits(ds_to_hide.current_theory)
-            ds.Qshow_all() #show all data of current dataset, except previously unticked files
+            ds.Qshow_all()  # show all data of current dataset, except previously unticked files
             ds.highlight_series()
             ds.populate_inspector()
-        else: # handle case where no dataset is left
+        else:  # handle case where no dataset is left
             self.dataset_actions_disabled(True)
-            self.inspector_table.setRowCount(0) #empty the inspector
+            self.inspector_table.setRowCount(0)  # empty the inspector
             self.DataInspectordockWidget.setWindowTitle("File:")
         self.update_Qplot()
 
@@ -1466,10 +1769,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         dlg.setWindowTitle("Change DataSet Name")
         dlg.setLabelText("New DataSet Name:")
         dlg.setTextValue(old_name)
-        dlg.resize(400,100)
+        dlg.resize(400, 100)
         success = dlg.exec()
         new_tab_name = dlg.textValue()
-        if (success and new_tab_name!=""):
+        if success and new_tab_name != "":
             self.DataSettabWidget.setTabText(index, new_tab_name)
             # self.datasets[old_name].name = new_tab_name
             # self.datasets[new_tab_name] = self.datasets.pop(old_name)
@@ -1480,7 +1783,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if index == self.DataSettabWidget.currentIndex():
             self.disconnect_curve_drag()
             ds.set_no_limits(ds.current_theory)
-        self.delete(ds.name) #call Application.delete to delete DataSet
+        self.delete(ds.name)  # call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
         self.update_legend()
 
@@ -1497,7 +1800,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 ds.theories[ds.current_theory].is_yrange_visible = y_vis
                 ds.theories[ds.current_theory].set_xy_limits_visible(x_vis, y_vis)
 
-        self.view_switch(selected_view_name) #view_switch of Application
+        self.view_switch(selected_view_name)  # view_switch of Application
         self.set_view_tools(selected_view_name)
         self.update_Qplot()
         self.disconnect_curve_drag()
@@ -1513,7 +1816,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def dropEvent(self, e):
         """Drag and drop stuff"""
-        #reptatelogger = logging.getLogger('ReptateLogger')
+        # reptatelogger = logging.getLogger('ReptateLogger')
         paths_to_open = []
         for url in e.mimeData().urls():
             path = url.toLocalFile()
@@ -1529,7 +1832,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # except:
         #     pass
         # self.canvas = FigureCanvas(self.figure)
-        #self.mplvl.addWidget(self.canvas)
+        # self.mplvl.addWidget(self.canvas)
         # self.canvas.draw()
 
     def addTableToCurrentDataSet(self, dt, ext):
@@ -1541,7 +1844,10 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 s_param = dt.file_parameters[param]
             except KeyError as e:
                 # header = "Missing Parameter"
-                message = "Parameter %s not found in file '%s'."%(e, dt.file_name_short)
+                message = "Parameter %s not found in file '%s'." % (
+                    e,
+                    dt.file_name_short,
+                )
                 # QMessageBox.warning(self, header, message)
                 self.logger.warning(message)
             else:
@@ -1555,46 +1861,48 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         file_name_short = dt.file_name_short
         lnew.insert(0, file_name_short)
         newitem = DataSetWidgetItem(ds.DataSettreeWidget, lnew)
-        #newitem.setCheckState(0, 2)
+        # newitem.setCheckState(0, 2)
         newitem.setCheckState(0, Qt.CheckState.Checked)
-        self.dataset_actions_disabled(False) #activate buttons
+        self.dataset_actions_disabled(False)  # activate buttons
 
     def handle_createNew_Empty_Dataset(self):
         """Called when button 'new dataset' pushed"""
         self.createNew_Empty_Dataset()
 
-    def createNew_Empty_Dataset(self, tabname=''):
+    def createNew_Empty_Dataset(self, tabname=""):
         """Add New empty tab to DataSettabWidget"""
-        self.num_datasets += 1 #increment counter of Application
+        self.num_datasets += 1  # increment counter of Application
         num = self.num_datasets
-        ds_name = 'Set%d'%num
+        ds_name = "Set%d" % num
         ds = QDataSet(name=ds_name, parent=self)
         self.datasets[ds_name] = ds
-        if tabname == '':
+        if tabname == "":
             tabname = ds_name
         ind = self.DataSettabWidget.addTab(ds, tabname)
 
-        #Set the new tab the active tab
+        # Set the new tab the active tab
         self.DataSettabWidget.setCurrentIndex(ind)
-        #Define the tab column names (header)
+        # Define the tab column names (header)
         dfile = list(self.filetypes.values())[0]
-        dataset_header=dfile.basic_file_parameters[:]
+        dataset_header = dfile.basic_file_parameters[:]
         dataset_header.insert(0, "File")
         ds.DataSettreeWidget.setHeaderItem(QTreeWidgetItem(dataset_header))
         ds.DataSettreeWidget.setSortingEnabled(True)
 
-        hd=ds.DataSettreeWidget.header()
+        hd = ds.DataSettreeWidget.header()
         hd.setSectionsClickable(True)
-        w=ds.DataSettreeWidget.width()
-        w/=hd.count()
+        w = ds.DataSettreeWidget.width()
+        w /= hd.count()
         for i in range(hd.count()):
             hd.resizeSection(i, w)
-            #hd.setTextAlignment(i, Qt.AlignHCenter)
+            # hd.setTextAlignment(i, Qt.AlignHCenter)
 
-        #Define the inspector column names (header)
+        # Define the inspector column names (header)
         if num == 1:
-            #inspect_header = dfile.col_names[:]
-            inspect_header = [a+' [' + b + ']' for a,b in zip(dfile.col_names,dfile.col_units)]
+            # inspect_header = dfile.col_names[:]
+            inspect_header = [
+                a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)
+            ]
             inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
         return self.DataSettabWidget.widget(ind)
 
@@ -1604,7 +1912,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
         allowed_ext = ""
         for ftype in self.filetypes.values():
-            allowed_ext += "%s (*%s);;" %(ftype.name, ftype.extension)
+            allowed_ext += "%s (*%s);;" % (ftype.name, ftype.extension)
         allowed_ext = allowed_ext.rstrip(";")
         paths_to_open = self.openFileNamesDialog(allowed_ext)
         if not paths_to_open:
@@ -1639,17 +1947,33 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             if ds is None:
                 self.createNew_Empty_Dataset()
                 ds = self.DataSettabWidget.currentWidget()
-            fname = "%s_%s_%s_%s" % (res_dic["file"], res_dic["sheet"], res_dic["col1"], res_dic["col2"])
+            fname = "%s_%s_%s_%s" % (
+                res_dic["file"],
+                res_dic["sheet"],
+                res_dic["col1"],
+                res_dic["col2"],
+            )
             try:
                 fname += "_%s" % res_dic["col3"]
             except:
                 pass
-            f, success = ds.new_dummy_file(fname=fname+"_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], fparams=fparams, file_type=ftype)
+            f, success = ds.new_dummy_file(
+                fname=fname + "_",
+                xrange=res_dic["x"],
+                yval=res_dic["y"],
+                zval=res_dic["z"],
+                fparams=fparams,
+                file_type=ftype,
+            )
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
-            ds.set_table_icons(ds.table_icon_list) # update the ds table marker icon
+            ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
-                QMessageBox.warning(self, 'Open Excel File', 'Some values could not be read from the file and were set to "nan"')
+                QMessageBox.warning(
+                    self,
+                    "Open Excel File",
+                    'Some values could not be read from the file and were set to "nan"',
+                )
 
     def handle_action_import_from_pasted(self):
         """Import data from pasted text"""
@@ -1664,7 +1988,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         if self.pasted_import_gui.exec_():
             res_dic = self.pasted_import_gui.get_data()
             if res_dic["nrows"] == 0:
-                QMessageBox.warning(self, 'Import From Pasted Data', 'Could not read pasted data')
+                QMessageBox.warning(
+                    self, "Import From Pasted Data", "Could not read pasted data"
+                )
                 return
             ds = self.DataSettabWidget.currentWidget()
             if ds is None:
@@ -1674,18 +2000,30 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for pname in ftype.basic_file_parameters:
                 fparam[pname] = 0
             fparam.update(res_dic["param_read"])
-            f, success = ds.new_dummy_file(fname=res_dic["fname"] + "_", xrange=res_dic["x"], yval=res_dic["y"], zval=res_dic["z"], z2val=res_dic["z2"], fparams=fparam, file_type=ftype)
+            f, success = ds.new_dummy_file(
+                fname=res_dic["fname"] + "_",
+                xrange=res_dic["x"],
+                yval=res_dic["y"],
+                zval=res_dic["z"],
+                z2val=res_dic["z2"],
+                fparams=fparam,
+                file_type=ftype,
+            )
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
                 self.count_pasted_data += 1
-            ds.set_table_icons(ds.table_icon_list) # update the ds table marker icon
+            ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
-                QMessageBox.warning(self, 'Import From Pasted Data', 'Some values could not be read from the file and were set to "nan"')
+                QMessageBox.warning(
+                    self,
+                    "Import From Pasted Data",
+                    'Some values could not be read from the file and were set to "nan"',
+                )
 
     def addDummyFiles(self):
         """Add dummy files to dataset"""
         if self.DataSettabWidget.count() == 0:
-                self.createNew_Empty_Dataset()
+            self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
         ftype = self.filetypes[list(self.filetypes)[0]]
         d = AddDummyFiles(self, ftype)
@@ -1702,7 +2040,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     pmax = float(item.text(2))
                     npoints = int(item.text(3))
                     cb = d.parameterTreeWidget.itemWidget(item, 4)
-                    if cb.currentText() == 'Log':
+                    if cb.currentText() == "Log":
                         prange = np.logspace(np.log10(pmin), np.log10(pmax), npoints)
                     else:
                         prange = np.linspace(pmin, pmax, npoints)
@@ -1713,9 +2051,9 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
             nparameterstochange = len(parameterstochange)
             paramsnames = parameterstochange + parameterstokeepconstant
-            if nparameterstochange==0:
+            if nparameterstochange == 0:
                 cases = [np.array(parametervalue)]
-            elif nparameterstochange==1:
+            elif nparameterstochange == 1:
                 cases = []
                 for i in range(len(parameterrange[0])):
                     case = [parameterrange[0][i]] + parametervalue
@@ -1723,7 +2061,11 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             else:
                 for val in parametervalue:
                     parameterrange.append(np.array([val]))
-                cases = list(np.array(np.meshgrid(*parameterrange)).T.reshape(-1,len(parameterrange)))
+                cases = list(
+                    np.array(np.meshgrid(*parameterrange)).T.reshape(
+                        -1, len(parameterrange)
+                    )
+                )
 
             # print(paramsnames)
             # print(cases)
@@ -1731,7 +2073,7 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             xmin = float(d.xminLineEdit.text())
             xmax = float(d.xmaxLineEdit.text())
             npoints = int(d.npointsLineEdit.text())
-            if d.scaleComboBox.currentText() == 'Log':
+            if d.scaleComboBox.currentText() == "Log":
                 xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
             else:
                 xrange = np.linspace(xmin, xmax, npoints)
@@ -1739,14 +2081,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                 fparams = {}
                 for i, pname in enumerate(paramsnames):
                     fparams[pname] = c[i]
-                f, success = ds.new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
+                f, success = ds.new_dummy_file(
+                    xrange=xrange, yval=yval, fparams=fparams, file_type=ftype
+                )
                 if success:
                     self.addTableToCurrentDataSet(f, ftype.extension)
 
     def addFileFunction(self):
         "Add a File to the current DataSet using a mathematical expression"
         if self.DataSettabWidget.count() == 0:
-                self.createNew_Empty_Dataset()
+            self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
         ftype = self.filetypes[list(self.filetypes)[0]]
         d = AddFileFunction(self, ftype)
@@ -1757,38 +2101,75 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
                     fparams[p] = float(d.param_dict[p].text())
                 except:
                     fparams[p] = 0
-            xmin = float(d.lab_dict['xmin'].text())
-            xmax = float(d.lab_dict['xmax'].text())
-            npoints = int(d.lab_dict['npoints'].text())
+            xmin = float(d.lab_dict["xmin"].text())
+            xmax = float(d.lab_dict["xmax"].text())
+            npoints = int(d.lab_dict["npoints"].text())
             logscale = d.l_new[4].isChecked()
-            if (logscale):
+            if logscale:
                 xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
             else:
                 xrange = np.linspace(xmin, xmax, npoints)
-            f, success = ds.new_dummy_file(xrange=xrange, yval=0, fparams=fparams, file_type=ftype)
+            f, success = ds.new_dummy_file(
+                xrange=xrange, yval=0, fparams=fparams, file_type=ftype
+            )
 
             if success:
                 cols = ftype.col_names
-                self.safe_dict={}
-                safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt', 'rand', 'size']
+                self.safe_dict = {}
+                safe_list = [
+                    "sin",
+                    "cos",
+                    "tan",
+                    "arccos",
+                    "arcsin",
+                    "arctan",
+                    "arctan2",
+                    "deg2rad",
+                    "rad2deg",
+                    "sinh",
+                    "cosh",
+                    "tanh",
+                    "arcsinh",
+                    "arccosh",
+                    "arctanh",
+                    "around",
+                    "round_",
+                    "rint",
+                    "floor",
+                    "ceil",
+                    "trunc",
+                    "exp",
+                    "log",
+                    "log10",
+                    "fabs",
+                    "mod",
+                    "e",
+                    "pi",
+                    "power",
+                    "sqrt",
+                    "rand",
+                    "size",
+                ]
                 for k in safe_list:
                     self.safe_dict[k] = globals().get(k, None)
-                self.safe_dict['x']=xrange
-                for i, cname in enumerate(cols):  #loop over the Parameters
+                self.safe_dict["x"] = xrange
+                for i, cname in enumerate(cols):  # loop over the Parameters
                     expr = d.c_new[i].text()
-                    x2 = eval(expr, {"__builtins__":None}, self.safe_dict)
-                    f.data_table.data[:,i] = x2
+                    x2 = eval(expr, {"__builtins__": None}, self.safe_dict)
+                    f.data_table.data[:, i] = x2
 
                 self.addTableToCurrentDataSet(f, ftype.extension)
 
     def new_tables_from_files(self, paths_to_open):
         """Create new Files in a DataSet from a list of files"""
-        if (self.DataSettabWidget.count()==0):
-                self.createNew_Empty_Dataset()
+        if self.DataSettabWidget.count() == 0:
+            self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
-        ds.DataSettreeWidget.blockSignals(True) #avoid triggering 'itemChanged' signal that causes a call to do_plot()
+        ds.DataSettreeWidget.blockSignals(
+            True
+        )  # avoid triggering 'itemChanged' signal that causes a call to do_plot()
         success, newtables, ext = ds.do_open(paths_to_open)
-        if success==True:
+        if success == True:
             self.check_no_param_missing(newtables, ext)
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
@@ -1806,12 +2187,17 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for param in self.filetypes[ext].basic_file_parameters[:]:
                 try:
                     temp = dt.file_parameters[param]
-                    if temp == '' or temp == '\n': # case where no value is provided (end line)
+                    if (
+                        temp == "" or temp == "\n"
+                    ):  # case where no value is provided (end line)
                         e_list.append(param)
                 except KeyError:
                     e_list.append(param)
-            if len(e_list)>0:
-                message = "Parameter(s) {%s} not found in file '%s'\n Value(s) set to 0"%(", ".join(e_list), dt.file_name_short)
+            if len(e_list) > 0:
+                message = (
+                    "Parameter(s) {%s} not found in file '%s'\n Value(s) set to 0"
+                    % (", ".join(e_list), dt.file_name_short)
+                )
                 # header = "Missing Parameter"
                 # QMessageBox.warning(self, header, message)
                 self.logger.warning(message)
@@ -1822,12 +2208,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """Open Files"""
         # file browser window
         qfdlg = QFileDialog(self)
-        #options = QFileDialog.Options()
-        options = qfdlg.Options()
-        #options |= QFileDialog.DontUseNativeDialog
+        # options = QFileDialog.Options()
+        options = qfdlg.options()
+        # options |= QFileDialog.DontUseNativeDialog
         dilogue_name = "Open"
-        #selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
-        selected_files, _ = qfdlg.getOpenFileNames(self, dilogue_name, self.dir_start, ext_filter, options=options)
+        # selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
+        selected_files, _ = qfdlg.getOpenFileNames(
+            self, dilogue_name, self.dir_start, ext_filter, options=options
+        )
         if selected_files:
             self.dir_start = dirname(selected_files[0])
         return selected_files
@@ -1848,11 +2236,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
 
     def printPlot(self):
         """Print/save current plot"""
-        fileName = QFileDialog.getSaveFileName(self,
-            "Export plot", "", "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)");
+        fileName = QFileDialog.getSaveFileName(
+            self,
+            "Export plot",
+            "",
+            "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)",
+        )
         # TODO: Set DPI, FILETYPE, etc
         plt.savefig(fileName[0])
-
 
     # def resizeplot(self, event=""):
     #     """[summary]
@@ -1885,14 +2276,16 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     #             ax.tick_params(which='major', labelsize=font_size)
     #             ax.tick_params(which='minor', labelsize=font_size*.8)
 
-
     def onpick(self, event):
         """Called when clicking on a plot/artist"""
         import matplotlib
-        if event.mouseevent.button == 3:  #right click in plot
+
+        if event.mouseevent.button == 3:  # right click in plot
             if not isinstance(event.artist, matplotlib.legend.Legend):
                 if event.artist.get_visible():
-                    self.artists_clicked.append(event.artist)  #collect all artists under mouse
+                    self.artists_clicked.append(
+                        event.artist
+                    )  # collect all artists under mouse
 
     # def onrelease(self, event):
     #     """Called when releasing mouse"""
@@ -2000,7 +2393,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     #         self._was_zooming = True
     #         self.figure.canvas.draw()
 
-
     #     elif event.name == 'motion_notify_event':  # drag
     #         if self._event is None:
     #             return
@@ -2017,33 +2409,34 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
     #         axes.draw_artist(self._patch)
     #         canvas.update()
 
-
-
     def open_figure_popup_menu(self, event):
         """Open a menu to let the user copy data or chart to clipboard"""
         main_menu = QMenu()
 
-        #copy chart action
+        # copy chart action
         copy_chart_action = main_menu.addAction("Copy Chart To Clipboard")
         copy_chart_action.triggered.connect(self.copy_chart)
-        #save chart action
+        # save chart action
         save_chart_action = main_menu.addAction("Save Chart")
         save_chart_action.triggered.connect(self.mpl_toolbar.save_figure)
 
-        #copy data sub-menu
-        if self.artists_clicked:  #do nothing if list of artists is empty
+        # copy data sub-menu
+        if self.artists_clicked:  # do nothing if list of artists is empty
             menu = QMenu("Copy Data To Clipboard")
             for artist in self.artists_clicked:
                 action_print_coordinates = menu.addAction(artist._name)
                 action_print_coordinates.triggered.connect(
-                    lambda: self.clipboard_coordinates(artist))
+                    lambda: self.clipboard_coordinates(artist)
+                )
             main_menu.addMenu(menu)
 
         main_menu.addSeparator()
         if self._event is not None:
             self._annotation_done = False
             add_annotation = main_menu.addAction(self.actionAdd_Annotation)
-            connection_id = self.actionAdd_Annotation.triggered.connect(self.add_annotation)
+            connection_id = self.actionAdd_Annotation.triggered.connect(
+                self.add_annotation
+            )
         refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
         # change view
@@ -2060,10 +2453,14 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
             for i in range(self.viewComboBox.count()):
                 view_name = self.viewComboBox.itemText(i)
                 pick_view = menu2.addAction(view_name)
-                pick_view.triggered.connect(lambda _, view_name=view_name: self.change_ax_view(n_ax_view_to_change, view_name))
+                pick_view.triggered.connect(
+                    lambda _, view_name=view_name: self.change_ax_view(
+                        n_ax_view_to_change, view_name
+                    )
+                )
             main_menu.addMenu(menu2)
 
-        #launch menu
+        # launch menu
         if main_menu.exec_(QCursor.pos()):
             self.artists_clicked.clear()
 
