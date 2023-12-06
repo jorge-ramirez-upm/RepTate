@@ -64,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'RepTate'
-copyright = '2017-2020, Universidad Politécnica de Madrid, University of Leeds'
+copyright = '2017-2023, Universidad Politécnica de Madrid, University of Leeds'
 author = 'Jorge Ramirez, Victor Boudara'
 
 # The version info for the project you're documenting, acts as replacement for
