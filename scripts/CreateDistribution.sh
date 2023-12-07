@@ -31,18 +31,11 @@ mkdir -p dist/RepTate/gui/Images
 cp gui/Images/logo.jpg dist/RepTate/gui/Images
 
 
-# Then CREATE CL Version
-rm -rf build/RepTateCL
-rm -rf dist/RepTateCL
-pyinstaller -i gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas -p applications -p core -p theories -p tools -p gui RepTateCL.py
-cp dist/RepTateCL/RepTateCL dist/RepTate
 mkdir dist/RepTate/tests
 cp -r tests/* dist/RepTate/tests 
 
 # Clean up build folders
 rm -rf build/RepTate
-rm -rf build/RepTateCL
-rm -rf dist/RepTateCL
 
 version=`python tools/getreptateversion.py`
 cd dist

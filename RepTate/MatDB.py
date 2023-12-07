@@ -41,7 +41,7 @@ import argparse
 import traceback
 import logging
 
-from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 from RepTate.applications.ApplicationCreep import ApplicationCreep
@@ -97,7 +97,6 @@ def start_MatDB(argv):
     app = QApplication(sys.argv)
     app.setApplicationName("RepTate")
 
-    CmdBase.mode = CmdMode.GUI
     tmpex = QApplicationManager(loglevel=loglevel)
     tmpapp = ApplicationCreep("tmpapp", tmpex)
     ex = ToolMaterialsDatabase("MatDB", tmpapp)

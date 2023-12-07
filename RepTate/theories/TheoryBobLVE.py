@@ -38,7 +38,7 @@ by Chinmay Das et al.
 import os
 import numpy as np
 import RepTate
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.gui import bob_LVE
@@ -65,15 +65,12 @@ class TheoryBobLVE(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
 
     def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryBobLVE(
-            name, parent_dataset,
-            axarr) if (CmdBase.mode == CmdMode.GUI) else CLTheoryBobLVE(
-                name, parent_dataset, axarr)
+        """Create an instance of the GUI"""
+        return GUITheoryBobLVE(name, parent_dataset, axarr) 
 
 
 class BaseTheoryBobLVE:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
     html_help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
     thname = TheoryBobLVE.thname
@@ -147,15 +144,6 @@ class BaseTheoryBobLVE:
 
     def do_fit(self, line=''):
         self.Qprint("Fitting not allowed in this theory")
-
-class CLTheoryBobLVE(BaseTheoryBobLVE, Theory):
-    """CL Version"""
-
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):

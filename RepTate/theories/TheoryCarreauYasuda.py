@@ -36,7 +36,7 @@ Carreau-Yasuda equation for the complex viscosity
 """
 import numpy as np
 from math import sqrt
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -67,16 +67,12 @@ class TheoryCarreauYasuda(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryCarreauYasuda(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryCarreauYasuda(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryCarreauYasuda(name, parent_dataset, ax)
 
 
 class BaseTheoryCarreauYasuda:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation"
     single_file = (
@@ -188,13 +184,6 @@ class BaseTheoryCarreauYasuda:
             / sqrt(2)
         )
 
-
-class CLTheoryCarreauYasuda(BaseTheoryCarreauYasuda, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):

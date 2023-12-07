@@ -49,7 +49,7 @@ from PySide6.QtCore import QUrl, Qt, QCoreApplication
 from RepTate.core.DataTable import DataTable
 
 DataTable.MAX_NUM_SERIES = 10
-from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversalViewer
 
@@ -94,7 +94,6 @@ def start_UV(argv):
     
     :param list argv: Command line parameters passed to UV
     """
-    GUI = True
 
     parser = argparse.ArgumentParser(
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
@@ -153,7 +152,6 @@ def start_UV(argv):
     app = QApplication(sys.argv)
     app.setApplicationName("RepTate")
 
-    CmdBase.mode = CmdMode.GUI
     tmpex = QApplicationManager(loglevel=loglevel)
 
     # 1. Find if all argument files have the same extension

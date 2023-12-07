@@ -35,7 +35,7 @@
 Template file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -59,16 +59,12 @@ class TheoryStickyReptation(CmdBase):
     doi = ["http://dx.doi.org/10.1021/ma00016a034"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryStickyReptation(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryStickyReptation(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryStickyReptation(name, parent_dataset, axarr)
 
 
 class BaseTheoryStickyReptation:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = ''
     single_file = (
@@ -304,16 +300,6 @@ class BaseTheoryStickyReptation:
         tt.data[:, 0] = ft.data[:, 0]
         tt.data[:, 1] = f1(ft.data[:, 0])
         tt.data[:, 2] = f2(ft.data[:, 0])
-
-
-class CLTheoryStickyReptation(BaseTheoryStickyReptation, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryStickyReptation(BaseTheoryStickyReptation, QTheory):

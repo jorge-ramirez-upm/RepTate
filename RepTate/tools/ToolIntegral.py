@@ -36,7 +36,7 @@ Integral file for creating a new Tool
 """
 import traceback
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from scipy.integrate import odeint
@@ -53,16 +53,12 @@ class ToolIntegral(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIToolIntegral(name, parent_app)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLToolIntegral(name, parent_app)
-        )
+        """Create an instance of the GUI"""
+        return GUIToolIntegral(name, parent_app)
 
 
 class BaseToolIntegral:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
     toolname = ToolIntegral.toolname
@@ -105,15 +101,6 @@ class BaseToolIntegral:
             self.Qprint("in ToolIntegral.calculate(): %s" % traceback.format_exc())
             return x, y
 
-
-class CLToolIntegral(BaseToolIntegral, Tool):
-    """CL Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-
-    # This class usually stays empty
 
 
 class GUIToolIntegral(BaseToolIntegral, QTool):

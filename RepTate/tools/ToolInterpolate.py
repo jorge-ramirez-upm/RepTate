@@ -36,7 +36,7 @@ Interpolate/Extrapolate data
 """
 import traceback
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
@@ -51,16 +51,12 @@ class ToolInterpolateExtrapolate(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIToolInterpolateExtrapolate(name, parent_app)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLToolInterpolateExtrapolate(name, parent_app)
-        )
+        """Create an instance of the GUI"""
+        return GUIToolInterpolateExtrapolate(name, parent_app)
 
 
 class BaseToolInterpolateExtrapolate:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolInterpolateExtrapolate.toolname
@@ -107,16 +103,6 @@ class BaseToolInterpolateExtrapolate:
                 "in ToolInterpolateExtrapolate.calculate(): %s" % traceback.format_exc()
             )
         return x, y
-
-
-class CLToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, Tool):
-    """CL Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-
-    # This class usually stays empty
 
 
 class GUIToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, QTool):

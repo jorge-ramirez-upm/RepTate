@@ -37,7 +37,7 @@ Module for the GO-polyStrand model of flow-induced crystallisation in polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -126,15 +126,12 @@ class TheoryGoPolyStrand(CmdBase):
     doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryGoPolyStrand(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryGoPolyStrand(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryGoPolyStrand(name, parent_dataset, ax) 
 
 
 class BaseTheoryGoPolyStrand:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
@@ -344,9 +341,7 @@ class BaseTheoryGoPolyStrand:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
-        # self.extra_graphic_visible(show)
+        self.Qhide_theory_extras(show)
 
     def extra_graphic_visible(self, state):
         """Show extra graphics"""
@@ -787,14 +782,6 @@ class BaseTheoryGoPolyStrand:
         self.Qprint(
             "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
         )
-
-
-class CLTheoryGoPolyStrand(BaseTheoryGoPolyStrand, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryGoPolyStrand(BaseTheoryGoPolyStrand, QTheory):

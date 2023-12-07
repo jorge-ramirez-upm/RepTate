@@ -35,7 +35,7 @@
 Template file for creating a new theory
 """
 import numpy as np
-from CmdBase import CmdBase, CmdMode
+from CmdBase import CmdBase
 from Parameter import Parameter, ParameterType, OptType
 from Theory import Theory
 from QTheory import QTheory
@@ -51,16 +51,12 @@ class TheoryTemplate(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryTemplate(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryTemplate(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryTemplate(name, parent_dataset, axarr)
 
 
 class BaseTheoryTemplate:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = ''
     single_file = (
@@ -109,16 +105,6 @@ If not, you can safely delete it."""
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
         tt.data[:, 1] = ft.data[:, 1] * ft.data[:, 1]
-
-
-class CLTheoryTemplate(BaseTheoryTemplate, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryTemplate(BaseTheoryTemplate, QTheory):

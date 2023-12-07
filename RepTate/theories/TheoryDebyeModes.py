@@ -36,7 +36,7 @@ Module that defines theories related to Debye modes, in the frequency and time d
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
@@ -72,16 +72,12 @@ class TheoryDebyeModesFrequency(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDebyeModesFrequency(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDebyeModesFrequency(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDebyeModesFrequency(name, parent_dataset, ax)
 
 
 class BaseTheoryDebyeModesFrequency:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#debye-modes"
     single_file = True
@@ -211,8 +207,7 @@ class BaseTheoryDebyeModesFrequency:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
@@ -293,14 +288,6 @@ class BaseTheoryDebyeModesFrequency:
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
-
-class CLTheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryDebyeModesFrequency(BaseTheoryDebyeModesFrequency, QTheory):

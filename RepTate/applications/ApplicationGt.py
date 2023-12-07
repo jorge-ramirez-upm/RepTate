@@ -35,7 +35,7 @@
 Module for the analysis of stress relaxation data from simulations and experiments.
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -65,16 +65,12 @@ class ApplicationGt(CmdBase):
     extension = "gt"
 
     def __new__(cls, name="Gt", parent=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIApplicationGt(name, parent)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLApplicationGt(name, parent)
-        )
+        """Create an instance of the GUI"""
+        return GUIApplicationGt(name, parent)
 
 
 class BaseApplicationGt:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html"
     appname = ApplicationGt.appname
@@ -417,19 +413,6 @@ class BaseApplicationGt:
             return None, x_in_range, y_in_range
         else:
             return "Check values of t_min and t_max", None, None
-
-class CLApplicationGt(BaseApplicationGt, Application):
-    """CL Version"""
-
-    def __init__(self, name="Gt", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
-    def show_sb_oversampling(self):
-        pass
-
-    def hide_sb_oversampling(self):
-        pass
 
 
 class GUIApplicationGt(BaseApplicationGt, QApplicationWindow):

@@ -37,7 +37,7 @@ Module for the SCCR theory for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -72,16 +72,12 @@ class TheorySCCR(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.1595099"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheorySCCR(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheorySCCR(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheorySCCR(name, parent_dataset, ax)
 
 
 class BaseTheorySCCR:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory"
     single_file = False
@@ -96,8 +92,7 @@ class BaseTheorySCCR:
         super().__init__(name, parent_dataset, axarr)
         self.function = self.SCCR
         self.has_modes = False
-        if CmdBase.mode == CmdMode.GUI:
-            self.signal_get_MW.connect(self.launch_get_MW_dialog)
+        self.signal_get_MW.connect(self.launch_get_MW_dialog)
 
         self.parameters["tau_e"] = Parameter(
             "tau_e",
@@ -336,10 +331,9 @@ class BaseTheorySCCR:
         except KeyError:
             self.success_MW = None
             self.fname_missing_mw = f.file_name_short
-            if CmdBase.mode == CmdMode.GUI:
-                self.signal_get_MW.emit(self)
-                while self.success_MW is None:
-                    time.sleep(0.5)
+            self.signal_get_MW.emit(self)
+            while self.success_MW is None:
+                time.sleep(0.5)
             if self.success_MW:
                 f.file_parameters["Mw"] = self.new_MW_val
                 Mw = self.new_MW_val
@@ -448,14 +442,6 @@ class BaseTheorySCCR:
                 ]
                 stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
                 tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
-
-
-class CLTheorySCCR(BaseTheorySCCR, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheorySCCR(BaseTheorySCCR, QTheory):

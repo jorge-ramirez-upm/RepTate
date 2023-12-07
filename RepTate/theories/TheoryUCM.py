@@ -36,7 +36,7 @@ Module for the Upper Convected Maxwell model
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -93,16 +93,12 @@ class TheoryUCM(CmdBase):
     doi = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryUCM(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryUCM(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryUCM(name, parent_dataset, ax)
 
 
 class BaseTheoryUCM:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model"
     single_file = False
@@ -287,16 +283,6 @@ class BaseTheoryUCM:
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
         return "", True
-
-
-class CLTheoryUCM(BaseTheoryUCM, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
-            self.function = self.calculate_UCMLAOS
 
 
 class GUITheoryUCM(BaseTheoryUCM, QTheory):

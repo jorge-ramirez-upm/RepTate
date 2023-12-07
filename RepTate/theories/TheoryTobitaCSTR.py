@@ -36,7 +36,7 @@
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -65,16 +65,12 @@ reactor during free-radical polymerisation.
     ]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryTobitaCSTR(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryTobitaCSTR(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryTobitaCSTR(name, parent_dataset, ax)
 
 
 class BaseTheoryTobitaCSTR:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaCSTR.html' % ((os.sep, )*6)
     html_help_file = (
@@ -369,15 +365,6 @@ class BaseTheoryTobitaCSTR:
                 self.ymax = temp
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
-
-class CLTheoryTobitaCSTR(BaseTheoryTobitaCSTR, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-    # This class usually stays empty
 
 
 class GUITheoryTobitaCSTR(BaseTheoryTobitaCSTR, QTheory):

@@ -35,7 +35,7 @@
 Dynamics Tube Dilution for Stars
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -73,16 +73,12 @@ class TheoryDTDStarsFreq(CmdBase):
     doi = ["http://dx.doi.org/10.1021/ma961559f"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDTDStarsFreq(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDTDStarsFreq(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDTDStarsFreq(name, parent_dataset, axarr)
 
 
 class BaseTheoryDTDStarsFreq:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
     single_file = (
@@ -167,15 +163,6 @@ class BaseTheoryDTDStarsFreq:
         tt.data[:, 2] = gpp[:]
 
 
-class CLTheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
-
 
 class GUITheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, QTheory):
     """GUI Version"""
@@ -220,16 +207,12 @@ class TheoryDTDStarsTime(CmdBase):
     doi = ["http://dx.doi.org/10.1021/ma961559f"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDTDStarsTime(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDTDStarsTime(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDTDStarsTime(name, parent_dataset, axarr)
 
 
 class BaseTheoryDTDStarsTime:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
     single_file = (
@@ -316,15 +299,6 @@ class BaseTheoryDTDStarsTime:
         tt.data[:, 0] = times
         tt.data[:, 1] = gamma * gt[:]
 
-
-class CLTheoryDTDStarsTime(BaseTheoryDTDStarsTime, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryDTDStarsTime(BaseTheoryDTDStarsTime, QTheory):

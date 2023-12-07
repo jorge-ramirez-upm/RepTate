@@ -2,7 +2,7 @@ echo off
 rem ################################################
 rem RECOMMENDED: Install WinPython64-3.7.4.1Zero.exe
 rem Either install from scratch or create an empty environment
-rem REPTATE REQUIRED PACKAGES: pip install numpy pyreadline PyQt5 matplotlib scipy openpyxl xlrd psutil colorama
+rem REPTATE REQUIRED PACKAGES: pip install numpy PyQt5 matplotlib scipy openpyxl xlrd psutil colorama
 rem INSTALL PACKAGING "pip install packaging"
 rem INSTALL PYINSTALLER "pip install pyinstaller"
 rmdir /s /q build\RepTate
@@ -58,19 +58,8 @@ copy tests\*.* dist\RepTate\tests
 mkdir dist\RepTate\docs\build\html
 xcopy docs\build\html dist\RepTate\docs\build\html /E
 
-rem ########################
-rem Then CREATE CL Version
-rmdir /s /q build\RepTateCL
-rmdir /s /q dist\RepTateCL
-rem TO DEBUG THE CREATION OF THE INSTALLER ADD FLAGS: -d all
-pyinstaller -i RepTate\gui\Images\Reptate64.ico --hidden-import=packaging --hidden-import=packaging.version --hidden-import=packaging.specifiers --hidden-import=packaging.requirements --hidden-import=scipy._lib.messagestream --hidden-import=pandas._libs.tslibs.timedeltas --name=RepTateCL RepTate\CL.py
-REM -p applications;core;theories;tools;gui 
-copy dist\RepTateCL\RepTateCL.exe dist\RepTate
-
 rem Clean up build folders
 rmdir /s /q build\RepTate
-rmdir /s /q build\RepTateCL
-rmdir /s /q dist\RepTateCL
 
 rem Create ZIP (portable package)
 for /f %%i in ('python RepTate\core\Version.py') do set version=%%i

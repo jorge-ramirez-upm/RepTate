@@ -33,7 +33,7 @@
 """Module TheoryArrhenius
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -57,16 +57,12 @@ class TheoryArrhenius(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryArrhenius(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryArrhenius(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryArrhenius(name, parent_dataset, axarr)
 
 
 class BaseTheoryArrhenius:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = ''
     single_file = (
@@ -111,17 +107,6 @@ class BaseTheoryArrhenius:
                 - 1 / (self.parameters["Tref"].value + 273.15)
             )
         )
-
-
-class CLTheoryArrhenius(BaseTheoryArrhenius, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
-
 
 class GUITheoryArrhenius(BaseTheoryArrhenius, QTheory):
     """GUI Version"""

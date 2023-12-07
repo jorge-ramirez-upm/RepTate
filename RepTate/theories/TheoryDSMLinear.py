@@ -32,7 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryDSMLinear"""
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -56,16 +56,12 @@ class TheoryDSMLinear(CmdBase):
     ]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDSMLinear(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDSMLinear(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDSMLinear(name, parent_dataset, axarr)
 
 
 class BaseTheoryDSMLinear:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = ''
     single_file = (
@@ -444,15 +440,6 @@ File error is calculated as the mean square of the residual, averaged over all p
         tt.data[:, 1] = Gstar.real * 1000  # convert to Pa
         tt.data[:, 2] = Gstar.imag * 1000
 
-
-class CLTheoryDSMLinear(BaseTheoryDSMLinear, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryDSMLinear(BaseTheoryDSMLinear, QTheory):

@@ -36,7 +36,7 @@ FindPeaks file for creating a new Tool
 """
 import numpy as np
 from scipy.optimize import curve_fit
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
@@ -54,16 +54,12 @@ class ToolFindPeaks(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIToolFindPeaks(name, parent_app)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLToolFindPeaks(name, parent_app)
-        )
+        """Create an instance of the GUI"""
+        return GUIToolFindPeaks(name, parent_app)
 
 
 class BaseToolFindPeaks:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
     toolname = ToolFindPeaks.toolname
@@ -206,16 +202,6 @@ class BaseToolFindPeaks:
         self.seriesarray.append(s)
         self.axarray.append(ax)
         return x, y
-
-
-class CLToolFindPeaks(BaseToolFindPeaks, Tool):
-    """CL Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-
-    # This class usually stays empty
 
 
 class GUIToolFindPeaks(BaseToolFindPeaks, QTool):

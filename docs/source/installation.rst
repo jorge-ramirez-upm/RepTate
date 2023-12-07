@@ -124,14 +124,6 @@ This will open up a window where you can type commands to install the extra pack
 	conda install xlrd
 	conda install colorama
 
-Additionally, on Windows::
-    
-    conda install pyreadline
-
-On  Mac or Linux::
-
-    conda install readline
-
 Alternatively, you can change into the RepTate code folder and run ``pip install -r requirements.txt``. The file ``requirements.txt`` contains a list of all the python packages and libraries that RepTate needs in order to run properly.
 
 If a package is missing and you try to run RepTate, Python will print an 

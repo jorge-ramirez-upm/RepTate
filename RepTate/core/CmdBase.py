@@ -38,7 +38,6 @@ Module that defines the basic command line interaction with the user.
 import os
 import sys
 import cmd
-import readline
 import enum
 
 # from pint import UnitRegistry
@@ -46,31 +45,6 @@ from colorama import Fore, init
 from numpy import *
 import logging
 
-
-class CmdMode(enum.Enum):
-    """Enumeration that describes the mode in which RepTate is running"""
-
-    cmdline = 0
-    batch = 1
-    GUI = 2
-    modes = ["Command Line Interpreter", "Batch processing", "Graphical User Interface"]
-
-    def __str__(self):
-        """String representation"""
-        return (
-            Fore.CYAN
-            + "cmdline: "
-            + Fore.RESET
-            + "%s\n" % (self.modes.value[0])
-            + Fore.CYAN
-            + "batch:   "
-            + Fore.RESET
-            + "%s\n" % self.modes.value[1]
-            + Fore.CYAN
-            + "GUI:     "
-            + Fore.RESET
-            + "%s" % self.modes.value[2]
-        )
 
 
 class CalcMode(enum.Enum):
@@ -95,7 +69,6 @@ class CmdBase(cmd.Cmd):
     """Basic Cmd Console that is inherited by most Reptate objects"""
 
     prompt = "> "
-    mode = CmdMode.cmdline
     calcmode = CalcMode.multithread
     # ureg = UnitRegistry()
 
@@ -104,10 +77,6 @@ class CmdBase(cmd.Cmd):
         super().__init__()
 
         init()
-
-        delims = readline.get_completer_delims()
-        delims = delims.replace(os.sep, "")
-        readline.set_completer_delims(delims)
 
         # list of safe methods for eval
         self.safe_globals = [
@@ -228,15 +197,10 @@ class CmdBase(cmd.Cmd):
 
     def do_quit(self, args):
         """Exit from the application."""
-        if CmdBase.mode == CmdMode.batch:
-            print("Exiting RepTate...")
-            readline.write_history_file()
-            sys.exit()
         msg = "Do you really want to exit RepTate?"
         shall = input("%s (y/N) " % msg).lower() == "y"
         if shall:
             print("Exiting RepTate...")
-            readline.write_history_file()
             sys.exit()
 
     def default(self, line):
@@ -367,18 +331,7 @@ class CmdBase(cmd.Cmd):
     - console available --> print available modes
     - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
         """
-        if line == "":
-            print("Current console mode: %s" % CmdMode.modes.value[CmdBase.mode.value])
-        elif line == "available":
-            c = CmdMode(0)
-            print(c)
-        elif line in dict(CmdMode.__members__.items()):
-            CmdBase.mode = CmdMode[line]
-        else:
-            print("Console mode %s not valid" % line)
-
-        if self.mode == CmdMode.batch:
-            self.prompt = ""
+    pass
 
     def complete_console(self, text, line, begidx, endidx):
         names = ["cmdline", "batch", "GUI", "available"]

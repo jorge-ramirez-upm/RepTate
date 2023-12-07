@@ -35,7 +35,7 @@
 Template file for the definition of a new Application Module
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -50,14 +50,12 @@ class ApplicationTemplate(CmdBase):
     extension = "txt"  # drag and drop this extension automatically opens this application
 
     def __new__(cls, name='Template', parent=None):
-        """Create an instance of the GUI or CL class"""
-        return GUIApplicationTemplate(name, parent) if (
-            CmdBase.mode == CmdMode.GUI) else CLApplicationTemplate(
-                name, parent)
+        """Create an instance of the GUI"""
+        return GUIApplicationTemplate(name, parent) 
 
 
 class BaseApplicationTemplate:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     #html_help_file = ''
     appname = ApplicationTemplate.appname
@@ -126,14 +124,6 @@ class BaseApplicationTemplate:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-
-class CLApplicationTemplate(BaseApplicationTemplate, Application):
-    """CL Version of the Application"""
-
-    def __init__(self, name='Template', parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-        #usually this class stays empty
 
 
 class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):

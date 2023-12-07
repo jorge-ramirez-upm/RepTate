@@ -43,7 +43,7 @@ import numpy as np
 from scipy.optimize import curve_fit, basinhopping, dual_annealing, differential_evolution, shgo, brute
 from scipy.stats.distributions import t
 
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import ParameterType, OptType
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
@@ -251,8 +251,7 @@ class Theory(CmdBase):
 
         self.do_cite("")
 
-        if CmdBase.mode == CmdMode.GUI:
-            self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
+        self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
          # flag for requesting end of computations
         self.stop_theory_flag = False
 
@@ -1068,10 +1067,7 @@ This routine works when the theory and the experimental data are not measured on
 
         # print information
         msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, 'Saved Theory', msg)
-        else:
-            print(msg)
+        QMessageBox.information(self, 'Saved Theory', msg)
 
     def complete_save(self, text, line, begidx, endidx):
         """Complete the save command"""
@@ -1193,10 +1189,9 @@ With no arguments: switches ON/OFF the horizontal span. Example: xrange -4 5"""
         self.yminline.set_visible(ystate)
         self.ymaxline.set_visible(ystate)
 
-        if CmdBase.mode == CmdMode.GUI:
-            self.parent_dataset.actionVertical_Limits.setChecked(xstate)
-            self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
-            self.parent_dataset.set_limit_icon()
+        self.parent_dataset.actionVertical_Limits.setChecked(xstate)
+        self.parent_dataset.actionHorizontal_Limits.setChecked(ystate)
+        self.parent_dataset.set_limit_icon()
 
 # MODES STUFF
 
@@ -1249,10 +1244,7 @@ that provide this functionality."""
         """Print citation information"""
         if len(self.citations)>0:
             for i in range(len(self.citations)):
-                if CmdBase.mode == CmdMode.GUI:
-                    self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
-                elif CmdBase.mode == CmdMode.cmdline:
-                    self.Qprint(Fore.RED + 'CITE' + Fore.RESET + ':%s ('%self.citations[i] + Fore.CYAN + '%s'%self.doi[i] + Fore.RESET + ')')
+                self.Qprint('''<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>'''%(self.doi[i], self.citations[i]))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""
@@ -1396,19 +1388,9 @@ that provide this functionality."""
     def Qprint(self, msg, end='<br>'):
         """Print a message on the theory log area or on the terminal"""
 
-        if CmdBase.mode == CmdMode.GUI:
-            if isinstance(msg, list):
-                msg = self.table_as_html(msg)
-            self.print_signal.emit(msg + end)
-        else:
-            if end == '<br>':
-                end = '\n'
-            if isinstance(msg, list):
-                msg = self.table_as_ascii(msg)
-            else:
-                msg = msg.replace('<br>', '\n')
-                msg = self.strip_tags(msg)
-            print(msg, end=end)
+        if isinstance(msg, list):
+            msg = self.table_as_html(msg)
+        self.print_signal.emit(msg + end)
 
     def table_as_html(self, tab):
         header = tab[0]

@@ -37,7 +37,7 @@ MaterialsDatabase Viewer
 import sys
 import os
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
@@ -245,16 +245,12 @@ class ToolMaterialsDatabase(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIToolMaterialsDatabase(name, parent_app)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLToolMaterialsDatabase(name, parent_app)
-        )
+        """Create an instance of the GUI"""
+        return GUIToolMaterialsDatabase(name, parent_app)
 
 
 class BaseToolMaterialsDatabase:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
     toolname = ToolMaterialsDatabase.toolname
@@ -353,8 +349,7 @@ class BaseToolMaterialsDatabase:
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Calculate some results related to the selected material or the file material"""
-        if (CmdBase.mode == CmdMode.GUI):
-            self.calculate_stuff("", file_parameters)
+        self.calculate_stuff("", file_parameters)
         return x, y
 
     def do_calculate_stuff(self, line=""):
@@ -445,45 +440,6 @@ Example:
         return x, y
 
 
-class CLToolMaterialsDatabase(BaseToolMaterialsDatabase, Tool):
-    """CL Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        if self.init_chem is not None:
-            self.do_material(self.init_chem)
-
-    def do_database(self, line):
-        """Print information about the location of the Material database files"""
-        print(
-            Fore.RED
-            + "RepTate Material database: "
-            + Fore.RESET
-            + os.path.join(dir_path, "materials_database.npy")
-        )
-        print(
-            Fore.RED + "User's material database:  " + Fore.RESET + file_user_database
-        )
-
-    def do_material(self, line):
-        """Change/View the selected material"""
-        db = check_chemistry(line)
-        if line == "":
-            print("Current Material: " + Fore.RED + self.parameters["name"].value)
-        elif db < 0:
-            print("Material " + Fore.RED + line + Fore.RESET + " not found.")
-        else:
-            for k in materials_db[db][line].data.keys():
-                self.set_param_value(k, materials_db[db][line].data[k])
-
-    def complete_material(self, text, line, begidx, endidx):
-        chems = list(materials_db[0].keys()) + list(materials_db[1].keys())
-        if not text:
-            completions = chems[:]
-        else:
-            completions = [f for f in chems if f.startswith(text)]
-        return completions
 
 
 class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):

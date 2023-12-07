@@ -88,7 +88,7 @@ from RepTate.gui.QDataSet import QDataSet
 from RepTate.core.DataTable import DataTable
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
 from RepTate.core.DataSet import ColorMode, SymbolMode, ThLineMode
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.core.DraggableArtists import DragType, DraggableSeries, DraggableNote
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
@@ -351,9 +351,6 @@ class QApplicationWindow(Application, QMainWindow, Ui_AppWindow):
         """**Constructor**"""
 
         super().__init__(name, parent, **kwargs)
-
-        if CmdBase.mode != CmdMode.GUI:
-            return None
 
         QMainWindow.__init__(self)
         Ui_AppWindow.__init__(self)

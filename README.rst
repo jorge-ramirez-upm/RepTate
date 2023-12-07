@@ -5,9 +5,7 @@ RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and 
 RepTate Rheology Software
 -------------------------
 
-- Dual user interface: 
-    - Graphical User Interface (GUI), using PySide6
-    - Command Line Interface (CL) for batch processing   
+- Graphical User Interface (GUI), using PySide6
 - Works on Windows, Linux and Mac
 - Free and open source
 - License GPLv3+

@@ -35,7 +35,7 @@
 Definition of a new Application for viewing generic txt data
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -191,16 +191,12 @@ class ApplicationUniversalViewer(CmdBase):
     extension = ""  # drag and drop this extension automatically opens this application
 
     def __new__(cls, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIApplicationUniversalViewer(name, parent, inifile, nplot_max)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLApplicationUniversalViewer(name, parent, inifile, nplot_max)
-        )
+        """Create an instance of the GUI"""
+        return GUIApplicationUniversalViewer(name, parent, inifile, nplot_max)
 
 
 class BaseApplicationUniversalViewer:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     # html_help_file = ''
     appname = ApplicationUniversalViewer.appname
@@ -293,14 +289,6 @@ class BaseApplicationUniversalViewer:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-
-class CLApplicationUniversalViewer(BaseApplicationUniversalViewer, Application):
-    """CL Version"""
-
-    def __init__(self, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
-        """**Constructor**"""
-        super().__init__(name, parent, inifile, nplot_max)
-        # usually this class stays empty
 
 
 class GUIApplicationUniversalViewer(BaseApplicationUniversalViewer, QApplicationWindow):

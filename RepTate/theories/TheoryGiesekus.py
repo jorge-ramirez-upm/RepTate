@@ -37,7 +37,7 @@ Module for the Giesekus model for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -75,15 +75,12 @@ class TheoryGiesekus(CmdBase):
     doi = ["http://dx.doi.org/10.1007/BF01973575"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryGiesekus(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryGiesekus(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryGiesekus(name, parent_dataset, ax) 
 
 
 class BaseTheoryGiesekus:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
@@ -370,8 +367,7 @@ class BaseTheoryGiesekus:
         """Set value of a theory parameter"""
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
-            if CmdBase.mode==CmdMode.GUI:
-                self.spinbox.setMaximum(int(value))
+            self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryGiesekus, self).set_param_value(
             name, value)
         if not success:
@@ -410,15 +406,6 @@ class BaseTheoryGiesekus:
                     del self.parameters["alpha%02d" % i]
         return '', True
 
-
-class CLTheoryGiesekus(BaseTheoryGiesekus, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
-            self.function = self.calculate_giesekusLAOS
 
 
 class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):

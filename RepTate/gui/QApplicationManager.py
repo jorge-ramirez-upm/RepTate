@@ -46,7 +46,7 @@ from PySide6.QtCore import QUrl, Qt, QSize
 from PySide6.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
 
 import RepTate
-from RepTate.core.CmdBase import CmdBase, CmdMode, CalcMode
+from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.ApplicationManager import ApplicationManager
 from RepTate.core.File import File
 from RepTate.gui.QAboutReptate import AboutWindow
@@ -93,7 +93,6 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         super().__init__(loglevel=loglevel)
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-        CmdBase.mode = CmdMode.GUI  #set GUI mode
         self.setupUi(self)
 
         if CmdBase.calcmode == CalcMode.singlethread:

@@ -36,7 +36,7 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """
 import os
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -56,16 +56,12 @@ class TheoryDiscrMWD(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDiscrMWD(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDiscrMWD(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDiscrMWD(name, parent_dataset, ax)
 
 
 class BaseTheoryDiscrMWD:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
     single_file = True
@@ -277,8 +273,7 @@ class BaseTheoryDiscrMWD:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         self.graphic_bins_visible(show)
 
     def graphic_bins_visible(self, state):
@@ -339,14 +334,6 @@ class BaseTheoryDiscrMWD:
         else:
             PDI = Mzp1 = Mz = Mw = Mn = np.nan
             self.Qprint("Could not determine moments")
-
-        # if line == "input" and CmdBase.mode == CmdMode.GUI:
-        #     file_table = self.parent_dataset.DataSettreeWidget.topLevelItem(0)
-        #     self.parent_dataset.DataSettreeWidget.blockSignals(True)
-        #     file_table.setText(1, "%0.3g" % (Mn / 1000))
-        #     file_table.setText(2, "%0.3g" % (Mw / 1000))
-        #     file_table.setText(3, "%0.3g" % PDI)
-        #     self.parent_dataset.DataSettreeWidget.blockSignals(False)
 
         if line == "discretized":
             self.set_param_value("Mn", Mn / 1000)
@@ -528,14 +515,6 @@ class BaseTheoryDiscrMWD:
         return m, phi
 
 
-class CLTheoryDiscrMWD(BaseTheoryDiscrMWD, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-
 class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
     """GUI Version"""
 
@@ -619,7 +598,4 @@ class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
 
         # print information
         msg = 'Saved %d bins to "%s"' % (nbin_out, file_out)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, "Saved discretized MWD", msg)
-        else:
-            print(msg)
+        QMessageBox.information(self, "Saved discretized MWD", msg)

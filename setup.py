@@ -60,7 +60,6 @@ setup(
     data_files=list_data_files,
     install_requires=requirements,
     entry_points={
-        "console_scripts": ["RepTateCL = RepTate.CL:main"],
         "gui_scripts": [
             "RepTate = RepTate.__main__:main",
             "MatDB = RepTate.MatDB:main",

@@ -44,7 +44,7 @@ import numpy as np
 import logging
 
 sys.path.append(".")
-from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.applications.ApplicationLVE import ApplicationLVE
 from PyQt5.QtWidgets import QApplication, QMessageBox
@@ -129,7 +129,6 @@ def start_RepTate(argv):
 
     app = QApplication(sys.argv)
 
-    CmdBase.mode = CmdMode.GUI
     tmpex = QApplicationManager(loglevel=loglevel)
     ex = ApplicationLVE("LVE", tmpex)
     ex.setWindowIcon(QIcon("gui/Images/new_icons/LVE.ico"))
@@ -169,10 +168,7 @@ def start_RepTate(argv):
         tb_msg += "%s: %s\n" % (type.__name__, str(value))
         # print(tb_msg) # JR: Not needed anymore
         l = logging.getLogger("RepTate")
-        if CmdBase.mode == CmdMode.GUI:
-            l.error(tb_msg.replace("\n", "<br>"))
-        else:
-            l.error(tb_msg)
+        l.error(tb_msg.replace("\n", "<br>"))
         msg = (
             'Sorry, something went wrong:\n "%s: %s".\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?'
             % (type.__name__, str(value))

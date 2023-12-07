@@ -37,7 +37,7 @@ TobitaBatch file for creating a new theory
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -68,16 +68,12 @@ class TheoryTobitaBatch(CmdBase):
     ]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryTobitaBatch(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryTobitaBatch(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryTobitaBatch(name, parent_dataset, axarr)
 
 
 class BaseTheoryTobitaBatch:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
     html_help_file = (
@@ -384,15 +380,6 @@ class BaseTheoryTobitaBatch:
         """This theory does not calculate the error"""
         pass
 
-
-class CLTheoryTobitaBatch(BaseTheoryTobitaBatch, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):

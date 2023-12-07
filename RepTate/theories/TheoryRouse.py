@@ -35,7 +35,7 @@
 RouseTime file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -70,16 +70,12 @@ class TheoryRouseTime(CmdBase):
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryRouseTime(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryRouseTime(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryRouseTime(name, parent_dataset, axarr)
 
 
 class BaseTheoryRouseTime:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
     single_file = (
@@ -175,16 +171,6 @@ class BaseTheoryRouseTime:
         tt.data[:, 1] = gamma * rh.approx_rouse_time(params)
 
 
-class CLTheoryRouseTime(BaseTheoryRouseTime, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
-
-
 class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
     """GUI Version"""
 
@@ -229,16 +215,12 @@ class TheoryRouseFrequency(CmdBase):
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryRouseFrequency(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryRouseFrequency(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryRouseFrequency(name, parent_dataset, axarr)
 
 
 class BaseTheoryRouseFrequency:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
     single_file = (
@@ -313,16 +295,6 @@ class BaseTheoryRouseFrequency:
         tt.data[:, 0] = omega
         tt.data[:, 1] = gp
         tt.data[:, 2] = gpp
-
-
-class CLTheoryRouseFrequency(BaseTheoryRouseFrequency, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):

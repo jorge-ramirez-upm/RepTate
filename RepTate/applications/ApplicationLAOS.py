@@ -35,7 +35,7 @@
 Large Amplitude Oscillatory Shear
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -52,16 +52,12 @@ class ApplicationLAOS(CmdBase):
     extension = "laos"
 
     def __new__(cls, name="LAOS", parent=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIApplicationLAOS(name, parent)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLApplicationLAOS(name, parent)
-        )
+        """Create an instance of the GUI"""
+        return GUIApplicationLAOS(name, parent)
 
 
 class BaseApplicationLAOS:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     # html_help_file = ''
     appname = ApplicationLAOS.appname
@@ -861,15 +857,6 @@ class BaseApplicationLAOS:
         )
 
         return gam_recon, tau_recon
-
-
-class CLApplicationLAOS(BaseApplicationLAOS, Application):
-    """CL Version"""
-
-    def __init__(self, name="LAOS", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-        # usually this class stays empty
 
 
 class GUIApplicationLAOS(BaseApplicationLAOS, QApplicationWindow):

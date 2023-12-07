@@ -35,7 +35,6 @@
 Module for the Main interface that contains all applications. Command line version.
 
 """
-import readline
 from urllib.request import urlopen
 import json
 import logging
@@ -44,7 +43,7 @@ from pathlib import Path
 import os
 from PySide6.QtCore import QStandardPaths
 
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.applications.ApplicationTTS import ApplicationTTS
 from RepTate.applications.ApplicationTTSFactors import ApplicationTTSFactors
 from RepTate.applications.ApplicationLVE import ApplicationLVE
@@ -89,13 +88,6 @@ class ApplicationManager(CmdBase):
     def __init__(self, parent=None, loglevel=logging.INFO):
         """**Constructor**"""
         super().__init__()
-
-        # SETUP READLINE, COMMAND HISTORY FILE, ETC
-        try:
-            readline.read_history_file()
-        except Exception as e:
-            print(e.__class__, ":", e)
-            print("History file not found. Creating a new one")
 
         # SETUP APPLICATIONS
         self.application_counter = 0
@@ -146,8 +138,6 @@ class ApplicationManager(CmdBase):
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         self.logger.debug("New ApplicationManager")
-        if self.mode == CmdMode.batch:
-            self.prompt += Fore.RESET
 
     # APPLICATION STUFF
 
@@ -237,10 +227,7 @@ Arguments:
                 appname + str(self.application_counter), self
             )
             self.applications[newapp.name] = newapp
-            if self.mode == CmdMode.batch:
-                newapp.prompt = ""
-            else:
-                newapp.prompt = self.prompt[:-2] + "/" + Fore.RED + newapp.name + "> "
+            newapp.prompt = self.prompt[:-2] + "/" + Fore.RED + newapp.name + "> "
             return newapp
         else:
             print('Application "%s" is not available' % appname)
@@ -250,8 +237,6 @@ Arguments:
         """Create a new application and open it. Arguments: name (MWD, LVE, TTS, etc... Application to open)"""
         newapp = self.new(appname)
         if newapp != None:
-            if CmdBase.mode != CmdMode.GUI:
-                newapp.cmdqueue.append("new")
             newapp.cmdloop()
 
     def complete_new(self, text, line, begidx, endidx):
@@ -491,7 +476,6 @@ Basic use:
         shall = input("\n%s (y/N) " % msg).lower() == "y"
         if shall:
             print("Exiting RepTate...")
-            readline.write_history_file()
             return True
 
     do_EOF = do_quit
@@ -512,17 +496,3 @@ Basic use:
     def do_check_version(self, line):
         """Check if there is a new version of RepTate on Github."""
         newversion, version_github, version_current = self.check_version()
-        if CmdBase.mode != CmdMode.GUI:
-            print(
-                "Current Version:   " + Fore.CYAN + "%s" % version_current + Fore.RESET
-            )
-            print(
-                "Version on Github: " + Fore.CYAN + "%s" % version_github + Fore.RESET
-            )
-            if newversion:
-                print(
-                    "The version of RepTate on Github (%s) is more recent than the one you are running (%s)"
-                    % (version_github, version_current)
-                )
-            else:
-                print("Your version is up to date.")

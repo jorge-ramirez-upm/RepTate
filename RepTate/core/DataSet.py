@@ -41,7 +41,7 @@ import os
 import glob
 
 import enum
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.File import File
 from RepTate.core.DataTable import DataTable
 
@@ -308,7 +308,7 @@ class ThLineMode(enum.Enum):
     )
 
 
-class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
+class DataSet(CmdBase):  
     """Abstract class to describe a data set"""
 
     doc_header = "DataSet commands (type help <topic>):"
@@ -572,12 +572,11 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                 th_color = color
             else:
                 th_color = self.th_color
-            if CmdBase.mode == CmdMode.GUI:
-                if file.active:
-                    # save file name with associated marker shape, fill and color
-                    self.table_icon_list.append(
-                        (file.file_name_short, marker_name, face, color)
-                    )
+            if file.active:
+                # save file name with associated marker shape, fill and color
+                self.table_icon_list.append(
+                    (file.file_name_short, marker_name, face, color)
+                )
 
             for nx in range(self.nplots):
                 view = self.parent_application.multiviews[nx]
@@ -674,11 +673,6 @@ class DataSet(CmdBase):  # cmd.Cmd not using super() is OK for CL mode.
                                     self.logger.warning(
                                         "Parameter %s not found in data file" % e
                                     )
-                                    # if CmdBase.mode != CmdMode.GUI:
-                                    #     print(
-                                    #         "Parameter %s not found in data file"
-                                    #         % (e))
-                            # dt.series[nx][i].set_label(file.file_name_short)
                             dt.series[nx][i].set_label(label)
                         else:
                             dt.series[nx][i].set_label("")
@@ -986,35 +980,20 @@ Arguments:
                     self.parent_application.axarr, "TH_" + f.file_name_short
                 )
                 self.theories[th_name].function(f)
-            if CmdBase.mode == CmdMode.GUI:
-                return f, True
+            return f, True
         else:
             return None, False
 
     def do_open(self, line):
         """Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
-        if CmdBase.mode != CmdMode.GUI:
-            f_names = glob.glob(line)
-            if not f_names:
-                f_names = (
-                    line.split()
-                )  # allow to provide multiple file names separated by a space
-        else:
-            f_names = line
+        f_names = line
         newtables = []
         if line == "" or len(f_names) == 0:
             message = "No valid file names provided"
-            if CmdBase.mode != CmdMode.GUI:
-                print(message)
-                return
             return (message, None, None)
         f_ext = [os.path.splitext(x)[1].split(".")[-1] for x in f_names]
         if f_ext.count(f_ext[0]) != len(f_ext):
             message = "File extensions of files must be equal!"
-            if CmdBase.mode != CmdMode.GUI:
-                print(message)
-                print(f_names)
-                return
             return (message, None, None)
         if f_ext[0] in self.parent_application.filetypes:
             ft = self.parent_application.filetypes[f_ext[0]]
@@ -1038,15 +1017,9 @@ Arguments:
                         self.theories[th_name].tables[df.file_name_short] = DataTable(
                             self.parent_application.axarr, "TH_" + df.file_name_short
                         )
-            if CmdBase.mode == CmdMode.GUI:
-                return (True, newtables, f_ext[0])
-            else:
-                self.do_plot()
+            return (True, newtables, f_ext[0])
         else:
             message = 'File type "%s" does not exists' % f_ext[0]
-            if CmdBase.mode != CmdMode.GUI:
-                print(message)
-                return
             return (message, None, None)
 
     def do_reload_data(self, line=""):
@@ -1235,20 +1208,11 @@ Arguments:
             )
             self.theories[th.name] = th
             self.current_theory = th.name
-            if self.mode == CmdMode.GUI:
-                if th.autocalculate:
-                    th.do_calculate("")
-                else:
-                    th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
-                return th, th_id
+            if th.autocalculate:
+                th.do_calculate("")
             else:
-                if self.mode == CmdMode.batch:
-                    th.prompt = ""
-                else:
-                    th.prompt = self.prompt[:-2] + "/" + Fore.MAGENTA + th_id + "> "
-                if th.autocalculate:
-                    th.do_calculate("")
-                return th, th_id
+                th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
+            return th, th_id
         else:
             print('Theory "%s" does not exists' % line)
             return None, None
@@ -1273,20 +1237,11 @@ Arguments:
             )
             self.theories[th.name] = th
             self.current_theory = th.name
-            if self.mode == CmdMode.GUI:
-                if calculate and th.autocalculate:
-                    th.do_calculate("")
-                else:
-                    th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
-                return th
+            if calculate and th.autocalculate:
+                th.do_calculate("")
             else:
-                if self.mode == CmdMode.batch:
-                    th.prompt = ""
-                else:
-                    th.prompt = self.prompt[:-2] + "/" + Fore.MAGENTA + th_id + "> "
-                if calculate:
-                    th.do_calculate("")
-                th.cmdloop()
+                th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
+            return th
         else:
             print('Theory "%s" does not exists' % line)
 

@@ -38,7 +38,7 @@ Module for the Rolie-Poly theory for the non-linear flow of entangled polymers.
 import os
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -76,16 +76,12 @@ class TheoryRoliePoly(CmdBase):
     doi = ["http://dx.doi.org/10.1016/S0377-0257(03)00114-9"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryRoliePoly(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryRoliePoly(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryRoliePoly(name, parent_dataset, ax)
 
 
 class BaseTheoryRoliePoly:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-poly-equation"
     single_file = False
@@ -208,8 +204,7 @@ class BaseTheoryRoliePoly:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(self.linearenvelope.isChecked())
 
     def extra_graphic_visible(self, state):
@@ -523,8 +518,7 @@ class BaseTheoryRoliePoly:
         """Set the value of a theory parameter"""
         if name == "nmodes":
             oldn = self.parameters["nmodes"].value
-            if CmdBase.mode == CmdMode.GUI:
-                self.spinbox.setMaximum(int(value))
+            self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryRoliePoly, self).set_param_value(name, value)
         if not success:
             return message, success
@@ -564,15 +558,6 @@ class BaseTheoryRoliePoly:
                     del self.parameters["tauR%02d" % i]
         return "", True
 
-
-class CLTheoryRoliePoly(BaseTheoryRoliePoly, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
-            self.function = self.RoliePolyLAOS
 
 
 class GUITheoryRoliePoly(BaseTheoryRoliePoly, QTheory):

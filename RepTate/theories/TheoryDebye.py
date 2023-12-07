@@ -35,7 +35,7 @@
 Debye theory for neutron scattering from ideal polymer chains
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -78,16 +78,12 @@ class TheoryDebye(CmdBase):
     doi = ["http://dx.doi.org/10.1021/j150451a002"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDebye(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDebye(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDebye(name, parent_dataset, axarr)
 
 
 class BaseTheoryDebye:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
     single_file = (
@@ -229,15 +225,6 @@ File error is calculated as the mean square of the residual, averaged over all p
                             % (f.file_name_short, Mw, np.sqrt(CRg * Mw))
                         )
 
-
-class CLTheoryDebye(BaseTheoryDebye, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryDebye(BaseTheoryDebye, QTheory):

@@ -73,7 +73,6 @@ Graphical User Interface
 - Read data from Excel file (Experimental)
 - i-Rheo Fourier transform to get G' and G'' from G(t)
 - Zoom with mouse and wheel
-- Calculate integral, find peaks (BETA, only in CL version)
 - Save predictions of theory to a RepTate compatible file
 
 ..todo:: Update this list

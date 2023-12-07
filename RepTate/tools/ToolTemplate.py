@@ -34,7 +34,7 @@
 
 Template file for creating a new Tool
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
@@ -49,16 +49,12 @@ class ToolTemplate(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIToolTemplate(name, parent_app)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLToolTemplate(name, parent_app)
-        )
+        """Create an instance of the GUI"""
+        return GUIToolTemplate(name, parent_app)
 
 
 class BaseToolTemplate:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
     toolname = ToolTemplate.toolname
@@ -84,15 +80,6 @@ If not, you can safely delete it."""
         """
         return x, y * y
 
-
-class CLToolTemplate(BaseToolTemplate, Tool):
-    """CL Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-
-    # This class usually stays empty
 
 
 class GUIToolTemplate(BaseToolTemplate, QTool):

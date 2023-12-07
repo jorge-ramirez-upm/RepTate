@@ -36,7 +36,7 @@ GEX file for creating a new theory
 """
 import numpy as np
 from math import gamma
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -62,16 +62,12 @@ class TheoryGEX(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryGEX(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryGEX(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryGEX(name, parent_dataset, axarr)
 
 
 class BaseTheoryGEX:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function"
     single_file = (
@@ -177,14 +173,6 @@ File error is calculated as the mean square of the residual, averaged over all p
             self.Qprint(table)
 
 
-class CLTheoryGEX(BaseTheoryGEX, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryGEX(BaseTheoryGEX, QTheory):

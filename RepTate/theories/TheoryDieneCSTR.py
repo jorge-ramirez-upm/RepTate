@@ -36,7 +36,7 @@
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -57,16 +57,12 @@ class TheoryDieneCSTR(CmdBase):
     doi = ["https://doi.org/10.1002/mats.201700006"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryDieneCSTR(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryDieneCSTR(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryDieneCSTR(name, parent_dataset, ax)
 
 
 class BaseTheoryDieneCSTR:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html"
@@ -428,15 +424,6 @@ class BaseTheoryDieneCSTR:
                 self.ymax = temp
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
-
-class CLTheoryDieneCSTR(BaseTheoryDieneCSTR, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-    # This class usually stays empty
 
 
 class GUITheoryDieneCSTR(BaseTheoryDieneCSTR, QTheory):

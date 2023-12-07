@@ -40,7 +40,7 @@ import io
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataSet import DataSet
 from RepTate.theories.TheoryBasic import *
 from RepTate.core.Tool import *
@@ -147,13 +147,6 @@ class Application(CmdBase):
         self._axes = None # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
         self._was_zooming = False
-
-        if (CmdBase.mode == CmdMode.cmdline):
-            # self.figure.show()
-            self.multiplots.setWindowFlags(self.multiplots.windowFlags()
-                                           & ~Qt.WindowCloseButtonHint)
-            self.multiplots.show()
-        # self.datacursor_ = None
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + '.' + self.name)
@@ -322,7 +315,7 @@ class Application(CmdBase):
         """Called when releasing mouse"""
         if event.button == 3:  #if release a right click
             self._zoom_area(event)
-            if not self._was_zooming and CmdBase.mode == CmdMode.GUI:
+            if not self._was_zooming:
                 self.open_figure_popup_menu(event)
             self.artists_clicked.clear()
             self._was_zooming = False
@@ -497,50 +490,6 @@ class Application(CmdBase):
             axes.draw_artist(self._patch)
             canvas.update()
 
-    # def update_datacursor_artists(self):
-    #     """Update the datacursor instance
-    #     Called at the end of ds.do_plot() and when plot-tab is changed"""
-    #     try:
-    #         self.datacursor_.remove()
-    #     except AttributeError:
-    #         pass
-    #     del self.datacursor_
-
-    #     if CmdBase.mode == CmdMode.GUI:
-    #         ds_list = [self.DataSettabWidget.currentWidget(),]
-    #         if self.actionView_All_Sets.isChecked():
-    #             ds_list = self.datasets.values()
-    #         artists = []
-    #         for ds in ds_list:
-    #             if ds:
-    #                 th = ds.TheorytabWidget.currentWidget()
-    #                 for f in ds.files:
-    #                     if f.active:
-    #                         dt = f.data_table
-    #                         for j in range(dt.MAX_NUM_SERIES):
-    #                             if self.current_viewtab == 0:
-    #                                 # all artists
-    #                                 for i in range(self.nplots):
-    #                                     artists.append(dt.series[i][j])
-    #                                     if th:
-    #                                         artists.append(th.tables[f.file_name_short].series[i][j])
-    #                             else:
-    #                                 # only artists of current tab
-    #                                 artists.append(dt.series[self.current_viewtab - 1][j])
-    #                                 if th:
-    #                                     artists.append(th.tables[f.file_name_short].series[self.current_viewtab - 1][j])
-    #             self.datacursor_ = cursor(pickables=artists)
-    #             self.datacursor_.bindings["deselect"] = 1
-    #     else:
-    #         axs = [self.axarr[i] for i in range(self.nplots)]
-    #         self.datacursor_ = cursor(pickables=axs)
-    #         self.datacursor_.bindings["deselect"] = 1
-    #     @self.datacursor_.connect("add")
-    #     def _(sel):
-    #         x, y = sel.target
-    #         sel.annotation.set(text="%.3g; %.3g"%(x,y), size=13)
-    #         sel.annotation.get_bbox_patch().set(alpha=0.7)
-    #         sel.annotation.arrow_patch.set(ec="red", alpha=0.5)
 
     def delete_multiplot(self):
         """deletes the multiplot object"""
@@ -596,10 +545,7 @@ class Application(CmdBase):
         else:
             dsname = line
         ds = DataSet(dsname, self)
-        if (self.mode == CmdMode.batch):
-            ds.prompt = ''
-        else:
-            ds.prompt = self.prompt[:-2] + '/' + Fore.YELLOW + ds.name + '> '
+        ds.prompt = self.prompt[:-2] + '/' + Fore.YELLOW + ds.name + '> '
         return ds, dsname
 
     def do_new(self, line):
@@ -774,13 +720,11 @@ class Application(CmdBase):
                 #index 0 is the defaut view
                 self.current_view = self.views[view_name]
             #add view name to the list of views avaliable
-            if CmdBase.mode == CmdMode.GUI:
-                self.viewComboBox.insertItem(i, view_name)
-                self.viewComboBox.setItemData(i, self.views[view_name].description, Qt.ToolTipRole)
+            self.viewComboBox.insertItem(i, view_name)
+            self.viewComboBox.setItemData(i, self.views[view_name].description, Qt.ToolTipRole)
 
-        if CmdBase.mode == CmdMode.GUI:
-            #index 0 is the defaut selection
-            self.viewComboBox.setCurrentIndex(0)
+        #index 0 is the defaut selection
+        self.viewComboBox.setCurrentIndex(0)
 
     def do_available_views(self, line=""):
         """List available views in the current application"""
@@ -873,10 +817,7 @@ class Application(CmdBase):
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
                 to = self.extratools[line](to_id, self)
-            if (self.mode == CmdMode.batch):
-                to.prompt = ''
-            else:
-                to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
+            to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
             self.tools.append(to)
         else:
             to=None
@@ -964,8 +905,7 @@ class Application(CmdBase):
         """Update the plot in the current application"""
         self.set_axes_properties(self.autoscale)
         #self.set_legend_properties()
-        if CmdBase.mode == CmdMode.GUI:
-            self.update_legend()
+        self.update_legend()
         self.canvas.draw()
 
     def set_axes_properties(self, autoscale=True):

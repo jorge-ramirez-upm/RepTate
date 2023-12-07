@@ -43,7 +43,7 @@ import traceback
 import numpy as np
 import logging
 
-from RepTate.core.CmdBase import CmdBase, CalcMode, CmdMode
+from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 
 # from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
@@ -95,7 +95,6 @@ def start_RepTate(argv):
 
     :param list argv: Command line parameters passed to Reptate
     """
-    GUI = True
 
     parser = argparse.ArgumentParser(
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",

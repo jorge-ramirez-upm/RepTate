@@ -33,7 +33,7 @@
 """Module TheoryLogNormal
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -58,16 +58,12 @@ class TheoryLogNormal(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryLogNormal(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryLogNormal(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryLogNormal(name, parent_dataset, axarr)
 
 
 class BaseTheoryLogNormal:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution"
     single_file = (
@@ -156,15 +152,6 @@ File error is calculated as the mean square of the residual, averaged over all p
             )
             self.Qprint(table)
 
-
-class CLTheoryLogNormal(BaseTheoryLogNormal, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryLogNormal(BaseTheoryLogNormal, QTheory):

@@ -42,7 +42,7 @@ import numpy as np
 from scipy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -80,16 +80,12 @@ class TheoryWLFShift(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryWLFShift(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryWLFShift(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryWLFShift(name, parent_dataset, ax)
 
 
 class BaseTheoryWLFShift:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift"
     single_file = False
@@ -527,18 +523,7 @@ class BaseTheoryWLFShift:
 
         # print information
         msg = 'Saved %d TTS file(s) in "%s"' % (counter, line)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, "Save TTS", msg)
-        else:
-            print(msg)
-
-
-class CLTheoryWLFShift(BaseTheoryWLFShift, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
+        QMessageBox.information(self, "Save TTS", msg)
 
 
 class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
@@ -667,7 +652,4 @@ class GUITheoryWLFShift(BaseTheoryWLFShift, QTheory):
                     fout.write("%-12g %-12g %-12g\n" % (T, aT, bT))
 
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, "Saved Files", msg)
-        else:
-            print(msg)
+        QMessageBox.information(self, "Saved Files", msg)

@@ -40,7 +40,7 @@ import numpy as np
 from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -90,16 +90,11 @@ class TheoryPomPom(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.550933"]
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryPomPom(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryPomPom(name, parent_dataset, ax)
-        )
-
+        """Create an instance of the GUI"""
+        return GUITheoryPomPom(name, parent_dataset, ax)
 
 class BaseTheoryPomPom:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
     single_file = False
@@ -489,15 +484,6 @@ class BaseTheoryPomPom:
                     del self.parameters["q%02d" % i]
         return "", True
 
-
-class CLTheoryPomPom(BaseTheoryPomPom, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        if isinstance(parent_dataset.parent_application, CLApplicationLAOS):
-            self.function = self.calculate_PomPomLAOS
 
 
 class GUITheoryPomPom(BaseTheoryPomPom, QTheory):

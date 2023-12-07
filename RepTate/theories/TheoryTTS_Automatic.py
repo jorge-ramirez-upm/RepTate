@@ -44,7 +44,7 @@ from scipy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 import RepTate
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -67,16 +67,12 @@ class TheoryTTSShiftAutomatic(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryTTSShiftAutomatic(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryTTSShiftAutomatic(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryTTSShiftAutomatic(name, parent_dataset, ax)
 
 
 class BaseTheoryTTSShiftAutomatic:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
     single_file = False
@@ -569,18 +565,8 @@ class BaseTheoryTTSShiftAutomatic:
 
         # print information
         msg = 'Saved %d TTS file(s) in "%s"' % (counter, line)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, "Save TTS", msg)
-        else:
-            print(msg)
+        QMessageBox.information(self, "Save TTS", msg)
 
-
-class CLTheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
@@ -736,7 +722,4 @@ class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
                     )
                 nsaved += 1
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
-        if CmdBase.mode == CmdMode.GUI:
-            QMessageBox.information(self, "Saved Files", msg)
-        else:
-            print(msg)
+        QMessageBox.information(self, "Saved Files", msg)

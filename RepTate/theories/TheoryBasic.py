@@ -38,7 +38,7 @@ Module that defines the basic theories that should be available for all Applicat
 from numpy import *
 import numpy as np
 import re
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -69,15 +69,11 @@ class TheoryPolynomial(CmdBase):
     description = "Fit a polynomial of degree n"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryPolynomial(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPolynomial(
-                name, parent_dataset, ax)
-
+        """Create an instance of the GUI"""
+        return GUITheoryPolynomial(name, parent_dataset, ax) 
 
 class BaseTheoryPolynomial:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
@@ -159,14 +155,6 @@ class BaseTheoryPolynomial:
                 tt.data[:, j] += a * tt.data[:, 0]**i
 
 
-class CLTheoryPolynomial(BaseTheoryPolynomial, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-
 class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
     """GUI Version"""
 
@@ -213,15 +201,12 @@ class TheoryPowerLaw(CmdBase):
     description = "Fit Power Law"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryPowerLaw(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryPowerLaw(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryPowerLaw(name, parent_dataset, ax) 
 
 
 class BaseTheoryPowerLaw:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
     thname = TheoryPowerLaw.thname
@@ -252,14 +237,6 @@ class BaseTheoryPowerLaw:
         for j in range(1, tt.num_columns):
             tt.data[:, j] = self.parameters[
                 "a"].value * tt.data[:, 0]**self.parameters["b"].value
-
-
-class CLTheoryPowerLaw(BaseTheoryPowerLaw, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
@@ -294,14 +271,11 @@ class TheoryExponential(CmdBase):
     description = "Fit Exponential"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryExponential(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryExponential(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryExponential(name, parent_dataset, ax) 
 
 class BaseTheoryExponential:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
     thname = TheoryExponential.thname
@@ -331,13 +305,6 @@ class BaseTheoryExponential:
         for j in range(1, tt.num_columns):
             tt.data[:, j] = self.parameters["a"].value * np.exp(
                 -tt.data[:, 0] / self.parameters["T"].value)
-
-class CLTheoryExponential(BaseTheoryExponential, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryExponential(BaseTheoryExponential, QTheory):
@@ -371,14 +338,11 @@ class TheoryTwoExponentials(CmdBase):
     description = "Fit two exponentials"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryTwoExponentials(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryTwoExponentials(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryTwoExponentials(name, parent_dataset, ax) 
 
 class BaseTheoryTwoExponentials:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
     thname = TheoryTwoExponentials.thname
@@ -426,12 +390,6 @@ class BaseTheoryTwoExponentials:
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
                 -tt.data[:, 0] / T2)
 
-class CLTheoryTwoExponentials(BaseTheoryTwoExponentials, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
@@ -475,15 +433,11 @@ class TheoryAlgebraicExpression(CmdBase):
     description = "Fit an algebraic expression with n parameters"
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryAlgebraicExpression(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryAlgebraicExpression(
-                name, parent_dataset, ax)
-
+        """Create an instance of the GUI"""
+        return GUITheoryAlgebraicExpression(name, parent_dataset, ax) 
 
 class BaseTheoryAlgebraicExpression:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
     single_file = False
     thname = TheoryAlgebraicExpression.thname
@@ -614,12 +568,6 @@ class BaseTheoryAlgebraicExpression:
         super().do_error(line)
         self.Qprint("%s: <b>%s</b>" % (self.thname, self.parameters["expression"].value))
 
-class CLTheoryAlgebraicExpression(BaseTheoryAlgebraicExpression, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryAlgebraicExpression(BaseTheoryAlgebraicExpression, QTheory):

@@ -39,7 +39,7 @@ import os
 import numpy as np
 import enum
 import RepTate
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
@@ -255,16 +255,12 @@ class TheoryCreatePolyconf(CmdBase):
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
 
     def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryCreatePolyconf(name, parent_dataset, axarr)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryCreatePolyconf(name, parent_dataset, axarr)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryCreatePolyconf(name, parent_dataset, axarr)
 
 
 class BaseTheoryCreatePolyconf:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html"
     single_file = (
@@ -372,15 +368,6 @@ class BaseTheoryCreatePolyconf:
             tt.data[:, 2] = gbin_out[:]
             tt.data[:, 3] = brbin_out[:]
 
-
-class CLTheoryCreatePolyconf(BaseTheoryCreatePolyconf, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # This class usually stays empty
 
 
 class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):

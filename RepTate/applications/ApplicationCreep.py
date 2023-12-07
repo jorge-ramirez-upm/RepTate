@@ -35,7 +35,7 @@
 Module for the analysis of data from Creep experiments
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -64,16 +64,11 @@ class ApplicationCreep(CmdBase):
     extension = "creep"
 
     def __new__(cls, name="Creep", parent=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUIApplicationCreep(name, parent)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLApplicationCreep(name, parent)
-        )
+        return GUIApplicationCreep(name, parent)
 
 
 class BaseApplicationCreep:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
@@ -373,21 +368,6 @@ class BaseApplicationCreep:
             return None, x_in_range, y_in_range
         else:
             return "Check values of eta, t_min and t_max ", None, None
-
-
-
-class CLApplicationCreep(BaseApplicationCreep, Application):
-    """CL Version"""
-
-    def __init__(self, name="Creep", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
-    def show_sb_oversampling(self):
-        pass
-
-    def hide_sb_oversampling(self):
-        pass
 
 
 class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):

@@ -35,7 +35,7 @@
 Module for handling time-temperature superposition factors and fit theories.
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -51,15 +51,12 @@ class ApplicationTTSFactors(CmdBase):
     extension = "ttsf"
 
     def __new__(cls, name="TTSF", parent=None):
-        """Create an instance of the GUI or CL class"""
-        if CmdBase.mode == CmdMode.GUI:
-            return GUIApplicationTTSFactors(name, parent)
-        else:
-            return CLApplicationTTSFactors(name, parent)
+        """Create an instance of the GUI"""
+        return GUIApplicationTTSFactors(name, parent)
 
 
 class BaseApplicationTTSFactors:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html"
@@ -239,14 +236,6 @@ class BaseApplicationTTSFactors:
         x[:, 0] = 1 / (dt.data[:, 0] + 273.15)
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
-
-
-class CLApplicationTTSFactors(BaseApplicationTTSFactors, Application):
-    """CL Version"""
-
-    def __init__(self, name="TTSFactors", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
 
 
 class GUIApplicationTTSFactors(BaseApplicationTTSFactors, QApplicationWindow):

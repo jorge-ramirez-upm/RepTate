@@ -36,7 +36,7 @@ Module for handling small angle oscillatory shear experiments and applying the
 time-temperature superposition principle.
 
 """
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
@@ -52,15 +52,12 @@ class ApplicationTTS(CmdBase):
     extension = "osc"
 
     def __new__(cls, name="TTS", parent=None):
-        """Create an instance of the GUI or CL class"""
-        if CmdBase.mode == CmdMode.GUI:
-            return GUIApplicationTTS(name, parent)
-        else:
-            return CLApplicationTTS(name, parent)
+        """Create an instance of the GUI"""
+        return GUIApplicationTTS(name, parent)
 
 
 class BaseApplicationTTS:
-    """Base Class for both GUI and CL"""
+    """Base Class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html"
     appname = ApplicationTTS.appname
@@ -486,15 +483,6 @@ class BaseApplicationTTS:
         y[:, 1] = np.log10(dt.data[:, 2])
         y[:, 2] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
-
-
-class CLApplicationTTS(BaseApplicationTTS, Application):
-    """CL Version"""
-
-    def __init__(self, name="TTS", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
 
 class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
     """GUI Version"""

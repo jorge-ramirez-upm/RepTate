@@ -36,7 +36,7 @@ Module that defines theories related to Retardation modes, in the frequency and 
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
@@ -73,16 +73,12 @@ class TheoryRetardationModesTime(CmdBase):
     doi = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return (
-            GUITheoryRetardationModesTime(name, parent_dataset, ax)
-            if (CmdBase.mode == CmdMode.GUI)
-            else CLTheoryRetardationModesTime(name, parent_dataset, ax)
-        )
+        """Create an instance of the GUI"""
+        return GUITheoryRetardationModesTime(name, parent_dataset, ax)
 
 
 class BaseTheoryRetardationModesTime:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
     single_file = True
@@ -216,8 +212,7 @@ class BaseTheoryRetardationModesTime:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
@@ -301,13 +296,6 @@ class BaseTheoryRetardationModesTime:
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
-
-class CLTheoryRetardationModesTime(BaseTheoryRetardationModesTime, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryRetardationModesTime(BaseTheoryRetardationModesTime, QTheory):

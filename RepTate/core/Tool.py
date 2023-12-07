@@ -37,7 +37,7 @@ Module that defines the basic structure and properties of a Tool.
 """
 import numpy as np
 
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import ParameterType
 from PySide6.QtGui import QTextCursor
 from PySide6.QtCore import Signal
@@ -98,10 +98,9 @@ class Tool(CmdBase):
 
         self.do_cite("")
 
-        if CmdBase.mode == CmdMode.GUI:
-            self.print_signal.connect(
-                self.print_qtextbox
-            )  # Asynchronous print when using multithread
+        self.print_signal.connect(
+            self.print_qtextbox
+        )  # Asynchronous print when using multithread
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
@@ -352,19 +351,9 @@ class Tool(CmdBase):
 
     def Qprint(self, msg, end="<br>"):
         """Print a message on the Tool info area"""
-        if CmdBase.mode == CmdMode.GUI:
-            if isinstance(msg, list):
-                msg = self.table_as_html(msg)
-            self.print_signal.emit(msg + end)
-        else:
-            if end == "<br>":
-                end = "\n"
-            if isinstance(msg, list):
-                msg = self.table_as_ascii(msg)
-            else:
-                msg = msg.replace("<br>", "\n")
-                msg = self.strip_tags(msg)
-            print(msg, end=end)
+        if isinstance(msg, list):
+            msg = self.table_as_html(msg)
+        self.print_signal.emit(msg + end)
 
     def table_as_html(self, tab):
         header = tab[0]

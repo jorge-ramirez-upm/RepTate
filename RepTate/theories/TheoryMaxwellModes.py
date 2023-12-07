@@ -36,7 +36,7 @@ Module that defines theories related to Maxwell modes, in the frequency and time
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase, CmdMode
+from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.Theory import Theory
@@ -70,14 +70,12 @@ class TheoryMaxwellModesFrequency(CmdBase):
     doi = []
     
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) if (
-            CmdBase.mode == CmdMode.GUI) else CLTheoryMaxwellModesFrequency(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) 
 
 
 class BaseTheoryMaxwellModesFrequency:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
@@ -180,10 +178,9 @@ class BaseTheoryMaxwellModesFrequency:
                     opt_type=OptType.opt,
                     min_value=-10,
                     max_value=10)
-            if CmdBase.mode == CmdMode.GUI:
-                self.spinbox.blockSignals(True)
-                self.spinbox.setValue(nmodesnew)
-                self.spinbox.blockSignals(False)
+            self.spinbox.blockSignals(True)
+            self.spinbox.setValue(nmodesnew)
+            self.spinbox.blockSignals(False)
         else:
             message, success = super().set_param_value(name, value)
         
@@ -247,8 +244,7 @@ class BaseTheoryMaxwellModesFrequency:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
@@ -337,13 +333,6 @@ class BaseTheoryMaxwellModesFrequency:
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
 
-class CLTheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
 
 class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
     """GUI Version"""
@@ -421,15 +410,12 @@ class TheoryMaxwellModesTime(CmdBase):
     citations = []
 
     def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI or CL class"""
-        return GUITheoryMaxwellModesTime(
-            name, parent_dataset,
-            ax) if (CmdBase.mode == CmdMode.GUI) else CLTheoryMaxwellModesTime(
-                name, parent_dataset, ax)
+        """Create an instance of the GUI"""
+        return GUITheoryMaxwellModesTime(name, parent_dataset, ax) 
 
 
 class BaseTheoryMaxwellModesTime:
-    """Base class for both GUI and CL"""
+    """Base class for both GUI"""
 
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
     single_file = True
@@ -523,8 +509,7 @@ class BaseTheoryMaxwellModesTime:
                     opt_type=OptType.opt,
                     min_value=-10,
                     max_value=10)
-            if CmdBase.mode == CmdMode.GUI:
-                self.spinbox.setValue(value)
+            self.spinbox.setValue(value)
         else:
             message, success = super().set_param_value(name, value)
         
@@ -578,8 +563,7 @@ class BaseTheoryMaxwellModesTime:
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
-        if CmdBase.mode == CmdMode.GUI:
-            self.Qhide_theory_extras(show)
+        self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
     def graphicmodes_visible(self, state):
@@ -670,13 +654,6 @@ class BaseTheoryMaxwellModesTime:
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
-
-class CLTheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, Theory):
-    """CL Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 
 class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
