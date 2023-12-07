@@ -61,7 +61,6 @@ from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 # from ApplicationFRS_I import *
 import RepTate
 from collections import OrderedDict
-from colorama import Fore
 
 
 class ApplicationManager(CmdBase):
@@ -73,16 +72,15 @@ class ApplicationManager(CmdBase):
     version = verdata["version"].split("+")[0]
     date = verdata["date"].split("T")[0]
     build = verdata["version"]
-    prompt = Fore.GREEN + "RepTate> "
-    intro = (
-        Fore.GREEN
-        + "RepTate "
-        + Fore.RED
-        + "%s - %s" % (version, date)
-        + Fore.RESET
-        + " command processor (Build %s" % build
-        + ")\nhelp [command] for instructions\nTAB for completions"
-    )
+    # intro = (
+    #     Fore.GREEN
+    #     + "RepTate "
+    #     + Fore.RED
+    #     + "%s - %s" % (version, date)
+    #     + Fore.RESET
+    #     + " command processor (Build %s" % build
+    #     + ")\nhelp [command] for instructions\nTAB for completions"
+    # )
     doc_header = "RepTate Manager commands (type help <topic>):"
 
     def __init__(self, parent=None, loglevel=logging.INFO):
@@ -144,14 +142,14 @@ class ApplicationManager(CmdBase):
     def available(self):
         """Return list of available applications"""
         L = []
-        for app in list(self.available_applications.values()):
-            L.append(
-                Fore.RED
-                + "%s:" % app.appname
-                + Fore.RESET
-                + (12 - len(app.appname)) * " "
-                + "%s" % app.description
-            )
+        # for app in list(self.available_applications.values()):
+        #     L.append(
+        #         Fore.RED
+        #         + "%s:" % app.appname
+        #         + Fore.RESET
+        #         + (12 - len(app.appname)) * " "
+        #         + "%s" % app.description
+        #     )
         return L
 
     def do_available(self, line):
@@ -191,14 +189,14 @@ class ApplicationManager(CmdBase):
     def list(self):
         """List open applications"""
         L = []
-        for app in list(self.applications.values()):
-            L.append(
-                Fore.RED
-                + "%s:" % app.appname
-                + Fore.RESET
-                + (12 - len(app.appname)) * " "
-                + "%s" % app.description
-            )
+        # for app in list(self.applications.values()):
+        #     L.append(
+        #         Fore.RED
+        #         + "%s:" % app.appname
+        #         + Fore.RESET
+        #         + (12 - len(app.appname)) * " "
+        #         + "%s" % app.description
+        #     )
         return L
 
     def do_list(self, line):
@@ -213,7 +211,7 @@ class ApplicationManager(CmdBase):
     def do_tree(self, line):
         """Show a tree structure of all open applications, tools, datasets and theories"""
         for app in self.applications.keys():
-            print(Fore.RED + "%s" % self.applications[app].name + Fore.RESET)
+            # print(Fore.RED + "%s" % self.applications[app].name + Fore.RESET)
             self.applications[app].do_tree(str(1))
 
     def new(self, appname):
@@ -227,7 +225,6 @@ Arguments:
                 appname + str(self.application_counter), self
             )
             self.applications[newapp.name] = newapp
-            newapp.prompt = self.prompt[:-2] + "/" + Fore.RED + newapp.name + "> "
             return newapp
         else:
             print('Application "%s" is not available' % appname)
@@ -372,20 +369,20 @@ Arguments:
         L, S = self.list_theories_Maxwell()
         if len(L) > 0:
             print("The following open theories provide/require Maxwell Modes:")
-            for k in L.keys():
-                items = k.split(".")
-                print(
-                    Fore.RED
-                    + items[0]
-                    + Fore.RESET
-                    + "."
-                    + Fore.YELLOW
-                    + items[1]
-                    + Fore.RESET
-                    + "."
-                    + Fore.MAGENTA
-                    + items[2]
-                )
+            # for k in L.keys():
+            #     items = k.split(".")
+            #     print(
+            #         Fore.RED
+            #         + items[0]
+            #         + Fore.RESET
+            #         + "."
+            #         + Fore.YELLOW
+            #         + items[1]
+            #         + Fore.RESET
+            #         + "."
+            #         + Fore.MAGENTA
+            #         + items[2]
+            #     )
         else:
             print("Currently there are no open theories that provide Maxwell modes.")
 
@@ -394,81 +391,81 @@ Arguments:
     def do_tutorial(self, line=""):
         """Show a short tutorial about the commands in RepTate application manager"""
         print("")
-        print(
-            "Inspect the python scripts in the"
-            + Fore.RED
-            + ' "tests" '
-            + Fore.RESET
-            + "folder."
-        )
+        # print(
+        #     "Inspect the python scripts in the"
+        #     + Fore.RED
+        #     + ' "tests" '
+        #     + Fore.RESET
+        #     + "folder."
+        # )
         print("Visit the page:")
-        print(
-            Fore.CYAN
-            + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-            + Fore.RESET
-        )
+        # print(
+        #     Fore.CYAN
+        #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+        #     + Fore.RESET
+        # )
         print(
             """
 Basic use:
 =========="""
         )
-        print(Fore.RED + "available" + Fore.RESET)
-        self.do_help("available")
-        print(Fore.RED + "new LVE" + Fore.RESET)
-        self.do_help("new")
-        print(Fore.RED + "list" + Fore.RESET)
-        self.do_help("list")
-        print(Fore.RED + "switch LVE1" + Fore.RESET)
-        print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
-        self.do_help("switch")
-        print(Fore.RED + "tree" + Fore.RESET)
-        self.do_help("tree")
-        print(Fore.RED + "quit" + Fore.RESET)
-        self.do_help("quit")
-        print("")
+        # print(Fore.RED + "available" + Fore.RESET)
+        # self.do_help("available")
+        # print(Fore.RED + "new LVE" + Fore.RESET)
+        # self.do_help("new")
+        # print(Fore.RED + "list" + Fore.RESET)
+        # self.do_help("list")
+        # print(Fore.RED + "switch LVE1" + Fore.RESET)
+        # print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
+        # self.do_help("switch")
+        # print(Fore.RED + "tree" + Fore.RESET)
+        # self.do_help("tree")
+        # print(Fore.RED + "quit" + Fore.RESET)
+        # self.do_help("quit")
+        # print("")
 
     def do_about(self, line):
         """Show about info."""
         print(ApplicationManager.intro)
         print("")
-        print(
-            Fore.GREEN
-            + "RepTate "
-            + Fore.RESET
-            + "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), "
-            + "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds "
-            + "and the University of Reading, as part of the muPP2 project, funded by the EPSRC."
-        )
-        print("")
-        print(
-            "This new version is a port (and enhancement) of the original RepTate code to python,"
-            + " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations."
-        )
-        print("")
-        print(
-            "It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, "
-            + Fore.CYAN
-            + "jorge.ramirez@upm.es"
-            + Fore.RESET
-            + ") and Victor Boudara (University of Leeds, "
-            + Fore.CYAN
-            + "v.a.boudara@leeds.ac.uk"
-            + Fore.RESET
-            + ")."
-        )
-        print("")
-        print("The program and source code are released under the GPLv3 license.")
-        print("")
-        print(
-            "This project is dedicated to the memory of our great friend and collaborator Alexei."
-        )
-        print("")
-        print(
-            "Project page: "
-            + Fore.CYAN
-            + "https://github.com/jorge-ramirez-upm/RepTate"
-        )
-        print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
+        # print(
+        #     Fore.GREEN
+        #     + "RepTate "
+        #     + Fore.RESET
+        #     + "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), "
+        #     + "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds "
+        #     + "and the University of Reading, as part of the muPP2 project, funded by the EPSRC."
+        # )
+        # print("")
+        # print(
+        #     "This new version is a port (and enhancement) of the original RepTate code to python,"
+        #     + " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations."
+        # )
+        # print("")
+        # print(
+        #     "It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, "
+        #     + Fore.CYAN
+        #     + "jorge.ramirez@upm.es"
+        #     + Fore.RESET
+        #     + ") and Victor Boudara (University of Leeds, "
+        #     + Fore.CYAN
+        #     + "v.a.boudara@leeds.ac.uk"
+        #     + Fore.RESET
+        #     + ")."
+        # )
+        # print("")
+        # print("The program and source code are released under the GPLv3 license.")
+        # print("")
+        # print(
+        #     "This project is dedicated to the memory of our great friend and collaborator Alexei."
+        # )
+        # print("")
+        # print(
+        #     "Project page: "
+        #     + Fore.CYAN
+        #     + "https://github.com/jorge-ramirez-upm/RepTate"
+        # )
+        # print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
     def do_quit(self, args):
         """Exit RepTate."""

@@ -50,7 +50,6 @@ from collections import OrderedDict
 
 import numpy as np
 import matplotlib.patheffects as pe
-from colorama import Fore
 import logging
 
 
@@ -384,8 +383,8 @@ class DataSet(CmdBase):
             except ValueError:
                 print("Wrong argument for the tree command.")
         if done:
-            for t in self.theories.values():
-                print(prefix + Fore.MAGENTA + "%s" % t.name + Fore.RESET)
+            # for t in self.theories.values():
+            #     print(prefix + Fore.MAGENTA + "%s" % t.name + Fore.RESET)
             for f in self.files:
                 print(prefix + "%s" % f.file_name_short)
 
@@ -837,15 +836,15 @@ Arguments:
             else:
                 a = "(-)"
 
-            print(
-                Fore.RED
-                + "%s " % c
-                + Fore.RESET
-                + "%s " % f.file_name_short
-                + Fore.CYAN
-                + "%s" % a
-                + Fore.RESET
-            )
+            # print(
+            #     Fore.RED
+            #     + "%s " % c
+            #     + Fore.RESET
+            #     + "%s " % f.file_name_short
+            #     + Fore.CYAN
+            #     + "%s" % a
+            #     + Fore.RESET
+            # )
 
     def do_list_files_details(self, line):
         """List the files in the dataset with the file parameters"""
@@ -1118,19 +1117,19 @@ Arguments:
         for index, file in enumerate(self.files):
             if file.file_name_short == line:
                 done = True
-                print(Fore.YELLOW + "File: " + Fore.RESET + file.file_name_short)
-                print(Fore.CYAN + "Path: " + Fore.RESET + file.file_full_path)
-                print(Fore.RED + "Parameters: " + Fore.RESET)
+                # print(Fore.YELLOW + "File: " + Fore.RESET + file.file_name_short)
+                # print(Fore.CYAN + "Path: " + Fore.RESET + file.file_full_path)
+                # print(Fore.RED + "Parameters: " + Fore.RESET)
                 print(file.file_parameters)
-                print(Fore.GREEN + "Header Lines: " + Fore.RESET)
+                # print(Fore.GREEN + "Header Lines: " + Fore.RESET)
                 print(file.header_lines)
                 dfile = list(self.parent_application.filetypes.values())[0]
                 inspect_header = [
                     a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)
                 ]
-                print(Fore.BLUE + "Column Header: " + Fore.RESET)
+                # print(Fore.BLUE + "Column Header: " + Fore.RESET)
                 print(inspect_header)
-                print(Fore.MAGENTA + "Data: " + Fore.RESET)
+                # print(Fore.MAGENTA + "Data: " + Fore.RESET)
                 print(file.data_table.data)
         if not done:
             print('File "%s" not found' % line)
@@ -1181,14 +1180,14 @@ Arguments:
         if len(self.theories) > 0:
             print("OPEN THEORIES IN THE CURRENT DATASET")
             print("====================================")
-        for t in self.theories.values():
-            print(
-                Fore.MAGENTA
-                + "%s:" % t.name
-                + Fore.RESET
-                + (15 - len(t.name)) * " "
-                + "%s" % t.thname
-            )
+        # for t in self.theories.values():
+        #     print(
+        #         Fore.MAGENTA
+        #         + "%s:" % t.name
+        #         + Fore.RESET
+        #         + (15 - len(t.name)) * " "
+        #         + "%s" % t.thname
+        #     )
 
     def new(self, line):
         """Create a new theory"""
@@ -1317,18 +1316,18 @@ Arguments:
 Basic use:
 =========="""
         )
-        print(Fore.RED + "available" + Fore.RESET)
-        self.do_help("available")
-        print(Fore.RED + "open" + Fore.RESET)
-        self.do_help("open")
-        print(Fore.RED + "file*" + Fore.RESET)
-        print("Several operations (show, delete, hide...) for files")
-        print(Fore.RED + "list" + Fore.RESET)
-        self.do_help("list")
-        print(Fore.RED + "tree" + Fore.RESET)
-        self.do_help("tree")
-        print(Fore.RED + "switch" + Fore.RESET)
-        self.do_help("switch")
-        print(Fore.RED + "reload_data" + Fore.RESET)
-        self.do_help("reload_data")
-        print("")
+        # print(Fore.RED + "available" + Fore.RESET)
+        # self.do_help("available")
+        # print(Fore.RED + "open" + Fore.RESET)
+        # self.do_help("open")
+        # print(Fore.RED + "file*" + Fore.RESET)
+        # print("Several operations (show, delete, hide...) for files")
+        # print(Fore.RED + "list" + Fore.RESET)
+        # self.do_help("list")
+        # print(Fore.RED + "tree" + Fore.RESET)
+        # self.do_help("tree")
+        # print(Fore.RED + "switch" + Fore.RESET)
+        # self.do_help("switch")
+        # print(Fore.RED + "reload_data" + Fore.RESET)
+        # self.do_help("reload_data")
+        # print("")

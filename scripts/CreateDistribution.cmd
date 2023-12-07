@@ -2,7 +2,7 @@ echo off
 rem ################################################
 rem RECOMMENDED: Install WinPython64-3.7.4.1Zero.exe
 rem Either install from scratch or create an empty environment
-rem REPTATE REQUIRED PACKAGES: pip install numpy PyQt5 matplotlib scipy openpyxl xlrd psutil colorama
+rem REPTATE REQUIRED PACKAGES: pip install numpy PyQt5 matplotlib scipy openpyxl xlrd psutil
 rem INSTALL PACKAGING "pip install packaging"
 rem INSTALL PYINSTALLER "pip install pyinstaller"
 rmdir /s /q build\RepTate

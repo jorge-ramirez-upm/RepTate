@@ -59,7 +59,6 @@ from PySide6.QtCore import QSize, QStandardPaths
 from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
 from pathlib import Path
 import RepTate.tools.polymer_data as polymer_data
-from colorama import Fore
 
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the PyInstaller bootloader

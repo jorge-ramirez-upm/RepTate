@@ -62,7 +62,6 @@ from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
 from RepTate.tools.ToolPowerLaw import ToolPowerLaw
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 #from RepTate.core.mplcursors import cursor
-from colorama import Fore, Style
 import logging
 
 class Application(CmdBase):
@@ -545,7 +544,6 @@ class Application(CmdBase):
         else:
             dsname = line
         ds = DataSet(dsname, self)
-        ds.prompt = self.prompt[:-2] + '/' + Fore.YELLOW + ds.name + '> '
         return ds, dsname
 
     def do_new(self, line):
@@ -610,8 +608,8 @@ class Application(CmdBase):
         if len(self.datasets)>0:
             print("DATASETS IN THE CURRENT APPLICATION")
             print("===================================")
-        for ds in self.datasets.values():
-            print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
+        # for ds in self.datasets.values():
+        #     print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
 
     def do_tree(self, line):
         """List all the tools, datasets, files and theories in the current application"""
@@ -631,10 +629,10 @@ class Application(CmdBase):
             except ValueError:
                 print("Wrong argument for the tree command.")
         if done:
-            for t in self.tools:
-                print(prefix + Fore.CYAN + t.name + Fore.RESET)
+            # for t in self.tools:
+            #     print(prefix + Fore.CYAN + t.name + Fore.RESET)
             for ds in self.datasets.keys():
-                print(prefix + Fore.YELLOW + "%s"%self.datasets[ds].name + Fore.RESET)
+                # print(prefix + Fore.YELLOW + "%s"%self.datasets[ds].name + Fore.RESET)
                 self.datasets[ds].do_tree(str(offset+1))
 
     def do_switch(self, line):
@@ -708,8 +706,8 @@ class Application(CmdBase):
         print("AVAILABLE FILETYPES")
         print("===================")
         ftypes = list(self.filetypes.values())
-        for ftype in ftypes:
-            print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
+        # for ftype in ftypes:
+        #     print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
 
 # VIEW STUFF
 
@@ -730,13 +728,13 @@ class Application(CmdBase):
         """List available views in the current application"""
         print("AVAILABLE VIEWS")
         print("===============")
-        for view in self.views.values():
-            if (view == self.current_view):
-                c = Fore.RED + "*" + Fore.RESET
-            else:
-                c = " "
-            print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
-                    Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
+        # for view in self.views.values():
+        #     if (view == self.current_view):
+        #         c = Fore.RED + "*" + Fore.RESET
+        #     else:
+        #         c = " "
+        #     print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
+        #             Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
     def do_available(self, line):
         """Tools/File Types/Views/Theories available in the current application"""
@@ -790,18 +788,18 @@ class Application(CmdBase):
         """List available theories in the current application"""
         print("AVAILABLE THEORIES")
         print("==================")
-        for t in list(self.theories.values()):
-            print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
+        # for t in list(self.theories.values()):
+        #     print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
 
 # TOOL STUFF
     def do_available_tools(self, line=""):
         """List available tools in the current application"""
         print("AVAILABLE TOOLS")
         print("===============")
-        for t in list(self.availabletools.values()):
-            print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
-        for t in list(self.extratools.values()):
-            print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
+        # for t in list(self.availabletools.values()):
+        #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
+        # for t in list(self.extratools.values()):
+        #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
 
     def tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
@@ -817,7 +815,6 @@ class Application(CmdBase):
                 to = self.availabletools[line](to_id, self)
             elif (line in extratooltypes):
                 to = self.extratools[line](to_id, self)
-            to.prompt = self.prompt[:-2] + '/' + Fore.CYAN + to.name + '> '
             self.tools.append(to)
         else:
             to=None
@@ -864,11 +861,11 @@ class Application(CmdBase):
         if len(self.tools)>0:
             print("OPEN TOOLS IN THIS APPLICATION")
             print("==============================")
-        for t in self.tools:
-            if t.active:
-                print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
-            else:
-                print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
+        # for t in self.tools:
+        #     if t.active:
+        #         print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
+        #     else:
+        #         print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
 
     def do_tool_activate(self, name):
         """Enable/Disable a given tool"""
@@ -994,25 +991,25 @@ class Application(CmdBase):
     def do_tutorial(self, line=""):
         """Show a short tutorial about the commands in RepTate applications"""
         print("")
-        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
-        print('Visit the page:')
-        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
-        print("""
-Basic use:
-==========""")
-        print(Fore.RED + "available" + Fore.RESET)
-        self.do_help("available")
-        print(Fore.RED + "new" + Fore.RESET)
-        self.do_help("new")
-        print(Fore.RED + "tool_new" + Fore.RESET)
-        self.do_help("tool_new")
-        print(Fore.RED + "view" + Fore.RESET)
-        self.do_help("view")
-        print(Fore.RED + "tree" + Fore.RESET)
-        self.do_help("tree")
-        print(Fore.RED + "switch" + Fore.RESET)
-        self.do_help("switch")
-        print(Fore.RED + "plot" + Fore.RESET)
-        self.do_help("plot")
-        print("")
+#         print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+#         print('Visit the page:')
+#         print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+#         print("""
+# Basic use:
+# ==========""")
+#         print(Fore.RED + "available" + Fore.RESET)
+#         self.do_help("available")
+#         print(Fore.RED + "new" + Fore.RESET)
+#         self.do_help("new")
+#         print(Fore.RED + "tool_new" + Fore.RESET)
+#         self.do_help("tool_new")
+#         print(Fore.RED + "view" + Fore.RESET)
+#         self.do_help("view")
+#         print(Fore.RED + "tree" + Fore.RESET)
+#         self.do_help("tree")
+#         print(Fore.RED + "switch" + Fore.RESET)
+#         self.do_help("switch")
+#         print(Fore.RED + "plot" + Fore.RESET)
+#         self.do_help("plot")
+#         print("")
         

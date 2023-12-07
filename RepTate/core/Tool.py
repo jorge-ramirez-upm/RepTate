@@ -396,28 +396,28 @@ class Tool(CmdBase):
     def do_tutorial(self, line=""):
         """Show a short tutorial about the commands in RepTate tools"""
         print("")
-        print(
-            "Inspect the python scripts in the"
-            + Fore.RED
-            + ' "tests" '
-            + Fore.RESET
-            + "folder."
-        )
+        # print(
+        #     "Inspect the python scripts in the"
+        #     + Fore.RED
+        #     + ' "tests" '
+        #     + Fore.RESET
+        #     + "folder."
+        # )
         print("Visit the page:")
-        print(
-            Fore.CYAN
-            + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-            + Fore.RESET
-        )
+        # print(
+        #     Fore.CYAN
+        #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+        #     + Fore.RESET
+        # )
         print(
             """
 Basic use:
 =========="""
         )
-        print(Fore.RED + "parameters" + Fore.RESET)
-        self.do_help("parameters")
-        print(Fore.RED + "par1=val1" + Fore.RESET)
-        print("Change the value of parameter par1")
-        print(Fore.RED + "activate" + Fore.RESET)
+        # print(Fore.RED + "parameters" + Fore.RESET)
+        # self.do_help("parameters")
+        # print(Fore.RED + "par1=val1" + Fore.RESET)
+        # print("Change the value of parameter par1")
+        # print(Fore.RED + "activate" + Fore.RESET)
         self.do_help("activate")
         print("")

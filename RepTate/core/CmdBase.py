@@ -41,7 +41,6 @@ import cmd
 import enum
 
 # from pint import UnitRegistry
-from colorama import Fore, init
 from numpy import *
 import logging
 
@@ -68,7 +67,6 @@ class CalcMode(enum.Enum):
 class CmdBase(cmd.Cmd):
     """Basic Cmd Console that is inherited by most Reptate objects"""
 
-    prompt = "> "
     calcmode = CalcMode.multithread
     # ureg = UnitRegistry()
 
@@ -76,7 +74,7 @@ class CmdBase(cmd.Cmd):
         """**Constructor**"""
         super().__init__()
 
-        init()
+        # init()
 
         # list of safe methods for eval
         self.safe_globals = [
@@ -210,10 +208,10 @@ class CmdBase(cmd.Cmd):
             eval(
                 line, {"__builtins__": None}, self.safe_dict
             )  # in self._locals, self._globals
-        except NameError as e:
-            print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
-        except TypeError as e:
-            print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
+        # except NameError as e:
+        #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
+        # except TypeError as e:
+        #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
         except Exception as e:
             print(e.__class__, ":", e)
 
@@ -249,9 +247,9 @@ class CmdBase(cmd.Cmd):
         if self.logger != None:
             nhandlers = len(logging.getLogger("RepTate").handlers)
             logfilename = ""
-            if nhandlers > 0:
-                print(Fore.RED + "%15s %10s" % ("Log Handler", "Level"))
-                print(26 * "=" + Fore.RESET)
+            # if nhandlers > 0:
+            #     print(Fore.RED + "%15s %10s" % ("Log Handler", "Level"))
+            #     print(26 * "=" + Fore.RESET)
             print(
                 "%15s %10s"
                 % ("Main", logging.getLevelName(logging.getLogger("RepTate").level))
@@ -264,14 +262,14 @@ class CmdBase(cmd.Cmd):
                 elif isinstance(h, logging.StreamHandler):
                     print("%15s %10s" % ("Console", logging.getLevelName(h.level)))
             print("")
-            print(Fore.RED + "Main Logger level:    " + Fore.RESET + "RepTate")
-            print(
-                Fore.RED
-                + "Current Logger level: "
-                + Fore.RESET
-                + "%s" % self.logger.name
-            )
-            print(Fore.RED + "Log File: " + Fore.RESET + "%s" % logfilename)
+            # print(Fore.RED + "Main Logger level:    " + Fore.RESET + "RepTate")
+            # print(
+            #     Fore.RED
+            #     + "Current Logger level: "
+            #     + Fore.RESET
+            #     + "%s" % self.logger.name
+            # )
+            # print(Fore.RED + "Log File: " + Fore.RESET + "%s" % logfilename)
 
     def do_loglevel(self, line):
         """Set log level"""

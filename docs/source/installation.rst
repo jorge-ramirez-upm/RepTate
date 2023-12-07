@@ -117,12 +117,11 @@ Open an "Anaconda prompt" (or equivalent). On Windows, this is found by clicking
 button and looking under All Programmes -> anaconda3.
 This will open up a window where you can type commands to install the extra packages::
 
-    conda install pyqt 
+    conda install PySide6
     conda install matplotlib 
     conda install scipy
     conda install openpyxl
 	conda install xlrd
-	conda install colorama
 
 Alternatively, you can change into the RepTate code folder and run ``pip install -r requirements.txt``. The file ``requirements.txt`` contains a list of all the python packages and libraries that RepTate needs in order to run properly.
 

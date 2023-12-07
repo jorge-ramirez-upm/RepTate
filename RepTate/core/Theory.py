@@ -54,7 +54,6 @@ from PySide6.QtWidgets import QMessageBox
 from collections import OrderedDict
 from math import log
 from RepTate.tools.ToolMaterialsDatabase import check_chemistry, get_all_parameters
-from colorama import Fore
 import logging
 from scipy.interpolate import interp1d
 from html.parser import HTMLParser
@@ -98,8 +97,8 @@ class MinimizationMethod(enum.Enum):
     def __str__(self):
         stt=""
         N=len(self.types.value)
-        for i, k in enumerate(self.types.value):
-            stt += Fore.RED + k + Fore.RESET + ": " + self.descriptions.value[i] + "\n"
+        # for i, k in enumerate(self.types.value):
+        #     stt += Fore.RED + k + Fore.RESET + ": " + self.descriptions.value[i] + "\n"
         return stt
 
 class ErrorCalculationMethod(enum.Enum):
@@ -943,8 +942,8 @@ This routine works when the theory and the experimental data are not measured on
         """Shows or changes the minimization method"""
         if (line==""):
             print("Current minimization method:")
-            print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] +
-                  Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
+            # print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] +
+            #       Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
         elif (line=="available"):
             m = MinimizationMethod(0)
             print(m)
@@ -1468,23 +1467,23 @@ that provide this functionality."""
     def do_tutorial(self, line=""):
         """Show a short tutorial about the commands in RepTate theories"""
         print("")
-        print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+        # print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
         print('Visit the page:')
-        print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+        # print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
         print("""
 Basic use:
 ==========""")
-        print(Fore.RED + "parameters" + Fore.RESET)
-        self.do_help("parameters")
-        print(Fore.RED + "par1=val1" + Fore.RESET)
-        print("Change the value of parameter par1")
-        print(Fore.RED + "calculate" + Fore.RESET)
-        self.do_help("calculate")
-        print(Fore.RED + "error" + Fore.RESET)
-        self.do_help("error")
-        print(Fore.RED + "fit" + Fore.RESET)
-        self.do_help("fit")
-        print(Fore.RED + "xrange" + Fore.RESET)
-        print(Fore.RED + "yrange" + Fore.RESET)
+        # print(Fore.RED + "parameters" + Fore.RESET)
+        # self.do_help("parameters")
+        # print(Fore.RED + "par1=val1" + Fore.RESET)
+        # print("Change the value of parameter par1")
+        # print(Fore.RED + "calculate" + Fore.RESET)
+        # self.do_help("calculate")
+        # print(Fore.RED + "error" + Fore.RESET)
+        # self.do_help("error")
+        # print(Fore.RED + "fit" + Fore.RESET)
+        # self.do_help("fit")
+        # print(Fore.RED + "xrange" + Fore.RESET)
+        # print(Fore.RED + "yrange" + Fore.RESET)
         self.do_help("xrange")
         print("")
