@@ -48,7 +48,7 @@ from PySide6.QtGui import QIcon, QDoubleValidator
 from PySide6.QtCore import QSize
 
 
-class TheoryLikhtmanMcLeish2002(CmdBase):
+class TheoryLikhtmanMcLeish2002(QTheory):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
         
     * **Parameters**
@@ -62,20 +62,8 @@ class TheoryLikhtmanMcLeish2002(CmdBase):
     description = "Likhtman-McLeish theory for linear entangled polymers"
     citations = ["Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"]
     doi = ["http://dx.doi.org/10.1021/ma0200219"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryLikhtmanMcLeish2002(name, parent_dataset, ax)
-
-
-class BaseTheoryLikhtmanMcLeish2002:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory"
     single_file = False
-    thname = TheoryLikhtmanMcLeish2002.thname
-    citations = TheoryLikhtmanMcLeish2002.citations
-    doi = TheoryLikhtmanMcLeish2002.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -153,6 +141,67 @@ class BaseTheoryLikhtmanMcLeish2002:
                 Ge = Gp[ind]
                 self.set_param_value("tau_e", taue)
                 self.set_param_value("Ge", Ge)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.linkMeGeaction = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge"
+        )
+        self.linkMeGeaction.setCheckable(True)
+        self.linkMeGeaction.setChecked(False)
+        lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
+        tb.addWidget(lbl)
+        self.txtrho = QLineEdit("%.4g" % self.parameters["rho0"].value)
+        self.txtrho.setReadOnly(True)
+        self.txtrho.setDisabled(True)
+        dvalidator = QDoubleValidator()  # prevent letters etc.
+        dvalidator.setBottom(0)  # minimum allowed value
+        dvalidator.setTop(10)  # maximum allowed value
+        self.txtrho.setValidator(dvalidator)
+        tb.addWidget(self.txtrho)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.linkMeGeaction.triggered.connect(
+            self.linkMeGeaction_change
+        )
+        connection_id = self.txtrho.textEdited.connect(self.handle_txtrho_edited)
+
+    def linkMeGeaction_change(self, checked):
+        self.set_param_value("linkMeGe", checked)
+        if checked:
+            self.txtrho.setReadOnly(False)
+            self.txtrho.setDisabled(False)
+            p = self.parameters["Ge"]
+            p.opt_type = OptType.const
+        else:
+            self.txtrho.setReadOnly(True)
+            self.txtrho.setDisabled(True)
+            p = self.parameters["Ge"]
+            p.opt_type = OptType.opt
+        self.update_parameter_table()
+        if self.autocalculate:
+            self.handle_actionCalculate_Theory()
+
+    def handle_txtrho_edited(self, new_text):
+        try:
+            val = float(new_text)
+        except ValueError:
+            QMessageBox.warning(
+                self, "Error", 'Could not convert "%s" to float' % new_text
+            )
+            self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
+        else:
+            self.set_param_value("rho0", val)
+            if self.autocalculate:
+                self.handle_actionCalculate_Theory()
+
+    def set_extra_data(self, _):
+        """Restore the check state of button and text value"""
+        self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
+        checked = self.parameters["linkMeGe"].value
+        self.linkMeGeaction.setChecked(checked)
+        self.linkMeGeaction_change(checked)
 
     def LikhtmanMcLeish2002(self, f=None):
         """Get the theory results from precalculated data"""
@@ -250,69 +299,3 @@ File error is calculated as the mean square of the residual, averaged over all p
 
 
 
-class GUITheoryLikhtmanMcLeish2002(BaseTheoryLikhtmanMcLeish2002, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.linkMeGeaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge"
-        )
-        self.linkMeGeaction.setCheckable(True)
-        self.linkMeGeaction.setChecked(False)
-        lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
-        tb.addWidget(lbl)
-        self.txtrho = QLineEdit("%.4g" % self.parameters["rho0"].value)
-        self.txtrho.setReadOnly(True)
-        self.txtrho.setDisabled(True)
-        dvalidator = QDoubleValidator()  # prevent letters etc.
-        dvalidator.setBottom(0)  # minimum allowed value
-        dvalidator.setTop(10)  # maximum allowed value
-        self.txtrho.setValidator(dvalidator)
-        tb.addWidget(self.txtrho)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.linkMeGeaction.triggered.connect(
-            self.linkMeGeaction_change
-        )
-        connection_id = self.txtrho.textEdited.connect(self.handle_txtrho_edited)
-
-    def linkMeGeaction_change(self, checked):
-        self.set_param_value("linkMeGe", checked)
-        if checked:
-            self.txtrho.setReadOnly(False)
-            self.txtrho.setDisabled(False)
-            p = self.parameters["Ge"]
-            p.opt_type = OptType.const
-        else:
-            self.txtrho.setReadOnly(True)
-            self.txtrho.setDisabled(True)
-            p = self.parameters["Ge"]
-            p.opt_type = OptType.opt
-        self.update_parameter_table()
-        if self.autocalculate:
-            self.handle_actionCalculate_Theory()
-
-    def handle_txtrho_edited(self, new_text):
-        try:
-            val = float(new_text)
-        except ValueError:
-            QMessageBox.warning(
-                self, "Error", 'Could not convert "%s" to float' % new_text
-            )
-            self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
-        else:
-            self.set_param_value("rho0", val)
-            if self.autocalculate:
-                self.handle_actionCalculate_Theory()
-
-    def set_extra_data(self, _):
-        """Restore the check state of button and text value"""
-        self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
-        checked = self.parameters["linkMeGe"].value
-        self.linkMeGeaction.setChecked(checked)
-        self.linkMeGeaction_change(checked)

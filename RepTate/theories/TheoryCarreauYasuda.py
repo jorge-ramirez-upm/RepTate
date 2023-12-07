@@ -36,16 +36,14 @@ Carreau-Yasuda equation for the complex viscosity
 """
 import numpy as np
 from math import sqrt
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtCore import QSize
 
 
-class TheoryCarreauYasuda(CmdBase):
+class TheoryCarreauYasuda(QTheory):
     """Fit the complex viscosity with the Carreau-Yasuda equation.
     
     * **Function**
@@ -65,22 +63,10 @@ class TheoryCarreauYasuda(CmdBase):
     description = "Carreau-Yasuda equation"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryCarreauYasuda(name, parent_dataset, ax)
-
-
-class BaseTheoryCarreauYasuda:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryCarreauYasuda.thname
-    citations = TheoryCarreauYasuda.citations
-    doi = TheoryCarreauYasuda.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -159,6 +145,10 @@ class BaseTheoryCarreauYasuda:
         lamda = 1.0 / wa * np.power(etaa / eta0, 1.0 / (n - 1))
         self.set_param_value("lambda", lamda)
 
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
     def function_CarreauYasuda(self, f=None):
         """Carreau-Yasuda equation for the complex viscosity"""
         ft = f.data_table
@@ -184,14 +174,3 @@ class BaseTheoryCarreauYasuda:
             / sqrt(2)
         )
 
-
-
-class GUITheoryCarreauYasuda(BaseTheoryCarreauYasuda, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))

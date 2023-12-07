@@ -32,14 +32,12 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryDSMLinear"""
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from scipy import special, optimize
 
 
-class TheoryDSMLinear(CmdBase):
+class TheoryDSMLinear(QTheory):
     """Calculate the Discrete Slip Link theory for the linear rheology of linear entangled polymers.
         
     * **Parameters**"""
@@ -54,22 +52,10 @@ class TheoryDSMLinear(CmdBase):
         "https://doi.org/10.1007/s00397-015-0836-0",
         "https://doi.org/10.1122%2F1.4869252",
     ]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDSMLinear(name, parent_dataset, axarr)
-
-
-class BaseTheoryDSMLinear:
-    """Base class for both GUI"""
-
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryDSMLinear.thname
-    citations = TheoryDSMLinear.citations
-    doi = TheoryDSMLinear.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -440,13 +426,3 @@ File error is calculated as the mean square of the residual, averaged over all p
         tt.data[:, 1] = Gstar.real * 1000  # convert to Pa
         tt.data[:, 2] = Gstar.imag * 1000
 
-
-
-class GUITheoryDSMLinear(BaseTheoryDSMLinear, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

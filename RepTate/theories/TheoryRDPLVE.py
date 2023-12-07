@@ -35,14 +35,11 @@
 Template file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from math import sqrt
 from collections import OrderedDict
 from RepTate.theories.theory_helpers import (
@@ -54,7 +51,7 @@ from RepTate.theories.theory_helpers import (
 )
 
 
-class TheoryRDPLVE(CmdBase):
+class TheoryRDPLVE(QTheory):
     """Rolie-Double-Poly equation for the linear predictions of polydispere entangled linear polymers
 
     * **Function**
@@ -79,21 +76,10 @@ class TheoryRDPLVE(CmdBase):
     thname = "RDP LVE"
     description = "Linear ViscoElastic predictions of the Rolie-Double-Poly model"
     citations = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryRDPLVE(name, parent_dataset, axarr)
-
-
-class BaseTheoryRDPLVE:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryRDPLVE.thname
-    citations = TheoryRDPLVE.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -162,135 +148,6 @@ class BaseTheoryRDPLVE:
         self.Zeff = []
         self.MAX_MODES = 200
 
-    def set_extra_data(self, extra_data):
-        """Set extra data when loading project"""
-        self.MWD_m = extra_data["MWD_m"]
-        self.MWD_phi = extra_data["MWD_phi"]
-        self.Zeff = extra_data["Zeff"]
-
-        # G button
-        if extra_data["with_gcorr"]:
-            self.with_gcorr == GcorrMode.with_gcorr
-            self.with_gcorr_button.setChecked(True)
-
-    def get_extra_data(self):
-        """Set extra_data when saving project"""
-        self.extra_data["MWD_m"] = self.MWD_m
-        self.extra_data["MWD_phi"] = self.MWD_phi
-        self.extra_data["Zeff"] = self.Zeff
-        self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
-
-    def get_modes(self):
-        """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
-        tau = np.zeros(nmodes)
-        G = np.zeros(nmodes)
-        GN0 = self.parameters["GN0"].value
-        for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * self.parameters["phi%02d" % i].value
-        return tau, G, True
-
-    def fZ(self, z):
-        """CLF correction function Likthman-McLeish (2002)"""
-        return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
-
-    def gZ(self, z):
-        """CLF correction function for modulus Likthman-McLeish (2002)"""
-        return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
-
-    def set_modes_from_mwd(self, m, phi):
-        """Set modes from MWD"""
-        Me = self.parameters["Me"].value
-        taue = self.parameters["tau_e"].value
-        res = Dilution(m, phi, taue, Me, self).res
-        if res[0] == False:
-            self.Qprint("Could not set modes from MDW")
-            return
-        _, phi, taus, taud = res
-        nmodes = len(phi)
-        self.set_param_value("nmodes", nmodes)
-        for i in range(nmodes):
-            self.set_param_value("phi%02d" % i, phi[i])
-            self.set_param_value("tauD%02d" % i, taud[i])
-        self.Qprint("Got %d modes from MWD" % nmodes)
-        self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
-        self.parent_dataset.handle_actionCalculate_Theory()
-
-    def set_param_value(self, name, value):
-        """Set the value of a theory parameter"""
-        if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
-        message, success = super().set_param_value(name, value)
-        if not success:
-            return message, success
-        if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["phi%02d" % i] = Parameter(
-                    name="phi%02d" % i,
-                    value=0.0,
-                    description="Volume fraction of mode %02d" % i,
-                    type=ParameterType.real,
-                    opt_type=OptType.nopt,
-                    display_flag=False,
-                    min_value=0,
-                )
-                self.parameters["tauD%02d" % i] = Parameter(
-                    name="tauD%02d" % i,
-                    value=100.0,
-                    description="Terminal time of mode %02d" % i,
-                    type=ParameterType.real,
-                    opt_type=OptType.nopt,
-                    display_flag=False,
-                    min_value=0,
-                )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
-                    del self.parameters["phi%02d" % i]
-                    del self.parameters["tauD%02d" % i]
-        return "", True
-
-    def calculate(self, f=None):
-        """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
-
-        nmodes = self.parameters["nmodes"].value
-        taud = []
-        phi = []
-        for i in range(nmodes):
-            taud.append(self.parameters["tauD%02d" % i].value)
-            phi.append(self.parameters["phi%02d" % i].value)
-
-        for i in range(nmodes):
-            if self.stop_theory_flag:
-                break
-            G = self.parameters["GN0"].value
-            if self.with_gcorr == GcorrMode.with_gcorr:
-                # G = G * sqrt(self.fZ(self.Zeff[i]))
-                G = G * self.gZ(self.Zeff[i])
-            for j in range(nmodes):
-                tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
-                wT = tt.data[:, 0] * tau
-                wTsq = wT ** 2
-                tt.data[:, 1] += G * phi[i] * phi[j] * wTsq / (1 + wTsq)
-                tt.data[:, 2] += G * phi[i] * phi[j] * wT / (1 + wTsq)
-
-
-
-class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
@@ -451,3 +308,127 @@ class GUITheoryRDPLVE(BaseTheoryRDPLVE, QTheory):
             self.MWD_m = np.copy(m)
             self.MWD_phi = np.copy(phi)
             self.set_modes_from_mwd(m, phi)
+
+
+    def set_extra_data(self, extra_data):
+        """Set extra data when loading project"""
+        self.MWD_m = extra_data["MWD_m"]
+        self.MWD_phi = extra_data["MWD_phi"]
+        self.Zeff = extra_data["Zeff"]
+
+        # G button
+        if extra_data["with_gcorr"]:
+            self.with_gcorr == GcorrMode.with_gcorr
+            self.with_gcorr_button.setChecked(True)
+
+    def get_extra_data(self):
+        """Set extra_data when saving project"""
+        self.extra_data["MWD_m"] = self.MWD_m
+        self.extra_data["MWD_phi"] = self.MWD_phi
+        self.extra_data["Zeff"] = self.Zeff
+        self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
+
+    def get_modes(self):
+        """Get the values of Maxwell Modes from this theory"""
+        nmodes = self.parameters["nmodes"].value
+        tau = np.zeros(nmodes)
+        G = np.zeros(nmodes)
+        GN0 = self.parameters["GN0"].value
+        for i in range(nmodes):
+            tau[i] = self.parameters["tauD%02d" % i].value
+            G[i] = GN0 * self.parameters["phi%02d" % i].value
+        return tau, G, True
+
+    def fZ(self, z):
+        """CLF correction function Likthman-McLeish (2002)"""
+        return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
+
+    def gZ(self, z):
+        """CLF correction function for modulus Likthman-McLeish (2002)"""
+        return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
+
+    def set_modes_from_mwd(self, m, phi):
+        """Set modes from MWD"""
+        Me = self.parameters["Me"].value
+        taue = self.parameters["tau_e"].value
+        res = Dilution(m, phi, taue, Me, self).res
+        if res[0] == False:
+            self.Qprint("Could not set modes from MDW")
+            return
+        _, phi, taus, taud = res
+        nmodes = len(phi)
+        self.set_param_value("nmodes", nmodes)
+        for i in range(nmodes):
+            self.set_param_value("phi%02d" % i, phi[i])
+            self.set_param_value("tauD%02d" % i, taud[i])
+        self.Qprint("Got %d modes from MWD" % nmodes)
+        self.update_parameter_table()
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
+        self.parent_dataset.handle_actionCalculate_Theory()
+
+    def set_param_value(self, name, value):
+        """Set the value of a theory parameter"""
+        if name == "nmodes":
+            oldn = self.parameters["nmodes"].value
+        message, success = super().set_param_value(name, value)
+        if not success:
+            return message, success
+        if name == "nmodes":
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["phi%02d" % i] = Parameter(
+                    name="phi%02d" % i,
+                    value=0.0,
+                    description="Volume fraction of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    min_value=0,
+                )
+                self.parameters["tauD%02d" % i] = Parameter(
+                    name="tauD%02d" % i,
+                    value=100.0,
+                    description="Terminal time of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    min_value=0,
+                )
+            if oldn > self.parameters["nmodes"].value:
+                for i in range(self.parameters["nmodes"].value, oldn):
+                    del self.parameters["phi%02d" % i]
+                    del self.parameters["tauD%02d" % i]
+        return "", True
+
+    def calculate(self, f=None):
+        """Calculate the theory"""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        nmodes = self.parameters["nmodes"].value
+        taud = []
+        phi = []
+        for i in range(nmodes):
+            taud.append(self.parameters["tauD%02d" % i].value)
+            phi.append(self.parameters["phi%02d" % i].value)
+
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            G = self.parameters["GN0"].value
+            if self.with_gcorr == GcorrMode.with_gcorr:
+                # G = G * sqrt(self.fZ(self.Zeff[i]))
+                G = G * self.gZ(self.Zeff[i])
+            for j in range(nmodes):
+                tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
+                wT = tt.data[:, 0] * tau
+                wTsq = wT ** 2
+                tt.data[:, 1] += G * phi[i] * phi[j] * wTsq / (1 + wTsq)
+                tt.data[:, 2] += G * phi[i] * phi[j] * wT / (1 + wTsq)
+
+

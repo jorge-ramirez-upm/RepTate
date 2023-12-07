@@ -38,8 +38,6 @@ by Chinmay Das et al.
 import os
 import numpy as np
 import RepTate
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.gui import bob_LVE
 import time
@@ -47,12 +45,12 @@ import time
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
 from PySide6.QtWidgets import QApplication, QToolBar
-from PySide6.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
+from PySide6.QtWidgets import QDialog, QFileDialog, QMessageBox
 from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtCore import QUrl, Signal, QSize
 
 
-class TheoryBobLVE(CmdBase):
+class TheoryBobLVE(QTheory):
     """Analyse the relaxation of polymers read from a polymer configuration file
     using BoB v2.5 (Chinmay Das and Daniel Read).
     These files can be generated from the React application in RepTate.
@@ -63,19 +61,8 @@ class TheoryBobLVE(CmdBase):
     description = 'Branch-On-Branch rheology'
     citations = ['Das C. et al., J. Rheol. 2006, 50, 207-234']
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
-
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryBobLVE(name, parent_dataset, axarr) 
-
-
-class BaseTheoryBobLVE:
-    """Base class for both GUI"""
     html_help_file = 'https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve'
     single_file = True  # False if the theory can be applied to multiple files simultaneously
-    thname = TheoryBobLVE.thname
-    citations = TheoryBobLVE.citations
-    doi = TheoryBobLVE.doi 
 
     signal_param_dialog = Signal(object)
 
@@ -93,69 +80,7 @@ class BaseTheoryBobLVE:
         self.inp_counter = 0 # counter for the 'virtual' input file for BoB
         self.virtual_input_file = [] # 'virtual' input file for BoB
 
-    def request_stop_computations(self):
-        """Called when user wants to terminate the current computation"""
-        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
-        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
-
-    def do_error(self, line=""):
-        """This theory calculate the error by interpolating the theory solution"""
-        self.do_error_interpolated(line="")
-
-    def calculate(self, f=None):
-        """Create polymer configuration file and calculate distribution characteristics"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        self.freqmin = f.data_table.mincol(0)
-        self.freqmax = f.data_table.maxcol(0)
-        #show form
-        self.success_dialog = None
-        self.argv = None
-
-        self.signal_param_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            # TODO: find a better way to wait for the dialog thread to finish
-            time.sleep(0.5)
-        if not self.success_dialog:
-            self.Qprint('Operation cancelled')
-            return
-        QApplication.processEvents()
-        self.bch.link_c_callback()
-        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
-        # Run BoB C++ code
-        self.start_time_cal = time.time()
-        try:
-            omega, gp, gpp = self.bch.return_bob_lve(self.argv)
-        except BobError:
-            self.Qprint('Operation cancelled')
-            return
-
-        #copy results to RepTate data file
-        if omega:
-            tt.num_columns = ft.num_columns
-            tt.num_rows = len(omega)
-            tt.data = np.zeros((tt.num_rows, tt.num_columns))
-            tt.data[:, 0] = omega[:]
-            tt.data[:, 1] = gp[:]
-            tt.data[:, 2] = gpp[:]
-
-    def do_fit(self, line=''):
-        self.Qprint("Fitting not allowed in this theory")
-
-
-class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-        # temp_dir = os.path.join('theories', 'temp')
-        # #create temp folder if does not exist
-        # if not os.path.exists(temp_dir):
-        #     os.makedirs(temp_dir)
+        # add widgets specific to the theory
         self.selected_file = None
         self.setup_dialog()
         tb = QToolBar()
@@ -307,3 +232,57 @@ class GUITheoryBobLVE(BaseTheoryBobLVE, QTheory):
             return True
         except UnicodeEncodeError:
             return False
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
+        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
+
+    def do_error(self, line=""):
+        """This theory calculate the error by interpolating the theory solution"""
+        self.do_error_interpolated(line="")
+
+    def calculate(self, f=None):
+        """Create polymer configuration file and calculate distribution characteristics"""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        self.freqmin = f.data_table.mincol(0)
+        self.freqmax = f.data_table.maxcol(0)
+        #show form
+        self.success_dialog = None
+        self.argv = None
+
+        self.signal_param_dialog.emit(self)
+        while self.success_dialog is None:  # wait for the end of QDialog
+            # TODO: find a better way to wait for the dialog thread to finish
+            time.sleep(0.5)
+        if not self.success_dialog:
+            self.Qprint('Operation cancelled')
+            return
+        QApplication.processEvents()
+        self.bch.link_c_callback()
+        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
+        # Run BoB C++ code
+        self.start_time_cal = time.time()
+        try:
+            omega, gp, gpp = self.bch.return_bob_lve(self.argv)
+        except BobError:
+            self.Qprint('Operation cancelled')
+            return
+
+        #copy results to RepTate data file
+        if omega:
+            tt.num_columns = ft.num_columns
+            tt.num_rows = len(omega)
+            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+            tt.data[:, 0] = omega[:]
+            tt.data[:, 1] = gp[:]
+            tt.data[:, 2] = gpp[:]
+
+    def do_fit(self, line=''):
+        self.Qprint("Fitting not allowed in this theory")
+
+

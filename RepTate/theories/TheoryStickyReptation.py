@@ -42,7 +42,7 @@ from RepTate.gui.QTheory import QTheory
 from scipy import interpolate
 
 
-class TheoryStickyReptation(CmdBase):
+class TheoryStickyReptation(QTheory):
     """Fit the Sticky Reptation theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
         
     * **Parameters**
@@ -57,22 +57,10 @@ class TheoryStickyReptation(CmdBase):
     description = "Sticky Reptation"
     citations = ["L. Leibler et al., Macromolecules, 1991, 24, 4701-4704"]
     doi = ["http://dx.doi.org/10.1021/ma00016a034"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryStickyReptation(name, parent_dataset, axarr)
-
-
-class BaseTheoryStickyReptation:
-    """Base class for both GUI"""
-
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryStickyReptation.thname
-    citations = TheoryStickyReptation.citations
-    doi = TheoryStickyReptation.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -301,12 +289,3 @@ class BaseTheoryStickyReptation:
         tt.data[:, 1] = f1(ft.data[:, 0])
         tt.data[:, 2] = f2(ft.data[:, 0])
 
-
-class GUITheoryStickyReptation(BaseTheoryStickyReptation, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:
