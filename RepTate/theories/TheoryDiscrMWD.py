@@ -36,9 +36,7 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """
 import os
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 import numpy as np
 from PySide6.QtCore import QSize
@@ -47,27 +45,15 @@ from PySide6.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableBinSeries
 
 
-class TheoryDiscrMWD(CmdBase):
+class TheoryDiscrMWD(QTheory):
     """Discretize a Molecular Weight Distribution"""
 
     thname = "Discretize MWD"
     description = "Discretize a Molecular Weight Distribution"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDiscrMWD(name, parent_dataset, ax)
-
-
-class BaseTheoryDiscrMWD:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
     single_file = True
-    thname = TheoryDiscrMWD.thname
-    citations = TheoryDiscrMWD.citations
-    doi = TheoryDiscrMWD.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -145,6 +131,85 @@ class BaseTheoryDiscrMWD:
 
         self.set_equally_spaced_bins()
         self.setup_graphic_bins()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(
+            self.NBIN_MIN, self.NBIN_MAX
+        )  # min and max number of modes
+        self.spinbox.setSuffix(" bins")
+        self.spinbox.setValue(self.parameters["nbin"].value)  # initial value
+        tb.addWidget(self.spinbox)
+        self.thToolsLayout.insertWidget(0, tb)
+        # view bins button
+        self.view_bins_button = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
+        self.view_bins_button.setCheckable(True)
+        self.view_bins_button.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        # connections signal and slots
+        connection_id = self.view_bins_button.triggered.connect(
+            self.handle_view_bins_button_triggered
+        )
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged
+        )
+
+        # disable useless buttons for this theory
+        self.parent_dataset.actionMinimize_Error.setDisabled(True)
+        self.parent_dataset.actionShow_Limits.setDisabled(True)
+        self.parent_dataset.actionVertical_Limits.setDisabled(True)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nbin'"""
+        self.spinbox.setValue(value)
+        self.set_param_value("nbin", value)
+        self.update_parameter_table()
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the view_bins_button button and change button activation state.
+        Called when curent theory is changed"""
+        self.view_bins_button.setChecked(state)
+        self.parent_dataset.actionMinimize_Error.setDisabled(state)
+        self.parent_dataset.actionShow_Limits.setDisabled(state)
+        self.parent_dataset.actionVertical_Limits.setDisabled(state)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
+
+    def handle_view_bins_button_triggered(self, checked):
+        """Set visibility of bins"""
+        self.graphic_bins_visible(checked)
+        self.set_bar_plot(True)  # leave the bar plot on
+        self.parent_dataset.parent_application.update_plot()
+
+    def do_save(self, dir, extra_txt=""):
+        """Save discrete MWD"""
+        nbin = self.parameters["nbin"].value
+        file_out = os.path.join(
+            dir,
+            "%s_TH_%dbins%s.txt" % (self.extra_data["current_fname"], nbin, extra_txt),
+        )
+        fout = open(file_out, "w")
+        # output polymers
+        Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data["saved_th"], "")
+        fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n" % (Mn, Mw, PDI, Mz_Mw))
+        fout.write("%-10s %12s\n" % ("M", "phi(M)"))
+        nbin_out = len(self.extra_data["saved_th"][:, 0])
+        for i in range(nbin_out):
+            fout.write(
+                "%-10.3e %12.6e\n"
+                % (self.extra_data["saved_th"][i, 0], self.extra_data["saved_th"][i, 1])
+            )
+
+        # print information
+        msg = 'Saved %d bins to "%s"' % (nbin_out, file_out)
+        QMessageBox.information(self, "Saved discretized MWD", msg)
+
 
     def set_equally_spaced_bins(self):
         """Find the first active file in the dataset and setup the bins"""
@@ -513,89 +578,3 @@ class BaseTheoryDiscrMWD:
         m = np.copy(self.extra_data["saved_th"][:, 0])
         phi = np.copy(self.extra_data["saved_th"][:, 1])
         return m, phi
-
-
-class GUITheoryDiscrMWD(BaseTheoryDiscrMWD, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(
-            self.NBIN_MIN, self.NBIN_MAX
-        )  # min and max number of modes
-        self.spinbox.setSuffix(" bins")
-        self.spinbox.setValue(self.parameters["nbin"].value)  # initial value
-        tb.addWidget(self.spinbox)
-        self.thToolsLayout.insertWidget(0, tb)
-        # view bins button
-        self.view_bins_button = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
-        self.view_bins_button.setCheckable(True)
-        self.view_bins_button.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        # connections signal and slots
-        connection_id = self.view_bins_button.triggered.connect(
-            self.handle_view_bins_button_triggered
-        )
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-
-        # disable useless buttons for this theory
-        self.parent_dataset.actionMinimize_Error.setDisabled(True)
-        self.parent_dataset.actionShow_Limits.setDisabled(True)
-        self.parent_dataset.actionVertical_Limits.setDisabled(True)
-        self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nbin'"""
-        self.spinbox.setValue(value)
-        self.set_param_value("nbin", value)
-        self.update_parameter_table()
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the view_bins_button button and change button activation state.
-        Called when curent theory is changed"""
-        self.view_bins_button.setChecked(state)
-        self.parent_dataset.actionMinimize_Error.setDisabled(state)
-        self.parent_dataset.actionShow_Limits.setDisabled(state)
-        self.parent_dataset.actionVertical_Limits.setDisabled(state)
-        self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
-
-    def handle_view_bins_button_triggered(self, checked):
-        """Set visibility of bins"""
-        self.graphic_bins_visible(checked)
-        self.set_bar_plot(True)  # leave the bar plot on
-        self.parent_dataset.parent_application.update_plot()
-
-    def do_save(self, dir, extra_txt=""):
-        """Save discrete MWD"""
-        nbin = self.parameters["nbin"].value
-        file_out = os.path.join(
-            dir,
-            "%s_TH_%dbins%s.txt" % (self.extra_data["current_fname"], nbin, extra_txt),
-        )
-        fout = open(file_out, "w")
-        # output polymers
-        Mn, Mw, PDI, Mz_Mw = self.calculate_moments(self.extra_data["saved_th"], "")
-        fout.write("Mn=%.3g;Mw=%.3g;PDI=%.3g;Mz/Mw=%.3g\n" % (Mn, Mw, PDI, Mz_Mw))
-        fout.write("%-10s %12s\n" % ("M", "phi(M)"))
-        nbin_out = len(self.extra_data["saved_th"][:, 0])
-        for i in range(nbin_out):
-            fout.write(
-                "%-10.3e %12.6e\n"
-                % (self.extra_data["saved_th"][i, 0], self.extra_data["saved_th"][i, 1])
-            )
-
-        # print information
-        msg = 'Saved %d bins to "%s"' % (nbin_out, file_out)
-        QMessageBox.information(self, "Saved discretized MWD", msg)

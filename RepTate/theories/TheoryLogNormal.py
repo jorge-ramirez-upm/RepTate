@@ -33,13 +33,11 @@
 """Module TheoryLogNormal
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 
-class TheoryLogNormal(CmdBase):
+class TheoryLogNormal(QTheory):
     """Log-Normal distribution: the logarithm of the molecular weight is normally distributed
     
     * **Function**
@@ -56,22 +54,10 @@ class TheoryLogNormal(CmdBase):
     description = "LogNormal distribution"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryLogNormal(name, parent_dataset, axarr)
-
-
-class BaseTheoryLogNormal:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryLogNormal.thname
-    citations = TheoryLogNormal.citations
-    doi = TheoryLogNormal.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -151,14 +137,3 @@ File error is calculated as the mean square of the residual, averaged over all p
                 ]
             )
             self.Qprint(table)
-
-
-
-class GUITheoryLogNormal(BaseTheoryLogNormal, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

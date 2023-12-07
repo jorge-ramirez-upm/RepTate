@@ -35,31 +35,19 @@
 Module for handling Molecular weight distributions from GPC experiments.
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationMWD(CmdBase):
+class ApplicationMWD(QApplicationWindow):
     """Application to analyze Molecular Weight Distributions"""
 
     appname = "MWD"
     description = "Experimental Molecular weight distributions"
     extension = "gpc"
-
-    def __new__(cls, name="LVE", parent=None):
-        """Create an instance of the GUI or"""
-        return GUIApplicationMWD(name, parent)
-
-
-class BaseApplicationMWD:
-    """Base Class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html"
-    appname = ApplicationMWD.appname
 
     def __init__(self, name="MWD", parent=None):
         """**Constructor**"""
@@ -166,11 +154,3 @@ class BaseApplicationMWD:
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-
-
-class GUIApplicationMWD(BaseApplicationMWD, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="MWD", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

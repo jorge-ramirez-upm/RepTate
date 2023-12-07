@@ -36,13 +36,11 @@ GEX file for creating a new theory
 """
 import numpy as np
 from math import gamma
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 
-class TheoryGEX(CmdBase):
+class TheoryGEX(QTheory):
     """Generalized Exponential Function (GEX) for experimental molecular weight distributions.
     
     * **Function**
@@ -60,22 +58,10 @@ class TheoryGEX(CmdBase):
     description = "Generalized Exponential Function distribution"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryGEX(name, parent_dataset, axarr)
-
-
-class BaseTheoryGEX:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#generalized-exponential-function"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryGEX.thname
-    citations = TheoryGEX.citations
-    doi = TheoryGEX.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -172,14 +158,3 @@ File error is calculated as the mean square of the residual, averaged over all p
             )
             self.Qprint(table)
 
-
-
-
-class GUITheoryGEX(BaseTheoryGEX, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:
