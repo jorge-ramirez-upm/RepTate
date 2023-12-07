@@ -35,14 +35,12 @@
 RouseTime file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 import RepTate.theories.rouse_ctypes_helper as rh
 
 
-class TheoryRouseTime(CmdBase):
+class TheoryRouseTime(QTheory):
     """Fit Rouse modes to a time dependent relaxation function
     
     * **Function**
@@ -68,22 +66,10 @@ class TheoryRouseTime(CmdBase):
     description = "Rouse model"
     citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryRouseTime(name, parent_dataset, axarr)
-
-
-class BaseTheoryRouseTime:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryRouseTime.thname
-    citations = TheoryRouseTime.citations
-    doi = TheoryRouseTime.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -114,29 +100,6 @@ class BaseTheoryRouseTime:
             opt_type=OptType.opt,
             min_value=0.01,
         )
-
-        # f = self.theory_files()[0]
-        # t_data = f.data_table.data[:, 0]
-        # tmin = min(t_data[np.nonzero(t_data)])
-        # tmax = max(t_data)
-        # self.parameters["logtmin"] = Parameter(
-        #     "logtmin",
-        #     np.log10(tmin),
-        #     "Log of time range minimum",
-        #     ParameterType.real,
-        #     opt_type=OptType.const)
-        # self.parameters["logtmax"] = Parameter(
-        #     "logtmax",
-        #     np.log10(tmax),
-        #     "Log of time range maximum",
-        #     ParameterType.real,
-        #     opt_type=OptType.const)
-        # self.parameters["points"] = Parameter(
-        #     "points",
-        #     20,
-        #     "number of theory points per decade",
-        #     ParameterType.real,
-        #     opt_type=OptType.const)
 
     def calculate(self, f=None):
         """RouseTime function"""
@@ -171,21 +134,11 @@ class BaseTheoryRouseTime:
         tt.data[:, 1] = gamma * rh.approx_rouse_time(params)
 
 
-class GUITheoryRouseTime(BaseTheoryRouseTime, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:
-
-
 ####################################################################
 ####################################################################
 
 
-class TheoryRouseFrequency(CmdBase):
+class TheoryRouseFrequency(QTheory):
     """Fit Rouse modes to a frequency dependent relaxation function
     
     * **Function**
@@ -213,40 +166,16 @@ class TheoryRouseFrequency(CmdBase):
     description = "Rouse model"
     citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi = ["http://dx.doi.org/10.1063/1.1699180"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryRouseFrequency(name, parent_dataset, axarr)
-
-
-class BaseTheoryRouseFrequency:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryRouseFrequency.thname
-    citations = TheoryRouseFrequency.citations
-    doi = TheoryRouseFrequency.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
         self.has_modes = False
-        # self.parameters["logwmin"] = Parameter(
-        #     "logwmin",
-        #     -5,
-        #     "Log of frequency range minimum",
-        #     ParameterType.real,
-        #     opt_type=OptType.nopt)
-        # self.parameters["logwmax"] = Parameter(
-        #     "logwmax",
-        #     4,
-        #     "Log of frequency range maximum",
-        #     ParameterType.real,
-        #     opt_type=OptType.nopt)
         self.parameters["G0"] = Parameter(
             "G0",
             1e6,
@@ -296,12 +225,3 @@ class BaseTheoryRouseFrequency:
         tt.data[:, 1] = gp
         tt.data[:, 2] = gpp
 
-
-class GUITheoryRouseFrequency(BaseTheoryRouseFrequency, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

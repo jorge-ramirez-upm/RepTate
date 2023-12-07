@@ -36,10 +36,8 @@ Module that defines theories related to Maxwell modes, in the frequency and time
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -47,7 +45,7 @@ from PySide6.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 
-class TheoryMaxwellModesFrequency(CmdBase):
+class TheoryMaxwellModesFrequency(QTheory):
     """Fit a generalized Maxwell model to a frequency dependent relaxation function. 
     
     * **Function**
@@ -68,20 +66,8 @@ class TheoryMaxwellModesFrequency(CmdBase):
     description = "Maxwell modes, frequency dependent"
     citations = []
     doi = []
-    
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryMaxwellModesFrequency(name, parent_dataset, ax) 
-
-
-class BaseTheoryMaxwellModesFrequency:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
     single_file = True
-    thname = TheoryMaxwellModesFrequency.thname
-    citations = TheoryMaxwellModesFrequency.citations
-    doi = TheoryMaxwellModesFrequency.doi 
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -142,6 +128,49 @@ class BaseTheoryMaxwellModesFrequency:
         self.graphicmodes = []
         self.artistmodes = []
         self.setup_graphic_modes()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        tb.addWidget(self.spinbox)
+        self.modesaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+        connection_id = self.modesaction.triggered.connect(
+            self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change visibility of modes"""
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # self.do_calculate("")
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmodes'"""
+        self.set_param_value('nmodes', value)
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
+
 
     def set_param_value(self, name, value):
         """Change other parameters when nmodes is changed, else call parent function"""
@@ -334,62 +363,12 @@ class BaseTheoryMaxwellModesFrequency:
 
 
 
-class GUITheoryMaxwellModesFrequency(BaseTheoryMaxwellModesFrequency, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
-        tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
-        self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
-
-    def modesaction_change(self, checked):
-        """Change visibility of modes"""
-        self.graphicmodes_visible(checked)
-        # self.view_modes = self.modesaction.isChecked()
-        # self.graphicmodes.set_visible(self.view_modes)
-        # self.do_calculate("")
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmodes'"""
-        self.set_param_value('nmodes', value)
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-        self.update_parameter_table()
-
-
 ##################################################################################
 #   MAXWELL MODES TIME
 ##################################################################################
 
 
-class TheoryMaxwellModesTime(CmdBase):
+class TheoryMaxwellModesTime(QTheory):
     """Fit a generalized Maxwell model to a time dependent relaxation function. 
     
     * **Function**
@@ -408,19 +387,8 @@ class TheoryMaxwellModesTime(CmdBase):
     thname = "Maxwell Modes"
     description = "Maxwell modes, time dependent"
     citations = []
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryMaxwellModesTime(name, parent_dataset, ax) 
-
-
-class BaseTheoryMaxwellModesTime:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
     single_file = True
-    thname = TheoryMaxwellModesTime.thname
-    citations = TheoryMaxwellModesTime.citations
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -473,6 +441,53 @@ class BaseTheoryMaxwellModesTime:
         self.graphicmodes = None
         self.artistmodes = None
         self.setup_graphic_modes()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        tb.addWidget(self.spinbox)
+        self.modesaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+        connection_id = self.modesaction.triggered.connect(
+            self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change visibility of modes"""
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # if self.view_modes:
+        #     self.artistmodes.connect()
+        # else:
+        #     self.artistmodes.disconnect()
+        # self.do_calculate("")
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmodes'"""
+        self.set_param_value('nmodes', value)
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
+
 
     def set_param_value(self, name, value):
         """Change other parameters when nmodes is changed, else call parent function"""
@@ -654,57 +669,3 @@ class BaseTheoryMaxwellModesTime:
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
-
-
-class GUITheoryMaxwellModesTime(BaseTheoryMaxwellModesTime, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
-        tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
-        self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
-
-    def modesaction_change(self, checked):
-        """Change visibility of modes"""
-        self.graphicmodes_visible(checked)
-        # self.view_modes = self.modesaction.isChecked()
-        # self.graphicmodes.set_visible(self.view_modes)
-        # if self.view_modes:
-        #     self.artistmodes.connect()
-        # else:
-        #     self.artistmodes.disconnect()
-        # self.do_calculate("")
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmodes'"""
-        self.set_param_value('nmodes', value)
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-        self.update_parameter_table()

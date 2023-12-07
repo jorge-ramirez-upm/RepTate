@@ -35,15 +35,13 @@
 Dynamics Tube Dilution for Stars
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 import RepTate.theories.dtd_ctypes_helper as dtdh
 
 
-class TheoryDTDStarsFreq(CmdBase):
+class TheoryDTDStarsFreq(QTheory):
     """Fit DTD Theory for stars.
     Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts
     
@@ -71,22 +69,10 @@ class TheoryDTDStarsFreq(CmdBase):
     description = "Dynamic Tube Dilution for stars, frequency domain"
     citations = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
     doi = ["http://dx.doi.org/10.1021/ma961559f"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDTDStarsFreq(name, parent_dataset, axarr)
-
-
-class BaseTheoryDTDStarsFreq:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryDTDStarsFreq.thname
-    citations = TheoryDTDStarsFreq.citations
-    doi = TheoryDTDStarsFreq.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -163,22 +149,11 @@ class BaseTheoryDTDStarsFreq:
         tt.data[:, 2] = gpp[:]
 
 
-
-class GUITheoryDTDStarsFreq(BaseTheoryDTDStarsFreq, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:
-
-
 #############################################################################################
 #############################################################################################
 
 
-class TheoryDTDStarsTime(CmdBase):
+class TheoryDTDStarsTime(QTheory):
     """Fit DTD Theory for stars
     
     * **Function**
@@ -205,22 +180,10 @@ class TheoryDTDStarsTime(CmdBase):
     description = "Dynamic Tube Dilution for stars, time domain"
     citations = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
     doi = ["http://dx.doi.org/10.1021/ma961559f"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDTDStarsTime(name, parent_dataset, axarr)
-
-
-class BaseTheoryDTDStarsTime:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryDTDStarsTime.thname
-    citations = TheoryDTDStarsTime.citations
-    doi = TheoryDTDStarsTime.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -298,14 +261,3 @@ class BaseTheoryDTDStarsTime:
             return
         tt.data[:, 0] = times
         tt.data[:, 1] = gamma * gt[:]
-
-
-
-class GUITheoryDTDStarsTime(BaseTheoryDTDStarsTime, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

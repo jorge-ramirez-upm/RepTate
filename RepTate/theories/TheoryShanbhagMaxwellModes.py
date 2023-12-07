@@ -65,7 +65,7 @@ class PredictionMode(enum.Enum):
     disc = 1
 
 
-class TheoryShanbhagMaxwellModesFrequency(CmdBase):
+class TheoryShanbhagMaxwellModesFrequency(QTheory):
     """Extract continuous and discrete relaxation spectra from complex modulus G*(w)
         
     * **Parameters**
@@ -86,21 +86,8 @@ class TheoryShanbhagMaxwellModesFrequency(CmdBase):
     description = "Relaxation spectra from dynamic moduli"
     citations = ["Takeh, A. and Shanbhag, S., Appl. Rheol. 2013, 23, 24628"]
     doi = ['http://dx.doi.org/10.3933/ApplRheol-23-24628']
-    
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryShanbhagMaxwellModesFrequency(name, parent_dataset, ax) 
-    
-
-
-class BaseTheoryShanbhagMaxwellModesFrequency:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
-    thname = TheoryShanbhagMaxwellModesFrequency.thname
-    citations = TheoryShanbhagMaxwellModesFrequency.citations
-    doi = TheoryShanbhagMaxwellModesFrequency.doi 
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -205,6 +192,142 @@ class BaseTheoryShanbhagMaxwellModesFrequency:
         self.GstM = None
         self.K = None
         self.n = 0
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutpredmode = QToolButton()
+        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.cont_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
+            "Fit from Spectrum")
+        self.disc_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+            "Fit from Discrete")
+        if self.prediction_mode == PredictionMode.cont:
+            self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+        else:
+            self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+        self.tbutpredmode.setMenu(menu)
+        tb.addWidget(self.tbutpredmode)
+
+        self.modesaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes/spectrum')
+        self.plateauaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
+        self.save_spectrum_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
+            "Save Spectrum")                      
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.plateauaction.setCheckable(True)
+        self.plateauaction.setChecked(False)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.modesaction.triggered.connect(
+            self.modesaction_change)
+        connection_id = self.plateauaction.triggered.connect(
+            self.plateauaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+        connection_id = self.save_spectrum_action.triggered.connect(
+            self.save_spectrum)
+        connection_id = self.cont_pred_action.triggered.connect(
+            self.select_cont_pred)
+        connection_id = self.disc_pred_action.triggered.connect(
+            self.select_disc_pred)
+
+    def select_cont_pred(self):
+        self.prediction_mode = PredictionMode.cont
+        self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+
+        if self.n > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.data[:, 1] = self.K[:self.n]
+                    tt.data[:, 2] = self.K[self.n:]
+
+            self.Qprint('<b>Fit from continuous spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
+    def select_disc_pred(self):
+        self.prediction_mode = PredictionMode.disc
+        self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+
+        if self.n > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.data[:, 1] = self.GstM[:self.n]
+                    tt.data[:, 2] = self.GstM[self.n:]
+
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
+
+    def save_spectrum(self):
+        """Save Spectrum to a text file"""
+        fpath, _ = QFileDialog.getSaveFileName(self,
+                                               "Save spectrum to a text file",
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
+        if fpath == '':
+            return
+            
+        with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
+
+            header = '# Continuous spectrum\n'
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
+
+            n = len(self.scont)
+            for i in range(n):
+                f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
+            
+            f.write('\n#end')
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote spectrum \"%s\"' % fpath)
+
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change visibility of modes"""
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # self.do_calculate("")
+
+    def plateauaction_change(self, checked):
+        self.set_param_value("plateau", checked)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmodes'"""
+        self.set_param_value('nmodes', value)
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
+
 
     def setup_graphic_modes(self):
         """Setup graphic helpers"""
@@ -1244,155 +1367,12 @@ File error is calculated as the mean square of the residual, averaged over all p
 
 
 
-class GUITheoryShanbhagMaxwellModesFrequency(BaseTheoryShanbhagMaxwellModesFrequency, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        self.tbutpredmode = QToolButton()
-        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.cont_pred_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
-            "Fit from Spectrum")
-        self.disc_pred_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Fit from Discrete")
-        if self.prediction_mode == PredictionMode.cont:
-            self.tbutpredmode.setDefaultAction(self.cont_pred_action)
-        else:
-            self.tbutpredmode.setDefaultAction(self.disc_pred_action)
-        self.tbutpredmode.setMenu(menu)
-        tb.addWidget(self.tbutpredmode)
-
-        self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes/spectrum')
-        self.plateauaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
-        self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
-        self.save_spectrum_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
-            "Save Spectrum")                      
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.plateauaction.setCheckable(True)
-        self.plateauaction.setChecked(False)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.plateauaction.triggered.connect(
-            self.plateauaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-        connection_id = self.save_spectrum_action.triggered.connect(
-            self.save_spectrum)
-        connection_id = self.cont_pred_action.triggered.connect(
-            self.select_cont_pred)
-        connection_id = self.disc_pred_action.triggered.connect(
-            self.select_disc_pred)
-
-    def select_cont_pred(self):
-        self.prediction_mode = PredictionMode.cont
-        self.tbutpredmode.setDefaultAction(self.cont_pred_action)
-
-        if self.n > 0:
-            th_files = self.theory_files()
-            for f in self.parent_dataset.files:
-                if f in th_files:
-                    tt = self.tables[f.file_name_short]
-                    tt.data[:, 1] = self.K[:self.n]
-                    tt.data[:, 2] = self.K[self.n:]
-
-            self.Qprint('<b>Fit from continuous spectrum</b>')
-            self.do_error('')
-            self.do_plot('')
-
-    def select_disc_pred(self):
-        self.prediction_mode = PredictionMode.disc
-        self.tbutpredmode.setDefaultAction(self.disc_pred_action)
-
-        if self.n > 0:
-            th_files = self.theory_files()
-            for f in self.parent_dataset.files:
-                if f in th_files:
-                    tt = self.tables[f.file_name_short]
-                    tt.data[:, 1] = self.GstM[:self.n]
-                    tt.data[:, 2] = self.GstM[self.n:]
-
-            self.Qprint('<b>Fit from discrete spectrum</b>')
-            self.do_error('')
-            self.do_plot('')
-
-
-    def save_spectrum(self):
-        """Save Spectrum to a text file"""
-        fpath, _ = QFileDialog.getSaveFileName(self,
-                                               "Save spectrum to a text file",
-                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
-        if fpath == '':
-            return
-            
-        with open(fpath, 'w') as f:
-            verdata = RepTate._version.get_versions()
-            version = verdata['version'].split('+')[0]
-            date = verdata['date'].split('T')[0]
-            build = verdata['version']
-
-            header = '# Continuous spectrum\n'
-            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
-            header += '# At %s on %s\n' % (time.strftime("%X"),
-                                           time.strftime("%a %b %d, %Y"))
-            f.write(header)
-
-            f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
-
-            n = len(self.scont)
-            for i in range(n):
-                f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
-            
-            f.write('\n#end')
-
-        QMessageBox.information(self, 'Success',
-                                'Wrote spectrum \"%s\"' % fpath)
-
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
-
-    def modesaction_change(self, checked):
-        """Change visibility of modes"""
-        self.graphicmodes_visible(checked)
-        # self.view_modes = self.modesaction.isChecked()
-        # self.graphicmodes.set_visible(self.view_modes)
-        # self.do_calculate("")
-
-    def plateauaction_change(self, checked):
-        self.set_param_value("plateau", checked)
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmodes'"""
-        self.set_param_value('nmodes', value)
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-        self.update_parameter_table()
-
-
 ##################################################################################
 #   MAXWELL MODES TIME
 ##################################################################################
 
 
-class TheoryShanbhagMaxwellModesTime(CmdBase):
+class TheoryShanbhagMaxwellModesTime(QTheory):
     """Extract continuous and discrete relaxation spectra from relaxation modulus G(t)
         
     * **Parameters**
@@ -1413,20 +1393,8 @@ class TheoryShanbhagMaxwellModesTime(CmdBase):
     description = "Relaxation spectra from relaxation modulus"
     citations = ["Shanbhag, S., Macromolecular Theory and Simulations, 2019, 1900005"]
     doi = ['http://dx.doi.org/10.1002/mats.201900005']
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryShanbhagMaxwellModesTime(name, parent_dataset, ax) 
-
-
-class BaseTheoryShanbhagMaxwellModesTime:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes'
     single_file = True
-    thname = TheoryShanbhagMaxwellModesTime.thname
-    citations = TheoryShanbhagMaxwellModesTime.citations
-    doi = TheoryShanbhagMaxwellModesTime.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -1528,6 +1496,135 @@ class BaseTheoryShanbhagMaxwellModesTime:
         self.GtM = None
         self.K = None
         self.tfit = None
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutpredmode = QToolButton()
+        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.cont_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
+            "Fit from Spectrum")
+        self.disc_pred_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+            "Fit from Discrete")
+        if self.prediction_mode == PredictionMode.cont:
+            self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+        else:
+            self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+        self.tbutpredmode.setMenu(menu)
+        tb.addWidget(self.tbutpredmode)
+    
+        self.modesaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+        self.plateauaction = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
+        self.save_modes_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")            
+        self.save_spectrum_action = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
+            "Save Spectrum")            
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.plateauaction.setCheckable(True)
+        self.plateauaction.setChecked(False)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.modesaction.triggered.connect(
+            self.modesaction_change)
+        connection_id = self.plateauaction.triggered.connect(
+            self.plateauaction_change)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+        connection_id = self.save_spectrum_action.triggered.connect(
+            self.save_spectrum)
+        connection_id = self.cont_pred_action.triggered.connect(
+            self.select_cont_pred)
+        connection_id = self.disc_pred_action.triggered.connect(
+            self.select_disc_pred)
+
+    def select_cont_pred(self):
+        self.prediction_mode = PredictionMode.cont
+        self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+
+        if len(self.tfit) > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.num_rows = len(self.tfit)
+                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
+                    tt.data[:, 0] = self.tfit
+                    tt.data[:, 1] = self.K
+
+            self.Qprint('<b>Fit from continuous spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
+    def select_disc_pred(self):
+        self.prediction_mode = PredictionMode.disc
+        self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+
+        if len(self.tfit) > 0:
+            th_files = self.theory_files()
+            for f in self.parent_dataset.files:
+                if f in th_files:
+                    tt = self.tables[f.file_name_short]
+                    tt.num_rows = len(self.tfit)
+                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
+                    tt.data[:, 0] = self.tfit
+                    tt.data[:, 1] = self.GtM
+
+            self.Qprint('<b>Fit from discrete spectrum</b>')
+            self.do_error('')
+            self.do_plot('')
+
+    def plateauaction_change(self, checked):
+        self.set_param_value("plateau", checked)
+
+    def save_spectrum(self):
+        """Save Spectrum to a text file"""
+        fpath, _ = QFileDialog.getSaveFileName(self,
+                                               "Save spectrum to a text file",
+                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
+        if fpath == '':
+            return
+            
+        with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
+
+            header = '# Continuous spectrum\n'
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
+
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
+
+            n = len(self.scont)
+            for i in range(n):
+                f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
+            
+            f.write('\n#end')
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote spectrum \"%s\"' % fpath)
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change visibility of modes"""
+        self.graphicmodes_visible(checked)
+
 
     def setup_graphic_modes(self):
         """Setup graphic helpers"""
@@ -2537,137 +2634,137 @@ File error is calculated as the mean square of the residual, averaged over all p
         self.discspectrum.set_data(x, y)
 
 
-class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QTheory):
-    """GUI Version"""
+# class GUITheoryShanbhagMaxwellModesTime(BaseTheoryShanbhagMaxwellModesTime, QTheory):
+#     """GUI Version"""
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
+#     def __init__(self, name="", parent_dataset=None, ax=None):
+#         """**Constructor**"""
+#         super().__init__(name, parent_dataset, ax)
 
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
+#     #     # add widgets specific to the theory
+#     #     tb = QToolBar()
+#     #     tb.setIconSize(QSize(24, 24))
 
-        self.tbutpredmode = QToolButton()
-        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.cont_pred_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
-            "Fit from Spectrum")
-        self.disc_pred_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Fit from Discrete")
-        if self.prediction_mode == PredictionMode.cont:
-            self.tbutpredmode.setDefaultAction(self.cont_pred_action)
-        else:
-            self.tbutpredmode.setDefaultAction(self.disc_pred_action)
-        self.tbutpredmode.setMenu(menu)
-        tb.addWidget(self.tbutpredmode)
+#     #     self.tbutpredmode = QToolButton()
+#     #     self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+#     #     menu = QMenu(self)
+#     #     self.cont_pred_action = menu.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-minimum-value.png'),
+#     #         "Fit from Spectrum")
+#     #     self.disc_pred_action = menu.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+#     #         "Fit from Discrete")
+#     #     if self.prediction_mode == PredictionMode.cont:
+#     #         self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+#     #     else:
+#     #         self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+#     #     self.tbutpredmode.setMenu(menu)
+#     #     tb.addWidget(self.tbutpredmode)
     
-        self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
-        self.plateauaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
-        self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
-        self.save_spectrum_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
-            "Save Spectrum")            
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.plateauaction.setCheckable(True)
-        self.plateauaction.setChecked(False)
-        self.thToolsLayout.insertWidget(0, tb)
+#     #     self.modesaction = tb.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+#     #     self.plateauaction = tb.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-flat-tire-80.png'), 'is there a residual plateau?')
+#     #     self.save_modes_action = tb.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+#     #         "Save Modes")            
+#     #     self.save_spectrum_action = tb.addAction(
+#     #         QIcon(':/Icon8/Images/new_icons/icons8-save_Ht.png'),
+#     #         "Save Spectrum")            
+#     #     self.modesaction.setCheckable(True)
+#     #     self.modesaction.setChecked(True)
+#     #     self.plateauaction.setCheckable(True)
+#     #     self.plateauaction.setChecked(False)
+#     #     self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.plateauaction.triggered.connect(
-            self.plateauaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-        connection_id = self.save_spectrum_action.triggered.connect(
-            self.save_spectrum)
-        connection_id = self.cont_pred_action.triggered.connect(
-            self.select_cont_pred)
-        connection_id = self.disc_pred_action.triggered.connect(
-            self.select_disc_pred)
+#     #     connection_id = self.modesaction.triggered.connect(
+#     #         self.modesaction_change)
+#     #     connection_id = self.plateauaction.triggered.connect(
+#     #         self.plateauaction_change)
+#     #     connection_id = self.save_modes_action.triggered.connect(
+#     #         self.save_modes)
+#     #     connection_id = self.save_spectrum_action.triggered.connect(
+#     #         self.save_spectrum)
+#     #     connection_id = self.cont_pred_action.triggered.connect(
+#     #         self.select_cont_pred)
+#     #     connection_id = self.disc_pred_action.triggered.connect(
+#     #         self.select_disc_pred)
 
-    def select_cont_pred(self):
-        self.prediction_mode = PredictionMode.cont
-        self.tbutpredmode.setDefaultAction(self.cont_pred_action)
+#     # def select_cont_pred(self):
+#     #     self.prediction_mode = PredictionMode.cont
+#     #     self.tbutpredmode.setDefaultAction(self.cont_pred_action)
 
-        if len(self.tfit) > 0:
-            th_files = self.theory_files()
-            for f in self.parent_dataset.files:
-                if f in th_files:
-                    tt = self.tables[f.file_name_short]
-                    tt.num_rows = len(self.tfit)
-                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
-                    tt.data[:, 0] = self.tfit
-                    tt.data[:, 1] = self.K
+#     #     if len(self.tfit) > 0:
+#     #         th_files = self.theory_files()
+#     #         for f in self.parent_dataset.files:
+#     #             if f in th_files:
+#     #                 tt = self.tables[f.file_name_short]
+#     #                 tt.num_rows = len(self.tfit)
+#     #                 tt.data = np.zeros((tt.num_rows, tt.num_columns))
+#     #                 tt.data[:, 0] = self.tfit
+#     #                 tt.data[:, 1] = self.K
 
-            self.Qprint('<b>Fit from continuous spectrum</b>')
-            self.do_error('')
-            self.do_plot('')
+#     #         self.Qprint('<b>Fit from continuous spectrum</b>')
+#     #         self.do_error('')
+#     #         self.do_plot('')
 
-    def select_disc_pred(self):
-        self.prediction_mode = PredictionMode.disc
-        self.tbutpredmode.setDefaultAction(self.disc_pred_action)
+#     # def select_disc_pred(self):
+#     #     self.prediction_mode = PredictionMode.disc
+#     #     self.tbutpredmode.setDefaultAction(self.disc_pred_action)
 
-        if len(self.tfit) > 0:
-            th_files = self.theory_files()
-            for f in self.parent_dataset.files:
-                if f in th_files:
-                    tt = self.tables[f.file_name_short]
-                    tt.num_rows = len(self.tfit)
-                    tt.data = np.zeros((tt.num_rows, tt.num_columns))
-                    tt.data[:, 0] = self.tfit
-                    tt.data[:, 1] = self.GtM
+#     #     if len(self.tfit) > 0:
+#     #         th_files = self.theory_files()
+#     #         for f in self.parent_dataset.files:
+#     #             if f in th_files:
+#     #                 tt = self.tables[f.file_name_short]
+#     #                 tt.num_rows = len(self.tfit)
+#     #                 tt.data = np.zeros((tt.num_rows, tt.num_columns))
+#     #                 tt.data[:, 0] = self.tfit
+#     #                 tt.data[:, 1] = self.GtM
 
-            self.Qprint('<b>Fit from discrete spectrum</b>')
-            self.do_error('')
-            self.do_plot('')
+#     #         self.Qprint('<b>Fit from discrete spectrum</b>')
+#     #         self.do_error('')
+#     #         self.do_plot('')
 
-    def plateauaction_change(self, checked):
-        self.set_param_value("plateau", checked)
+#     # def plateauaction_change(self, checked):
+#     #     self.set_param_value("plateau", checked)
 
-    def save_spectrum(self):
-        """Save Spectrum to a text file"""
-        fpath, _ = QFileDialog.getSaveFileName(self,
-                                               "Save spectrum to a text file",
-                                               os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
-        if fpath == '':
-            return
+#     # def save_spectrum(self):
+#     #     """Save Spectrum to a text file"""
+#     #     fpath, _ = QFileDialog.getSaveFileName(self,
+#     #                                            "Save spectrum to a text file",
+#     #                                            os.path.join(RepTate.root_dir, "data"), "Text (*.txt)")
+#     #     if fpath == '':
+#     #         return
             
-        with open(fpath, 'w') as f:
-            verdata = RepTate._version.get_versions()
-            version = verdata['version'].split('+')[0]
-            date = verdata['date'].split('T')[0]
-            build = verdata['version']
+#     #     with open(fpath, 'w') as f:
+#     #         verdata = RepTate._version.get_versions()
+#     #         version = verdata['version'].split('+')[0]
+#     #         date = verdata['date'].split('T')[0]
+#     #         build = verdata['version']
 
-            header = '# Continuous spectrum\n'
-            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
+#     #         header = '# Continuous spectrum\n'
+#     #         header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
 
-            header += '# At %s on %s\n' % (time.strftime("%X"),
-                                           time.strftime("%a %b %d, %Y"))
-            f.write(header)
+#     #         header += '# At %s on %s\n' % (time.strftime("%X"),
+#     #                                        time.strftime("%a %b %d, %Y"))
+#     #         f.write(header)
 
-            f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
+#     #         f.write('\n#%15s\t%15s\n'%('tau_i','G_i'))
 
-            n = len(self.scont)
-            for i in range(n):
-                f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
+#     #         n = len(self.scont)
+#     #         for i in range(n):
+#     #             f.write('%15g\t%15g\n'%(self.scont[i],np.exp(self.Hcont[i])))
             
-            f.write('\n#end')
+#     #         f.write('\n#end')
 
-        QMessageBox.information(self, 'Success',
-                                'Wrote spectrum \"%s\"' % fpath)
+#     #     QMessageBox.information(self, 'Success',
+#     #                             'Wrote spectrum \"%s\"' % fpath)
 
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
+#     # def Qhide_theory_extras(self, state):
+#     #     """Uncheck the modeaction button. Called when curent theory is changed"""
+#     #     self.modesaction.setChecked(state)
 
-    def modesaction_change(self, checked):
-        """Change visibility of modes"""
-        self.graphicmodes_visible(checked)
+#     # def modesaction_change(self, checked):
+#     #     """Change visibility of modes"""
+#     #     self.graphicmodes_visible(checked)
