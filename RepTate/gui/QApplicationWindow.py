@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017-2020): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -56,7 +56,8 @@ from PySide6.QtGui import (
 )
 from PySide6.QtUiTools import loadUiType
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+#from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (

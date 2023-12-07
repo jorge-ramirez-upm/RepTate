@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017-2020): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -43,8 +43,8 @@ import traceback
 import logging
 import configparser
 
-from PySide6.QtWidgets import QApplication, QMessageBox, QShortcut
-from PySide6.QtGui import QDesktopServices, QIcon, QKeySequence
+from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtGui import QDesktopServices, QIcon, QKeySequence, QShortcut
 from PySide6.QtCore import QUrl, Qt, QCoreApplication
 from RepTate.core.DataTable import DataTable
 
@@ -98,7 +98,7 @@ def start_UV(argv):
 
     parser = argparse.ArgumentParser(
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2020)",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2023)",
     )
     parser.add_argument(
         "-d", "--dpi", help="High DPI support on Windows", action="store_true"

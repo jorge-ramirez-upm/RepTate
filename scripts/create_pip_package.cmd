@@ -20,6 +20,8 @@ rmdir /Q/S RepTate_test.egg-info
 
 REM compile package
 python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
+REM python -m build --wheel --outdir %BUILDFOLDER%
+
 
 REM upload to PyPi
 python -m twine upload %BUILDFOLDER%/*.whl

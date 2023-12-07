@@ -38,7 +38,8 @@ REM install needed packages first
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install tqdm
 python -m pip install --user --upgrade twine
-python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
+REM python setup.py bdist_wheel --dist-dir %BUILDFOLDER%
+python -m build --wheel --outdir %BUILDFOLDER%
 
 REM Upload The binary package to pypi
 REM python -m twine upload %BUILDFOLDER%\*.whl

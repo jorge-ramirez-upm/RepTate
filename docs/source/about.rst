@@ -26,6 +26,6 @@ https://reptate.readthedocs.io/installation.html
 
 If you want to know more about the features of RepTate, or want to learn how to use the software, check the documentation. Additionally, you can check the news page to see the latest features and a history of changes in RepTate.
 
-A paper about RepTate is in preparation, and will be submitted sometime during 2018.
+A paper about RepTate has been published in the Journal of Rheology in 2020.
 
 If you have any comments or suggestions, you can contact the developers.

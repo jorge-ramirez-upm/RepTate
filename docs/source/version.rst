@@ -2,6 +2,13 @@
 Version History
 ===============
 
+Release 1.2.0 - 20231207
+========================
+- Removed spinbox to increase/decrease number of views (giving problems)
+- Removed mplcursors (data can be tracked by showing the Figure Toolbar)
+- Changed PyQt5 --> PySide6. Solved the High DPI problem on Windows
+- Removed bug that erased figures when switching tabs in multi plot view
+
 Release 1.1.0 - 20200527
 ========================
 - NEW DSM theory in the LVE App (thanks to J. Ethier & J. Schieber)
