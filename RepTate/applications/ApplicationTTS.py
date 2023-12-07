@@ -36,31 +36,19 @@ Module for handling small angle oscillatory shear experiments and applying the
 time-temperature superposition principle.
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationTTS(CmdBase):
+class ApplicationTTS(QApplicationWindow):
     """Application to Analyze Linear Viscoelastic Data and perform Time-Temperature Superposition"""
 
     appname = "TTS"
     description = "Linear Viscoelasticity"
     extension = "osc"
-
-    def __new__(cls, name="TTS", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationTTS(name, parent)
-
-
-class BaseApplicationTTS:
-    """Base Class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/TTS.html"
-    appname = ApplicationTTS.appname
 
     def __init__(self, name="TTS", parent=None):
         """**Constructor**"""
@@ -484,9 +472,3 @@ class BaseApplicationTTS:
         y[:, 2] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
-class GUIApplicationTTS(BaseApplicationTTS, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="TTS", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

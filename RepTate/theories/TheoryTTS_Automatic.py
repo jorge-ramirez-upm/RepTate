@@ -44,16 +44,14 @@ from scipy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 import RepTate
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QFileDialog, QComboBox, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
 
-class TheoryTTSShiftAutomatic(CmdBase):
+class TheoryTTSShiftAutomatic(QTheory):
     """Automatic Time-temperature superposition of experimental data.
 
     * **Parameters**
@@ -65,20 +63,8 @@ class TheoryTTSShiftAutomatic(CmdBase):
     description = "Shift data automatically for best overlap"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryTTSShiftAutomatic(name, parent_dataset, ax)
-
-
-class BaseTheoryTTSShiftAutomatic:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
     single_file = False
-    thname = TheoryTTSShiftAutomatic.thname
-    citations = TheoryTTSShiftAutomatic.citations
-    doi = TheoryTTSShiftAutomatic.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -109,6 +95,155 @@ class BaseTheoryTTSShiftAutomatic:
         self.aT_vs_T = {}
         for k in self.tables.keys():
             self.shiftParameters[k] = (0.0, 0.0)  # log10 of horizontal, then vertical
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.verticalshift = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-vertical-shift.png"),
+            "Vertical shift",
+        )
+        self.verticalshift.setCheckable(True)
+        self.verticalshift.setChecked(True)
+        # self.savemaster = tb.addAction(self.style().standardIcon(
+        #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
+        self.cbTemp = QComboBox()
+        self.populate_TempComboBox()
+        self.cbTemp.setToolTip("Select a goal Temperature")
+        tb.addWidget(self.cbTemp)
+        self.refreshT = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-reset.png"), "Refresh T list"
+        )
+        self.saveShiftFactors = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-save-ShiftFactors.png"),
+            "Save shift factors",
+        )
+        self.arrhe_tb = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/activation_energy.png"),
+            "Print Arrhenius activation energy",
+        )
+
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
+        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
+        connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
+        connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
+        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
+
+        self.dir_start = os.path.join(RepTate.root_dir, "data")
+
+    def print_activation_energy(self):
+        # Evaluate activation ennergy from Arrhenius fit
+        if self.aT_vs_T == []:
+            self.Qprint("<h3>Apply TTS first</h3>")
+            return
+
+        def f(invT, Ea):
+            return Ea / 8.314 * (invT - 1 / (273.15 + self.parameters["T"].value))
+
+        Ea_list = []
+        for case in self.aT_vs_T:
+            lnaT = [np.log(10) * aT for aT, _ in self.aT_vs_T[case]]
+            invT = [1 / (273.15 + T) for _, T in self.aT_vs_T[case]]
+            popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
+            alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
+            n = len(invT)  # number of data points
+            p = 1  # number of parameters
+            dof = max(0, n - p)  # number of degrees of freedom
+            # student-t value for the dof and confidence level
+            tval = distributions.t.ppf(1.0 - alpha / 2.0, dof)
+            Ea_list.append(
+                (case, popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3)
+            )
+        if len(Ea_list) == 1:
+            self.Qprint(
+                "<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>"
+                % (popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3)
+            )
+        else:
+            table = [
+                ["Mw", "Ea (kJ/mol)"],
+            ]
+            for items in Ea_list:
+                table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
+            self.Qprint(table)
+
+    def populate_TempComboBox(self):
+        k = list(self.Tdict.keys())
+        a = sorted(list(set([x[0] for x in self.Tdict[k[0]]])))
+        for i in range(1, len(k)):
+            b = sorted([x[0] for x in self.Tdict[k[i]]])
+            a = sorted(list(set(a) & set(b)))
+        self.cbTemp.clear()
+        for t in a:
+            self.cbTemp.addItem(str(t))
+        if self.cbTemp.count() > 0:
+            self.set_param_value("T", float(self.cbTemp.currentText()))
+        self.update_parameter_table()
+
+    def do_vertical_shift(self):
+        self.set_param_value("vert", self.verticalshift.isChecked())
+
+    # def do_save_dialog(self):
+    #     folder = str(
+    #         QFileDialog.getExistingDirectory(
+    #             self, "Select Directory to save Master curves"))
+    #     self.do_save(folder)
+
+    def change_temperature(self):
+        try:
+            self.set_param_value("T", float(self.cbTemp.currentText()))
+            self.update_parameter_table()
+        except:
+            pass
+
+    def refresh_temperatures(self):
+        self.Mwset, self.Mw, self.Tdict = self.get_cases()
+        self.populate_TempComboBox()
+
+    def save_shift_factors(self):
+        dilogue_name = "Select Folder for Saving Shift Factors"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
+        if not isdir(folder):
+            return
+        self.dir_start = folder
+        nsaved = 0
+        for case in self.Tdict.keys():
+            fname = ""
+            if case[0] > 0:
+                fname += "Mw%g" % case[0]
+            if case[1] > 0:
+                fname += "MwB%g" % case[1]
+            if case[2] > 0:
+                fname += "phi%g" % case[2]
+            if case[3] > 0:
+                fname += "phiB%g" % case[3]
+            with open(join(folder, fname + ".ttsf"), "w") as fout:
+                Temps0 = [x[0] for x in self.Tdict[case]]
+                Filenames = [x[2] for x in self.Tdict[case]]
+                Files = [x[3] for x in self.Tdict[case]]
+                indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
+
+                f0 = Files[0]
+                for pname in f0.file_parameters:
+                    if pname != "T":
+                        fout.write("%s=%s;" % (pname, f0.file_parameters[pname]))
+                fout.write("\n")
+                fout.write("%-12s %-12s %-12s\n" % ("T", "aT", "bT"))
+                fout.write("%-12s %-12s %-12s\n" % ("[°C]", "[-]", "[-]"))
+
+                for i in indTsorted:
+                    fname = Filenames[i]
+                    sparam = self.shiftParameters[fname]
+                    fout.write(
+                        "%-12g %-12g %-12g\n"
+                        % (Temps0[i], 10.0 ** sparam[0], 10.0 ** sparam[1])
+                    )
+                nsaved += 1
+        msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
+        QMessageBox.information(self, "Saved Files", msg)
+
 
     def TheoryTTSShiftAutomatic(self, f=None):
         """Calculate the theory"""
@@ -566,160 +701,3 @@ class BaseTheoryTTSShiftAutomatic:
         # print information
         msg = 'Saved %d TTS file(s) in "%s"' % (counter, line)
         QMessageBox.information(self, "Save TTS", msg)
-
-
-
-class GUITheoryTTSShiftAutomatic(BaseTheoryTTSShiftAutomatic, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.verticalshift = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-vertical-shift.png"),
-            "Vertical shift",
-        )
-        self.verticalshift.setCheckable(True)
-        self.verticalshift.setChecked(True)
-        # self.savemaster = tb.addAction(self.style().standardIcon(
-        #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
-        self.cbTemp = QComboBox()
-        self.populate_TempComboBox()
-        self.cbTemp.setToolTip("Select a goal Temperature")
-        tb.addWidget(self.cbTemp)
-        self.refreshT = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-reset.png"), "Refresh T list"
-        )
-        self.saveShiftFactors = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-ShiftFactors.png"),
-            "Save shift factors",
-        )
-        self.arrhe_tb = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/activation_energy.png"),
-            "Print Arrhenius activation energy",
-        )
-
-        self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
-        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
-        connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
-        connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
-        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
-        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
-
-        self.dir_start = os.path.join(RepTate.root_dir, "data")
-
-    def print_activation_energy(self):
-        # Evaluate activation ennergy from Arrhenius fit
-        if self.aT_vs_T == []:
-            self.Qprint("<h3>Apply TTS first</h3>")
-            return
-
-        def f(invT, Ea):
-            return Ea / 8.314 * (invT - 1 / (273.15 + self.parameters["T"].value))
-
-        Ea_list = []
-        for case in self.aT_vs_T:
-            lnaT = [np.log(10) * aT for aT, _ in self.aT_vs_T[case]]
-            invT = [1 / (273.15 + T) for _, T in self.aT_vs_T[case]]
-            popt, pcov = curve_fit(f, invT, lnaT, p0=[1e3])
-            alpha = 0.05  # 95% confidence interval = 100*(1-alpha)
-            n = len(invT)  # number of data points
-            p = 1  # number of parameters
-            dof = max(0, n - p)  # number of degrees of freedom
-            # student-t value for the dof and confidence level
-            tval = distributions.t.ppf(1.0 - alpha / 2.0, dof)
-            Ea_list.append(
-                (case, popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3)
-            )
-        if len(Ea_list) == 1:
-            self.Qprint(
-                "<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>"
-                % (popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3)
-            )
-        else:
-            table = [
-                ["Mw", "Ea (kJ/mol)"],
-            ]
-            for items in Ea_list:
-                table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
-            self.Qprint(table)
-
-    def populate_TempComboBox(self):
-        k = list(self.Tdict.keys())
-        a = sorted(list(set([x[0] for x in self.Tdict[k[0]]])))
-        for i in range(1, len(k)):
-            b = sorted([x[0] for x in self.Tdict[k[i]]])
-            a = sorted(list(set(a) & set(b)))
-        self.cbTemp.clear()
-        for t in a:
-            self.cbTemp.addItem(str(t))
-        if self.cbTemp.count() > 0:
-            self.set_param_value("T", float(self.cbTemp.currentText()))
-        self.update_parameter_table()
-
-    def do_vertical_shift(self):
-        self.set_param_value("vert", self.verticalshift.isChecked())
-
-    # def do_save_dialog(self):
-    #     folder = str(
-    #         QFileDialog.getExistingDirectory(
-    #             self, "Select Directory to save Master curves"))
-    #     self.do_save(folder)
-
-    def change_temperature(self):
-        try:
-            self.set_param_value("T", float(self.cbTemp.currentText()))
-            self.update_parameter_table()
-        except:
-            pass
-
-    def refresh_temperatures(self):
-        self.Mwset, self.Mw, self.Tdict = self.get_cases()
-        self.populate_TempComboBox()
-
-    def save_shift_factors(self):
-        dilogue_name = "Select Folder for Saving Shift Factors"
-        folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
-        if not isdir(folder):
-            return
-        self.dir_start = folder
-        nsaved = 0
-        for case in self.Tdict.keys():
-            fname = ""
-            if case[0] > 0:
-                fname += "Mw%g" % case[0]
-            if case[1] > 0:
-                fname += "MwB%g" % case[1]
-            if case[2] > 0:
-                fname += "phi%g" % case[2]
-            if case[3] > 0:
-                fname += "phiB%g" % case[3]
-            with open(join(folder, fname + ".ttsf"), "w") as fout:
-                Temps0 = [x[0] for x in self.Tdict[case]]
-                Filenames = [x[2] for x in self.Tdict[case]]
-                Files = [x[3] for x in self.Tdict[case]]
-                indTsorted = sorted(range(len(Temps0)), key=lambda k: Temps0[k])
-
-                f0 = Files[0]
-                for pname in f0.file_parameters:
-                    if pname != "T":
-                        fout.write("%s=%s;" % (pname, f0.file_parameters[pname]))
-                fout.write("\n")
-                fout.write("%-12s %-12s %-12s\n" % ("T", "aT", "bT"))
-                fout.write("%-12s %-12s %-12s\n" % ("[°C]", "[-]", "[-]"))
-
-                for i in indTsorted:
-                    fname = Filenames[i]
-                    sparam = self.shiftParameters[fname]
-                    fout.write(
-                        "%-12g %-12g %-12g\n"
-                        % (Temps0[i], 10.0 ** sparam[0], 10.0 ** sparam[1])
-                    )
-                nsaved += 1
-        msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
-        QMessageBox.information(self, "Saved Files", msg)
