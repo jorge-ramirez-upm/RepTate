@@ -40,23 +40,20 @@ import numpy as np
 from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from RepTate.core.Theory import EndComputationRequested
-from RepTate.applications.ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
+from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 import RepTate
 import time
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
-class TheoryPomPom(CmdBase):
+class TheoryPomPom(QTheory):
     """Multi-mode PomPom Model based on :cite:`NLVE-Blackwell2000`:
     
     .. math::
@@ -88,19 +85,8 @@ class TheoryPomPom(CmdBase):
     description = "Pom-Pom constitutive equation"
     citations = ["McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110"]
     doi = ["http://dx.doi.org/10.1122/1.550933"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryPomPom(name, parent_dataset, ax)
-
-class BaseTheoryPomPom:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
     single_file = False
-    thname = TheoryPomPom.thname
-    citations = TheoryPomPom.citations
-    doi = TheoryPomPom.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -157,6 +143,169 @@ class BaseTheoryPomPom:
 
         self.MAX_MODES = 40
         self.init_flow_mode()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu(self)
+            self.shear_flow_action = menu.addAction(
+                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
+            )
+            self.extensional_flow_action = menu.addAction(
+                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
+            )
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow
+            )
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow
+            )
+        else:
+            self.function = self.calculate_PomPomLAOS
+
+        self.tbutmodes = QToolButton()
+        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.get_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
+        )
+        self.edit_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
+        )
+        self.plot_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
+        )
+        self.save_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
+        self.tbutmodes.setDefaultAction(self.get_modes_action)
+        self.tbutmodes.setMenu(menu)
+        tb.addWidget(self.tbutmodes)
+
+        # Save to flowsolve button
+        self.flowsolve_btn = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-save-flowsolve.png"),
+            "Save Parameters To FlowSolve",
+        )
+        self.flowsolve_btn.setCheckable(False)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+        connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
+
+    def handle_flowsolve_btn(self):
+        """Save theory parameters in FlowSolve format"""
+
+        # Get filename of RepTate project to open
+        fpath, _ = QFileDialog.getSaveFileName(
+            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
+        )
+        if fpath == "":
+            return
+
+        with open(fpath, "w") as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata["version"].split("+")[0]
+            date = verdata["date"].split("T")[0]
+            build = verdata["version"]
+            header = "#flowGen input\n"
+            header += "# Generated with RepTate %s %s (build %s)\n" % (
+                version,
+                date,
+                build,
+            )
+            header += "# At %s on %s\n" % (
+                time.strftime("%X"),
+                time.strftime("%a %b %d, %Y"),
+            )
+            f.write(header)
+
+            f.write("\n#param global\n")
+            f.write("constit multip\n")
+            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
+
+            f.write("\n#param constitutive\n")
+
+            n = self.parameters["nmodes"].value
+            td = np.zeros(n)
+            for i in range(n):
+                td[i] = self.parameters["tauB%02d" % i].value
+            # sort taud ascending order
+            args = np.argsort(td)
+
+            modulus = "modulus"
+            taub = "taub"
+            ratio = "ratio"
+            qarms = "qarms"
+            for i, arg in enumerate(args):
+                modulus += " %.6g" % self.parameters["G%02d" % arg].value
+                taub += " %.6g" % self.parameters["tauB%02d" % arg].value
+                ratio += " %.6g" % self.parameters["ratio%02d" % arg].value
+                qarms += " %.6g" % self.parameters["q%02d" % arg].value
+            f.write("%s\n%s\n%s\n%s\n" % (modulus, taub, ratio, qarms))
+
+            f.write("nustar 2\n")
+
+            f.write("\n#end")
+
+        QMessageBox.information(
+            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
+        )
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def get_modes_reptate(self):
+        self.Qcopy_modes()
+
+    def edit_modes_window(self):
+        times, G, success = self.get_modes()
+        if not success:
+            self.logger.warning("Could not get modes successfully")
+            return
+        d = EditModesDialog(self, times, G, self.MAX_MODES)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            self.set_param_value("nmodes", nmodes)
+            success = True
+            for i in range(nmodes):
+                msg, success1 = self.set_param_value(
+                    "tauB%02d" % i, d.table.item(i, 0).text()
+                )
+                msg, success2 = self.set_param_value(
+                    "G%02d" % i, d.table.item(i, 1).text()
+                )
+                success *= success1 * success2
+            if not success:
+                QMessageBox.warning(
+                    self,
+                    "Error",
+                    "Some parameter(s) could not be updated.\nPlease try again.",
+                )
+            else:
+                self.handle_actionCalculate_Theory()
+
+    def plot_modes_graph(self):
+        pass
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -434,7 +583,7 @@ class BaseTheoryPomPom:
         """Set the value of theory parameters"""
         if name == "nmodes":
             oldn = self.parameters["nmodes"].value
-        message, success = super(BaseTheoryPomPom, self).set_param_value(name, value)
+        message, success = super(TheoryPomPom, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
@@ -483,175 +632,3 @@ class BaseTheoryPomPom:
                     del self.parameters["ratio%02d" % i]
                     del self.parameters["q%02d" % i]
         return "", True
-
-
-
-class GUITheoryPomPom(BaseTheoryPomPom, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
-            self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-            menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-            )
-            self.extensional_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-            )
-            if self.flow_mode == FlowMode.shear:
-                self.tbutflow.setDefaultAction(self.shear_flow_action)
-            else:
-                self.tbutflow.setDefaultAction(self.extensional_flow_action)
-            self.tbutflow.setMenu(menu)
-            tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow
-            )
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow
-            )
-        else:
-            self.function = self.calculate_PomPomLAOS
-
-        self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
-        )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
-        self.plot_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
-        )
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
-        self.tbutmodes.setDefaultAction(self.get_modes_action)
-        self.tbutmodes.setMenu(menu)
-        tb.addWidget(self.tbutmodes)
-
-        # Save to flowsolve button
-        self.flowsolve_btn = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-flowsolve.png"),
-            "Save Parameters To FlowSolve",
-        )
-        self.flowsolve_btn.setCheckable(False)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
-
-    def handle_flowsolve_btn(self):
-        """Save theory parameters in FlowSolve format"""
-
-        # Get filename of RepTate project to open
-        fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
-        )
-        if fpath == "":
-            return
-
-        with open(fpath, "w") as f:
-            verdata = RepTate._version.get_versions()
-            version = verdata["version"].split("+")[0]
-            date = verdata["date"].split("T")[0]
-            build = verdata["version"]
-            header = "#flowGen input\n"
-            header += "# Generated with RepTate %s %s (build %s)\n" % (
-                version,
-                date,
-                build,
-            )
-            header += "# At %s on %s\n" % (
-                time.strftime("%X"),
-                time.strftime("%a %b %d, %Y"),
-            )
-            f.write(header)
-
-            f.write("\n#param global\n")
-            f.write("constit multip\n")
-            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
-
-            f.write("\n#param constitutive\n")
-
-            n = self.parameters["nmodes"].value
-            td = np.zeros(n)
-            for i in range(n):
-                td[i] = self.parameters["tauB%02d" % i].value
-            # sort taud ascending order
-            args = np.argsort(td)
-
-            modulus = "modulus"
-            taub = "taub"
-            ratio = "ratio"
-            qarms = "qarms"
-            for i, arg in enumerate(args):
-                modulus += " %.6g" % self.parameters["G%02d" % arg].value
-                taub += " %.6g" % self.parameters["tauB%02d" % arg].value
-                ratio += " %.6g" % self.parameters["ratio%02d" % arg].value
-                qarms += " %.6g" % self.parameters["q%02d" % arg].value
-            f.write("%s\n%s\n%s\n%s\n" % (modulus, taub, ratio, qarms))
-
-            f.write("nustar 2\n")
-
-            f.write("\n#end")
-
-        QMessageBox.information(
-            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
-        )
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)
-
-    def get_modes_reptate(self):
-        self.Qcopy_modes()
-
-    def edit_modes_window(self):
-        times, G, success = self.get_modes()
-        if not success:
-            self.logger.warning("Could not get modes successfully")
-            return
-        d = EditModesDialog(self, times, G, self.MAX_MODES)
-        if d.exec_():
-            nmodes = d.table.rowCount()
-            self.set_param_value("nmodes", nmodes)
-            success = True
-            for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "tauB%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "G%02d" % i, d.table.item(i, 1).text()
-                )
-                success *= success1 * success2
-            if not success:
-                QMessageBox.warning(
-                    self,
-                    "Error",
-                    "Some parameter(s) could not be updated.\nPlease try again.",
-                )
-            else:
-                self.handle_actionCalculate_Theory()
-
-    def plot_modes_graph(self):
-        pass

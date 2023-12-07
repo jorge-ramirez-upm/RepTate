@@ -36,20 +36,17 @@ Module for the Upper Convected Maxwell model
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
-from RepTate.applications.ApplicationLAOS import CLApplicationLAOS, GUIApplicationLAOS
+from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
-class TheoryUCM(CmdBase):
+class TheoryUCM(QTheory):
     """Multi-mode Upper Convected Maxwell model (see Chapter 1 of :cite:`NLVE-Larson1988`):
     
     .. math::
@@ -91,20 +88,8 @@ class TheoryUCM(CmdBase):
     description = "Upper-convected Maxwell constitutive equation"
     citations = ["Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"]
     doi = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryUCM(name, parent_dataset, ax)
-
-
-class BaseTheoryUCM:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model"
     single_file = False
-    thname = TheoryUCM.thname
-    citations = TheoryUCM.citations
-    doi = TheoryUCM.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -142,6 +127,103 @@ class BaseTheoryUCM:
 
         self.MAX_MODES = 40
         self.init_flow_mode()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu(self)
+            self.shear_flow_action = menu.addAction(
+                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
+            )
+            self.extensional_flow_action = menu.addAction(
+                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
+            )
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow
+            )
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow
+            )
+        else:
+            self.function = self.calculate_UCMLAOS
+
+        self.tbutmodes = QToolButton()
+        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.get_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
+        )
+        self.edit_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
+        )
+        self.plot_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
+        )
+        self.save_modes_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
+        self.tbutmodes.setDefaultAction(self.get_modes_action)
+        self.tbutmodes.setMenu(menu)
+        tb.addWidget(self.tbutmodes)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def get_modes_reptate(self):
+        self.Qcopy_modes()
+
+    def edit_modes_window(self):
+        times, G, success = self.get_modes()
+        if not success:
+            self.logger.warning("Could not get modes successfully")
+            return
+        d = EditModesDialog(self, times, G, self.MAX_MODES)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            self.set_param_value("nmodes", nmodes)
+            success = True
+            for i in range(nmodes):
+                msg, success1 = self.set_param_value(
+                    "tauD%02d" % i, d.table.item(i, 0).text()
+                )
+                msg, success2 = self.set_param_value(
+                    "G%02d" % i, d.table.item(i, 1).text()
+                )
+                success *= success1 * success2
+            if not success:
+                QMessageBox.warning(
+                    self,
+                    "Error",
+                    "Some parameter(s) could not be updated.\nPlease try again.",
+                )
+            else:
+                self.handle_actionCalculate_Theory()
+
+    def plot_modes_graph(self):
+        pass
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -254,7 +336,7 @@ class BaseTheoryUCM:
         """Set the value of a theory parameter"""
         if name == "nmodes":
             oldn = self.parameters["nmodes"].value
-        message, success = super(BaseTheoryUCM, self).set_param_value(name, value)
+        message, success = super(TheoryUCM, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
@@ -284,107 +366,3 @@ class BaseTheoryUCM:
                     del self.parameters["tauD%02d" % i]
         return "", True
 
-
-class GUITheoryUCM(BaseTheoryUCM, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
-            self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-            menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-            )
-            self.extensional_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-            )
-            if self.flow_mode == FlowMode.shear:
-                self.tbutflow.setDefaultAction(self.shear_flow_action)
-            else:
-                self.tbutflow.setDefaultAction(self.extensional_flow_action)
-            self.tbutflow.setMenu(menu)
-            tb.addWidget(self.tbutflow)
-
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow
-            )
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow
-            )
-        else:
-            self.function = self.calculate_UCMLAOS
-
-        self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
-        )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
-        self.plot_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
-        )
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
-        self.tbutmodes.setDefaultAction(self.get_modes_action)
-        self.tbutmodes.setMenu(menu)
-        tb.addWidget(self.tbutmodes)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)
-
-    def get_modes_reptate(self):
-        self.Qcopy_modes()
-
-    def edit_modes_window(self):
-        times, G, success = self.get_modes()
-        if not success:
-            self.logger.warning("Could not get modes successfully")
-            return
-        d = EditModesDialog(self, times, G, self.MAX_MODES)
-        if d.exec_():
-            nmodes = d.table.rowCount()
-            self.set_param_value("nmodes", nmodes)
-            success = True
-            for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "G%02d" % i, d.table.item(i, 1).text()
-                )
-                success *= success1 * success2
-            if not success:
-                QMessageBox.warning(
-                    self,
-                    "Error",
-                    "Some parameter(s) could not be updated.\nPlease try again.",
-                )
-            else:
-                self.handle_actionCalculate_Theory()
-
-    def plot_modes_graph(self):
-        pass

@@ -37,20 +37,17 @@ Module for the Giesekus model for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from RepTate.core.Theory import EndComputationRequested
-from RepTate.applications.ApplicationLAOS import GUIApplicationLAOS, CLApplicationLAOS
+from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
-class TheoryGiesekus(CmdBase):
+class TheoryGiesekus(QTheory):
     """Multi-mode Giesekus Model (see Chapter 6 of :cite:`NLVE-Larson1988`):
     
     .. math::
@@ -73,20 +70,8 @@ class TheoryGiesekus(CmdBase):
     description = "Giesekus constitutive equation"
     citations = ["Giesekus H., Rheol. Acta 1966, 5, 29"]
     doi = ["http://dx.doi.org/10.1007/BF01973575"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryGiesekus(name, parent_dataset, ax) 
-
-
-class BaseTheoryGiesekus:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model'
     single_file = False
-    thname = TheoryGiesekus.thname
-    citations = TheoryGiesekus.citations
-    doi = TheoryGiesekus.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -136,6 +121,119 @@ class BaseTheoryGiesekus:
 
         self.MAX_MODES = 40
         self.init_flow_mode()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
+            self.tbutflow = QToolButton()
+            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu = QMenu(self)
+            self.shear_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
+                "Shear Flow")
+            self.extensional_flow_action = menu.addAction(
+                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+                "Extensional Flow")
+            if self.flow_mode == FlowMode.shear:
+                self.tbutflow.setDefaultAction(self.shear_flow_action)
+            else:
+                self.tbutflow.setDefaultAction(self.extensional_flow_action)
+            self.tbutflow.setMenu(menu)
+            tb.addWidget(self.tbutflow)
+            connection_id = self.shear_flow_action.triggered.connect(
+                self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(
+                self.select_extensional_flow)
+        else:
+            self.function = self.calculate_giesekusLAOS
+
+        self.tbutmodes = QToolButton()
+        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.get_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
+            "Get Modes")
+        self.edit_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
+            "Edit Modes")
+        self.plot_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+            "Plot Modes")
+        self.save_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")
+        self.tbutmodes.setDefaultAction(self.get_modes_action)
+        self.tbutmodes.setMenu(menu)
+        tb.addWidget(self.tbutmodes)
+
+        #SpinBox "n-stretch modes"
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(
+            0, self.parameters["nmodes"].value)  # min and max number of modes
+        self.spinbox.setSuffix(" stretch")
+        self.spinbox.setToolTip("Number of stretching modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        tb.addWidget(self.spinbox)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.get_modes_action.triggered.connect(
+            self.get_modes_reptate)
+        connection_id = self.edit_modes_action.triggered.connect(
+            self.edit_modes_window)
+        connection_id = self.plot_modes_action.triggered.connect(
+            self.plot_modes_graph)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        nmodes = self.parameters["nmodes"].value
+        self.set_param_value("nstretch", min(nmodes, value))
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def get_modes_reptate(self):
+        self.Qcopy_modes()
+
+    def edit_modes_window(self):
+        times, G, success = self.get_modes()
+        if not success:
+            self.logger.warning("Could not get modes successfully")
+            return
+        d = EditModesDialog(self, times, G, self.MAX_MODES)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            self.set_param_value("nmodes", nmodes)
+            self.set_param_value("nstretch", nmodes)
+            success = True
+            for i in range(nmodes):
+                msg, success1 = self.set_param_value("tauD%02d" % i,
+                                                     d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i,
+                                                     d.table.item(i, 1).text())
+                success *= success1 * success2
+            if not success:
+                QMessageBox.warning(
+                    self, 'Error',
+                    'Some parameter(s) could not be updated.\nPlease try again.'
+                )
+            else:
+                self.handle_actionCalculate_Theory()
+
+    def plot_modes_graph(self):
+        pass
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -406,124 +504,3 @@ class BaseTheoryGiesekus:
                     del self.parameters["alpha%02d" % i]
         return '', True
 
-
-
-class GUITheoryGiesekus(BaseTheoryGiesekus, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        if not isinstance(parent_dataset.parent_application, GUIApplicationLAOS):
-            self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-            menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(':/Icon8/Images/new_icons/icon-shear.png'),
-                "Shear Flow")
-            self.extensional_flow_action = menu.addAction(
-                QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-                "Extensional Flow")
-            if self.flow_mode == FlowMode.shear:
-                self.tbutflow.setDefaultAction(self.shear_flow_action)
-            else:
-                self.tbutflow.setDefaultAction(self.extensional_flow_action)
-            self.tbutflow.setMenu(menu)
-            tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow)
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow)
-        else:
-            self.function = self.calculate_giesekusLAOS
-
-        self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes")
-        self.edit_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
-            "Edit Modes")
-        self.plot_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-            "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")
-        self.tbutmodes.setDefaultAction(self.get_modes_action)
-        self.tbutmodes.setMenu(menu)
-        tb.addWidget(self.tbutmodes)
-
-        #SpinBox "n-stretch modes"
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(
-            0, self.parameters["nmodes"].value)  # min and max number of modes
-        self.spinbox.setSuffix(" stretch")
-        self.spinbox.setToolTip("Number of stretching modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
-        tb.addWidget(self.spinbox)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.get_modes_action.triggered.connect(
-            self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(
-            self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(
-            self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def handle_spinboxValueChanged(self, value):
-        nmodes = self.parameters["nmodes"].value
-        self.set_param_value("nstretch", min(nmodes, value))
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)
-
-    def get_modes_reptate(self):
-        self.Qcopy_modes()
-
-    def edit_modes_window(self):
-        times, G, success = self.get_modes()
-        if not success:
-            self.logger.warning("Could not get modes successfully")
-            return
-        d = EditModesDialog(self, times, G, self.MAX_MODES)
-        if d.exec_():
-            nmodes = d.table.rowCount()
-            self.set_param_value("nmodes", nmodes)
-            self.set_param_value("nstretch", nmodes)
-            success = True
-            for i in range(nmodes):
-                msg, success1 = self.set_param_value("tauD%02d" % i,
-                                                     d.table.item(i, 0).text())
-                msg, success2 = self.set_param_value("G%02d" % i,
-                                                     d.table.item(i, 1).text())
-                success *= success1 * success2
-            if not success:
-                QMessageBox.warning(
-                    self, 'Error',
-                    'Some parameter(s) could not be updated.\nPlease try again.'
-                )
-            else:
-                self.handle_actionCalculate_Theory()
-
-    def plot_modes_graph(self):
-        pass

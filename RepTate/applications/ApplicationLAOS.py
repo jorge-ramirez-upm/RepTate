@@ -35,8 +35,6 @@
 Large Amplitude Oscillatory Shear
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
@@ -44,23 +42,13 @@ import numpy as np
 from PySide6.QtWidgets import QSpinBox
 
 
-class ApplicationLAOS(CmdBase):
+class ApplicationLAOS(QApplicationWindow):
     """Application for Large Oscillatory Shear data"""
 
     appname = "LAOS"
     description = "LAOS Application"  # used in the command-line Reptate
     extension = "laos"
-
-    def __new__(cls, name="LAOS", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationLAOS(name, parent)
-
-
-class BaseApplicationLAOS:
-    """Base Class for both GUI"""
-
     # html_help_file = ''
-    appname = ApplicationLAOS.appname
 
     def __init__(self, name="LAOS", parent=None, **kwargs):
         """**Constructor**"""
@@ -284,6 +272,74 @@ class BaseApplicationLAOS:
 
         # set the current view
         self.set_views()
+
+        self.add_HHSR_widget()
+        self.set_HHSR_widget_visible(False)
+        self.add_PPQC_widget()
+        self.set_PPQC_widget_visible(False)
+
+    def add_HHSR_widget(self):
+        """Add spinbox for HHSR"""
+        self.sb_HHSR = QSpinBox()
+        self.sb_HHSR.setRange(1, 99)
+        self.sb_HHSR.setSingleStep(2)
+        self.sb_HHSR.setValue(self.HHSR)
+        self.sb_HHSR.setToolTip("Highest harmonic to consider in stress reconstruction")
+        self.sb_HHSR.valueChanged.connect(self.change_HHSR)
+        self.viewLayout.insertWidget(3, self.sb_HHSR)
+
+    def change_HHSR(self, val):
+        """Change the value of the HHSR.
+        Called when the spinbox value is changed"""
+        self.HHSR = val
+        self.update_all_ds_plots()
+
+    def set_HHSR_widget_visible(self, state):
+        """Show/Hide the extra widget "HHSR" """
+        self.sb_HHSR.setVisible(state)
+
+    def add_PPQC_widget(self):
+        """Add spinbox for HHSR"""
+        self.sb_PPQC = QSpinBox()
+        self.sb_PPQC.setRange(20, 500)
+        self.sb_PPQC.setSingleStep(10)
+        self.sb_PPQC.setValue(self.PPQC)
+        self.sb_PPQC.setToolTip(
+            "Points per quarter cycle in FT reconstruction (20-500)"
+        )
+        self.sb_PPQC.valueChanged.connect(self.change_PPQC)
+        self.viewLayout.insertWidget(3, self.sb_PPQC)
+
+    def change_PPQC(self, val):
+        """Change the value of the PPQC.
+        Called when the spinbox value is changed"""
+        self.PPQC = val
+        self.update_all_ds_plots()
+
+    def set_PPQC_widget_visible(self, state):
+        """Show/Hide the extra widget "PPQC" """
+        self.sb_PPQC.setVisible(state)
+
+    def set_view_tools(self, view_name):
+        """Show/Hide extra view widgets depending on the current view"""
+        if view_name in [
+            "sigma(gamma) FILT",
+            "FFT spectrum",
+            "sigma(gdot) FILT",
+            "sigma(gamma) ANLS",
+            "sigma(gdot) ANLS",
+            "Cheb elastic",
+            "Cheb viscous",
+        ]:
+            self.set_HHSR_widget_visible(True)
+            self.set_PPQC_widget_visible(True)
+        else:
+            try:
+                self.set_HHSR_widget_visible(False)
+                self.set_PPQC_widget_visible(False)
+            except AttributeError:
+                pass
+
 
     def view_sigmatgammatRAW(self, dt, file_parameters):
         """Stress & strain vs time"""
@@ -858,77 +914,3 @@ class BaseApplicationLAOS:
 
         return gam_recon, tau_recon
 
-
-class GUIApplicationLAOS(BaseApplicationLAOS, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="LAOS", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
-        self.add_HHSR_widget()
-        self.set_HHSR_widget_visible(False)
-        self.add_PPQC_widget()
-        self.set_PPQC_widget_visible(False)
-
-    def add_HHSR_widget(self):
-        """Add spinbox for HHSR"""
-        self.sb_HHSR = QSpinBox()
-        self.sb_HHSR.setRange(1, 99)
-        self.sb_HHSR.setSingleStep(2)
-        self.sb_HHSR.setValue(self.HHSR)
-        self.sb_HHSR.setToolTip("Highest harmonic to consider in stress reconstruction")
-        self.sb_HHSR.valueChanged.connect(self.change_HHSR)
-        self.viewLayout.insertWidget(3, self.sb_HHSR)
-
-    def change_HHSR(self, val):
-        """Change the value of the HHSR.
-        Called when the spinbox value is changed"""
-        self.HHSR = val
-        self.update_all_ds_plots()
-
-    def set_HHSR_widget_visible(self, state):
-        """Show/Hide the extra widget "HHSR" """
-        self.sb_HHSR.setVisible(state)
-
-    def add_PPQC_widget(self):
-        """Add spinbox for HHSR"""
-        self.sb_PPQC = QSpinBox()
-        self.sb_PPQC.setRange(20, 500)
-        self.sb_PPQC.setSingleStep(10)
-        self.sb_PPQC.setValue(self.PPQC)
-        self.sb_PPQC.setToolTip(
-            "Points per quarter cycle in FT reconstruction (20-500)"
-        )
-        self.sb_PPQC.valueChanged.connect(self.change_PPQC)
-        self.viewLayout.insertWidget(3, self.sb_PPQC)
-
-    def change_PPQC(self, val):
-        """Change the value of the PPQC.
-        Called when the spinbox value is changed"""
-        self.PPQC = val
-        self.update_all_ds_plots()
-
-    def set_PPQC_widget_visible(self, state):
-        """Show/Hide the extra widget "PPQC" """
-        self.sb_PPQC.setVisible(state)
-
-    def set_view_tools(self, view_name):
-        """Show/Hide extra view widgets depending on the current view"""
-        if view_name in [
-            "sigma(gamma) FILT",
-            "FFT spectrum",
-            "sigma(gdot) FILT",
-            "sigma(gamma) ANLS",
-            "sigma(gdot) ANLS",
-            "Cheb elastic",
-            "Cheb viscous",
-        ]:
-            self.set_HHSR_widget_visible(True)
-            self.set_PPQC_widget_visible(True)
-        else:
-            try:
-                self.set_HHSR_widget_visible(False)
-                self.set_PPQC_widget_visible(False)
-            except AttributeError:
-                pass
