@@ -2,7 +2,7 @@
 Version History
 ===============
 
-Release 1.2.0 - 20231207
+Release 1.2.1 - 20231207
 ========================
 - Removed spinbox to increase/decrease number of views (giving problems)
 - Removed mplcursors (data can be tracked by showing the Figure Toolbar)
