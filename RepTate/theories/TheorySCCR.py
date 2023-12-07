@@ -37,14 +37,11 @@ Module for the SCCR theory for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from math import sqrt, exp, pow
 import time
@@ -55,7 +52,7 @@ from PySide6.QtCore import Signal
 from RepTate.theories.theory_helpers import FlowMode
 
 
-class TheorySCCR(CmdBase):
+class TheorySCCR(QTheory):
     """Full SCCR theory for the Non-linear transient flow of linear entangled polymers.
         
     * **Parameters**
@@ -70,20 +67,8 @@ class TheorySCCR(CmdBase):
     description = "SCCR theory for linear entangled polymers"
     citations = ["Graham, R.S. et al., J. Rheol., 2003, 47, 1171-1200"]
     doi = ["http://dx.doi.org/10.1122/1.1595099"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheorySCCR(name, parent_dataset, ax)
-
-
-class BaseTheorySCCR:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory"
     single_file = False
-    thname = TheorySCCR.thname
-    citations = TheorySCCR.citations
-    doi = TheorySCCR.doi
 
     signal_get_MW = Signal(object)
 
@@ -158,6 +143,73 @@ class BaseTheorySCCR:
         self.init_flow_mode()
         self.get_material_parameters()
         self.autocalculate = False
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutflow = QToolButton()
+        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.shear_flow_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
+        )
+        self.extensional_flow_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
+        )
+        if self.flow_mode == FlowMode.shear:
+            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        else:
+            self.tbutflow.setDefaultAction(self.extensional_flow_action)
+        self.tbutflow.setMenu(menu)
+        tb.addWidget(self.tbutflow)
+
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, 5)  # min and max number of modes
+        self.spinbox.setPrefix("N=")
+        self.spinbox.setSuffix("*Z")
+        self.spinbox.setToolTip("Precision of SCCR Calculation")
+        self.spinbox.setValue(self.parameters["N"].value)
+        self.spinbox.setSingleStep(2)
+        tb.addWidget(self.spinbox)
+
+        self.recommendedN = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-light-on-N.png"),
+            "Recommended N value",
+        )
+        self.recommendedN.setCheckable(True)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(
+            self.select_extensional_flow
+        )
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.recommendedN.triggered.connect(self.handle_recommendedN)
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def handle_recommendedN(self, checked):
+        self.spinbox.setEnabled(not checked)
+        self.set_param_value("recommendedN", checked)
+
+    def handle_spinboxValueChanged(self, value):
+        self.set_param_value("N", value)
+
+    def set_extra_data(self, extra_data):
+        """Set extra data when loading project"""
+        self.spinbox.setValue(self.parameters["N"].value)
+        self.recommendedN.setChecked(self.parameters["recommendedN"].value)
+        self.handle_recommendedN(self.parameters["recommendedN"].value)
 
     def launch_get_MW_dialog(self):
         title = 'Missing "Mw" value'
@@ -444,76 +496,3 @@ class BaseTheorySCCR:
                 tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
 
 
-class GUITheorySCCR(BaseTheorySCCR, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
-        else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
-
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, 5)  # min and max number of modes
-        self.spinbox.setPrefix("N=")
-        self.spinbox.setSuffix("*Z")
-        self.spinbox.setToolTip("Precision of SCCR Calculation")
-        self.spinbox.setValue(self.parameters["N"].value)
-        self.spinbox.setSingleStep(2)
-        tb.addWidget(self.spinbox)
-
-        self.recommendedN = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-light-on-N.png"),
-            "Recommended N value",
-        )
-        self.recommendedN.setCheckable(True)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.recommendedN.triggered.connect(self.handle_recommendedN)
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)
-
-    def handle_recommendedN(self, checked):
-        self.spinbox.setEnabled(not checked)
-        self.set_param_value("recommendedN", checked)
-
-    def handle_spinboxValueChanged(self, value):
-        self.set_param_value("N", value)
-
-    def set_extra_data(self, extra_data):
-        """Set extra data when loading project"""
-        self.spinbox.setValue(self.parameters["N"].value)
-        self.recommendedN.setChecked(self.parameters["recommendedN"].value)
-        self.handle_recommendedN(self.parameters["recommendedN"].value)

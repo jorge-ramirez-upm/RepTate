@@ -466,7 +466,7 @@ class TheoryGiesekus(QTheory):
         if (name == "nmodes"):
             oldn = self.parameters["nmodes"].value
             self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryGiesekus, self).set_param_value(
+        message, success = super(TheoryGiesekus, self).set_param_value(
             name, value)
         if not success:
             return message, success

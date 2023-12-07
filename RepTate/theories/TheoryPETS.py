@@ -37,21 +37,18 @@ Module for the PETS theory for the non-linear flow of entangled polymers.
 """
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from RepTate.core.Theory import EndComputationRequested
 from RepTate.theories.theory_helpers import FlowMode
 
 
-class TheoryPETS(CmdBase):
+class TheoryPETS(QTheory):
     """Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of 
 entangled telechelic (with sticky functional groups at the chain-ends) star polymers. 
 
@@ -72,20 +69,8 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
     description = "Preaveraged model for entangled telechelic star polymers"
     citations = ["Boudara, V.A.H, and D.J. Read, J. Rheol., 61, 339-362 (2017)"]
     doi = ["http://dx.doi.org/10.1122/1.4974908"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryPETS(name, parent_dataset, ax)
-
-
-class BaseTheoryPETS:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation"
     single_file = False
-    thname = TheoryPETS.thname
-    citations = TheoryPETS.citations
-    doi = TheoryPETS.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -187,6 +172,91 @@ class BaseTheoryPETS:
 
         self.MAX_MODES = 40
         self.init_flow_mode()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutflow = QToolButton()
+        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.shear_flow_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
+        )
+        self.extensional_flow_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
+        )
+        if self.flow_mode == FlowMode.shear:
+            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        else:
+            self.tbutflow.setDefaultAction(self.extensional_flow_action)
+        self.tbutflow.setMenu(menu)
+        tb.addWidget(self.tbutflow)
+
+        # Show LVE button
+        self.linearenvelope = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
+        )
+        self.linearenvelope.setCheckable(True)
+        self.linearenvelope.setChecked(False)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(
+            self.select_extensional_flow
+        )
+        connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
+
+    def Qhide_theory_extras(self, show):
+        """Uncheck the LVE button. Called when curent theory is changed"""
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
+
+    def show_linear_envelope(self, state):
+        self.extra_graphic_visible(state)
+        # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        # self.plot_theory_stuff()
+        # self.parent_dataset.parent_application.update_plot()
+
+    def plot_theory_stuff(self):
+        """Plot theory helpers"""
+        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp.num_columns = 2
+        data_table_tmp.num_rows = 100
+        data_table_tmp.data = np.zeros((100, 2))
+
+        times = np.logspace(-2, 3, 100)
+        data_table_tmp.data[:, 0] = times
+        data_table_tmp.data[:, 1] = 0
+        fparamaux = {}
+        fparamaux["gdot"] = 1e-8
+
+        G = self.parameters["G"].value
+        tauD = self.parameters["tauD"].value
+        data_table_tmp.data[:, 1] += (
+            G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
+        )
+        if self.flow_mode == FlowMode.uext:
+            data_table_tmp.data[:, 1] *= 3.0
+        view = self.parent_dataset.parent_application.current_view
+        try:
+            x, y, success = view.view_proc(data_table_tmp, fparamaux)
+        except TypeError as e:
+            print(e)
+            return
+        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
@@ -481,94 +551,3 @@ class BaseTheoryPETS:
             #  build stress array
             tt.data[:, 1] = G * (f * (QAxx - QAyy) + (1 - f) * (QDxx - QDyy))
 
-
-class GUITheoryPETS(BaseTheoryPETS, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
-        else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
-
-        # Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
-        )
-        self.linearenvelope.setCheckable(True)
-        self.linearenvelope.setChecked(False)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
-        connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
-
-    def Qhide_theory_extras(self, show):
-        """Uncheck the LVE button. Called when curent theory is changed"""
-        if show:
-            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
-        else:
-            self.LVEenvelopeseries.set_visible(False)
-
-    def show_linear_envelope(self, state):
-        self.extra_graphic_visible(state)
-        # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
-        # self.plot_theory_stuff()
-        # self.parent_dataset.parent_application.update_plot()
-
-    def plot_theory_stuff(self):
-        """Plot theory helpers"""
-        data_table_tmp = DataTable(self.axarr)
-        data_table_tmp.num_columns = 2
-        data_table_tmp.num_rows = 100
-        data_table_tmp.data = np.zeros((100, 2))
-
-        times = np.logspace(-2, 3, 100)
-        data_table_tmp.data[:, 0] = times
-        data_table_tmp.data[:, 1] = 0
-        fparamaux = {}
-        fparamaux["gdot"] = 1e-8
-
-        G = self.parameters["G"].value
-        tauD = self.parameters["tauD"].value
-        data_table_tmp.data[:, 1] += (
-            G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
-        )
-        if self.flow_mode == FlowMode.uext:
-            data_table_tmp.data[:, 1] *= 3.0
-        view = self.parent_dataset.parent_application.current_view
-        try:
-            x, y, success = view.view_proc(data_table_tmp, fparamaux)
-        except TypeError as e:
-            print(e)
-            return
-        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)

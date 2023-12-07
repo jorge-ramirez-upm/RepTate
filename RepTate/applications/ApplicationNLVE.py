@@ -43,23 +43,13 @@ from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationNLVE(CmdBase):
+class ApplicationNLVE(QApplicationWindow):
     """Application to Analyze Start up of Nonlinear flow"""
 
     appname = "NLVE"
     description = "Non-Linear Flow"
     extension = "shear uext"
-
-    def __new__(cls, name="NLVE", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationNLVE(name, parent)
-
-
-class BaseApplicationNLVE:
-    """Base Class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html"
-    appname = ApplicationNLVE.appname
 
     def __init__(self, name="NLVE", parent=None):
         """**Constructor**"""
@@ -294,11 +284,3 @@ class BaseApplicationNLVE:
         x[0, 0] = flow_rate
         y[0, 0] = dt.data[-1, 1]
         return x, y, True
-
-
-class GUIApplicationNLVE(BaseApplicationNLVE, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="NLVE", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

@@ -38,21 +38,19 @@ by Chinmay Das et al.
 import os
 import numpy as np
 import RepTate
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 import time
 
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
 from PySide6.QtWidgets import QApplication, QToolBar, QToolButton, QMenu
-from PySide6.QtWidgets import QDialog, QFormLayout, QWidget, QLineEdit, QLabel, QComboBox, QDialogButtonBox, QFileDialog, QMessageBox, QTextEdit
+from PySide6.QtWidgets import QDialog, QFileDialog, QMessageBox
 from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtCore import QUrl, Signal, QSize
 from RepTate.theories.theory_helpers import FlowMode
 from RepTate.gui import bob_LVE
 
-class TheoryBobNLVE(CmdBase):
+class TheoryBobNLVE(QTheory):
     """Predict the nonlinear rheology of "branch-on-branch" polymers, read from a polymer configuration file,
     using BoB v2.5 (Chinmay Das and Daniel Read).
     Polymer configuration files can be generated from the React application in RepTate.
@@ -63,19 +61,8 @@ class TheoryBobNLVE(CmdBase):
     description = 'Branch-On-Branch rheology'
     citations = ['Das C. et al., J. Rheol. 2006, 50, 207-234']
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
-
-    def __new__(cls, name='', parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryBobNLVE(name, parent_dataset, axarr) 
-
-
-class BaseTheoryBobNLVE:
-    """Base class for both GUI"""
     html_help_file = 'https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve'
     single_file = False  # False if the theory can be applied to multiple files simultaneously
-    thname = TheoryBobNLVE.thname
-    citations = TheoryBobNLVE.citations
-    doi = TheoryBobNLVE.doi 
 
     signal_param_dialog = Signal(object)
 
@@ -96,85 +83,6 @@ class BaseTheoryBobNLVE:
         self.inp_counter = 0 # counter for the 'virtual' input file for BoB
         self.virtual_input_file = [] # 'virtual' input file for BoB
 
-    def init_flow_mode(self):
-        """Find if data files are shear or extension"""
-        try:
-            f = self.theory_files()[0]
-            if f.file_type.extension == 'shear':
-                self.flow_mode = FlowMode.shear
-            else:
-                self.flow_mode = FlowMode.uext
-        except Exception as e:
-            print("in RP init:", e)
-            self.flow_mode = FlowMode.shear  #default mode: shear
-
-    def request_stop_computations(self):
-        """Called when user wants to terminate the current computation"""
-        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
-        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
-
-    def do_error(self, line=""):
-        """This theory does not calculate the error"""
-        pass
-
-
-    def calculate(self, f=None):
-        """Create polymer configuration file and calculate distribution characteristics"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        self.freqmax = 1.0 / f.data_table.mincol(0)
-        self.freqmin = 1.0 / f.data_table.maxcol(0)
-        
-        #show form if not filled yet
-        if not self.success_dialog:
-            self.signal_param_dialog.emit(self)
-            self.success_dialog = None
-            while self.success_dialog is None:  # wait for the end of QDialog
-                # TODO: find a better way to wait for the dialog thread to finish
-                time.sleep(0.5)
-        if not self.success_dialog:
-            self.Qprint('Operation cancelled')
-            return
-        QApplication.processEvents()
-        self.bch.link_c_callback()
-        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
-        
-        # Run BoB C++ code
-        self.start_time_cal = time.time()
-        flowrate = float(f.file_parameters["gdot"])
-        tmin = ft.data[0, 0]
-        tmax = ft.data[-1, 0]
-        is_shear = self.flow_mode == FlowMode.shear
-        self.Qprint("<hr><h3>rate %.3g s<sup>-1</sup></h3>" % flowrate)
-        try:
-            time_arr, stress_arr = self.bch.return_bob_nlve(self.argv, flowrate, tmin, tmax, is_shear)
-        except BobError:
-            self.Qprint('Operation cancelled')
-            return
-
-        #copy results to RepTate data file
-        if time:
-            tt.num_columns = ft.num_columns
-            tt.num_rows = len(time_arr)
-            tt.data = np.zeros((tt.num_rows, tt.num_columns))
-            tt.data[:, 0] = time_arr[:]
-            tt.data[:, 1] = stress_arr[:]
-            # tt.data[:, 2] =
-
-    def do_fit(self, line=''):
-        self.Qprint("Fitting not allowed in this theory")
-
-
-
-class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name='', parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
         # temp_dir = os.path.join('theories', 'temp')
         # #create temp folder if does not exist
         # if not os.path.exists(temp_dir):
@@ -356,3 +264,74 @@ class GUITheoryBobNLVE(BaseTheoryBobNLVE, QTheory):
             return True
         except UnicodeEncodeError:
             return False
+        
+    def init_flow_mode(self):
+        """Find if data files are shear or extension"""
+        try:
+            f = self.theory_files()[0]
+            if f.file_type.extension == 'shear':
+                self.flow_mode = FlowMode.shear
+            else:
+                self.flow_mode = FlowMode.uext
+        except Exception as e:
+            print("in RP init:", e)
+            self.flow_mode = FlowMode.shear  #default mode: shear
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint('<font color=red><b>Stop current calculation requested</b></font>')
+        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
+
+    def do_error(self, line=""):
+        """This theory does not calculate the error"""
+        pass
+
+
+    def calculate(self, f=None):
+        """Create polymer configuration file and calculate distribution characteristics"""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        self.freqmax = 1.0 / f.data_table.mincol(0)
+        self.freqmin = 1.0 / f.data_table.maxcol(0)
+        
+        #show form if not filled yet
+        if not self.success_dialog:
+            self.signal_param_dialog.emit(self)
+            self.success_dialog = None
+            while self.success_dialog is None:  # wait for the end of QDialog
+                # TODO: find a better way to wait for the dialog thread to finish
+                time.sleep(0.5)
+        if not self.success_dialog:
+            self.Qprint('Operation cancelled')
+            return
+        QApplication.processEvents()
+        self.bch.link_c_callback()
+        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
+        
+        # Run BoB C++ code
+        self.start_time_cal = time.time()
+        flowrate = float(f.file_parameters["gdot"])
+        tmin = ft.data[0, 0]
+        tmax = ft.data[-1, 0]
+        is_shear = self.flow_mode == FlowMode.shear
+        self.Qprint("<hr><h3>rate %.3g s<sup>-1</sup></h3>" % flowrate)
+        try:
+            time_arr, stress_arr = self.bch.return_bob_nlve(self.argv, flowrate, tmin, tmax, is_shear)
+        except BobError:
+            self.Qprint('Operation cancelled')
+            return
+
+        #copy results to RepTate data file
+        if time:
+            tt.num_columns = ft.num_columns
+            tt.num_rows = len(time_arr)
+            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+            tt.data[:, 0] = time_arr[:]
+            tt.data[:, 1] = stress_arr[:]
+            # tt.data[:, 2] =
+
+    def do_fit(self, line=''):
+        self.Qprint("Fitting not allowed in this theory")

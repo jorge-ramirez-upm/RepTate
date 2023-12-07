@@ -38,15 +38,12 @@ Module for the Rolie-Double-Poly theory for the non-linear flow of entangled pol
 import os
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from math import sqrt
 import time
@@ -66,7 +63,7 @@ from RepTate.theories.theory_helpers import (
 )
 
 
-class TheoryRolieDoublePoly(CmdBase):
+class TheoryRolieDoublePoly(QTheory):
     """Rolie-Double-Poly equations for the nonlinear predictions of polydisperse melts of entangled linear polymers
 
     * **Function**
@@ -106,19 +103,8 @@ class TheoryRolieDoublePoly(CmdBase):
     description = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
     citations = ["Boudara V.A.H. et al., J. Rheol. 63, 71-91 (2019)"]
     doi = ["http://dx.doi.org/10.1122/1.5052320"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryRolieDoublePoly(name, parent_dataset, ax)
-
-class BaseTheoryRolieDoublePoly:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations"
     single_file = False
-    thname = TheoryRolieDoublePoly.thname
-    citations = TheoryRolieDoublePoly.citations
-    doi = TheoryRolieDoublePoly.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -229,329 +215,6 @@ class BaseTheoryRolieDoublePoly:
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
         self.init_flow_mode()
-
-    def set_extra_data(self, extra_data):
-        """Set extra data when loading project"""
-        self.MWD_m = extra_data["MWD_m"]
-        self.MWD_phi = extra_data["MWD_phi"]
-        self.Zeff = extra_data["Zeff"]
-
-        # FENE button
-        self.handle_with_fene_button(extra_data["with_fene"])
-
-        # G button
-        if extra_data["with_gcorr"]:
-            self.with_gcorr == GcorrMode.with_gcorr
-            self.with_gcorr_button.setChecked(True)
-
-    def get_extra_data(self):
-        """Set extra_data when saving project"""
-        self.extra_data["MWD_m"] = self.MWD_m
-        self.extra_data["MWD_phi"] = self.MWD_phi
-        self.extra_data["Zeff"] = self.Zeff
-        self.extra_data["with_fene"] = self.with_fene == FeneMode.with_fene
-        self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
-
-    def init_flow_mode(self):
-        """Find if data files are shear or extension"""
-        try:
-            f = self.theory_files()[0]
-            if f.file_type.extension == "shear":
-                self.flow_mode = FlowMode.shear
-            else:
-                self.flow_mode = FlowMode.uext
-        except Exception as e:
-            print("in RP init:", e)
-            self.flow_mode = FlowMode.shear  # default mode: shear
-
-    def destructor(self):
-        """Called when the theory tab is closed"""
-        self.show_theory_extras(False)
-        self.ax.lines.remove(self.LVEenvelopeseries)
-
-    def show_theory_extras(self, show=False):
-        """Called when the active theory is changed"""
-        self.Qhide_theory_extras(show)
-        # self.extra_graphic_visible(show)
-
-    def extra_graphic_visible(self, state):
-        """Change visibility of graphic helpers"""
-        self.view_LVEenvelope = state
-        self.LVEenvelopeseries.set_visible(state)
-        self.parent_dataset.parent_application.update_plot()
-
-    def get_modes(self):
-        """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
-        tau = np.zeros(nmodes)
-        G = np.zeros(nmodes)
-        GN0 = self.parameters["GN0"].value
-        for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * self.parameters["phi%02d" % i].value
-        return tau, G, True
-
-    def set_modes_from_mwd(self, m, phi):
-        """Set modes from MWD"""
-        Me = self.parameters["Me"].value
-        taue = self.parameters["tau_e"].value
-        res = Dilution(m, phi, taue, Me, self).res
-        if res[0] == False:
-            self.Qprint("Could not set modes from MDW")
-            return
-        _, phi, taus, taud = res
-        nmodes = len(phi)
-        self.set_param_value("nmodes", nmodes)
-        for i in range(nmodes):
-            self.set_param_value("phi%02d" % i, phi[i])
-            self.set_param_value("tauR%02d" % i, taus[i])
-            self.set_param_value("tauD%02d" % i, taud[i])
-        self.Qprint("Got %d modes from MWD" % nmodes)
-        self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
-
-    def set_modes(self, tau, G):
-        """Set the values of Maxwell Modes from another theory"""
-        nmodes = len(tau)
-        self.set_param_value("nmodes", nmodes)
-        sum_G = G.sum()
-
-        for i in range(nmodes):
-            self.set_param_value("tauD%02d" % i, tau[i])
-            self.set_param_value("phi%02d" % i, G[i] / sum_G)
-        self.update_parameter_table()
-        return True
-
-    def fZ(self, z):
-        """CLF correction function Likthman-McLeish (2002)"""
-        return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
-
-    def gZ(self, z):
-        """CLF correction function for modulus Likthman-McLeish (2002)"""
-        return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
-
-    def sigmadot_shear(self, sigma, t, p):
-        """Rolie-Poly differential equation under *shear* flow
-        with stretching and finite extensibility if selected"""
-        if self.stop_theory_flag:
-            raise EndComputationRequested
-        tmax = p[-1]
-        if t >= tmax * self.count:
-            self.Qprint("--", end="")
-            self.count += 0.2
-
-        # Calling C function:
-        if self.with_fene == FeneMode.with_fene:
-            wfene = 1
-        else:
-            wfene = 0
-        return rpch.compute_derivs_shear(sigma, p, t, wfene)
-
-    def sigmadot_uext(self, sigma, t, p):
-        """Rolie-Poly differential equation under *uniaxial elongational* flow
-        with stretching and finite extensibility if selecter"""
-        if self.stop_theory_flag:
-            raise EndComputationRequested
-        tmax = p[-1]
-        if t >= tmax * self.count:
-            self.Qprint("--", end="")
-            # self.Qprint("%4d%% done" % (self.count*100))
-            self.count += 0.2
-
-        # Calling C function:
-        if self.with_fene == FeneMode.with_fene:
-            wfene = 1
-        else:
-            wfene = 0
-        return rpch.compute_derivs_uext(sigma, p, t, wfene)
-
-    def calculate_fene(self, l_square, lmax):
-        """calculate finite extensibility function value"""
-        ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
-        l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
-        return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
-
-    def RolieDoublePoly(self, f=None):
-        """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
-
-        # ODE solver parameters
-        abserr = 1.0e-8
-        relerr = 1.0e-8
-        t = ft.data[:, 0]
-        t = np.concatenate([[0], t])
-        # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta = self.parameters["beta"].value
-        delta = self.parameters["delta"].value
-        lmax = self.parameters["lmax"].value
-        flow_rate = float(f.file_parameters["gdot"])
-        nmodes = self.parameters["nmodes"].value
-
-        # flow geometry
-        if self.flow_mode == FlowMode.shear:
-            sigma0 = [1.0, 1.0, 0.0] * (nmodes * nmodes)  # sxx_ij, syy_ij, sxy_ij
-            pde_stretch = self.sigmadot_shear
-        elif self.flow_mode == FlowMode.uext:
-            sigma0 = [1.0, 1.0] * (nmodes * nmodes)  # sxx_ij, syy_ij
-            pde_stretch = self.sigmadot_uext
-        else:
-            return
-
-        taud_arr = []
-        taus_arr = []
-        phi_arr = []
-        for i in range(nmodes):
-            taud_arr.append(self.parameters["tauD%02d" % i].value)
-            taus_arr.append(self.parameters["tauR%02d" % i].value)
-            phi_arr.append(self.parameters["phi%02d" % i].value)
-        tmax = t[-1]
-        p = [nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta, flow_rate, tmax]
-        self.count = 0.2
-        self.Qprint("Rate %.3g<br>  0%% " % flow_rate, end="")
-        try:
-            sig = odeint(pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
-        except EndComputationRequested:
-            return
-        self.Qprint(" 100%")
-        # sig.shape is (len(t), 3*n^2) in shear
-        if self.flow_mode == FlowMode.shear:
-            c = 3
-            sig = sig[1:, :]
-            nt = len(sig)
-            lsq = np.zeros((nt, nmodes))
-            if self.with_fene == FeneMode.with_fene:
-                # calculate lambda^2
-                for i in range(nmodes):
-                    if self.stop_theory_flag:
-                        break
-                    I = c * nmodes * i
-                    trace_arr = np.zeros(nt)
-                    for j in range(nmodes):
-                        # trace_arr += phi_arr[j] * (sxx_t[:, I + j] + 2 * syy_t[:, I + j])
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
-                    lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
-
-            for i in range(nmodes):
-                if self.stop_theory_flag:
-                    break
-                I = c * nmodes * i
-                sig_i = np.zeros(nt)
-                for j in range(nmodes):
-                    sig_i += phi_arr[j] * sig[:, I + c * j + 2]
-
-                if self.with_fene == FeneMode.with_fene:
-                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
-                if self.with_gcorr == GcorrMode.with_gcorr:
-                    sig_i *= self.gZ(self.Zeff[i])
-                tt.data[:, 1] += phi_arr[i] * sig_i
-            tt.data[:, 1] *= self.parameters["GN0"].value
-
-        if self.flow_mode == FlowMode.uext:
-            # every 2 component we find xx, yy, starting at 0, or 1; and remove t=0
-            # sxx_t = sig[1:, 0::2] # len(t) - 1 rows and n^2 cols
-            # syy_t = sig[1:, 1::2] # len(t) - 1 rows and n^2 cols
-
-            # nt = len(sxx_t)
-            c = 2
-            sig = sig[1:, :]
-            nt = len(sig)
-            lsq = np.zeros((nt, nmodes))
-            if self.with_fene == FeneMode.with_fene:
-                for i in range(nmodes):
-                    if self.stop_theory_flag:
-                        break
-                    I = c * nmodes * i
-                    trace_arr = np.zeros(nt)
-                    for j in range(nmodes):
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
-                    lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
-
-            for i in range(nmodes):
-                if self.stop_theory_flag:
-                    break
-                I = c * nmodes * i
-                sig_i = np.zeros(nt)
-                for j in range(nmodes):
-                    sig_i += phi_arr[j] * (sig[:, I + c * j] - sig[:, I + c * j + 1])
-
-                if self.with_fene == FeneMode.with_fene:
-                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
-                if self.with_gcorr == GcorrMode.with_gcorr:
-                    sig_i *= self.gZ(self.Zeff[i])
-                tt.data[:, 1] += phi_arr[i] * sig_i
-
-            tt.data[:, 1] *= self.parameters["GN0"].value
-
-    def set_param_value(self, name, value):
-        """Set the value of theory parameters"""
-        if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
-            # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryRolieDoublePoly, self).set_param_value(
-            name, value
-        )
-        if not success:
-            return message, success
-        if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
-                self.parameters["phi%02d" % i] = Parameter(
-                    name="phi%02d" % i,
-                    value=0.0,
-                    description="Volume fraction of mode %02d" % i,
-                    type=ParameterType.real,
-                    opt_type=OptType.nopt,
-                    display_flag=False,
-                    min_value=0,
-                )
-                self.parameters["tauD%02d" % i] = Parameter(
-                    name="tauD%02d" % i,
-                    value=100.0,
-                    description="Terminal time of mode %02d" % i,
-                    type=ParameterType.real,
-                    opt_type=OptType.nopt,
-                    display_flag=False,
-                    min_value=0,
-                )
-                self.parameters["tauR%02d" % i] = Parameter(
-                    name="tauR%02d" % i,
-                    value=1,
-                    description="Rouse time of mode %02d" % i,
-                    type=ParameterType.real,
-                    opt_type=OptType.opt,
-                    display_flag=True,
-                    min_value=0,
-                )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
-                    del self.parameters["phi%02d" % i]
-                    del self.parameters["tauD%02d" % i]
-                    del self.parameters["tauR%02d" % i]
-        return "", True
-
-    def do_fit(self, line):
-        """Minimisation procedure disabled in this theory"""
-        self.Qprint(
-            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
-        )
-
-
-class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
         # add widgets specific to the theory
         tb = QToolBar()
@@ -929,3 +592,320 @@ class GUITheoryRolieDoublePoly(BaseTheoryRolieDoublePoly, QTheory):
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+
+
+    def set_extra_data(self, extra_data):
+        """Set extra data when loading project"""
+        self.MWD_m = extra_data["MWD_m"]
+        self.MWD_phi = extra_data["MWD_phi"]
+        self.Zeff = extra_data["Zeff"]
+
+        # FENE button
+        self.handle_with_fene_button(extra_data["with_fene"])
+
+        # G button
+        if extra_data["with_gcorr"]:
+            self.with_gcorr == GcorrMode.with_gcorr
+            self.with_gcorr_button.setChecked(True)
+
+    def get_extra_data(self):
+        """Set extra_data when saving project"""
+        self.extra_data["MWD_m"] = self.MWD_m
+        self.extra_data["MWD_phi"] = self.MWD_phi
+        self.extra_data["Zeff"] = self.Zeff
+        self.extra_data["with_fene"] = self.with_fene == FeneMode.with_fene
+        self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
+
+    def init_flow_mode(self):
+        """Find if data files are shear or extension"""
+        try:
+            f = self.theory_files()[0]
+            if f.file_type.extension == "shear":
+                self.flow_mode = FlowMode.shear
+            else:
+                self.flow_mode = FlowMode.uext
+        except Exception as e:
+            print("in RP init:", e)
+            self.flow_mode = FlowMode.shear  # default mode: shear
+
+    def destructor(self):
+        """Called when the theory tab is closed"""
+        self.show_theory_extras(False)
+        self.ax.lines.remove(self.LVEenvelopeseries)
+
+    def show_theory_extras(self, show=False):
+        """Called when the active theory is changed"""
+        self.Qhide_theory_extras(show)
+        # self.extra_graphic_visible(show)
+
+    def extra_graphic_visible(self, state):
+        """Change visibility of graphic helpers"""
+        self.view_LVEenvelope = state
+        self.LVEenvelopeseries.set_visible(state)
+        self.parent_dataset.parent_application.update_plot()
+
+    def get_modes(self):
+        """Get the values of Maxwell Modes from this theory"""
+        nmodes = self.parameters["nmodes"].value
+        tau = np.zeros(nmodes)
+        G = np.zeros(nmodes)
+        GN0 = self.parameters["GN0"].value
+        for i in range(nmodes):
+            tau[i] = self.parameters["tauD%02d" % i].value
+            G[i] = GN0 * self.parameters["phi%02d" % i].value
+        return tau, G, True
+
+    def set_modes_from_mwd(self, m, phi):
+        """Set modes from MWD"""
+        Me = self.parameters["Me"].value
+        taue = self.parameters["tau_e"].value
+        res = Dilution(m, phi, taue, Me, self).res
+        if res[0] == False:
+            self.Qprint("Could not set modes from MDW")
+            return
+        _, phi, taus, taud = res
+        nmodes = len(phi)
+        self.set_param_value("nmodes", nmodes)
+        for i in range(nmodes):
+            self.set_param_value("phi%02d" % i, phi[i])
+            self.set_param_value("tauR%02d" % i, taus[i])
+            self.set_param_value("tauD%02d" % i, taud[i])
+        self.Qprint("Got %d modes from MWD" % nmodes)
+        self.update_parameter_table()
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
+
+    def set_modes(self, tau, G):
+        """Set the values of Maxwell Modes from another theory"""
+        nmodes = len(tau)
+        self.set_param_value("nmodes", nmodes)
+        sum_G = G.sum()
+
+        for i in range(nmodes):
+            self.set_param_value("tauD%02d" % i, tau[i])
+            self.set_param_value("phi%02d" % i, G[i] / sum_G)
+        self.update_parameter_table()
+        return True
+
+    def fZ(self, z):
+        """CLF correction function Likthman-McLeish (2002)"""
+        return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
+
+    def gZ(self, z):
+        """CLF correction function for modulus Likthman-McLeish (2002)"""
+        return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
+
+    def sigmadot_shear(self, sigma, t, p):
+        """Rolie-Poly differential equation under *shear* flow
+        with stretching and finite extensibility if selected"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        tmax = p[-1]
+        if t >= tmax * self.count:
+            self.Qprint("--", end="")
+            self.count += 0.2
+
+        # Calling C function:
+        if self.with_fene == FeneMode.with_fene:
+            wfene = 1
+        else:
+            wfene = 0
+        return rpch.compute_derivs_shear(sigma, p, t, wfene)
+
+    def sigmadot_uext(self, sigma, t, p):
+        """Rolie-Poly differential equation under *uniaxial elongational* flow
+        with stretching and finite extensibility if selecter"""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        tmax = p[-1]
+        if t >= tmax * self.count:
+            self.Qprint("--", end="")
+            # self.Qprint("%4d%% done" % (self.count*100))
+            self.count += 0.2
+
+        # Calling C function:
+        if self.with_fene == FeneMode.with_fene:
+            wfene = 1
+        else:
+            wfene = 0
+        return rpch.compute_derivs_uext(sigma, p, t, wfene)
+
+    def calculate_fene(self, l_square, lmax):
+        """calculate finite extensibility function value"""
+        ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
+        l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
+        return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
+
+    def RolieDoublePoly(self, f=None):
+        """Calculate the theory"""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+
+        # ODE solver parameters
+        abserr = 1.0e-8
+        relerr = 1.0e-8
+        t = ft.data[:, 0]
+        t = np.concatenate([[0], t])
+        # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+        beta = self.parameters["beta"].value
+        delta = self.parameters["delta"].value
+        lmax = self.parameters["lmax"].value
+        flow_rate = float(f.file_parameters["gdot"])
+        nmodes = self.parameters["nmodes"].value
+
+        # flow geometry
+        if self.flow_mode == FlowMode.shear:
+            sigma0 = [1.0, 1.0, 0.0] * (nmodes * nmodes)  # sxx_ij, syy_ij, sxy_ij
+            pde_stretch = self.sigmadot_shear
+        elif self.flow_mode == FlowMode.uext:
+            sigma0 = [1.0, 1.0] * (nmodes * nmodes)  # sxx_ij, syy_ij
+            pde_stretch = self.sigmadot_uext
+        else:
+            return
+
+        taud_arr = []
+        taus_arr = []
+        phi_arr = []
+        for i in range(nmodes):
+            taud_arr.append(self.parameters["tauD%02d" % i].value)
+            taus_arr.append(self.parameters["tauR%02d" % i].value)
+            phi_arr.append(self.parameters["phi%02d" % i].value)
+        tmax = t[-1]
+        p = [nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta, flow_rate, tmax]
+        self.count = 0.2
+        self.Qprint("Rate %.3g<br>  0%% " % flow_rate, end="")
+        try:
+            sig = odeint(pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
+        except EndComputationRequested:
+            return
+        self.Qprint(" 100%")
+        # sig.shape is (len(t), 3*n^2) in shear
+        if self.flow_mode == FlowMode.shear:
+            c = 3
+            sig = sig[1:, :]
+            nt = len(sig)
+            lsq = np.zeros((nt, nmodes))
+            if self.with_fene == FeneMode.with_fene:
+                # calculate lambda^2
+                for i in range(nmodes):
+                    if self.stop_theory_flag:
+                        break
+                    I = c * nmodes * i
+                    trace_arr = np.zeros(nt)
+                    for j in range(nmodes):
+                        # trace_arr += phi_arr[j] * (sxx_t[:, I + j] + 2 * syy_t[:, I + j])
+                        trace_arr += phi_arr[j] * (
+                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
+                        )
+                    lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
+
+            for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
+                I = c * nmodes * i
+                sig_i = np.zeros(nt)
+                for j in range(nmodes):
+                    sig_i += phi_arr[j] * sig[:, I + c * j + 2]
+
+                if self.with_fene == FeneMode.with_fene:
+                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
+                if self.with_gcorr == GcorrMode.with_gcorr:
+                    sig_i *= self.gZ(self.Zeff[i])
+                tt.data[:, 1] += phi_arr[i] * sig_i
+            tt.data[:, 1] *= self.parameters["GN0"].value
+
+        if self.flow_mode == FlowMode.uext:
+            # every 2 component we find xx, yy, starting at 0, or 1; and remove t=0
+            # sxx_t = sig[1:, 0::2] # len(t) - 1 rows and n^2 cols
+            # syy_t = sig[1:, 1::2] # len(t) - 1 rows and n^2 cols
+
+            # nt = len(sxx_t)
+            c = 2
+            sig = sig[1:, :]
+            nt = len(sig)
+            lsq = np.zeros((nt, nmodes))
+            if self.with_fene == FeneMode.with_fene:
+                for i in range(nmodes):
+                    if self.stop_theory_flag:
+                        break
+                    I = c * nmodes * i
+                    trace_arr = np.zeros(nt)
+                    for j in range(nmodes):
+                        trace_arr += phi_arr[j] * (
+                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
+                        )
+                    lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
+
+            for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
+                I = c * nmodes * i
+                sig_i = np.zeros(nt)
+                for j in range(nmodes):
+                    sig_i += phi_arr[j] * (sig[:, I + c * j] - sig[:, I + c * j + 1])
+
+                if self.with_fene == FeneMode.with_fene:
+                    sig_i *= self.calculate_fene(lsq[:, i], lmax)
+                if self.with_gcorr == GcorrMode.with_gcorr:
+                    sig_i *= self.gZ(self.Zeff[i])
+                tt.data[:, 1] += phi_arr[i] * sig_i
+
+            tt.data[:, 1] *= self.parameters["GN0"].value
+
+    def set_param_value(self, name, value):
+        """Set the value of theory parameters"""
+        if name == "nmodes":
+            oldn = self.parameters["nmodes"].value
+            # self.spinbox.setMaximum(int(value))
+        message, success = super(BaseTheoryRolieDoublePoly, self).set_param_value(
+            name, value
+        )
+        if not success:
+            return message, success
+        if name == "nmodes":
+            for i in range(self.parameters["nmodes"].value):
+                self.parameters["phi%02d" % i] = Parameter(
+                    name="phi%02d" % i,
+                    value=0.0,
+                    description="Volume fraction of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    min_value=0,
+                )
+                self.parameters["tauD%02d" % i] = Parameter(
+                    name="tauD%02d" % i,
+                    value=100.0,
+                    description="Terminal time of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.nopt,
+                    display_flag=False,
+                    min_value=0,
+                )
+                self.parameters["tauR%02d" % i] = Parameter(
+                    name="tauR%02d" % i,
+                    value=1,
+                    description="Rouse time of mode %02d" % i,
+                    type=ParameterType.real,
+                    opt_type=OptType.opt,
+                    display_flag=True,
+                    min_value=0,
+                )
+            if oldn > self.parameters["nmodes"].value:
+                for i in range(self.parameters["nmodes"].value, oldn):
+                    del self.parameters["phi%02d" % i]
+                    del self.parameters["tauD%02d" % i]
+                    del self.parameters["tauR%02d" % i]
+        return "", True
+
+    def do_fit(self, line):
+        """Minimisation procedure disabled in this theory"""
+        self.Qprint(
+            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
+        )
+
