@@ -35,31 +35,19 @@
 Module for the analysis of data from SANS experiments
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationSANS(CmdBase):
+class ApplicationSANS(QApplicationWindow):
     """Application to Analyze Data from SANS experiments"""
 
     appname = "SANS"
     description = "Small Angle Neutron Scattering Experiments"
     extension = "sans"
-
-    def __new__(cls, name="SANS", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationSANS(name, parent)
-
-
-class BaseApplicationSANS:
-    """Base Class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html"
-    appname = ApplicationSANS.appname
 
     def __init__(self, name="SANS", parent=None):
         """**Constructor**"""
@@ -183,10 +171,3 @@ class BaseApplicationSANS:
         y[:, 0] = 1.0 / dt.data[:, 1]
         return x, y, True
 
-
-class GUIApplicationSANS(BaseApplicationSANS, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="SANS", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

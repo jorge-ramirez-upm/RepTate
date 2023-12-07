@@ -35,16 +35,14 @@
 Debye theory for neutron scattering from ideal polymer chains
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
 
-class TheoryDebye(CmdBase):
+class TheoryDebye(QTheory):
     """Fit a Debye function to the small angle neutron scattering data of ideal polymer chains. 
     
     * **Function**
@@ -76,22 +74,10 @@ class TheoryDebye(CmdBase):
     description = "Debye theory for neutron scattering from ideal polymer chains"
     citations = ["Debye P., J. Phys. Chem. 1947, 51, 18-32"]
     doi = ["http://dx.doi.org/10.1021/j150451a002"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDebye(name, parent_dataset, axarr)
-
-
-class BaseTheoryDebye:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryDebye.thname
-    citations = TheoryDebye.citations
-    doi = TheoryDebye.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -156,6 +142,37 @@ class BaseTheoryDebye:
             opt_type=OptType.const,
             display_flag=False,
         )
+
+        # add widgets specific to the theory here:
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.tbutstretched = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-socks.png"), "Stretched"
+        )
+        self.tbutstretched.setCheckable(True)
+        self.tbutstretched.setChecked(False)
+        self.tbutnonideal = tb.addAction(
+            QIcon(":/Images/Images/new_icons/icons8-broom.png"), "Non-Ideal Mix"
+        )
+        self.tbutnonideal.setCheckable(True)
+        self.tbutnonideal.setChecked(False)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        # connections signal and slots
+        connection_id = self.tbutstretched.triggered.connect(
+            self.handle_tbutstretched_triggered
+        )
+        connection_id = self.tbutnonideal.triggered.connect(
+            self.handle_tbutnonideal_triggered
+        )
+
+    def handle_tbutstretched_triggered(self, checked):
+        """Check Streched"""
+        self.set_param_value("stretched", checked)
+
+    def handle_tbutnonideal_triggered(self, checked):
+        """Handle Non-ideal"""
+        self.set_param_value("non-ideal", checked)
 
     def calculateDebye(self, f=None):
         """Debye function"""
@@ -225,42 +242,3 @@ File error is calculated as the mean square of the residual, averaged over all p
                             % (f.file_name_short, Mw, np.sqrt(CRg * Mw))
                         )
 
-
-
-class GUITheoryDebye(BaseTheoryDebye, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-        # add widgets specific to the theory here:
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.tbutstretched = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-socks.png"), "Stretched"
-        )
-        self.tbutstretched.setCheckable(True)
-        self.tbutstretched.setChecked(False)
-        self.tbutnonideal = tb.addAction(
-            QIcon(":/Images/Images/new_icons/icons8-broom.png"), "Non-Ideal Mix"
-        )
-        self.tbutnonideal.setCheckable(True)
-        self.tbutnonideal.setChecked(False)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        # connections signal and slots
-        connection_id = self.tbutstretched.triggered.connect(
-            self.handle_tbutstretched_triggered
-        )
-        connection_id = self.tbutnonideal.triggered.connect(
-            self.handle_tbutnonideal_triggered
-        )
-
-    def handle_tbutstretched_triggered(self, checked):
-        """Check Streched"""
-        self.set_param_value("stretched", checked)
-
-    def handle_tbutnonideal_triggered(self, checked):
-        """Handle Non-ideal"""
-        self.set_param_value("non-ideal", checked)
