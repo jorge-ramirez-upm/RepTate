@@ -42,18 +42,36 @@ import os
 from os.path import dirname, join, abspath, join, isfile, basename
 from PySide6.QtUiTools  import loadUiType
 from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
-from PySide6.QtCore import QUrl, Qt, QSize
+from PySide6.QtCore import QUrl, Qt, QSize, QStandardPaths
 from PySide6.QtWidgets import QApplication, QInputDialog, QMenu, QToolBar, QToolButton, QMessageBox, QFileDialog, QTextBrowser
 
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
-from RepTate.core.ApplicationManager import ApplicationManager
+#from RepTate.core.ApplicationManager import ApplicationManager
 from RepTate.core.File import File
-from RepTate.gui.QAboutReptate import AboutWindow
+#from RepTate.gui.QAboutReptate import AboutWindow
+# COPY FROM APPLICATIONMANAGER
+from RepTate.applications.ApplicationTTS import ApplicationTTS
+from RepTate.applications.ApplicationTTSFactors import ApplicationTTSFactors
+from RepTate.applications.ApplicationLVE import ApplicationLVE
+from RepTate.applications.ApplicationNLVE import ApplicationNLVE
+from RepTate.applications.ApplicationCrystal import ApplicationCrystal
+from RepTate.applications.ApplicationMWD import ApplicationMWD
+from RepTate.applications.ApplicationGt import ApplicationGt
+from RepTate.applications.ApplicationCreep import ApplicationCreep
+from RepTate.applications.ApplicationSANS import ApplicationSANS
+from RepTate.applications.ApplicationReact import ApplicationReact
+from RepTate.applications.ApplicationDielectric import ApplicationDielectric
+from RepTate.applications.ApplicationLAOS import ApplicationLAOS
+from urllib.request import urlopen
+import json
+# END COPY
 from collections import OrderedDict
 import numpy as np
 import time
 import logging
+import logging.handlers
+
 
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -84,16 +102,78 @@ class QTextEditLogger(logging.Handler):
         self.widget.moveCursor(QTextCursor.End)
 
 
-class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
+#class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
+class QApplicationManager(QMainWindow, Ui_MainWindow):
     """Main Reptate window and application manager"""
     html_help_file = 'http://reptate.readthedocs.io/index.html'
+    # COPIED FROM APPLICATIONMANAGER
+    verdata = RepTate._version.get_versions()
+    version = verdata["version"].split("+")[0]
+    date = verdata["date"].split("T")[0]
+    build = verdata["version"]
+    intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
+    doc_header = "RepTate Manager commands (type help <topic>):"
+    # END COPY
+
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """**Constructor**"""
-        super().__init__(loglevel=loglevel)
+        #super().__init__(loglevel=loglevel)
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
+        # COPY FROM APPLICATIONMANAGER
+        # SETUP APPLICATIONS
+        self.application_counter = 0
+        self.applications = OrderedDict()
+        self.available_applications = OrderedDict()
+        self.available_applications[ApplicationMWD.appname] = ApplicationMWD
+        self.available_applications[ApplicationTTS.appname] = ApplicationTTS
+        self.available_applications[
+            ApplicationTTSFactors.appname
+        ] = ApplicationTTSFactors
+        self.available_applications[ApplicationLVE.appname] = ApplicationLVE
+        self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
+        self.available_applications[ApplicationCrystal.appname] = ApplicationCrystal
+        self.available_applications[ApplicationGt.appname] = ApplicationGt
+        self.available_applications[ApplicationCreep.appname] = ApplicationCreep
+        self.available_applications[ApplicationSANS.appname] = ApplicationSANS
+        self.available_applications[ApplicationReact.appname] = ApplicationReact
+        self.available_applications[
+            ApplicationDielectric.appname
+        ] = ApplicationDielectric
+        self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
+
+        # LOGGING STUFF
+        # Setup AppName and platform-dependent path to AppData
+        path_to_AppData = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        try:
+            os.mkdir(path_to_AppData)
+        except FileExistsError:
+            pass
+
+        self.logger = logging.getLogger("RepTate")
+        self.logger.setLevel(loglevel)
+        # home_path = str(Path.home())
+        logfile = os.path.join(path_to_AppData, "RepTate.log")
+        fh = logging.handlers.RotatingFileHandler(
+            logfile, maxBytes=100000, backupCount=5
+        )
+        fh.setLevel(loglevel)
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.WARNING)
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter(
+            "%(asctime)s %(name)s %(levelname)s: %(message)s", "%Y%m%d %H%M%S"
+        )
+        fh.setFormatter(formatter)
+        ch.setFormatter(formatter)
+        # add the handlers to the logger
+        self.logger.addHandler(fh)
+        self.logger.addHandler(ch)
+        self.logger.debug("New ApplicationManager")
+        # END COPY        
 
         if CmdBase.calcmode == CalcMode.singlethread:
             self.setWindowTitle('RepTate ' + self.version + ' ' + self.date +
@@ -377,6 +457,20 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
         """Visit the web site of the RepTatepaper"""
         QDesktopServices.openUrl(QUrl.fromUserInput(('https://dx.doi.org/10.1122/8.0000002')))
 
+    # COPY FROM APPLICATIONMANAGER
+    def check_version(self):
+        url = "https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases"
+        releasedata = (urlopen(url).read()).decode("UTF-8")
+        parsed_json = json.loads(releasedata)
+        release_dict = parsed_json[0]  # Get the latest release
+        tag = release_dict["tag_name"]
+        version_github = tag.split("v")[1]
+        verdata = RepTate._version.get_versions()
+        version_current = verdata["version"].split("+")[0]
+        newversion = version_github > version_current
+        return newversion, version_github, version_current
+    # END COPY
+
     def handle_check_RepTate_version(self):
         """Query Github for the latest RepTate release"""
         newversion, version_github, version_current = self.check_version()
@@ -429,6 +523,7 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
 
     def show_about(self):
         """Show about window"""
+        from RepTate.gui.QAboutReptate import AboutWindow
         #dlg = AboutWindow(self, self.version + ' ' + self.date)
         dlg = AboutWindow(self, "RepTate %s %s"%(self.version, self.date), "Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href=\"https://dx.doi.org/10.1122/8.0000002\">Cite RepTate</a>" %self.build)
         dlg.show()
@@ -448,6 +543,24 @@ class QApplicationManager(ApplicationManager, QMainWindow, Ui_MainWindow):
             app.delete(ds_name) #call theory destructor
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app.name)
+
+    # COPY FROM APPLICATIONMANAGER
+    def new(self, appname):
+        """Create a new application and open it.
+
+Arguments:
+    - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
+        if appname in self.available_applications:
+            self.application_counter += 1
+            newapp = self.available_applications[appname](
+                appname + str(self.application_counter), self
+            )
+            self.applications[newapp.name] = newapp
+            return newapp
+        else:
+            print('Application "%s" is not available' % appname)
+            return None
+    # END COPY
 
     def Qopen_app(self, app_name, icon):
         """Open app"""

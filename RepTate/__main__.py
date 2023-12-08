@@ -43,10 +43,11 @@ import numpy as np
 import logging
 
 from RepTate.core.CmdBase import CmdBase, CalcMode
-from RepTate.gui.QApplicationManager import QApplicationManager
+#from RepTate.gui.QApplicationManager import QApplicationManager
 
 from PySide6.QtWidgets import QApplication
-from RepTate.gui.SplashScreen import SplashScreen
+#from PySide6.QtCore import Qt, QCoreApplication
+# from RepTate.gui.SplashScreen import SplashScreen
 
 # from time import time, sleep
 
@@ -156,9 +157,11 @@ def start_RepTate(argv):
     #     matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = 34
     #     #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = app.desktop().physicalDpiX()/4
 
+    from RepTate.gui.SplashScreen import SplashScreen
     splash = SplashScreen()
     splash.show()
 
+    from RepTate.gui.QApplicationManager import QApplicationManager
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     # splash.showMessage("Loading RepTate...")

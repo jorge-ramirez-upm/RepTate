@@ -36,11 +36,10 @@ Module that defines the GUI Splashscreen that is loaded during the startup of Re
 
 """
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap, QColor
 from PySide6.QtWidgets import QSplashScreen, QApplication, QLabel
-from PySide6.QtGui import QPixmap, QFont
+from PySide6.QtGui import QPixmap, QFont, QColor
 import RepTate
-
+import RepTate.gui.About_rc
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress"""
