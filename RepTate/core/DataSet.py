@@ -41,6 +41,7 @@ import os
 import glob
 
 import enum
+
 # from RepTate.core.CmdBase import CmdBase
 from RepTate.core.File import File
 from RepTate.core.DataTable import DataTable
@@ -307,8 +308,8 @@ class ThLineMode(enum.Enum):
     )
 
 
-# class DataSet(CmdBase):  
-class DataSet:  
+# class DataSet(CmdBase):
+class DataSet:
     """Abstract class to describe a data set"""
 
     def __init__(self, name="DataSet", parent=None):
@@ -667,7 +668,9 @@ class DataSet:
                                     label += (
                                         pmt + "=" + str(file.file_parameters[pmt]) + " "
                                     )
-                                except KeyError as e:  # if parameter missing from data file
+                                except (
+                                    KeyError
+                                ) as e:  # if parameter missing from data file
                                     self.logger.warning(
                                         "Parameter %s not found in data file" % e
                                     )
@@ -752,13 +755,13 @@ class DataSet:
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
 
-Examples:
-    sort Mw,reverse
-    sort T
+        Examples:
+            sort Mw,reverse
+            sort T
 
-Arguments:
-    - Par {[str]} -- File parameter according to which the files will be sorted
-    - reverse -- The files will be sorted in reverse order"""
+        Arguments:
+            - Par {[str]} -- File parameter according to which the files will be sorted
+            - reverse -- The files will be sorted in reverse order"""
         items = line.split(",")
         if len(items) == 0:
             print("Wrong number of arguments")
@@ -850,61 +853,61 @@ Arguments:
     #     for f in self.files:
     #         print(f)
 
-#     def do_file_new(self, line):
-#         """Add an empty file of the given type to the current Data Set
+    #     def do_file_new(self, line):
+    #         """Add an empty file of the given type to the current Data Set
 
-# Arguments:
-#     - line {str} -- TYPE (extension of file) [, NAME (name, optional)]"""
-#         if line == "":
-#             print("Missing file type")
-#             return
-#         items = line.split(",")
-#         if len(items) == 0:
-#             print("Missing file type")
-#             return
-#         elif len(items) == 1:
-#             ext = items[0]
-#             fname = (
-#                 os.getcwd()
-#                 + os.path.sep
-#                 + "DummyFile%02d" % (self.num_files + 1)
-#                 + "."
-#                 + ext
-#             )
-#         elif len(items) == 2:
-#             ext = items[0]
-#             fname = os.getcwd() + os.path.sep + items[1] + "." + ext
-#         else:
-#             print("Wrong number of arguments")
+    # Arguments:
+    #     - line {str} -- TYPE (extension of file) [, NAME (name, optional)]"""
+    #         if line == "":
+    #             print("Missing file type")
+    #             return
+    #         items = line.split(",")
+    #         if len(items) == 0:
+    #             print("Missing file type")
+    #             return
+    #         elif len(items) == 1:
+    #             ext = items[0]
+    #             fname = (
+    #                 os.getcwd()
+    #                 + os.path.sep
+    #                 + "DummyFile%02d" % (self.num_files + 1)
+    #                 + "."
+    #                 + ext
+    #             )
+    #         elif len(items) == 2:
+    #             ext = items[0]
+    #             fname = os.getcwd() + os.path.sep + items[1] + "." + ext
+    #         else:
+    #             print("Wrong number of arguments")
 
-#         if ext in self.parent_application.filetypes:
-#             self.num_files += 1
-#             f = File(
-#                 fname,
-#                 self.parent_application.filetypes[ext],
-#                 self,
-#                 self.parent_application.axarr,
-#             )
-#             self.files.append(f)
-#             self.current_file = f
-#             # leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
-#             # if leg:
-#             #    leg.draggable()
-#             # self.current_application.figure.canvas.draw()
-#         else:
-#             print(
-#                 'File type "%s" cannot be read by application %s'
-#                 % (line, self.parent_application.name)
-#             )
+    #         if ext in self.parent_application.filetypes:
+    #             self.num_files += 1
+    #             f = File(
+    #                 fname,
+    #                 self.parent_application.filetypes[ext],
+    #                 self,
+    #                 self.parent_application.axarr,
+    #             )
+    #             self.files.append(f)
+    #             self.current_file = f
+    #             # leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
+    #             # if leg:
+    #             #    leg.draggable()
+    #             # self.current_application.figure.canvas.draw()
+    #         else:
+    #             print(
+    #                 'File type "%s" cannot be read by application %s'
+    #                 % (line, self.parent_application.name)
+    #             )
 
-#     def complete_file_new(self, text, line, begidx, endidx):
-#         """Complete new file command"""
-#         file_types = list(self.parent_application.filetypes.keys())
-#         if not text:
-#             completions = file_types[:]
-#         else:
-#             completions = [f for f in file_types if f.startswith(text)]
-#         return completions
+    #     def complete_file_new(self, text, line, begidx, endidx):
+    #         """Complete new file command"""
+    #         file_types = list(self.parent_application.filetypes.keys())
+    #         if not text:
+    #             completions = file_types[:]
+    #         else:
+    #             completions = [f for f in file_types if f.startswith(text)]
+    #         return completions
 
     def new_dummy_file(
         self,
@@ -1082,19 +1085,19 @@ Arguments:
 
     #     return result
 
-        # f_names=[]
-        # for f in list(self.parent_application.filetypes.keys()):
-        #    pattern='%s**.%s'%(text,f)
-        #    #f_names += glob.glob('data/**/*.%s'%f, recursive=True)
-        #    f_names += glob.glob(pattern, recursive=True)
-        # if not text:
-        #    completions = f_names[:]
-        # else:
-        #    completions = [ f
-        #                    for f in f_names
-        #                    if f.startswith(text)
-        #                    ]
-        # return completions
+    # f_names=[]
+    # for f in list(self.parent_application.filetypes.keys()):
+    #    pattern='%s**.%s'%(text,f)
+    #    #f_names += glob.glob('data/**/*.%s'%f, recursive=True)
+    #    f_names += glob.glob(pattern, recursive=True)
+    # if not text:
+    #    completions = f_names[:]
+    # else:
+    #    completions = [ f
+    #                    for f in f_names
+    #                    if f.startswith(text)
+    #                    ]
+    # return completions
 
     # def do_file_active(self, line):
     #     """Change active file in the current dataset"""
@@ -1294,6 +1297,7 @@ Arguments:
             if maxfile > max:
                 max = maxfile
         return max
+
 
 #     def do_tutorial(self, line=""):
 #         """Show a short tutorial about the commands in RepTate Datasets"""

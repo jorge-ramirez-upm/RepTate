@@ -37,6 +37,9 @@ Module that defines the GUI counterpart of Dataset.
 """
 import sys
 import os
+import glob
+import enum
+
 from os.path import dirname, join, abspath, isdir
 from PySide6.QtGui import (
     QPixmap,
@@ -73,12 +76,17 @@ from PySide6.QtWidgets import (
     QCheckBox,
 )
 import RepTate
-from RepTate.core.DataSet import DataSet
+from RepTate.core.File import File
 from RepTate.core.DataTable import DataTable
 from RepTate.gui.QTheory import MinimizationMethod, ErrorCalculationMethod
 from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import matplotlib.patheffects as pe
+
+import itertools
+from collections import OrderedDict
+import logging
+
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -88,6 +96,264 @@ if getattr(sys, "frozen", False):
 else:
     PATH = dirname(abspath(__file__))
 Ui_DataSet, QWidget = loadUiType(join(PATH, "DataSet.ui"))
+
+
+# COPY FROM DATASET
+class ColorMode(enum.Enum):
+    """Class to describe how to change colors in the current DataSet"""
+
+    fixed = 0
+    variable = 1
+    gradient = 2
+    modes = ["Fixed color", "Variable color (from palette)", "Color gradient"]
+    color1 = (0, 0, 0, 1)  # black RGB
+    color2 = (1, 0, 0, 1)  # red RGB
+    colorpalettes = {
+        "Rainbow": [
+            (0, 0, 0),
+            (1.0, 0, 0),
+            (0, 1.0, 0),
+            (0, 0, 1.0),
+            (1.0, 1.0, 0),
+            (1.0, 0, 1.0),
+            (0, 1.0, 1.0),
+            (0.5, 0, 0),
+            (0, 0.5, 0),
+            (0, 0, 0.5),
+            (0.5, 0.5, 0),
+            (0.5, 0, 0.5),
+            (0, 0.5, 0.5),
+            (0.25, 0, 0),
+            (0, 0.25, 0),
+            (0, 0, 0.25),
+            (0.25, 0.25, 0),
+            (0.25, 0, 0.25),
+            (0, 0.25, 0.25),
+        ],
+        "Pastel": [
+            (0.573, 0.776, 1.0),
+            (0.592, 0.941, 0.667),
+            (1.0, 0.624, 0.604),
+            (0.816, 0.733, 1.0),
+            (1.0, 0.996, 0.639),
+            (0.69, 0.878, 0.902),
+            (0.573, 0.776, 1.0),
+            (0.592, 0.941, 0.667),
+            (1.0, 0.624, 0.604),
+            (0.816, 0.733, 1.0),
+            (1.0, 0.996, 0.639),
+            (0.69, 0.878, 0.902),
+            (0.573, 0.776, 1.0),
+            (0.592, 0.941, 0.667),
+            (1.0, 0.624, 0.604),
+        ],
+        "Bright": [
+            (0.0, 0.247, 1.0),
+            (0.012, 0.929, 0.227),
+            (0.91, 0.0, 0.043),
+            (0.541, 0.169, 0.886),
+            (1.0, 0.769, 0.0),
+            (0.0, 0.843, 1.0),
+            (0.0, 0.247, 1.0),
+            (0.012, 0.929, 0.227),
+            (0.91, 0.0, 0.043),
+            (0.541, 0.169, 0.886),
+            (1.0, 0.769, 0.0),
+            (0.0, 0.843, 1.0),
+            (0.0, 0.247, 1.0),
+            (0.012, 0.929, 0.227),
+            (0.91, 0.0, 0.043),
+        ],
+        "Dark": [
+            (0, 0, 0),
+            (0.0, 0.11, 0.498),
+            (0.004, 0.459, 0.09),
+            (0.549, 0.035, 0.0),
+            (0.463, 0.0, 0.631),
+            (0.722, 0.525, 0.043),
+            (0.0, 0.388, 0.455),
+            (0.0, 0.11, 0.498),
+            (0.004, 0.459, 0.09),
+            (0.549, 0.035, 0.0),
+            (0.463, 0.0, 0.631),
+            (0.722, 0.525, 0.043),
+            (0.0, 0.388, 0.455),
+            (0.0, 0.11, 0.498),
+            (0.004, 0.459, 0.09),
+            (0.549, 0.035, 0.0),
+        ],
+        "ColorBlind": [
+            (0, 0, 0),
+            (0.0, 0.447, 0.698),
+            (0.0, 0.62, 0.451),
+            (0.835, 0.369, 0.0),
+            (0.8, 0.475, 0.655),
+            (0.941, 0.894, 0.259),
+            (0.337, 0.706, 0.914),
+            (0.0, 0.447, 0.698),
+            (0.0, 0.62, 0.451),
+            (0.835, 0.369, 0.0),
+            (0.8, 0.475, 0.655),
+            (0.941, 0.894, 0.259),
+            (0.337, 0.706, 0.914),
+            (0.0, 0.447, 0.698),
+            (0.0, 0.62, 0.451),
+            (0.835, 0.369, 0.0),
+        ],
+        "Paired": [
+            (0.651, 0.808, 0.890),
+            (0.122, 0.471, 0.706),
+            (0.698, 0.875, 0.541),
+            (0.200, 0.627, 0.173),
+            (0.984, 0.604, 0.600),
+            (0.890, 0.102, 0.11),
+            (0.992, 0.749, 0.435),
+            (1.0, 0.498, 0.0),
+            (0.792, 0.698, 0.839),
+            (0.416, 0.239, 0.604),
+            (1.0, 1.0, 0.6),
+            (0.694, 0.349, 0.157),
+            (0.651, 0.808, 0.890),
+            (0.122, 0.471, 0.706),
+            (0.698, 0.875, 0.541),
+            (0.200, 0.627, 0.173),
+        ],
+    }
+
+
+class SymbolMode(enum.Enum):
+    """Class to describe how to change the symbols in the DataSet"""
+
+    fixed = 0
+    fixedfilled = 1
+    variable = 2
+    variablefilled = 3
+    modes = [
+        "Fixed empty symbol",
+        "Fixed filled symbol",
+        "Variable empty symbols",
+        "Variable filled symbols",
+    ]
+    # symbol1 = "."
+    # symbol1_name = "point"
+    symbol1 = "o"
+    symbol1_name = "circle"
+    allmarkers = [
+        # ".",
+        "o",
+        "v",
+        "^",
+        "<",
+        ">",
+        "1",
+        "2",
+        "3",
+        "4",
+        "8",
+        "s",
+        "p",
+        "P",
+        "*",
+        "h",
+        "H",
+        "+",
+        "x",
+        "X",
+        "D",
+        "d",
+        "|",
+        "_",
+    ]
+    allmarkernames = [
+        # "point",
+        "circle",
+        "triangle_down",
+        "triangle_up",
+        "triangle_left",
+        "triangle_right",
+        "tri_down",
+        "tri_up",
+        "tri_left",
+        "tri_right",
+        "octagon",
+        "square",
+        "pentagon",
+        "plus (filled)",
+        "star",
+        "hexagon1",
+        "hexagon2",
+        "plus",
+        "x",
+        "x (filled)",
+        "diamond",
+        "thin_diamond",
+        "vline",
+        "hline",
+    ]
+    filledmarkers = [
+        # ".",
+        "o",
+        "v",
+        "^",
+        "<",
+        ">",
+        "8",
+        "s",
+        "p",
+        "P",
+        "*",
+        "h",
+        "H",
+        "X",
+        "D",
+        "d",
+    ]
+    filledmarkernames = [
+        # "point",
+        "circle",
+        "triangle_down",
+        "triangle_up",
+        "triangle_left",
+        "triangle_right",
+        "octagon",
+        "square",
+        "pentagon",
+        "plus (filled)",
+        "star",
+        "hexagon1",
+        "hexagon2",
+        "x (filled)",
+        "diamond",
+        "thin_diamond",
+    ]
+
+
+class ThLineMode(enum.Enum):
+    """Class to describe how to change the line types in Theories"""
+
+    as_data = 0
+    fixed = 1
+    color = (0, 0, 0, 1)  # black RGB
+    linestyles = OrderedDict(
+        [
+            ("solid", (0, ())),
+            ("loosely dotted", (0, (1, 10))),
+            ("dotted", (0, (1, 5))),
+            ("densely dotted", (0, (1, 1))),
+            ("loosely dashed", (0, (5, 10))),
+            ("dashed", (0, (5, 5))),
+            ("densely dashed", (0, (5, 1))),
+            ("loosely dashdotted", (0, (3, 10, 1, 10))),
+            ("dashdotted", (0, (3, 5, 1, 5))),
+            ("densely dashdotted", (0, (3, 1, 1, 1))),
+            ("loosely dashdotdotted", (0, (3, 10, 1, 10, 1, 10))),
+            ("dashdotdotted", (0, (3, 5, 1, 5, 1, 5))),
+            ("densely dashdotdotted", (0, (3, 1, 1, 1, 1, 1))),
+        ]
+    )
+
+
+# END COPY FROM DATASET
 
 
 class EditFileParametersDialog(QDialog):
@@ -209,16 +475,52 @@ class EditFileParametersDialog(QDialog):
         self.view_xmax.setDisabled(not checked)
 
 
-class QDataSet(DataSet, QWidget, Ui_DataSet):
-    """Class that contains data files"""
+class QDataSet(QWidget, Ui_DataSet):
+    """Abstract class to describe a data set that contains data files"""
 
     def __init__(self, name="QDataSet", parent=None):
         """**Constructor**"""
-        super().__init__(name=name, parent=parent)
+        # super().__init__(name=name, parent=parent)
         QWidget.__init__(self)
         Ui_DataSet.__init__(self)
-
         self.setupUi(self)
+
+        # COPY FROM DATASET
+        self.name = name
+        self.parent_application = parent
+        self.nplots = self.parent_application.nplots
+        self.files = []
+        self.current_file = None
+        self.num_files = 0
+        # Marker settings
+        self.marker_size = 6
+        self.line_width = 1
+        self.colormode = ColorMode.variable.value
+        self.color1 = ColorMode.color1.value
+        self.color2 = ColorMode.color2.value
+        self.th_line_mode = ThLineMode.as_data.value
+        self.th_color = ThLineMode.color.value
+        self.palette_name = "ColorBlind"
+        self.symbolmode = SymbolMode.fixed.value
+        self.symbol1 = SymbolMode.symbol1.value
+        self.symbol1_name = SymbolMode.symbol1_name.value
+        self.th_linestyle = "solid"
+        self.th_line_width = 1.5
+        #
+        self.theories = {}
+        self.num_theories = 0
+        self.inactive_files = {}
+        self.current_theory = None
+        self.table_icon_list = []  # save the file's marker shape, fill and color there
+        self.selected_file = None
+
+        # LOGGING STUFF
+        self.logger = logging.getLogger(
+            self.parent_application.logger.name + "." + self.name
+        )
+        self.logger.debug("New DataSet")
+        np.seterrcall(self.write)
+        # END COPY FROM DATASET
 
         self.DataSettreeWidget = DataSetWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
@@ -367,6 +669,597 @@ class QDataSet(DataSet, QWidget, Ui_DataSet):
         connection_id = self.actionError_Calc_Options.triggered.connect(
             self.handle_error_calculation_options
         )
+
+    # COPY FROM DATASET
+    def write(self, type, flag):
+        """Write numpy error logs to the logger"""
+        self.logger.info("numpy: %s (flag %s)" % (type, flag))
+
+    def change_file_visibility(self, file_name_short, check_state=True):
+        """Hide/Show file in the figure"""
+        file_matching = []
+        for file in self.files:
+            if file.file_name_short == file_name_short:  # find changed file
+                file_matching.append(file)
+        if len(file_matching) == 0:
+            raise ValueError('Could not match file "%s"' % file_name_short)
+            return
+        if len(file_matching) > 1:
+            raise ValueError('Too many match for file "%s"' % file_name_short)
+            return
+
+        file_matching[0].active = check_state
+
+        # hide datatable
+        dt = file_matching[0].data_table
+        for i in range(dt.MAX_NUM_SERIES):
+            for nx in range(self.nplots):  # loop over the plots
+                dt.series[nx][i].set_visible(check_state)
+        # hide theory table
+        for th in self.theories.values():
+            th.set_th_table_visible(file_matching[0].file_name_short, check_state)
+
+        # save the check_state to recover it upon change of tab or 'view all' events
+        if check_state == False:
+            self.inactive_files[file_matching[0].file_name_short] = file_matching[0]
+        else:
+            try:
+                del self.inactive_files[file_matching[0].file_name_short]
+            except KeyError:
+                pass
+        self.do_plot()
+
+    def do_show_all(self, line):
+        """Show all files in the current DataSet"""
+        for file in self.files:
+            if file.file_name_short not in self.inactive_files:
+                file.active = True
+                dt = file.data_table
+                for i in range(dt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots):  # loop over the plots
+                        dt.series[nx][i].set_visible(True)
+        if self.current_theory:
+            self.theories[self.current_theory].do_show()
+        self.do_plot("")
+
+    def do_hide_all(self, line):
+        """Hide all files in the current DataSet"""
+        for file in self.files:
+            file.active = False
+            dt = file.data_table
+            for i in range(dt.MAX_NUM_SERIES):
+                for nx in range(self.nplots):  # loop over the plots
+                    dt.series[nx][i].set_visible(False)
+        for th in self.theories.values():
+            th.do_hide()
+        self.do_plot("")
+
+    def do_plot(self, line=""):
+        """Plot the current dataset using the current view of the parent application"""
+        # view = self.parent_application.current_view
+
+        self.table_icon_list.clear()
+        filled = False
+        if self.symbolmode == SymbolMode.fixed.value:  # single symbol, empty?
+            markers = [self.symbol1]
+            marker_names = [self.symbol1_name]
+        elif self.symbolmode == SymbolMode.fixedfilled.value:  # single symbol, filled?
+            markers = [self.symbol1]
+            marker_names = [self.symbol1_name]
+            filled = True
+        elif self.symbolmode == SymbolMode.variable.value:  # variable symbols, empty
+            markers = SymbolMode.allmarkers.value
+            marker_names = SymbolMode.allmarkernames.value
+        else:  #
+            markers = SymbolMode.filledmarkers.value  # variable symbols, filled
+            marker_names = SymbolMode.filledmarkernames.value
+            filled = True
+
+        if self.colormode == ColorMode.fixed.value:  # single color?
+            colors = [self.color1]
+        elif self.colormode == ColorMode.variable.value:  # variable colors from palette
+            colors = ColorMode.colorpalettes.value[self.palette_name]
+        else:
+            n = len(self.files) - len(self.inactive_files)  # number of files to plot
+            if n < 2:
+                colors = [self.color1]  # only one color needed
+            else:  # interpolate the color1 and color2
+                r1, g1, b1, a1 = self.color1
+                r2, g2, b2, a2 = self.color2
+                dr = (r2 - r1) / (n - 1)
+                dg = (g2 - g1) / (n - 1)
+                db = (b2 - b1) / (n - 1)
+                da = (a2 - a1) / (n - 1)
+                colors = []
+                for i in range(n):  # create a color palette
+                    colors.append((r1 + i * dr, g1 + i * dg, b1 + i * db, a1 + i * da))
+
+        linelst = itertools.cycle((":", "-", "-.", "--"))
+        palette = itertools.cycle((colors))
+        markerlst = itertools.cycle((markers))
+        marker_name_lst = itertools.cycle((marker_names))
+        size = self.marker_size  # if file.size is None else file.size
+        width = self.line_width
+        # theory settings
+        th_linestyle = ThLineMode.linestyles.value[self.th_linestyle]
+
+        for to in self.parent_application.tools:
+            to.clean_graphic_stuff()
+            if to.active:
+                to.Qprint("<hr><h2>Calculating...</h2>")
+
+        for j, file in enumerate(self.files):
+            dt = file.data_table
+
+            marker = next(markerlst)  # if file.marker is None else file.marker
+            marker_name = next(
+                marker_name_lst
+            )  # if file.marker is None else file.marker
+            color = next(palette)  # if file.color is None else file.color
+            face = color if filled else "none"
+            if self.th_line_mode == ThLineMode.as_data.value:
+                th_color = color
+            else:
+                th_color = self.th_color
+            if file.active:
+                # save file name with associated marker shape, fill and color
+                self.table_icon_list.append(
+                    (file.file_name_short, marker_name, face, color)
+                )
+
+            for nx in range(self.nplots):
+                view = self.parent_application.multiviews[nx]
+                try:
+                    x, y, success = view.view_proc(dt, file.file_parameters)
+                except TypeError as e:
+                    print("in do_plot()", e)
+                    return
+
+                ## Apply current shifts to data
+                # for i in range(view.n):
+                #    if file.isshifted[i]:
+                #        if view.log_x:
+                #            x[:,i]*=np.power(10, file.xshift[i])
+                #        else:
+                #            x[:,i]+=file.xshift[i]
+                #        if view.log_y:
+                #            y[:,i]*=np.power(10, file.yshift[i])
+                #        else:
+                #            y[:,i]+=file.yshift[i]
+
+                # Apply the currently active tools
+                for to in self.parent_application.tools:
+                    if file.active and to.active:
+                        to.Qprint("<h3>" + file.file_name_short + "</h3>")
+                        x, y = to.calculate_all(
+                            view.n,
+                            x,
+                            y,
+                            self.parent_application.axarr[nx],
+                            color,
+                            file.file_parameters,
+                        )
+
+                # Apply current shifts to data
+                for i in range(view.n):
+                    if file.isshifted[i]:
+                        if view.log_x:
+                            x[:, i] *= np.power(10, file.xshift[i])
+                        else:
+                            x[:, i] += file.xshift[i]
+                        if view.log_y:
+                            y[:, i] *= np.power(10, file.yshift[i])
+                        else:
+                            y[:, i] += file.yshift[i]
+
+                fillstylesempty = itertools.cycle(
+                    ("none", "full", "left", "right", "bottom", "top")
+                )
+                fillstylesfilled = itertools.cycle(
+                    ("full", "none", "right", "left", "top", "bottom")
+                )
+                for i in range(dt.MAX_NUM_SERIES):
+                    if i < view.n and file.active:
+                        dt.series[nx][i].set_data(x[:, i], y[:, i])
+                        dt.series[nx][i].set_visible(True)
+                        dt.series[nx][i].set_marker(marker)
+
+                        if filled:
+                            fs = next(fillstylesfilled)
+                        else:
+                            fs = next(fillstylesempty)
+                        if fs == "none":
+                            face = "none"
+                        else:
+                            face = color
+                        dt.series[nx][i].set_fillstyle(fs)
+
+                        # if i == 0:
+                        #     face = color if filled else 'none'
+                        # elif i == 1: # filled and empty symbols
+                        #     if face == 'none':
+                        #         face = color
+                        #     elif face == color:
+                        #         face = 'none'
+                        # else:
+                        #     face = color
+                        #     fillstyles=["left", "right", "bottom", "top", "full", "left", "right", "bottom", "top", "full", "left", "right", "bottom", "top"]
+                        #     fs = fillstyles[i-2]
+                        #     dt.series[nx][i].set_fillstyle(fs)
+                        dt.series[nx][i].set_markerfacecolor(face)
+                        dt.series[nx][i].set_markeredgecolor(color)
+                        dt.series[nx][i].set_markeredgewidth(width)
+                        dt.series[nx][i].set_markersize(size)
+                        dt.series[nx][i].set_linestyle("")
+                        if file.active and i == 0:
+                            label = ""
+                            for pmt in file.file_type.basic_file_parameters:
+                                try:
+                                    label += (
+                                        pmt + "=" + str(file.file_parameters[pmt]) + " "
+                                    )
+                                except (
+                                    KeyError
+                                ) as e:  # if parameter missing from data file
+                                    self.logger.warning(
+                                        "Parameter %s not found in data file" % e
+                                    )
+                            dt.series[nx][i].set_label(label)
+                        else:
+                            dt.series[nx][i].set_label("")
+                    else:
+                        dt.series[nx][i].set_visible(False)
+                        dt.series[nx][i].set_label("")
+
+                for th in self.theories.values():
+                    if th.active:
+                        th.plot_theory_stuff()
+                    tt = th.tables[file.file_name_short]
+                    try:
+                        x, y, success = view.view_proc(tt, file.file_parameters)
+                    except Exception as e:
+                        print("in do_plot th", e)
+                        continue
+
+                    # Apply the currently active tools
+                    for to in self.parent_application.tools:
+                        if file.active and to.active and to.applytotheory:
+                            to.Qprint("* <i>" + th.name + "</i>")
+                            x, y = to.calculate_all(
+                                view.n,
+                                x,
+                                y,
+                                self.parent_application.axarr[nx],
+                                color,
+                                file.file_parameters,
+                            )
+
+                    for i in range(tt.MAX_NUM_SERIES):
+                        if i < view.n and file.active and th.active:
+                            tt.series[nx][i].set_data(x[:, i], y[:, i])
+                            tt.series[nx][i].set_visible(True)
+                            if view.with_thline or i > 0:
+                                tt.series[nx][i].set_marker("")
+                                if i == 1:  # 2nd theory line with different style
+                                    if self.th_linestyle == "solid":
+                                        th_linestyle = ThLineMode.linestyles.value[
+                                            "dashed"
+                                        ]
+                                    else:
+                                        th_linestyle = ThLineMode.linestyles.value[
+                                            "solid"
+                                        ]
+                                elif i == 2:  # 3rd theory line with different style
+                                    if self.th_linestyle == "solid":
+                                        th_linestyle = ThLineMode.linestyles.value[
+                                            "dashdotted"
+                                        ]
+                                    else:
+                                        th_linestyle = ThLineMode.linestyles.value[
+                                            "dotted"
+                                        ]
+                                else:
+                                    th_linestyle = ThLineMode.linestyles.value[
+                                        self.th_linestyle
+                                    ]
+                                tt.series[nx][i].set_linestyle(th_linestyle)
+                            else:
+                                tt.series[nx][i].set_linestyle("")
+                                tt.series[nx][i].set_marker(".")
+                                if view.filled:
+                                    tt.series[nx][i].set_markerfacecolor(th_color)
+                                else:
+                                    tt.series[nx][i].set_markerfacecolor("none")
+                                tt.series[nx][i].set_markersize(size)
+
+                            tt.series[nx][i].set_linewidth(self.th_line_width)
+                            tt.series[nx][i].set_color(th_color)
+                            tt.series[nx][i].set_label("")
+                            tt.series[nx][i].set_path_effects([pe.Normal()])
+                        else:
+                            tt.series[nx][i].set_visible(False)
+                            tt.series[nx][i].set_label("")
+        # self.parent_application.update_datacursor_artists()
+        self.parent_application.update_plot()
+
+    def do_sort(self, line):
+        """Sort files in dataset according to the value of a file parameter
+
+        Examples:
+            sort Mw,reverse
+            sort T
+
+        Arguments:
+            - Par {[str]} -- File parameter according to which the files will be sorted
+            - reverse -- The files will be sorted in reverse order"""
+        items = line.split(",")
+        if len(items) == 0:
+            print("Wrong number of arguments")
+        elif len(items) == 1:
+            fp = items[0]
+            rev = False
+        elif len(items) == 2:
+            fp = items[0]
+            rev = items[1].strip() == "reverse"
+        else:
+            print("Wrong number of arguments")
+
+        if self.current_file:
+            if fp in self.current_file.file_parameters:
+                self.files.sort(key=lambda x: float(x.file_parameters[fp]), reverse=rev)
+                self.do_plot()
+            elif fp == "File":
+                self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
+                self.do_plot()
+            else:
+                self.logger.warning("Parameter %s not found in files" % line)
+                # print("Parameter %s not found in files" % line)
+
+    def new_dummy_file(
+        self,
+        fname="",
+        xrange=[],
+        yval=0,
+        zval=None,
+        z2val=None,
+        fparams={},
+        file_type=None,
+    ):
+        """Create File from xrange and file parameters
+        xrange: list of x points
+        yval: float
+        fparam: dict containing file parameter names and values
+        """
+        if fname == "":
+            filename = (
+                "dummy_"
+                + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams])
+                + "."
+                + file_type.extension
+            )
+        else:
+            filename = (
+                fname
+                + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams])
+                + "."
+                + file_type.extension
+            )
+        f = File(
+            file_name=filename,
+            file_type=file_type,
+            parent_dataset=self,
+            axarr=self.parent_application.axarr,
+        )
+        f.file_parameters = fparams
+        dt = f.data_table
+        dt.num_columns = len(file_type.col_names)
+        dt.num_rows = len(xrange)
+        dt.data = np.zeros((dt.num_rows, dt.num_columns))
+        dt.data[:, 0] = xrange
+        if isinstance(yval, list):
+            for i in range(1, dt.num_columns):
+                dt.data[:, i] = yval[:]
+        else:
+            for i in range(1, dt.num_columns):
+                dt.data[:, i] = yval
+        if dt.num_columns > 2:
+            if zval is None:
+                dt.data[:, 2] = np.nan
+            else:
+                dt.data[:, 2] = zval[:]
+        if dt.num_columns > 3:
+            if z2val is None:
+                dt.data[:, 3] = np.nan
+            else:
+                dt.data[:, 3] = z2val[:]
+        unique = True
+        for file in self.files:
+            if (
+                f.file_name_short == file.file_name_short
+            ):  # check if file already exists in current ds
+                unique = False
+        if unique:
+            self.files.append(f)
+            self.current_file = f
+            for th_name in self.theories:
+                # add a theory table
+                self.theories[th_name].tables[f.file_name_short] = DataTable(
+                    self.parent_application.axarr, "TH_" + f.file_name_short
+                )
+                self.theories[th_name].function(f)
+            return f, True
+        else:
+            return None, False
+
+    def do_open(self, line):
+        """Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
+        f_names = line
+        newtables = []
+        if line == "" or len(f_names) == 0:
+            message = "No valid file names provided"
+            return (message, None, None)
+        f_ext = [os.path.splitext(x)[1].split(".")[-1] for x in f_names]
+        if f_ext.count(f_ext[0]) != len(f_ext):
+            message = "File extensions of files must be equal!"
+            return (message, None, None)
+        if f_ext[0] in self.parent_application.filetypes:
+            ft = self.parent_application.filetypes[f_ext[0]]
+            for f in f_names:
+                if not os.path.isfile(f):
+                    print('File "%s" does not exists' % f)
+                    continue  # next file name
+                df = ft.read_file(f, self, self.parent_application.axarr)
+                unique = True
+                for file in self.files:
+                    if (
+                        df.file_name_short == file.file_name_short
+                    ):  # check if file already exists in current ds
+                        unique = False
+                if unique:
+                    self.files.append(df)
+                    self.current_file = df
+                    newtables.append(df)
+                    for th_name in self.theories:
+                        # add a theory table
+                        self.theories[th_name].tables[df.file_name_short] = DataTable(
+                            self.parent_application.axarr, "TH_" + df.file_name_short
+                        )
+            return (True, newtables, f_ext[0])
+        else:
+            message = 'File type "%s" does not exists' % f_ext[0]
+            return (message, None, None)
+
+    def do_reload_data(self, line=""):
+        """Reload data files in the current DataSet"""
+        for file in self.files:
+            if not file.active:
+                continue
+            path = file.file_full_path
+            ft = file.file_type
+            if not os.path.isfile(path):
+                self.logger.warning(
+                    "Could not open file %s: %s" % (file.file_name_short, path)
+                )
+                continue
+            df = ft.read_file(path, self, None)
+            file.header_lines = df.header_lines[:]
+            file.file_parameters.clear()
+            file.file_parameters.update(df.file_parameters)
+            file.data_table.data = np.array(df.data_table.data)
+            file.data_table.num_columns = df.data_table.num_columns
+            file.data_table.num_rows = df.data_table.num_rows
+        self.do_plot("")
+
+    def __listdir(self, root):
+        """List directory 'root' appending the path separator to subdirs."""
+        res = []
+        for name in os.listdir(root):
+            path = os.path.join(root, name)
+            if os.path.isdir(path):
+                name += os.sep
+                # name += '/'
+            res.append(name)
+        return res
+
+    def do_delete(self, name):
+        """Delete a theory from the current dataset"""
+        if name in self.theories.keys():
+            self.theories[name].destructor()
+            for tt in self.theories[
+                name
+            ].tables.values():  # remove matplotlib artist from ax
+                for i in range(tt.MAX_NUM_SERIES):
+                    for nx in range(self.nplots):
+                        tt.series[nx][i].remove()
+                        # self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
+            del self.theories[name]
+            self.do_plot("")
+        else:
+            print('Theory "%s" not found' % name)
+
+    def new(self, line):
+        """Create a new theory"""
+        """Add a new theory of the type specified to the current Data Set"""
+        thtypes = list(self.parent_application.theories.keys())
+        if line in thtypes:
+            if self.current_file is None:
+                print("Current dataset is empty\n" "%s was not created" % line)
+                return
+            self.num_theories += 1
+            th_id = "".join(
+                c for c in line if c.isupper()
+            )  # get the upper case letters of th_name
+            th_id = "%s%d" % (th_id, self.num_theories)  # append number
+            th = self.parent_application.theories[line](
+                th_id, self, self.parent_application.axarr
+            )
+            self.theories[th.name] = th
+            self.current_theory = th.name
+            if th.autocalculate:
+                th.do_calculate("")
+            else:
+                th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
+            return th, th_id
+        else:
+            print('Theory "%s" does not exists' % line)
+            return None, None
+
+    def do_new(self, line, calculate=True):
+        """Add a new theory of the type specified to the current Data Set"""
+        thtypes = list(self.parent_application.theories.keys())
+        if line in thtypes:
+            if self.current_file is None:
+                print("Current dataset is empty\n" "%s was not created" % line)
+                return
+            self.num_theories += 1
+            # th_id = "%s%02d"%(line,self.num_theories)
+            # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
+            # th_id = "%s%02d" % (line, self.num_theories)
+            th_id = "".join(
+                c for c in line if c.isupper()
+            )  # get the upper case letters of th_name
+            th_id = "%s%d" % (th_id, self.num_theories)  # append number
+            th = self.parent_application.theories[line](
+                th_id, self, self.parent_application.axarr
+            )
+            self.theories[th.name] = th
+            self.current_theory = th.name
+            if calculate and th.autocalculate:
+                th.do_calculate("")
+            else:
+                th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
+            return th
+        else:
+            print('Theory "%s" does not exists' % line)
+
+    def mincol(self, col):
+        """Minimum value in table column line of all Files in DataSet"""
+        min = 1e100
+        for f in self.files:
+            minfile = f.mincol(col)
+            if minfile < min:
+                min = minfile
+        return min
+
+    def minpositivecol(self, col):
+        """Minimum positive value in table column line of all Files in DataSet"""
+        min = 1e100
+        for f in self.files:
+            minfile = f.minpositivecol(col)
+            if minfile < min:
+                min = minfile
+        return min
+
+    def maxcol(self, col):
+        """Maximum value in table column line of all Files in DataSet"""
+        max = -1e100
+        for f in self.files:
+            maxfile = f.maxcol(col)
+            if maxfile > max:
+                max = maxfile
+        return max
+
+    # END COPY FROM DATASET
 
     def copy_parameters(self):
         """Copy the parameters of the currently active theory to the clipboard"""

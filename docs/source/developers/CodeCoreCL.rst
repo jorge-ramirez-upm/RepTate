@@ -12,14 +12,6 @@ CmdBase
     :undoc-members:
     :show-inheritance:
 
-DataSet
--------
-
-.. automodule:: RepTate.core.DataSet.DataSet
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 DataTable
 ---------
 
