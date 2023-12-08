@@ -357,8 +357,10 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.contspectrum)
-        self.ax.lines.remove(self.discspectrum)
+        # self.ax.lines.remove(self.contspectrum)
+        # self.ax.lines.remove(self.discspectrum)
+        self.contspectrum.remove()
+        self.discspectrum.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -1654,8 +1656,10 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.contspectrum)
-        self.ax.lines.remove(self.discspectrum)
+        # self.ax.lines.remove(self.contspectrum)
+        # self.ax.lines.remove(self.discspectrum)
+        self.contspectrum.remove()
+        self.discspectrum.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""

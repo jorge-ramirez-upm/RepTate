@@ -37,7 +37,8 @@ Module that defines the basic class from which all applications are derived.
 """
 import io
 import math
-#import logging
+
+# import logging
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 
@@ -52,7 +53,13 @@ from PySide6.QtGui import QImage, QColor
 from PySide6.QtCore import Qt
 
 from collections import OrderedDict
-from RepTate.theories.TheoryBasic import TheoryPolynomial, TheoryPowerLaw, TheoryExponential, TheoryTwoExponentials, TheoryAlgebraicExpression
+from RepTate.theories.TheoryBasic import (
+    TheoryPolynomial,
+    TheoryPowerLaw,
+    TheoryExponential,
+    TheoryTwoExponentials,
+    TheoryAlgebraicExpression,
+)
 from RepTate.tools.ToolIntegral import ToolIntegral
 from RepTate.tools.ToolFindPeaks import ToolFindPeaks
 from RepTate.tools.ToolGradient import ToolGradient
@@ -62,45 +69,43 @@ from RepTate.tools.ToolEvaluate import ToolEvaluate
 from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
 from RepTate.tools.ToolPowerLaw import ToolPowerLaw
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
-#from RepTate.core.mplcursors import cursor
+
+# from RepTate.core.mplcursors import cursor
 import logging
 
-#class Application(CmdBase):
-class Application:
-    """Main abstract class that represents an application
 
-    """
+# class Application(CmdBase):
+class Application:
+    """Main abstract class that represents an application"""
+
     appname = "Template"
     description = "Abstract class that defines basic functionality"
     extension = ""
-    doc_header = 'Application commands (type help <topic>):'
+    doc_header = "Application commands (type help <topic>):"
 
-    def __init__(self,
-                 name="ApplicationTemplate",
-                 parent=None,
-                 nplot_max=4,
-                 ncols=2,
-                 **kwargs):
+    def __init__(
+        self, name="ApplicationTemplate", parent=None, nplot_max=4, ncols=2, **kwargs
+    ):
         """**Constructor**"""
 
         # super().__init__()
         self.name = name
         self.parent_manager = parent
         self.views = OrderedDict()
-        self.filetypes = OrderedDict() # keep filetypes in order
+        self.filetypes = OrderedDict()  # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
-        self.availabletools = OrderedDict()     # keep tools combobox in order
-        self.extratools = OrderedDict()     # keep tools combobox in order
+        self.availabletools = OrderedDict()  # keep tools combobox in order
+        self.extratools = OrderedDict()  # keep tools combobox in order
         self.datasets = {}
         self.tools = []
         self.num_tools = 0
         self.current_view = 0
         self.num_datasets = 0
         self.legend_visible = False
-        self.multiviews = []  #default view order in multiplot views
+        self.multiviews = []  # default view order in multiplot views
         self.nplot_max = nplot_max  # maximun number of plots
         self.nplots = nplot_max  # current number of plots
-        self.ncols = ncols  #number of columns in the multiplot
+        self.ncols = ncols  # number of columns in the multiplot
         self.current_viewtab = 0
 
         self.autoscale = True
@@ -111,7 +116,9 @@ class Application:
         self.common_theories[TheoryPowerLaw.thname] = TheoryPowerLaw
         self.common_theories[TheoryExponential.thname] = TheoryExponential
         self.common_theories[TheoryTwoExponentials.thname] = TheoryTwoExponentials
-        self.common_theories[TheoryAlgebraicExpression.thname] = TheoryAlgebraicExpression
+        self.common_theories[
+            TheoryAlgebraicExpression.thname
+        ] = TheoryAlgebraicExpression
 
         # Tools available everywhere
         self.availabletools[ToolBounds.toolname] = ToolBounds
@@ -119,7 +126,9 @@ class Application:
         self.availabletools[ToolFindPeaks.toolname] = ToolFindPeaks
         self.availabletools[ToolGradient.toolname] = ToolGradient
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
-        self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
+        self.availabletools[
+            ToolInterpolateExtrapolate.toolname
+        ] = ToolInterpolateExtrapolate
         self.availabletools[ToolPowerLaw.toolname] = ToolPowerLaw
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
@@ -133,60 +142,86 @@ class Application:
         # self.figure = self.multiplots.figure
         # self.axarr = self.multiplots.axarr  #
         # self.canvas = self.multiplots.canvas
-        self.ax_opt_defaults = {'fontweight': 'normal', 'fontsize': 20, 'style': 'normal', 'family': 'sans-serif', 'color_ax':  QColor(0, 0, 0).getRgbF(),'color_label':  QColor(0, 0, 0).getRgbF(), 'tick_label_size':20, 'axis_thickness': 1.25, 'grid': 0, 'label_size_auto':1, 'tick_label_size_auto':1}
+        self.ax_opt_defaults = {
+            "fontweight": "normal",
+            "fontsize": 20,
+            "style": "normal",
+            "family": "sans-serif",
+            "color_ax": QColor(0, 0, 0).getRgbF(),
+            "color_label": QColor(0, 0, 0).getRgbF(),
+            "tick_label_size": 20,
+            "axis_thickness": 1.25,
+            "grid": 0,
+            "label_size_auto": 1,
+            "tick_label_size_auto": 1,
+        }
         self.ax_opts = self.ax_opt_defaults.copy()
 
-        connection_id = self.figure.canvas.mpl_connect('resize_event', self.resizeplot)
-        connection_id = self.figure.canvas.mpl_connect('scroll_event', self.zoom_wheel)
-        connection_id = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
-        connection_id = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
-        connection_id = self.figure.canvas.mpl_connect('button_release_event', self.onrelease)
+        connection_id = self.figure.canvas.mpl_connect("resize_event", self.resizeplot)
+        connection_id = self.figure.canvas.mpl_connect("scroll_event", self.zoom_wheel)
+        connection_id = self.figure.canvas.mpl_connect(
+            "button_press_event", self.on_press
+        )
+        connection_id = self.figure.canvas.mpl_connect(
+            "motion_notify_event", self.on_motion
+        )
+        connection_id = self.figure.canvas.mpl_connect(
+            "button_release_event", self.onrelease
+        )
 
         # Variables used during matplotlib interaction
         self.artists_clicked = []
-        self._pressed_button = None # To store active button during interaction
-        self._axes = None # To store x and y axes concerned by interaction
+        self._pressed_button = None  # To store active button during interaction
+        self._axes = None  # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
         self._was_zooming = False
 
         # LOGGING STUFF
-        self.logger = logging.getLogger(self.parent_manager.logger.name + '.' + self.name)
-        self.logger.debug('New %s app'%self.appname)
+        self.logger = logging.getLogger(
+            self.parent_manager.logger.name + "." + self.name
+        )
+        self.logger.debug("New %s app" % self.appname)
 
     def resizeplot(self, event=""):
         """Rescale plot graphics when the window is resized"""
-        if not (self.ax_opts['label_size_auto'] or self.ax_opts['tick_label_size_auto']):
+        if not (
+            self.ax_opts["label_size_auto"] or self.ax_opts["tick_label_size_auto"]
+        ):
             return
-        #large window settings
+        # large window settings
         w_large = 900
         h_large = 650
         font_large = 16
-        #small window settings
+        # small window settings
         w_small = 300
         h_small = 400
         font_small = 10
-        #interpolate for current window size
+        # interpolate for current window size
         geometry = self.multiplots.frameGeometry()
         width = geometry.width()
         height = geometry.height()
-        scale_w = font_small + (width - w_small)*(font_large - font_small)/(w_large - w_small)
-        scale_h = font_small + (height - h_small)*(font_large - font_small)/(h_large - h_small)
+        scale_w = font_small + (width - w_small) * (font_large - font_small) / (
+            w_large - w_small
+        )
+        scale_h = font_small + (height - h_small) * (font_large - font_small) / (
+            h_large - h_small
+        )
         font_size = min(scale_w, scale_h)
-        #resize plot fonts
+        # resize plot fonts
         for ax in self.axarr:
-            if self.ax_opts['label_size_auto']:
+            if self.ax_opts["label_size_auto"]:
                 ax.xaxis.label.set_size(font_size)
                 ax.yaxis.label.set_size(font_size)
-            if self.ax_opts['tick_label_size_auto']:
-                ax.tick_params(which='major', labelsize=font_size)
-                ax.tick_params(which='minor', labelsize=font_size*.8)
+            if self.ax_opts["tick_label_size_auto"]:
+                ax.tick_params(which="major", labelsize=font_size)
+                ax.tick_params(which="minor", labelsize=font_size * 0.8)
 
     def zoom_wheel(self, event):
         base_scale = 1.1
-        if event.button == 'up':
+        if event.button == "up":
             # deal with zoom in
             scale_factor = 1 / base_scale
-        elif event.button == 'down':
+        elif event.button == "down":
             # deal with zoom out
             scale_factor = base_scale
         else:
@@ -194,9 +229,9 @@ class Application:
             scale_factor = 1
 
         # if event.step > 0:
-            # scale_factor = self.scale_factor
+        # scale_factor = self.scale_factor
         # else:
-            # scale_factor = 1. / self.scale_factor
+        # scale_factor = 1. / self.scale_factor
 
         # Go through all axes to enable zoom for multiple axes subplots
         x_axes, y_axes = self._axes_to_update(event)
@@ -206,16 +241,16 @@ class Application:
             xdata, ydata = transform.transform_point((event.x, event.y))
 
             xlim = ax.get_xlim()
-            xlim = self._zoom_range(xlim[0], xlim[1],
-                                    xdata, scale_factor,
-                                    ax.get_xscale())
+            xlim = self._zoom_range(
+                xlim[0], xlim[1], xdata, scale_factor, ax.get_xscale()
+            )
             ax.set_xlim(xlim)
 
         for ax in y_axes:
             ylim = ax.get_ylim()
-            ylim = self._zoom_range(ylim[0], ylim[1],
-                                    ydata, scale_factor,
-                                    ax.get_yscale())
+            ylim = self._zoom_range(
+                ylim[0], ylim[1], ydata, scale_factor, ax.get_yscale()
+            )
             ax.set_ylim(ylim)
 
         if x_axes or y_axes:
@@ -262,29 +297,27 @@ class Application:
         else:
             min_, max_ = end, begin
 
-        if scale == 'linear':
+        if scale == "linear":
             old_min, old_max = min_, max_
-        elif scale == 'log':
-            old_min = np.log10(min_ if min_ > 0. else np.nextafter(0, 1))
-            center = np.log10(
-                center if center > 0. else np.nextafter(0, 1))
-            old_max = np.log10(max_) if max_ > 0. else 0.
+        elif scale == "log":
+            old_min = np.log10(min_ if min_ > 0.0 else np.nextafter(0, 1))
+            center = np.log10(center if center > 0.0 else np.nextafter(0, 1))
+            old_max = np.log10(max_) if max_ > 0.0 else 0.0
         else:
-            logging.warning(
-                'Zoom on wheel not implemented for scale "%s"' % scale)
+            logging.warning('Zoom on wheel not implemented for scale "%s"' % scale)
             return begin, end
 
         offset = (center - old_min) / (old_max - old_min)
         range_ = (old_max - old_min) / scale_factor
         new_min = center - offset * range_
-        new_max = center + (1. - offset) * range_
+        new_max = center + (1.0 - offset) * range_
 
-        if scale == 'log':
+        if scale == "log":
             try:
-                new_min, new_max = 10. ** float(new_min), 10. ** float(new_max)
+                new_min, new_max = 10.0 ** float(new_min), 10.0 ** float(new_max)
             except OverflowError:  # Limit case
                 new_min, new_max = min_, max_
-            if new_min <= 0. or new_max <= 0.:  # Limit case
+            if new_min <= 0.0 or new_max <= 0.0:  # Limit case
                 new_min, new_max = min_, max_
 
         if begin < end:
@@ -293,13 +326,13 @@ class Application:
             return new_max, new_min
 
     def on_press(self, event):
-        if event.button == 2: # Pan
+        if event.button == 2:  # Pan
             x_axes, y_axes = self._axes_to_update(event)
             if x_axes or y_axes:
                 self._axes = x_axes, y_axes
                 self._pressed_button = event.button
                 self._pan(event)
-        elif event.button == 3: # Zoom
+        elif event.button == 3:  # Zoom
             x_axes, y_axes = self._axes_to_update(event)
             if x_axes or y_axes:
                 self._axes = x_axes, y_axes
@@ -314,7 +347,7 @@ class Application:
 
     def onrelease(self, event):
         """Called when releasing mouse"""
-        if event.button == 3:  #if release a right click
+        if event.button == 3:  # if release a right click
             self._zoom_area(event)
             if not self._was_zooming:
                 self.open_figure_popup_menu(event)
@@ -325,13 +358,13 @@ class Application:
         self._pressed_button = None
 
     def _pan(self, event):
-        if event.name == 'button_press_event':  # begin pan
+        if event.name == "button_press_event":  # begin pan
             self._event = event
 
-        elif event.name == 'button_release_event':  # end pan
+        elif event.name == "button_release_event":  # end pan
             self._event = None
 
-        elif event.name == 'motion_notify_event':  # pan
+        elif event.name == "motion_notify_event":  # pan
             if self._event is None:
                 return
 
@@ -364,15 +397,16 @@ class Application:
         data = pixel_to_data.transform_point((event.x, event.y))
         last_data = pixel_to_data.transform_point((last_event.x, last_event.y))
 
-        if scale == 'linear':
+        if scale == "linear":
             delta = data[axis_id] - last_data[axis_id]
             new_lim = lim[0] - delta, lim[1] - delta
-        elif scale == 'log':
+        elif scale == "log":
             try:
-                delta = math.log10(data[axis_id]) - \
-                    math.log10(last_data[axis_id])
-                new_lim = [pow(10., (math.log10(lim[0]) - delta)),
-                           pow(10., (math.log10(lim[1]) - delta))]
+                delta = math.log10(data[axis_id]) - math.log10(last_data[axis_id])
+                new_lim = [
+                    pow(10.0, (math.log10(lim[0]) - delta)),
+                    pow(10.0, (math.log10(lim[1]) - delta)),
+                ]
             except (ValueError, OverflowError):
                 new_lim = lim  # Keep previous limits
         else:
@@ -381,11 +415,17 @@ class Application:
         return new_lim
 
     def _zoom_area(self, event):
-        if event.name == 'button_press_event':  # begin drag
+        if event.name == "button_press_event":  # begin drag
             self._event = event
             self._patch = plt.Rectangle(
-                xy=(event.xdata, event.ydata), width=0, height=0,
-                fill=False, linewidth=1., linestyle=':', color='gray')
+                xy=(event.xdata, event.ydata),
+                width=0,
+                height=0,
+                fill=False,
+                linewidth=1.0,
+                linestyle=":",
+                color="gray",
+            )
             self._event.inaxes.add_patch(self._patch)
 
             canvas = self._patch.figure.canvas
@@ -396,7 +436,7 @@ class Application:
             axes.draw_artist(self._patch)
             canvas.update()
 
-        elif event.name == 'button_release_event':  # end drag
+        elif event.name == "button_release_event":  # end drag
             self.background = None
             try:
                 self._patch.remove()
@@ -407,8 +447,7 @@ class Application:
             if self._event == None:
                 self._was_zooming = False
                 return
-            if (abs(event.x - self._event.x) < 3 or
-                    abs(event.y - self._event.y) < 3):
+            if abs(event.x - self._event.x) < 3 or abs(event.y - self._event.y) < 3:
                 self._was_zooming = False
                 return  # No zoom when points are too close
 
@@ -417,65 +456,62 @@ class Application:
             for ax in x_axes:
                 pixel_to_data = ax.transData.inverted()
                 end_pt = pixel_to_data.transform_point((event.x, event.y))
-                begin_pt = pixel_to_data.transform_point(
-                    (self._event.x, self._event.y))
+                begin_pt = pixel_to_data.transform_point((self._event.x, self._event.y))
 
                 min_ = min(begin_pt[0], end_pt[0])
                 max_ = max(begin_pt[0], end_pt[0])
-                if (end_pt[0]>begin_pt[0]):
+                if end_pt[0] > begin_pt[0]:
                     if not ax.xaxis_inverted():
                         ax.set_xlim(min_, max_)
                     else:
                         ax.set_xlim(max_, min_)
                 else:
                     min_now, max_now = ax.get_xlim()
-                    if ax.get_xscale() == 'log':
-                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                    if ax.get_xscale() == "log":
+                        fac = 10.0 ** ((math.log10(max_) - math.log10(min_)) / 2)
                         if not ax.xaxis_inverted():
-                            ax.set_xlim(min_now/fac, max_now*fac)
+                            ax.set_xlim(min_now / fac, max_now * fac)
                         else:
-                            ax.set_xlim(max_now*fac, min_now/fac)
+                            ax.set_xlim(max_now * fac, min_now / fac)
                     else:
                         dx = max_ - min_
                         if not ax.xaxis_inverted():
-                            ax.set_xlim(min_now-dx, max_now+dx)
+                            ax.set_xlim(min_now - dx, max_now + dx)
                         else:
-                            ax.set_xlim(max_now+dx, min_now-dx)
+                            ax.set_xlim(max_now + dx, min_now - dx)
 
             for ax in y_axes:
                 pixel_to_data = ax.transData.inverted()
                 end_pt = pixel_to_data.transform_point((event.x, event.y))
-                begin_pt = pixel_to_data.transform_point(
-                    (self._event.x, self._event.y))
+                begin_pt = pixel_to_data.transform_point((self._event.x, self._event.y))
 
                 min_ = min(begin_pt[1], end_pt[1])
                 max_ = max(begin_pt[1], end_pt[1])
-                if (end_pt[1]<begin_pt[1]):
+                if end_pt[1] < begin_pt[1]:
                     if not ax.yaxis_inverted():
                         ax.set_ylim(min_, max_)
                     else:
                         ax.set_ylim(max_, min_)
                 else:
                     min_now, max_now = ax.get_ylim()
-                    if ax.get_yscale() == 'log':
-                        fac = 10.0**((math.log10(max_) - math.log10(min_))/2)
+                    if ax.get_yscale() == "log":
+                        fac = 10.0 ** ((math.log10(max_) - math.log10(min_)) / 2)
                         if not ax.yaxis_inverted():
-                            ax.set_ylim(min_now/fac, max_now*fac)
+                            ax.set_ylim(min_now / fac, max_now * fac)
                         else:
-                            ax.set_ylim(max_now*fac, min_now/fac)
+                            ax.set_ylim(max_now * fac, min_now / fac)
                     else:
                         dy = max_ - min_
                         if not ax.yaxis_inverted():
-                            ax.set_ylim(min_now-dy, max_now+dy)
+                            ax.set_ylim(min_now - dy, max_now + dy)
                         else:
-                            ax.set_ylim(max_now+dy, min_now-dy)
+                            ax.set_ylim(max_now + dy, min_now - dy)
 
             self._event = None
             self._was_zooming = True
             self.figure.canvas.draw()
 
-
-        elif event.name == 'motion_notify_event':  # drag
+        elif event.name == "motion_notify_event":  # drag
             if self._event is None:
                 return
 
@@ -491,17 +527,16 @@ class Application:
             axes.draw_artist(self._patch)
             canvas.update()
 
-
     def delete_multiplot(self):
         """deletes the multiplot object"""
         del self.multiplots
 
     def set_multiplot(self, nplots, ncols):
         """defines the plot"""
-        self.multiplots = MultiView(PlotOrganizationType.OptimalRow,
-                                    nplots, ncols, self)
-        self.multiplots.plotselecttabWidget.setCurrentIndex(
-            self.current_viewtab)
+        self.multiplots = MultiView(
+            PlotOrganizationType.OptimalRow, nplots, ncols, self
+        )
+        self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
         self.figure = self.multiplots.figure
         self.axarr = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
@@ -520,7 +555,7 @@ class Application:
         self.view_switch(self.current_view.name)
 
     def copy_chart(self):
-        """ Copy current chart to clipboard"""
+        """Copy current chart to clipboard"""
         buf = io.BytesIO()
         self.figure.savefig(buf, dpi=150)
         QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
@@ -541,7 +576,7 @@ class Application:
     def new(self, line):
         """Create new empty dataset in the application"""
         self.num_datasets += 1
-        if (line == ""):
+        if line == "":
             dsname = "Set%d" % self.num_datasets
         else:
             dsname = line
@@ -567,7 +602,7 @@ class Application:
             self.datasets[ds_name].files.clear()
             del self.datasets[ds_name]
         else:
-            print("Data Set \"%s\" not found" % ds_name)
+            print('Data Set "%s" not found' % ds_name)
 
     def remove_ds_ax_lines(self, ds_name):
         """Remove all dataset file artists from ax including theory ones"""
@@ -579,11 +614,13 @@ class Application:
             for tt in th.tables.values():
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.nplots):
-                        self.axarr[nx].lines.remove(tt.series[nx][i])
+                        # self.axarr[nx].lines.remove(tt.series[nx][i])
+                        tt.series[nx][i].remove()
         for file in ds.files:
             for i in range(file.data_table.MAX_NUM_SERIES):
                 for nx in range(self.nplots):
-                    self.axarr[nx].lines.remove(file.data_table.series[nx][i])
+                    # self.axarr[nx].lines.remove(file.data_table.series[nx][i])
+                    file.data_table.series[nx][i].remove()
 
     # def do_delete(self, name):
     #     """Delete a dataset from the current application"""
@@ -640,8 +677,8 @@ class Application:
     # def do_switch(self, line):
     #     """Set focus to an open set/theory/tool.
     #     By hitting TAB, all the currently accessible elements are shown.
-        
-    #     :param line: Name of the set/theory/tool to switch the focus to.- 
+
+    #     :param line: Name of the set/theory/tool to switch the focus to.-
 
     #     :Example:
 
@@ -701,7 +738,7 @@ class Application:
 
     #     return ds_names + thlist + to_names
 
-# FILE TYPE STUFF
+    # FILE TYPE STUFF
 
     # def do_available_filetypes(self, line=""):
     #     """List available file types in the current application"""
@@ -711,19 +748,21 @@ class Application:
     #     # for ftype in ftypes:
     #     #     print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
 
-# VIEW STUFF
+    # VIEW STUFF
 
     def set_views(self):
         """Set current view and assign availiable view labels to viewComboBox if in GUI mode"""
-        for i, view_name in enumerate(self.views):  #loop over the keys
+        for i, view_name in enumerate(self.views):  # loop over the keys
             if i == 0:
-                #index 0 is the defaut view
+                # index 0 is the defaut view
                 self.current_view = self.views[view_name]
-            #add view name to the list of views avaliable
+            # add view name to the list of views avaliable
             self.viewComboBox.insertItem(i, view_name)
-            self.viewComboBox.setItemData(i, self.views[view_name].description, Qt.ToolTipRole)
+            self.viewComboBox.setItemData(
+                i, self.views[view_name].description, Qt.ToolTipRole
+            )
 
-        #index 0 is the defaut selection
+        # index 0 is the defaut selection
         self.viewComboBox.setCurrentIndex(0)
 
     # def do_available_views(self, line=""):
@@ -754,7 +793,7 @@ class Application:
             else:
                 self.multiviews[self.current_viewtab - 1] = self.views[name]
         else:
-            print("View \"%s\" not found" % name)
+            print('View "%s" not found' % name)
         # Update the plots!
         # Loop over datasets and call do_plot()
         temp = self.autoscale
@@ -784,7 +823,7 @@ class Application:
     #         completions = [f for f in view_names if f.startswith(text)]
     #     return completions
 
-# THEORY STUFF
+    # THEORY STUFF
 
     # def do_available_theories(self, line=""):
     #     """List available theories in the current application"""
@@ -793,7 +832,7 @@ class Application:
     #     # for t in list(self.theories.values()):
     #     #     print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
 
-# TOOL STUFF
+    # TOOL STUFF
     # def do_available_tools(self, line=""):
     #     """List available tools in the current application"""
     #     print("AVAILABLE TOOLS")
@@ -807,19 +846,19 @@ class Application:
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         extratooltypes = list(self.extratools.keys())
-        if ((line in tooltypes) or (line in extratooltypes)):
+        if (line in tooltypes) or (line in extratooltypes):
             self.num_tools += 1
-            to_id = ''.join(
-                c for c in line
-                if c.isupper())  #get the upper case letters of th_name
+            to_id = "".join(
+                c for c in line if c.isupper()
+            )  # get the upper case letters of th_name
             to_id = "%s%d" % (to_id, self.num_tools)
-            if (line in tooltypes):
+            if line in tooltypes:
                 to = self.availabletools[line](to_id, self)
-            elif (line in extratooltypes):
+            elif line in extratooltypes:
                 to = self.extratools[line](to_id, self)
             self.tools.append(to)
         else:
-            to=None
+            to = None
         return to
 
     # def do_tool_new(self, line):
@@ -847,7 +886,7 @@ class Application:
             self.tools[idx].destructor()
             del self.tools[idx]
         except AttributeError as e:
-            print("Tool \"%s\" not found" % name)
+            print('Tool "%s" not found' % name)
 
     # def complete_tool_delete(self, text, line, begidx, endidx):
     #     """Complete delete tool command"""
@@ -885,7 +924,7 @@ class Application:
     #     completions = self.complete_tool_delete(text, line, begidx, endidx)
     #     return completions
 
-# LEGEND STUFF
+    # LEGEND STUFF
 
     def legend(self):
         """Show/Hide the legend"""
@@ -897,13 +936,12 @@ class Application:
     #     """Show/Hide the legend"""
     #     self.legend()
 
-
-# OTHER STUFF
+    # OTHER STUFF
 
     def update_plot(self):
         """Update the plot in the current application"""
         self.set_axes_properties(self.autoscale)
-        #self.set_legend_properties()
+        # self.set_legend_properties()
         self.update_legend()
         self.canvas.draw()
 
@@ -912,50 +950,56 @@ class Application:
         for nx in range(self.nplots):
             view = self.multiviews[nx]
             ax = self.axarr[nx]
-            if (view.log_x):
+            if view.log_x:
                 ax.set_xscale("log")
             else:
                 ax.set_xscale("linear")
                 ax.xaxis.set_minor_locator(AutoMinorLocator())
-            if (view.log_y):
+            if view.log_y:
                 ax.set_yscale("log")
             else:
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())
 
-            ax.set_xlabel(view.x_label + ' [' + view.x_units + ']')
-            ax.set_ylabel(view.y_label + ' [' + view.y_units + ']')
+            ax.set_xlabel(view.x_label + " [" + view.x_units + "]")
+            ax.set_ylabel(view.y_label + " [" + view.y_units + "]")
 
-            if not self.ax_opts['label_size_auto']:
-                ax.xaxis.label.set_size(self.ax_opts['fontsize'])
-                ax.yaxis.label.set_size(self.ax_opts['fontsize'])
+            if not self.ax_opts["label_size_auto"]:
+                ax.xaxis.label.set_size(self.ax_opts["fontsize"])
+                ax.yaxis.label.set_size(self.ax_opts["fontsize"])
 
-            ax.xaxis.label.set_color(self.ax_opts['color_label'])
-            ax.yaxis.label.set_color(self.ax_opts['color_label'])
+            ax.xaxis.label.set_color(self.ax_opts["color_label"])
+            ax.yaxis.label.set_color(self.ax_opts["color_label"])
 
-            ax.xaxis.label.set_style(self.ax_opts['style'])
-            ax.yaxis.label.set_style(self.ax_opts['style'])
+            ax.xaxis.label.set_style(self.ax_opts["style"])
+            ax.yaxis.label.set_style(self.ax_opts["style"])
 
-            ax.xaxis.label.set_family(self.ax_opts['family'])
-            ax.yaxis.label.set_family(self.ax_opts['family'])
+            ax.xaxis.label.set_family(self.ax_opts["family"])
+            ax.yaxis.label.set_family(self.ax_opts["family"])
 
-            ax.xaxis.label.set_weight(self.ax_opts['fontweight'])
-            ax.yaxis.label.set_weight(self.ax_opts['fontweight'])
+            ax.xaxis.label.set_weight(self.ax_opts["fontweight"])
+            ax.yaxis.label.set_weight(self.ax_opts["fontweight"])
 
-            ax_thick = self.ax_opts['axis_thickness']
-            ax.tick_params(which='major', width=1.00*ax_thick, length=5*ax_thick)
-            ax.tick_params(which='minor', width=0.75*ax_thick, length=2.5*ax_thick)
+            ax_thick = self.ax_opts["axis_thickness"]
+            ax.tick_params(which="major", width=1.00 * ax_thick, length=5 * ax_thick)
+            ax.tick_params(which="minor", width=0.75 * ax_thick, length=2.5 * ax_thick)
 
-            if not self.ax_opts['tick_label_size_auto']:
-                ax.tick_params(which='major', labelsize=self.ax_opts['tick_label_size'])
-                ax.tick_params(which='minor', labelsize=self.ax_opts['tick_label_size']*.8)
+            if not self.ax_opts["tick_label_size_auto"]:
+                ax.tick_params(which="major", labelsize=self.ax_opts["tick_label_size"])
+                ax.tick_params(
+                    which="minor", labelsize=self.ax_opts["tick_label_size"] * 0.8
+                )
 
-            ax.grid(self.ax_opts['grid'])
+            ax.grid(self.ax_opts["grid"])
 
-            for pos in ['top', 'bottom', 'left', 'right']:
+            for pos in ["top", "bottom", "left", "right"]:
                 ax.spines[pos].set_linewidth(ax_thick)
-                ax.spines[pos].set_color(self.ax_opts['color_ax'])
-            ax.tick_params(which='both', color=self.ax_opts['color_ax'], labelcolor=self.ax_opts['color_ax'])
+                ax.spines[pos].set_color(self.ax_opts["color_ax"])
+            ax.tick_params(
+                which="both",
+                color=self.ax_opts["color_ax"],
+                labelcolor=self.ax_opts["color_ax"],
+            )
 
             if autoscale:
                 self.axarr[nx].relim(True)
@@ -967,7 +1011,7 @@ class Application:
         """Set default legend properties"""
         # pass
         leg = self.axarr[0].legend(frameon=True, ncol=2)
-        if (self.legend_visible):
+        if self.legend_visible:
             leg.set_draggable(True)
             pass
         else:
@@ -975,7 +1019,7 @@ class Application:
                 leg.remove()
             except AttributeError as e:
                 pass
-                #print("legend: %s"%e)
+                # print("legend: %s"%e)
 
     # def do_figure_save(self, line=""):
     #     """Save the figure to file. Argument = file name. The image format is determined from the file extension."""
@@ -988,11 +1032,12 @@ class Application:
     #     """Complete the figure_save command"""
     #     return self.complete_cd(text, line, begidx, endidx)
 
+
 # TUTORIAL
 
-    # def do_tutorial(self, line=""):
-    #     """Show a short tutorial about the commands in RepTate applications"""
-    #     print("")
+# def do_tutorial(self, line=""):
+#     """Show a short tutorial about the commands in RepTate applications"""
+#     print("")
 #         print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
 #         print('Visit the page:')
 #         print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
@@ -1014,4 +1059,3 @@ class Application:
 #         print(Fore.RED + "plot" + Fore.RESET)
 #         self.do_help("plot")
 #         print("")
-        

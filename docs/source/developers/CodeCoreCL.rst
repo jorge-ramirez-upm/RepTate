@@ -4,23 +4,6 @@ Core classes (Command Line)
 .. toctree::
    :maxdepth: 2
 
-
-Application
------------
-
-.. automodule:: RepTate.core.Application.Application
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    
-ApplicationManager
-------------------
-
-.. automodule:: RepTate.core.ApplicationManager.ApplicationManager
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 CmdBase
 -------
 
@@ -69,21 +52,6 @@ Parameter
     :undoc-members:
     :show-inheritance:
 
-Theory
-------
-    
-.. automodule:: RepTate.core.Theory.Theory
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Tool
-------
-    
-.. automodule:: RepTate.core.Tool.Tool
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 View
 ----

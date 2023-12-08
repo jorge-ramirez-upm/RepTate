@@ -62,11 +62,12 @@ class TheoryMaxwellModesFrequency(QTheory):
        - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
     
     """
+
     thname = "Maxwell Modes"
     description = "Maxwell modes, frequency dependent"
     citations = []
     doi = []
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#maxwell-modes"
     single_file = True
 
     def __init__(self, name="", parent_dataset=None, ax=None):
@@ -87,7 +88,8 @@ class TheoryMaxwellModesFrequency(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=-10,
-            max_value=10)
+            max_value=10,
+        )
         self.parameters["logwmax"] = Parameter(
             "logwmax",
             np.log10(wmax),
@@ -95,7 +97,8 @@ class TheoryMaxwellModesFrequency(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=-10,
-            max_value=10)
+            max_value=10,
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
@@ -104,16 +107,21 @@ class TheoryMaxwellModesFrequency(QTheory):
             opt_type=OptType.const,
             display_flag=False,
             min_value=1,
-            max_value=self.MAX_MODES)
+            max_value=self.MAX_MODES,
+        )
         # Interpolate modes from data
-        if nmodes>1:
+        if nmodes > 1:
             w = np.logspace(np.log10(wmin), np.log10(wmax), nmodes)
         else:
             w = np.logspace(np.log10(wmin), np.log10(wmin), nmodes)
             self.parameters["logwmax"].opt_type = OptType.const
         G = np.abs(
-            np.interp(w, self.parent_dataset.files[0].data_table.data[:, 0],
-                      self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(
+                w,
+                self.parent_dataset.files[0].data_table.data[:, 0],
+                self.parent_dataset.files[0].data_table.data[:, 1],
+            )
+        )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d" % i] = Parameter(
                 "logG%02d" % i,
@@ -122,7 +130,8 @@ class TheoryMaxwellModesFrequency(QTheory):
                 ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=-10,
-                max_value=10)
+                max_value=10,
+            )
 
         # GRAPHIC MODES
         self.graphicmodes = []
@@ -135,23 +144,23 @@ class TheoryMaxwellModesFrequency(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
         self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -166,15 +175,14 @@ class TheoryMaxwellModesFrequency(QTheory):
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmodes'"""
-        self.set_param_value('nmodes', value)
+        self.set_param_value("nmodes", value)
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
-
     def set_param_value(self, name, value):
         """Change other parameters when nmodes is changed, else call parent function"""
-        if name == 'nmodes':
+        if name == "nmodes":
             nmodesold = self.parameters["nmodes"].value
             wminold = self.parameters["logwmin"].value
             wmaxold = self.parameters["logwmax"].value
@@ -186,11 +194,11 @@ class TheoryMaxwellModesFrequency(QTheory):
 
             nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
-            if nmodesnew>1 and nmodesold==1:
-                if wminold>wmaxold:
+            if nmodesnew > 1 and nmodesold == 1:
+                if wminold > wmaxold:
                     wminold, wmaxold = wmaxold, wminold
                 self.parameters["logwmax"].opt_type = OptType.opt
-            if nmodesnew>1:
+            if nmodesnew > 1:
                 wnew = np.logspace(wminold, wmaxold, nmodesnew)
                 Gnew = np.interp(wnew, wold, Gold)
             else:
@@ -206,13 +214,14 @@ class TheoryMaxwellModesFrequency(QTheory):
                     ParameterType.real,
                     opt_type=OptType.opt,
                     min_value=-10,
-                    max_value=10)
+                    max_value=10,
+                )
             self.spinbox.blockSignals(True)
             self.spinbox.setValue(nmodesnew)
             self.spinbox.blockSignals(False)
         else:
             message, success = super().set_param_value(name, value)
-        
+
         return message, success
 
     def drag_mode(self, dx, dy):
@@ -242,34 +251,44 @@ class TheoryMaxwellModesFrequency(QTheory):
     def setup_graphic_modes(self):
         """Setup graphic helpers"""
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            w = np.logspace(self.parameters["logwmin"].value,
-                            self.parameters["logwmax"].value, nmodes)
+        if nmodes > 1:
+            w = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmax"].value,
+                nmodes,
+            )
         else:
-            w = np.logspace(self.parameters["logwmin"].value,
-                            self.parameters["logwmin"].value, nmodes)
+            w = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmin"].value,
+                nmodes,
+            )
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
 
         self.graphicmodes = self.ax.plot(w, G)[0]
-        self.graphicmodes.set_marker('D')
-        self.graphicmodes.set_linestyle('')
+        self.graphicmodes.set_marker("D")
+        self.graphicmodes.set_linestyle("")
         self.graphicmodes.set_visible(self.view_modes)
-        self.graphicmodes.set_markerfacecolor('yellow')
-        self.graphicmodes.set_markeredgecolor('black')
+        self.graphicmodes.set_markerfacecolor("yellow")
+        self.graphicmodes.set_markeredgecolor("black")
         self.graphicmodes.set_markeredgewidth(3)
         self.graphicmodes.set_markersize(8)
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
-            self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application, self.drag_mode)
+            self.graphicmodes,
+            DragType.special,
+            self.parent_dataset.parent_application,
+            self.drag_mode,
+        )
         self.plot_theory_stuff()
 
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes)
+        # self.ax.lines.remove(self.graphicmodes)
+        self.graphicmodes.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -290,12 +309,18 @@ class TheoryMaxwellModesFrequency(QTheory):
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                            self.parameters["logwmax"].value, nmodes)
+        if nmodes > 1:
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmax"].value,
+                nmodes,
+            )
         else:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                            self.parameters["logwmin"].value, nmodes)
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmin"].value,
+                nmodes,
+            )
         tau = 1.0 / freq
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -312,12 +337,18 @@ class TheoryMaxwellModesFrequency(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
 
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                               self.parameters["logwmax"].value, nmodes)
+        if nmodes > 1:
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmax"].value,
+                nmodes,
+            )
         else:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                               self.parameters["logwmin"].value, nmodes)
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmin"].value,
+                nmodes,
+            )
         tau = 1.0 / freq
 
         for i in range(nmodes):
@@ -338,18 +369,25 @@ class TheoryMaxwellModesFrequency(QTheory):
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
-        if nmodes>1:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                              self.parameters["logwmax"].value, nmodes)
+        if nmodes > 1:
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmax"].value,
+                nmodes,
+            )
         else:
-            freq = np.logspace(self.parameters["logwmin"].value,
-                              self.parameters["logwmin"].value, nmodes)
+            freq = np.logspace(
+                self.parameters["logwmin"].value,
+                self.parameters["logwmin"].value,
+                nmodes,
+            )
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
             data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
-                10, self.parameters["logG%02d" % i].value)
+                10, self.parameters["logG%02d" % i].value
+            )
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
@@ -359,8 +397,8 @@ class TheoryMaxwellModesFrequency(QTheory):
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                data_table_tmp.series[nx][i].remove()
 
 
 ##################################################################################
@@ -369,25 +407,26 @@ class TheoryMaxwellModesFrequency(QTheory):
 
 
 class TheoryMaxwellModesTime(QTheory):
-    """Fit a generalized Maxwell model to a time dependent relaxation function. 
-    
+    """Fit a generalized Maxwell model to a time dependent relaxation function.
+
     * **Function**
         .. math::
             \\begin{eqnarray}
             G(t) & = & \\sum_{i=1}^{n_{modes}} G_i \\exp (-t/\\tau_i)
             \\end{eqnarray}
-    
+
     * **Parameters**
        - :math:`n_{modes}`: number of Maxwell modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.
        - logtmin = :math:`\\log(t_{min})`: decimal logarithm of the minimum time.
        - logtmax = :math:`\\log(t_{max})`: decimal logarithm of the maximum time.
        - logGi = :math:`\\log(G_{i})`: decimal logarithm of the amplitude of Maxwell mode :math:`i`.
-    
+
     """
+
     thname = "Maxwell Modes"
     description = "Maxwell modes, time dependent"
     citations = []
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes'
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#maxwell-modes"
     single_file = True
 
     def __init__(self, name="", parent_dataset=None, ax=None):
@@ -406,36 +445,44 @@ class TheoryMaxwellModesTime(QTheory):
             np.log10(tmin),
             "Log of time range minimum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+        )
         self.parameters["logtmax"] = Parameter(
             "logtmax",
             np.log10(tmax),
             "Log of time range maximum",
             ParameterType.real,
-            opt_type=OptType.opt)
+            opt_type=OptType.opt,
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
             description="Number of Maxwell modes",
             type=ParameterType.integer,
             opt_type=OptType.const,
-            display_flag=False)
+            display_flag=False,
+        )
         # Interpolate modes from data
-        if nmodes>1:
+        if nmodes > 1:
             tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
         else:
             tau = np.logspace(np.log10(tmax), np.log10(tmax), nmodes)
             self.parameters["logtmin"].opt_type = OptType.const
         G = np.abs(
-            np.interp(tau, self.parent_dataset.files[0].data_table.data[:, 0],
-                      self.parent_dataset.files[0].data_table.data[:, 1]))
+            np.interp(
+                tau,
+                self.parent_dataset.files[0].data_table.data[:, 0],
+                self.parent_dataset.files[0].data_table.data[:, 1],
+            )
+        )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d" % i] = Parameter(
                 "logG%02d" % i,
                 np.log10(G[i]),
                 "Log of Mode %d amplitude" % i,
                 ParameterType.real,
-                opt_type=OptType.opt)
+                opt_type=OptType.opt,
+            )
 
         # GRAPHIC MODES
         self.graphicmodes = None
@@ -448,23 +495,23 @@ class TheoryMaxwellModesTime(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  #initial value
+        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-visible.png'), 'View modes')
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
         self.save_modes_action = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")            
+            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
+        )
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(
-            self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
 
     def Qhide_theory_extras(self, state):
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -483,15 +530,14 @@ class TheoryMaxwellModesTime(QTheory):
 
     def handle_spinboxValueChanged(self, value):
         """Handle a change of the parameter 'nmodes'"""
-        self.set_param_value('nmodes', value)
+        self.set_param_value("nmodes", value)
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
-
     def set_param_value(self, name, value):
         """Change other parameters when nmodes is changed, else call parent function"""
-        if name == 'nmodes':
+        if name == "nmodes":
             nmodesold = self.parameters["nmodes"].value
             tminold = self.parameters["logtmin"].value
             tmaxold = self.parameters["logtmax"].value
@@ -503,15 +549,15 @@ class TheoryMaxwellModesTime(QTheory):
 
             nmodesnew = value
             message, success = super().set_param_value("nmodes", nmodesnew)
-            if nmodesnew>1 and nmodesold==1:
-                if tauminold>taumaxold:
+            if nmodesnew > 1 and nmodesold == 1:
+                if tauminold > taumaxold:
                     tauminold, taumaxold = taumaxold, tauminold
                 self.parameters["logtmin"].opt_type = OptType.opt
-            if (nmodesnew > 1):
+            if nmodesnew > 1:
                 taunew = np.logspace(tminold, tmaxold, nmodesnew)
                 Gnew = np.interp(taunew, tauold, Gold)
             else:
-                taunew = 10.0**np.array([tmaxold])
+                taunew = 10.0 ** np.array([tmaxold])
                 Gnew = np.array([Gold[-1]])
                 self.parameters["logtmin"].opt_type = OptType.const
 
@@ -523,11 +569,12 @@ class TheoryMaxwellModesTime(QTheory):
                     ParameterType.real,
                     opt_type=OptType.opt,
                     min_value=-10,
-                    max_value=10)
+                    max_value=10,
+                )
             self.spinbox.setValue(value)
         else:
             message, success = super().set_param_value(name, value)
-        
+
         return message, success
 
     def drag_mode(self, dx, dy):
@@ -547,34 +594,44 @@ class TheoryMaxwellModesTime(QTheory):
     def setup_graphic_modes(self):
         """setup graphic helpers"""
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            tau = np.logspace(self.parameters["logtmin"].value,
-                              self.parameters["logtmax"].value, nmodes)
+        if nmodes > 1:
+            tau = np.logspace(
+                self.parameters["logtmin"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         else:
-            tau = np.logspace(self.parameters["logtmax"].value,
-                              self.parameters["logtmax"].value, nmodes)
+            tau = np.logspace(
+                self.parameters["logtmax"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
 
         self.graphicmodes = self.ax.plot(tau, G)[0]
-        self.graphicmodes.set_marker('D')
-        self.graphicmodes.set_linestyle('')
+        self.graphicmodes.set_marker("D")
+        self.graphicmodes.set_linestyle("")
         self.graphicmodes.set_visible(self.view_modes)
-        self.graphicmodes.set_markerfacecolor('yellow')
-        self.graphicmodes.set_markeredgecolor('black')
+        self.graphicmodes.set_markerfacecolor("yellow")
+        self.graphicmodes.set_markeredgecolor("black")
         self.graphicmodes.set_markeredgewidth(3)
         self.graphicmodes.set_markersize(8)
         self.graphicmodes.set_alpha(0.5)
         self.artistmodes = DraggableModesSeries(
-            self.graphicmodes, DragType.special,
-            self.parent_dataset.parent_application, self.drag_mode)
+            self.graphicmodes,
+            DragType.special,
+            self.parent_dataset.parent_application,
+            self.drag_mode,
+        )
         self.plot_theory_stuff()
 
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes)
+        # self.ax.lines.remove(self.graphicmodes)
+        self.graphicmodes.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -595,12 +652,18 @@ class TheoryMaxwellModesTime(QTheory):
     def get_modes(self):
         """Get the values of Maxwell Modes from this theory"""
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            tau = np.logspace(self.parameters["logtmin"].value,
-                              self.parameters["logtmax"].value, nmodes)
+        if nmodes > 1:
+            tau = np.logspace(
+                self.parameters["logtmin"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         else:
-            tau = np.logspace(self.parameters["logtmax"].value,
-                              self.parameters["logtmax"].value, nmodes)
+            tau = np.logspace(
+                self.parameters["logtmax"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         G = np.zeros(nmodes)
         for i in range(nmodes):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
@@ -617,18 +680,24 @@ class TheoryMaxwellModesTime(QTheory):
 
         try:
             gamma = float(f.file_parameters["gamma"])
-            if (gamma==0):
-                gamma=1
+            if gamma == 0:
+                gamma = 1
         except:
             gamma = 1
 
         nmodes = self.parameters["nmodes"].value
-        if nmodes>1:
-            tau = np.logspace(self.parameters["logtmin"].value,
-                              self.parameters["logtmax"].value, nmodes)
+        if nmodes > 1:
+            tau = np.logspace(
+                self.parameters["logtmin"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         else:
-            tau = np.logspace(self.parameters["logtmax"].value,
-                              self.parameters["logtmax"].value, nmodes)
+            tau = np.logspace(
+                self.parameters["logtmax"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
 
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -646,18 +715,25 @@ class TheoryMaxwellModesTime(QTheory):
         nmodes = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 2))
-        if nmodes>1:
-            tau = np.logspace(self.parameters["logtmin"].value,
-                            self.parameters["logtmax"].value, nmodes)
+        if nmodes > 1:
+            tau = np.logspace(
+                self.parameters["logtmin"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         else:
-            tau = np.logspace(self.parameters["logtmax"].value,
-                            self.parameters["logtmax"].value, nmodes)
+            tau = np.logspace(
+                self.parameters["logtmax"].value,
+                self.parameters["logtmax"].value,
+                nmodes,
+            )
         data_table_tmp.data[:, 0] = tau
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
             data_table_tmp.data[i, 1] = np.power(
-                10, self.parameters["logG%02d" % i].value)
+                10, self.parameters["logG%02d" % i].value
+            )
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
@@ -667,5 +743,5 @@ class TheoryMaxwellModesTime(QTheory):
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
+                data_table_tmp.series[nx][i].remove()
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])

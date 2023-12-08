@@ -41,8 +41,8 @@ from PySide6.QtWidgets import QTreeWidget
 
 class DataSetWidget(QTreeWidget):
     """Subclass of QTreeWidget
-    
-    Subclass of QTreeWidget that allows to select nothing in the DataSet 
+
+    Subclass of QTreeWidget that allows to select nothing in the DataSet
     by clicking in the white area of the DataSet, and allows to delete a data table item
     """
 
@@ -78,9 +78,10 @@ class DataSetWidget(QTreeWidget):
                     dt = file.data_table
                     for i in range(dt.MAX_NUM_SERIES):
                         for nx in range(self.parent_dataset.nplots):
-                            self.parent_dataset.parent_application.axarr[
-                                nx
-                            ].lines.remove(dt.series[nx][i])
+                            # self.parent_dataset.parent_application.axarr[
+                            #     nx
+                            # ].lines.remove(dt.series[nx][i])
+                            dt.series[nx][i].remove()
                     self.parent_dataset.files.remove(file)
                     break
 
@@ -93,9 +94,10 @@ class DataSetWidget(QTreeWidget):
                     tt = th.tables[file_name_short]
                     for i in range(tt.MAX_NUM_SERIES):
                         for nx in range(self.parent_dataset.nplots):
-                            self.parent_dataset.parent_application.axarr[
-                                nx
-                            ].lines.remove(tt.series[nx][i])
+                            # self.parent_dataset.parent_application.axarr[
+                            #     nx
+                            # ].lines.remove(tt.series[nx][i])
+                            tt.series[nx][i].remove()
                     del th.tables[file_name_short]
                 except KeyError:
                     pass

@@ -1161,7 +1161,8 @@ Arguments:
             ].tables.values():  # remove matplotlib artist from ax
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.nplots):
-                        self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
+                        tt.series[nx][i].remove()
+                        # self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
             del self.theories[name]
             self.do_plot("")
         else:

@@ -47,14 +47,14 @@ from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 class TheoryRetardationModesTime(QTheory):
     """Fit a discrete Retardation spectrum to time dependent creep data
-    
+
     * **Function**
         .. math::
             \\gamma(t) = \\sigma_0 \\left( J_0 + \\sum_{1}^{n_{modes}} J_i \\left[ 1 - \\exp\\left(\\frac{-t}{\\tau_i}\\right) \\right] + \\frac{t}{\\eta_0} \\right)
-    
+
         where:
           - :math:`\\sigma_0`: constant stress applied during the creep experiment.
-    
+
     * **Parameters**
        - :math:`J_0`: Instantaneous compliance (``logJini``, in logarithmic scale).
        - :math:`\\eta_0`: Terminal viscosity (``logeta0``, in logarithmic scale).
@@ -62,7 +62,7 @@ class TheoryRetardationModesTime(QTheory):
        - logtmin = :math:`\\log(t_{min})`: decimal logarithm of the minimum time range for the modes.
        - logtmax = :math:`\\log(t_{max})`: decimal logarithm of the maximum time.
        - logJi = :math:`\\log(J_{i})`: decimal logarithm of the compliance of Retardation mode :math:`i`.
-    
+
     """
 
     thname = "Retardation Modes"
@@ -215,7 +215,6 @@ class TheoryRetardationModesTime(QTheory):
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
-
     def drag_mode(self, dx, dy):
         """Drag modes around"""
         nmodes = self.parameters["nmodes"].value
@@ -260,7 +259,8 @@ class TheoryRetardationModesTime(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes)
+        # self.ax.lines.remove(self.graphicmodes)
+        self.graphicmodes.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -346,6 +346,5 @@ class TheoryRetardationModesTime(QTheory):
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
-
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                data_table_tmp.series[nx][i].remove()

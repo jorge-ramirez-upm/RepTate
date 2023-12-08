@@ -75,7 +75,7 @@ from PySide6.QtWidgets import (
 import RepTate
 from RepTate.core.DataSet import DataSet
 from RepTate.core.DataTable import DataTable
-from RepTate.core.Theory import MinimizationMethod, ErrorCalculationMethod
+from RepTate.gui.QTheory import MinimizationMethod, ErrorCalculationMethod
 from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import matplotlib.patheffects as pe

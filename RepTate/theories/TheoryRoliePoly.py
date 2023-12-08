@@ -39,7 +39,7 @@ import os
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import (
     QToolBar,
@@ -55,7 +55,6 @@ from RepTate.gui.Theory_rc import *
 from math import sqrt
 import RepTate
 import time
-from RepTate.core.Theory import EndComputationRequested
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog, FeneMode
 
@@ -258,7 +257,10 @@ class TheoryRoliePoly(QTheory):
 
         # Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
+            self,
+            "Save Parameters to FowSolve",
+            os.path.join(RepTate.root_dir, "data"),
+            "FlowSolve (*.fsrep)",
         )
         if fpath == "":
             return
@@ -455,7 +457,8 @@ class TheoryRoliePoly(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.extra_graphic_visible(False)
-        self.ax.lines.remove(self.LVEenvelopeseries)
+        # self.ax.lines.remove(self.LVEenvelopeseries)
+        self.LVEenvelopeseries.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -504,7 +507,7 @@ class TheoryRoliePoly(QTheory):
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
         else:
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
-        aux2 = beta * (l_sq ** delta)
+        aux2 = beta * (l_sq**delta)
 
         return [
             2 * gammadot * sxy - (sxx - 1.0) / tauD - aux1 * (sxx + aux2 * (sxx - 1.0)),
@@ -546,7 +549,7 @@ class TheoryRoliePoly(QTheory):
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
         else:
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
-        aux2 = beta * (l_sq ** delta)
+        aux2 = beta * (l_sq**delta)
 
         dsxx = (
             2.0 * epsilon_dot * sxx
@@ -592,7 +595,7 @@ class TheoryRoliePoly(QTheory):
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR * fene
         else:
             aux1 = 2.0 * (1.0 - 1.0 / sqrt(l_sq)) / tauR
-        aux2 = beta * (l_sq ** delta)
+        aux2 = beta * (l_sq**delta)
 
         return [
             2 * gammadot * sxy - (sxx - 1.0) / tauD - aux1 * (sxx + aux2 * (sxx - 1.0)),
@@ -812,4 +815,3 @@ class TheoryRoliePoly(QTheory):
                     del self.parameters["tauD%02d" % i]
                     del self.parameters["tauR%02d" % i]
         return "", True
-

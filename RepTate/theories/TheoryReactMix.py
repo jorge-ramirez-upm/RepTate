@@ -36,9 +36,7 @@
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtCore import Signal
 

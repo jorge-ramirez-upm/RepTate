@@ -38,31 +38,30 @@ Module for the PETS theory for the non-linear flow of entangled polymers.
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from RepTate.gui.Theory_rc import *
-from RepTate.core.Theory import EndComputationRequested
 from RepTate.theories.theory_helpers import FlowMode
 
 
 class TheoryPETS(QTheory):
-    """Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of 
-entangled telechelic (with sticky functional groups at the chain-ends) star polymers. 
+    """Preaveraged model for Entangled Telechelic Star polymers: This theory is intended for the prediction of non-linear transient flows of
+    entangled telechelic (with sticky functional groups at the chain-ends) star polymers.
 
-    * **Parameters**
-       - ``G`` : Plateau Modulus
-       - ``tauD`` : Orientation relaxation time
-       - ``tauS`` : Stretch Relxation time
-       - ``tau_as`` : Typical time the sticker spends associated
-       - ``tau_free`` : Typical time the sticker spends free
-       - ``lmax`` : Maximum extensibility
-       - ``beta`` : CCR coefficient
-       - ``delta`` : CCR exponent
-       - ``Z`` : Entanglement number
-       - ``r_a`` : Ratio of sticker size to tube diameter
+        * **Parameters**
+           - ``G`` : Plateau Modulus
+           - ``tauD`` : Orientation relaxation time
+           - ``tauS`` : Stretch Relxation time
+           - ``tau_as`` : Typical time the sticker spends associated
+           - ``tau_free`` : Typical time the sticker spends free
+           - ``lmax`` : Maximum extensibility
+           - ``beta`` : CCR coefficient
+           - ``delta`` : CCR exponent
+           - ``Z`` : Entanglement number
+           - ``r_a`` : Ratio of sticker size to tube diameter
     """
 
     thname = "PETS"
@@ -257,7 +256,6 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
         pass
@@ -281,7 +279,8 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
     def destructor(self):
         """Called when the theory tab is closed"""
         self.extra_graphic_visible(False)
-        self.ax.lines.remove(self.LVEenvelopeseries)
+        # self.ax.lines.remove(self.LVEenvelopeseries)
+        self.LVEenvelopeseries.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -311,21 +310,21 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
 
         # Create the vector with the time derivative of sigma
 
-        lm2 = lmax ** 2
+        lm2 = lmax**2
         trQA = QAxx + 2 * QAyy
         trQD = QDxx + 2 * QDyy
         la = ((lm2 * trQA) / (3 * lm2 - 3 + trQA)) ** 0.5
         ld = ((lm2 * trQD) / (3 * lm2 - 3 + trQD)) ** 0.5
         fenela = (3 * lm2 - 3 + trQA) / (3 * lm2)
         feneld = (3 * lm2 - 3 + trQD) / (3 * lm2)
-        feneEq = (1 - 1 / lm2) / (1 - ldeq ** 2 / lm2)
+        feneEq = (1 - 1 / lm2) / (1 - ldeq**2 / lm2)
 
         r_freeas = 1 / tau_free
         r_asfree = (
             1
             / tau_as
             * (
-                (1 - la ** 2 / lm2)
+                (1 - la**2 / lm2)
                 / (1 - 1 / lm2 * (la - r_a / Z) ** 2)
                 * (1 - (1 - r_a / Z) / lm2)
                 / (1 - 1 / lm2)
@@ -393,21 +392,21 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
 
         # Create the vector with the time derivative of sigma
 
-        lm2 = lmax ** 2
+        lm2 = lmax**2
         trQA = QAxx + 2 * QAyy
         trQD = QDxx + 2 * QDyy
         la = ((lm2 * trQA) / (3 * lm2 - 3 + trQA)) ** 0.5
         ld = ((lm2 * trQD) / (3 * lm2 - 3 + trQD)) ** 0.5
         fenela = (3 * lm2 - 3 + trQA) / (3 * lm2)
         feneld = (3 * lm2 - 3 + trQD) / (3 * lm2)
-        feneEq = (1 - 1 / lm2) / (1 - ldeq ** 2 / lm2)
+        feneEq = (1 - 1 / lm2) / (1 - ldeq**2 / lm2)
 
         r_freeas = 1 / tau_free
         r_asfree = (
             1
             / tau_as
             * (
-                (1 - la ** 2 / lm2)
+                (1 - la**2 / lm2)
                 / (
                     1
                     - 1
@@ -550,4 +549,3 @@ entangled telechelic (with sticky functional groups at the chain-ends) star poly
             QDyy = np.delete(res_vec[:, 5], [0])
             #  build stress array
             tt.data[:, 1] = G * (f * (QAxx - QAyy) + (1 - f) * (QDxx - QDyy))
-

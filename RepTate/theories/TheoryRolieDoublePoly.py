@@ -39,7 +39,7 @@ import os
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -50,7 +50,6 @@ import time
 import RepTate
 
 import RepTate.theories.rp_blend_ctypes_helper as rpch
-from RepTate.core.Theory import EndComputationRequested
 from collections import OrderedDict
 from RepTate.theories.theory_helpers import (
     FlowMode,
@@ -59,7 +58,7 @@ from RepTate.theories.theory_helpers import (
     GcorrMode,
     Dilution,
     EditMWDDialog,
-    GetMwdRepTate
+    GetMwdRepTate,
 )
 
 
@@ -313,7 +312,10 @@ class TheoryRolieDoublePoly(QTheory):
 
         # Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
+            self,
+            "Save Parameters to FowSolve",
+            os.path.join(RepTate.root_dir, "data"),
+            "FlowSolve (*.fsrep)",
         )
         if fpath == "":
             return
@@ -591,8 +593,8 @@ class TheoryRolieDoublePoly(QTheory):
         # remove tmp artist form ax
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                data_table_tmp.series[nx][i].remove()
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
@@ -631,7 +633,8 @@ class TheoryRolieDoublePoly(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.show_theory_extras(False)
-        self.ax.lines.remove(self.LVEenvelopeseries)
+        # self.ax.lines.remove(self.LVEenvelopeseries)
+        self.LVEenvelopeseries.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -908,4 +911,3 @@ class TheoryRolieDoublePoly(QTheory):
         self.Qprint(
             "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
         )
-

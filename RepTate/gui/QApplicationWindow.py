@@ -1861,11 +1861,13 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             for tt in th.tables.values():
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.nplots):
-                        self.axarr[nx].lines.remove(tt.series[nx][i])
+                        # self.axarr[nx].lines.remove(tt.series[nx][i])
+                        tt.series[nx][i].remove()
         for file in ds.files:
             for i in range(file.data_table.MAX_NUM_SERIES):
                 for nx in range(self.nplots):
-                    self.axarr[nx].lines.remove(file.data_table.series[nx][i])
+                    # self.axarr[nx].lines.remove(file.data_table.series[nx][i])
+                    file.data_table.series[nx][i].remove()
     # END COPY FROM APPLICATION
 
     # COPY FROM APPLICATION

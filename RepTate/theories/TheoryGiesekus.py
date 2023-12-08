@@ -38,12 +38,11 @@ Module for the Giesekus model for the non-linear flow of entangled polymers.
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from RepTate.gui.Theory_rc import *
-from RepTate.core.Theory import EndComputationRequested
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 

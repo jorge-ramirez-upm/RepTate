@@ -39,8 +39,6 @@ polymers.
 import os
 import numpy as np
 from scipy import interp
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox

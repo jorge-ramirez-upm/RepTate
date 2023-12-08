@@ -41,12 +41,11 @@ from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from RepTate.gui.Theory_rc import *
-from RepTate.core.Theory import EndComputationRequested
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 import RepTate
 import time

@@ -251,7 +251,8 @@ class TheoryDebyeModesFrequency(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes)
+        self.graphicmodes.remove()
+        # self.ax.lines.remove(self.graphicmodes)
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -335,5 +336,6 @@ class TheoryDebyeModesFrequency(QTheory):
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                data_table_tmp.series[nx][i].remove()
 

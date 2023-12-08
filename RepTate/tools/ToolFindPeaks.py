@@ -120,7 +120,8 @@ class ToolFindPeaks(QTool):
 
     def clean_graphic_stuff(self):
         for s, a in zip(self.seriesarray, self.axarray):
-            a.lines.remove(s)
+            # a.lines.remove(s)
+            s.remove()
         self.seriesarray.clear()
         self.axarray.clear()
 
@@ -222,4 +223,3 @@ class ToolFindPeaks(QTool):
         self.seriesarray.append(s)
         self.axarray.append(ax)
         return x, y
-

@@ -334,7 +334,8 @@ class TheoryDiscrMWD(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphic_bins_visible(False)
-        self.ax.lines.remove(self.graphic_bins)
+        # self.ax.lines.remove(self.graphic_bins)
+        self.graphic_bins.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""

@@ -35,9 +35,7 @@
 Template file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 

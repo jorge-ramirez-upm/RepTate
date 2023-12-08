@@ -48,12 +48,12 @@ from RepTate.theories.kww_ctypes_helper import kwwc, kwws
 
 
 class TheoryKWWModesFrequency(QTheory):
-    """Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function. 
-    
+    """Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function.
+
     * **Function**
         .. math::
             \\epsilon (t) - \\epsilon_\\infty =  \\Delta\\epsilon \\left[ 1 - \\exp \\left( - \\frac{t}{\\tau} \\right)^\\beta\\right]
-    
+
     * **Parameters**
        - einf = :math:`\\epsilon_{\\infty}`: Unrelaxed permitivity
        - :math:`n_{modes}`: number of Havriliak-Negami modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.
@@ -61,10 +61,10 @@ class TheoryKWWModesFrequency(QTheory):
        - logwmax = :math:`\\log(\\omega_{max})`: decimal logarithm of the maximum frequency.
        - logDei = :math:`\\log(\\Delta\\epsilon_{i})`, where :math:`\\Delta\\epsilon_{i}=\\epsilon_{s,i}-\\epsilon_\\infty`: decimal logarithm of the relaxation strength of Debye mode :math:`i`, where :math:`\\epsilon_{s,i}` is the static permitivity of mode :math:`i`.
        - :math:`\\beta`: stretched exponential parameter
-       
+
     .. note::
         It makes use of the libkww code, by Joachim Wuttke, CITE: doi:10.3390/a5040604
-    
+
     """
 
     thname = "KWW modes"
@@ -268,7 +268,8 @@ class TheoryKWWModesFrequency(QTheory):
     def destructor(self):
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        self.ax.lines.remove(self.graphicmodes)
+        # self.ax.lines.remove(self.graphicmodes)
+        self.graphicmodes.remove()
 
     def show_theory_extras(self, show=False):
         """Called when the active theory is changed"""
@@ -352,7 +353,5 @@ class TheoryKWWModesFrequency(QTheory):
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
-
-
-
+                # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+                data_table_tmp.series[nx][i].remove()

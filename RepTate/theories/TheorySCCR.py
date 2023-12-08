@@ -38,14 +38,13 @@ Module for the SCCR theory for the non-linear flow of entangled polymers.
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from RepTate.gui.Theory_rc import *
 from math import sqrt, exp, pow
 import time
-from RepTate.core.Theory import EndComputationRequested
 import RepTate.theories.sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
 from PySide6.QtCore import Signal
