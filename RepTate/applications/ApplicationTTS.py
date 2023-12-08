@@ -300,8 +300,8 @@ class ApplicationTTS(QApplicationWindow):
         self.filetypes[ftype.extension] = ftype
 
         # THEORIES
-        self.theories[TheoryTTSShiftAutomatic.thname] = TheoryTTSShiftAutomatic
         self.theories[TheoryWLFShift.thname] = TheoryWLFShift
+        self.theories[TheoryTTSShiftAutomatic.thname] = TheoryTTSShiftAutomatic
         self.add_common_theories()
 
         # set the current view
