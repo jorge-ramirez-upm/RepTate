@@ -37,8 +37,10 @@ Module that defines the GUI counterpart of the class Tool.
 """
 # from PySide6.QtCore import *
 import sys
+import numpy as np
+
 from PySide6.QtUiTools  import loadUiType
-from RepTate.core.Tool import Tool
+#from RepTate.core.Tool import Tool
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import (
     QWidget,
@@ -48,11 +50,31 @@ from PySide6.QtWidgets import (
     QHeaderView,
     QMessageBox,
     QToolBar,
+    QAbstractItemView
 )
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QIcon, QCursor
+from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from math import ceil, floor
+from collections import OrderedDict
+
+import logging
+from html.parser import HTMLParser
+
+class MLStripper(HTMLParser):
+    """Remove HTML tags from string"""
+    def __init__(self):
+        self.reset()
+        self.strict = False
+        self.convert_charrefs= True
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
 
 if getattr(sys, 'frozen', False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -65,15 +87,55 @@ sys.path.append(PATH)
 Ui_ToolTab, QWidget = loadUiType(join(PATH, "Tooltab.ui"))
 
 
-class QTool(Ui_ToolTab, QWidget, Tool):
+#class QTool(Ui_ToolTab, QWidget, Tool):
+class QTool(QWidget, Ui_ToolTab):
     """Abstract class to describe a tool"""
+
+    toolname = ""
+    """ toolname {str} -- Tool name """
+    description = ""
+    """ description {str} -- Description of Tool """
+    citations = []
+    """ citations {list of str} -- Articles that should be cited """
+    doi = []
+    doc_header = "Tool commands (type help <topic>):"
+
+    print_signal = Signal(str)
+
 
     def __init__(self, name="QTool", parent_app=None):
         """**Constructor**"""
         QWidget.__init__(self)
-        Tool.__init__(self, name=name, parent_app=parent_app)
+        Ui_ToolTab.__init__(self)
+        #Tool.__init__(self, name=name, parent_app=parent_app)
         #super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
+
+        # COPY FROM TOOL
+        self.name = name
+        self.parent_application = parent_app
+        self.parameters = (
+            OrderedDict()
+        )  # keep the dictionary key in order for the parameter table
+        self.active = True  # defines if the Tool is plotted
+        self.applytotheory = True  # Do we also apply the tool to the theory?
+
+        # LOGGING STUFF
+        self.logger = logging.getLogger(
+            self.parent_application.logger.name + "." + self.name
+        )
+        self.logger.debug("New " + self.toolname + " Tool")
+        # np.seterr(all="call")
+        #np.seterr(all="ignore")
+        np.seterrcall(self.write)
+
+        self.do_cite("")
+
+        self.print_signal.connect(
+            self.print_qtextbox
+        )  # Asynchronous print when using multithread
+
+        # END COPY FROM TOOL
 
         self.tb = QToolBar()
         self.tb.setIconSize(QSize(24, 24))
@@ -91,7 +153,7 @@ class QTool(Ui_ToolTab, QWidget, Tool):
         self.toolParamTable.setAlternatingRowColors(True)
         self.toolParamTable.setFrameShape(QFrame.NoFrame)
         self.toolParamTable.setFrameShadow(QFrame.Plain)
-        self.toolParamTable.setEditTriggers(self.toolParamTable.NoEditTriggers)
+        self.toolParamTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.toolTextBox.setReadOnly(True)
         self.toolTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -113,6 +175,203 @@ class QTool(Ui_ToolTab, QWidget, Tool):
             self.handle_parameterItemChanged
         )
         self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
+
+    # COPY FROM TOOL
+    def write(self, type, flag):
+        """Write numpy error logs to the logger"""
+        self.logger.info("numpy: %s (flag %s)" % (type, flag))
+
+    def destructor(self):
+        """If the Tool needs to erase some memory in a special way, any
+        child theory must rewrite this funcion"""
+        pass
+
+    def precmd(self, line):
+        """Calculations before the Tool is calculated
+
+        This function could be erased
+        This method is called after the line has been input but before
+        it has been interpreted. If you want to modifdy the input line
+        before execution (for example, variable substitution) do it here."""
+        super(Tool, self).precmd(line)
+        return line
+
+    def update_parameter_table(self):
+        """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
+        pass
+    # END COPY FROM TOOL
+
+    # COPY FROM TOOL
+    def plot_tool_stuff(self):
+        """Special function to plot tool graphical objects"""
+        pass
+
+    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
+        """Calculate the tool for all views"""
+        newxy = []
+        lenx = 1e9
+        for i in range(n):
+            self.Qprint("<b>Series %d</b>" % (i + 1))
+            xcopy = x[:, i]
+            ycopy = y[:, i]
+            xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
+            newxy.append([xcopy, ycopy])
+            lenx = min(lenx, len(xcopy))
+        x = np.resize(x, (lenx, n))
+        y = np.resize(y, (lenx, n))
+        for i in range(n):
+            x[:, i] = np.resize(newxy[i][0], lenx)
+            y[:, i] = np.resize(newxy[i][1], lenx)
+        return x, y
+
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        return x, y
+
+    def clean_graphic_stuff(self):
+        pass
+    # END COPY FROM TOOL
+
+    # COPY FROM TOOL
+    def do_cite(self, line):
+        """Print citation information """
+        if len(self.citations) > 1:
+            for i in range(len(self.citations)):
+                self.Qprint(
+                    """<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>"""
+                    % (self.doi[i], self.citations[i])
+                )
+
+    def do_plot(self, line=""):
+        """Update plot"""
+        self.parent_application.update_all_ds_plots()
+
+    def set_param_value(self, name, value):
+        """Set the value of a parameter of the tool"""
+        p = self.parameters[name]
+        try:
+            if p.type == ParameterType.real:
+                try:
+                    val = float(value)
+                except ValueError:
+                    return "Value must be a float", False
+                if val < p.min_value:
+                    p.value = p.min_value
+                    return "Value must be greater than %.4g" % p.min_value, False
+                elif val > p.max_value:
+                    p.value = p.max_value
+                    return "Value must be smaller than %.4g" % p.max_value, False
+                else:
+                    p.value = val
+                    return "", True
+
+            elif p.type == ParameterType.integer:
+                try:
+                    val = int(value)  # convert to int
+                except ValueError:
+                    return "Value must be an integer", False
+                if val < p.min_value:
+                    p.value = p.min_value
+                    return "Value must be greater than %d" % p.min_value, False
+                elif val > p.max_value:
+                    p.value = p.max_value
+                    return "Value must be smaller than %d" % p.max_value, False
+                else:
+                    p.value = val
+                    return "", True
+
+            elif p.type == ParameterType.discrete_integer:
+                try:
+                    val = int(value)  # convert to int
+                except ValueError:
+                    return "Value must be an integer", False
+                if val in p.discrete_values:
+                    p.value = val
+                    return "", True
+                else:
+                    message = "Values allowed: " + ", ".join(
+                        [str(s) for s in p.discrete_values]
+                    )
+                    print(message)
+                    return message, False
+
+            elif p.type == ParameterType.discrete_real:
+                try:
+                    val = float(value)
+                except ValueError:
+                    return "Value must be a float", False
+                if val in p.discrete_values:
+                    p.value = val
+                    return "", True
+                else:
+                    message = "Values allowed: " + ", ".join(
+                        [str(s) for s in p.discrete_values]
+                    )
+                    print(message)
+                    return message, False
+
+            elif p.type == ParameterType.boolean:
+                if value in [True, "true", "True", "1", "t", "T", "y", "yes"]:
+                    p.value = True
+                else:
+                    p.value = False
+                return "", True
+            elif p.type == ParameterType.string:
+                p.value = value
+                return "", True
+
+            else:
+                return "", False
+
+        except ValueError as e:
+            print("In set_param_value:", e)
+            return "", False
+    # END COPY FROM TOOL
+
+    # COPY FROM TOOL
+    def Qprint(self, msg, end="<br>"):
+        """Print a message on the Tool info area"""
+        if isinstance(msg, list):
+            msg = self.table_as_html(msg)
+        self.print_signal.emit(msg + end)
+
+    def table_as_html(self, tab):
+        header = tab[0]
+        rows = tab[1:]
+        nrows = len(rows)
+        table = """<table border="1" width="100%">"""
+        # header
+        table += "<tr>"
+        table += "".join(["<th>%s</th>" % h for h in header])
+        table += "</tr>"
+        # data
+        for row in rows:
+            table += "<tr>"
+            table += "".join(["<td>%s</td>" % d for d in row])
+            table += "</tr>"
+        table += """</table><br>"""
+        return table
+
+    def table_as_ascii(self, tab):
+        text = ""
+        for row in tab:
+            text += " ".join(row)
+            text += "\n"
+        return text
+
+    def strip_tags(self, html_text):
+        s = MLStripper()
+        s.feed(html_text)
+        return s.get_data()
+
+    def print_qtextbox(self, msg):
+        """Print message in the GUI log text box"""
+        self.toolTextBox.moveCursor(QTextCursor.End)
+        self.toolTextBox.insertHtml(msg)
+        self.toolTextBox.verticalScrollBar().setValue(
+            self.toolTextBox.verticalScrollBar().maximum()
+        )
+        self.toolTextBox.moveCursor(QTextCursor.End)
+    # END COPY FROM TOOL
 
     def toolTextBox_context_menu(self):
         """Custom contextual menu for the theory textbox"""
