@@ -334,7 +334,8 @@ class TheoryCreatePolyconf(QTheory):
         # fill combobox
         i = 0
         for e in ArchitectureType:
-            self.d.cb_type.addItem(e.value["name"], QVariant(e.name))
+            #self.d.cb_type.addItem(e.value["name"], QVariant(e.name))
+            self.d.cb_type.addItem(e.value["name"], e.name)
             self.d.cb_type.setItemData(i, e.value["descr"], Qt.ToolTipRole)
             i += 1
         # pre-fill the prototype text box
