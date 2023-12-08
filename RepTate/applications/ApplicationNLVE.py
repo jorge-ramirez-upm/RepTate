@@ -35,8 +35,6 @@
 Module for handling data from start up of shear and extensional flow experiments.
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
