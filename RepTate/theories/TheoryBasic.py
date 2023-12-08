@@ -38,8 +38,6 @@ Module that defines the basic theories that should be available for all Applicat
 from numpy import *
 import numpy as np
 import re
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
@@ -54,7 +52,7 @@ from PySide6.QtCore import QSize
 |_|            |___/                                 
 """
 
-class TheoryPolynomial(CmdBase):
+class TheoryPolynomial(QTheory):
     """Fit a polynomial of degree :math:`n` to the data
 
     * **Function**
@@ -67,17 +65,8 @@ class TheoryPolynomial(CmdBase):
     """
     thname = "Polynomial"
     description = "Fit a polynomial of degree n"
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryPolynomial(name, parent_dataset, ax) 
-
-class BaseTheoryPolynomial:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
     single_file = True
-    thname = TheoryPolynomial.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**
@@ -105,6 +94,23 @@ class BaseTheoryPolynomial:
                 ParameterType.real,
                 opt_type=OptType.opt)
         self.Qprint("%s: A0 + A1*x + A2*x^2 + ..." % self.thname)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_DEGREE) # min and max number of modes
+        self.spinbox.setPrefix("degree ")
+        self.spinbox.setValue(self.parameters["n"].value)  #initial value
+        tb.addWidget(self.spinbox)
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmode'"""
+        self.set_param_value("n", value)
+
 
     def set_param_value(self, name, value):
         """Change a parameter value, in particular *n*
@@ -155,28 +161,6 @@ class BaseTheoryPolynomial:
                 tt.data[:, j] += a * tt.data[:, 0]**i
 
 
-class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_DEGREE) # min and max number of modes
-        self.spinbox.setPrefix("degree ")
-        self.spinbox.setValue(self.parameters["n"].value)  #initial value
-        tb.addWidget(self.spinbox)
-        self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmode'"""
-        self.set_param_value("n", value)
 
 """
  _ __   _____      _____ _ __  | | __ ___      __
@@ -186,7 +170,7 @@ class GUITheoryPolynomial(BaseTheoryPolynomial, QTheory):
 |_|                                              
 """
 
-class TheoryPowerLaw(CmdBase):
+class TheoryPowerLaw(QTheory):
     """Fit a power law to the data
 
     * **Function**
@@ -199,17 +183,8 @@ class TheoryPowerLaw(CmdBase):
     """
     thname = "Power Law"
     description = "Fit Power Law"
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryPowerLaw(name, parent_dataset, ax) 
-
-
-class BaseTheoryPowerLaw:
-    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
     single_file = True
-    thname = TheoryPowerLaw.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -239,12 +214,6 @@ class BaseTheoryPowerLaw:
                 "a"].value * tt.data[:, 0]**self.parameters["b"].value
 
 
-class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 """
                                         _   _       _ 
@@ -255,7 +224,7 @@ class GUITheoryPowerLaw(BaseTheoryPowerLaw, QTheory):
           |_|                                         
 """
 
-class TheoryExponential(CmdBase):
+class TheoryExponential(QTheory):
     """Fit a single exponential decay to the data
 
     * **Function**
@@ -269,16 +238,8 @@ class TheoryExponential(CmdBase):
     """
     thname = "Exponential"
     description = "Fit Exponential"
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryExponential(name, parent_dataset, ax) 
-
-class BaseTheoryExponential:
-    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
     single_file = True
-    thname = TheoryExponential.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -307,12 +268,6 @@ class BaseTheoryExponential:
                 -tt.data[:, 0] / self.parameters["T"].value)
 
 
-class GUITheoryExponential(BaseTheoryExponential, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
 
 """
  ____                                           _   _       _     
@@ -323,7 +278,7 @@ class GUITheoryExponential(BaseTheoryExponential, QTheory):
                   |_|                                             
 """
 
-class TheoryTwoExponentials(CmdBase):
+class TheoryTwoExponentials(QTheory):
     """Fit **two** single exponential decay to the data
 
     * **Function**
@@ -336,16 +291,8 @@ class TheoryTwoExponentials(CmdBase):
     """
     thname = "Two Exponentials"
     description = "Fit two exponentials"
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryTwoExponentials(name, parent_dataset, ax) 
-
-class BaseTheoryTwoExponentials:
-    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
     single_file = True
-    thname = TheoryTwoExponentials.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -391,14 +338,6 @@ class BaseTheoryTwoExponentials:
                 -tt.data[:, 0] / T2)
 
 
-
-class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
 """
        _            _               _      
   __ _| | __ _  ___| |__  _ __ __ _(_) ___ 
@@ -414,7 +353,7 @@ class GUITheoryTwoExponentials(BaseTheoryTwoExponentials, QTheory):
           |_|                                    
 """
 
-class TheoryAlgebraicExpression(CmdBase):
+class TheoryAlgebraicExpression(QTheory):
     """Fit a user algebraic expression with :math:`n` parameters. 
     
     The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt
@@ -431,16 +370,8 @@ class TheoryAlgebraicExpression(CmdBase):
     """
     thname = "Algebraic Expression"
     description = "Fit an algebraic expression with n parameters"
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryAlgebraicExpression(name, parent_dataset, ax) 
-
-class BaseTheoryAlgebraicExpression:
-    """Base class for both GUI"""
     html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
     single_file = False
-    thname = TheoryAlgebraicExpression.thname
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -473,6 +404,37 @@ class BaseTheoryAlgebraicExpression:
         self.safe_dict = {}
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
+        self.spinbox.setToolTip("Number of parameters")
+        self.spinbox.setValue(self.parameters["n"].value)  #initial value
+        tb.addWidget(self.spinbox)
+        self.expressionCB = QComboBox()
+        self.expressionCB.setToolTip("Algebraic expression")
+        self.expressionCB.addItem("A0+A1*x")
+        self.expressionCB.addItem("A0*sin(A1*x)")
+        self.expressionCB.addItem("A0*sin(A1*x+A2)")
+        self.expressionCB.setEditable(True)
+        self.expressionCB.setMinimumWidth(self.parent_dataset.width()-75)
+        tb.addWidget(self.expressionCB)
+
+        self.thToolsLayout.insertWidget(0, tb)
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged)
+        connection_id = self.expressionCB.currentIndexChanged.connect(
+            self.handle_expressionChanged)
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'n'"""
+        self.set_param_value("n", value)
+
+    def handle_expressionChanged(self, item):
+        """Handle a change in the algebraic expression"""
+        self.set_param_value("expression", self.expressionCB.itemText(item))
         
 
     def set_param_value(self, name, value):
@@ -568,42 +530,3 @@ class BaseTheoryAlgebraicExpression:
         super().do_error(line)
         self.Qprint("%s: <b>%s</b>" % (self.thname, self.parameters["expression"].value))
 
-
-
-class GUITheoryAlgebraicExpression(BaseTheoryAlgebraicExpression, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
-        self.spinbox.setToolTip("Number of parameters")
-        self.spinbox.setValue(self.parameters["n"].value)  #initial value
-        tb.addWidget(self.spinbox)
-        self.expressionCB = QComboBox()
-        self.expressionCB.setToolTip("Algebraic expression")
-        self.expressionCB.addItem("A0+A1*x")
-        self.expressionCB.addItem("A0*sin(A1*x)")
-        self.expressionCB.addItem("A0*sin(A1*x+A2)")
-        self.expressionCB.setEditable(True)
-        self.expressionCB.setMinimumWidth(self.parent_dataset.width()-75)
-        tb.addWidget(self.expressionCB)
-
-        self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged)
-        connection_id = self.expressionCB.currentIndexChanged.connect(
-            self.handle_expressionChanged)
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'n'"""
-        self.set_param_value("n", value)
-
-    def handle_expressionChanged(self, item):
-        """Handle a change in the algebraic expression"""
-        self.set_param_value("expression", self.expressionCB.itemText(item))

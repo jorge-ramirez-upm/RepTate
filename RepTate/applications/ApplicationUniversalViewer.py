@@ -183,23 +183,13 @@ class ViewParseExpression(object):
         return x, y, True
 
 
-class ApplicationUniversalViewer(CmdBase):
+class ApplicationUniversalViewer(QApplicationWindow):
     """Application for viewing generic txt data described by ini files"""
 
     appname = "Universal Viewer"
     description = "Universal Viewer Application"  # used in the command-line Reptate
     extension = ""  # drag and drop this extension automatically opens this application
-
-    def __new__(cls, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
-        """Create an instance of the GUI"""
-        return GUIApplicationUniversalViewer(name, parent, inifile, nplot_max)
-
-
-class BaseApplicationUniversalViewer:
-    """Base Class for both GUI"""
-
     # html_help_file = ''
-    appname = ApplicationUniversalViewer.appname
 
     def __init__(self, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
         """**Constructor**"""
@@ -289,13 +279,3 @@ class BaseApplicationUniversalViewer:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-
-
-class GUIApplicationUniversalViewer(BaseApplicationUniversalViewer, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
-        """**Constructor**"""
-        super().__init__(name, parent, inifile, nplot_max)
-
-        # add the GUI-specific objects here:
