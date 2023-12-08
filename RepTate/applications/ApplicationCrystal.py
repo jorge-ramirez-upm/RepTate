@@ -35,33 +35,21 @@
 Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationCrystal(CmdBase):
+class ApplicationCrystal(QApplicationWindow):
     """Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation."""
 
     appname = "Crystal"
     description = "Flow induced Crystallisation"
     extension = "shearxs uextxs shear uext"
-
-    def __new__(cls, name="Crystal", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationCrystal(name, parent)
-
-
-class BaseApplicationCrystal:
-    """Base Class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html"
     )
-    appname = ApplicationCrystal.appname
 
     def __init__(self, name="Crystal", parent=None):
         """**Constructor**"""
@@ -419,12 +407,3 @@ class BaseApplicationCrystal:
         x[0, 0] = flow_rate
         y[0, 0] = dt.data[-1, 2]
         return x, y, True
-
-
-
-class GUIApplicationCrystal(BaseApplicationCrystal, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="Crystal", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

@@ -38,15 +38,12 @@ Module for the Smooth Poly STRAND model of polymer FIC (uses the Rolie-Double-Po
 import os
 import numpy as np
 from scipy.integrate import odeint
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
 from RepTate.gui.Theory_rc import *
 from math import sqrt
 import time
@@ -62,7 +59,7 @@ import RepTate.theories.SchneiderRate as SchneiderRate
 import RepTate.theories.timeArraySplit as timeArraySplit
 from RepTate.theories.theory_helpers import FlowMode, EditModesVolFractionsDialog, FeneMode, GcorrMode, NoquMode, SingleSpeciesMode, Dilution, EditMWDDialog, GetMwdRepTate
 
-class TheorySmoothPolyStrand(CmdBase):
+class TheorySmoothPolyStrand(QTheory):
     """Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
 
     * **Rheological model: The Rolie-Double-Poly model**
@@ -128,20 +125,8 @@ class TheorySmoothPolyStrand(CmdBase):
     description = "Smooth-polySTRAND model for flow-induced nucleation"
     citations = ["D.J. Read et al., Phys. Rev. Lett. 124, 147802 (2020)"]
     doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheorySmoothPolyStrand(name, parent_dataset, ax) 
-
-
-class BaseTheorySmoothPolyStrand:
-    """Base class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html'
     single_file = False
-    thname = TheorySmoothPolyStrand.thname
-    citations = TheorySmoothPolyStrand.citations
-    doi = TheorySmoothPolyStrand.doi
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -304,6 +289,402 @@ class BaseTheorySmoothPolyStrand:
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
         self.init_flow_mode()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+
+        self.tbutflow = QToolButton()
+        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.shear_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
+            "Extensional Flow")
+        if self.flow_mode == FlowMode.shear:
+            self.tbutflow.setDefaultAction(self.shear_flow_action)
+        else:
+            self.tbutflow.setDefaultAction(self.extensional_flow_action)
+        self.tbutflow.setMenu(menu)
+        tb.addWidget(self.tbutflow)
+
+        self.tbutmodes = QToolButton()
+        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.get_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
+            "Get Modes (MWD app)")
+        self.get_modes_data_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
+            "Get Modes (MWD data)")
+        self.edit_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
+            "Edit Modes")
+        # self.plot_modes_action = menu.addAction(
+        #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
+        #     "Plot Modes")
+        self.save_modes_action = menu.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
+            "Save Modes")
+        self.tbutmodes.setDefaultAction(self.get_modes_action)
+        self.tbutmodes.setMenu(menu)
+        tb.addWidget(self.tbutmodes)
+        # #Show LVE button
+        self.linearenvelope = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/lve-icon.png'),
+            'Show Linear Envelope')
+        self.linearenvelope.setCheckable(True)
+        self.linearenvelope.setChecked(False)
+        #Finite extensibility button
+        self.with_fene_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
+            'Finite Extensibility')
+        self.with_fene_button.setCheckable(True)
+        #Modulus correction button
+        self.with_gcorr_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
+            'Modulus Correction')
+        self.with_gcorr_button.setCheckable(True)
+        #Ignore quiescent button
+        self.with_noqu_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-noquiescent.png'),
+            'Neglect quiescent nucleation')
+        self.with_noqu_button.setCheckable(True)
+        #Single species button
+        self.with_single_button = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-SingleSpecies.png'),
+            'Average to single species for nucleation')
+        self.with_single_button.setCheckable(True)
+
+
+        #Save to flowsolve button
+        self.flowsolve_btn = tb.addAction(
+            QIcon(':/Icon8/Images/new_icons/icons8-save-flowsolve.png'),
+            'Save Parameters To FlowSolve')
+        self.flowsolve_btn.setCheckable(False)
+
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.shear_flow_action.triggered.connect(
+            self.select_shear_flow)
+        connection_id = self.extensional_flow_action.triggered.connect(
+            self.select_extensional_flow)
+        connection_id = self.get_modes_action.triggered.connect(
+            self.get_modes_reptate)
+        connection_id = self.get_modes_data_action.triggered.connect(
+            self.edit_mwd_modes)
+        connection_id = self.edit_modes_action.triggered.connect(
+            self.edit_modes_window)
+        # connection_id = self.plot_modes_action.triggered.connect(
+        #     self.plot_modes_graph)
+        connection_id = self.linearenvelope.triggered.connect(
+            self.show_linear_envelope)
+        connection_id = self.save_modes_action.triggered.connect(
+            self.save_modes)
+        connection_id = self.with_fene_button.triggered.connect(
+            self.handle_with_fene_button)
+        connection_id = self.with_gcorr_button.triggered.connect(
+            self.handle_with_gcorr_button)
+        connection_id = self.with_noqu_button.triggered.connect(
+            self.handle_with_noqu_button)
+        connection_id = self.with_single_button.triggered.connect(
+            self.handle_with_single_button)
+
+#        connection_id = self.noqu_button.triggered.connect(
+#            self.handle_with_gcorr_button)
+        connection_id = self.flowsolve_btn.triggered.connect(
+            self.handle_flowsolve_btn)
+
+    def handle_flowsolve_btn(self):
+        """Save theory parameters in FlowSolve format"""
+
+        #Get filename of RepTate project to open
+        fpath, _ = QFileDialog.getSaveFileName(self,
+                                               "Save Parameters to FowSolve",
+                                               os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)")
+        if fpath == '':
+            return
+
+        with open(fpath, 'w') as f:
+            verdata = RepTate._version.get_versions()
+            version = verdata['version'].split('+')[0]
+            date = verdata['date'].split('T')[0]
+            build = verdata['version']
+            header = '#flowGen input\n'
+            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
+            header += '# At %s on %s\n' % (time.strftime("%X"),
+                                           time.strftime("%a %b %d, %Y"))
+            f.write(header)
+
+            f.write('\n#param global\n')
+            f.write('constit polydisperse\n')
+            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
+
+            f.write('\n#param constitutive\n')
+
+            n = self.parameters['nmodes'].value
+
+            td = np.zeros(n)
+            for i in range(n):
+                td[i] = self.parameters["tauD%02d" % i].value
+            # sort taud ascending order
+            args = np.argsort(td)
+
+            fraction = 'fraction'
+            taud = 'taud'
+            tauR = 'tauR'
+            lmax = 'lambdaMax'
+            for i, arg in enumerate(args):
+                fraction += ' %.6g' % self.parameters["phi%02d" % arg].value
+                taud += ' %.6g' % self.parameters["tauD%02d" % arg].value
+                tauR += ' %.6g' % self.parameters["tauR%02d" % arg].value
+                lmax += ' %.6g' % self.parameters["lmax"].value
+            f.write('%s\n%s\n%s\n' % (taud, tauR, fraction))
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
+                f.write('%s\n' % lmax)
+            f.write('modulus %.6g\n' % self.parameters["GN0"].value)
+            f.write('beta %.6gn' % self.parameters["beta"].value)
+            f.write('delta %.6g\n' % self.parameters["delta"].value)
+
+            f.write('\n#end')
+
+        QMessageBox.information(self, 'Success',
+                                'Wrote FlowSolve parameters in \"%s\"' % fpath)
+
+    def handle_with_gcorr_button(self, checked):
+        if checked:
+            if len(self.Zeff) > 0:
+                # if Zeff contains something
+                self.with_gcorr = GcorrMode.with_gcorr
+            else:
+                self.Qprint(
+                    '<font color=orange><b>Modulus correction needs Z from MWD</b></font>'
+                )
+                self.with_gcorr_button.setChecked(False)
+                return
+        else:
+            self.with_gcorr = GcorrMode.none
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
+
+    def handle_with_noqu_button(self, checked):
+        if checked:
+            
+            self.with_noqu = NoquMode.with_noqu
+            self.with_noqu_button.setChecked(True)
+        else:
+            self.with_noqu = NoquMode.none
+
+        self.Qprint(
+            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
+        )
+
+        
+    def handle_with_single_button(self, checked):
+        if checked:
+            
+            self.with_single = SingleSpeciesMode.with_single
+            self.with_single_button.setChecked(True)
+        else:
+            self.with_single= SingleSpeciesMode.none
+
+        self.Qprint(
+            '<font color=green><b>Single species: Press "Calculate" to update theory</b></font>'
+        )
+
+    def handle_with_fene_button(self, checked):
+        if checked:
+            self.with_fene = FeneMode.with_fene
+            self.with_fene_button.setChecked(True)
+            self.with_fene_button.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-facebook-f.png'))
+            self.parameters["lmax"].display_flag = True
+            self.parameters["lmax"].opt_type = OptType.nopt
+        else:
+            self.with_fene = FeneMode.none
+            self.with_fene_button.setChecked(False)
+            self.with_fene_button.setIcon(
+                QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
+            self.parameters["lmax"].display_flag = False
+            self.parameters["lmax"].opt_type = OptType.const
+        self.update_parameter_table()
+        self.Qprint(
+            '<font color=green><b>Press "Calculate" to update theory</b></font>'
+        )
+
+    def Qhide_theory_extras(self, show):
+        """Uncheck the LVE button. Called when curent theory is changed"""
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
+        self.parent_dataset.actionMinimize_Error.setDisabled(show)
+        self.parent_dataset.actionShow_Limits.setDisabled(show)
+        self.parent_dataset.actionVertical_Limits.setDisabled(show)
+        self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
+
+    def show_linear_envelope(self, state):
+        self.plot_theory_stuff()
+        self.extra_graphic_visible(state)
+        # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        # self.plot_theory_stuff()
+        # self.parent_dataset.parent_application.update_plot()
+
+    def select_shear_flow(self):
+        self.flow_mode = FlowMode.shear
+        self.tbutflow.setDefaultAction(self.shear_flow_action)
+
+    def select_extensional_flow(self):
+        self.flow_mode = FlowMode.uext
+        self.tbutflow.setDefaultAction(self.extensional_flow_action)
+
+    def get_modes_reptate(self):
+        apmng = self.parent_dataset.parent_application.parent_manager
+        get_dict = {}
+        for app in apmng.applications.values():
+            app_index = apmng.ApplicationtabWidget.indexOf(app)
+            app_tab_name = apmng.ApplicationtabWidget.tabText(app_index)
+            for ds in app.datasets.values():
+                ds_index = app.DataSettabWidget.indexOf(ds)
+                ds_tab_name = app.DataSettabWidget.tabText(ds_index)
+                for th in ds.theories.values():
+                    th_index = ds.TheorytabWidget.indexOf(th)
+                    th_tab_name = ds.TheorytabWidget.tabText(th_index)
+                    if th.thname == 'Discretize MWD':
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
+                                               th_tab_name)] = th.get_mwd
+
+        if get_dict:
+            d = GetMwdRepTate(self, get_dict, 'Select Discretized MWD')
+            if (d.exec_() and d.btngrp.checkedButton() != None):
+                _, success1 = self.set_param_value("tau_e", d.taue_text.text())
+                _, success2 = self.set_param_value("Me", d.Me_text.text())
+                if not success1 * success2:
+                    self.Qprint("Could not understand Me or taue, try again")
+                    return
+                item = d.btngrp.checkedButton().text()
+                m, phi = get_dict[item]()
+
+                self.MWD_m = np.copy(m)
+                self.MWD_phi = np.copy(phi)
+                self.set_modes_from_mwd(m, phi)
+        else:
+            # no theory Discretise MWD found
+            QMessageBox.warning(self, 'Get MW distribution',
+                                'No \"Discretize MWD\" theory found')
+        # self.parent_dataset.handle_actionCalculate_Theory()
+
+    def edit_modes_window(self):
+        nmodes = self.parameters["nmodes"].value
+        phi = np.zeros(nmodes)
+        taud = np.zeros(nmodes)
+        taur = np.zeros(nmodes)
+        for i in range(nmodes):
+            phi[i] = self.parameters["phi%02d" % i].value
+            taud[i] = self.parameters["tauD%02d" % i].value
+            taur[i] = self.parameters["tauR%02d" % i].value
+        param_dic = OrderedDict()
+        param_dic["phi"] = phi
+        param_dic["tauD"] = taud
+        param_dic["tauR"] = taur
+        d = EditModesVolFractionsDialog(self, param_dic, self.MAX_MODES)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            self.set_param_value("nmodes", nmodes)
+            # self.set_param_value("nstretch", nmodes)
+            success = True
+            for i in range(nmodes):
+                msg, success1 = self.set_param_value("phi%02d" % i,
+                                                     d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("tauD%02d" % i,
+                                                     d.table.item(i, 1).text())
+                msg, success3 = self.set_param_value("tauR%02d" % i,
+                                                     d.table.item(i, 2).text())
+                success *= success1 * success2 * success3
+            if not success:
+                QMessageBox.warning(
+                    self, 'Error',
+                    'Some parameter(s) could not be updated.\nPlease try again.'
+                )
+            else:
+                self.handle_actionCalculate_Theory()
+
+    def edit_mwd_modes(self):
+        d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
+        if d.exec_():
+            nmodes = d.table.rowCount()
+            m = []
+            phi = []
+            _, success1 = self.set_param_value("tau_e", d.taue_text.text())
+            _, success2 = self.set_param_value("Me", d.Me_text.text())
+            if not success1 * success2:
+                self.Qprint("Could not understand Me or taue, try again")
+                return
+            for i in range(nmodes):
+                try:
+                    m.append(float(d.table.item(i, 0).text()))
+                    phi.append(float(d.table.item(i, 1).text()))
+                except ValueError:
+                    self.Qprint("Could not understand line %d, try again" %
+                                (i + 1))
+                    return
+            self.MWD_m = np.copy(m)
+            self.MWD_phi = np.copy(phi)
+            self.set_modes_from_mwd(m, phi)
+
+    # def plot_modes_graph(self):
+    #     pass
+
+    def plot_theory_stuff(self):
+        """Plot theory helpers"""
+        logtmin = np.log10(self.parent_dataset.minpositivecol(0))
+        logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
+        ntimes = int((logtmax - logtmin) * 20)
+        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp.num_columns = 5
+        data_table_tmp.num_rows = ntimes
+        data_table_tmp.data = np.zeros((ntimes, 5))
+
+        times = np.logspace(logtmin, logtmax, ntimes)
+        data_table_tmp.data[:, 0] = times
+        nmodes = self.parameters["nmodes"].value
+        data_table_tmp.data[:, 1] = 0
+        fparamaux = {"gdot": 1e-8}
+
+        phi = []
+        taud = []
+        for i in range(nmodes):
+            phi.append(self.parameters["phi%02d" % i].value)
+            taud.append(self.parameters["tauD%02d" % i].value)
+
+        for i in range(nmodes):
+            if self.stop_theory_flag:
+                break
+            G = self.parameters['GN0'].value
+            if self.with_gcorr == GcorrMode.with_gcorr:
+                G = G * self.gZ(self.Zeff[i])
+            for j in range(nmodes):
+                # TODO: use symetry to reduce number of loops
+                tau = 1. / (1. / taud[i] + 1. / taud[j])
+                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux[
+                    "gdot"] * tau * (1 - np.exp(-times / tau))
+        if self.flow_mode == FlowMode.uext:
+            data_table_tmp.data[:, 1] *= 3.0
+        view = self.parent_dataset.parent_application.current_view
+        try:
+            x, y, success = view.view_proc(data_table_tmp, fparamaux)
+        except TypeError as e:
+            print(e)
+            return
+        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+        # remove tmp artist form ax
+        for i in range(data_table_tmp.MAX_NUM_SERIES):
+            for nx in range(len(self.axarr)):
+                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
+
+
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
@@ -809,407 +1190,5 @@ class BaseTheorySmoothPolyStrand:
         self.Qprint(
             "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
         )
-
-
-class GUITheorySmoothPolyStrand(BaseTheorySmoothPolyStrand, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-
-        self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-shear.png'), "Shear Flow")
-        self.extensional_flow_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icon-uext.png'),
-            "Extensional Flow")
-        if self.flow_mode == FlowMode.shear:
-            self.tbutflow.setDefaultAction(self.shear_flow_action)
-        else:
-            self.tbutflow.setDefaultAction(self.extensional_flow_action)
-        self.tbutflow.setMenu(menu)
-        tb.addWidget(self.tbutflow)
-
-        self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
-        menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes (MWD app)")
-        self.get_modes_data_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-broadcasting.png'),
-            "Get Modes (MWD data)")
-        self.edit_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-edit-file.png'),
-            "Edit Modes")
-        # self.plot_modes_action = menu.addAction(
-        #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
-        #     "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-Maxwell.png'),
-            "Save Modes")
-        self.tbutmodes.setDefaultAction(self.get_modes_action)
-        self.tbutmodes.setMenu(menu)
-        tb.addWidget(self.tbutmodes)
-        # #Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/lve-icon.png'),
-            'Show Linear Envelope')
-        self.linearenvelope.setCheckable(True)
-        self.linearenvelope.setChecked(False)
-        #Finite extensibility button
-        self.with_fene_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'),
-            'Finite Extensibility')
-        self.with_fene_button.setCheckable(True)
-        #Modulus correction button
-        self.with_gcorr_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-circled-g-filled.png'),
-            'Modulus Correction')
-        self.with_gcorr_button.setCheckable(True)
-        #Ignore quiescent button
-        self.with_noqu_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-noquiescent.png'),
-            'Neglect quiescent nucleation')
-        self.with_noqu_button.setCheckable(True)
-        #Single species button
-        self.with_single_button = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-SingleSpecies.png'),
-            'Average to single species for nucleation')
-        self.with_single_button.setCheckable(True)
-
-
-        #Save to flowsolve button
-        self.flowsolve_btn = tb.addAction(
-            QIcon(':/Icon8/Images/new_icons/icons8-save-flowsolve.png'),
-            'Save Parameters To FlowSolve')
-        self.flowsolve_btn.setCheckable(False)
-
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.shear_flow_action.triggered.connect(
-            self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow)
-        connection_id = self.get_modes_action.triggered.connect(
-            self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes)
-        connection_id = self.edit_modes_action.triggered.connect(
-            self.edit_modes_window)
-        # connection_id = self.plot_modes_action.triggered.connect(
-        #     self.plot_modes_graph)
-        connection_id = self.linearenvelope.triggered.connect(
-            self.show_linear_envelope)
-        connection_id = self.save_modes_action.triggered.connect(
-            self.save_modes)
-        connection_id = self.with_fene_button.triggered.connect(
-            self.handle_with_fene_button)
-        connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button)
-        connection_id = self.with_noqu_button.triggered.connect(
-            self.handle_with_noqu_button)
-        connection_id = self.with_single_button.triggered.connect(
-            self.handle_with_single_button)
-
-#        connection_id = self.noqu_button.triggered.connect(
-#            self.handle_with_gcorr_button)
-        connection_id = self.flowsolve_btn.triggered.connect(
-            self.handle_flowsolve_btn)
-
-    def handle_flowsolve_btn(self):
-        """Save theory parameters in FlowSolve format"""
-
-        #Get filename of RepTate project to open
-        fpath, _ = QFileDialog.getSaveFileName(self,
-                                               "Save Parameters to FowSolve",
-                                               os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)")
-        if fpath == '':
-            return
-
-        with open(fpath, 'w') as f:
-            verdata = RepTate._version.get_versions()
-            version = verdata['version'].split('+')[0]
-            date = verdata['date'].split('T')[0]
-            build = verdata['version']
-            header = '#flowGen input\n'
-            header += '# Generated with RepTate %s %s (build %s)\n' % (version, date, build)
-            header += '# At %s on %s\n' % (time.strftime("%X"),
-                                           time.strftime("%a %b %d, %Y"))
-            f.write(header)
-
-            f.write('\n#param global\n')
-            f.write('constit polydisperse\n')
-            # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
-
-            f.write('\n#param constitutive\n')
-
-            n = self.parameters['nmodes'].value
-
-            td = np.zeros(n)
-            for i in range(n):
-                td[i] = self.parameters["tauD%02d" % i].value
-            # sort taud ascending order
-            args = np.argsort(td)
-
-            fraction = 'fraction'
-            taud = 'taud'
-            tauR = 'tauR'
-            lmax = 'lambdaMax'
-            for i, arg in enumerate(args):
-                fraction += ' %.6g' % self.parameters["phi%02d" % arg].value
-                taud += ' %.6g' % self.parameters["tauD%02d" % arg].value
-                tauR += ' %.6g' % self.parameters["tauR%02d" % arg].value
-                lmax += ' %.6g' % self.parameters["lmax"].value
-            f.write('%s\n%s\n%s\n' % (taud, tauR, fraction))
-            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
-                f.write('%s\n' % lmax)
-            f.write('modulus %.6g\n' % self.parameters["GN0"].value)
-            f.write('beta %.6gn' % self.parameters["beta"].value)
-            f.write('delta %.6g\n' % self.parameters["delta"].value)
-
-            f.write('\n#end')
-
-        QMessageBox.information(self, 'Success',
-                                'Wrote FlowSolve parameters in \"%s\"' % fpath)
-
-    def handle_with_gcorr_button(self, checked):
-        if checked:
-            if len(self.Zeff) > 0:
-                # if Zeff contains something
-                self.with_gcorr = GcorrMode.with_gcorr
-            else:
-                self.Qprint(
-                    '<font color=orange><b>Modulus correction needs Z from MWD</b></font>'
-                )
-                self.with_gcorr_button.setChecked(False)
-                return
-        else:
-            self.with_gcorr = GcorrMode.none
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
-
-    def handle_with_noqu_button(self, checked):
-        if checked:
-            
-            self.with_noqu = NoquMode.with_noqu
-            self.with_noqu_button.setChecked(True)
-        else:
-            self.with_noqu = NoquMode.none
-
-        self.Qprint(
-            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
-        )
-
-        
-    def handle_with_single_button(self, checked):
-        if checked:
-            
-            self.with_single = SingleSpeciesMode.with_single
-            self.with_single_button.setChecked(True)
-        else:
-            self.with_single= SingleSpeciesMode.none
-
-        self.Qprint(
-            '<font color=green><b>Single species: Press "Calculate" to update theory</b></font>'
-        )
-
-    def handle_with_fene_button(self, checked):
-        if checked:
-            self.with_fene = FeneMode.with_fene
-            self.with_fene_button.setChecked(True)
-            self.with_fene_button.setIcon(
-                QIcon(':/Icon8/Images/new_icons/icons8-facebook-f.png'))
-            self.parameters["lmax"].display_flag = True
-            self.parameters["lmax"].opt_type = OptType.nopt
-        else:
-            self.with_fene = FeneMode.none
-            self.with_fene_button.setChecked(False)
-            self.with_fene_button.setIcon(
-                QIcon(':/Icon8/Images/new_icons/icons8-infinite.png'))
-            self.parameters["lmax"].display_flag = False
-            self.parameters["lmax"].opt_type = OptType.const
-        self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
-
-    def Qhide_theory_extras(self, show):
-        """Uncheck the LVE button. Called when curent theory is changed"""
-        if show:
-            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
-        else:
-            self.LVEenvelopeseries.set_visible(False)
-        self.parent_dataset.actionMinimize_Error.setDisabled(show)
-        self.parent_dataset.actionShow_Limits.setDisabled(show)
-        self.parent_dataset.actionVertical_Limits.setDisabled(show)
-        self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
-
-    def show_linear_envelope(self, state):
-        self.plot_theory_stuff()
-        self.extra_graphic_visible(state)
-        # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
-        # self.plot_theory_stuff()
-        # self.parent_dataset.parent_application.update_plot()
-
-    def select_shear_flow(self):
-        self.flow_mode = FlowMode.shear
-        self.tbutflow.setDefaultAction(self.shear_flow_action)
-
-    def select_extensional_flow(self):
-        self.flow_mode = FlowMode.uext
-        self.tbutflow.setDefaultAction(self.extensional_flow_action)
-
-    def get_modes_reptate(self):
-        apmng = self.parent_dataset.parent_application.parent_manager
-        get_dict = {}
-        for app in apmng.applications.values():
-            app_index = apmng.ApplicationtabWidget.indexOf(app)
-            app_tab_name = apmng.ApplicationtabWidget.tabText(app_index)
-            for ds in app.datasets.values():
-                ds_index = app.DataSettabWidget.indexOf(ds)
-                ds_tab_name = app.DataSettabWidget.tabText(ds_index)
-                for th in ds.theories.values():
-                    th_index = ds.TheorytabWidget.indexOf(th)
-                    th_tab_name = ds.TheorytabWidget.tabText(th_index)
-                    if th.thname == 'Discretize MWD':
-                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name,
-                                               th_tab_name)] = th.get_mwd
-
-        if get_dict:
-            d = GetMwdRepTate(self, get_dict, 'Select Discretized MWD')
-            if (d.exec_() and d.btngrp.checkedButton() != None):
-                _, success1 = self.set_param_value("tau_e", d.taue_text.text())
-                _, success2 = self.set_param_value("Me", d.Me_text.text())
-                if not success1 * success2:
-                    self.Qprint("Could not understand Me or taue, try again")
-                    return
-                item = d.btngrp.checkedButton().text()
-                m, phi = get_dict[item]()
-
-                self.MWD_m = np.copy(m)
-                self.MWD_phi = np.copy(phi)
-                self.set_modes_from_mwd(m, phi)
-        else:
-            # no theory Discretise MWD found
-            QMessageBox.warning(self, 'Get MW distribution',
-                                'No \"Discretize MWD\" theory found')
-        # self.parent_dataset.handle_actionCalculate_Theory()
-
-    def edit_modes_window(self):
-        nmodes = self.parameters["nmodes"].value
-        phi = np.zeros(nmodes)
-        taud = np.zeros(nmodes)
-        taur = np.zeros(nmodes)
-        for i in range(nmodes):
-            phi[i] = self.parameters["phi%02d" % i].value
-            taud[i] = self.parameters["tauD%02d" % i].value
-            taur[i] = self.parameters["tauR%02d" % i].value
-        param_dic = OrderedDict()
-        param_dic["phi"] = phi
-        param_dic["tauD"] = taud
-        param_dic["tauR"] = taur
-        d = EditModesVolFractionsDialog(self, param_dic, self.MAX_MODES)
-        if d.exec_():
-            nmodes = d.table.rowCount()
-            self.set_param_value("nmodes", nmodes)
-            # self.set_param_value("nstretch", nmodes)
-            success = True
-            for i in range(nmodes):
-                msg, success1 = self.set_param_value("phi%02d" % i,
-                                                     d.table.item(i, 0).text())
-                msg, success2 = self.set_param_value("tauD%02d" % i,
-                                                     d.table.item(i, 1).text())
-                msg, success3 = self.set_param_value("tauR%02d" % i,
-                                                     d.table.item(i, 2).text())
-                success *= success1 * success2 * success3
-            if not success:
-                QMessageBox.warning(
-                    self, 'Error',
-                    'Some parameter(s) could not be updated.\nPlease try again.'
-                )
-            else:
-                self.handle_actionCalculate_Theory()
-
-    def edit_mwd_modes(self):
-        d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
-        if d.exec_():
-            nmodes = d.table.rowCount()
-            m = []
-            phi = []
-            _, success1 = self.set_param_value("tau_e", d.taue_text.text())
-            _, success2 = self.set_param_value("Me", d.Me_text.text())
-            if not success1 * success2:
-                self.Qprint("Could not understand Me or taue, try again")
-                return
-            for i in range(nmodes):
-                try:
-                    m.append(float(d.table.item(i, 0).text()))
-                    phi.append(float(d.table.item(i, 1).text()))
-                except ValueError:
-                    self.Qprint("Could not understand line %d, try again" %
-                                (i + 1))
-                    return
-            self.MWD_m = np.copy(m)
-            self.MWD_phi = np.copy(phi)
-            self.set_modes_from_mwd(m, phi)
-
-    # def plot_modes_graph(self):
-    #     pass
-
-    def plot_theory_stuff(self):
-        """Plot theory helpers"""
-        logtmin = np.log10(self.parent_dataset.minpositivecol(0))
-        logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
-        ntimes = int((logtmax - logtmin) * 20)
-        data_table_tmp = DataTable(self.axarr)
-        data_table_tmp.num_columns = 5
-        data_table_tmp.num_rows = ntimes
-        data_table_tmp.data = np.zeros((ntimes, 5))
-
-        times = np.logspace(logtmin, logtmax, ntimes)
-        data_table_tmp.data[:, 0] = times
-        nmodes = self.parameters["nmodes"].value
-        data_table_tmp.data[:, 1] = 0
-        fparamaux = {"gdot": 1e-8}
-
-        phi = []
-        taud = []
-        for i in range(nmodes):
-            phi.append(self.parameters["phi%02d" % i].value)
-            taud.append(self.parameters["tauD%02d" % i].value)
-
-        for i in range(nmodes):
-            if self.stop_theory_flag:
-                break
-            G = self.parameters['GN0'].value
-            if self.with_gcorr == GcorrMode.with_gcorr:
-                G = G * self.gZ(self.Zeff[i])
-            for j in range(nmodes):
-                # TODO: use symetry to reduce number of loops
-                tau = 1. / (1. / taud[i] + 1. / taud[j])
-                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux[
-                    "gdot"] * tau * (1 - np.exp(-times / tau))
-        if self.flow_mode == FlowMode.uext:
-            data_table_tmp.data[:, 1] *= 3.0
-        view = self.parent_dataset.parent_application.current_view
-        try:
-            x, y, success = view.view_proc(data_table_tmp, fparamaux)
-        except TypeError as e:
-            print(e)
-            return
-        self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
-        # remove tmp artist form ax
-        for i in range(data_table_tmp.MAX_NUM_SERIES):
-            for nx in range(len(self.axarr)):
-                self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
 
