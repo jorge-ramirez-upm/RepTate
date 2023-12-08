@@ -76,122 +76,122 @@ class CmdBase(cmd.Cmd):
 
         # init()
 
-        # list of safe methods for eval
-        self.safe_globals = [
-            "arccos",
-            "arcsin",
-            "arctan",
-            "arctan2",
-            "ceil",
-            "cos",
-            "cosh",
-            "degrees",
-            "e",
-            "exp",
-            "fabs",
-            "floor",
-            "fmod",
-            "frexp",
-            "hypot",
-            "ldexp",
-            "log",
-            "log10",
-            "modf",
-            "pi",
-            "pow",
-            "radians",
-            "sin",
-            "sinh",
-            "sqrt",
-            "tan",
-            "tanh",
-        ]
-        self.safe_locals = ["self"]
+        # # list of safe methods for eval
+        # self.safe_globals = [
+        #     "arccos",
+        #     "arcsin",
+        #     "arctan",
+        #     "arctan2",
+        #     "ceil",
+        #     "cos",
+        #     "cosh",
+        #     "degrees",
+        #     "e",
+        #     "exp",
+        #     "fabs",
+        #     "floor",
+        #     "fmod",
+        #     "frexp",
+        #     "hypot",
+        #     "ldexp",
+        #     "log",
+        #     "log10",
+        #     "modf",
+        #     "pi",
+        #     "pow",
+        #     "radians",
+        #     "sin",
+        #     "sinh",
+        #     "sqrt",
+        #     "tan",
+        #     "tanh",
+        # ]
+        # self.safe_locals = ["self"]
 
-        # creating a dictionary of safe methods
-        self.safe_dict = {}
-        for k in self.safe_globals:
-            self.safe_dict[k] = globals().get(k, None)
-        for k in self.safe_locals:
-            self.safe_dict[k] = locals().get(k, None)
-        self.safe_dict["print"] = print
-        self.safe_dict["list"] = list
-        self.safe_dict["type"] = type
+        # # creating a dictionary of safe methods
+        # self.safe_dict = {}
+        # for k in self.safe_globals:
+        #     self.safe_dict[k] = globals().get(k, None)
+        # for k in self.safe_locals:
+        #     self.safe_dict[k] = locals().get(k, None)
+        # self.safe_dict["print"] = print
+        # self.safe_dict["list"] = list
+        # self.safe_dict["type"] = type
 
         self.logger = None
 
-    def do_shell(self, line):
-        """Run a shell command. Argument: Command to run. It can also be invoked with the character !"""
-        print("running shell command:", line)
-        output = os.popen(line).read()
-        print(output)
-        self.last_output = output
+    # def do_shell(self, line):
+    #     """Run a shell command. Argument: Command to run. It can also be invoked with the character !"""
+    #     print("running shell command:", line)
+    #     output = os.popen(line).read()
+    #     print(output)
+    #     self.last_output = output
 
-    def __listdir(self, root):
-        """List directory 'root' appending the path separator to subdirs."""
-        res = []
-        for name in os.listdir(root):
-            path = os.path.join(root, name)
-            if os.path.isdir(path):
-                name += os.sep
-                # name += '/'
-            res.append(name)
-        return res
+    # def __listdir(self, root):
+    #     """List directory 'root' appending the path separator to subdirs."""
+    #     res = []
+    #     for name in os.listdir(root):
+    #         path = os.path.join(root, name)
+    #         if os.path.isdir(path):
+    #             name += os.sep
+    #             # name += '/'
+    #         res.append(name)
+    #     return res
 
-    def __complete_path(self, path=None):
-        """Perform completion of filesystem path."""
-        if not path:
-            return self.__listdir(".")
+    # def __complete_path(self, path=None):
+    #     """Perform completion of filesystem path."""
+    #     if not path:
+    #         return self.__listdir(".")
 
-        dirname, rest = os.path.split(path)
-        tmp = dirname if dirname else "."
-        res = [
-            os.path.join(dirname, p) for p in self.__listdir(tmp) if p.startswith(rest)
-        ]
+    #     dirname, rest = os.path.split(path)
+    #     tmp = dirname if dirname else "."
+    #     res = [
+    #         os.path.join(dirname, p) for p in self.__listdir(tmp) if p.startswith(rest)
+    #     ]
 
-        # more than one match, or single match which does not exist (typo)
-        if len(res) > 1 or not os.path.exists(path):
-            return res
-        # resolved to a single directory, so return list of files below it
-        if os.path.isdir(path):
-            return [os.path.join(path, p) for p in self.__listdir(path)]
-        # exact file match terminates this completion
-        return [path + " "]
+    #     # more than one match, or single match which does not exist (typo)
+    #     if len(res) > 1 or not os.path.exists(path):
+    #         return res
+    #     # resolved to a single directory, so return list of files below it
+    #     if os.path.isdir(path):
+    #         return [os.path.join(path, p) for p in self.__listdir(path)]
+    #     # exact file match terminates this completion
+    #     return [path + " "]
 
-    def complete_cd(self, text, line, begidx, endidx):
-        """Completions for the cd command (used by dereived classes Application and Theory)"""
-        test = line.split()
-        if len(test) > 1:
-            result = self.__complete_path(test[1])
-        else:
-            result = self.__complete_path()
+    # def complete_cd(self, text, line, begidx, endidx):
+    #     """Completions for the cd command (used by dereived classes Application and Theory)"""
+    #     test = line.split()
+    #     if len(test) > 1:
+    #         result = self.__complete_path(test[1])
+    #     else:
+    #         result = self.__complete_path()
 
-        return result
+    #     return result
 
-    def do_ls(self, line):
-        """List contents of current folder."""
-        dirs = os.listdir()
-        for d in dirs:
-            print("%s" % d)
+    # def do_ls(self, line):
+    #     """List contents of current folder."""
+    #     dirs = os.listdir()
+    #     for d in dirs:
+    #         print("%s" % d)
 
-    do_dir = do_ls
+    # do_dir = do_ls
 
-    def do_pwd(self, line):
-        """Print the current folder"""
-        print(os.getcwd())
+    # def do_pwd(self, line):
+    #     """Print the current folder"""
+    #     print(os.getcwd())
 
-    do_cwd = do_pwd
+    # do_cwd = do_pwd
 
-    def emptyline(self):
-        """Called when an empty line is introduced in the prompt."""
-        pass
+    # def emptyline(self):
+    #     """Called when an empty line is introduced in the prompt."""
+    #     pass
 
-    def do_EOF(self, args):
-        """Exit Console and Return to Parent or exit"""
-        print("")
-        return True
+    # def do_EOF(self, args):
+    #     """Exit Console and Return to Parent or exit"""
+    #     print("")
+    #     return True
 
-    do_up = do_EOF
+    # do_up = do_EOF
 
     def do_quit(self, args):
         """Exit from the application."""
@@ -201,75 +201,75 @@ class CmdBase(cmd.Cmd):
             print("Exiting RepTate...")
             sys.exit()
 
-    def default(self, line):
-        """Called on an input line when the command prefix is not recognized.
-        In that case we execute the line as Python code."""
-        try:
-            eval(
-                line, {"__builtins__": None}, self.safe_dict
-            )  # in self._locals, self._globals
-        # except NameError as e:
-        #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
-        # except TypeError as e:
-        #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
-        except Exception as e:
-            print(e.__class__, ":", e)
+    # def default(self, line):
+    #     """Called on an input line when the command prefix is not recognized.
+    #     In that case we execute the line as Python code."""
+    #     try:
+    #         eval(
+    #             line, {"__builtins__": None}, self.safe_dict
+    #         )  # in self._locals, self._globals
+    #     # except NameError as e:
+    #     #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
+    #     # except TypeError as e:
+    #     #     print("Command " + Fore.RED + "%s" % line + Fore.RESET + " not found")
+    #     except Exception as e:
+    #         print(e.__class__, ":", e)
 
-    def completedefault(self, text, line, begidx, endidx):
-        items = (
-            line.replace(",", " ")
-            .replace("(", " ")
-            .replace(")", " ")
-            .replace(".", " ")
-            .split()
-        )
-        lastitem = items[-1]
-        if len(items) > 1:
-            onebeforelastitem = items[-2]
-        else:
-            onebeforelastitem = ""
-        L = list(self.safe_dict.keys())
-        L2 = list(vars(self))
-        if not lastitem:
-            completions = L
-        elif onebeforelastitem == "self":
-            completions = ["self." + f for f in L2 if f.startswith(lastitem)]
-        elif lastitem == "self":
-            completions = L2
-        elif lastitem in L and len(items) == 1:
-            completions = L
-        else:
-            completions = [f for f in L if f.startswith(lastitem)]
-        return completions
+    # def completedefault(self, text, line, begidx, endidx):
+    #     items = (
+    #         line.replace(",", " ")
+    #         .replace("(", " ")
+    #         .replace(")", " ")
+    #         .replace(".", " ")
+    #         .split()
+    #     )
+    #     lastitem = items[-1]
+    #     if len(items) > 1:
+    #         onebeforelastitem = items[-2]
+    #     else:
+    #         onebeforelastitem = ""
+    #     L = list(self.safe_dict.keys())
+    #     L2 = list(vars(self))
+    #     if not lastitem:
+    #         completions = L
+    #     elif onebeforelastitem == "self":
+    #         completions = ["self." + f for f in L2 if f.startswith(lastitem)]
+    #     elif lastitem == "self":
+    #         completions = L2
+    #     elif lastitem in L and len(items) == 1:
+    #         completions = L
+    #     else:
+    #         completions = [f for f in L if f.startswith(lastitem)]
+    #     return completions
 
-    def do_log(self, line):
-        """Info about the logger"""
-        if self.logger != None:
-            nhandlers = len(logging.getLogger("RepTate").handlers)
-            logfilename = ""
-            # if nhandlers > 0:
-            #     print(Fore.RED + "%15s %10s" % ("Log Handler", "Level"))
-            #     print(26 * "=" + Fore.RESET)
-            print(
-                "%15s %10s"
-                % ("Main", logging.getLevelName(logging.getLogger("RepTate").level))
-            )
-            for i in range(nhandlers):
-                h = logging.getLogger("RepTate").handlers[i]
-                if isinstance(h, logging.handlers.RotatingFileHandler):
-                    print("%15s %10s" % ("File", logging.getLevelName(h.level)))
-                    logfilename = h.baseFilename
-                elif isinstance(h, logging.StreamHandler):
-                    print("%15s %10s" % ("Console", logging.getLevelName(h.level)))
-            print("")
-            # print(Fore.RED + "Main Logger level:    " + Fore.RESET + "RepTate")
-            # print(
-            #     Fore.RED
-            #     + "Current Logger level: "
-            #     + Fore.RESET
-            #     + "%s" % self.logger.name
-            # )
-            # print(Fore.RED + "Log File: " + Fore.RESET + "%s" % logfilename)
+    # def do_log(self, line):
+    #     """Info about the logger"""
+    #     if self.logger != None:
+    #         nhandlers = len(logging.getLogger("RepTate").handlers)
+    #         logfilename = ""
+    #         # if nhandlers > 0:
+    #         #     print(Fore.RED + "%15s %10s" % ("Log Handler", "Level"))
+    #         #     print(26 * "=" + Fore.RESET)
+    #         print(
+    #             "%15s %10s"
+    #             % ("Main", logging.getLevelName(logging.getLogger("RepTate").level))
+    #         )
+    #         for i in range(nhandlers):
+    #             h = logging.getLogger("RepTate").handlers[i]
+    #             if isinstance(h, logging.handlers.RotatingFileHandler):
+    #                 print("%15s %10s" % ("File", logging.getLevelName(h.level)))
+    #                 logfilename = h.baseFilename
+    #             elif isinstance(h, logging.StreamHandler):
+    #                 print("%15s %10s" % ("Console", logging.getLevelName(h.level)))
+    #         print("")
+    #         # print(Fore.RED + "Main Logger level:    " + Fore.RESET + "RepTate")
+    #         # print(
+    #         #     Fore.RED
+    #         #     + "Current Logger level: "
+    #         #     + Fore.RESET
+    #         #     + "%s" % self.logger.name
+    #         # )
+    #         # print(Fore.RED + "Log File: " + Fore.RESET + "%s" % logfilename)
 
     def do_loglevel(self, line):
         """Set log level"""
@@ -309,35 +309,35 @@ class CmdBase(cmd.Cmd):
                 if h is not None and l is not None:
                     h.setLevel(l)
 
-    def complete_loglevel(self, text, line, begidx, endidx):
-        handlers = ["Main", "File", "Console"]
-        levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        items = line.split()
-        nitems = len(items)
-        if nitems < 2:
-            completions = [f for f in handlers if f.startswith(text)]
-        elif nitems == 2 and items[1] not in handlers:
-            completions = [f for f in handlers if f.startswith(text)]
-        else:
-            completions = [f for f in levels if f.startswith(text)]
-        return completions
+    # def complete_loglevel(self, text, line, begidx, endidx):
+    #     handlers = ["Main", "File", "Console"]
+    #     levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    #     items = line.split()
+    #     nitems = len(items)
+    #     if nitems < 2:
+    #         completions = [f for f in handlers if f.startswith(text)]
+    #     elif nitems == 2 and items[1] not in handlers:
+    #         completions = [f for f in handlers if f.startswith(text)]
+    #     else:
+    #         completions = [f for f in levels if f.startswith(text)]
+    #     return completions
 
-    def do_console(self, line):
-        """Print/Set current & available Console modes. Arguments (if empty show current):
+    # def do_console(self, line):
+    #     """Print/Set current & available Console modes. Arguments (if empty show current):
         
-    - console --> print current mode
-    - console available --> print available modes
-    - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
-        """
-    pass
+    # - console --> print current mode
+    # - console available --> print available modes
+    # - console [cmdline, batch, GUI] --> Set the console mode to [cmdline, batch, GUI]
+    #     """
+    # pass
 
-    def complete_console(self, text, line, begidx, endidx):
-        names = ["cmdline", "batch", "GUI", "available"]
-        if not text:
-            completions = names[:]
-        else:
-            completions = [f for f in names if f.startswith(text)]
-        return completions
+    # def complete_console(self, text, line, begidx, endidx):
+    #     names = ["cmdline", "batch", "GUI", "available"]
+    #     if not text:
+    #         completions = names[:]
+    #     else:
+    #         completions = [f for f in names if f.startswith(text)]
+    #     return completions
 
     def cmdloop(self, intro=""):
         """Overload the cmd.Cmd cmdloop function to capture Ctrl+C"""
