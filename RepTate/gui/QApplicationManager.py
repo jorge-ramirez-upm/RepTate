@@ -464,9 +464,13 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         parsed_json = json.loads(releasedata)
         release_dict = parsed_json[0]  # Get the latest release
         tag = release_dict["tag_name"]
-        version_github = tag.split("v")[1]
+        version_github = tag
+        #version_github = tag.split("v")[1]
         verdata = RepTate._version.get_versions()
         version_current = verdata["version"].split("+")[0]
+        items = version_current.split("v")
+        if len(items) > 1:
+            version_current = items[1]
         newversion = version_github > version_current
         return newversion, version_github, version_current
     # END COPY
