@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2018): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2018-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -61,7 +61,8 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.fed)
 
-class Tool(CmdBase):
+# class Tool(CmdBase):
+class Tool:
     """Abstract class to describe a Tool"""
 
     toolname = ""
@@ -77,7 +78,7 @@ class Tool(CmdBase):
 
     def __init__(self, name="Tool", parent_app=None):
         """**Constructor**"""
-        super().__init__()
+        # super().__init__()
 
         self.name = name
         self.parent_application = parent_app
@@ -125,30 +126,30 @@ class Tool(CmdBase):
         """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
         pass
 
-    def do_parameters(self, line):
-        """View the Tool parameters. Several parameters are allowed. With no arguments, show the current values"""
-        plist = list(self.parameters.keys())
-        plist.sort()
-        print("%9s   %10s" % ("Parameter", "Value"))
-        print("==================================")
-        for p in plist:
-            if self.parameters[p].type == ParameterType.string:
-                formatstring = "%10s"
-            else:
-                formatstring = "%10.5g"
-            print(
-                "%8s = " % self.parameters[p].name
-                + formatstring % self.parameters[p].value
-            )
+    # def do_parameters(self, line):
+    #     """View the Tool parameters. Several parameters are allowed. With no arguments, show the current values"""
+    #     plist = list(self.parameters.keys())
+    #     plist.sort()
+    #     print("%9s   %10s" % ("Parameter", "Value"))
+    #     print("==================================")
+    #     for p in plist:
+    #         if self.parameters[p].type == ParameterType.string:
+    #             formatstring = "%10s"
+    #         else:
+    #             formatstring = "%10.5g"
+    #         print(
+    #             "%8s = " % self.parameters[p].name
+    #             + formatstring % self.parameters[p].value
+    #         )
 
-    def complete_parameters(self, text, line, begidx, endidx):
-        """Complete the names of parameters"""
-        parameter_names = list(self.parameters.keys())
-        if not text:
-            completions = parameter_names[:]
-        else:
-            completions = [f for f in parameter_names if f.startswith(text)]
-        return completions
+    # def complete_parameters(self, text, line, begidx, endidx):
+    #     """Complete the names of parameters"""
+    #     parameter_names = list(self.parameters.keys())
+    #     if not text:
+    #         completions = parameter_names[:]
+    #     else:
+    #         completions = [f for f in parameter_names if f.startswith(text)]
+    #     return completions
 
     def plot_tool_stuff(self):
         """Special function to plot tool graphical objects"""
@@ -228,13 +229,13 @@ class Tool(CmdBase):
 
     # SPAN STUFF
 
-    def do_activate(self, line):
-        """Enable/disable the Tool"""
-        self.active = not self.active
+    # def do_activate(self, line):
+    #     """Enable/disable the Tool"""
+    #     self.active = not self.active
 
-    def do_applytotheory(self, line):
-        """Apply the tool to the theory data"""
-        self.applytotheory = not self.applytotheory
+    # def do_applytotheory(self, line):
+    #     """Apply the tool to the theory data"""
+    #     self.applytotheory = not self.applytotheory
 
     def do_cite(self, line):
         """Print citation information """
@@ -393,31 +394,31 @@ class Tool(CmdBase):
         )
         self.toolTextBox.moveCursor(QTextCursor.End)
 
-    def do_tutorial(self, line=""):
-        """Show a short tutorial about the commands in RepTate tools"""
-        print("")
-        # print(
-        #     "Inspect the python scripts in the"
-        #     + Fore.RED
-        #     + ' "tests" '
-        #     + Fore.RESET
-        #     + "folder."
-        # )
-        print("Visit the page:")
-        # print(
-        #     Fore.CYAN
-        #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-        #     + Fore.RESET
-        # )
-        print(
-            """
-Basic use:
-=========="""
-        )
-        # print(Fore.RED + "parameters" + Fore.RESET)
-        # self.do_help("parameters")
-        # print(Fore.RED + "par1=val1" + Fore.RESET)
-        # print("Change the value of parameter par1")
-        # print(Fore.RED + "activate" + Fore.RESET)
-        self.do_help("activate")
-        print("")
+#     def do_tutorial(self, line=""):
+#         """Show a short tutorial about the commands in RepTate tools"""
+#         print("")
+#         # print(
+#         #     "Inspect the python scripts in the"
+#         #     + Fore.RED
+#         #     + ' "tests" '
+#         #     + Fore.RESET
+#         #     + "folder."
+#         # )
+#         print("Visit the page:")
+#         # print(
+#         #     Fore.CYAN
+#         #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+#         #     + Fore.RESET
+#         # )
+#         print(
+#             """
+# Basic use:
+# =========="""
+#         )
+#         # print(Fore.RED + "parameters" + Fore.RESET)
+#         # self.do_help("parameters")
+#         # print(Fore.RED + "par1=val1" + Fore.RESET)
+#         # print("Change the value of parameter par1")
+#         # print(Fore.RED + "activate" + Fore.RESET)
+#         self.do_help("activate")
+#         print("")

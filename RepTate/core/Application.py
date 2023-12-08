@@ -36,11 +36,12 @@ Module that defines the basic class from which all applications are derived.
 
 """
 import io
+import math
 #import logging
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 
-from RepTate.core.CmdBase import CmdBase
+# from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataSet import DataSet
 from RepTate.theories.TheoryBasic import *
 from RepTate.core.Tool import *
@@ -64,7 +65,8 @@ from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 #from RepTate.core.mplcursors import cursor
 import logging
 
-class Application(CmdBase):
+#class Application(CmdBase):
+class Application:
     """Main abstract class that represents an application
 
     """
@@ -81,7 +83,7 @@ class Application(CmdBase):
                  **kwargs):
         """**Constructor**"""
 
-        super().__init__()
+        # super().__init__()
         self.name = name
         self.parent_manager = parent
         self.views = OrderedDict()
@@ -546,11 +548,11 @@ class Application(CmdBase):
         ds = DataSet(dsname, self)
         return ds, dsname
 
-    def do_new(self, line):
-        """Create a new empty dataset in this application."""
-        ds, dsname = self.new(line)
-        self.datasets[dsname] = ds
-        ds.cmdloop()
+    # def do_new(self, line):
+    #     """Create a new empty dataset in this application."""
+    #     ds, dsname = self.new(line)
+    #     self.datasets[dsname] = ds
+    #     ds.cmdloop()
 
     def delete(self, ds_name):
         """Delete a dataset from the current application"""
@@ -583,131 +585,131 @@ class Application(CmdBase):
                 for nx in range(self.nplots):
                     self.axarr[nx].lines.remove(file.data_table.series[nx][i])
 
-    def do_delete(self, name):
-        """Delete a dataset from the current application"""
-        self.delete(name)
-    do_del = do_delete
+    # def do_delete(self, name):
+    #     """Delete a dataset from the current application"""
+    #     self.delete(name)
+    # do_del = do_delete
 
-    def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete dataset command"""
-        dataset_names = list(self.datasets.keys())
-        if not text:
-            completions = dataset_names[:]
-        else:
-            completions = [f for f in dataset_names if f.startswith(text)]
-        return completions
-    complete_del = complete_delete
+    # def complete_delete(self, text, line, begidx, endidx):
+    #     """Complete delete dataset command"""
+    #     dataset_names = list(self.datasets.keys())
+    #     if not text:
+    #         completions = dataset_names[:]
+    #     else:
+    #         completions = [f for f in dataset_names if f.startswith(text)]
+    #     return completions
+    # complete_del = complete_delete
 
-    def do_list(self, line=""):
-        """List the datasets in the current application"""
-        self.do_list_tools()
-        self.do_list_datasets()
+    # def do_list(self, line=""):
+    #     """List the datasets in the current application"""
+    #     self.do_list_tools()
+    #     self.do_list_datasets()
 
-    def do_list_datasets(self, line=""):
-        """List the datasets in the current application"""
-        if len(self.datasets)>0:
-            print("DATASETS IN THE CURRENT APPLICATION")
-            print("===================================")
-        # for ds in self.datasets.values():
-        #     print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
+    # def do_list_datasets(self, line=""):
+    #     """List the datasets in the current application"""
+    #     if len(self.datasets)>0:
+    #         print("DATASETS IN THE CURRENT APPLICATION")
+    #         print("===================================")
+    #     # for ds in self.datasets.values():
+    #     #     print(Fore.YELLOW + "%s"%ds.name + Fore.RESET)
 
-    def do_tree(self, line):
-        """List all the tools, datasets, files and theories in the current application"""
-        done=False
-        if line=="":
-            offset=0
-            prefix=""
-            done=True
-        else:
-            try:
-                offset=int(line)
-                if offset==1:
-                    prefix="|--"
-                    done=True
-                else:
-                    print("Wrong argument for the tree command.")
-            except ValueError:
-                print("Wrong argument for the tree command.")
-        if done:
-            # for t in self.tools:
-            #     print(prefix + Fore.CYAN + t.name + Fore.RESET)
-            for ds in self.datasets.keys():
-                # print(prefix + Fore.YELLOW + "%s"%self.datasets[ds].name + Fore.RESET)
-                self.datasets[ds].do_tree(str(offset+1))
+    # def do_tree(self, line):
+    #     """List all the tools, datasets, files and theories in the current application"""
+    #     done=False
+    #     if line=="":
+    #         offset=0
+    #         prefix=""
+    #         done=True
+    #     else:
+    #         try:
+    #             offset=int(line)
+    #             if offset==1:
+    #                 prefix="|--"
+    #                 done=True
+    #             else:
+    #                 print("Wrong argument for the tree command.")
+    #         except ValueError:
+    #             print("Wrong argument for the tree command.")
+    #     if done:
+    #         # for t in self.tools:
+    #         #     print(prefix + Fore.CYAN + t.name + Fore.RESET)
+    #         for ds in self.datasets.keys():
+    #             # print(prefix + Fore.YELLOW + "%s"%self.datasets[ds].name + Fore.RESET)
+    #             self.datasets[ds].do_tree(str(offset+1))
 
-    def do_switch(self, line):
-        """Set focus to an open set/theory/tool.
-        By hitting TAB, all the currently accessible elements are shown.
+    # def do_switch(self, line):
+    #     """Set focus to an open set/theory/tool.
+    #     By hitting TAB, all the currently accessible elements are shown.
         
-        :param line: Name of the set/theory/tool to switch the focus to.- 
+    #     :param line: Name of the set/theory/tool to switch the focus to.- 
 
-        :Example:
+    #     :Example:
 
-            >>> switch LVE1.Set1.LM1
-            >>> switch NLVE2.Set2.RP2
-            >>> switch PL1
+    #         >>> switch LVE1.Set1.LM1
+    #         >>> switch NLVE2.Set2.RP2
+    #         >>> switch PL1
 
-        .. todo:: Find key functions and document them like this one
+    #     .. todo:: Find key functions and document them like this one
 
-        """
-        items=line.split('.')
-        listtools = [x.name for x in self.tools]
-        if len(items)>1:
-            name=items[0]
-            if name in self.datasets.keys():
-                ds = self.datasets[name]
-                ds.cmdqueue.append('switch '+'.'.join(items[1:]))
-                ds.cmdloop()
-            else:
-                print("DataSet \"%s\" not found" % name)
-        else:
-            name=items[0]
-            if name in self.datasets.keys():
-                ds = self.datasets[name]
-                ds.cmdloop()
-            elif name in listtools:
-                try:
-                    idx = listtools.index(line)
-                    self.tools[idx].cmdloop()
-                except AttributeError as e:
-                    print("Tool\"%s\" not found" % line)
-            else:
-                print("DataSet \"%s\" not found" % name)
+    #     """
+    #     items=line.split('.')
+    #     listtools = [x.name for x in self.tools]
+    #     if len(items)>1:
+    #         name=items[0]
+    #         if name in self.datasets.keys():
+    #             ds = self.datasets[name]
+    #             ds.cmdqueue.append('switch '+'.'.join(items[1:]))
+    #             ds.cmdloop()
+    #         else:
+    #             print("DataSet \"%s\" not found" % name)
+    #     else:
+    #         name=items[0]
+    #         if name in self.datasets.keys():
+    #             ds = self.datasets[name]
+    #             ds.cmdloop()
+    #         elif name in listtools:
+    #             try:
+    #                 idx = listtools.index(line)
+    #                 self.tools[idx].cmdloop()
+    #             except AttributeError as e:
+    #                 print("Tool\"%s\" not found" % line)
+    #         else:
+    #             print("DataSet \"%s\" not found" % name)
 
-    def complete_switch(self, text, line, begidx, endidx):
-        """Complete switch command"""
-        setlist = list(self.datasets.keys())
-        thlist = []
-        for ds in setlist:
-            thnames = self.datasets[ds].get_tree()
-            thlist += [ds + '.' + t for t in thnames]
-        toollist = [x.name for x in self.tools]
-        switchlist = setlist + thlist + toollist
-        if not text:
-            completions = switchlist[:]
-        else:
-            completions = [f for f in switchlist if f.startswith(text)]
-        return completions
+    # def complete_switch(self, text, line, begidx, endidx):
+    #     """Complete switch command"""
+    #     setlist = list(self.datasets.keys())
+    #     thlist = []
+    #     for ds in setlist:
+    #         thnames = self.datasets[ds].get_tree()
+    #         thlist += [ds + '.' + t for t in thnames]
+    #     toollist = [x.name for x in self.tools]
+    #     switchlist = setlist + thlist + toollist
+    #     if not text:
+    #         completions = switchlist[:]
+    #     else:
+    #         completions = [f for f in switchlist if f.startswith(text)]
+    #     return completions
 
-    def get_tree(self):
-        ds_names = list(self.datasets.keys())
-        thlist = []
-        for ds in ds_names:
-            thnames = self.datasets[ds].get_tree()
-            thlist += [ds + '.' + t for t in thnames]
-        to_names = [t.name for t in self.tools]
+    # def get_tree(self):
+    #     ds_names = list(self.datasets.keys())
+    #     thlist = []
+    #     for ds in ds_names:
+    #         thnames = self.datasets[ds].get_tree()
+    #         thlist += [ds + '.' + t for t in thnames]
+    #     to_names = [t.name for t in self.tools]
 
-        return ds_names + thlist + to_names
+    #     return ds_names + thlist + to_names
 
 # FILE TYPE STUFF
 
-    def do_available_filetypes(self, line=""):
-        """List available file types in the current application"""
-        print("AVAILABLE FILETYPES")
-        print("===================")
-        ftypes = list(self.filetypes.values())
-        # for ftype in ftypes:
-        #     print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
+    # def do_available_filetypes(self, line=""):
+    #     """List available file types in the current application"""
+    #     print("AVAILABLE FILETYPES")
+    #     print("===================")
+    #     ftypes = list(self.filetypes.values())
+    #     # for ftype in ftypes:
+    #     #     print("%s ("%ftype.name + Fore.CYAN + "*.%s"%ftype.extension + Fore.RESET + "): %s"%ftype.description)
 
 # VIEW STUFF
 
@@ -724,24 +726,24 @@ class Application(CmdBase):
         #index 0 is the defaut selection
         self.viewComboBox.setCurrentIndex(0)
 
-    def do_available_views(self, line=""):
-        """List available views in the current application"""
-        print("AVAILABLE VIEWS")
-        print("===============")
-        # for view in self.views.values():
-        #     if (view == self.current_view):
-        #         c = Fore.RED + "*" + Fore.RESET
-        #     else:
-        #         c = " "
-        #     print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
-        #             Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
+    # def do_available_views(self, line=""):
+    #     """List available views in the current application"""
+    #     print("AVAILABLE VIEWS")
+    #     print("===============")
+    #     # for view in self.views.values():
+    #     #     if (view == self.current_view):
+    #     #         c = Fore.RED + "*" + Fore.RESET
+    #     #     else:
+    #     #         c = " "
+    #     #     print(c + Fore.BLUE + Style.BRIGHT + "%s"%view.name +
+    #     #             Fore.RESET + Style.RESET_ALL + ":\t%s" %view.description)
 
-    def do_available(self, line):
-        """Tools/File Types/Views/Theories available in the current application"""
-        self.do_available_tools()
-        self.do_available_filetypes()
-        self.do_available_views()
-        self.do_available_theories()
+    # def do_available(self, line):
+    #     """Tools/File Types/Views/Theories available in the current application"""
+    #     self.do_available_tools()
+    #     self.do_available_filetypes()
+    #     self.do_available_views()
+    #     self.do_available_theories()
 
     def view_switch(self, name):
         """Change to another view from open application"""
@@ -765,41 +767,41 @@ class Application(CmdBase):
         for ds in self.datasets.values():
             ds.do_plot()
 
-    def do_plot(self, name=""):
-        """Update and refresh all plots"""
-        self.update_all_ds_plots()
+    # def do_plot(self, name=""):
+    #     """Update and refresh all plots"""
+    #     self.update_all_ds_plots()
 
-    def do_view(self, name):
-        """Change the active view"""
-        self.view_switch(name)
+    # def do_view(self, name):
+    #     """Change the active view"""
+    #     self.view_switch(name)
 
-    def complete_view(self, text, line, begidx, endidx):
-        """Complete view command"""
-        view_names = list(self.views.keys())
-        if not text:
-            completions = view_names[:]
-        else:
-            completions = [f for f in view_names if f.startswith(text)]
-        return completions
+    # def complete_view(self, text, line, begidx, endidx):
+    #     """Complete view command"""
+    #     view_names = list(self.views.keys())
+    #     if not text:
+    #         completions = view_names[:]
+    #     else:
+    #         completions = [f for f in view_names if f.startswith(text)]
+    #     return completions
 
 # THEORY STUFF
 
-    def do_available_theories(self, line=""):
-        """List available theories in the current application"""
-        print("AVAILABLE THEORIES")
-        print("==================")
-        # for t in list(self.theories.values()):
-        #     print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
+    # def do_available_theories(self, line=""):
+    #     """List available theories in the current application"""
+    #     print("AVAILABLE THEORIES")
+    #     print("==================")
+    #     # for t in list(self.theories.values()):
+    #     #     print(Fore.MAGENTA + "%s:"%t.thname + (20-len(t.thname))*" " + Fore.RESET + "%s"%t.description)
 
 # TOOL STUFF
-    def do_available_tools(self, line=""):
-        """List available tools in the current application"""
-        print("AVAILABLE TOOLS")
-        print("===============")
-        # for t in list(self.availabletools.values()):
-        #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
-        # for t in list(self.extratools.values()):
-        #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
+    # def do_available_tools(self, line=""):
+    #     """List available tools in the current application"""
+    #     print("AVAILABLE TOOLS")
+    #     print("===============")
+    #     # for t in list(self.availabletools.values()):
+    #     #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
+    #     # for t in list(self.extratools.values()):
+    #     #     print(Fore.CYAN + "%s"%t.toolname + Fore.RESET + ":\t%s"%t.description)
 
     def tool_new(self, line):
         """Add a new tool of the type specified to the list of tools"""
@@ -820,22 +822,22 @@ class Application(CmdBase):
             to=None
         return to
 
-    def do_tool_new(self, line):
-        """Create a new empty dataset in this application."""
-        to = self.tool_new(line)
-        if to != None:
-            to.cmdloop()
-        else:
-            print("Tool \"%s\" does not exists" % line)
+    # def do_tool_new(self, line):
+    #     """Create a new empty dataset in this application."""
+    #     to = self.tool_new(line)
+    #     if to != None:
+    #         to.cmdloop()
+    #     else:
+    #         print("Tool \"%s\" does not exists" % line)
 
-    def complete_tool_new(self, text, line, begidx, endidx):
-        """Complete new tool command"""
-        tool_names = list(self.availabletools.keys()) + list(self.extratools.keys())
-        if not text:
-            completions = tool_names[:]
-        else:
-            completions = [f for f in tool_names if f.startswith(text)]
-        return completions
+    # def complete_tool_new(self, text, line, begidx, endidx):
+    #     """Complete new tool command"""
+    #     tool_names = list(self.availabletools.keys()) + list(self.extratools.keys())
+    #     if not text:
+    #         completions = tool_names[:]
+    #     else:
+    #         completions = [f for f in tool_names if f.startswith(text)]
+    #     return completions
 
     def do_tool_delete(self, name):
         """Delete a tool from the current application"""
@@ -847,41 +849,41 @@ class Application(CmdBase):
         except AttributeError as e:
             print("Tool \"%s\" not found" % name)
 
-    def complete_tool_delete(self, text, line, begidx, endidx):
-        """Complete delete tool command"""
-        listtools = [x.name for x in self.tools]
-        if not text:
-            completions = listtools[:]
-        else:
-            completions = [f for f in listtools if f.startswith(text)]
-        return completions
+    # def complete_tool_delete(self, text, line, begidx, endidx):
+    #     """Complete delete tool command"""
+    #     listtools = [x.name for x in self.tools]
+    #     if not text:
+    #         completions = listtools[:]
+    #     else:
+    #         completions = [f for f in listtools if f.startswith(text)]
+    #     return completions
 
-    def do_list_tools(self, line=""):
-        """List opened tools in the current application"""
-        if len(self.tools)>0:
-            print("OPEN TOOLS IN THIS APPLICATION")
-            print("==============================")
-        # for t in self.tools:
-        #     if t.active:
-        #         print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
-        #     else:
-        #         print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
+    # def do_list_tools(self, line=""):
+    #     """List opened tools in the current application"""
+    #     if len(self.tools)>0:
+    #         print("OPEN TOOLS IN THIS APPLICATION")
+    #         print("==============================")
+    #     # for t in self.tools:
+    #     #     if t.active:
+    #     #         print("*" + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
+    #     #     else:
+    #     #         print(" " + Fore.CYAN + "%s:"%t.name + Fore.RESET + (15-len(t.name))*" " + "%s"%t.toolname)
 
-    def do_tool_activate(self, name):
-        """Enable/Disable a given tool"""
-        listtools = [x.name for x in self.tools]
-        try:
-            idx = listtools.index(name)
-            self.tools[idx].do_activate(name)
-        except AttributeError as e:
-            print("Tool \"%s\" not found" % name)
-        except ValueError as e:
-            print("Tool \"%s\" not found" % name)
+    # def do_tool_activate(self, name):
+    #     """Enable/Disable a given tool"""
+    #     listtools = [x.name for x in self.tools]
+    #     try:
+    #         idx = listtools.index(name)
+    #         self.tools[idx].do_activate(name)
+    #     except AttributeError as e:
+    #         print("Tool \"%s\" not found" % name)
+    #     except ValueError as e:
+    #         print("Tool \"%s\" not found" % name)
 
-    def complete_tool_activate(self, text, line, begidx, endidx):
-        """Complete the tool switch command"""
-        completions = self.complete_tool_delete(text, line, begidx, endidx)
-        return completions
+    # def complete_tool_activate(self, text, line, begidx, endidx):
+    #     """Complete the tool switch command"""
+    #     completions = self.complete_tool_delete(text, line, begidx, endidx)
+    #     return completions
 
 # LEGEND STUFF
 
@@ -891,9 +893,9 @@ class Application(CmdBase):
         self.set_legend_properties()
         self.canvas.draw()
 
-    def do_legend(self, line):
-        """Show/Hide the legend"""
-        self.legend()
+    # def do_legend(self, line):
+    #     """Show/Hide the legend"""
+    #     self.legend()
 
 
 # OTHER STUFF
@@ -975,22 +977,22 @@ class Application(CmdBase):
                 pass
                 #print("legend: %s"%e)
 
-    def do_figure_save(self, line=""):
-        """Save the figure to file. Argument = file name. The image format is determined from the file extension."""
-        if line=="":
-            plt.savefig("RepTateFigure.png")
-        else:
-            plt.savefig(line)
+    # def do_figure_save(self, line=""):
+    #     """Save the figure to file. Argument = file name. The image format is determined from the file extension."""
+    #     if line=="":
+    #         plt.savefig("RepTateFigure.png")
+    #     else:
+    #         plt.savefig(line)
 
-    def complete_figure_save(self, text, line, begidx, endidx):
-        """Complete the figure_save command"""
-        return self.complete_cd(text, line, begidx, endidx)
+    # def complete_figure_save(self, text, line, begidx, endidx):
+    #     """Complete the figure_save command"""
+    #     return self.complete_cd(text, line, begidx, endidx)
 
 # TUTORIAL
 
-    def do_tutorial(self, line=""):
-        """Show a short tutorial about the commands in RepTate applications"""
-        print("")
+    # def do_tutorial(self, line=""):
+    #     """Show a short tutorial about the commands in RepTate applications"""
+    #     print("")
 #         print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
 #         print('Visit the page:')
 #         print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)

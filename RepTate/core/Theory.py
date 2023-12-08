@@ -43,7 +43,7 @@ import numpy as np
 from scipy.optimize import curve_fit, basinhopping, dual_annealing, differential_evolution, shgo, brute
 from scipy.stats.distributions import t
 
-from RepTate.core.CmdBase import CmdBase
+# from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import ParameterType, OptType
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
@@ -117,7 +117,8 @@ class EndComputationRequested(Exception):
     """Exception class to end computations"""
     pass
 
-class Theory(CmdBase):
+# class Theory(CmdBase):
+class Theory:
     """Abstract class to describe a theory"""
     thname = ""
     """ thname {str} -- Theory name """
@@ -155,7 +156,7 @@ class Theory(CmdBase):
             - parent_dataset {DataSet} -- DataSet that contains the Theory (default: {None})
             - ax {matplotlib axes} -- matplotlib graph (default: {None})
         """
-        super().__init__()
+        # super().__init__()
 
         self.name = name
         self.parent_dataset = parent_dataset
@@ -938,83 +939,83 @@ This routine works when the theory and the experimental data are not measured on
         self.Qprint('''<i>---Fitted in %.3g seconds---</i><br>''' % (time.time() - start_time))
         self.do_cite("")
 
-    def do_mintype(self, line):
-        """Shows or changes the minimization method"""
-        if (line==""):
-            print("Current minimization method:")
-            # print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] +
-            #       Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
-        elif (line=="available"):
-            m = MinimizationMethod(0)
-            print(m)
-        elif (line in dict(MinimizationMethod.__members__.items())):
-            self.mintype=MinimizationMethod[line]
-        else:
-            print ("Minimization method %s not valid"%line)
+    # def do_mintype(self, line):
+    #     """Shows or changes the minimization method"""
+    #     if (line==""):
+    #         print("Current minimization method:")
+    #         # print(Fore.RED + "%s"%MinimizationMethod.types.value[self.mintype.value] +
+    #         #       Fore.RESET + "\t%s"%MinimizationMethod.descriptions.value[self.mintype.value])
+    #     elif (line=="available"):
+    #         m = MinimizationMethod(0)
+    #         print(m)
+    #     elif (line in dict(MinimizationMethod.__members__.items())):
+    #         self.mintype=MinimizationMethod[line]
+    #     else:
+    #         print ("Minimization method %s not valid"%line)
 
-    def complete_mintype(self, text, line, begidx, endidx):
-        """Complete mintype command"""
-        types = MinimizationMethod.types.value + ["available"]
-        if not text:
-            completions = types[:]
-        else:
-            completions = [f for f in types if f.startswith(text)]
-        return completions
+    # def complete_mintype(self, text, line, begidx, endidx):
+    #     """Complete mintype command"""
+    #     types = MinimizationMethod.types.value + ["available"]
+    #     if not text:
+    #         completions = types[:]
+    #     else:
+    #         completions = [f for f in types if f.startswith(text)]
+    #     return completions
 
-    def do_file(self, line):
-        """Print the theory table associated with the given file name"""
-        if line in self.tables:
-            print(self.tables[line].data)
-        else:
-            print("Theory table for \"%s\" not found" % line)
+    # def do_file(self, line):
+    #     """Print the theory table associated with the given file name"""
+    #     if line in self.tables:
+    #         print(self.tables[line].data)
+    #     else:
+    #         print("Theory table for \"%s\" not found" % line)
 
-    def complete_file(self, text, line, begidx, endidx):
-        """Complete with file names"""
-        file_names = list(self.tables.keys())
-        if not text:
-            completions = file_names[:]
-        else:
-            completions = [f for f in file_names if f.startswith(text)]
-        return completions
+    # def complete_file(self, text, line, begidx, endidx):
+    #     """Complete with file names"""
+    #     file_names = list(self.tables.keys())
+    #     if not text:
+    #         completions = file_names[:]
+    #     else:
+    #         completions = [f for f in file_names if f.startswith(text)]
+    #     return completions
 
-    def do_parameters(self, line):
-        """View/switch minimization of Theory parameters. Several parameters are allowed. With no arguments, show the current values"""
-        if (line == ""):
-            plist = list(self.parameters.keys())
-            plist.sort()
-            print("%9s   %10s (with * = is optimized)" % ("Parameter",
-                                                          "Value"))
-            print("==================================")
-            for p in plist:
-                if self.parameters[p].opt_type == OptType.opt:
-                    print("*%8s = %10.5g" % (self.parameters[p].name,
-                                             self.parameters[p].value))
-                elif self.parameters[p].opt_type == OptType.nopt:
-                    print("%8s = %10.5g" % (self.parameters[p].name,
-                                            self.parameters[p].value))
-                elif self.parameters[p].opt_type == OptType.const:
-                    print("%8s = %10.5g" % (self.parameters[p].name,
-                                            self.parameters[p].value))
-        else:
-            for s in line.split():
-                if (s in self.parameters):
-                    if self.parameters[s].opt_type == OptType.opt:
-                        self.parameters[s].opt_type = OptType.nopt
-                    elif self.parameters[s].opt_type == OptType.nopt:
-                        self.parameters[s].opt_type = OptType.opt
-                    elif self.parameters[s].opt_type == OptType.const:
-                        print("Parameter %s is not optimized" % s)
-                else:
-                    print("Parameter %s not found" % s)
+    # def do_parameters(self, line):
+    #     """View/switch minimization of Theory parameters. Several parameters are allowed. With no arguments, show the current values"""
+    #     if (line == ""):
+    #         plist = list(self.parameters.keys())
+    #         plist.sort()
+    #         print("%9s   %10s (with * = is optimized)" % ("Parameter",
+    #                                                       "Value"))
+    #         print("==================================")
+    #         for p in plist:
+    #             if self.parameters[p].opt_type == OptType.opt:
+    #                 print("*%8s = %10.5g" % (self.parameters[p].name,
+    #                                          self.parameters[p].value))
+    #             elif self.parameters[p].opt_type == OptType.nopt:
+    #                 print("%8s = %10.5g" % (self.parameters[p].name,
+    #                                         self.parameters[p].value))
+    #             elif self.parameters[p].opt_type == OptType.const:
+    #                 print("%8s = %10.5g" % (self.parameters[p].name,
+    #                                         self.parameters[p].value))
+    #     else:
+    #         for s in line.split():
+    #             if (s in self.parameters):
+    #                 if self.parameters[s].opt_type == OptType.opt:
+    #                     self.parameters[s].opt_type = OptType.nopt
+    #                 elif self.parameters[s].opt_type == OptType.nopt:
+    #                     self.parameters[s].opt_type = OptType.opt
+    #                 elif self.parameters[s].opt_type == OptType.const:
+    #                     print("Parameter %s is not optimized" % s)
+    #             else:
+    #                 print("Parameter %s not found" % s)
 
-    def complete_parameters(self, text, line, begidx, endidx):
-        """Complete the parameters command"""
-        parameter_names = list(self.parameters.keys())
-        if not text:
-            completions = parameter_names[:]
-        else:
-            completions = [f for f in parameter_names if f.startswith(text)]
-        return completions
+    # def complete_parameters(self, text, line, begidx, endidx):
+    #     """Complete the parameters command"""
+    #     parameter_names = list(self.parameters.keys())
+    #     if not text:
+    #         completions = parameter_names[:]
+    #     else:
+    #         completions = [f for f in parameter_names if f.startswith(text)]
+    #     return completions
 
     def plot_theory_stuff(self):
         """Plot theory helpers"""
@@ -1068,9 +1069,9 @@ This routine works when the theory and the experimental data are not measured on
         msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
         QMessageBox.information(self, 'Saved Theory', msg)
 
-    def complete_save(self, text, line, begidx, endidx):
-        """Complete the save command"""
-        return self.complete_cd(text, line, begidx, endidx)
+    # def complete_save(self, text, line, begidx, endidx):
+    #     """Complete the save command"""
+    #     return self.complete_cd(text, line, begidx, endidx)
 # SPAN STUFF
 
     def change_xmin(self, dx, dy):
@@ -1194,38 +1195,38 @@ With no arguments: switches ON/OFF the horizontal span. Example: xrange -4 5"""
 
 # MODES STUFF
 
-    def do_list_theories_Maxwell(self, line):
-        """List the theories in the current RepTate instance that provide Maxwell modes"""
-        apmng = self.parent_dataset.parent_application.parent_manager
-        apmng.do_list_theories_Maxwell()
+    # def do_list_theories_Maxwell(self, line):
+    #     """List the theories in the current RepTate instance that provide Maxwell modes"""
+    #     apmng = self.parent_dataset.parent_application.parent_manager
+    #     apmng.do_list_theories_Maxwell()
 
-    def do_copy_modes(self, line):
-        """Copy Maxwell modes from another theory"""
-        apmng = self.parent_dataset.parent_application.parent_manager
-        L, S= apmng.list_theories_Maxwell(th_exclude=self)
-        if line in L.keys():
-            tau, G0, success = L[line]()
-            if not success:
-                self.logger.warning("Could not get modes successfully")
-            tauinds = (-tau).argsort()
-            tau = tau[tauinds]
-            G0 = G0[tauinds]
-            success = self.set_modes(tau, G0)
-            if not success:
-                self.logger.warning("Could not set modes successfully")
-        else:
-            print("Theory %s does not exist or does not provide modes"%line)
+    # def do_copy_modes(self, line):
+    #     """Copy Maxwell modes from another theory"""
+    #     apmng = self.parent_dataset.parent_application.parent_manager
+    #     L, S= apmng.list_theories_Maxwell(th_exclude=self)
+    #     if line in L.keys():
+    #         tau, G0, success = L[line]()
+    #         if not success:
+    #             self.logger.warning("Could not get modes successfully")
+    #         tauinds = (-tau).argsort()
+    #         tau = tau[tauinds]
+    #         G0 = G0[tauinds]
+    #         success = self.set_modes(tau, G0)
+    #         if not success:
+    #             self.logger.warning("Could not set modes successfully")
+    #     else:
+    #         print("Theory %s does not exist or does not provide modes"%line)
 
-    def complete_copy_modes(self, text, line, begidx, endidx):
-        """Complete the copy_modes command"""
-        apmng = self.parent_dataset.parent_application.parent_manager
-        L, S= apmng.list_theories_Maxwell(th_exclude=self)
-        L = list(L.keys())
-        if not text:
-            completions = L[:]
-        else:
-            completions = [f for f in L if f.startswith(text)]
-        return completions
+    # def complete_copy_modes(self, text, line, begidx, endidx):
+    #     """Complete the copy_modes command"""
+    #     apmng = self.parent_dataset.parent_application.parent_manager
+    #     L, S= apmng.list_theories_Maxwell(th_exclude=self)
+    #     L = list(L.keys())
+    #     if not text:
+    #         completions = L[:]
+    #     else:
+    #         completions = [f for f in L if f.startswith(text)]
+    #     return completions
 
     def get_modes(self):
         """Get Maxwell modes from this theory. This function must be rewritten from derived theories"""
@@ -1445,45 +1446,45 @@ that provide this functionality."""
         get_all_parameters(chem, self, fparam, dbindex)
         return True
 
-    def get_material_parametersOLD(self):
-        """Get theory parameters from materials database"""
-        if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
-            chem=self.parent_dataset.files[0].file_parameters['chem']
-            if chem in materials_user_database.keys():
-                for p in self.parameters.keys():
-                    if p in materials_user_database[chem].data.keys():
-                        self.set_param_value(p, materials_user_database[chem].data[p])
-                return True
-            elif chem in materials_database.keys():
-                for p in self.parameters.keys():
-                    if p in materials_database[chem].data.keys():
-                        self.set_param_value(p, materials_database[chem].data[p])
-                return True
-            else:
-                return False
-        else:
-            return False
+    # def get_material_parametersOLD(self):
+    #     """Get theory parameters from materials database"""
+    #     if 'chem' in self.parent_dataset.files[0].file_parameters.keys():
+    #         chem=self.parent_dataset.files[0].file_parameters['chem']
+    #         if chem in materials_user_database.keys():
+    #             for p in self.parameters.keys():
+    #                 if p in materials_user_database[chem].data.keys():
+    #                     self.set_param_value(p, materials_user_database[chem].data[p])
+    #             return True
+    #         elif chem in materials_database.keys():
+    #             for p in self.parameters.keys():
+    #                 if p in materials_database[chem].data.keys():
+    #                     self.set_param_value(p, materials_database[chem].data[p])
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         return False
 
-    def do_tutorial(self, line=""):
-        """Show a short tutorial about the commands in RepTate theories"""
-        print("")
-        # print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
-        print('Visit the page:')
-        # print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
-        print("""
-Basic use:
-==========""")
-        # print(Fore.RED + "parameters" + Fore.RESET)
-        # self.do_help("parameters")
-        # print(Fore.RED + "par1=val1" + Fore.RESET)
-        # print("Change the value of parameter par1")
-        # print(Fore.RED + "calculate" + Fore.RESET)
-        # self.do_help("calculate")
-        # print(Fore.RED + "error" + Fore.RESET)
-        # self.do_help("error")
-        # print(Fore.RED + "fit" + Fore.RESET)
-        # self.do_help("fit")
-        # print(Fore.RED + "xrange" + Fore.RESET)
-        # print(Fore.RED + "yrange" + Fore.RESET)
-        self.do_help("xrange")
-        print("")
+#     def do_tutorial(self, line=""):
+#         """Show a short tutorial about the commands in RepTate theories"""
+#         print("")
+#         # print('Inspect the python scripts in the' + Fore.RED + ' "tests" ' + Fore.RESET + 'folder.')
+#         print('Visit the page:')
+#         # print(Fore.CYAN + 'https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html' + Fore.RESET)
+#         print("""
+# Basic use:
+# ==========""")
+#         # print(Fore.RED + "parameters" + Fore.RESET)
+#         # self.do_help("parameters")
+#         # print(Fore.RED + "par1=val1" + Fore.RESET)
+#         # print("Change the value of parameter par1")
+#         # print(Fore.RED + "calculate" + Fore.RESET)
+#         # self.do_help("calculate")
+#         # print(Fore.RED + "error" + Fore.RESET)
+#         # self.do_help("error")
+#         # print(Fore.RED + "fit" + Fore.RESET)
+#         # self.do_help("fit")
+#         # print(Fore.RED + "xrange" + Fore.RESET)
+#         # print(Fore.RED + "yrange" + Fore.RESET)
+#         self.do_help("xrange")
+#         print("")

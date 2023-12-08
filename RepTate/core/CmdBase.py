@@ -64,7 +64,8 @@ class CalcMode(enum.Enum):
         )
 
 
-class CmdBase(cmd.Cmd):
+# class CmdBase(cmd.Cmd):
+class CmdBase:
     """Basic Cmd Console that is inherited by most Reptate objects"""
 
     calcmode = CalcMode.multithread
@@ -72,7 +73,7 @@ class CmdBase(cmd.Cmd):
 
     def __init__(self, parent=None):
         """**Constructor**"""
-        super().__init__()
+        # super().__init__()
 
         # init()
 
@@ -193,13 +194,13 @@ class CmdBase(cmd.Cmd):
 
     # do_up = do_EOF
 
-    def do_quit(self, args):
-        """Exit from the application."""
-        msg = "Do you really want to exit RepTate?"
-        shall = input("%s (y/N) " % msg).lower() == "y"
-        if shall:
-            print("Exiting RepTate...")
-            sys.exit()
+    # def do_quit(self, args):
+    #     """Exit from the application."""
+    #     msg = "Do you really want to exit RepTate?"
+    #     shall = input("%s (y/N) " % msg).lower() == "y"
+    #     if shall:
+    #         print("Exiting RepTate...")
+    #         sys.exit()
 
     # def default(self, line):
     #     """Called on an input line when the command prefix is not recognized.
@@ -271,43 +272,43 @@ class CmdBase(cmd.Cmd):
     #         # )
     #         # print(Fore.RED + "Log File: " + Fore.RESET + "%s" % logfilename)
 
-    def do_loglevel(self, line):
-        """Set log level"""
-        if self.logger != None:
-            nhandlers = len(logging.getLogger("RepTate").handlers)
-            for i in range(nhandlers):
-                h = logging.getLogger("RepTate").handlers[i]
-                if isinstance(h, logging.handlers.RotatingFileHandler):
-                    fhandler = h
-                elif isinstance(h, logging.StreamHandler):
-                    chandler = h
-            items = line.split()
-            h = None
-            l = None
-            handlers = ["Main", "File", "Console"]
-            levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-            if len(items) < 2:
-                print(
-                    "Wrong number of parameters. Example of use: loglevel Console WARNING"
-                )
-            else:
-                if items[0] == "Main":
-                    h = logging.getLogger("RepTate")
-                elif items[0] == "File":
-                    h = fhandler
-                elif items[0] == "Console":
-                    h = chandler
-                else:
-                    print("Wrong Log Handler. Valid values are:")
-                    print(handlers)
-                if items[1] not in levels:
-                    print("Wrong Log level. Valid values are:")
-                    print(levels)
-                else:
-                    l = items[1]
+    # def do_loglevel(self, line):
+    #     """Set log level"""
+    #     if self.logger != None:
+    #         nhandlers = len(logging.getLogger("RepTate").handlers)
+    #         for i in range(nhandlers):
+    #             h = logging.getLogger("RepTate").handlers[i]
+    #             if isinstance(h, logging.handlers.RotatingFileHandler):
+    #                 fhandler = h
+    #             elif isinstance(h, logging.StreamHandler):
+    #                 chandler = h
+    #         items = line.split()
+    #         h = None
+    #         l = None
+    #         handlers = ["Main", "File", "Console"]
+    #         levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    #         if len(items) < 2:
+    #             print(
+    #                 "Wrong number of parameters. Example of use: loglevel Console WARNING"
+    #             )
+    #         else:
+    #             if items[0] == "Main":
+    #                 h = logging.getLogger("RepTate")
+    #             elif items[0] == "File":
+    #                 h = fhandler
+    #             elif items[0] == "Console":
+    #                 h = chandler
+    #             else:
+    #                 print("Wrong Log Handler. Valid values are:")
+    #                 print(handlers)
+    #             if items[1] not in levels:
+    #                 print("Wrong Log level. Valid values are:")
+    #                 print(levels)
+    #             else:
+    #                 l = items[1]
 
-                if h is not None and l is not None:
-                    h.setLevel(l)
+    #             if h is not None and l is not None:
+    #                 h.setLevel(l)
 
     # def complete_loglevel(self, text, line, begidx, endidx):
     #     handlers = ["Main", "File", "Console"]
@@ -339,13 +340,13 @@ class CmdBase(cmd.Cmd):
     #         completions = [f for f in names if f.startswith(text)]
     #     return completions
 
-    def cmdloop(self, intro=""):
-        """Overload the cmd.Cmd cmdloop function to capture Ctrl+C"""
-        if self.intro != None:
-            print(self.intro)
-        while True:
-            try:
-                super(CmdBase, self).cmdloop(intro="")
-                break
-            except KeyboardInterrupt:
-                print("^C")
+    # def cmdloop(self, intro=""):
+    #     """Overload the cmd.Cmd cmdloop function to capture Ctrl+C"""
+    #     if self.intro != None:
+    #         print(self.intro)
+    #     while True:
+    #         try:
+    #             super(CmdBase, self).cmdloop(intro="")
+    #             break
+    #         except KeyboardInterrupt:
+    #             print("^C")

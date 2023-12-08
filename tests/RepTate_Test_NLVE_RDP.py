@@ -48,7 +48,6 @@ sys.path.append("visual")
 sys.path.append("tools")
 from QApplicationManager import QApplicationManager
 
-# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from SplashScreen import SplashScreen
 from time import time, sleep

@@ -43,7 +43,6 @@ import getopt
 sys.path.append(".")
 from RepTate.gui.QApplicationManager import QApplicationManager
 
-# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PyQt5.QtWidgets import QApplication
 from time import time, sleep
 from RepTate.core.CmdBase import CmdBase, CalcMode

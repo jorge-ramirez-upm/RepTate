@@ -45,9 +45,7 @@ import logging
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 
-# from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt, QCoreApplication
 from RepTate.gui.SplashScreen import SplashScreen
 
 # from time import time, sleep

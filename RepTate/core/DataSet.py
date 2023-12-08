@@ -41,7 +41,7 @@ import os
 import glob
 
 import enum
-from RepTate.core.CmdBase import CmdBase
+# from RepTate.core.CmdBase import CmdBase
 from RepTate.core.File import File
 from RepTate.core.DataTable import DataTable
 
@@ -307,14 +307,15 @@ class ThLineMode(enum.Enum):
     )
 
 
-class DataSet(CmdBase):  
+# class DataSet(CmdBase):  
+class DataSet:  
     """Abstract class to describe a data set"""
 
     doc_header = "DataSet commands (type help <topic>):"
 
     def __init__(self, name="DataSet", parent=None):
         """**Constructor**"""
-        super().__init__()
+        # super().__init__()
 
         self.name = name
         self.parent_application = parent
@@ -357,39 +358,39 @@ class DataSet(CmdBase):
 
     # DATASET STUFF ##########################################################################################################
 
-    def do_list(self, line=""):
-        """List files and theories in the current DataSet"""
-        self.do_list_files()
-        self.do_list_theories()
+    # def do_list(self, line=""):
+    #     """List files and theories in the current DataSet"""
+    #     self.do_list_files()
+    #     self.do_list_theories()
 
-    def do_tree(self, line):
-        """List all the tools, datasets, files and theories in the current application"""
-        done = False
-        if line == "":
-            offset = 0
-            prefix = ""
-            done = True
-        else:
-            try:
-                offset = int(line)
-                if offset == 1:
-                    prefix = "|--"
-                    done = True
-                elif offset == 2:
-                    prefix = "|  |--"
-                    done = True
-                else:
-                    print("Wrong argument for the tree command.")
-            except ValueError:
-                print("Wrong argument for the tree command.")
-        if done:
-            # for t in self.theories.values():
-            #     print(prefix + Fore.MAGENTA + "%s" % t.name + Fore.RESET)
-            for f in self.files:
-                print(prefix + "%s" % f.file_name_short)
+    # def do_tree(self, line):
+    #     """List all the tools, datasets, files and theories in the current application"""
+    #     done = False
+    #     if line == "":
+    #         offset = 0
+    #         prefix = ""
+    #         done = True
+    #     else:
+    #         try:
+    #             offset = int(line)
+    #             if offset == 1:
+    #                 prefix = "|--"
+    #                 done = True
+    #             elif offset == 2:
+    #                 prefix = "|  |--"
+    #                 done = True
+    #             else:
+    #                 print("Wrong argument for the tree command.")
+    #         except ValueError:
+    #             print("Wrong argument for the tree command.")
+    #     if done:
+    #         # for t in self.theories.values():
+    #         #     print(prefix + Fore.MAGENTA + "%s" % t.name + Fore.RESET)
+    #         for f in self.files:
+    #             print(prefix + "%s" % f.file_name_short)
 
-    def get_tree(self):
-        return list(self.theories.keys())
+    # def get_tree(self):
+    #     return list(self.theories.keys())
 
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure"""
@@ -450,59 +451,59 @@ class DataSet(CmdBase):
             th.do_hide()
         self.do_plot("")
 
-    def do_file_hide(self, line):
-        """Hide a specific file"""
-        done = False
-        for index, f in enumerate(self.files):
-            if f.file_name_short == line:
-                if not f.active:
-                    print("File %s is already hidden" % line)
-                    return
-                f.active = False
-                dt = f.data_table
-                for i in range(dt.MAX_NUM_SERIES):
-                    for nx in range(self.nplots):
-                        dt.series[nx][i].set_visible(False)
-                done = True
-                self.do_plot()
-        if not done:
-            print('File "%s" not found' % line)
+    # def do_file_hide(self, line):
+    #     """Hide a specific file"""
+    #     done = False
+    #     for index, f in enumerate(self.files):
+    #         if f.file_name_short == line:
+    #             if not f.active:
+    #                 print("File %s is already hidden" % line)
+    #                 return
+    #             f.active = False
+    #             dt = f.data_table
+    #             for i in range(dt.MAX_NUM_SERIES):
+    #                 for nx in range(self.nplots):
+    #                     dt.series[nx][i].set_visible(False)
+    #             done = True
+    #             self.do_plot()
+    #     if not done:
+    #         print('File "%s" not found' % line)
 
-    def complete_file_hide(self, text, line, begidx, endidx):
-        """Complete with the names of files that are currently visible"""
-        f_names = [fl.file_name_short for fl in self.files if fl.active]
-        if not text:
-            completions = f_names[:]
-        else:
-            completions = [f for f in f_names if f.startswith(text)]
-        return completions
+    # def complete_file_hide(self, text, line, begidx, endidx):
+    #     """Complete with the names of files that are currently visible"""
+    #     f_names = [fl.file_name_short for fl in self.files if fl.active]
+    #     if not text:
+    #         completions = f_names[:]
+    #     else:
+    #         completions = [f for f in f_names if f.startswith(text)]
+    #     return completions
 
-    def do_file_show(self, line):
-        """Show a specific file"""
-        done = False
-        for index, f in enumerate(self.files):
-            if f.file_name_short == line:
-                if f.active:
-                    print("File %s is already visible" % line)
-                    return
-                f.active = True
-                dt = f.data_table
-                for i in range(dt.MAX_NUM_SERIES):
-                    for nx in range(self.nplots):
-                        dt.series[nx][i].set_visible(True)
-                done = True
-                self.do_plot()
-        if not done:
-            print('File "%s" not found' % line)
+    # def do_file_show(self, line):
+    #     """Show a specific file"""
+    #     done = False
+    #     for index, f in enumerate(self.files):
+    #         if f.file_name_short == line:
+    #             if f.active:
+    #                 print("File %s is already visible" % line)
+    #                 return
+    #             f.active = True
+    #             dt = f.data_table
+    #             for i in range(dt.MAX_NUM_SERIES):
+    #                 for nx in range(self.nplots):
+    #                     dt.series[nx][i].set_visible(True)
+    #             done = True
+    #             self.do_plot()
+    #     if not done:
+    #         print('File "%s" not found' % line)
 
-    def complete_file_show(self, text, line, begidx, endidx):
-        """Complete with the names of the files in the DataSet that are currently hidden"""
-        f_names = [fl.file_name_short for fl in self.files if not fl.active]
-        if not text:
-            completions = f_names[:]
-        else:
-            completions = [f for f in f_names if f.startswith(text)]
-        return completions
+    # def complete_file_show(self, text, line, begidx, endidx):
+    #     """Complete with the names of the files in the DataSet that are currently hidden"""
+    #     f_names = [fl.file_name_short for fl in self.files if not fl.active]
+    #     if not text:
+    #         completions = f_names[:]
+    #     else:
+    #         completions = [f for f in f_names if f.startswith(text)]
+    #     return completions
 
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
@@ -783,129 +784,129 @@ Arguments:
                 self.logger.warning("Parameter %s not found in files" % line)
                 # print("Parameter %s not found in files" % line)
 
-    def complete_sort(self, text, line, begidx, endidx):
-        """Complete with the list of file parameters of the current file in the current dataset"""
-        if self.current_file == None:
-            print("A file must be selected first")
-            return
-        fp_names = list(self.current_file.file_parameters.keys())
-        if not text:
-            completions = fp_names[:]
-        else:
-            completions = [f for f in fp_names if f.startswith(text)]
-        return completions
+    # def complete_sort(self, text, line, begidx, endidx):
+    #     """Complete with the list of file parameters of the current file in the current dataset"""
+    #     if self.current_file == None:
+    #         print("A file must be selected first")
+    #         return
+    #     fp_names = list(self.current_file.file_parameters.keys())
+    #     if not text:
+    #         completions = fp_names[:]
+    #     else:
+    #         completions = [f for f in fp_names if f.startswith(text)]
+    #     return completions
 
     # FILE STUFF ##########################################################################################################
 
-    def do_file_delete(self, line):
-        """Delete file from the data set"""
-        done = False
-        for index, f in enumerate(self.files):
-            if f.file_name_short == line:
-                if self.current_file == f:
-                    self.current_file = None
-                dt = f.data_table
-                for i in range(dt.MAX_NUM_SERIES):
-                    for nx in range(self.nplots):
-                        self.parent_application.axarr[nx].lines.remove(dt.series[nx][i])
-                self.files.remove(f)
-                done = True
-                self.do_plot()
-        if not done:
-            print('File "%s" not found' % line)
+    # def do_file_delete(self, line):
+    #     """Delete file from the data set"""
+    #     done = False
+    #     for index, f in enumerate(self.files):
+    #         if f.file_name_short == line:
+    #             if self.current_file == f:
+    #                 self.current_file = None
+    #             dt = f.data_table
+    #             for i in range(dt.MAX_NUM_SERIES):
+    #                 for nx in range(self.nplots):
+    #                     self.parent_application.axarr[nx].lines.remove(dt.series[nx][i])
+    #             self.files.remove(f)
+    #             done = True
+    #             self.do_plot()
+    #     if not done:
+    #         print('File "%s" not found' % line)
 
-    def complete_file_delete(self, text, line, begidx, endidx):
-        f_names = [fl.file_name_short for fl in self.files]
-        if not text:
-            completions = f_names[:]
-        else:
-            completions = [f for f in f_names if f.startswith(text)]
-        return completions
+    # def complete_file_delete(self, text, line, begidx, endidx):
+    #     f_names = [fl.file_name_short for fl in self.files]
+    #     if not text:
+    #         completions = f_names[:]
+    #     else:
+    #         completions = [f for f in f_names if f.startswith(text)]
+    #     return completions
 
-    def do_list_files(self, line=""):
-        """List the files in the current dataset. Active files are shown with an \*. Hidden files are shown with (-)."""
-        print("FILES IN THE CURRENT DATASET")
-        print("============================")
-        for f in self.files:
-            if f == self.current_file:
-                c = "*"
-            else:
-                c = " "
-            if f.active:
-                a = ""
-            else:
-                a = "(-)"
+    # def do_list_files(self, line=""):
+    #     """List the files in the current dataset. Active files are shown with an \*. Hidden files are shown with (-)."""
+    #     print("FILES IN THE CURRENT DATASET")
+    #     print("============================")
+    #     for f in self.files:
+    #         if f == self.current_file:
+    #             c = "*"
+    #         else:
+    #             c = " "
+    #         if f.active:
+    #             a = ""
+    #         else:
+    #             a = "(-)"
 
-            # print(
-            #     Fore.RED
-            #     + "%s " % c
-            #     + Fore.RESET
-            #     + "%s " % f.file_name_short
-            #     + Fore.CYAN
-            #     + "%s" % a
-            #     + Fore.RESET
-            # )
+    #         # print(
+    #         #     Fore.RED
+    #         #     + "%s " % c
+    #         #     + Fore.RESET
+    #         #     + "%s " % f.file_name_short
+    #         #     + Fore.CYAN
+    #         #     + "%s" % a
+    #         #     + Fore.RESET
+    #         # )
 
-    def do_list_files_details(self, line):
-        """List the files in the dataset with the file parameters"""
-        for f in self.files:
-            print(f)
+    # def do_list_files_details(self, line):
+    #     """List the files in the dataset with the file parameters"""
+    #     for f in self.files:
+    #         print(f)
 
-    def do_file_new(self, line):
-        """Add an empty file of the given type to the current Data Set
+#     def do_file_new(self, line):
+#         """Add an empty file of the given type to the current Data Set
 
-Arguments:
-    - line {str} -- TYPE (extension of file) [, NAME (name, optional)]"""
-        if line == "":
-            print("Missing file type")
-            return
-        items = line.split(",")
-        if len(items) == 0:
-            print("Missing file type")
-            return
-        elif len(items) == 1:
-            ext = items[0]
-            fname = (
-                os.getcwd()
-                + os.path.sep
-                + "DummyFile%02d" % (self.num_files + 1)
-                + "."
-                + ext
-            )
-        elif len(items) == 2:
-            ext = items[0]
-            fname = os.getcwd() + os.path.sep + items[1] + "." + ext
-        else:
-            print("Wrong number of arguments")
+# Arguments:
+#     - line {str} -- TYPE (extension of file) [, NAME (name, optional)]"""
+#         if line == "":
+#             print("Missing file type")
+#             return
+#         items = line.split(",")
+#         if len(items) == 0:
+#             print("Missing file type")
+#             return
+#         elif len(items) == 1:
+#             ext = items[0]
+#             fname = (
+#                 os.getcwd()
+#                 + os.path.sep
+#                 + "DummyFile%02d" % (self.num_files + 1)
+#                 + "."
+#                 + ext
+#             )
+#         elif len(items) == 2:
+#             ext = items[0]
+#             fname = os.getcwd() + os.path.sep + items[1] + "." + ext
+#         else:
+#             print("Wrong number of arguments")
 
-        if ext in self.parent_application.filetypes:
-            self.num_files += 1
-            f = File(
-                fname,
-                self.parent_application.filetypes[ext],
-                self,
-                self.parent_application.axarr,
-            )
-            self.files.append(f)
-            self.current_file = f
-            # leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
-            # if leg:
-            #    leg.draggable()
-            # self.current_application.figure.canvas.draw()
-        else:
-            print(
-                'File type "%s" cannot be read by application %s'
-                % (line, self.parent_application.name)
-            )
+#         if ext in self.parent_application.filetypes:
+#             self.num_files += 1
+#             f = File(
+#                 fname,
+#                 self.parent_application.filetypes[ext],
+#                 self,
+#                 self.parent_application.axarr,
+#             )
+#             self.files.append(f)
+#             self.current_file = f
+#             # leg=self.current_application.ax.legend([], [], loc='upper left', frameon=True, ncol=2, title='Hello')
+#             # if leg:
+#             #    leg.draggable()
+#             # self.current_application.figure.canvas.draw()
+#         else:
+#             print(
+#                 'File type "%s" cannot be read by application %s'
+#                 % (line, self.parent_application.name)
+#             )
 
-    def complete_file_new(self, text, line, begidx, endidx):
-        """Complete new file command"""
-        file_types = list(self.parent_application.filetypes.keys())
-        if not text:
-            completions = file_types[:]
-        else:
-            completions = [f for f in file_types if f.startswith(text)]
-        return completions
+#     def complete_file_new(self, text, line, begidx, endidx):
+#         """Complete new file command"""
+#         file_types = list(self.parent_application.filetypes.keys())
+#         if not text:
+#             completions = file_types[:]
+#         else:
+#             completions = [f for f in file_types if f.startswith(text)]
+#         return completions
 
     def new_dummy_file(
         self,
@@ -1053,35 +1054,35 @@ Arguments:
             res.append(name)
         return res
 
-    def __complete_path(self, path=None):
-        """Perform completion of filesystem path"""
-        if not path:
-            return self.__listdir(".")
+    # def __complete_path(self, path=None):
+    #     """Perform completion of filesystem path"""
+    #     if not path:
+    #         return self.__listdir(".")
 
-        dirname, rest = os.path.split(path)
-        tmp = dirname if dirname else "."
-        res = [
-            os.path.join(dirname, p) for p in self.__listdir(tmp) if p.startswith(rest)
-        ]
+    #     dirname, rest = os.path.split(path)
+    #     tmp = dirname if dirname else "."
+    #     res = [
+    #         os.path.join(dirname, p) for p in self.__listdir(tmp) if p.startswith(rest)
+    #     ]
 
-        # more than one match, or single match which does not exist (typo)
-        if len(res) > 1 or not os.path.exists(path):
-            return res
-        # resolved to a single directory, so return list of files below it
-        if os.path.isdir(path):
-            return [os.path.join(path, p) for p in self.__listdir(path)]
-        # exact file match terminates this completion
-        return [path + " "]
+    #     # more than one match, or single match which does not exist (typo)
+    #     if len(res) > 1 or not os.path.exists(path):
+    #         return res
+    #     # resolved to a single directory, so return list of files below it
+    #     if os.path.isdir(path):
+    #         return [os.path.join(path, p) for p in self.__listdir(path)]
+    #     # exact file match terminates this completion
+    #     return [path + " "]
 
-    def complete_open(self, text, line, begidx, endidx):
-        """Complete the file_open command"""
-        test = line.split()
-        if len(test) > 1:
-            result = self.__complete_path(test[1])
-        else:
-            result = self.__complete_path()
+    # def complete_open(self, text, line, begidx, endidx):
+    #     """Complete the file_open command"""
+    #     test = line.split()
+    #     if len(test) > 1:
+    #         result = self.__complete_path(test[1])
+    #     else:
+    #         result = self.__complete_path()
 
-        return result
+    #     return result
 
         # f_names=[]
         # for f in list(self.parent_application.filetypes.keys()):
@@ -1097,59 +1098,59 @@ Arguments:
         #                    ]
         # return completions
 
-    def do_file_active(self, line):
-        """Change active file in the current dataset"""
-        done = False
-        for f in self.files:
-            if f.file_name_short == line:
-                self.current_file = f
-                done = True
-        if not done:
-            print('File "%s" not found' % line)
+    # def do_file_active(self, line):
+    #     """Change active file in the current dataset"""
+    #     done = False
+    #     for f in self.files:
+    #         if f.file_name_short == line:
+    #             self.current_file = f
+    #             done = True
+    #     if not done:
+    #         print('File "%s" not found' % line)
 
-    complete_file_active = complete_file_delete
+    # complete_file_active = complete_file_delete
 
-    def do_file(self, line):
-        """Show the contents of a given file on the screen (if the file name is not specified, it shows the current file)"""
-        done = False
-        if line == "":
-            line = self.current_file.file_name_short
-        for index, file in enumerate(self.files):
-            if file.file_name_short == line:
-                done = True
-                # print(Fore.YELLOW + "File: " + Fore.RESET + file.file_name_short)
-                # print(Fore.CYAN + "Path: " + Fore.RESET + file.file_full_path)
-                # print(Fore.RED + "Parameters: " + Fore.RESET)
-                print(file.file_parameters)
-                # print(Fore.GREEN + "Header Lines: " + Fore.RESET)
-                print(file.header_lines)
-                dfile = list(self.parent_application.filetypes.values())[0]
-                inspect_header = [
-                    a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)
-                ]
-                # print(Fore.BLUE + "Column Header: " + Fore.RESET)
-                print(inspect_header)
-                # print(Fore.MAGENTA + "Data: " + Fore.RESET)
-                print(file.data_table.data)
-        if not done:
-            print('File "%s" not found' % line)
+    # def do_file(self, line):
+    #     """Show the contents of a given file on the screen (if the file name is not specified, it shows the current file)"""
+    #     done = False
+    #     if line == "":
+    #         line = self.current_file.file_name_short
+    #     for index, file in enumerate(self.files):
+    #         if file.file_name_short == line:
+    #             done = True
+    #             # print(Fore.YELLOW + "File: " + Fore.RESET + file.file_name_short)
+    #             # print(Fore.CYAN + "Path: " + Fore.RESET + file.file_full_path)
+    #             # print(Fore.RED + "Parameters: " + Fore.RESET)
+    #             print(file.file_parameters)
+    #             # print(Fore.GREEN + "Header Lines: " + Fore.RESET)
+    #             print(file.header_lines)
+    #             dfile = list(self.parent_application.filetypes.values())[0]
+    #             inspect_header = [
+    #                 a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)
+    #             ]
+    #             # print(Fore.BLUE + "Column Header: " + Fore.RESET)
+    #             print(inspect_header)
+    #             # print(Fore.MAGENTA + "Data: " + Fore.RESET)
+    #             print(file.data_table.data)
+    #     if not done:
+    #         print('File "%s" not found' % line)
 
-    complete_file = complete_file_delete
+    # complete_file = complete_file_delete
 
     # THEORY STUFF ##########################################################################################################
 
-    def do_available(self, line):
-        """List available filetypes and theories in parent application"""
-        self.parent_application.do_available_filetypes()
-        self.parent_application.do_available_theories()
+    # def do_available(self, line):
+    #     """List available filetypes and theories in parent application"""
+    #     self.parent_application.do_available_filetypes()
+    #     self.parent_application.do_available_theories()
 
-    def do_available_filetypes(self, line):
-        """List available filetypes in parent application"""
-        self.parent_application.do_available_filetypes()
+    # def do_available_filetypes(self, line):
+    #     """List available filetypes in parent application"""
+    #     self.parent_application.do_available_filetypes()
 
-    def do_available_theories(self, line):
-        """List available theories in parent application"""
-        self.parent_application.do_available_theories()
+    # def do_available_theories(self, line):
+    #     """List available theories in parent application"""
+    #     self.parent_application.do_available_theories()
 
     def do_delete(self, name):
         """Delete a theory from the current dataset"""
@@ -1166,28 +1167,28 @@ Arguments:
         else:
             print('Theory "%s" not found' % name)
 
-    def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete theory command"""
-        th_names = list(self.theories.keys())
-        if not text:
-            completions = th_names[:]
-        else:
-            completions = [f for f in th_names if f.startswith(text)]
-        return completions
+    # def complete_delete(self, text, line, begidx, endidx):
+    #     """Complete delete theory command"""
+    #     th_names = list(self.theories.keys())
+    #     if not text:
+    #         completions = th_names[:]
+    #     else:
+    #         completions = [f for f in th_names if f.startswith(text)]
+    #     return completions
 
-    def do_list_theories(self, line=""):
-        """List open theories in current dataset"""
-        if len(self.theories) > 0:
-            print("OPEN THEORIES IN THE CURRENT DATASET")
-            print("====================================")
-        # for t in self.theories.values():
-        #     print(
-        #         Fore.MAGENTA
-        #         + "%s:" % t.name
-        #         + Fore.RESET
-        #         + (15 - len(t.name)) * " "
-        #         + "%s" % t.thname
-        #     )
+    # def do_list_theories(self, line=""):
+    #     """List open theories in current dataset"""
+    #     if len(self.theories) > 0:
+    #         print("OPEN THEORIES IN THE CURRENT DATASET")
+    #         print("====================================")
+    #     # for t in self.theories.values():
+    #     #     print(
+    #     #         Fore.MAGENTA
+    #     #         + "%s:" % t.name
+    #     #         + Fore.RESET
+    #     #         + (15 - len(t.name)) * " "
+    #     #         + "%s" % t.thname
+    #     #     )
 
     def new(self, line):
         """Create a new theory"""
@@ -1244,29 +1245,29 @@ Arguments:
         else:
             print('Theory "%s" does not exists' % line)
 
-    def complete_new(self, text, line, begidx, endidx):
-        """Complete new theory command"""
-        theory_names = list(self.parent_application.theories.keys())
-        if not text:
-            completions = theory_names[:]
-        else:
-            completions = [f for f in theory_names if f.startswith(text)]
-        return completions
+    # def complete_new(self, text, line, begidx, endidx):
+    #     """Complete new theory command"""
+    #     theory_names = list(self.parent_application.theories.keys())
+    #     if not text:
+    #         completions = theory_names[:]
+    #     else:
+    #         completions = [f for f in theory_names if f.startswith(text)]
+    #     return completions
 
-    def do_switch(self, line):
-        """Change the active theory"""
-        if line in self.theories.keys():
-            th = self.theories[line]
-            self.current_theory = line
-            th.cmdloop()
-        else:
-            print('Theory "%s" not found' % line)
+    # def do_switch(self, line):
+    #     """Change the active theory"""
+    #     if line in self.theories.keys():
+    #         th = self.theories[line]
+    #         self.current_theory = line
+    #         th.cmdloop()
+    #     else:
+    #         print('Theory "%s" not found' % line)
 
-    complete_switch = complete_delete
+    # complete_switch = complete_delete
 
-    def do_legend(self, line):
-        """Show/hide the legend"""
-        self.parent_application.do_legend(line)
+    # def do_legend(self, line):
+    #     """Show/hide the legend"""
+    #     self.parent_application.do_legend(line)
 
     def mincol(self, col):
         """Minimum value in table column line of all Files in DataSet"""
@@ -1295,39 +1296,39 @@ Arguments:
                 max = maxfile
         return max
 
-    def do_tutorial(self, line=""):
-        """Show a short tutorial about the commands in RepTate Datasets"""
-        print("")
-        print(
-            "Inspect the python scripts in the"
-            + Fore.RED
-            + ' "tests" '
-            + Fore.RESET
-            + "folder."
-        )
-        print("Visit the page:")
-        print(
-            Fore.CYAN
-            + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-            + Fore.RESET
-        )
-        print(
-            """
-Basic use:
-=========="""
-        )
-        # print(Fore.RED + "available" + Fore.RESET)
-        # self.do_help("available")
-        # print(Fore.RED + "open" + Fore.RESET)
-        # self.do_help("open")
-        # print(Fore.RED + "file*" + Fore.RESET)
-        # print("Several operations (show, delete, hide...) for files")
-        # print(Fore.RED + "list" + Fore.RESET)
-        # self.do_help("list")
-        # print(Fore.RED + "tree" + Fore.RESET)
-        # self.do_help("tree")
-        # print(Fore.RED + "switch" + Fore.RESET)
-        # self.do_help("switch")
-        # print(Fore.RED + "reload_data" + Fore.RESET)
-        # self.do_help("reload_data")
-        # print("")
+#     def do_tutorial(self, line=""):
+#         """Show a short tutorial about the commands in RepTate Datasets"""
+#         print("")
+#         print(
+#             "Inspect the python scripts in the"
+#             + Fore.RED
+#             + ' "tests" '
+#             + Fore.RESET
+#             + "folder."
+#         )
+#         print("Visit the page:")
+#         print(
+#             Fore.CYAN
+#             + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+#             + Fore.RESET
+#         )
+#         print(
+#             """
+# Basic use:
+# =========="""
+#         )
+#         # print(Fore.RED + "available" + Fore.RESET)
+#         # self.do_help("available")
+#         # print(Fore.RED + "open" + Fore.RESET)
+#         # self.do_help("open")
+#         # print(Fore.RED + "file*" + Fore.RESET)
+#         # print("Several operations (show, delete, hide...) for files")
+#         # print(Fore.RED + "list" + Fore.RESET)
+#         # self.do_help("list")
+#         # print(Fore.RED + "tree" + Fore.RESET)
+#         # self.do_help("tree")
+#         # print(Fore.RED + "switch" + Fore.RESET)
+#         # self.do_help("switch")
+#         # print(Fore.RED + "reload_data" + Fore.RESET)
+#         # self.do_help("reload_data")
+#         # print("")

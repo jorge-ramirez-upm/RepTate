@@ -43,7 +43,7 @@ from pathlib import Path
 import os
 from PySide6.QtCore import QStandardPaths
 
-from RepTate.core.CmdBase import CmdBase
+# from RepTate.core.CmdBase import CmdBase
 from RepTate.applications.ApplicationTTS import ApplicationTTS
 from RepTate.applications.ApplicationTTSFactors import ApplicationTTSFactors
 from RepTate.applications.ApplicationLVE import ApplicationLVE
@@ -63,7 +63,8 @@ import RepTate
 from collections import OrderedDict
 
 
-class ApplicationManager(CmdBase):
+#class ApplicationManager(CmdBase):
+class ApplicationManager:
     """Main Reptate container of applications
 
     """
@@ -77,7 +78,7 @@ class ApplicationManager(CmdBase):
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """**Constructor**"""
-        super().__init__()
+        # super().__init__()
 
         # SETUP APPLICATIONS
         self.application_counter = 0
@@ -131,80 +132,80 @@ class ApplicationManager(CmdBase):
 
     # APPLICATION STUFF
 
-    def available(self):
-        """Return list of available applications"""
-        L = []
-        # for app in list(self.available_applications.values()):
-        #     L.append(
-        #         Fore.RED
-        #         + "%s:" % app.appname
-        #         + Fore.RESET
-        #         + (12 - len(app.appname)) * " "
-        #         + "%s" % app.description
-        #     )
-        return L
+    # def available(self):
+    #     """Return list of available applications"""
+    #     L = []
+    #     # for app in list(self.available_applications.values()):
+    #     #     L.append(
+    #     #         Fore.RED
+    #     #         + "%s:" % app.appname
+    #     #         + Fore.RESET
+    #     #         + (12 - len(app.appname)) * " "
+    #     #         + "%s" % app.description
+    #     #     )
+    #     return L
 
-    def do_available(self, line):
-        """List all the available applications in RepTate."""
-        print("AVAILABLE APPLICATIONS")
-        print("======================")
+    # def do_available(self, line):
+    #     """List all the available applications in RepTate."""
+    #     print("AVAILABLE APPLICATIONS")
+    #     print("======================")
 
-        L = self.available()
-        for app in L:
-            print(app)
+    #     L = self.available()
+    #     for app in L:
+    #         print(app)
 
-    def delete(self, name):
-        """Delete an open application"""
-        if name in self.applications.keys():
-            self.applications[name].delete_multiplot()
-            del self.applications[name]
-        else:
-            print('Application "%s" not found' % name)
+    # def delete(self, name):
+    #     """Delete an open application"""
+    #     if name in self.applications.keys():
+    #         self.applications[name].delete_multiplot()
+    #         del self.applications[name]
+    #     else:
+    #         print('Application "%s" not found' % name)
 
-    def do_delete(self, name):
-        """Delete an open application. By hitting TAB, all the currently open applications are shown."""
-        self.delete(name)
+    # def do_delete(self, name):
+    #     """Delete an open application. By hitting TAB, all the currently open applications are shown."""
+    #     self.delete(name)
 
-    do_del = do_delete
+    # do_del = do_delete
 
-    def complete_delete(self, text, line, begidx, endidx):
-        """Complete delete application command"""
-        app_names = list(self.applications.keys())
-        if not text:
-            completions = app_names[:]
-        else:
-            completions = [f for f in app_names if f.startswith(text)]
-        return completions
+    # def complete_delete(self, text, line, begidx, endidx):
+    #     """Complete delete application command"""
+    #     app_names = list(self.applications.keys())
+    #     if not text:
+    #         completions = app_names[:]
+    #     else:
+    #         completions = [f for f in app_names if f.startswith(text)]
+    #     return completions
 
-    complete_del = complete_delete
+    # complete_del = complete_delete
 
-    def list(self):
-        """List open applications"""
-        L = []
-        # for app in list(self.applications.values()):
-        #     L.append(
-        #         Fore.RED
-        #         + "%s:" % app.appname
-        #         + Fore.RESET
-        #         + (12 - len(app.appname)) * " "
-        #         + "%s" % app.description
-        #     )
-        return L
+    # def list(self):
+    #     """List open applications"""
+    #     L = []
+    #     # for app in list(self.applications.values()):
+    #     #     L.append(
+    #     #         Fore.RED
+    #     #         + "%s:" % app.appname
+    #     #         + Fore.RESET
+    #     #         + (12 - len(app.appname)) * " "
+    #     #         + "%s" % app.description
+    #     #     )
+    #     return L
 
-    def do_list(self, line):
-        """List all the currently open applications."""
-        print("CURRENTLY RUNNING APPLICATIONS")
-        print("==============================")
+    # def do_list(self, line):
+    #     """List all the currently open applications."""
+    #     print("CURRENTLY RUNNING APPLICATIONS")
+    #     print("==============================")
 
-        L = self.list()
-        for app in L:
-            print(app)
+    #     L = self.list()
+    #     for app in L:
+    #         print(app)
 
-    def do_tree(self, line):
-        """Show a tree structure of all open applications, tools, datasets and theories"""
-        for app in self.applications.keys():
-            # print(Fore.RED + "%s" % self.applications[app].name + Fore.RESET)
-            self.applications[app].do_tree(str(1))
+    # def do_tree(self, line):
+    #     """Show a tree structure of all open applications, tools, datasets and theories"""
+    #     for app in self.applications.keys():
+    #         # print(Fore.RED + "%s" % self.applications[app].name + Fore.RESET)
+    #         self.applications[app].do_tree(str(1))
 
     def new(self, appname):
         """Create a new application and open it.
@@ -222,122 +223,122 @@ Arguments:
             print('Application "%s" is not available' % appname)
             return None
 
-    def do_new(self, appname):
-        """Create a new application and open it. Arguments: name (MWD, LVE, TTS, etc... Application to open)"""
-        newapp = self.new(appname)
-        if newapp != None:
-            newapp.cmdloop()
+    # def do_new(self, appname):
+    #     """Create a new application and open it. Arguments: name (MWD, LVE, TTS, etc... Application to open)"""
+    #     newapp = self.new(appname)
+    #     if newapp != None:
+    #         newapp.cmdloop()
 
-    def complete_new(self, text, line, begidx, endidx):
-        """Complete new application command"""
-        app_names = list(self.available_applications.keys())
-        if not text:
-            completions = app_names[:]
-        else:
-            completions = [f for f in app_names if f.startswith(text)]
-        return completions
+    # def complete_new(self, text, line, begidx, endidx):
+    #     """Complete new application command"""
+    #     app_names = list(self.available_applications.keys())
+    #     if not text:
+    #         completions = app_names[:]
+    #     else:
+    #         completions = [f for f in app_names if f.startswith(text)]
+    #     return completions
 
-    def do_switch(self, line):
-        """Set focus to an open application/set/theory/tool. 
-Argument: name -- applicaton/set/theory/tool to switch the focus to (hit TAB to complete)"""
-        items = line.split(".")
-        if len(items) > 1:
-            name = items[0]
-            if name in self.applications.keys():
-                app = self.applications[name]
-                app.cmdqueue.append("switch " + ".".join(items[1:]))
-                app.cmdloop()
-            else:
-                print('Application "%s" not found' % name)
-        else:
-            name = items[0]
-            if name in self.applications.keys():
-                app = self.applications[name]
-                app.cmdloop()
-            else:
-                print('Application "%s" not found' % name)
+#     def do_switch(self, line):
+#         """Set focus to an open application/set/theory/tool. 
+# Argument: name -- applicaton/set/theory/tool to switch the focus to (hit TAB to complete)"""
+#         items = line.split(".")
+#         if len(items) > 1:
+#             name = items[0]
+#             if name in self.applications.keys():
+#                 app = self.applications[name]
+#                 app.cmdqueue.append("switch " + ".".join(items[1:]))
+#                 app.cmdloop()
+#             else:
+#                 print('Application "%s" not found' % name)
+#         else:
+#             name = items[0]
+#             if name in self.applications.keys():
+#                 app = self.applications[name]
+#                 app.cmdloop()
+#             else:
+#                 print('Application "%s" not found' % name)
 
-    def complete_switch(self, text, line, begidx, endidx):
-        """Complete switch command"""
-        applist = list(self.applications.keys())
-        setlist = []
-        for app in applist:
-            setnames = self.applications[app].get_tree()
-            setlist += [app + "." + s for s in setnames]
-        switchlist = applist + setlist
-        if not text:
-            completions = switchlist[:]
-        else:
-            completions = [f for f in switchlist if f.startswith(text)]
-        return completions
+#     def complete_switch(self, text, line, begidx, endidx):
+#         """Complete switch command"""
+#         applist = list(self.applications.keys())
+#         setlist = []
+#         for app in applist:
+#             setnames = self.applications[app].get_tree()
+#             setlist += [app + "." + s for s in setnames]
+#         switchlist = applist + setlist
+#         if not text:
+#             completions = switchlist[:]
+#         else:
+#             completions = [f for f in switchlist if f.startswith(text)]
+#         return completions
 
     # MAXWELL MODES COPY
 
-    def do_copy_modes(self, line):
-        """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
+#     def do_copy_modes(self, line):
+#         """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
 
-Usage:
-    copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
+# Usage:
+#     copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
 
-Arguments:
-    - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
-        apps = line.split()
-        if len(apps) < 2:
-            print(
-                "Not enough parameters passed\n"
-                "Use 'copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2'\n"
-                "See 'list_theories_Maxwell' for a list of availiable theories"
-            )
-            return
+# Arguments:
+#     - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
+#         apps = line.split()
+#         if len(apps) < 2:
+#             print(
+#                 "Not enough parameters passed\n"
+#                 "Use 'copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2'\n"
+#                 "See 'list_theories_Maxwell' for a list of availiable theories"
+#             )
+#             return
 
-        source = str(apps[0])
-        target = str(apps[1])
-        if not len(source.split(".")) == 3:
-            print(
-                "Source format should be: 'App1.Dataset1.Theory1'\n"
-                "See 'list_theories_Maxwell' for a list of availiable theories"
-            )
-            return
-        if not len(target.split(".")) == 3:
-            print(
-                "Target format should be: 'App2.Dataset2.Theory2'\n"
-                "See 'list_theories_Maxwell' for a list of availiable theories"
-            )
-            return
-        if source == target:
-            print("Source and Target theories must be different")
-            return
+#         source = str(apps[0])
+#         target = str(apps[1])
+#         if not len(source.split(".")) == 3:
+#             print(
+#                 "Source format should be: 'App1.Dataset1.Theory1'\n"
+#                 "See 'list_theories_Maxwell' for a list of availiable theories"
+#             )
+#             return
+#         if not len(target.split(".")) == 3:
+#             print(
+#                 "Target format should be: 'App2.Dataset2.Theory2'\n"
+#                 "See 'list_theories_Maxwell' for a list of availiable theories"
+#             )
+#             return
+#         if source == target:
+#             print("Source and Target theories must be different")
+#             return
 
-        get_dict, set_dict = self.list_theories_Maxwell()
-        dict_keys = list(get_dict.keys())  # get_dict and set_dict have the same keys
-        if (source in dict_keys) and (target in dict_keys):
-            tau, G, success = get_dict[source]()
-            if not success:
-                self.logger.warning("Could not get modes successfully")
-                return
-            success = set_dict[target](tau, G)
-            if not success:
-                self.logger.warning("Could not set modes successfully")
-                return
-            print("Copied modes from %s to %s" % (source, target))
-            return
-        else:
-            print(
-                "Source or Target not found\n"
-                "or theory does not have modes.\n"
-                "No copy has been made"
-            )
-            return
+#         get_dict, set_dict = self.list_theories_Maxwell()
+#         dict_keys = list(get_dict.keys())  # get_dict and set_dict have the same keys
+#         if (source in dict_keys) and (target in dict_keys):
+#             tau, G, success = get_dict[source]()
+#             if not success:
+#                 self.logger.warning("Could not get modes successfully")
+#                 return
+#             success = set_dict[target](tau, G)
+#             if not success:
+#                 self.logger.warning("Could not set modes successfully")
+#                 return
+#             print("Copied modes from %s to %s" % (source, target))
+#             return
+#         else:
+#             print(
+#                 "Source or Target not found\n"
+#                 "or theory does not have modes.\n"
+#                 "No copy has been made"
+#             )
+#             return
 
-    def complete_copy_modes(self, text, line, begidx, endidx):
-        """Complete the command copy_modes"""
-        L, S = self.list_theories_Maxwell()
-        L = list(L.keys())
-        if not text:
-            completions = L[:]
-        else:
-            completions = [f for f in L if f.startswith(text)]
-        return completions
+#     def complete_copy_modes(self, text, line, begidx, endidx):
+#         """Complete the command copy_modes"""
+#         L, S = self.list_theories_Maxwell()
+#         L = list(L.keys())
+#         if not text:
+#             completions = L[:]
+#         else:
+#             completions = [f for f in L if f.startswith(text)]
+#         return completions
 
     def list_theories_Maxwell(self, th_exclude=None):
         """List the theories in the current RepTate instance that provide and need
@@ -356,70 +357,70 @@ Arguments:
                         ] = th.set_modes
         return get_dict, set_dict
 
-    def do_list_theories_Maxwell(self, line=""):
-        """List the theories in the current RepTate instance that provide Maxwell modes"""
-        L, S = self.list_theories_Maxwell()
-        if len(L) > 0:
-            print("The following open theories provide/require Maxwell Modes:")
-            # for k in L.keys():
-            #     items = k.split(".")
-            #     print(
-            #         Fore.RED
-            #         + items[0]
-            #         + Fore.RESET
-            #         + "."
-            #         + Fore.YELLOW
-            #         + items[1]
-            #         + Fore.RESET
-            #         + "."
-            #         + Fore.MAGENTA
-            #         + items[2]
-            #     )
-        else:
-            print("Currently there are no open theories that provide Maxwell modes.")
+    # def do_list_theories_Maxwell(self, line=""):
+    #     """List the theories in the current RepTate instance that provide Maxwell modes"""
+    #     L, S = self.list_theories_Maxwell()
+    #     if len(L) > 0:
+    #         print("The following open theories provide/require Maxwell Modes:")
+    #         # for k in L.keys():
+    #         #     items = k.split(".")
+    #         #     print(
+    #         #         Fore.RED
+    #         #         + items[0]
+    #         #         + Fore.RESET
+    #         #         + "."
+    #         #         + Fore.YELLOW
+    #         #         + items[1]
+    #         #         + Fore.RESET
+    #         #         + "."
+    #         #         + Fore.MAGENTA
+    #         #         + items[2]
+    #         #     )
+    #     else:
+    #         print("Currently there are no open theories that provide Maxwell modes.")
 
     # OTHER STUFF
 
-    def do_tutorial(self, line=""):
-        """Show a short tutorial about the commands in RepTate application manager"""
-        print("")
-        # print(
-        #     "Inspect the python scripts in the"
-        #     + Fore.RED
-        #     + ' "tests" '
-        #     + Fore.RESET
-        #     + "folder."
-        # )
-        print("Visit the page:")
-        # print(
-        #     Fore.CYAN
-        #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-        #     + Fore.RESET
-        # )
-        print(
-            """
-Basic use:
-=========="""
-        )
-        # print(Fore.RED + "available" + Fore.RESET)
-        # self.do_help("available")
-        # print(Fore.RED + "new LVE" + Fore.RESET)
-        # self.do_help("new")
-        # print(Fore.RED + "list" + Fore.RESET)
-        # self.do_help("list")
-        # print(Fore.RED + "switch LVE1" + Fore.RESET)
-        # print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
-        # self.do_help("switch")
-        # print(Fore.RED + "tree" + Fore.RESET)
-        # self.do_help("tree")
-        # print(Fore.RED + "quit" + Fore.RESET)
-        # self.do_help("quit")
-        # print("")
+#     def do_tutorial(self, line=""):
+#         """Show a short tutorial about the commands in RepTate application manager"""
+#         print("")
+#         # print(
+#         #     "Inspect the python scripts in the"
+#         #     + Fore.RED
+#         #     + ' "tests" '
+#         #     + Fore.RESET
+#         #     + "folder."
+#         # )
+#         print("Visit the page:")
+#         # print(
+#         #     Fore.CYAN
+#         #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+#         #     + Fore.RESET
+#         # )
+#         print(
+#             """
+# Basic use:
+# =========="""
+#         )
+#         # print(Fore.RED + "available" + Fore.RESET)
+#         # self.do_help("available")
+#         # print(Fore.RED + "new LVE" + Fore.RESET)
+#         # self.do_help("new")
+#         # print(Fore.RED + "list" + Fore.RESET)
+#         # self.do_help("list")
+#         # print(Fore.RED + "switch LVE1" + Fore.RESET)
+#         # print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
+#         # self.do_help("switch")
+#         # print(Fore.RED + "tree" + Fore.RESET)
+#         # self.do_help("tree")
+#         # print(Fore.RED + "quit" + Fore.RESET)
+#         # self.do_help("quit")
+#         # print("")
 
-    def do_about(self, line):
-        """Show about info."""
-        print(ApplicationManager.intro)
-        print("")
+    # def do_about(self, line):
+    #     """Show about info."""
+    #     print(ApplicationManager.intro)
+    #     print("")
         # print(
         #     Fore.GREEN
         #     + "RepTate "
@@ -459,16 +460,16 @@ Basic use:
         # )
         # print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
-    def do_quit(self, args):
-        """Exit RepTate."""
-        msg = "Do you really want to exit RepTate?"
-        shall = input("\n%s (y/N) " % msg).lower() == "y"
-        if shall:
-            print("Exiting RepTate...")
-            return True
+    # def do_quit(self, args):
+    #     """Exit RepTate."""
+    #     msg = "Do you really want to exit RepTate?"
+    #     shall = input("\n%s (y/N) " % msg).lower() == "y"
+    #     if shall:
+    #         print("Exiting RepTate...")
+    #         return True
 
-    do_EOF = do_quit
-    do_up = do_quit
+    # do_EOF = do_quit
+    # do_up = do_quit
 
     def check_version(self):
         url = "https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases"
@@ -482,6 +483,6 @@ Basic use:
         newversion = version_github > version_current
         return newversion, version_github, version_current
 
-    def do_check_version(self, line):
-        """Check if there is a new version of RepTate on Github."""
-        newversion, version_github, version_current = self.check_version()
+    # def do_check_version(self, line):
+    #     """Check if there is a new version of RepTate on Github."""
+    #     newversion, version_github, version_current = self.check_version()

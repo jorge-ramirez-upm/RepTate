@@ -121,7 +121,7 @@ Ui_AddDummyFiles, QDialog = loadUiType(join(PATH, "dummyfilesDialog.ui"))
 class AddDummyFiles(QDialog, Ui_AddDummyFiles):
     def __init__(self, parent=None, filetype=None):
         super(AddDummyFiles, self).__init__(parent)
-        QDialog.__init__(self)
+        # QDialog.__init__(self)
         Ui_AddDummyFiles.__init__(self)
         self.setupUi(self)
 

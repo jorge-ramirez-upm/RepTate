@@ -507,21 +507,21 @@ class TheoryWLFShift(QTheory):
             """<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time)
         )
 
-    def do_print(self, line):
-        """Print the theory table associated with the given file name"""
-        if line in self.tables:
-            print(self.tables[line].data)
-        else:
-            print('Theory table for "%s" not found' % line)
+    # def do_print(self, line):
+    #     """Print the theory table associated with the given file name"""
+    #     if line in self.tables:
+    #         print(self.tables[line].data)
+    #     else:
+    #         print('Theory table for "%s" not found' % line)
 
-    def complete_print(self, text, line, begidx, endidx):
-        """Complete the print command"""
-        file_names = list(self.tables.keys())
-        if not text:
-            completions = file_names[:]
-        else:
-            completions = [f for f in file_names if f.startswith(text)]
-        return completions
+    # def complete_print(self, text, line, begidx, endidx):
+    #     """Complete the print command"""
+    #     file_names = list(self.tables.keys())
+    #     if not text:
+    #         completions = file_names[:]
+    #     else:
+    #         completions = [f for f in file_names if f.startswith(text)]
+    #     return completions
 
     def do_save(self, line, extra_txt=""):
         """Save the results from WLFShift theory predictions to a TTS file"""
