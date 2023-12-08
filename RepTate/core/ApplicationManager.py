@@ -63,18 +63,15 @@ import RepTate
 from collections import OrderedDict
 
 
-#class ApplicationManager(CmdBase):
+# class ApplicationManager(CmdBase):
 class ApplicationManager:
-    """Main Reptate container of applications
-
-    """
+    """Main Reptate container of applications"""
 
     verdata = RepTate._version.get_versions()
     version = verdata["version"].split("+")[0]
     date = verdata["date"].split("T")[0]
     build = verdata["version"]
     intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
-    doc_header = "RepTate Manager commands (type help <topic>):"
 
     def __init__(self, parent=None, loglevel=logging.INFO):
         """**Constructor**"""
@@ -103,7 +100,9 @@ class ApplicationManager:
 
         # LOGGING STUFF
         # Setup AppName and platform-dependent path to AppData
-        path_to_AppData = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        path_to_AppData = QStandardPaths.writableLocation(
+            QStandardPaths.AppDataLocation
+        )
         try:
             os.mkdir(path_to_AppData)
         except FileExistsError:
@@ -210,8 +209,8 @@ class ApplicationManager:
     def new(self, appname):
         """Create a new application and open it.
 
-Arguments:
-    - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
+        Arguments:
+            - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         if appname in self.available_applications:
             self.application_counter += 1
             newapp = self.available_applications[appname](
@@ -238,107 +237,107 @@ Arguments:
     #         completions = [f for f in app_names if f.startswith(text)]
     #     return completions
 
-#     def do_switch(self, line):
-#         """Set focus to an open application/set/theory/tool. 
-# Argument: name -- applicaton/set/theory/tool to switch the focus to (hit TAB to complete)"""
-#         items = line.split(".")
-#         if len(items) > 1:
-#             name = items[0]
-#             if name in self.applications.keys():
-#                 app = self.applications[name]
-#                 app.cmdqueue.append("switch " + ".".join(items[1:]))
-#                 app.cmdloop()
-#             else:
-#                 print('Application "%s" not found' % name)
-#         else:
-#             name = items[0]
-#             if name in self.applications.keys():
-#                 app = self.applications[name]
-#                 app.cmdloop()
-#             else:
-#                 print('Application "%s" not found' % name)
+    #     def do_switch(self, line):
+    #         """Set focus to an open application/set/theory/tool.
+    # Argument: name -- applicaton/set/theory/tool to switch the focus to (hit TAB to complete)"""
+    #         items = line.split(".")
+    #         if len(items) > 1:
+    #             name = items[0]
+    #             if name in self.applications.keys():
+    #                 app = self.applications[name]
+    #                 app.cmdqueue.append("switch " + ".".join(items[1:]))
+    #                 app.cmdloop()
+    #             else:
+    #                 print('Application "%s" not found' % name)
+    #         else:
+    #             name = items[0]
+    #             if name in self.applications.keys():
+    #                 app = self.applications[name]
+    #                 app.cmdloop()
+    #             else:
+    #                 print('Application "%s" not found' % name)
 
-#     def complete_switch(self, text, line, begidx, endidx):
-#         """Complete switch command"""
-#         applist = list(self.applications.keys())
-#         setlist = []
-#         for app in applist:
-#             setnames = self.applications[app].get_tree()
-#             setlist += [app + "." + s for s in setnames]
-#         switchlist = applist + setlist
-#         if not text:
-#             completions = switchlist[:]
-#         else:
-#             completions = [f for f in switchlist if f.startswith(text)]
-#         return completions
+    #     def complete_switch(self, text, line, begidx, endidx):
+    #         """Complete switch command"""
+    #         applist = list(self.applications.keys())
+    #         setlist = []
+    #         for app in applist:
+    #             setnames = self.applications[app].get_tree()
+    #             setlist += [app + "." + s for s in setnames]
+    #         switchlist = applist + setlist
+    #         if not text:
+    #             completions = switchlist[:]
+    #         else:
+    #             completions = [f for f in switchlist if f.startswith(text)]
+    #         return completions
 
     # MAXWELL MODES COPY
 
-#     def do_copy_modes(self, line):
-#         """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
+    #     def do_copy_modes(self, line):
+    #         """Copy maxwell modes from one theory to another. Both theories may live inside different applications and/or datasets
 
-# Usage:
-#     copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
+    # Usage:
+    #     copymodes App1.SetA.TheoryI App2.SetB.TheoryJ
 
-# Arguments:
-#     - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
-#         apps = line.split()
-#         if len(apps) < 2:
-#             print(
-#                 "Not enough parameters passed\n"
-#                 "Use 'copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2'\n"
-#                 "See 'list_theories_Maxwell' for a list of availiable theories"
-#             )
-#             return
+    # Arguments:
+    #     - line {str} -- Origin (App.Dataset.Theory) Destination (App.Dataset.Theory) """
+    #         apps = line.split()
+    #         if len(apps) < 2:
+    #             print(
+    #                 "Not enough parameters passed\n"
+    #                 "Use 'copymodes App1.Dataset1.Theory1 App2.Dataset2.Theory2'\n"
+    #                 "See 'list_theories_Maxwell' for a list of availiable theories"
+    #             )
+    #             return
 
-#         source = str(apps[0])
-#         target = str(apps[1])
-#         if not len(source.split(".")) == 3:
-#             print(
-#                 "Source format should be: 'App1.Dataset1.Theory1'\n"
-#                 "See 'list_theories_Maxwell' for a list of availiable theories"
-#             )
-#             return
-#         if not len(target.split(".")) == 3:
-#             print(
-#                 "Target format should be: 'App2.Dataset2.Theory2'\n"
-#                 "See 'list_theories_Maxwell' for a list of availiable theories"
-#             )
-#             return
-#         if source == target:
-#             print("Source and Target theories must be different")
-#             return
+    #         source = str(apps[0])
+    #         target = str(apps[1])
+    #         if not len(source.split(".")) == 3:
+    #             print(
+    #                 "Source format should be: 'App1.Dataset1.Theory1'\n"
+    #                 "See 'list_theories_Maxwell' for a list of availiable theories"
+    #             )
+    #             return
+    #         if not len(target.split(".")) == 3:
+    #             print(
+    #                 "Target format should be: 'App2.Dataset2.Theory2'\n"
+    #                 "See 'list_theories_Maxwell' for a list of availiable theories"
+    #             )
+    #             return
+    #         if source == target:
+    #             print("Source and Target theories must be different")
+    #             return
 
-#         get_dict, set_dict = self.list_theories_Maxwell()
-#         dict_keys = list(get_dict.keys())  # get_dict and set_dict have the same keys
-#         if (source in dict_keys) and (target in dict_keys):
-#             tau, G, success = get_dict[source]()
-#             if not success:
-#                 self.logger.warning("Could not get modes successfully")
-#                 return
-#             success = set_dict[target](tau, G)
-#             if not success:
-#                 self.logger.warning("Could not set modes successfully")
-#                 return
-#             print("Copied modes from %s to %s" % (source, target))
-#             return
-#         else:
-#             print(
-#                 "Source or Target not found\n"
-#                 "or theory does not have modes.\n"
-#                 "No copy has been made"
-#             )
-#             return
+    #         get_dict, set_dict = self.list_theories_Maxwell()
+    #         dict_keys = list(get_dict.keys())  # get_dict and set_dict have the same keys
+    #         if (source in dict_keys) and (target in dict_keys):
+    #             tau, G, success = get_dict[source]()
+    #             if not success:
+    #                 self.logger.warning("Could not get modes successfully")
+    #                 return
+    #             success = set_dict[target](tau, G)
+    #             if not success:
+    #                 self.logger.warning("Could not set modes successfully")
+    #                 return
+    #             print("Copied modes from %s to %s" % (source, target))
+    #             return
+    #         else:
+    #             print(
+    #                 "Source or Target not found\n"
+    #                 "or theory does not have modes.\n"
+    #                 "No copy has been made"
+    #             )
+    #             return
 
-#     def complete_copy_modes(self, text, line, begidx, endidx):
-#         """Complete the command copy_modes"""
-#         L, S = self.list_theories_Maxwell()
-#         L = list(L.keys())
-#         if not text:
-#             completions = L[:]
-#         else:
-#             completions = [f for f in L if f.startswith(text)]
-#         return completions
+    #     def complete_copy_modes(self, text, line, begidx, endidx):
+    #         """Complete the command copy_modes"""
+    #         L, S = self.list_theories_Maxwell()
+    #         L = list(L.keys())
+    #         if not text:
+    #             completions = L[:]
+    #         else:
+    #             completions = [f for f in L if f.startswith(text)]
+    #         return completions
 
     def list_theories_Maxwell(self, th_exclude=None):
         """List the theories in the current RepTate instance that provide and need
@@ -381,84 +380,84 @@ Arguments:
 
     # OTHER STUFF
 
-#     def do_tutorial(self, line=""):
-#         """Show a short tutorial about the commands in RepTate application manager"""
-#         print("")
-#         # print(
-#         #     "Inspect the python scripts in the"
-#         #     + Fore.RED
-#         #     + ' "tests" '
-#         #     + Fore.RESET
-#         #     + "folder."
-#         # )
-#         print("Visit the page:")
-#         # print(
-#         #     Fore.CYAN
-#         #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
-#         #     + Fore.RESET
-#         # )
-#         print(
-#             """
-# Basic use:
-# =========="""
-#         )
-#         # print(Fore.RED + "available" + Fore.RESET)
-#         # self.do_help("available")
-#         # print(Fore.RED + "new LVE" + Fore.RESET)
-#         # self.do_help("new")
-#         # print(Fore.RED + "list" + Fore.RESET)
-#         # self.do_help("list")
-#         # print(Fore.RED + "switch LVE1" + Fore.RESET)
-#         # print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
-#         # self.do_help("switch")
-#         # print(Fore.RED + "tree" + Fore.RESET)
-#         # self.do_help("tree")
-#         # print(Fore.RED + "quit" + Fore.RESET)
-#         # self.do_help("quit")
-#         # print("")
+    #     def do_tutorial(self, line=""):
+    #         """Show a short tutorial about the commands in RepTate application manager"""
+    #         print("")
+    #         # print(
+    #         #     "Inspect the python scripts in the"
+    #         #     + Fore.RED
+    #         #     + ' "tests" '
+    #         #     + Fore.RESET
+    #         #     + "folder."
+    #         # )
+    #         print("Visit the page:")
+    #         # print(
+    #         #     Fore.CYAN
+    #         #     + "https://reptate.readthedocs.io/manual/Applications/All_Tutorials/All_Tutorials.html"
+    #         #     + Fore.RESET
+    #         # )
+    #         print(
+    #             """
+    # Basic use:
+    # =========="""
+    #         )
+    #         # print(Fore.RED + "available" + Fore.RESET)
+    #         # self.do_help("available")
+    #         # print(Fore.RED + "new LVE" + Fore.RESET)
+    #         # self.do_help("new")
+    #         # print(Fore.RED + "list" + Fore.RESET)
+    #         # self.do_help("list")
+    #         # print(Fore.RED + "switch LVE1" + Fore.RESET)
+    #         # print(Fore.RED + "switch LVE1.Set1.LM1" + Fore.RESET)
+    #         # self.do_help("switch")
+    #         # print(Fore.RED + "tree" + Fore.RESET)
+    #         # self.do_help("tree")
+    #         # print(Fore.RED + "quit" + Fore.RESET)
+    #         # self.do_help("quit")
+    #         # print("")
 
     # def do_about(self, line):
     #     """Show about info."""
     #     print(ApplicationManager.intro)
     #     print("")
-        # print(
-        #     Fore.GREEN
-        #     + "RepTate "
-        #     + Fore.RESET
-        #     + "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), "
-        #     + "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds "
-        #     + "and the University of Reading, as part of the muPP2 project, funded by the EPSRC."
-        # )
-        # print("")
-        # print(
-        #     "This new version is a port (and enhancement) of the original RepTate code to python,"
-        #     + " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations."
-        # )
-        # print("")
-        # print(
-        #     "It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, "
-        #     + Fore.CYAN
-        #     + "jorge.ramirez@upm.es"
-        #     + Fore.RESET
-        #     + ") and Victor Boudara (University of Leeds, "
-        #     + Fore.CYAN
-        #     + "v.a.boudara@leeds.ac.uk"
-        #     + Fore.RESET
-        #     + ")."
-        # )
-        # print("")
-        # print("The program and source code are released under the GPLv3 license.")
-        # print("")
-        # print(
-        #     "This project is dedicated to the memory of our great friend and collaborator Alexei."
-        # )
-        # print("")
-        # print(
-        #     "Project page: "
-        #     + Fore.CYAN
-        #     + "https://github.com/jorge-ramirez-upm/RepTate"
-        # )
-        # print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
+    # print(
+    #     Fore.GREEN
+    #     + "RepTate "
+    #     + Fore.RESET
+    #     + "(Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment), "
+    #     + "was originally created in Delphi by Jorge Ramírez and Alexei Likhtman at the University of Leeds "
+    #     + "and the University of Reading, as part of the muPP2 project, funded by the EPSRC."
+    # )
+    # print("")
+    # print(
+    #     "This new version is a port (and enhancement) of the original RepTate code to python,"
+    #     + " using pyqt and matplotlib for the visuals, and numpy and scipy for the numerical calculations."
+    # )
+    # print("")
+    # print(
+    #     "It has been developed by Jorge Ramírez (Universidad Politécnica de Madrid, "
+    #     + Fore.CYAN
+    #     + "jorge.ramirez@upm.es"
+    #     + Fore.RESET
+    #     + ") and Victor Boudara (University of Leeds, "
+    #     + Fore.CYAN
+    #     + "v.a.boudara@leeds.ac.uk"
+    #     + Fore.RESET
+    #     + ")."
+    # )
+    # print("")
+    # print("The program and source code are released under the GPLv3 license.")
+    # print("")
+    # print(
+    #     "This project is dedicated to the memory of our great friend and collaborator Alexei."
+    # )
+    # print("")
+    # print(
+    #     "Project page: "
+    #     + Fore.CYAN
+    #     + "https://github.com/jorge-ramirez-upm/RepTate"
+    # )
+    # print("Documentation: " + Fore.CYAN + "http://reptate.readthedocs.io/")
 
     # def do_quit(self, args):
     #     """Exit RepTate."""

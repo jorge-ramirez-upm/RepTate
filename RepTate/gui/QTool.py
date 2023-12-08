@@ -98,7 +98,6 @@ class QTool(QWidget, Ui_ToolTab):
     citations = []
     """ citations {list of str} -- Articles that should be cited """
     doi = []
-    doc_header = "Tool commands (type help <topic>):"
 
     print_signal = Signal(str)
 

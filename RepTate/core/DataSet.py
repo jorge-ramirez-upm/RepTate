@@ -311,8 +311,6 @@ class ThLineMode(enum.Enum):
 class DataSet:  
     """Abstract class to describe a data set"""
 
-    doc_header = "DataSet commands (type help <topic>):"
-
     def __init__(self, name="DataSet", parent=None):
         """**Constructor**"""
         # super().__init__()

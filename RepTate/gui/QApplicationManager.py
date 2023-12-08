@@ -112,7 +112,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     date = verdata["date"].split("T")[0]
     build = verdata["version"]
     intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
-    doc_header = "RepTate Manager commands (type help <topic>):"
     # END COPY
 
 

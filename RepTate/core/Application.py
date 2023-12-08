@@ -81,7 +81,6 @@ class Application:
     appname = "Template"
     description = "Abstract class that defines basic functionality"
     extension = ""
-    doc_header = "Application commands (type help <topic>):"
 
     def __init__(
         self, name="ApplicationTemplate", parent=None, nplot_max=4, ncols=2, **kwargs

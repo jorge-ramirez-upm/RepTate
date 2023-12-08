@@ -293,7 +293,6 @@ class QTheory(QWidget, Ui_TheoryTab):
     """ doicode {list of str} -- Doi code of the article """
     nfev = 0
     """ nfev {int} -- Number of function evaluations """
-    doc_header = 'Theory commands (type help <topic>):'
 
     print_signal = Signal(str)
 
