@@ -33,13 +33,11 @@
 """Module TheoryArrhenius
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 
-class TheoryArrhenius(CmdBase):
+class TheoryArrhenius(QTheory):
     """Arrhenius Equation
 
     * **Function**
@@ -55,21 +53,10 @@ class TheoryArrhenius(CmdBase):
     thname = "ArrheniusTheory"
     description = "Arrhenius Theory"
     citations = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryArrhenius(name, parent_dataset, axarr)
-
-
-class BaseTheoryArrhenius:
-    """Base class for both GUI"""
-
     # html_help_file = ''
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryArrhenius.thname
-    citations = TheoryArrhenius.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -108,11 +95,3 @@ class BaseTheoryArrhenius:
             )
         )
 
-class GUITheoryArrhenius(BaseTheoryArrhenius, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

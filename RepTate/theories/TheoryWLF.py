@@ -35,13 +35,11 @@
 WLF file for creating a new theory
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 
 
-class TheoryWLF(CmdBase):
+class TheoryWLF(QTheory):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
     * **Function**
@@ -67,21 +65,10 @@ class TheoryWLF(CmdBase):
     description = "Williams-Landel-Ferry"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryWLF(name, parent_dataset, axarr)
-
-
-class BaseTheoryWLF:
-    """Base class for both GUI"""
-
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryWLF.thname
-    citations = TheoryWLF.citations
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -187,13 +174,3 @@ class BaseTheoryWLF:
             / (ft.data[:, 0] + 273.15)
         )
 
-
-
-class GUITheoryWLF(BaseTheoryWLF, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-
-    # add widgets specific to the theory here:

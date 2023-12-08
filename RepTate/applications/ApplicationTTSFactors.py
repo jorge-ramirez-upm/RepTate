@@ -43,25 +43,15 @@ from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationTTSFactors(CmdBase):
+class ApplicationTTSFactors(QApplicationWindow):
     """Application handling time-temperature superposition factors and fit theories"""
 
     appname = "TTSF"
     description = "TTS shift factors"
     extension = "ttsf"
-
-    def __new__(cls, name="TTSF", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationTTSFactors(name, parent)
-
-
-class BaseApplicationTTSFactors:
-    """Base Class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html"
     )
-    appname = ApplicationTTSFactors.appname
 
     def __init__(self, name="TTSF", parent=None):
         """**Constructor**"""
@@ -237,10 +227,3 @@ class BaseApplicationTTSFactors:
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-
-class GUIApplicationTTSFactors(BaseApplicationTTSFactors, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="TTSFactors", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
