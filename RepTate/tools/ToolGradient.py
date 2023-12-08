@@ -35,30 +35,17 @@
 Gradient file for creating a new Tool
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 
 
-class ToolGradient(CmdBase):
+class ToolGradient(QTool):
     """Calculate the derivative of y with respect to x, where y is the ordinate and x is the abcissa in the current view. The gradient function from numpy is used, where the derivative is computed using second order accurate central differences in the interior points and first order accurate one-sides (forward or backwards) differences at the boundaries.
     """
 
     toolname = "Gradient"
     description = "Take derivative of current data/view"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolGradient(name, parent_app)
-
-
-class BaseToolGradient:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Gradient.html'
-    toolname = ToolGradient.toolname
-    citations = ToolGradient.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -70,6 +57,11 @@ class BaseToolGradient:
         # description='parameter 1',
         # type=ParameterType.real,
         # opt_type=OptType.const)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         try:
@@ -79,15 +71,3 @@ class BaseToolGradient:
         except TypeError as e:
             print("in ToolGradient.Gradient() ", e)
             return x, y
-
-
-class GUIToolGradient(BaseToolGradient, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

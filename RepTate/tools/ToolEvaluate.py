@@ -36,32 +36,18 @@ Evaluate algebraic expressions in the current view
 """
 import traceback
 from numpy import *
-import numpy as np
 import re
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 
 
-class ToolEvaluate(CmdBase):
+class ToolEvaluate(QTool):
     """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser."""
 
     toolname = "Eval Exp"
     description = "Evaluate Expression Tool"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolEvaluate(name, parent_app)
-
-
-class BaseToolEvaluate:
-    """Base Class for Evaluation of expressions"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolEvaluate.toolname
-    citations = ToolEvaluate.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -115,6 +101,12 @@ class BaseToolEvaluate:
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
 
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
+
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Evaluate function that returns the square of the y, according to the view"""
         xexpr = self.parameters["x"].value
@@ -161,15 +153,3 @@ class BaseToolEvaluate:
             self.Qprint("in ToolEvaluate.calculate(): %s" % traceback.format_exc())
             return x, y
 
-
-
-class GUIToolEvaluate(BaseToolEvaluate, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

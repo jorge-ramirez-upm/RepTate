@@ -36,31 +36,18 @@ Interpolate/Extrapolate data
 """
 import traceback
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from scipy.interpolate import interp1d
 
 
-class ToolInterpolateExtrapolate(CmdBase):
+class ToolInterpolateExtrapolate(QTool):
     """Interpolates data"""
 
     toolname = "Interpolate/Extrapolate"
     description = "Interpolate/Extrapolate from view"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolInterpolateExtrapolate(name, parent_app)
-
-
-class BaseToolInterpolateExtrapolate:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolInterpolateExtrapolate.toolname
-    citations = ToolInterpolateExtrapolate.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -72,6 +59,12 @@ class BaseToolInterpolateExtrapolate:
             type=ParameterType.real,
             opt_type=OptType.const,
         )
+
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """InterpolateExtrapolate function that returns the square of the y, according to the view"""
@@ -103,15 +96,3 @@ class BaseToolInterpolateExtrapolate:
                 "in ToolInterpolateExtrapolate.calculate(): %s" % traceback.format_exc()
             )
         return x, y
-
-
-class GUIToolInterpolateExtrapolate(BaseToolInterpolateExtrapolate, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

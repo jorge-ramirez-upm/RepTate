@@ -35,31 +35,18 @@
 Remove data ouside Bounds
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 
 
-class ToolBounds(CmdBase):
+class ToolBounds(QTool):
     """Remove points in the current view ïf :math:`x \\notin [x_{min}, x_{max}]` or :math:`y \\notin [y_{min}, y_{max}]`
     """
 
     toolname = "Bounds"
     description = "Bounds Tool"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolBounds(name, parent_app)
-
-
-class BaseToolBounds:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolBounds.toolname
-    citations = ToolBounds.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -89,25 +76,6 @@ class BaseToolBounds:
             type=ParameterType.real,
         )
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
-        """Bounds function limits the data shown in the view"""
-        xmin = self.parameters["xmin"].value
-        xmax = self.parameters["xmax"].value
-        ymin = self.parameters["ymin"].value
-        ymax = self.parameters["ymax"].value
-        conditionx = (x > xmin) * (x < xmax)
-        conditiony = (y > ymin) * (y < ymax)
-        x2 = np.extract(conditionx * conditiony, x)
-        y2 = np.extract(conditionx * conditiony, y)
-        return x2, y2
-
-
-class GUIToolBounds(BaseToolBounds, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
 
@@ -148,3 +116,16 @@ class GUIToolBounds(BaseToolBounds, QTool):
                     success = False
 
         return message, success
+
+
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        """Bounds function limits the data shown in the view"""
+        xmin = self.parameters["xmin"].value
+        xmax = self.parameters["xmax"].value
+        ymin = self.parameters["ymin"].value
+        ymax = self.parameters["ymax"].value
+        conditionx = (x > xmin) * (x < xmax)
+        conditiony = (y > ymin) * (y < ymax)
+        x2 = np.extract(conditionx * conditiony, x)
+        y2 = np.extract(conditionx * conditiony, y)
+        return x2, y2

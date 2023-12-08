@@ -36,14 +36,12 @@ Integral file for creating a new Tool
 """
 import traceback
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from scipy.integrate import odeint
 from scipy.interpolate import interp1d
 
 
-class ToolIntegral(CmdBase):
+class ToolIntegral(QTool):
     """Calculate the integral of y with respect to x, where y is the ordinate and x is the abcissa in the current view. Repeated points in the data are removed before the integral is performed. The data between the point is interpolated with a cubic spline. The total value of the definite integral is shown in the Tool output region.
     If a different integration interval is needed, the Bounds tool can be used before the Integral tool.
     """
@@ -51,18 +49,7 @@ class ToolIntegral(CmdBase):
     toolname = "Integral"
     description = "Integral of current data/view"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolIntegral(name, parent_app)
-
-
-class BaseToolIntegral:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
-    toolname = ToolIntegral.toolname
-    citations = ToolIntegral.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -75,6 +62,9 @@ class BaseToolIntegral:
         # description='parameter 1',
         # type=ParameterType.real,
         # opt_type=OptType.const)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Integral function that returns the square of the y, according to the view"""
@@ -94,22 +84,10 @@ class BaseToolIntegral:
             func = lambda y0, t: ff(t)
             y2 = odeint(func, [0], xunique)
 
-            y2 = np.reshape(y2, num_rows, 1)
+            y2 = np.reshape(y2, num_rows)
             self.Qprint("<b>I</b> = %g" % y2[-1])
             return xunique, y2
         except Exception as e:
             self.Qprint("in ToolIntegral.calculate(): %s" % traceback.format_exc())
             return x, y
 
-
-
-class GUIToolIntegral(BaseToolIntegral, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

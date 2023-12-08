@@ -36,14 +36,12 @@ FindPeaks file for creating a new Tool
 """
 import numpy as np
 from scipy.optimize import curve_fit
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from PySide6.QtGui import QIcon
 
 
-class ToolFindPeaks(CmdBase):
+class ToolFindPeaks(QTool):
     """Find peaks (maxima or minima) in the data, as represented by the current view. The option to find the maxima or the minima is specified by the min/max check button (the minpeaks parameter in the command line version). The **threshold** controls the relative height that a peak must have (with respect to the data span) in order to be detected. The **minimum_distance** parameter controls how far from each other the peaks must be in order to be distinguished. The returned peaks correspond to the maximum/minimum data point in the current view. Alternatively, the user can select to fit a parabola to the peaks and find the analytical maximum or minimum of the parabola. The parameter **minimum_distance** also controls the number of points around the maximum data point used to fit the parabola. The peaks are returned in the Tool information area and shown as symbols in the chart.
 
     The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks.
@@ -52,18 +50,7 @@ class ToolFindPeaks(CmdBase):
     toolname = "Find Peaks"
     description = "Find Peaks in current data/view"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolFindPeaks(name, parent_app)
-
-
-class BaseToolFindPeaks:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
-    toolname = ToolFindPeaks.toolname
-    citations = ToolFindPeaks.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -97,6 +84,39 @@ class BaseToolFindPeaks:
         )
         self.seriesarray = []
         self.axarray = []
+
+        self.update_parameter_table()
+        self.tb.addSeparator()
+        self.minpeaks = self.tb.addAction("Minimum peaks")
+        self.minpeaks.setCheckable(True)
+        self.handle_minpeaks_button(checked=False)
+        connection_id = self.minpeaks.triggered.connect(self.handle_minpeaks_button)
+        self.parabola = self.tb.addAction("Fit Parabola")
+        self.parabola.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-bell-curve.png"))
+        self.parabola.setCheckable(True)
+        self.parabola.setChecked(False)
+        connection_id = self.parabola.triggered.connect(self.handle_parabola_button)
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
+    def handle_minpeaks_button(self, checked):
+        if checked:
+            self.minpeaks.setIcon(
+                QIcon(":/Icon8/Images/new_icons/icons8-peak-minimum.png")
+            )
+        else:
+            self.minpeaks.setIcon(
+                QIcon(":/Icon8/Images/new_icons/icons8-peak-maximum.png")
+            )
+        self.minpeaks.setChecked(checked)
+        self.set_param_value("minpeaks", checked)
+        self.parent_application.update_all_ds_plots()
+
+    def handle_parabola_button(self, checked):
+        self.parabola.setChecked(checked)
+        self.set_param_value("parabola", checked)
+        self.parent_application.update_all_ds_plots()
 
     def clean_graphic_stuff(self):
         for s, a in zip(self.seriesarray, self.axarray):
@@ -203,42 +223,3 @@ class BaseToolFindPeaks:
         self.axarray.append(ax)
         return x, y
 
-
-class GUIToolFindPeaks(BaseToolFindPeaks, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.tb.addSeparator()
-        self.minpeaks = self.tb.addAction("Minimum peaks")
-        self.minpeaks.setCheckable(True)
-        self.handle_minpeaks_button(checked=False)
-        connection_id = self.minpeaks.triggered.connect(self.handle_minpeaks_button)
-        self.parabola = self.tb.addAction("Fit Parabola")
-        self.parabola.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-bell-curve.png"))
-        self.parabola.setCheckable(True)
-        self.parabola.setChecked(False)
-        connection_id = self.parabola.triggered.connect(self.handle_parabola_button)
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:
-
-    def handle_minpeaks_button(self, checked):
-        if checked:
-            self.minpeaks.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-peak-minimum.png")
-            )
-        else:
-            self.minpeaks.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-peak-maximum.png")
-            )
-        self.minpeaks.setChecked(checked)
-        self.set_param_value("minpeaks", checked)
-        self.parent_application.update_all_ds_plots()
-
-    def handle_parabola_button(self, checked):
-        self.parabola.setChecked(checked)
-        self.set_param_value("parabola", checked)
-        self.parent_application.update_all_ds_plots()

@@ -37,9 +37,7 @@ MaterialsDatabase Viewer
 import sys
 import os
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from PySide6.QtWidgets import (
     QComboBox,
@@ -231,7 +229,7 @@ def get_single_parameter(chem, param, fparam, dbindex):
         return value, True
 
 
-class ToolMaterialsDatabase(CmdBase):
+class ToolMaterialsDatabase(QTool):
     """A special Tool to store the material parameters. Many apps and theories rely on the
     parameters stored in this database. There are two copies of the database: i) a general one
     that is distributed with RepTate, is stored in the software installation folder and contains
@@ -242,23 +240,11 @@ class ToolMaterialsDatabase(CmdBase):
     toolname = "Materials Database"
     description = "Materials Database Explorer"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolMaterialsDatabase(name, parent_app)
-
-
-class BaseToolMaterialsDatabase:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
-    toolname = ToolMaterialsDatabase.toolname
-    citations = ToolMaterialsDatabase.citations
 
     def __init__(self, name="", parent_app=None):
-        """**Constructor**
-        
-        """
+        """**Constructor**"""
+
         super().__init__(name, parent_app)
         self.parameters["name"] = Parameter(
             name="name",
@@ -346,107 +332,6 @@ class BaseToolMaterialsDatabase:
                 if 'chem' in f.file_parameters:
                     self.init_chem=f.file_parameters['chem']
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
-        """Calculate some results related to the selected material or the file material"""
-        self.calculate_stuff("", file_parameters)
-        return x, y
-
-    def do_calculate_stuff(self, line=""):
-        """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
-Example:
-    calculate_stuff 35.4 240 1 1
-
-    Mw=35.4 T=240 isofrictional=True verticalshift=True"""
-        items = line.split()
-        if len(items) == 4:
-            Mw = float(items[0])
-            T = float(items[1])
-            iso = bool(items[2])
-            vert = bool(items[3])
-            B1 = self.parameters["B1"].value
-            B2 = self.parameters["B2"].value
-            logalpha = self.parameters["logalpha"].value
-            alpha = np.power(10.0, logalpha)
-            CTg = self.parameters["CTg"].value
-            tau_e = self.parameters["tau_e"].value
-            Ge = self.parameters["Ge"].value
-            Me = self.parameters["Me"].value
-            c_nu = self.parameters["c_nu"].value
-            rho0 = self.parameters["rho0"].value
-            Te = self.parameters["Te"].value
-
-            if iso:
-                B2 += CTg / Mw  # - 68.7 * dx12
-                Trcorrected = T - CTg / Mw  # + 68.7 * dx12
-            else:
-                Trcorrected = T
-
-            aT = np.power(
-                10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te)
-            )
-            if vert:
-                bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
-            else:
-                bT = 1
-
-            self.Qprint("<hr><h3>WLF TTS Shift Factors</h3>")
-            # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
-            self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
-            self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
-
-            self.Qprint("<h3>Tube Theory parameters</h3>")
-            Ge /= bT
-            tau_e /= aT
-            self.Qprint("<b>tau_e</b> = %g" % tau_e)
-            self.Qprint("<b>Ge</b> = %g<br>" % Ge)
-
-            self.Qprint("<h3>Other Results</h3>")
-            CC1 = 1.69
-            CC2 = 4.17
-            CC3 = -1.55
-            Z = Mw / Me
-            tR = tau_e * Z * Z
-            tD = (
-                3
-                * tau_e
-                * Z ** 3
-                * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z ** 1.5)
-            )
-            self.Qprint("<b>Z</b> = %g" % Z)
-            self.Qprint("<b>tau_R</b> = %g" % tR)
-            self.Qprint("<b>tau_D</b> = %g<br>" % tD)
-        else:
-            print("Wrong number of parameters.")
-            print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
-
-    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
-        """Calculate the tool for all views - In MatDB, only first view is needed """
-        newxy = []
-        lenx = 1e9
-        for i in range(n):
-            self.Qprint("<b>Series %d</b>" % (i + 1))
-            xcopy = x[:, i]
-            ycopy = y[:, i]
-            if i == 0:
-                xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
-            newxy.append([xcopy, ycopy])
-            lenx = min(lenx, len(xcopy))
-        x = np.resize(x, (lenx, n))
-        y = np.resize(y, (lenx, n))
-        for i in range(n):
-            x[:, i] = np.resize(newxy[i][0], lenx)
-            y[:, i] = np.resize(newxy[i][1], lenx)
-        return x, y
-
-
-
-
-class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
         self.update_parameter_table()
         # self.parent_application.update_all_ds_plots()
 
@@ -873,3 +758,96 @@ class GUIToolMaterialsDatabase(BaseToolMaterialsDatabase, QTool):
         tab_data.append(["<b>tau_R</b>", "%g" % tR])
         tab_data.append(["<b>tau_D</b>", "%g" % tD])
         self.Qprint(tab_data)
+
+
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        """Calculate some results related to the selected material or the file material"""
+        self.calculate_stuff("", file_parameters)
+        return x, y
+
+    def do_calculate_stuff(self, line=""):
+        """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
+Example:
+    calculate_stuff 35.4 240 1 1
+
+    Mw=35.4 T=240 isofrictional=True verticalshift=True"""
+        items = line.split()
+        if len(items) == 4:
+            Mw = float(items[0])
+            T = float(items[1])
+            iso = bool(items[2])
+            vert = bool(items[3])
+            B1 = self.parameters["B1"].value
+            B2 = self.parameters["B2"].value
+            logalpha = self.parameters["logalpha"].value
+            alpha = np.power(10.0, logalpha)
+            CTg = self.parameters["CTg"].value
+            tau_e = self.parameters["tau_e"].value
+            Ge = self.parameters["Ge"].value
+            Me = self.parameters["Me"].value
+            c_nu = self.parameters["c_nu"].value
+            rho0 = self.parameters["rho0"].value
+            Te = self.parameters["Te"].value
+
+            if iso:
+                B2 += CTg / Mw  # - 68.7 * dx12
+                Trcorrected = T - CTg / Mw  # + 68.7 * dx12
+            else:
+                Trcorrected = T
+
+            aT = np.power(
+                10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te)
+            )
+            if vert:
+                bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
+            else:
+                bT = 1
+
+            self.Qprint("<hr><h3>WLF TTS Shift Factors</h3>")
+            # Need T1 (to shift from) and T2 (to shift to), if we want to report aT and bT
+            self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + T)))
+            self.Qprint("<b>C2</b> = %g<br>" % (B2 + T))
+
+            self.Qprint("<h3>Tube Theory parameters</h3>")
+            Ge /= bT
+            tau_e /= aT
+            self.Qprint("<b>tau_e</b> = %g" % tau_e)
+            self.Qprint("<b>Ge</b> = %g<br>" % Ge)
+
+            self.Qprint("<h3>Other Results</h3>")
+            CC1 = 1.69
+            CC2 = 4.17
+            CC3 = -1.55
+            Z = Mw / Me
+            tR = tau_e * Z * Z
+            tD = (
+                3
+                * tau_e
+                * Z ** 3
+                * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z ** 1.5)
+            )
+            self.Qprint("<b>Z</b> = %g" % Z)
+            self.Qprint("<b>tau_R</b> = %g" % tR)
+            self.Qprint("<b>tau_D</b> = %g<br>" % tD)
+        else:
+            print("Wrong number of parameters.")
+            print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
+
+    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
+        """Calculate the tool for all views - In MatDB, only first view is needed """
+        newxy = []
+        lenx = 1e9
+        for i in range(n):
+            self.Qprint("<b>Series %d</b>" % (i + 1))
+            xcopy = x[:, i]
+            ycopy = y[:, i]
+            if i == 0:
+                xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
+            newxy.append([xcopy, ycopy])
+            lenx = min(lenx, len(xcopy))
+        x = np.resize(x, (lenx, n))
+        y = np.resize(y, (lenx, n))
+        for i in range(n):
+            x[:, i] = np.resize(newxy[i][0], lenx)
+            y[:, i] = np.resize(newxy[i][1], lenx)
+        return x, y

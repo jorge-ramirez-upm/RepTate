@@ -34,13 +34,11 @@
 
 Tool to check the power law of some data
 """
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 
 
-class ToolPowerLaw(CmdBase):
+class ToolPowerLaw(QTool):
     """Check the power law of the data (or some part of it) by dividing the y coordinate by the x coordinate 
 raised to n.
     """
@@ -48,18 +46,7 @@ raised to n.
     toolname = "PowerLaw"
     description = "Check the power law of the data"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolPowerLaw(name, parent_app)
-
-
-class BaseToolPowerLaw:
-    """Basic class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolPowerLaw.toolname
-    citations = ToolPowerLaw.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -72,6 +59,12 @@ class BaseToolPowerLaw:
             opt_type=OptType.const,
         )
 
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
+
     def destructor(self):
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
 If not, you can safely delete it."""
@@ -82,14 +75,3 @@ If not, you can safely delete it."""
         n = self.parameters["n"].value
         return x, y / x ** n
 
-
-class GUIToolPowerLaw(BaseToolPowerLaw, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

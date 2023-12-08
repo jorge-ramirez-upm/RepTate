@@ -34,31 +34,18 @@
 
 Template file for creating a new Tool
 """
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 
 
-class ToolTemplate(CmdBase):
+class ToolTemplate(QTool):
     """TEMPLATE FOR NEW TOOLS. HERE IS WHERE THE BASIC INFORMATION OF THE TOOL SHOULD APPEAR.
     """
 
     toolname = "TemplateTool"
     description = "Template Tool"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolTemplate(name, parent_app)
-
-
-class BaseToolTemplate:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolTemplate.toolname
-    citations = ToolTemplate.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -70,6 +57,12 @@ class BaseToolTemplate:
         # type=ParameterType.real,
         # opt_type=OptType.const)
 
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()
+
+        # add widgets specific to the Tool here:
+
+
     def destructor(self):
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
 If not, you can safely delete it."""
@@ -79,16 +72,3 @@ If not, you can safely delete it."""
         """Template function that returns the square of the y, according to the view
         """
         return x, y * y
-
-
-
-class GUIToolTemplate(BaseToolTemplate, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
-        self.update_parameter_table()
-        self.parent_application.update_all_ds_plots()
-
-    # add widgets specific to the Tool here:

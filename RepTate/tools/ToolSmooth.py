@@ -35,32 +35,19 @@
 Smooth data by applying a Savitzky-Golay filter
 """
 import traceback
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.Tool import Tool
 from RepTate.gui.QTool import QTool
 from scipy.signal import savgol_filter
 
 
-class ToolSmooth(CmdBase):
+class ToolSmooth(QTool):
     """Smooths the current view data by applying a Savitzky-Golay filter. The smoothing procedure is controlled by means of two parameters: the **window** length (a positive, odd integer), which represents the number of convolution coefficients of the filter, and the **order** of the polynomial used to fit the samples (must be smaller than the window length).
     """
 
     toolname = "Smooth"
     description = "Smooth Tool"
     citations = []
-
-    def __new__(cls, name="", parent_app=None):
-        """Create an instance of the GUI"""
-        return GUIToolSmooth(name, parent_app)
-
-
-class BaseToolSmooth:
-    """Base class for both GUI"""
-
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-    toolname = ToolSmooth.toolname
-    citations = ToolSmooth.citations
 
     def __init__(self, name="", parent_app=None):
         """**Constructor**"""
@@ -78,34 +65,6 @@ class BaseToolSmooth:
             type=ParameterType.integer,
         )
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
-        """Smooth the x, y data"""
-        window = self.parameters["window"].value
-        order = self.parameters["order"].value
-        if window % 2 == 0:
-            self.Qprint("Invalid window (must be an odd number)")
-            return x, y
-        if window >= len(y):
-            self.Qprint("Invalid window (must be smaller than the length of the data)")
-            return x, y
-        if window <= order:
-            self.Qprint("Invalid order (must be smaller than the window)")
-            return x, y
-
-        try:
-            y2 = savgol_filter(y, window, order)
-            return x, y2
-        except Exception as e:
-            self.Qprint("in ToolSmooth.calculate(): %s" % traceback.format_exc())
-            return x, y
-
-
-class GUIToolSmooth(BaseToolSmooth, QTool):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_app=None):
-        """**Constructor**"""
-        super().__init__(name, parent_app)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
 
@@ -136,3 +95,25 @@ class GUIToolSmooth(BaseToolSmooth, QTool):
                     success = False
 
         return message, success
+
+
+    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+        """Smooth the x, y data"""
+        window = self.parameters["window"].value
+        order = self.parameters["order"].value
+        if window % 2 == 0:
+            self.Qprint("Invalid window (must be an odd number)")
+            return x, y
+        if window >= len(y):
+            self.Qprint("Invalid window (must be smaller than the length of the data)")
+            return x, y
+        if window <= order:
+            self.Qprint("Invalid order (must be smaller than the window)")
+            return x, y
+
+        try:
+            y2 = savgol_filter(y, window, order)
+            return x, y2
+        except Exception as e:
+            self.Qprint("in ToolSmooth.calculate(): %s" % traceback.format_exc())
+            return x, y
