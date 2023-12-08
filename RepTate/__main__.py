@@ -39,7 +39,6 @@ import os
 import sys
 import glob
 import argparse
-import traceback
 import numpy as np
 import logging
 
@@ -47,9 +46,8 @@ from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 
 # from ApplicationManager import * #solved the issue with the matplot window not opening on Mac
-from PySide6.QtWidgets import QApplication, QMessageBox
-from PySide6.QtGui import QDesktopServices
-from PySide6.QtCore import QUrl, Qt, QCoreApplication
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt, QCoreApplication
 from RepTate.gui.SplashScreen import SplashScreen
 
 # from time import time, sleep
@@ -100,9 +98,9 @@ def start_RepTate(argv):
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
         epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2023)",
     )
-    parser.add_argument(
-        "-d", "--dpi", help="High DPI support on Windows", action="store_true"
-    )
+    # parser.add_argument(
+    #     "-d", "--dpi", help="High DPI support on Windows", action="store_true"
+    # )
     parser.add_argument(
         "-l", "--tool", help="Open the tool L (if available)", default="", metavar="L"
     )
@@ -144,21 +142,21 @@ def start_RepTate(argv):
     QApplication.setStyle("Fusion")  # comment that line for a native look
     # for a list of available styles: "from PySide6.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
-    if args.dpi or sys.platform == "darwin":
-        os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+    # if args.dpi or sys.platform == "darwin":
+    #     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    #     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    #     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    #     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
     app = QApplication(sys.argv)
     app.setApplicationName("RepTate")
 
-    if args.dpi and sys.platform == "win32":
-        #os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-        import matplotlib
-        #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = int (np.round(app.desktop().physicalDpiX()/10))
-        matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = 34
-        #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = app.desktop().physicalDpiX()/4
+    # if args.dpi and sys.platform == "win32":
+    #     #os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    #     import matplotlib
+    #     #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = int (np.round(app.desktop().physicalDpiX()/10))
+    #     matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = 34
+    #     #matplotlib.pyplot.matplotlib.rcParams['figure.dpi'] = app.desktop().physicalDpiX()/4
 
     splash = SplashScreen()
     splash.show()

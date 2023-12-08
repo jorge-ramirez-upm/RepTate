@@ -72,15 +72,7 @@ class ApplicationManager(CmdBase):
     version = verdata["version"].split("+")[0]
     date = verdata["date"].split("T")[0]
     build = verdata["version"]
-    # intro = (
-    #     Fore.GREEN
-    #     + "RepTate "
-    #     + Fore.RED
-    #     + "%s - %s" % (version, date)
-    #     + Fore.RESET
-    #     + " command processor (Build %s" % build
-    #     + ")\nhelp [command] for instructions\nTAB for completions"
-    # )
+    intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
     doc_header = "RepTate Manager commands (type help <topic>):"
 
     def __init__(self, parent=None, loglevel=logging.INFO):

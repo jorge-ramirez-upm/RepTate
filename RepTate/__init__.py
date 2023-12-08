@@ -4,7 +4,6 @@ import traceback
 import logging
 import numpy as np
 from ._version import get_versions
-from RepTate.core.CmdBase import CmdBase
 
 __version__ = get_versions()["version"]
 del get_versions

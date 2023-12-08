@@ -35,8 +35,6 @@
 Definition of a new Application for viewing generic txt data
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
