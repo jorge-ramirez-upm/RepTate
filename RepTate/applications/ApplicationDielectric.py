@@ -35,33 +35,21 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationDielectric(CmdBase):
+class ApplicationDielectric(QApplicationWindow):
     """Application to Analyze Dielectric Spectroscopy Data"""
 
     appname = "Dielectric"
     description = "Dielectric Spectroscopy"
     extension = "dls"
-
-    def __new__(cls, name="Dielectric", parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationDielectric(name, parent)
-
-
-class BaseApplicationDielectric:
-    """Base Class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html"
     )
-    appname = ApplicationDielectric.appname
 
     def __init__(self, name="Dielectric", parent=None):
         """**Constructor**"""
@@ -320,12 +308,3 @@ class BaseApplicationDielectric:
         x[:, 0] = dt.data[:, 1]
         y[:, 0] = dt.data[:, 2]
         return x, y, True
-
-
-
-class GUIApplicationDielectric(BaseApplicationDielectric, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="Dielectric", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)

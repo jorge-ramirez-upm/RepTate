@@ -35,30 +35,18 @@
 Template file for the definition of a new Application Module
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationTemplate(CmdBase):
+class ApplicationTemplate(QApplicationWindow):
     """Application for [THE BASIC DOCUMENTATION OF THE APPLICATION GOES HERE]"""
     appname = 'Template'
     description = 'Template Application'  #used in the command-line Reptate
     extension = "txt"  # drag and drop this extension automatically opens this application
-
-    def __new__(cls, name='Template', parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationTemplate(name, parent) 
-
-
-class BaseApplicationTemplate:
-    """Base Class for both GUI"""
-
     #html_help_file = ''
-    appname = ApplicationTemplate.appname
 
     def __init__(self, name='Template', parent=None):
         """**Constructor**"""
@@ -114,6 +102,9 @@ class BaseApplicationTemplate:
         #set the current view
         self.set_views()
 
+        #add the GUI-specific objects here:
+
+
     def viewyx(self, dt, file_parameters):
         """Function that defines how the view is shown. In this example, just the 1st and 2nd columns are shown. 
         
@@ -124,13 +115,3 @@ class BaseApplicationTemplate:
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-
-
-class GUIApplicationTemplate(BaseApplicationTemplate, QApplicationWindow):
-    """GUI Version of the Application"""
-
-    def __init__(self, name='Template', parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
-        #add the GUI-specific objects here:

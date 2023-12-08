@@ -36,10 +36,8 @@ Module that defines theories related to Havriliak-Negami modes, in the frequency
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -49,7 +47,7 @@ from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 from RepTate.theories.kww_ctypes_helper import kwwc, kwws
 
 
-class TheoryKWWModesFrequency(CmdBase):
+class TheoryKWWModesFrequency(QTheory):
     """Fit a Kohlrausch-Williams-Watts (KWW, stretched exponential) model to a frequency dependent relaxation function. 
     
     * **Function**
@@ -79,20 +77,8 @@ class TheoryKWWModesFrequency(CmdBase):
         "http://dx.doi.org/10.1002/andp.18541670203",
         "http://dx.doi.org/10.1039/TF9706600080",
     ]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryKWWModesFrequency(name, parent_dataset, ax)
-
-
-class BaseTheoryKWWModesFrequency:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes"
     single_file = True
-    thname = TheoryKWWModesFrequency.thname
-    citations = TheoryKWWModesFrequency.citations
-    doi = TheoryKWWModesFrequency.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -166,6 +152,67 @@ class BaseTheoryKWWModesFrequency:
         self.graphicmodes = []
         self.artistmodes = []
         self.setup_graphic_modes()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
+        tb.addWidget(self.spinbox)
+        self.modesaction = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change mode visibility"""
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # self.do_calculate("")
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmode'"""
+        nmodesold = self.parameters["nmodes"].value
+        wminold = self.parameters["logwmin"].value
+        wmaxold = self.parameters["logwmax"].value
+        wold = np.logspace(wminold, wmaxold, nmodesold)
+        Gold = np.zeros(nmodesold)
+        for i in range(nmodesold):
+            Gold[i] = self.parameters["logDe%02d" % i].value
+            del self.parameters["logDe%02d" % i]
+
+        nmodesnew = value
+        self.set_param_value("nmodes", nmodesnew)
+        wnew = np.logspace(wminold, wmaxold, nmodesnew)
+
+        Gnew = np.interp(wnew, wold, Gold)
+
+        for i in range(nmodesnew):
+            self.parameters["logDe%02d" % i] = Parameter(
+                "logDe%02d" % i,
+                Gnew[i],
+                "Log of Mode %d amplitude" % i,
+                ParameterType.real,
+                opt_type=OptType.opt,
+            )
+
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
 
     def drag_mode(self, dx, dy):
         """Drag modes"""
@@ -309,70 +356,3 @@ class BaseTheoryKWWModesFrequency:
 
 
 
-class GUITheoryKWWModesFrequency(BaseTheoryKWWModesFrequency, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
-        tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
-
-    def modesaction_change(self, checked):
-        """Change mode visibility"""
-        self.graphicmodes_visible(checked)
-        # self.view_modes = self.modesaction.isChecked()
-        # self.graphicmodes.set_visible(self.view_modes)
-        # self.do_calculate("")
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmode'"""
-        nmodesold = self.parameters["nmodes"].value
-        wminold = self.parameters["logwmin"].value
-        wmaxold = self.parameters["logwmax"].value
-        wold = np.logspace(wminold, wmaxold, nmodesold)
-        Gold = np.zeros(nmodesold)
-        for i in range(nmodesold):
-            Gold[i] = self.parameters["logDe%02d" % i].value
-            del self.parameters["logDe%02d" % i]
-
-        nmodesnew = value
-        self.set_param_value("nmodes", nmodesnew)
-        wnew = np.logspace(wminold, wmaxold, nmodesnew)
-
-        Gnew = np.interp(wnew, wold, Gold)
-
-        for i in range(nmodesnew):
-            self.parameters["logDe%02d" % i] = Parameter(
-                "logDe%02d" % i,
-                Gnew[i],
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
-                opt_type=OptType.opt,
-            )
-
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-        self.update_parameter_table()
