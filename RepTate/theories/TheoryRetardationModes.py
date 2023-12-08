@@ -36,10 +36,8 @@ Module that defines theories related to Retardation modes, in the frequency and 
 
 """
 import numpy as np
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -47,7 +45,7 @@ from PySide6.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 
 
-class TheoryRetardationModesTime(CmdBase):
+class TheoryRetardationModesTime(QTheory):
     """Fit a discrete Retardation spectrum to time dependent creep data
     
     * **Function**
@@ -71,20 +69,8 @@ class TheoryRetardationModesTime(CmdBase):
     description = "Fit Retardation modes to time dependent creep data"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryRetardationModesTime(name, parent_dataset, ax)
-
-
-class BaseTheoryRetardationModesTime:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
     single_file = True
-    thname = TheoryRetardationModesTime.thname
-    citations = TheoryRetardationModesTime.citations
-    doi = TheoryRetardationModesTime.doi
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -163,6 +149,72 @@ class BaseTheoryRetardationModesTime:
         self.graphicmodes = None
         self.artistmodes = None
         self.setup_graphic_modes()
+
+        # add widgets specific to the theory
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
+        self.spinbox.setSuffix(" modes")
+        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
+        tb.addWidget(self.spinbox)
+        self.modesaction = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
+        )
+        self.modesaction.setCheckable(True)
+        self.modesaction.setChecked(True)
+        self.thToolsLayout.insertWidget(0, tb)
+
+        connection_id = self.spinbox.valueChanged.connect(
+            self.handle_spinboxValueChanged
+        )
+        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+
+    def Qhide_theory_extras(self, state):
+        """Uncheck the modeaction button. Called when curent theory is changed"""
+        self.modesaction.setChecked(state)
+
+    def modesaction_change(self, checked):
+        """Change visibility of modes"""
+        self.graphicmodes_visible(checked)
+        # self.view_modes = self.modesaction.isChecked()
+        # self.graphicmodes.set_visible(self.view_modes)
+        # if self.view_modes:
+        #     self.artistmodes.connect()
+        # else:
+        #     self.artistmodes.disconnect()
+        # self.do_calculate("")
+
+    def handle_spinboxValueChanged(self, value):
+        """Handle a change of the parameter 'nmode'"""
+        nmodesold = self.parameters["nmodes"].value
+        tminold = self.parameters["logtmin"].value
+        tmaxold = self.parameters["logtmax"].value
+        tauold = np.logspace(tminold, tmaxold, nmodesold)
+        Gold = np.zeros(nmodesold)
+        for i in range(nmodesold):
+            Gold[i] = self.parameters["logJ%02d" % i].value
+            del self.parameters["logJ%02d" % i]
+
+        nmodesnew = value
+        self.set_param_value("nmodes", nmodesnew)
+        taunew = np.logspace(tminold, tmaxold, nmodesnew)
+
+        Gnew = np.interp(taunew, tauold, Gold)
+
+        for i in range(nmodesnew):
+            self.parameters["logJ%02d" % i] = Parameter(
+                "logJ%02d" % i,
+                Gnew[i],
+                "Log of Mode %d compliance" % i,
+                ParameterType.real,
+                opt_type=OptType.opt,
+            )
+
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
+        self.update_parameter_table()
+
 
     def drag_mode(self, dx, dy):
         """Drag modes around"""
@@ -297,75 +349,3 @@ class BaseTheoryRetardationModesTime:
                 self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
 
 
-
-class GUITheoryRetardationModesTime(BaseTheoryRetardationModesTime, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-
-        # add widgets specific to the theory
-        tb = QToolBar()
-        tb.setIconSize(QSize(24, 24))
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
-        self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
-        tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
-        self.modesaction.setCheckable(True)
-        self.modesaction.setChecked(True)
-        self.thToolsLayout.insertWidget(0, tb)
-
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-
-    def Qhide_theory_extras(self, state):
-        """Uncheck the modeaction button. Called when curent theory is changed"""
-        self.modesaction.setChecked(state)
-
-    def modesaction_change(self, checked):
-        """Change visibility of modes"""
-        self.graphicmodes_visible(checked)
-        # self.view_modes = self.modesaction.isChecked()
-        # self.graphicmodes.set_visible(self.view_modes)
-        # if self.view_modes:
-        #     self.artistmodes.connect()
-        # else:
-        #     self.artistmodes.disconnect()
-        # self.do_calculate("")
-
-    def handle_spinboxValueChanged(self, value):
-        """Handle a change of the parameter 'nmode'"""
-        nmodesold = self.parameters["nmodes"].value
-        tminold = self.parameters["logtmin"].value
-        tmaxold = self.parameters["logtmax"].value
-        tauold = np.logspace(tminold, tmaxold, nmodesold)
-        Gold = np.zeros(nmodesold)
-        for i in range(nmodesold):
-            Gold[i] = self.parameters["logJ%02d" % i].value
-            del self.parameters["logJ%02d" % i]
-
-        nmodesnew = value
-        self.set_param_value("nmodes", nmodesnew)
-        taunew = np.logspace(tminold, tmaxold, nmodesnew)
-
-        Gnew = np.interp(taunew, tauold, Gold)
-
-        for i in range(nmodesnew):
-            self.parameters["logJ%02d" % i] = Parameter(
-                "logJ%02d" % i,
-                Gnew[i],
-                "Log of Mode %d compliance" % i,
-                ParameterType.real,
-                opt_type=OptType.opt,
-            )
-
-        if self.autocalculate:
-            self.parent_dataset.handle_actionCalculate_Theory()
-        self.update_parameter_table()

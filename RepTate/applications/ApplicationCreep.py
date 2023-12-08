@@ -35,8 +35,6 @@
 Module for the analysis of data from Creep experiments
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
@@ -52,28 +50,18 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QMessageBox,
 )
-from PySide6.QtGui import QDoubleValidator
 from math import log10
 
 
-class ApplicationCreep(CmdBase):
+class ApplicationCreep(QApplicationWindow):
     """Application to Analyze Data from Creep experiments"""
 
     appname = "Creep"
     description = "Creep Experiments"
     extension = "creep"
-
-    def __new__(cls, name="Creep", parent=None):
-        return GUIApplicationCreep(name, parent)
-
-
-class BaseApplicationCreep:
-    """Base Class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
     )
-    appname = ApplicationCreep.appname
 
     def __init__(self, name="Creep", parent=None):
         """**Constructor**"""
@@ -207,6 +195,152 @@ class BaseApplicationCreep:
 
         # set the current view
         self.set_views()
+
+        self.add_oversampling_widget()
+        self.set_oversampling_widget_visible(False)
+
+        self.add_xrange_widget_view()
+        self.set_xrange_widgets_view_visible(False)
+
+    def add_oversampling_widget(self):
+        """Add spinbox for the oversampling ratio"""
+        self.sb_oversampling = QSpinBox()
+        self.sb_oversampling.setToolTip("Value of the oversampling ratio")
+        self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
+        self.sb_oversampling.setValue(self.OVER)
+        self.sb_oversampling.valueChanged.connect(self.change_oversampling)
+
+        self.viewLayout.insertWidget(2, self.sb_oversampling)
+
+    def add_xrange_widget_view(self):
+        """Add widgets below the view combobox to select the
+        x-range applied to view transformation"""
+        hlayout = QHBoxLayout()
+
+        hlayout.addStretch()
+        # eta
+        self.eta_view = QLineEdit("4")
+        self.eta_view.setToolTip("Value of steady state viscosity")
+        self.eta_view.editingFinished.connect(self.set_eta)
+        self.eta_view.setMaximumWidth(35)
+        self.eta_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.eta_label = QLabel("<b>log(eta)</b>")
+        hlayout.addWidget(self.eta_label)
+        hlayout.addWidget(self.eta_view)
+        # space
+        hlayout.addSpacing(5)
+        # xmin
+        self.xmin_view = QLineEdit("-inf")
+        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
+        self.xmin_view.editingFinished.connect(self.set_xmin)
+        self.xmin_view.setMaximumWidth(35)
+        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
+        hlayout.addWidget(self.xmin_label)
+        hlayout.addWidget(self.xmin_view)
+        # space
+        hlayout.addSpacing(5)
+        # xmax
+        self.xmax_view = QLineEdit("inf")
+        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
+        self.xmax_view.editingFinished.connect(self.set_xmax)
+        self.xmax_view.setMaximumWidth(35)
+        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
+        hlayout.addWidget(self.xmax_label)
+        hlayout.addWidget(self.xmax_view)
+        # push button to refresh view
+        self.pb = QPushButton("GO")
+        self.pb.setMaximumWidth(25)
+        self.pb.clicked.connect(self.update_all_ds_plots)
+        hlayout.addWidget(self.pb)
+        self.hlayout_view = hlayout
+        self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
+
+    def set_eta(self):
+        """Update the value of eta. Return success status"""
+        text = self.eta_view.text()
+        if text in ["-np.inf", "-inf"]:
+            self.eta = -np.inf
+        else:
+            try:
+                self.eta = 10 ** float(text)
+                self.eta_view.setStyleSheet("QLineEdit { background: white;}")
+                return True
+            except:
+                self.eta_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
+
+    def set_xmin(self):
+        """Update the value of t_min. Return success status"""
+        text = self.xmin_view.text()
+        if text in ["np.inf", "inf"]:
+            self.tmin_view = -np.inf
+        else:
+            try:
+                self.tmin_view = 10 ** float(text)
+                if self.tmin_view >= self.tmax_view:
+                    self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
+                    return False
+                else:
+                    self.xmin_view.setStyleSheet("QLineEdit { background: white;}")
+            except:
+                self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
+        return True
+
+    def set_xmax(self):
+        """Update the value of t_max. Return success status"""
+        text = self.xmax_view.text()
+        if text in ["np.inf", "inf"]:
+            self.tmax_view = np.inf
+        else:
+            try:
+                self.tmax_view = 10 ** float(text)
+                if self.tmin_view >= self.tmax_view:
+                    self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
+                    return False
+                else:
+                    self.xmax_view.setStyleSheet("QLineEdit { background: white;}")
+            except:
+                self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
+                return False
+        return True
+
+    def change_oversampling(self, val):
+        """Change the value of the oversampling ratio.
+        Called when the spinbox value is changed"""
+        self.OVER = val
+
+    def set_oversampling_widget_visible(self, state):
+        """Show/Hide the extra widget "sampling ratio" """
+        self.sb_oversampling.setVisible(state)
+
+    def set_xrange_widgets_view_visible(self, state):
+        """Show/Hide the extra widgets for xrange selection"""
+        self.pb.setVisible(state)
+        self.xmin_label.setVisible(state)
+        self.eta_label.setVisible(state)
+        self.xmax_label.setVisible(state)
+        self.eta_view.setVisible(state)
+        self.xmin_view.setVisible(state)
+        self.xmax_view.setVisible(state)
+
+    def set_view_tools(self, view_name):
+        """Show/Hide extra view widgets depending on the current view"""
+        if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(False)
+        elif view_name == "i-Rheo-Over G',G''":
+            self.set_xrange_widgets_view_visible(True)
+            self.set_oversampling_widget_visible(True)
+        else:
+            try:
+                self.set_xrange_widgets_view_visible(False)
+                self.set_oversampling_widget_visible(False)
+            except AttributeError:
+                pass
+
 
     def viewLogStraint(self, dt, file_parameters):
         """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
@@ -370,154 +504,3 @@ class BaseApplicationCreep:
             return "Check values of eta, t_min and t_max ", None, None
 
 
-class GUIApplicationCreep(BaseApplicationCreep, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name="Creep", parent=None):
-        """**Constructor**"""
-        super().__init__(name, parent)
-
-        self.add_oversampling_widget()
-        self.set_oversampling_widget_visible(False)
-
-        self.add_xrange_widget_view()
-        self.set_xrange_widgets_view_visible(False)
-
-    def add_oversampling_widget(self):
-        """Add spinbox for the oversampling ratio"""
-        self.sb_oversampling = QSpinBox()
-        self.sb_oversampling.setToolTip("Value of the oversampling ratio")
-        self.sb_oversampling.setRange(self.MIN_OVER, self.MAX_OVER)
-        self.sb_oversampling.setValue(self.OVER)
-        self.sb_oversampling.valueChanged.connect(self.change_oversampling)
-
-        self.viewLayout.insertWidget(2, self.sb_oversampling)
-
-    def add_xrange_widget_view(self):
-        """Add widgets below the view combobox to select the
-        x-range applied to view transformation"""
-        hlayout = QHBoxLayout()
-
-        hlayout.addStretch()
-        # eta
-        self.eta_view = QLineEdit("4")
-        self.eta_view.setToolTip("Value of steady state viscosity")
-        self.eta_view.editingFinished.connect(self.set_eta)
-        self.eta_view.setMaximumWidth(35)
-        self.eta_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        self.eta_label = QLabel("<b>log(eta)</b>")
-        hlayout.addWidget(self.eta_label)
-        hlayout.addWidget(self.eta_view)
-        # space
-        hlayout.addSpacing(5)
-        # xmin
-        self.xmin_view = QLineEdit("-inf")
-        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
-        self.xmin_view.editingFinished.connect(self.set_xmin)
-        self.xmin_view.setMaximumWidth(35)
-        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
-        hlayout.addWidget(self.xmin_label)
-        hlayout.addWidget(self.xmin_view)
-        # space
-        hlayout.addSpacing(5)
-        # xmax
-        self.xmax_view = QLineEdit("inf")
-        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
-        self.xmax_view.editingFinished.connect(self.set_xmax)
-        self.xmax_view.setMaximumWidth(35)
-        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
-        hlayout.addWidget(self.xmax_label)
-        hlayout.addWidget(self.xmax_view)
-        # push button to refresh view
-        self.pb = QPushButton("GO")
-        self.pb.setMaximumWidth(25)
-        self.pb.clicked.connect(self.update_all_ds_plots)
-        hlayout.addWidget(self.pb)
-        self.hlayout_view = hlayout
-        self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
-
-    def set_eta(self):
-        """Update the value of eta. Return success status"""
-        text = self.eta_view.text()
-        if text in ["-np.inf", "-inf"]:
-            self.eta = -np.inf
-        else:
-            try:
-                self.eta = 10 ** float(text)
-                self.eta_view.setStyleSheet("QLineEdit { background: white;}")
-                return True
-            except:
-                self.eta_view.setStyleSheet("QLineEdit { background: red;}")
-                return False
-
-    def set_xmin(self):
-        """Update the value of t_min. Return success status"""
-        text = self.xmin_view.text()
-        if text in ["np.inf", "inf"]:
-            self.tmin_view = -np.inf
-        else:
-            try:
-                self.tmin_view = 10 ** float(text)
-                if self.tmin_view >= self.tmax_view:
-                    self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
-                    return False
-                else:
-                    self.xmin_view.setStyleSheet("QLineEdit { background: white;}")
-            except:
-                self.xmin_view.setStyleSheet("QLineEdit { background: red;}")
-                return False
-        return True
-
-    def set_xmax(self):
-        """Update the value of t_max. Return success status"""
-        text = self.xmax_view.text()
-        if text in ["np.inf", "inf"]:
-            self.tmax_view = np.inf
-        else:
-            try:
-                self.tmax_view = 10 ** float(text)
-                if self.tmin_view >= self.tmax_view:
-                    self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
-                    return False
-                else:
-                    self.xmax_view.setStyleSheet("QLineEdit { background: white;}")
-            except:
-                self.xmax_view.setStyleSheet("QLineEdit { background: red;}")
-                return False
-        return True
-
-    def change_oversampling(self, val):
-        """Change the value of the oversampling ratio.
-        Called when the spinbox value is changed"""
-        self.OVER = val
-
-    def set_oversampling_widget_visible(self, state):
-        """Show/Hide the extra widget "sampling ratio" """
-        self.sb_oversampling.setVisible(state)
-
-    def set_xrange_widgets_view_visible(self, state):
-        """Show/Hide the extra widgets for xrange selection"""
-        self.pb.setVisible(state)
-        self.xmin_label.setVisible(state)
-        self.eta_label.setVisible(state)
-        self.xmax_label.setVisible(state)
-        self.eta_view.setVisible(state)
-        self.xmin_view.setVisible(state)
-        self.xmax_view.setVisible(state)
-
-    def set_view_tools(self, view_name):
-        """Show/Hide extra view widgets depending on the current view"""
-        if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
-            self.set_xrange_widgets_view_visible(True)
-            self.set_oversampling_widget_visible(False)
-        elif view_name == "i-Rheo-Over G',G''":
-            self.set_xrange_widgets_view_visible(True)
-            self.set_oversampling_widget_visible(True)
-        else:
-            try:
-                self.set_xrange_widgets_view_visible(False)
-                self.set_oversampling_widget_visible(False)
-            except AttributeError:
-                pass
