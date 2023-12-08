@@ -36,9 +36,7 @@
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QApplication
@@ -48,29 +46,17 @@ import RepTate.theories.react_ctypes_helper as rch
 import RepTate.theories.react_gui_tools as rgt
 
 
-class TheoryMultiMetCSTR(CmdBase):
+class TheoryMultiMetCSTR(QTheory):
     """THEORY DOCUMENTATION IS MISSING"""
 
     thname = "Multi-Met CSTR"
     description = "Multiple Metallocene CSTR Reaction Theory"
     citations = ["Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051"]
     doi = ["http://dx.doi.org/10.1021/ma030354l"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryMultiMetCSTR(name, parent_dataset, axarr)
-
-
-class BaseTheoryMultiMetCSTR:
-    """Base class for both GUI"""
-
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html"
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryMultiMetCSTR.thname
-    citations = TheoryMultiMetCSTR.citations
-    doi = TheoryMultiMetCSTR.doi
 
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
@@ -127,6 +113,25 @@ class BaseTheoryMultiMetCSTR:
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.signal_mulmet_dialog.connect(rgt.launch_mulmet_dialog)
         self.do_xrange("", visible=self.xrange.get_visible())
+
+        rgt.initialise_tool_bar(self)
+
+    def theory_buttons_disabled(self, state):
+        """Disable/Enable some theory buttons before/after calculation start."""
+        rgt.theory_buttons_disabled(self, state)
+
+    def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
+        rgt.handle_save_bob_configuration(self)
+
+    def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
+        rgt.handle_edit_bob_settings(self)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        rgt.handle_btn_prio_senio(self, checked)
+
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -391,29 +396,3 @@ class BaseTheoryMultiMetCSTR:
     def do_error(self, line):
         """This theory does not calculate the error"""
         pass
-
-
-
-class GUITheoryMultiMetCSTR(BaseTheoryMultiMetCSTR, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-        rgt.initialise_tool_bar(self)
-
-    def theory_buttons_disabled(self, state):
-        """Disable/Enable some theory buttons before/after calculation start."""
-        rgt.theory_buttons_disabled(self, state)
-
-    def handle_save_bob_configuration(self):
-        """Save polymer configuraions to a file"""
-        rgt.handle_save_bob_configuration(self)
-
-    def handle_edit_bob_settings(self):
-        """Open the BoB binnig settings dialog"""
-        rgt.handle_edit_bob_settings(self)
-
-    def handle_btn_prio_senio(self, checked):
-        """Change do_priority_seniority"""
-        rgt.handle_btn_prio_senio(self, checked)

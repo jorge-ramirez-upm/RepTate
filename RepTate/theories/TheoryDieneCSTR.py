@@ -36,9 +36,7 @@
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Signal
@@ -48,31 +46,19 @@ import RepTate.theories.react_ctypes_helper as rch
 import RepTate.theories.react_gui_tools as rgt
 
 
-class TheoryDieneCSTR(CmdBase):
+class TheoryDieneCSTR(QTheory):
     """DieneCSTR reaction theory"""
 
     thname = "Diene CSTR"
     description = "The Diene CSTR reaction theory"
     citations = ["Das C. et al., Macromol. Theory Simul., 26, 1700006 (2017)"]
     doi = ["https://doi.org/10.1002/mats.201700006"]
-
-    def __new__(cls, name="", parent_dataset=None, ax=None):
-        """Create an instance of the GUI"""
-        return GUITheoryDieneCSTR(name, parent_dataset, ax)
-
-
-class BaseTheoryDieneCSTR:
-    """Base class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html"
     )
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryDieneCSTR.thname
-    citations = TheoryDieneCSTR.citations
-    doi = TheoryDieneCSTR.doi
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
@@ -208,6 +194,33 @@ class BaseTheoryDieneCSTR:
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.do_xrange("", visible=self.xrange.get_visible())
+
+        rgt.initialise_tool_bar(self)
+
+    def theory_buttons_disabled(self, state):
+        """Disable/Enable some theory buttons before/after calculation start."""
+        rgt.theory_buttons_disabled(self, state)
+
+    def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
+        rgt.handle_save_bob_configuration(self)
+
+    def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
+        rgt.handle_edit_bob_settings(self)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        rgt.handle_btn_prio_senio(self, checked)
+
+    def set_extra_data(self, extra_data):
+        """set extra data"""
+        rgt.set_extra_data(self, extra_data)
+
+    def get_extra_data(self):
+        """set extra data"""
+        rgt.get_extra_data(self)
+
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -424,36 +437,3 @@ class BaseTheoryDieneCSTR:
                 self.ymax = temp
             self.Qprint("<b>yrange</b>=[%.03g, %0.3g]" % (self.ymin, self.ymax))
 
-
-
-class GUITheoryDieneCSTR(BaseTheoryDieneCSTR, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, ax=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, ax)
-        rgt.initialise_tool_bar(self)
-
-    def theory_buttons_disabled(self, state):
-        """Disable/Enable some theory buttons before/after calculation start."""
-        rgt.theory_buttons_disabled(self, state)
-
-    def handle_save_bob_configuration(self):
-        """Save polymer configuraions to a file"""
-        rgt.handle_save_bob_configuration(self)
-
-    def handle_edit_bob_settings(self):
-        """Open the BoB binnig settings dialog"""
-        rgt.handle_edit_bob_settings(self)
-
-    def handle_btn_prio_senio(self, checked):
-        """Change do_priority_seniority"""
-        rgt.handle_btn_prio_senio(self, checked)
-
-    def set_extra_data(self, extra_data):
-        """set extra data"""
-        rgt.set_extra_data(self, extra_data)
-
-    def get_extra_data(self):
-        """set extra data"""
-        rgt.get_extra_data(self)

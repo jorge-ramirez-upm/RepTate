@@ -47,31 +47,19 @@ import RepTate.theories.react_ctypes_helper as rch
 import RepTate.theories.react_gui_tools as rgt
 
 
-class TheoryReactMix(CmdBase):
+class TheoryReactMix(QTheory):
     """BASIC THEORY DOCUMENTATION IS MISSING IN PYTHON FILE"""
 
     thname = "React Mix"
     description = "Combine other active React theories"
     citations = []
     doi = []
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryReactMix(name, parent_dataset, axarr)
-
-
-class BaseTheoryReactMix:
-    """Base class for both GUI"""
-
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/mixture.html"
     )
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryReactMix.thname
-    citations = TheoryReactMix.citations
-    doi = TheoryReactMix.doi
 
     signal_mix_dialog = Signal(object)
 
@@ -101,6 +89,30 @@ class BaseTheoryReactMix:
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
         self.ratios = []  # list of ratios in dialog
         self.include = []  # list of (0 or 1) include in dialog
+
+        rgt.initialise_tool_bar(self)
+        self.bob_settings_button.setDisabled(True)
+        self.btn_prio_senio.setDisabled(True)
+
+    def theory_buttons_disabled(self, state):
+        """
+        Enable/Disable theory buttons, typically called at the start and stop of a calculation.
+        This is relevant in multithread mode only.
+        """
+        self.save_bob_configuration_button.setDisabled(state)
+
+    def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
+        rgt.handle_save_mix_configuration(self)
+
+    def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
+        rgt.handle_edit_bob_settings(self)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        # rgt.handle_btn_prio_senio(self, checked)
+
 
     def Calc(self, f=None):
         """ReactMix function"""
@@ -207,35 +219,3 @@ class BaseTheoryReactMix:
         self.extra_data["ratios"] = self.ratios
         self.extra_data["include"] = self.include
         rgt.get_extra_data(self)
-
-
-
-
-class GUITheoryReactMix(BaseTheoryReactMix, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-        rgt.initialise_tool_bar(self)
-        self.bob_settings_button.setDisabled(True)
-        self.btn_prio_senio.setDisabled(True)
-
-    def theory_buttons_disabled(self, state):
-        """
-        Enable/Disable theory buttons, typically called at the start and stop of a calculation.
-        This is relevant in multithread mode only.
-        """
-        self.save_bob_configuration_button.setDisabled(state)
-
-    def handle_save_bob_configuration(self):
-        """Save polymer configuraions to a file"""
-        rgt.handle_save_mix_configuration(self)
-
-    def handle_edit_bob_settings(self):
-        """Open the BoB binnig settings dialog"""
-        rgt.handle_edit_bob_settings(self)
-
-    def handle_btn_prio_senio(self, checked):
-        """Change do_priority_seniority"""
-        # rgt.handle_btn_prio_senio(self, checked)

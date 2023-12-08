@@ -35,30 +35,18 @@
 React module
 
 """
-from RepTate.core.CmdBase import CmdBase
-from RepTate.core.Application import Application
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
-class ApplicationReact(CmdBase):
+class ApplicationReact(QApplicationWindow):
     """Application for Monte Carlo polymerisation"""
     appname = 'React'
     description = 'React Application'  #used in the command-line Reptate
     extension = 'reac'
-
-    def __new__(cls, name='React', parent=None):
-        """Create an instance of the GUI"""
-        return GUIApplicationReact(name, parent) 
-
-
-class BaseApplicationReact:
-    """Base Class for both GUI"""
-
     html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
-    appname = ApplicationReact.appname
 
     def __init__(self, name='React', parent=None, **kwargs):
         """**Constructor**"""
@@ -404,6 +392,11 @@ class BaseApplicationReact:
         # for _ in self.extra_view_names:
         #     self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
 
+        #add the GUI-specific objects here:
+        for _ in self.extra_view_names:
+            self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
+
+
     def change_view(self):
         """Redefinition to handle the x-range selection when P&S is selected"""
         do_priority_seniority = False
@@ -625,15 +618,3 @@ class BaseApplicationReact:
             y[:] = np.nan
         return x, y, True
 
-
-class GUIApplicationReact(BaseApplicationReact, QApplicationWindow):
-    """GUI Version"""
-
-    def __init__(self, name='React', parent=None):
-        """**Constructor**"""
-
-        super().__init__(name, parent)
-
-        #add the GUI-specific objects here:
-        for _ in self.extra_view_names:
-            self.viewComboBox.removeItem(self.viewComboBox.count() - 1)

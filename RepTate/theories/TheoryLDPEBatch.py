@@ -37,9 +37,7 @@ TobitaBatch file for creating a new theory
 """
 import numpy as np
 import time
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QApplication
@@ -49,7 +47,7 @@ import RepTate.theories.react_ctypes_helper as rch
 import RepTate.theories.react_gui_tools as rgt
 
 
-class TheoryTobitaBatch(CmdBase):
+class TheoryTobitaBatch(QTheory):
     """LDPE batch reaction theory
     
     The LDPE batch reaction theory uses an algorithm described in the paper by H.
@@ -66,25 +64,12 @@ class TheoryTobitaBatch(CmdBase):
     doi = [
         "http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"
     ]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryTobitaBatch(name, parent_dataset, axarr)
-
-
-class BaseTheoryTobitaBatch:
-    """Base class for both GUI"""
-
-    # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaLDPE.html' % ((os.sep, )*6)
     html_help_file = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html"
     )
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryTobitaBatch.thname
-    citations = TheoryTobitaBatch.citations
-    doi = TheoryTobitaBatch.doi
 
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
@@ -172,6 +157,33 @@ class BaseTheoryTobitaBatch:
         self.signal_request_polymer.connect(rgt.request_more_polymer)
         self.signal_request_arm.connect(rgt.request_more_arm)
         self.do_xrange("", visible=self.xrange.get_visible())
+
+        rgt.initialise_tool_bar(self)
+
+    def theory_buttons_disabled(self, state):
+        """Disable/Enable some theory buttons before/after calculation start."""
+        rgt.theory_buttons_disabled(self, state)
+
+    def handle_save_bob_configuration(self):
+        """Save polymer configuraions to a file"""
+        rgt.handle_save_bob_configuration(self)
+
+    def handle_edit_bob_settings(self):
+        """Open the BoB binnig settings dialog"""
+        rgt.handle_edit_bob_settings(self)
+
+    def handle_btn_prio_senio(self, checked):
+        """Change do_priority_seniority"""
+        rgt.handle_btn_prio_senio(self, checked)
+
+    def set_extra_data(self, extra_data):
+        """set extra data"""
+        rgt.set_extra_data(self, extra_data)
+
+    def get_extra_data(self):
+        """set extra data"""
+        rgt.get_extra_data(self)
+
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
@@ -380,36 +392,3 @@ class BaseTheoryTobitaBatch:
         """This theory does not calculate the error"""
         pass
 
-
-
-class GUITheoryTobitaBatch(BaseTheoryTobitaBatch, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
-        rgt.initialise_tool_bar(self)
-
-    def theory_buttons_disabled(self, state):
-        """Disable/Enable some theory buttons before/after calculation start."""
-        rgt.theory_buttons_disabled(self, state)
-
-    def handle_save_bob_configuration(self):
-        """Save polymer configuraions to a file"""
-        rgt.handle_save_bob_configuration(self)
-
-    def handle_edit_bob_settings(self):
-        """Open the BoB binnig settings dialog"""
-        rgt.handle_edit_bob_settings(self)
-
-    def handle_btn_prio_senio(self, checked):
-        """Change do_priority_seniority"""
-        rgt.handle_btn_prio_senio(self, checked)
-
-    def set_extra_data(self, extra_data):
-        """set extra data"""
-        rgt.set_extra_data(self, extra_data)
-
-    def get_extra_data(self):
-        """set extra data"""
-        rgt.get_extra_data(self)

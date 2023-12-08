@@ -39,9 +39,7 @@ import os
 import numpy as np
 import enum
 import RepTate
-from RepTate.core.CmdBase import CmdBase
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.Theory import Theory
 from RepTate.gui.QTheory import QTheory
 from collections import OrderedDict
 import time
@@ -62,7 +60,7 @@ from PySide6.QtWidgets import (
     QToolBar,
 )
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
-from PySide6.QtCore import QUrl, Signal, QSize, Qt, QVariant
+from PySide6.QtCore import QUrl, Signal, QSize, Qt #, QVariant
 
 
 class DistributionType(enum.Enum):
@@ -230,7 +228,7 @@ class ArchitectureType(enum.Enum):
     }
 
 
-class TheoryCreatePolyconf(CmdBase):
+class TheoryCreatePolyconf(QTheory):
     """Create polymer configuration files using BoB v2.5 (Chinmay Das and Daniel Read).
     The configuration file created with this theory can then be analysed
     in the BoB LVE theory, in the LVE application of RepTate.
@@ -253,22 +251,10 @@ class TheoryCreatePolyconf(CmdBase):
     description = "Create and Save Polymer Configuration with BOB"
     citations = ["Das C. et al, J. Rheol. 2006, 50, 207-234"]
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
-
-    def __new__(cls, name="", parent_dataset=None, axarr=None):
-        """Create an instance of the GUI"""
-        return GUITheoryCreatePolyconf(name, parent_dataset, axarr)
-
-
-class BaseTheoryCreatePolyconf:
-    """Base class for both GUI"""
-
     html_help_file = "https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html"
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
-    thname = TheoryCreatePolyconf.thname
-    citations = TheoryCreatePolyconf.citations
-    doi = TheoryCreatePolyconf.doi
 
     signal_param_dialog = Signal(object)
 
@@ -299,83 +285,6 @@ class BaseTheoryCreatePolyconf:
         self.from_file_filename_counter = 0  # counter
         self.protoname = []  # list of proto/polycode names
 
-    def request_stop_computations(self):
-        """Called when user wants to terminate the current computation"""
-        self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
-        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
-
-    def do_error(self, line=""):
-        """This theory does not calculate the error"""
-        pass
-
-    def calculate(self, f=None):
-        """Create polymer configuration file and calculate distribution characteristics"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        # show form
-        self.success_dialog = None
-        self.signal_param_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            time.sleep(
-                0.5
-            )  # TODO: find a better way to wait for the dialog thread to finish
-        if not self.success_dialog:
-            self.Qprint("Operation cancelled")
-            return
-
-        # Run BoB C++ code
-        gpc_out = []
-        QApplication.processEvents()
-        self.bch.link_c_callback()
-        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
-        self.start_time_cal = time.time()
-        try:
-            mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
-                self.argv, self.npol_tot
-            )
-        except BobError:
-            self.Qprint("Operation cancelled")
-            return
-
-        # copy results to RepTate data file
-        if gpc_out:
-            if not self.is_ascii(self.polyconf_file_out):
-                pass
-                # #copy file to selected loaction
-                # temp_polyconf = os.path.join('theories', 'temp',
-                #                              'temp_polyconf.dat')
-                # copy2(temp_polyconf, self.polyconf_file_out)
-
-            try:
-                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g, PDI=%.3g</b>" % (mn, mw, mw / mn))
-            except ZeroDivisionError:
-                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g</b>" % (mn, mw))
-            self.Qprint(
-                '<br><b>Polymer configuration written in</b><i>"%s"</i><br>'
-                % self.polyconf_file_out
-            )
-
-            # copy results to data series
-            lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out
-            tt.num_columns = ft.num_columns
-            tt.num_rows = len(lgmid_out)
-            tt.data = np.zeros((tt.num_rows, tt.num_columns))
-            tt.data[:, 0] = lgmid_out[:]
-            tt.data[:, 1] = wtbin_out[:]
-            tt.data[:, 2] = gbin_out[:]
-            tt.data[:, 3] = brbin_out[:]
-
-
-
-class GUITheoryCreatePolyconf(BaseTheoryCreatePolyconf, QTheory):
-    """GUI Version"""
-
-    def __init__(self, name="", parent_dataset=None, axarr=None):
-        """**Constructor**"""
-        super().__init__(name, parent_dataset, axarr)
         self.ncomponent = 1
         self.trash_indices = []
         self.dict_component = OrderedDict()
@@ -950,3 +859,73 @@ FunH
             return True
         except UnicodeEncodeError:
             return False
+
+
+    def request_stop_computations(self):
+        """Called when user wants to terminate the current computation"""
+        self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
+        self.bch.set_flag_stop_bob(ctypes.c_bool(True))
+
+    def do_error(self, line=""):
+        """This theory does not calculate the error"""
+        pass
+
+    def calculate(self, f=None):
+        """Create polymer configuration file and calculate distribution characteristics"""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        # show form
+        self.success_dialog = None
+        self.signal_param_dialog.emit(self)
+        while self.success_dialog is None:  # wait for the end of QDialog
+            time.sleep(
+                0.5
+            )  # TODO: find a better way to wait for the dialog thread to finish
+        if not self.success_dialog:
+            self.Qprint("Operation cancelled")
+            return
+
+        # Run BoB C++ code
+        gpc_out = []
+        QApplication.processEvents()
+        self.bch.link_c_callback()
+        self.bch.set_do_priority_seniority(ctypes.c_bool(self.do_priority_seniority))
+        self.start_time_cal = time.time()
+        try:
+            mn, mw, gpc_out = self.bch.save_polyconf_and_return_gpc(
+                self.argv, self.npol_tot
+            )
+        except BobError:
+            self.Qprint("Operation cancelled")
+            return
+
+        # copy results to RepTate data file
+        if gpc_out:
+            if not self.is_ascii(self.polyconf_file_out):
+                pass
+                # #copy file to selected loaction
+                # temp_polyconf = os.path.join('theories', 'temp',
+                #                              'temp_polyconf.dat')
+                # copy2(temp_polyconf, self.polyconf_file_out)
+
+            try:
+                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g, PDI=%.3g</b>" % (mn, mw, mw / mn))
+            except ZeroDivisionError:
+                self.Qprint("<br><b>Mn=%.3g, Mw=%.3g</b>" % (mn, mw))
+            self.Qprint(
+                '<br><b>Polymer configuration written in</b><i>"%s"</i><br>'
+                % self.polyconf_file_out
+            )
+
+            # copy results to data series
+            lgmid_out, wtbin_out, brbin_out, gbin_out = gpc_out
+            tt.num_columns = ft.num_columns
+            tt.num_rows = len(lgmid_out)
+            tt.data = np.zeros((tt.num_rows, tt.num_columns))
+            tt.data[:, 0] = lgmid_out[:]
+            tt.data[:, 1] = wtbin_out[:]
+            tt.data[:, 2] = gbin_out[:]
+            tt.data[:, 3] = brbin_out[:]
