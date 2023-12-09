@@ -60,7 +60,6 @@ from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.core.File import File
 
 # from RepTate.gui.QAboutReptate import AboutWindow
-# COPY FROM APPLICATIONMANAGER
 from RepTate.applications.ApplicationTTS import ApplicationTTS
 from RepTate.applications.ApplicationTTSFactors import ApplicationTTSFactors
 from RepTate.applications.ApplicationLVE import ApplicationLVE
@@ -76,7 +75,6 @@ from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from urllib.request import urlopen
 import json
 
-# END COPY
 from collections import OrderedDict
 import numpy as np
 import time
@@ -134,7 +132,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        # COPY FROM APPLICATIONMANAGER
         # SETUP APPLICATIONS
         self.application_counter = 0
         self.applications = OrderedDict()
@@ -186,7 +183,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         self.logger.debug("New ApplicationManager")
-        # END COPY
 
         if CmdBase.calcmode == CalcMode.singlethread:
             self.setWindowTitle(
@@ -491,7 +487,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             QUrl.fromUserInput(("https://dx.doi.org/10.1122/8.0000002"))
         )
 
-    # COPY FROM APPLICATIONMANAGER
     def check_version(self):
         url = "https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases"
         releasedata = (urlopen(url).read()).decode("UTF-8")
@@ -507,8 +502,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             version_current = items[1]
         newversion = version_github > version_current
         return newversion, version_github, version_current
-
-    # END COPY
 
     def handle_check_RepTate_version(self):
         """Query Github for the latest RepTate release"""
@@ -604,7 +597,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app.name)
 
-    # COPY FROM APPLICATIONMANAGER
     def new(self, appname):
         """Create a new application and open it.
 
@@ -620,8 +612,6 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         else:
             print('Application "%s" is not available' % appname)
             return None
-
-    # END COPY
 
     def Qopen_app(self, app_name, icon):
         """Open app"""

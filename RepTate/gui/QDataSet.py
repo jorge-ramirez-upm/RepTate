@@ -98,7 +98,6 @@ else:
 Ui_DataSet, QWidget = loadUiType(join(PATH, "DataSet.ui"))
 
 
-# COPY FROM DATASET
 class ColorMode(enum.Enum):
     """Class to describe how to change colors in the current DataSet"""
 
@@ -353,9 +352,6 @@ class ThLineMode(enum.Enum):
     )
 
 
-# END COPY FROM DATASET
-
-
 class EditFileParametersDialog(QDialog):
     """Create the form that is used to modify the file parameters"""
 
@@ -485,7 +481,6 @@ class QDataSet(QWidget, Ui_DataSet):
         Ui_DataSet.__init__(self)
         self.setupUi(self)
 
-        # COPY FROM DATASET
         self.name = name
         self.parent_application = parent
         self.nplots = self.parent_application.nplots
@@ -520,7 +515,6 @@ class QDataSet(QWidget, Ui_DataSet):
         )
         self.logger.debug("New DataSet")
         np.seterrcall(self.write)
-        # END COPY FROM DATASET
 
         self.DataSettreeWidget = DataSetWidget(self)
         self.splitter.insertWidget(0, self.DataSettreeWidget)
@@ -670,7 +664,6 @@ class QDataSet(QWidget, Ui_DataSet):
             self.handle_error_calculation_options
         )
 
-    # COPY FROM DATASET
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
         self.logger.info("numpy: %s (flag %s)" % (type, flag))
@@ -1258,8 +1251,6 @@ class QDataSet(QWidget, Ui_DataSet):
             if maxfile > max:
                 max = maxfile
         return max
-
-    # END COPY FROM DATASET
 
     def copy_parameters(self):
         """Copy the parameters of the currently active theory to the clipboard"""

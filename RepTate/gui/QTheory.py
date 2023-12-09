@@ -324,7 +324,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         # super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
 
-        # COPY FROM THEORY
         self.name = name
         self.parent_dataset = parent_dataset
         self.axarr = axarr
@@ -421,7 +420,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
          # flag for requesting end of computations
         self.stop_theory_flag = False
-        # END COPY FROM THEORY
 
         # build the therory widget
         self.thParamTable.setIndentation(0)
@@ -463,7 +461,6 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.handle_parameterItemChanged
         )
 
-# COPY FROM THEORY
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
         self.logger.info('numpy: %s (flag %s)'%(type, flag))
@@ -1534,8 +1531,6 @@ that provide this functionality."""
             return False
         get_all_parameters(chem, self, fparam, dbindex)
         return True
-
-# END COPY FROM THEORY
 
     def populate_default_minimization_options(self):
         dvalidator = QDoubleValidator()

@@ -110,7 +110,6 @@ class QTool(QWidget, Ui_ToolTab):
         # super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
 
-        # COPY FROM TOOL
         self.name = name
         self.parent_application = parent_app
         self.parameters = (
@@ -133,8 +132,6 @@ class QTool(QWidget, Ui_ToolTab):
         self.print_signal.connect(
             self.print_qtextbox
         )  # Asynchronous print when using multithread
-
-        # END COPY FROM TOOL
 
         self.tb = QToolBar()
         self.tb.setIconSize(QSize(24, 24))
@@ -175,7 +172,6 @@ class QTool(QWidget, Ui_ToolTab):
         )
         self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
 
-    # COPY FROM TOOL
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
         self.logger.info("numpy: %s (flag %s)" % (type, flag))
@@ -199,9 +195,6 @@ class QTool(QWidget, Ui_ToolTab):
         """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
         pass
 
-    # END COPY FROM TOOL
-
-    # COPY FROM TOOL
     def plot_tool_stuff(self):
         """Special function to plot tool graphical objects"""
         pass
@@ -230,9 +223,6 @@ class QTool(QWidget, Ui_ToolTab):
     def clean_graphic_stuff(self):
         pass
 
-    # END COPY FROM TOOL
-
-    # COPY FROM TOOL
     def do_cite(self, line):
         """Print citation information"""
         if len(self.citations) > 1:
@@ -327,9 +317,6 @@ class QTool(QWidget, Ui_ToolTab):
             print("In set_param_value:", e)
             return "", False
 
-    # END COPY FROM TOOL
-
-    # COPY FROM TOOL
     def Qprint(self, msg, end="<br>"):
         """Print a message on the Tool info area"""
         if isinstance(msg, list):
@@ -373,8 +360,6 @@ class QTool(QWidget, Ui_ToolTab):
             self.toolTextBox.verticalScrollBar().maximum()
         )
         self.toolTextBox.moveCursor(QTextCursor.End)
-
-    # END COPY FROM TOOL
 
     def toolTextBox_context_menu(self):
         """Custom contextual menu for the theory textbox"""
