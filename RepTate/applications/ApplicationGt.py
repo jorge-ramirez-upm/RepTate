@@ -211,7 +211,9 @@ class ApplicationGt(QApplicationWindow):
         hlayout.addStretch()
         # xmin
         self.xmin_view = QLineEdit("-inf")
-        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
+        self.xmin_view.setToolTip(
+            "Discard data points below this value before i-Rheo transformation"
+        )
         self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
         self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -222,7 +224,9 @@ class ApplicationGt(QApplicationWindow):
         hlayout.addSpacing(5)
         # xmax
         self.xmax_view = QLineEdit("inf")
-        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
+        self.xmax_view.setToolTip(
+            "Discard data points above this value before i-Rheo transformation"
+        )
         self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
         self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -236,7 +240,7 @@ class ApplicationGt(QApplicationWindow):
         hlayout.addWidget(self.pb)
         self.hlayout_view = hlayout
         self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
-        
+
     def set_xmin(self):
         """Update the value of t_min. Return success status"""
         text = self.xmin_view.text()
@@ -338,7 +342,7 @@ class ApplicationGt(QApplicationWindow):
         :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`"""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
-            QMessageBox.warning(self, 'Error', error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         n = len(data_x)
         try:
@@ -363,7 +367,7 @@ class ApplicationGt(QApplicationWindow):
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
-            QMessageBox.warning(self, 'Error', error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
@@ -427,7 +431,6 @@ class ApplicationGt(QApplicationWindow):
             data_x[ind1 + 1 :] - data_x[ind1:-1]
         )
         for i, w in enumerate(wp):
-
             y[i, 0] = (
                 g0
                 + sin(w * t1) * (g1 - g0) / w / t1
@@ -451,7 +454,7 @@ class ApplicationGt(QApplicationWindow):
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
-            QMessageBox.warning(self, 'Error', error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
@@ -508,15 +511,20 @@ class ApplicationGt(QApplicationWindow):
         success *= self.set_xmax()
         if success:
             # get indices of data in xrange
-            filtered = np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view)
+            filtered = np.logical_and(
+                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
+            )
             non_zeros = np.count_nonzero(filtered)
             if non_zeros < 1:
                 # too few data between tmin and tmax
-                return "Too few data points (%d) between t_min and t_max" % non_zeros, None, None
+                return (
+                    "Too few data points (%d) between t_min and t_max" % non_zeros,
+                    None,
+                    None,
+                )
             args = np.where(filtered)
             x_in_range = dt.data[:, 0][args]
             y_in_range = dt.data[:, 1][args]
             return None, x_in_range, y_in_range
         else:
             return "Check values of t_min and t_max", None, None
-

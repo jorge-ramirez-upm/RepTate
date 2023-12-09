@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -39,7 +39,7 @@ from scipy import special, optimize
 
 class TheoryDSMLinear(QTheory):
     """Calculate the Discrete Slip Link theory for the linear rheology of linear entangled polymers.
-        
+
     * **Parameters**"""
 
     thname = "CFSM+Rouse"
@@ -133,7 +133,7 @@ class TheoryDSMLinear(QTheory):
         T = (
             float(parent_dataset.files[0].file_parameters["T"]) + 273.15
         )  # In units of K
-        R = 8.314462 * 10 ** 3  # units of L Pa K^-1 mol^-1
+        R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
         rho0 = self.parameters["rho0"].value
         MK = self.parameters["MK"].value
         # ---------------------------------------------
@@ -145,7 +145,7 @@ class TheoryDSMLinear(QTheory):
             self.Nc = solNc
             self.Mc = Mw / self.Nc
             self.set_param_value("Mc", self.Mc)
-            self.tau_c = 151.148 / (omega_x * self.Nc ** 3.50)
+            self.tau_c = 151.148 / (omega_x * self.Nc**3.50)
             self.set_param_value("tau_c", self.tau_c)
             self.beta = Mw / (0.56 * self.Nc * MK) - 1
             # self.set_param_value("beta", self.beta)
@@ -234,8 +234,8 @@ class TheoryDSMLinear(QTheory):
 
         alphaR = [0.64635, -0.4959, -1.2716]
         tauR = [
-            6.313268381616272 * (10 ** -9),
-            2.181509372282138 * (10 ** -7),
+            6.313268381616272 * (10**-9),
+            2.181509372282138 * (10**-7),
             0.797317365925168,
             18.201382525250114,
         ]
@@ -269,21 +269,20 @@ class TheoryDSMLinear(QTheory):
         sumGdp1 = 0
         sumGdp2 = 0
         for i in range(0, len(alpha)):
-
             sumGp1 += (self.supp_prod(tau, alpha, i) / (alpha[i] + 2)) * (
                 tau[i + 1] ** (alpha[i] + 2)
                 * special.hyp2f1(
                     1,
                     (alpha[i] + 2) / 2,
                     (alpha[i] + 4) / 2,
-                    -(omega ** 2) * tau[i + 1] ** 2,
+                    -(omega**2) * tau[i + 1] ** 2,
                 )
                 - tau[i] ** (alpha[i] + 2)
                 * special.hyp2f1(
                     1,
                     (alpha[i] + 2) / 2,
                     (alpha[i] + 4) / 2,
-                    -(omega ** 2) * tau[i] ** 2,
+                    -(omega**2) * tau[i] ** 2,
                 )
             )
 
@@ -299,14 +298,14 @@ class TheoryDSMLinear(QTheory):
                     1,
                     (alpha[i] + 1) / 2,
                     (alpha[i] + 3) / 2,
-                    -(omega ** 2) * tau[i + 1] ** 2,
+                    -(omega**2) * tau[i + 1] ** 2,
                 )
                 - tau[i] ** (alpha[i] + 1)
                 * special.hyp2f1(
                     1,
                     (alpha[i] + 1) / 2,
                     (alpha[i] + 3) / 2,
-                    -(omega ** 2) * tau[i] ** 2,
+                    -(omega**2) * tau[i] ** 2,
                 )
             )
 
@@ -316,14 +315,15 @@ class TheoryDSMLinear(QTheory):
                 / alpha[i]
             )
 
-        return G0 * omega ** 2 * sumGp1 / sumGp2 + 1j * (G0 * omega * sumGdp1 / sumGdp2)
+        return G0 * omega**2 * sumGp1 / sumGp2 + 1j * (G0 * omega * sumGdp1 / sumGdp2)
 
     def do_error(self, line):
         """Report the error of the current theory
 
-Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+        Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
+        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
+        """
         super().do_error(line)
         self.print_DSM_params()
 
@@ -352,7 +352,7 @@ File error is calculated as the mean square of the residual, averaged over all p
         self.Qprint(tab_data)
 
     def calculate(self, f=None):
-        """ 
+        """
         CLUSTERED FIXED SLIP-LINK (CFSM) + ROUSE MODEL FOR LINEAR VISCOELASTICITY
 
           PARAMETERS:
@@ -377,7 +377,7 @@ File error is calculated as the mean square of the residual, averaged over all p
         rho0 = self.parameters["rho0"].value
         Mw = float(f.file_parameters["Mw"]) * 1000.0  # units of Da
         T = float(f.file_parameters["T"]) + 273.15  # units of K
-        R = 8.314462 * 10 ** 3  # units of L Pa K^-1 mol^-1
+        R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
 
         Mc = self.parameters["Mc"].value
         tau_c = self.parameters["tau_c"].value
@@ -418,11 +418,10 @@ File error is calculated as the mean square of the residual, averaged over all p
         )
         prefactor = G0 * ((N_K + beta) / (beta + 1))
         Rouse = prefactor * Gstar_vec(
-            omega=(tt.data[:, 0] * tau_K * (beta ** 2)), params=params, Rouse=True
+            omega=(tt.data[:, 0] * tau_K * (beta**2)), params=params, Rouse=True
         )
 
         Gstar = CFSM + Rouse  # G* has units of kPa
 
         tt.data[:, 1] = Gstar.real * 1000  # convert to Pa
         tt.data[:, 2] = Gstar.imag * 1000
-

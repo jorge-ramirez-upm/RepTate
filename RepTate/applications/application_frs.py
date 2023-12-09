@@ -35,10 +35,11 @@
 Module for handling FRS experiments and simulations.
 
 """
-from RepTate.core.Application import Application
+from RepTate.gui.QApplicationWindow import QApplicationWindow
+import numpy as np
 
 
-class ApplicationFRS_I(Application):
+class ApplicationFRS_I(QApplicationWindow):
     """Application to FRS Intensity simulations"""
 
     name = "FRS_I"

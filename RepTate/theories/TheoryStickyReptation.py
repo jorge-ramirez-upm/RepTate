@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -42,7 +42,7 @@ from scipy import interpolate
 
 class TheoryStickyReptation(QTheory):
     """Fit the Sticky Reptation theory for the linear rheology of linear entangled polymers with a number of stickers that can form reversible intramolecular crosslinks.
-        
+
     * **Parameters**
        - ``Ge`` : elastic plateau modulus.
        - ``Ze`` : number of entanglements per chain.
@@ -126,7 +126,7 @@ class TheoryStickyReptation(QTheory):
 
     def calculate(self, f=None):
         """
- 
+
         STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
 
           PARAMETERS:
@@ -137,36 +137,36 @@ class TheoryStickyReptation(QTheory):
           > alpha - magnitude of the contour-length fluctuations in the
                     double-reptation model. This is principle a universal
                     dimensionless number with a value around ~10.
-          IMPORTANT: 
+          IMPORTANT:
           I. This sticky-reptation model assumes high Rouse frequencies
-             not to affect the rheology at times of the order of the 
-             sticker time, due to which the rheology is independent 
-             of both the elementary (non-sticky) Rouse time, tau0, 
+             not to affect the rheology at times of the order of the
+             sticker time, due to which the rheology is independent
+             of both the elementary (non-sticky) Rouse time, tau0,
              and the degree of polymerisation, N. See below.
           II. The results may be affected by numerical approximations,
              see below.
 
           I. MODEL APPROXIMATION:
-          1: The reptation time and Rouse relaxation after sticker 
-             dissociation are approximate. After sticker dissociation 
-             a strand of length N/Zs relaxes (a factor of two, to 
-             represent a strand of twice that length relaxes) is 
+          1: The reptation time and Rouse relaxation after sticker
+             dissociation are approximate. After sticker dissociation
+             a strand of length N/Zs relaxes (a factor of two, to
+             represent a strand of twice that length relaxes) is
              ignored. The reptation time is taken tau_rep=tau_s Zs^2*Ze,
              with the prefactor 3 ignored.
           2. The model assumes that the sticker dissociation time tau_s
              is much larger than tau0*(N/Zs)^2. The shape of the sticker
-             plateau in G' and G'' is therefore not affected by the 
+             plateau in G' and G'' is therefore not affected by the
              early-time Rouse relaxation, and is independent of tau0 and
              N: Including the high frequencies requires tau0 and N as
              additional parameters.
 
           II. NUMERICAL SETTINGS:
-          Some numerical 
+          Some numerical
           1. The infinite sums in the double-reptation model are
              truncated using a numerical tolerance level.
           2. To transform G(t) to G'(w) and G''(w) a time range with
              a finite number of samples is defined. The time range
-             and number of samples may affect the results. """
+             and number of samples may affect the results."""
 
         # ---------------------------------------------
         # FUNCTION INPUT
@@ -208,10 +208,10 @@ class TheoryStickyReptation(QTheory):
         dsum = 0.0
         for q in range(1, int(Zs) + 1):
             if q < Ze:
-                GSR += 0.2 * np.exp(-tS * q ** 2)
+                GSR += 0.2 * np.exp(-tS * q**2)
                 dsum += 0.2
             else:
-                GSR += np.exp(-tS * q ** 2)
+                GSR += np.exp(-tS * q**2)
                 dsum += 1
 
             # Normalise (verified using the asymptotic value of G(t)
@@ -235,7 +235,7 @@ class TheoryStickyReptation(QTheory):
                 dGrep = np.exp(-q2 * Ut[n]) / q2
                 GREP[n] += dGrep
                 err = dGrep / GREP[n]
-        GREP = (GREP * 8 / np.pi ** 2) ** 2
+        GREP = (GREP * 8 / np.pi**2) ** 2
 
         # Relaxation modulus G(t) = sum of Sticky Rouse and Reptation
         G = Ge * (GSR + GREP)
@@ -260,7 +260,6 @@ class TheoryStickyReptation(QTheory):
 
         coeff = (G[ind1 + 1 :] - G[ind1:-1]) / (t[ind1 + 1 :] - t[ind1:-1])
         for i, w in enumerate(wp):
-
             G1G2[i, 1] = (
                 g0
                 + np.sin(w * t1) * (g1 - g0) / w / t1
@@ -286,4 +285,3 @@ class TheoryStickyReptation(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
         tt.data[:, 1] = f1(ft.data[:, 0])
         tt.data[:, 2] = f2(ft.data[:, 0])
-

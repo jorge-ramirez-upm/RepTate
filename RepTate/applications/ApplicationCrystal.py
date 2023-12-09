@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -383,7 +383,7 @@ class ApplicationCrystal(QApplicationWindow):
         return x, y, True
 
     def view_flowcurve(self, dt, file_parameters):
-        """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate"""
+        """:math:`\\sigma(t_{\\to\\infty})` vs flow rate"""
 
         try:
             flow_rate = float(file_parameters["gdot"])
@@ -396,7 +396,7 @@ class ApplicationCrystal(QApplicationWindow):
         return x, y, True
 
     def view_steadyNuc(self, dt, file_parameters):
-        """ :math:`\\dot{N}(t_{\\to\\infty})` vs flow rate"""
+        """:math:`\\dot{N}(t_{\\to\\infty})` vs flow rate"""
 
         try:
             flow_rate = float(file_parameters["gdot"])
