@@ -56,16 +56,13 @@ def main():
 
 def start_MatDB(argv):
     """
-    Materials Database application. 
-    
+    Materials Database application.
+
     :param list argv: Command line parameters passed to MatDB
     """
     parser = argparse.ArgumentParser(
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
         epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2023)",
-    )
-    parser.add_argument(
-        "-d", "--dpi", help="High DPI support on Windows", action="store_true"
     )
     parser.add_argument(
         "-v", "--verbose", help="Write debug information to stdout", action="store_true"
@@ -88,12 +85,6 @@ def start_MatDB(argv):
     QApplication.setStyle("Fusion")  # comment that line for a native look
     # for a list of available styles: "from PySide6.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"
 
-    if args.dpi:
-        os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
-
     app = QApplication(sys.argv)
     app.setApplicationName("RepTate")
 
@@ -109,6 +100,12 @@ def start_MatDB(argv):
     shortcut.activated.connect(app.quit)
 
     CmdBase.calcmode = CalcMode.singlethread
+
+    # Hide unused buttons
+    ex.actionActive.setVisible(False)
+    ex.verticalshift.setVisible(False)
+    ex.isofrictional.setVisible(False)
+    ex.shiftdata.setVisible(False)
 
     ex.show()
     sys.exit(app.exec())
