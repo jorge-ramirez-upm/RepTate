@@ -2,6 +2,12 @@
 Version History
 ===============
 
+Release 1.2.2 - 20231209
+========================
+- Changes to the code to make it compatible with modern versions of Python, Numpy and Matplotlib
+- Removed CLI (Command Line Interface). 
+- Removed high DPI option (automatically handled)
+
 Release 1.2.1 - 20231207
 ========================
 - Removed spinbox to increase/decrease number of views (giving problems)
