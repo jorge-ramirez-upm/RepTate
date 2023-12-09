@@ -49,6 +49,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 import RepTate
 
+
 class TheoryWLFShift(QTheory):
     """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
 
@@ -260,7 +261,7 @@ class TheoryWLFShift(QTheory):
                         T, aT, bT, _ = self.shift_factor_dic[f.file_name_short]
                         list_out.append((T, aT, bT))
                 list_out.sort()
-                for (T, aT, bT) in list_out:
+                for T, aT, bT in list_out:
                     fout.write("%-12g %-12g %-12g\n" % (T, aT, bT))
 
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
@@ -320,7 +321,7 @@ class TheoryWLFShift(QTheory):
         view = self.parent_dataset.parent_application.current_view
         nfiles = len(self.parent_dataset.files)
         file_error = np.zeros(nfiles)
-        file_points = np.zeros(nfiles, dtype=np.int)
+        file_points = np.zeros(nfiles, dtype=int)
         xth = []
         yth = []
         Mw = []
@@ -631,4 +632,3 @@ class TheoryWLFShift(QTheory):
         # print information
         msg = 'Saved %d TTS file(s) in "%s"' % (counter, line)
         QMessageBox.information(self, "Save TTS", msg)
-
