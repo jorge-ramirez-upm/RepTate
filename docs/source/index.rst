@@ -33,6 +33,7 @@ Contents:
    developers/developers
    contributors
    version
+   papers
 
 More info:
 ----------

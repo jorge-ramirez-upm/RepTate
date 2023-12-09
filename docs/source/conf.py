@@ -308,5 +308,5 @@ texinfo_documents = [
 numfig = True
 
 bibtex_bibfiles = ['manual/Applications/Crystal/bibliography.bib', 'manual/Applications/Gt/bibliography.bib', 'manual/Applications/LVE/bibliography.bib', 'manual/Applications/LVE/refs.bib', 
-'manual/Applications/NLVE/bibliography.bib', 'manual/Applications/React/bibliography.bib', 'manual/Applications/SANS/bibliography.bib', 'manual/General/bibliography.bib']
+'manual/Applications/NLVE/bibliography.bib', 'manual/Applications/React/bibliography.bib', 'manual/Applications/SANS/bibliography.bib', 'manual/General/bibliography.bib', 'papers.bib']
 
