@@ -12,5 +12,4 @@
     general
     Theory/theory
     Tutorial/tutorialGUILAOS
-    Tutorial/tutorialCLLAOS
 

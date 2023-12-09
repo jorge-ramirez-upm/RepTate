@@ -6,4 +6,3 @@ G(t): Tutorial
    	:maxdepth: 2
 	
 	tutorialGUIGt
-	tutorialCLGt

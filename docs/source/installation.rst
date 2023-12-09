@@ -4,7 +4,7 @@ Installation
 
 RepTate can be installed in three ways: 
 
-    #. the "shortcut", allows you to run RepTate in a couple of clicks;
+    #. the "shortcut", allows you to run RepTate in a couple of clicks (**outdated**);
     #. the "intermediate", is almost as quick and allows you to run a well tested version of RepTate.
     #. the "scenic route", requires more steps and the use of the command-line interface. 
 
@@ -18,6 +18,8 @@ RepTate can be installed in three ways:
 
 The "shortcut"
 ==============
+
+**NOTE**: This option is outdated (installation packages are not up to date).
 
 Binary packages (containing all the needed files and libraries, 
 as well as a Python interpreter), for the latest version (|release|) can be downloaded here: 
@@ -39,9 +41,9 @@ Previous versions of the code can be downloaded from the following `folder
 The "intermediate" route
 ========================
 
-This option requires the installation of Python 3 and the RepTate package, from the command line.
+This option requires the installation of Python 3.11 and the RepTate package, from the command line.
 
-#. Install Python 3.6 or later. Possible alternatives are:
+#. Install Python 3.11 or later. Possible alternatives are:
 
     - Go to the official `Python <https://www.python.org/ftp/python/3.7.4/>`_ site (the example points to the folder that contains the installation packages for version 3.7.4). Download the package that corresponds to your system.
 
@@ -58,6 +60,23 @@ This option requires the installation of Python 3 and the RepTate package, from 
     - Search on the ``bin`` or ``scripts`` folder of your Python installation for an executable file named ``RepTate``. 
 
 The "intermediate" route is easy and convenient. However, it only allows you to run well tested releases of RepTate. If you want to inspect the latest version of the code, we recommend you to use the "scenic" route, explained below.
+
+Recommended on Windows: WinPython
+---------------------------------
+
+WinPython is a portable distribution of the Python programming language for Windows. It can be installed locally, without administrator privileges, and does not modify the Windows system in any way. The "dot" version is rather compact and contains all the packages needed to run RepTate.
+
+- Download the latest version of WinPython from `here <https://winpython.github.io/>`_.
+
+- Execute and install locally, preferably on a folder with no spaces and/or special characters in its name (e.g. ``C:\WinPython``).
+
+- Go to the ``WinPython`` folder and double-click on the ``WinPython Command Prompt.exe`` file. This will open a command prompt from which you can access python and install RepTate via ``pip install RepTate``. The pip program (*package installer for Python*) will take care of installing all the necessary packages to get RepTate running.
+
+- From the command prompt, try launching RepTate application. There are two options for this: 
+
+    - From the python command prompt, run ``python -m RepTate``.
+
+    - Simply run ``RepTate.exe``.
 
 The "scenic route"
 ==================

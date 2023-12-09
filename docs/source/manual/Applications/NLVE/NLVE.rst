@@ -12,4 +12,3 @@
     general
     Theory/theory
     Tutorial/tutorialGUINLVE
-    Tutorial/tutorialCLNLVE

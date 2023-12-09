@@ -54,26 +54,26 @@ Views
 
 Log(aT)
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewLogaT()
    
 aT
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewaT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewaT()
    
 Log(bT)
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewLogbT()
    
 bT
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewbT()
    
 Log(aT, bT)
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaTbT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewLogaTbT()
    
 Log(aT) vs 1/T (Kelvin)
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTSFactors.BaseApplicationTTSFactors.viewLogaT_invT()
+.. automethod:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors.viewLogaT_invT()
    
 .. todo:: Complete the views

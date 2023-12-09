@@ -57,7 +57,7 @@ Views
 
 log(G',G"(w))
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogG1G2()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogG1G2()
    
 .. image:: images/TTS_logG1G2.png
     :width: 45%
@@ -66,7 +66,7 @@ log(G',G"(w))
 
 G',G"(w)
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewG1G2()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewG1G2()
 
 .. image:: images/TTS_G1G2.png
     :width: 45%
@@ -74,7 +74,7 @@ G',G"(w)
 
 etastar
 ----------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewEtaStar()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewEtaStar()
 
 .. image:: images/TTS_etastar.png
     :width: 45%
@@ -82,7 +82,7 @@ etastar
 
 logetastar
 ----------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogEtaStar()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogEtaStar()
 
 .. image:: images/TTS_logetastar.png
     :width: 45%
@@ -90,7 +90,7 @@ logetastar
 
 delta    
 ----------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewDelta()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewDelta()
 
 .. image:: images/TTS_delta.png
     :width: 45%
@@ -98,7 +98,7 @@ delta
 
 tan(delta)
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewTanDelta()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewTanDelta()
 
 .. image:: images/TTS_tandelta.png
     :width: 45%
@@ -106,7 +106,7 @@ tan(delta)
 
 log(tan(delta))
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogTanDelta()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogTanDelta()
 
 .. image:: images/TTS_logtandelta.png
     :width: 45%
@@ -114,7 +114,7 @@ log(tan(delta))
     
 log(G*)
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogGstar()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogGstar()
 
 .. image:: images/TTS_logGstar.png
     :width: 45%
@@ -122,7 +122,7 @@ log(G*)
 
 log(tan(delta),G*)
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogtandeltaGstar()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogtandeltaGstar()
 
 .. image:: images/TTS_logtandeltaGstar.png
     :width: 45%
@@ -130,7 +130,7 @@ log(tan(delta),G*)
 
 delta(G*)
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewdeltatanGstar()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewdeltatanGstar()
 
 .. image:: images/TTS_deltaGstar.png
     :width: 45%
@@ -138,7 +138,7 @@ delta(G*)
 
 J',J"(w)
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewJ1J2()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewJ1J2()
 
 .. image:: images/TTS_J1J2.png
     :width: 45%
@@ -146,7 +146,7 @@ J',J"(w)
 
 Cole-Cole
 ----------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewColeCole()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewColeCole()
 
 .. image:: images/TTS_ColeCole.png
     :width: 45%
@@ -154,7 +154,7 @@ Cole-Cole
 
 log(G')
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogG1()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogG1()
 
 .. image:: images/TTS_logG1.png
     :width: 45%
@@ -163,7 +163,7 @@ log(G')
 
 G'
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewG1()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewG1()
 
 .. image:: images/TTS_G1.png
     :width: 45%
@@ -171,7 +171,7 @@ G'
 
 log(G")
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogG2()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogG2()
 
 .. image:: images/TTS_logG2.png
     :width: 45%
@@ -180,7 +180,7 @@ log(G")
 
 G"
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewG2()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewG2()
 
 .. image:: images/TTS_G2.png
     :width: 45%
@@ -188,7 +188,7 @@ G"
 
 log(G',G"(w),tan(delta))
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationTTS.BaseApplicationTTS.viewLogG1G2tandelta()
+.. automethod:: RepTate.applications.ApplicationTTS.ApplicationTTS.viewLogG1G2tandelta()
 
 .. image:: images/TTS_logG1G2tandelta.png
     :width: 45%

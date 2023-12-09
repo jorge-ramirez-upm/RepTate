@@ -10,38 +10,24 @@ Basic Classes
 
 The following scheme shows the class inheritance diagram of the most imporatant classes in RepTate. Most of them are children of the CmdBase class. In the diagram:
 
-   - Empty ellipses represent **core classes**. Their source code can be found in the ``code`` folder and are they provide the basic functionality to work from the command line (CL version).
-   
-            - Grey filled rounded boxes represent the **gui classes**. Each core class has a gui counterpart. Each gui class is derived from a core class and a PyQt object (either QWidget or QMainWindow).
+   - Empty ellipses represent **core classes**. Their source code can be found in the ``core`` folder and are they provide the basic functionality.
 
-   - Green filled boxes represent **PyQt5** classes. Many PyQt5 classes are used within the RepTate code. In the diagram, only two of the most important are shown.
+   - Grey filled rounded boxes represent the RepTate central **GUI classes**. Each GUI class is derived from a PyQt object (either QWidget or QMainWindow).
 
-   - Arrows represent inheritance. The arrow goes **from the parent class to the child class**.
+   - Green filled boxes represent **PySide6** classes. Many PySide6 classes are used within the RepTate code. In the diagram, only two of the most important are shown.
+
+   - Green arrows represent inheritance. The arrow goes **from the parent class to the child class**.
+
+   - Red arrows represent **composition**. The arrow goes **from the container class to the contained class**.
 
 .. graphviz::
 
    digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
-      "ApplicationManager" [href="../developers/CodeCoreCL.html#applicationmanager", target="_top"]
-      "DataSet" [href="../developers/CodeCoreCL.html#dataset", target="_top"]
-      "Theory" [href="../developers/CodeCoreCL.html#theory", target="_top"]
-      "Tool" [href="../developers/CodeCoreCL.html#tool", target="_top"]
-      "CmdBase" -> "Application";
-      "CmdBase" -> "ApplicationManager";
-      "CmdBase" -> "DataSet";
-      "CmdBase" -> "Theory";
-      "CmdBase" -> "Tool";
       "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top", shape="box", style="rounded,filled"]
       "QApplicationManager" [href="../developers/CodeCoreGUI.html#qapplicationmanager", target="_top", shape="box", style="rounded,filled"]
       "QDataSet" [href="../developers/CodeCoreGUI.html#qdataset", target="_top", shape="box", style="rounded,filled"]
       "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top", shape="box", style="rounded,filled"]
       "QTool" [href="../developers/CodeCoreGUI.html#qtool", target="_top", shape="box", style="rounded,filled"]
-      "Application" -> "QApplicationWindow";
-      "ApplicationManager" -> "QApplicationManager";
-      "DataSet" -> "QDataSet";
-      "Theory" -> "QTheory";
-      "Tool" -> "QTool";
       "QWidget" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qt-5/qwidget.html", target="_top", style="filled"]
       "QMainWindow" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qt-5/qmainwindow.html", target="_top", style="filled"]
       "QWidget" -> "QApplicationWindow" [color=green];
@@ -49,186 +35,28 @@ The following scheme shows the class inheritance diagram of the most imporatant 
       "QWidget" -> "QTheory" [color=green];
       "QWidget" -> "QTool" [color=green];
       "QMainWindow" -> "QApplicationManager" [color=green];
-   }
-
-``CmdBase`` provides the basic functionality to operate on the command line (CL). RepTate was built first as a CL application and this hierarchical class structure is a reminder of that. The Graphic User Interface (GUI) version of the classes are children of the corresponding CL versions and QWidget class from PyQt (except the QApplicationManager, which is derived from QMainWindow).
-
-Applications
-------------
-
-When developing a new application, it is important to keep in mind the class hierarchical structure of application classes in RepTate. In the following scheme, an example diagram of the class inheritance a particular application (**LVE**) is shown). In the diagram:
-
-   - All classes represented by an empty ellipse are CL classes. They must provide the basic functionality of the class (everything that the class needs to work during a CL or a batch session of RepTate). 
-
-   - Classes represented by a filled rounded box are gui classes. They must provide all the GUI functionality of the class (buttons, menus, special features, etc). Simple applications will inherit all the needed GUI functionality from **QApplicationWindow**. More advanced apps will need special implementation of advanced features. 
-
-   - Classes represented by red empty boxes are **metaclasses**. Essentially, it is a class with no functionality. Its only purpose is to select which of the two versions of the application (either CL or GUI) is created, depending on the particular context. 
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
-      "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top", shape="box", style="rounded,filled"]
-      "ApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top", shape=box,color=red]
-	   "BaseApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top"]
-	   "CLApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top"]
-	   "GUIApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Application";
-      "Application" -> "QApplicationWindow";
-      "QApplicationWindow" -> "GUIApplicationLVE";
-      "Application" -> "CLApplicationLVE";
-      "BaseApplicationLVE" -> "GUIApplicationLVE";
-      "BaseApplicationLVE" -> "CLApplicationLVE";
-      "CmdBase" -> "ApplicationLVE"
-      "ApplicationLVE" -> "CLApplicationLVE" [style=dotted, label="CL", color=red, fontcolor=red];
-      "ApplicationLVE" -> "GUIApplicationLVE" [style=dotted, label="GUI", color=red, fontcolor=red];
-   }
-
-Note for Victor
-^^^^^^^^^^^^^^^
-
-I don't feel very comfortable with this hieararchy for the following reasons:
-
-   - ApplicationLVE is a child of CmdBase but uses none of its functionality. Application LVE is just a metaclass that decides which is the right instance to create, depending on the case (CL or GUI).
-   - BaseApplicationLVE uses functionality of Application but it is not a children of it. In fact, VSCode and other editors complain that some of the members of BaseApplicationLVE do not exist. 
-   
-I never understood well how this structure could work, but the fact is that it does and it was a brilliant solution at the time. In fact, I consider this to be one of the biggest pillars upon which we built RepTate. It was fully your solution, so I want to discuss it with you before applying any changes to this.
-
-Following the considerations above, I suggest the following new inheritance relation:
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Application" [href="../developers/CodeCoreCL.html#application", target="_top"]
-      "QApplicationWindow" [href="../developers/CodeCoreGUI.html#qapplicationwindow", target="_top", shape="box", style="rounded,filled"]
-      "ApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top", shape=box,color=red]
-	   "BaseApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top"]
-	   "CLApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top"]
-	   "GUIApplicationLVE" [href="../developers/CodeApplications.html#applicationlve", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Application";
-      "Application" -> "QApplicationWindow";
-      "QApplicationWindow" -> "GUIApplicationLVE";
-      "Application" -> "BaseApplicationLVE";
-      "BaseApplicationLVE" -> "CLApplicationLVE";
-      "BaseApplicationLVE" -> "GUIApplicationLVE";
-      "ApplicationLVE" -> "CLApplicationLVE" [style=dotted, label="CL", color=red, fontcolor=red];
-      "ApplicationLVE" -> "GUIApplicationLVE" [style=dotted, label="GUI", color=red, fontcolor=red];
-   }
-
-
-Now, the dependencies are clear, and all classes that need to use functionality from another are children of it. ApplicationLVE does not need to be the child of any class because it simply does not use any functionality. It is just a Metaclass. I've tried this implementation for one of the Applications and it seems to work. However, before applying this structure to the overall code, I'd like to know what you think about it. In any case, if I ever try to implement this, I'll do it in a separate branch that we will test thoroughly before merging it to the main.
-
-
-Theories
---------
-
-Example diagram of the class inheritance of one of the Theories
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Theory" [href="../developers/CodeCoreCL.html#theory", target="_top"]
-      "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top", shape="box", style="rounded,filled"]
-      "TheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top", shape=box, color=red]
-      "BaseTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
-      "CLTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
-      "GUITheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Theory";
-      "Theory" -> "QTheory";
-      "QTheory" -> "GUITheoryPolynomial";
-      "Theory" -> "CLTheoryPolynomial";
-      "BaseTheoryPolynomial" -> "GUITheoryPolynomial";
-      "BaseTheoryPolynomial" -> "CLTheoryPolynomial";
-      "CmdBase" -> "TheoryPolynomial"
-      "TheoryPolynomial" -> "CLTheoryPolynomial" [style=dotted, label="CL", color=red, fontcolor=red];
-      "TheoryPolynomial" -> "GUITheoryPolynomial" [style=dotted, label="GUI", color=red, fontcolor=red];
-   }
-
-Note for Victor regarding theories
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Using a similar reasoning as with Applications, I suggest the following new structure:
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Theory" [href="../developers/CodeCoreCL.html#theory", target="_top"]
-      "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top", shape="box", style="rounded,filled"]
-      "TheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top", shape=box, color=red]
-      "BaseTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
-      "CLTheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top"]
-      "GUITheoryPolynomial" [href="../developers/CodeTheories.html#theorybasic", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Theory";
-      "Theory" -> "QTheory";
-      "QTheory" -> "GUITheoryPolynomial";
-      "Theory" -> "BaseTheoryPolynomial";
-      "BaseTheoryPolynomial" -> "CLTheoryPolynomial";
-      "BaseTheoryPolynomial" -> "GUITheoryPolynomial";
-      "TheoryPolynomial" -> "CLTheoryPolynomial" [style=dotted, label="CL", color=red, fontcolor=red];
-      "TheoryPolynomial" -> "GUITheoryPolynomial" [style=dotted, label="GUI", color=red, fontcolor=red];
-   }
-
-
-
-Tools
------
-
-Example diagram of the class inheritance relation for one of the Tools:
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Tool" [href="../developers/CodeCoreCL.html#tool", target="_top"]
-      "QTool" [href="../developers/CodeCoreGUI.html#qtool", target="_top", shape="box", style="rounded,filled"]
-      "ToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top", shape=box, color=red]
-      "BaseToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top"]
-      "CLToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top"]
-      "GUIToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Tool";
-      "Tool" -> "QTool";
-      "QTool" -> "GUIToolBounds";
-      "Tool" -> "CLToolBounds";
-      "BaseToolBounds" -> "GUIToolBounds";
-      "BaseToolBounds" -> "CLToolBounds";
-      "CmdBase" -> "ToolBounds"
-      "ToolBounds" -> "CLToolBounds" [style=dotted, label="CL", color=red, fontcolor=red];
-      "ToolBounds" -> "GUIToolBounds" [style=dotted, label="GUI", color=red, fontcolor=red];
-   }
-
-Note for Victor regarding tools
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Using a similar reasoning as with Applications, I suggest the following new structure:
-
-.. graphviz::
-
-   digraph foo {
-      "CmdBase" [href="../developers/CodeCoreCL.html#cmdbase", target="_top"]
-      "Tool" [href="../developers/CodeCoreCL.html#tool", target="_top"]
-      "QTool" [href="../developers/CodeCoreGUI.html#qtool", target="_top", shape="box", style="rounded,filled"]
-      "ToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top", shape=box, color=red]
-      "BaseToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top"]
-      "CLToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top"]
-      "GUIToolBounds" [href="../developers/CodeTools.html#toolbounds", target="_top", shape="box", style="rounded,filled"]
-      "CmdBase" -> "Tool";
-      "Tool" -> "QTool";
-      "QTool" -> "GUIToolBounds";
-      "Tool" -> "BaseToolBounds";
-      "BaseToolBounds" -> "CLToolBounds";
-      "BaseToolBounds" -> "GUIToolBounds";
-      "ToolBounds" -> "CLToolBounds" [style=dotted, label="CL", color=red, fontcolor=red];
-      "ToolBounds" -> "GUIToolBounds" [style=dotted, label="GUI", color=red, fontcolor=red];
+      "QApplicationManager" -> "QApplicationWindow" [color=red];
+      "QApplicationWindow" -> "QDataSet" [color=red];
+      "QApplicationWindow" -> "QTool" [color=red];
+      "QDataSet" -> "QTheory" [color=red];
+      "View" [href="../developers/CodeCoreCL.html#view", target="_top"]
+      "FileType" [href="../developers/CodeCoreCL.html#filetype", target="_top"]
+      "QApplicationWindow" -> "View" [color=red];
+      "QApplicationWindow" -> "FileType" [color=red];
+      "File" [href="../developers/CodeCoreCL.html#file", target="_top"]
+      "QDataSet" -> "File" [color=red];
+      "DataTable" [href="../developers/CodeCoreCL.html#datatable", target="_top"]
+      "File" -> "DataTable" [color=red];
+      "Parameter" [href="../developers/CodeCoreCL.html#parameter", target="_top"]
+      "QTheory" -> "Parameter" [color=red];
+      "QTool" -> "Parameter" [color=red];
+      "QTheory" -> "DataTable" [color=red];
    }
 
 Container Diagrams
 ==================
 
-The structure RepTate, which can be clearly seen when running a CL or a GUI session, is also reflected in the code. Essentially:
+The structure RepTate, which can be clearly seen when running a session, is also reflected in the code. Essentially:
 
    - A RepTate session may contain one or more open applications of the same or different type (*i.e.* LVE, NLVE, LAOS, etc).
 

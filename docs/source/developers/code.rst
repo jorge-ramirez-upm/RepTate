@@ -23,15 +23,6 @@ Graphical User Interface
     :inherited-members:
     :show-inheritance:
 
-Command Line Version
---------------------
-
-.. automodule:: RepTate.CL
-    :members:
-    :undoc-members:
-    :inherited-members:
-    :show-inheritance:
-
 Materials Database
 ------------------
 

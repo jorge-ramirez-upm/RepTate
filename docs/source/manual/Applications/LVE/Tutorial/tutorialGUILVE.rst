@@ -1,6 +1,6 @@
-======================================
-LVE Tutorial: Graphical User Interface
-======================================
+============
+LVE Tutorial
+============
 
 .. contents:: Contents
     :local:

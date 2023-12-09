@@ -61,18 +61,18 @@ Views
 
 log(eta(t))
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogeta()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewLogeta()
 Ndot(t) [log-log]
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNdot
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewNdot
 
 N(t) [log-log]
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewNt
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewNt
 
 phiX(t) [log-log]
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewphiX
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewphiX
 
 Ndot(t) [log-lin]
 ---------------------
@@ -92,33 +92,33 @@ vs time :math:`t`
 
 eta(t))
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.vieweta()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.vieweta()
 
 
 log(sigma(gamma))
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaGamma()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewLogSigmaGamma()
     
 sigma(gamma)
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaGamma()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewSigmaGamma()
 
 log(sigma(t))
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewLogSigmaTime()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewLogSigmaTime()
 
     
 sigma(t)
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.viewSigmaTime()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.viewSigmaTime()
 
 
 Flow Curve
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_flowcurve()
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.view_flowcurve()
 
 Steady Nucleation
 ---------------------
-.. automethod:: RepTate.applications.ApplicationCrystal.BaseApplicationCrystal.view_steadyNuc
+.. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.view_steadyNuc
 
 .. todo:: Document the views 

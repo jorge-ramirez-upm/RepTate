@@ -1,6 +1,6 @@
-========================================
-React Tutorial: Graphical User Interface
-========================================
+==============
+React Tutorial
+==============
 
 .. |logo| image:: /app_logo/React.png
     :width: 20pt

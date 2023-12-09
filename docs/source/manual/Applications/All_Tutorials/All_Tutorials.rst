@@ -6,7 +6,6 @@ All RepTate Tutorials
    :maxdepth: 2
     
    tutorialGUI
-   tutorialCL
     
 
 

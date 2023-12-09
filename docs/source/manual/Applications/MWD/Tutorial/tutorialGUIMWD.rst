@@ -1,6 +1,6 @@
-======================================
-MWD Tutorial: Graphical User Interface
-======================================
+============
+MWD Tutorial
+============
 
 .. |logo| image:: /app_logo/MWD.png
     :width: 20pt

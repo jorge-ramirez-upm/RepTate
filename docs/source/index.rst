@@ -15,8 +15,8 @@ RepTate documentation
 =====================
 
 **RepTate** (Rheology of Entangled Polymers: Toolkit for Analysis of Theory & Experiment)
-is a free and open source software package for viewing, exchanging and analysing experimental data.
-It features a command-line interface and a graphical user interface.
+is a free and open source software package for viewing, exchanging and analysing experimental data, 
+using a modern graphical user interface.
 
 |img1| |img2|
 

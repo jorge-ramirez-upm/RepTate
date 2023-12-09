@@ -12,5 +12,4 @@
 	general	
 	Theory/theory
 	Tutorial/tutorialGUIReact
-	Tutorial/tutorialCLReact
 	

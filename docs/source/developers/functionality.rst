@@ -59,16 +59,16 @@ application file ``ApplicationTemplate.py`` that can be found in the
     replace **all** the occurrences of "Template" by "XY". For example, 
     
     .. code-block:: python
-       :lineno-start: 46
+       :lineno-start: 44
 
-        class ApplicationTemplate(CmdBase):
+        class ApplicationTemplate(QApplicationWindow):
     
     becomes
 
     .. code-block:: python
-       :lineno-start: 46
+       :lineno-start: 44
 
-        class ApplicationXY(CmdBase):
+        class ApplicationXY(QApplicationWindow):
 
 
 #.  Give a brief description of the purpose of the application, 
@@ -89,46 +89,38 @@ that are (i) file types accepted by the application, (ii) the views,
 and (iii) the theories, as defined in the :ref:`goals_section` section.
 But first, we have to let RepTate know about our new application.
 
-Edit RepTate's ``ApplicationManager``
+Edit RepTate's ``QApplicationManager``
 -------------------------------------
 
 We need to add a reference to this new application into 
-RepTate's ``ApplicationManager``, so it knows it exists. To do so:
+RepTate's ``QApplicationManager``, so it knows it exists. To do so:
 
-#.  Insert this line in the top part of the file ``core/ApplicationManager.py``,
+#.  Insert this line in the top part of the file ``gui/QsApplicationManager.py``,
     e.g.
 
     .. code-block:: python
-       :lineno-start: 56
+       :lineno-start: 77
 
-       from ApplicationXY import ApplicationXY
+       from RepTate.applications.ApplicationXY import ApplicationXY
 
-#.  Insert the following line to add an entry to the ``ApplicationManager`` dictionary
+#.  Insert the following line to add an entry to the ``QApplicationManager`` dictionary
 
     .. code-block:: python
-       :lineno-start: 115
+       :lineno-start: 155
 
        self.available_applications[ApplicationXY.appname] = ApplicationXY
 
-.. note::
-    Our new application is ready to be used in Command Line RepTate!
-
-Edit RepTate's ``QApplicationManager``
---------------------------------------
-
 In order to have our new application available in the Graphical 
-User Interface (GUI) version of RepTate (and not just available in the
-Command-Line version of RepTate), we need to create a new "button"
+User Interface (GUI), we need to create a new "button"
 that will launch our new application when clicked.
-We will edit the file ``gui/QApplicationManager.py`` in this purpose.
 
 #.  Add a button in the main RepTate tool-bar by inserting the following lines in 
     the ``__init__`` method of ``gui/QApplicationManager.py``. 
-    The icon name (filename) should correspond to the ``appmane``, here ``XY.png``. See 
+    The icon name (filename) should correspond to the ``appname``, here ``XY.png``. See 
     the section :ref:`new_icons` to create and use your onwn icon in RepTate.
 
     .. code-block:: python
-       :lineno-start: 142
+       :lineno-start: 258
 
         # ApplicationXY button
         #choose the button icon
@@ -145,18 +137,18 @@ We will edit the file ``gui/QApplicationManager.py`` in this purpose.
     add
 
     .. code-block:: python
-       :lineno-start: 149
+       :lineno-start: 266
         
         #connect button
         self.actionXY.triggered.connect(lambda: self.handle_new_app('XY'))
 
     .. warning::
-        The application name (``appname``), defined at line 79 of ``ApplicationXY.py``, should then be "XY". 
+        The application name (``appname``), defined at line 46 of ``ApplicationXY.py``, should then be "XY". 
         Additionally, the icon name defining the logo of the new application should be named "XY.png",
         see the definition of the ``handle_new_app`` method.
 
 .. note:: 
-    Our new application is ready to be used in GUI RepTate!
+    Our new application is ready to be used in RepTate!
 
 
 Note on default theories
@@ -165,7 +157,7 @@ Note on default theories
 By default, some "basic theories" are included with the application 
 (e.g. polynomial, power-law, exponential). To remove all these 
 "basic theories" from your new application, comment the following line
-in the ``__init__`` method of ``class BaseApplicationXY``
+in the ``__init__`` method of ``class ApplicationXY``
 
  .. code-block:: python
     :lineno-start: 135
@@ -187,14 +179,14 @@ To do so, we modify ``ApplicationXY.py`` as follows.
 In ``class ApplicationXY``, before ``def __new__``, add
 
 .. code-block:: python
-    :lineno-start: 53
+    :lineno-start: 48
 
     extension = "xy"  # drag and drop this extension automatically opens this application
 
-In the ``__init__`` method of ``class BaseApplicationXY`` add
+In the ``__init__`` method of ``class ApplicationXY`` add
 
 .. code-block:: python
-    :lineno-start: 120
+    :lineno-start: 86
 
     # set the type of files that ApplicationTemplate can open
     ftype = TXTColumnFile(
@@ -215,10 +207,10 @@ About the "old" view
 
 At the moment, only one view is allowed in our new ``ApplicationXY``. 
 That view is located in the ``__init__`` method of
-``class BaseApplicationXY``:
+``class ApplicationXY``:
 
 .. code-block:: python
-    :lineno-start: 95
+    :lineno-start: 62
 
     # VIEWS
     # set the views that can be selected in the view combobox
@@ -252,7 +244,7 @@ shown at the same time (similar to the React or Stress Relaxation applications),
 this number can be increased (up to 4)
 
 .. code-block:: python
-    :lineno-start: 110
+    :lineno-start: 75
     
     # set multiviews
     # default view order in multiplot views, set nplots=1 for single view
@@ -262,7 +254,7 @@ The definition of the method ``viewyx`` is
 given by
 
 .. code-block:: python
-    :lineno-start: 140
+    :lineno-start: 108
     
     def viewyx(self, dt, file_parameters):
         """Documentation"""
@@ -283,10 +275,10 @@ Definition of a new view
 To define a new view that shows :math:`x` vs :math:`\sqrt{y}`, as 
 requested in the :ref:`goals_section` section, we add a view to
 ``self.views`` dictionary. The new view is called "sqrt(y)".
-In the ``__init__`` method of ``class BaseApplicationXY``, add
+In the ``__init__`` method of ``class ApplicationXY``, add
 
 .. code-block:: python
-    :lineno-start: 110
+    :lineno-start: 74
 
     self.views['sqrt(y)'] = View(
         name='sqrt(y)',
@@ -305,10 +297,10 @@ In the ``__init__`` method of ``class BaseApplicationXY``, add
     The ``x_label`` and ``y_label`` support LaTeX-like syntax.
 
 We also need to define the new method ``view_sqrt_y``.
-In ``class BaseApplicationXY``, add the definition
+In ``class ApplicationXY``, add the definition
 
 .. code-block:: python
-    :lineno-start: 158
+    :lineno-start: 118
     
     def view_sqrt_y(self, dt, file_parameters):
         """Documentation"""
@@ -340,16 +332,16 @@ theory file ``TheoryTemplate.py`` that can be found in RepTate
     replace **all** the occurrences of "Template" by "Line". For example, 
     
     .. code-block:: python
-       :lineno-start: 45
+       :lineno-start: 42
 
-        class TheoryTemplate(CmdBase):
+        class TheoryTemplate(QTheory):
     
     becomes
 
     .. code-block:: python
-       :lineno-start: 45
+       :lineno-start: 42
 
-        class TheoryLine(CmdBase):
+        class TheoryLine(QTheory):
 
 #.  Give a brief description of the purpose of the application, 
     e.g. " Theory fitting a line to the data".
@@ -377,29 +369,29 @@ We need to add a reference to this new theory into
 ``ApplicationXY.py``, so it knows it exists. To do so:
 
 #.  Insert the following line in the ``__init__`` method of
-    ``class BaseApplicationXY``, after the "``# IMPORT THEORIES``" comment
+    ``class ApplicationXY``, after the "``# IMPORT THEORIES``" comment
 
     .. code-block:: python
-       :lineno-start: 89
+       :lineno-start: 54
         
         # IMPORT THEORIES
         # Import theories specific to the Application e.g.:
-        from TheoryLine import TheoryLine
+        from RepTate.theories.TheoryLine import TheoryLine
 
     .. hint::
         We choose to place the theories ``import``
-        inside the ``__init__`` method of ``class BaseApplicationXY`` 
+        inside the ``__init__`` method of ``class ApplicationXY`` 
         rather than in the very top of the file
         ``ApplicationXY.py`` as this prevents RepTate from loading
         all theories at start. Instead, theories are loaded only when an application
         using them is opened.
 
 #.  Insert the following line, also in the ``__init__`` method of
-    ``class BaseApplicationXY``, after the ``# THEORIES``, and before
+    ``class ApplicationXY``, after the ``# THEORIES``, and before
     ``self.add_common_theories()``, the line
 
     .. code-block:: python
-       :lineno-start: 134
+       :lineno-start: 102
 
         self.theories[TheoryLine.thname] = TheoryLine
 
@@ -416,9 +408,9 @@ calculates the theory values.
     online RepTate documentation (`reptate.readthedocs <http://reptate.readthedocs.io/>`_).
 
     .. code-block:: python
-       :lineno-start: 46
+       :lineno-start: 42
 
-        class TheoryLine(CmdBase):
+        class TheoryLine(QTheory):
             """Fit a straight line. 
             
             * **Function**
@@ -432,11 +424,11 @@ calculates the theory values.
             """
 
 #.  To define the theory parameters, :math:`a` and :math:`b`, we modify the
-    ``__init__`` method of ``class BaseTheoryLine`` to have only these two
+    ``__init__`` method of ``class TheoryLine`` to have only these two
     parameter definitions
 
     .. code-block:: python
-       :lineno-start: 95
+       :lineno-start: 60
 
         self.parameters['a'] = Parameter(
             name='a',
@@ -462,10 +454,10 @@ calculates the theory values.
       be optimised but is not by default.
 
 
-#.  Modify the method ``calculate`` of ``class BaseTheoryLine``
+#.  Modify the method ``calculate`` of ``class TheoryLine``
 
     .. code-block:: python
-       :lineno-start: 143
+       :lineno-start: 89
 
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -482,8 +474,8 @@ calculates the theory values.
         - The file type of ``ApplicationXY`` defined in section :ref:`file_type`
           tells us that there are **two** columns in the data files. Hence, the theory
           data also have two columns to populate. For example of application/theory using
-          more than two data columns, see ``class BaseApplicationLVE`` of ``ApplicationLVE.py`` 
-          and ``class BaseTheoryMaxwellModesFrequency``
+          more than two data columns, see ``class ApplicationLVE`` of ``ApplicationLVE.py`` 
+          and ``class TheoryMaxwellModesFrequency``
           of ``TheoryMaxwellModes.py``.
         - The information from the data file header, in our example ``date`` and
           ``T``, can be called via, e.g. ``T = float(f.file_parameters["T"])``.
@@ -519,7 +511,7 @@ a button icon for instance, we need to
     
     ..  code-block:: bash
         
-        $ pyrcc5 MainWindow.qrc -o MainWindow_rc.py
+        $ rcc MainWindow.qrc -o MainWindow_rc.py
 
 .. note::
     Your new icon ``my_favourite_icon.png`` is now ready to be used

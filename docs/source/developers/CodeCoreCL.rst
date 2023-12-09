@@ -1,16 +1,8 @@
-Core classes (Command Line)
-===========================
+Core classes
+============
 
 .. toctree::
    :maxdepth: 2
-
-CmdBase
--------
-
-.. automodule:: RepTate.core.CmdBase.CmdBase
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 DataTable
 ---------

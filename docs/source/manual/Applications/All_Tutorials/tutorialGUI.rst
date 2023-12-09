@@ -1,8 +1,8 @@
-====================
-RepTate GUI Tutorial
-====================
+================
+RepTate Tutorial
+================
 
-Examples of use of RepTate using the Graphical User Interface.
+Examples of use of RepTate.
 
 .. toctree::
    :maxdepth: 2

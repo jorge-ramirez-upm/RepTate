@@ -1,6 +1,6 @@
-==============================================================
-Flow-Induced Crystallizaion Tutorial: Graphical User Interface
-==============================================================
+====================================
+Flow-Induced Crystallizaion Tutorial
+====================================
 
 .. contents:: Contents
     :local:

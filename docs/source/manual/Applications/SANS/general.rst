@@ -53,7 +53,7 @@ Views
 log(I(q))
 ----------------------------------------
 
-.. automethod:: RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewLogSANS()
+.. automethod:: RepTate.applications.ApplicationSANS.ApplicationSANS.viewLogSANS()
 
 .. image:: images/SANS_LogIq.png
     :width: 45%
@@ -63,7 +63,7 @@ log(I(q))
 I(q)
 ---------------------------
 
-.. automethod:: RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewSANS()
+.. automethod:: RepTate.applications.ApplicationSANS.ApplicationSANS.viewSANS()
 
 .. image:: images/SANS_Iq.png
     :width: 45%
@@ -72,7 +72,7 @@ I(q)
 Zimm
 ------------------------------------------------
 
-.. automethod:: RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewZimm()
+.. automethod:: RepTate.applications.ApplicationSANS.ApplicationSANS.viewZimm()
 
 .. image:: images/SANS_Zimm.png
     :width: 45%
@@ -81,7 +81,7 @@ Zimm
 Kratky
 ---------------------------------------------------
 
-.. automethod:: RepTate.applications.ApplicationSANS.BaseApplicationSANS.viewKratky()
+.. automethod:: RepTate.applications.ApplicationSANS.ApplicationSANS.viewKratky()
 
 .. image:: images/SANS_Kratky.png
     :width: 45%

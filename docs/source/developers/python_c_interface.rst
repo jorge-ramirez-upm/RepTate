@@ -149,7 +149,7 @@ imports the Python Ctypes object we will be needing.
 
 defines the path of our library file, and ``sys.platform`` returns either 
 ``win32``, ``darwin`` or ``linux``. Note that the path is relative to the path of 
-``RepTate.py`` or ``RepTateCL.py``.
+``RepTate.py``.
 
 ::
 

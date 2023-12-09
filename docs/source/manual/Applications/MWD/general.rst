@@ -84,7 +84,7 @@ Views
 
 log-lin
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationMWD.BaseApplicationMWD.view_WM()
+.. automethod:: RepTate.applications.ApplicationMWD.ApplicationMWD.view_WM()
 
 (Molecular weight in logarithmic scale)
 
@@ -94,7 +94,7 @@ log-lin
 
 log-log
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationMWD.BaseApplicationMWD.view_logWM()
+.. automethod:: RepTate.applications.ApplicationMWD.ApplicationMWD.view_logWM()
 
 .. image:: images/MWD_log-log.png
     :width: 45%
@@ -102,7 +102,7 @@ log-log
 
 lin-lin
 --------------------------------
-.. automethod:: RepTate.applications.ApplicationMWD.BaseApplicationMWD.view_WM()
+.. automethod:: RepTate.applications.ApplicationMWD.ApplicationMWD.view_WM()
 
 .. image:: images/MWD_lin-lin.png
     :width: 45%

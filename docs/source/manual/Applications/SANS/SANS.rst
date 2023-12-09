@@ -11,6 +11,5 @@
 	
     general
     Theory/theory
-    Tutorial/tutorialCLSANS
     Tutorial/tutorialGUISANS
 	

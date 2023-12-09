@@ -1,6 +1,6 @@
-======================================
-TTS Tutorial: Graphical User Interface
-======================================
+============
+TTS Tutorial
+============
 
 .. contents:: Contents
     :local:

@@ -7,7 +7,7 @@ Here we give a detailed description of all applications, including the following
 	- A general description (purpose, and type of files)
 	- Views included, with examples
 	- Theories included, with manual
-	- Tutorials for the GUI and CL version
+	- Tutorials
 
 The current version of RepTate includes the following applications:
 
