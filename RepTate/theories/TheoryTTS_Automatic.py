@@ -244,7 +244,6 @@ class TheoryTTSShiftAutomatic(QTheory):
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         QMessageBox.information(self, "Saved Files", msg)
 
-
     def TheoryTTSShiftAutomatic(self, f=None):
         """Calculate the theory"""
         ft = f.data_table
@@ -266,7 +265,7 @@ class TheoryTTSShiftAutomatic(QTheory):
     def get_cases(self):
         """Get all different samples in the dataset
 
-           Samples are different if Mw, Mw2, phi, phi2 are different
+        Samples are different if Mw, Mw2, phi, phi2 are different
         """
         nfiles = len(self.parent_dataset.files)
         Mw = []
@@ -317,7 +316,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         view = self.parent_dataset.parent_application.current_view
         nfiles = len(self.parent_dataset.files)
         file_error = np.zeros(nfiles)
-        file_points = np.zeros(nfiles, dtype=np.int)
+        file_points = np.zeros(nfiles, dtype=int)
         xth = []
         yth = []
         xmin = np.zeros((nfiles, view.n))
