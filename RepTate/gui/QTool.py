@@ -39,8 +39,7 @@ Module that defines the GUI counterpart of the class Tool.
 import sys
 import numpy as np
 
-from PySide6.QtUiTools  import loadUiType
-#from RepTate.core.Tool import Tool
+from PySide6.QtUiTools import loadUiType
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import (
     QWidget,
@@ -50,7 +49,7 @@ from PySide6.QtWidgets import (
     QHeaderView,
     QMessageBox,
     QToolBar,
-    QAbstractItemView
+    QAbstractItemView,
 )
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
@@ -61,24 +60,26 @@ from collections import OrderedDict
 import logging
 from html.parser import HTMLParser
 
+
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
+
     def __init__(self):
         self.reset()
         self.strict = False
-        self.convert_charrefs= True
+        self.convert_charrefs = True
         self.fed = []
 
     def handle_data(self, d):
         self.fed.append(d)
 
     def get_data(self):
-        return ''.join(self.fed)
+        return "".join(self.fed)
 
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app 
+    # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
     PATH = sys._MEIPASS
 else:
@@ -87,7 +88,7 @@ sys.path.append(PATH)
 Ui_ToolTab, QWidget = loadUiType(join(PATH, "Tooltab.ui"))
 
 
-#class QTool(Ui_ToolTab, QWidget, Tool):
+# class QTool(Ui_ToolTab, QWidget, Tool):
 class QTool(QWidget, Ui_ToolTab):
     """Abstract class to describe a tool"""
 
@@ -101,13 +102,12 @@ class QTool(QWidget, Ui_ToolTab):
 
     print_signal = Signal(str)
 
-
     def __init__(self, name="QTool", parent_app=None):
         """**Constructor**"""
         QWidget.__init__(self)
         Ui_ToolTab.__init__(self)
-        #Tool.__init__(self, name=name, parent_app=parent_app)
-        #super().__init__(name=name, parent_app=parent_app)
+        # Tool.__init__(self, name=name, parent_app=parent_app)
+        # super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
 
         # COPY FROM TOOL
@@ -125,7 +125,7 @@ class QTool(QWidget, Ui_ToolTab):
         )
         self.logger.debug("New " + self.toolname + " Tool")
         # np.seterr(all="call")
-        #np.seterr(all="ignore")
+        # np.seterr(all="ignore")
         np.seterrcall(self.write)
 
         self.do_cite("")
@@ -198,6 +198,7 @@ class QTool(QWidget, Ui_ToolTab):
     def update_parameter_table(self):
         """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
         pass
+
     # END COPY FROM TOOL
 
     # COPY FROM TOOL
@@ -228,11 +229,12 @@ class QTool(QWidget, Ui_ToolTab):
 
     def clean_graphic_stuff(self):
         pass
+
     # END COPY FROM TOOL
 
     # COPY FROM TOOL
     def do_cite(self, line):
-        """Print citation information """
+        """Print citation information"""
         if len(self.citations) > 1:
             for i in range(len(self.citations)):
                 self.Qprint(
@@ -324,6 +326,7 @@ class QTool(QWidget, Ui_ToolTab):
         except ValueError as e:
             print("In set_param_value:", e)
             return "", False
+
     # END COPY FROM TOOL
 
     # COPY FROM TOOL
@@ -370,6 +373,7 @@ class QTool(QWidget, Ui_ToolTab):
             self.toolTextBox.verticalScrollBar().maximum()
         )
         self.toolTextBox.moveCursor(QTextCursor.End)
+
     # END COPY FROM TOOL
 
     def toolTextBox_context_menu(self):
@@ -386,7 +390,7 @@ class QTool(QWidget, Ui_ToolTab):
         menu.exec_(QCursor.pos())
 
     def change_toolTextBox_fontsize(self, factor):
-        """Change the toolTextBox font size by a factor `factor` """
+        """Change the toolTextBox font size by a factor `factor`"""
         font = self.toolTextBox.currentFont()
         if factor < 1:
             font_size = ceil(font.pointSize() * factor)

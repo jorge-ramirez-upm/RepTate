@@ -57,7 +57,6 @@ from PySide6.QtWidgets import (
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 
-# from RepTate.core.ApplicationManager import ApplicationManager
 from RepTate.core.File import File
 
 # from RepTate.gui.QAboutReptate import AboutWindow

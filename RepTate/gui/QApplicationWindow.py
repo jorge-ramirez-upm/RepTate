@@ -92,8 +92,6 @@ from RepTate.core.MultiView import MultiView, PlotOrganizationType
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
 from RepTate.gui.QDataSet import ColorMode, SymbolMode, ThLineMode
 
-# from RepTate.core.CmdBase import CmdBase
-# from RepTate.core.Application import Application
 from RepTate.core.DraggableArtists import DragType, DraggableSeries, DraggableNote
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 from collections import OrderedDict
