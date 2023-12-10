@@ -90,7 +90,7 @@ and (iii) the theories, as defined in the :ref:`goals_section` section.
 But first, we have to let RepTate know about our new application.
 
 Edit RepTate's ``QApplicationManager``
--------------------------------------
+--------------------------------------
 
 We need to add a reference to this new application into 
 RepTate's ``QApplicationManager``, so it knows it exists. To do so:

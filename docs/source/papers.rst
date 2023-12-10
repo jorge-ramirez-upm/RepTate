@@ -7,6 +7,6 @@ The following scientific works cite RepTate.
 .. rubric:: References
 
 .. bibliography::  papers.bib
-    amangeldiIterativeApproachParameter2021
-    xuRheologicalMechanicalStudy2023
+    :style: unsrt
+    :notcited:
 	

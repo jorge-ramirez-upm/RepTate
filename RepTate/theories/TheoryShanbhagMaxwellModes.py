@@ -568,7 +568,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         """
         Function: InitializeH(input)
 
-        Input:  Gexp    = 2n*1 vector [G';G"],
+        Input:  Gexp    = 2n\*1 vector [G';G"],
                 s       = relaxation modes,
                 kernMat = matrix for faster kernel evaluation
                 G0      = optional; if plateau is nonzero

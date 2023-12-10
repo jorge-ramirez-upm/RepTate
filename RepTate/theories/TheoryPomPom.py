@@ -67,13 +67,15 @@ class TheoryPomPom(QTheory):
         \\exp\\left( \\nu^* (\\lambda_i - 1) \\right),
         
     where, for each mode :math:`i`:
+
         - :math:`G_i`: weight of mode :math:`i`
         - :math:`\\tau_{\\mathrm b, i}`: backbone orientation relaxation time of mode :math:`i`
         - :math:`\\tau_{\\mathrm s, i}`: backbone stretch relaxation time of mode :math:`i`
         - :math:`\\nu_i^* = \\dfrac{2}{q_i - 1}`
         - :math:`q_i`: the number of dangling arms of each mode
 
-   * **Parameters**
+   - **Parameters**
+   
             - ``q_i`` :math:`\\equiv q_i`: the number of dangling arms of each mode
             - ``ratio_i`` :math:`\\equiv \\dfrac{\\tau_{\\mathrm b, i}}{\\tau_{\\mathrm s, i}}`:
             the ratio of orientation to stretch relaxation times of each mode
