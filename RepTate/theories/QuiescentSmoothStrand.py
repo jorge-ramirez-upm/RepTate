@@ -6,7 +6,6 @@ Created on Fri Nov 30 13:15:57 2018
 """
 
 import math
-import scipy
 from scipy import optimize
 
 
@@ -28,13 +27,13 @@ def wholeLandscape(NT, E0_param, mus_param, Kappa0_param):
 
 def Freequi(NS, NT):
     LL = NT / NS
-    kappa = Kappa0 + 1.0 / LL ** 2
+    kappa = Kappa0 + 1.0 / LL**2
 
     FF = (
         -0.5 * (NS - 1) * math.log(2.0 * math.pi / kappa) + 0.5 * math.log(NS) - NT * E0
     )
     # surface terms
-    aspect = NS ** 3 / NT ** 2 / arsq
+    aspect = NS**3 / NT**2 / arsq
     if aspect < 1:
         ep = math.sqrt(1.0 - aspect)
         Stil = 2.0 * NS + 2.0 * ar * NT * math.asin(ep) / ep / math.sqrt(NS)
@@ -42,7 +41,7 @@ def Freequi(NS, NT):
         eps0 = math.sqrt(1.0 - 1.0 / aspect)
         Stil = (
             2.0 * NS
-            + arsq * NT ** 2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS ** 2
+            + arsq * NT**2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS**2
         )
     else:
         Stil = 2.0 * NS + 2.0 * ar * NT / math.sqrt(NS)
@@ -51,7 +50,7 @@ def Freequi(NS, NT):
 
 
 def Free1qui(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Freequi, bounds=(0.00001, 0.999999 * NT), args=(NT), method="bounded"
     )
     # print res
@@ -59,7 +58,7 @@ def Free1qui(NT):
 
 
 def Freeflucqui(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Freequi, bounds=(0.0000001, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x

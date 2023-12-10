@@ -47,7 +47,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 from openpyxl import load_workbook
-import xlrd
+from xlrd import open_workbook
 import RepTate
 
 if getattr(sys, "frozen", False):
@@ -397,7 +397,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 self.wb = load_workbook(filename=self.filepath, data_only=True)
                 self.sheet_names = self.wb.sheetnames
             else:
-                self.wb = xlrd.open_workbook(self.filepath)
+                self.wb = open_workbook(self.filepath)
                 self.sheet_names = self.wb.sheet_names()
         except:
             # password protected?

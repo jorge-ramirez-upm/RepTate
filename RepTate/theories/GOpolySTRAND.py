@@ -6,12 +6,12 @@ Created on Fri Nov 30 13:15:57 2018
 """
 
 import math
-import scipy
 
 # import matplotlib.pyplot as plt
 from scipy import optimize
 
 # import pandas as pa
+
 
 def afun(A, LL):
     sum1 = 0.0
@@ -19,14 +19,14 @@ def afun(A, LL):
     for i in range(numc):
         tem = 1.0 - A * edf[i]
         sum1 += phi[i] * edf[i] / tem
-        sum2 += phi[i] * edf[i] / tem ** 2
+        sum2 += phi[i] * edf[i] / tem**2
     tem = LL * sum1 / sum2 - 1.0
     return tem
 
 
 def Free2(NS, NT):
     LL = NT / NS
-    A = scipy.optimize.brenth(afun, 0, iedfmax, args=(LL))
+    A = optimize.brenth(afun, 0, iedfmax, args=(LL))
     sum1 = 0.0
     for i in range(numc):
         tem = 1.0 - A * edf[i]
@@ -52,7 +52,7 @@ def Free2(NS, NT):
         )
     FF = NT * sum1 - NS * math.log(LL) - NT * E0
     # surface terms
-    aspect = NS ** 3 / NT ** 2 / arsq
+    aspect = NS**3 / NT**2 / arsq
     if aspect < 1:
         ep = math.sqrt(1.0 - aspect)
         Stil = 2.0 * NS + 2.0 * ar * NT * math.asin(ep) / ep / math.sqrt(NS)
@@ -60,7 +60,7 @@ def Free2(NS, NT):
         eps0 = math.sqrt(1.0 - 1.0 / aspect)
         Stil = (
             2.0 * NS
-            + arsq * NT ** 2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS ** 2
+            + arsq * NT**2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS**2
         )
     else:
         Stil = 2.0 * NS + 2.0 * ar * NT / math.sqrt(NS)
@@ -72,7 +72,7 @@ def Freequi(NS, NT):
     LL = NT / NS
     FF = -NS * math.log(LL) - NT * E0 + (NT - NS) * math.log(1.0 - 1.0 / LL)
     # surface terms
-    aspect = NS ** 3 / NT ** 2 / arsq
+    aspect = NS**3 / NT**2 / arsq
     if aspect < 1:
         ep = math.sqrt(1.0 - aspect)
         Stil = 2.0 * NS + 2.0 * ar * NT * math.asin(ep) / ep / math.sqrt(NS)
@@ -80,7 +80,7 @@ def Freequi(NS, NT):
         eps0 = math.sqrt(1.0 - 1.0 / aspect)
         Stil = (
             2.0 * NS
-            + arsq * NT ** 2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS ** 2
+            + arsq * NT**2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS**2
         )
     else:
         Stil = 2.0 * NS + 2.0 * ar * NT / math.sqrt(NS)
@@ -89,14 +89,14 @@ def Freequi(NS, NT):
 
 
 def Free1(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Free2, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     return res.fun
 
 
 def Freefluc(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Free2, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x
@@ -109,14 +109,14 @@ def Freefluc(NT):
 
 
 def Free1qui(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Freequi, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     return res.fun
 
 
 def Freeflucqui(NT):
-    res = scipy.optimize.minimize_scalar(
+    res = optimize.minimize_scalar(
         Freequi, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x

@@ -6,9 +6,10 @@ Created on Fri Nov 30 13:15:57 2018
 """
 
 import math
-import scipy
+
 from scipy import optimize
 import numpy as np
+
 
 def wfun(phi, Df, P, B, NS):
     return (
@@ -16,7 +17,7 @@ def wfun(phi, Df, P, B, NS):
         * phi
         / (
             NS
-            + (Qs - NS) * B * np.exp(-LL * Df - Df ** 2 / 2.0 / kappa + Df / kappa * P)
+            + (Qs - NS) * B * np.exp(-LL * Df - Df**2 / 2.0 / kappa + Df / kappa * P)
         )
     )
 
@@ -38,9 +39,9 @@ def Free2(Ns, NT):
     NS = Ns[0]
     LL = NT / NS
     Qs = Qs0 * NS
-    kappa = Kappa0 + 1.0 / LL ** 2
+    kappa = Kappa0 + 1.0 / LL**2
 
-    sol = scipy.optimize.root(
+    sol = optimize.root(
         afun,
         np.array([max(0.00001, Pprevious), Bprevious]),
         args=(NS),
@@ -78,11 +79,11 @@ def Free2(Ns, NT):
         - 0.5 * (NS - 1) * np.log(2.0 * math.pi / kappa)
         + 0.5 * np.log(NS)
         - NT * sum4
-        - 0.5 * NS / kappa * (sum5 - sum4 ** 2)
+        - 0.5 * NS / kappa * (sum5 - sum4**2)
         - E0 * NT
     )
     # surface terms
-    aspect = NS ** 3 / NT ** 2 / arsq
+    aspect = NS**3 / NT**2 / arsq
     if aspect < 1:
         ep = math.sqrt(1.0 - aspect)
         Stil = 2.0 * NS + 2.0 * ar * NT * math.asin(ep) / ep / math.sqrt(NS)
@@ -90,7 +91,7 @@ def Free2(Ns, NT):
         eps0 = math.sqrt(1.0 - 1.0 / aspect)
         Stil = (
             2.0 * NS
-            + arsq * NT ** 2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS ** 2
+            + arsq * NT**2 * math.log((1.0 + eps0) / (1.0 - eps0)) / eps0 / NS**2
         )
     else:
         Stil = 2.0 * NS + 2.0 * ar * NT / math.sqrt(NS)
@@ -100,7 +101,7 @@ def Free2(Ns, NT):
 
 def Free1(NT):
     x0 = NSprevious
-    res = scipy.optimize.minimize(Free2, x0, method="Nelder-Mead", args=(NT))
+    res = optimize.minimize(Free2, x0, method="Nelder-Mead", args=(NT))
     # res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
     print(res)
     return res.fun
@@ -109,7 +110,7 @@ def Free1(NT):
 def Freefluc(NT):
     global NSprevious
     x0 = NSprevious
-    res = scipy.optimize.minimize(Free2, x0, method="Nelder-Mead", args=(NT))
+    res = optimize.minimize(Free2, x0, method="Nelder-Mead", args=(NT))
     # print res
     # res=scipy.optimize.minimize_scalar(Free2, bounds=(1,0.999999*NT), args=(NT), method='bounded')
     nsmid = res.x[0]
@@ -201,12 +202,9 @@ def findDfStar_Direct(params):
     search_frac = 0.1
     upper = NTprevious * (1 + search_frac / 100.0)
     lower = NTprevious * (1 - search_frac)
-    res = scipy.optimize.minimize_scalar(
-        FreeTrue, bounds=(lower, upper), method="bounded"
-    )
+    res = optimize.minimize_scalar(FreeTrue, bounds=(lower, upper), method="bounded")
     return -res.fun, res.x, NSprevious, Pprevious, Bprevious
 
 
 def FreeTrue(NT):
     return -Freefluc(1.0 * NT)
-
