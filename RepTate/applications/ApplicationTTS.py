@@ -61,8 +61,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(G',G''(w))"] = View(
             name="log(G',G''(w))",
             description="log Storage,Loss moduli",
-            x_label="log($\omega$)",
-            y_label="log(G'($\omega$),G''($\omega$))",
+            x_label=r"log($\omega$)",
+            y_label=r"log(G'($\omega$),G''($\omega$))",
             x_units="rad/s",
             y_units="Pa",
             log_x=False,
@@ -74,8 +74,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
             "Storage,Loss moduli",
-            "$\omega$",
-            "G'($\omega$),G''($\omega$)",
+            r"$\omega$",
+            r"G'($\omega$),G''($\omega$)",
             "rad/s",
             "Pa",
             True,
@@ -87,8 +87,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["etastar"] = View(
             "etastar",
             "Complex Viscosity",
-            "$\omega$",
-            "$|\eta^*(\omega)|$",
+            r"$\omega$",
+            r"$|\eta^*(\omega)|$",
             "rad/s",
             "Pa.s",
             True,
@@ -100,8 +100,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["logetastar"] = View(
             "logetastar",
             "log Complex Viscosity",
-            "log($\omega$)",
-            "log$|\eta^*(\omega)|$",
+            r"log($\omega$)",
+            r"log$|\eta^*(\omega)|$",
             "rad/s",
             "Pa.s",
             False,
@@ -113,8 +113,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["delta"] = View(
             "delta",
             "delta",
-            "$\omega$",
-            "$\delta(\omega)$",
+            r"$\omega$",
+            r"$\delta(\omega)$",
             "rad/s",
             "-",
             True,
@@ -126,8 +126,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["tan(delta)"] = View(
             "tan(delta)",
             "tan(delta)",
-            "$\omega$",
-            "tan($\delta$)",
+            r"$\omega$",
+            r"tan($\delta$)",
             "rad/s",
             "-",
             True,
@@ -139,8 +139,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(tan(delta))"] = View(
             "log(tan(delta))",
             "log(tan(delta))",
-            "log($\omega$)",
-            "log(tan($\delta$))",
+            r"log($\omega$)",
+            r"log(tan($\delta$))",
             "rad/s",
             "-",
             False,
@@ -152,8 +152,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(G*)"] = View(
             "log(G*)",
             "log(G*(omega))",
-            "log($\omega$)",
-            "log(G*($\omega$))",
+            r"log($\omega$)",
+            r"log(G*($\omega$))",
             "rad/s",
             "Pa",
             False,
@@ -164,22 +164,22 @@ class ApplicationTTS(QApplicationWindow):
         )
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
-            "log(tan($\delta$))",
+            r"log(tan($\delta$))",
             "log(G*)",
-            "log(tan($\delta$))",
+            r"log(tan($\delta$))",
             "Pa",
             "-",
             False,
             False,
             self.viewLogtandeltaGstar,
             1,
-            ["log(tan($\delta))"],
+            [r"log(tan($\delta))"],
         )
         self.views["delta(G*)"] = View(
             "delta(G*)",
-            "$\delta$(G*))",
+            r"$\delta$(G*))",
             "log(G*)",
-            "$\delta$(G*))",
+            r"$\delta$(G*))",
             "Pa",
             "deg",
             False,
@@ -191,10 +191,10 @@ class ApplicationTTS(QApplicationWindow):
         self.views["J',J''(w)"] = View(
             "J',J''(w)",
             "J moduli",
-            "$\omega$",
-            "J'($\omega$),J''($\omega$)",
+            r"$\omega$",
+            r"J'($\omega$),J''($\omega$)",
             "rad/s",
-            "$Pa^{-1}$",
+            r"$Pa^{-1}$",
             True,
             True,
             self.viewJ1J2,
@@ -204,8 +204,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
             "Cole-Cole plot",
-            "$\eta'$",
-            "$\eta''$",
+            r"$\eta'$",
+            r"$\eta''$",
             "Pa.s",
             "Pa.s",
             False,
@@ -217,8 +217,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(G')"] = View(
             name="log(G')",
             description="log Storage modulus",
-            x_label="log($\omega$)",
-            y_label="log(G'($\omega$))",
+            x_label=r"log($\omega$)",
+            y_label=r"log(G'($\omega$))",
             x_units="rad/s",
             y_units="Pa",
             log_x=False,
@@ -230,8 +230,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["G'"] = View(
             "G'",
             "Storage modulus",
-            "$\omega$",
-            "G'($\omega$)",
+            r"$\omega$",
+            r"G'($\omega$)",
             "rad/s",
             "Pa",
             True,
@@ -243,8 +243,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(G'')"] = View(
             name="log(G'')",
             description="log Loss modulus",
-            x_label="log($\omega$)",
-            y_label="log(G'($\omega$))",
+            x_label=r"log($\omega$)",
+            y_label=r"log(G'($\omega$))",
             x_units="rad/s",
             y_units="Pa",
             log_x=False,
@@ -256,8 +256,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["G''"] = View(
             "G''",
             "Loss modulus",
-            "$\omega$",
-            "G''($\omega$)",
+            r"$\omega$",
+            r"G''($\omega$)",
             "rad/s",
             "Pa",
             True,
@@ -269,8 +269,8 @@ class ApplicationTTS(QApplicationWindow):
         self.views["log(G',G''(w),tan(delta))"] = View(
             name="log(G',G''(w),tan(delta))",
             description="log Storage,Loss moduli, tan(delta)",
-            x_label="log($\omega$)",
-            y_label="log(G'($\omega$),G''($\omega$),tan($\delta$))",
+            x_label=r"log($\omega$)",
+            y_label=r"log(G'($\omega$),G''($\omega$),tan($\delta$))",
             x_units="rad/s",
             y_units="Pa,-",
             log_x=False,
@@ -308,8 +308,7 @@ class ApplicationTTS(QApplicationWindow):
         self.set_views()
 
     def viewLogG1G2(self, dt, file_parameters):
-        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -319,8 +318,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewG1G2(self, dt, file_parameters):
-        """Storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -330,8 +328,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewEtaStar(self, dt, file_parameters):
-        """Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -339,8 +336,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogEtaStar(self, dt, file_parameters):
-        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -350,8 +346,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewDelta(self, dt, file_parameters):
-        """Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G''/G')\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G''/G')\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -359,8 +354,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewTanDelta(self, dt, file_parameters):
-        """Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G''/G'` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G''/G'` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -368,8 +362,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogTanDelta(self, dt, file_parameters):
-        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
-        """
+        """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -377,8 +370,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogGstar(self, dt, file_parameters):
-        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -386,8 +378,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogtandeltaGstar(self, dt, file_parameters):
-        """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
-        """
+        """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
@@ -395,8 +386,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewdeltatanGstar(self, dt, file_parameters):
-        """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`
-        """
+        """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
@@ -404,8 +394,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewJ1J2(self, dt, file_parameters):
-        """Storage compliance :math:`J'(\\omega)=G'/(G'^2+G''^2)` and loss compliance :math:`J''(\\omega)=G''/(G'^2+G''^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Storage compliance :math:`J'(\\omega)=G'/(G'^2+G''^2)` and loss compliance :math:`J''(\\omega)=G''/(G'^2+G''^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -415,8 +404,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewColeCole(self, dt, file_parameters):
-        """Cole-Cole plot: out of phase viscosity :math:`\\eta''(\\omega)=G'(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta'(\\omega)=G''(\\omega)/\\omega`
-        """
+        """Cole-Cole plot: out of phase viscosity :math:`\\eta''(\\omega)=G'(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta'(\\omega)=G''(\\omega)/\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 2] / dt.data[:, 0]
@@ -424,8 +412,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogG1(self, dt, file_parameters):
-        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -433,8 +420,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewG1(self, dt, file_parameters):
-        """Storage modulus :math:`G'(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Storage modulus :math:`G'(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -442,8 +428,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogG2(self, dt, file_parameters):
-        """Logarithm of the loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -451,8 +436,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewG2(self, dt, file_parameters):
-        """Loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)
-        """
+        """Loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -460,8 +444,7 @@ class ApplicationTTS(QApplicationWindow):
         return x, y, True
 
     def viewLogG1G2tandelta(self, dt, file_parameters):
-        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))`, loss modulus :math:`\\log(G''(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`
-        """
+        """Logarithm of the storage modulus :math:`\\log(G'(\\omega))`, loss modulus :math:`\\log(G''(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 3))
         y = np.zeros((dt.num_rows, 3))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -471,4 +454,3 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         y[:, 2] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
-

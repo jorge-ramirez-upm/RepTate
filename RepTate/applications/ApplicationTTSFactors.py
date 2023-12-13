@@ -64,7 +64,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="log(aT)",
             description="log Horizontal shift factor",
             x_label="T",
-            y_label="$\log(a_T)$",
+            y_label=r"$\log(a_T)$",
             x_units="°C",
             y_units="-",
             log_x=False,
@@ -77,7 +77,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="aT",
             description="Horizontal shift factor",
             x_label="T",
-            y_label="$a_T$",
+            y_label=r"$a_T$",
             x_units="°C",
             y_units="-",
             log_x=False,
@@ -90,7 +90,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="log(bT)",
             description="log Vertical shift factor",
             x_label="T",
-            y_label="$\log(b_T)$",
+            y_label=r"$\log(b_T)$",
             x_units="°C",
             y_units="-",
             log_x=False,
@@ -103,7 +103,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="bT",
             description="Vertical shift factor",
             x_label="T",
-            y_label="$b_T$",
+            y_label=r"$b_T$",
             x_units="°C",
             y_units="-",
             log_x=False,
@@ -117,7 +117,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="log(aT, bT)",
             description="log Horizontal and Vertical shift factors",
             x_label="T",
-            y_label="$\log(a_T, b_T)$",
+            y_label=r"$\log(a_T, b_T)$",
             x_units="°C",
             y_units="-",
             log_x=False,
@@ -131,7 +131,7 @@ class ApplicationTTSFactors(QApplicationWindow):
             name="log(aT) vs 1/T",
             description="log Horizontal shift factors vs 1/T",
             x_label="1/T",
-            y_label="$\log(a_T)$",
+            y_label=r"$\log(a_T)$",
             x_units="K$^{-1}$",
             y_units="-",
             log_x=False,
@@ -170,8 +170,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         self.set_views()
 
     def viewLogaT(self, dt, file_parameters):
-        """Logarithm of the horizontal shift factor
-        """
+        """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -179,8 +178,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         return x, y, True
 
     def viewaT(self, dt, file_parameters):
-        """Horizontal shift factor
-        """
+        """Horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -188,8 +186,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         return x, y, True
 
     def viewLogbT(self, dt, file_parameters):
-        """Logarithm of the vertical shift factor
-        """
+        """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -197,8 +194,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         return x, y, True
 
     def viewbT(self, dt, file_parameters):
-        """Vertical shift factor
-        """
+        """Vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -206,8 +202,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         return x, y, True
 
     def viewLogaTbT(self, dt, file_parameters):
-        """Logarithm of the vertical shift factor
-        """
+        """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
         x[:, 0] = dt.data[:, 0]
@@ -217,11 +212,9 @@ class ApplicationTTSFactors(QApplicationWindow):
         return x, y, True
 
     def viewLogaT_invT(self, dt, file_parameters):
-        """Logarithm of the horizontal shift factor
-        """
+        """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = 1 / (dt.data[:, 0] + 273.15)
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
-

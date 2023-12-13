@@ -80,9 +80,9 @@ class ApplicationNLVE(QApplicationWindow):
             name="eta(t)",
             description="transient viscosity",
             x_label="t",
-            y_label="$\eta^+$",
+            y_label=r"$\eta^+$",
             x_units="s",
-            y_units="Pa$\cdot$s",
+            y_units=r"Pa$\cdot$s",
             log_x=True,
             log_y=True,
             view_proc=self.vieweta,
@@ -92,8 +92,8 @@ class ApplicationNLVE(QApplicationWindow):
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
             description="log transient shear stress vs gamma",
-            x_label="log($\gamma$)",
-            y_label="log($\sigma^+$)",
+            x_label=r"log($\gamma$)",
+            y_label=r"log($\sigma^+$)",
             x_units="-",
             y_units="Pa",
             log_x=False,
@@ -105,8 +105,8 @@ class ApplicationNLVE(QApplicationWindow):
         self.views["sigma(gamma)"] = View(
             name="sigma(gamma)",
             description="transient shear stress vs gamma",
-            x_label="$\gamma$",
-            y_label="$\sigma^+$",
+            x_label=r"$\gamma$",
+            y_label=r"$\sigma^+$",
             x_units="-",
             y_units="Pa",
             log_x=False,
@@ -119,7 +119,7 @@ class ApplicationNLVE(QApplicationWindow):
             name="log(sigma(t))",
             description="log transient shear stress vs time",
             x_label="log(t)",
-            y_label="log($\sigma^+$)",
+            y_label=r"log($\sigma^+$)",
             x_units="s",
             y_units="Pa",
             log_x=False,
@@ -132,7 +132,7 @@ class ApplicationNLVE(QApplicationWindow):
             name="sigma(t)",
             description="transient shear stress vs time",
             x_label="t",
-            y_label="$\sigma^+$",
+            y_label=r"$\sigma^+$",
             x_units="s",
             y_units="Pa",
             log_x=False,
@@ -145,8 +145,8 @@ class ApplicationNLVE(QApplicationWindow):
             name="Flow Curve",
             description="Steady state stress vs flow rate",
             x_label="Flow rate",
-            y_label="$\sigma$",
-            x_units="s$^{-1}$",
+            y_label=r"$\sigma$",
+            x_units=r"s$^{-1}$",
             y_units="Pa",
             log_x=True,
             log_y=True,
@@ -200,8 +200,7 @@ class ApplicationNLVE(QApplicationWindow):
         self.set_views()
 
     def viewLogeta(self, dt, file_parameters):
-        """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`
-        """
+        """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -213,8 +212,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def vieweta(self, dt, file_parameters):
-        """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)
-        """
+        """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -226,8 +224,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def viewLogSigmaTime(self, dt, file_parameters):
-        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`
-        """
+        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -235,8 +232,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def viewSigmaTime(self, dt, file_parameters):
-        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`
-        """
+        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -244,8 +240,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def viewLogSigmaGamma(self, dt, file_parameters):
-        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`
-        """
+        """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         try:
@@ -257,8 +252,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def viewSigmaGamma(self, dt, file_parameters):
-        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`
-        """
+        """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         try:
@@ -270,8 +264,7 @@ class ApplicationNLVE(QApplicationWindow):
         return x, y, True
 
     def view_flowcurve(self, dt, file_parameters):
-        """ :math:`\\sigma(t_{\\to\\infty})` vs flow rate
-        """
+        """:math:`\\sigma(t_{\\to\\infty})` vs flow rate"""
 
         try:
             flow_rate = float(file_parameters["gdot"])

@@ -79,7 +79,7 @@ class ApplicationCreep(QApplicationWindow):
             name="log(gamma(t))",
             description="log strain",
             x_label="log(t)",
-            y_label="log($\gamma$)",
+            y_label=r"log($\gamma$)",
             x_units="s",
             y_units="-",
             log_x=False,
@@ -92,7 +92,7 @@ class ApplicationCreep(QApplicationWindow):
             name="gamma(t)",
             description="strain",
             x_label="t",
-            y_label="$\gamma$",
+            y_label=r"$\gamma$",
             x_units="s",
             y_units="-",
             log_x=True,
@@ -107,7 +107,7 @@ class ApplicationCreep(QApplicationWindow):
             x_label="log(t)",
             y_label="log(J)",
             x_units="s",
-            y_units="$\mathrm{Pa}^{-1}$",
+            y_units=r"$\mathrm{Pa}^{-1}$",
             log_x=False,
             log_y=False,
             view_proc=self.viewLogJt,
@@ -120,7 +120,7 @@ class ApplicationCreep(QApplicationWindow):
             x_label="t",
             y_label="J",
             x_units="s",
-            y_units="$\mathrm{Pa}^{-1}$",
+            y_units=r"$\mathrm{Pa}^{-1}$",
             log_x=True,
             log_y=True,
             view_proc=self.viewJt,
@@ -143,7 +143,7 @@ class ApplicationCreep(QApplicationWindow):
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of J(t)",
-            x_label="$\omega$",
+            x_label=r"$\omega$",
             y_label="G',G''",
             x_units="rad/s",
             y_units="Pa",
@@ -156,7 +156,7 @@ class ApplicationCreep(QApplicationWindow):
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
             description="G', G'' from i-Rheo transformation of J(t) with Oversampling",
-            x_label="$\omega$",
+            x_label=r"$\omega$",
             y_label="G',G''",
             x_units="rad/s",
             y_units="Pa",
@@ -231,7 +231,9 @@ class ApplicationCreep(QApplicationWindow):
         hlayout.addSpacing(5)
         # xmin
         self.xmin_view = QLineEdit("-inf")
-        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
+        self.xmin_view.setToolTip(
+            "Discard data points below this value before i-Rheo transformation"
+        )
         self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
         self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -242,7 +244,9 @@ class ApplicationCreep(QApplicationWindow):
         hlayout.addSpacing(5)
         # xmax
         self.xmax_view = QLineEdit("inf")
-        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
+        self.xmax_view.setToolTip(
+            "Discard data points above this value before i-Rheo transformation"
+        )
         self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
         self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -341,7 +345,6 @@ class ApplicationCreep(QApplicationWindow):
             except AttributeError:
                 pass
 
-
     def viewLogStraint(self, dt, file_parameters):
         """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
@@ -389,7 +392,7 @@ class ApplicationCreep(QApplicationWindow):
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
-            QMessageBox.warning(self, 'Error', error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
@@ -434,7 +437,7 @@ class ApplicationCreep(QApplicationWindow):
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
-            QMessageBox.warning(self, 'Error', error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         xunique, indunique = np.unique(data_x, return_index=True)
         n = len(xunique)
@@ -491,16 +494,20 @@ class ApplicationCreep(QApplicationWindow):
         success *= self.set_eta()
         if success:
             # get indices of data in xrange
-            filtered = np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view)
+            filtered = np.logical_and(
+                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
+            )
             non_zeros = np.count_nonzero(filtered)
             if non_zeros < 1:
                 # too few data between tmin and tmax
-                return "Too few data points (%d) between t_min and t_max" % non_zeros, None, None
+                return (
+                    "Too few data points (%d) between t_min and t_max" % non_zeros,
+                    None,
+                    None,
+                )
             args = np.where(filtered)
             x_in_range = dt.data[:, 0][args]
             y_in_range = dt.data[:, 1][args]
             return None, x_in_range, y_in_range
         else:
             return "Check values of eta, t_min and t_max ", None, None
-
-

@@ -94,7 +94,7 @@ class ApplicationGt(QApplicationWindow):
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
             description="G', G'' from i-Rheo transformation of G(t)",
-            x_label="$\omega$",
+            x_label=r"$\omega$",
             y_label="G',G''",
             x_units="rad/s",
             y_units="Pa",
@@ -107,7 +107,7 @@ class ApplicationGt(QApplicationWindow):
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
             description="G', G'' from i-Rheo transformation of G(t) with Oversampling",
-            x_label="$\omega$",
+            x_label=r"$\omega$",
             y_label="G',G''",
             x_units="rad/s",
             y_units="Pa",
@@ -120,7 +120,7 @@ class ApplicationGt(QApplicationWindow):
         self.views["Schwarzl G',G''"] = View(
             name="Schwarzl G',G''",
             description="G', G'' from Schwarzl transformation of G(t)",
-            x_label="$\omega$",
+            x_label=r"$\omega$",
             y_label="G',G''",
             x_units="rad/s",
             y_units="Pa",

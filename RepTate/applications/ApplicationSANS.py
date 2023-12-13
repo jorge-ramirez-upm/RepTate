@@ -61,7 +61,7 @@ class ApplicationSANS(QApplicationWindow):
             description="log Intensity",
             x_label="log(q)",
             y_label="log(I)",
-            x_units="$\mathrm{\AA}^{-1}$",
+            x_units=r"$\mathrm{\AA}^{-1}$",
             y_units="-",
             log_x=False,
             log_y=False,
@@ -74,7 +74,7 @@ class ApplicationSANS(QApplicationWindow):
             description="Intensity",
             x_label="q",
             y_label="I",
-            x_units="$\mathrm{\AA}^{-1}$",
+            x_units=r"$\mathrm{\AA}^{-1}$",
             y_units="-",
             log_x=False,
             log_y=False,
@@ -85,9 +85,9 @@ class ApplicationSANS(QApplicationWindow):
         self.views["Zimm"] = View(
             name="Zimm",
             description="Zimm plot (1/I(q) vs q^2)",
-            x_label="$\mathrm{q}^2$",
+            x_label=r"$\mathrm{q}^2$",
             y_label="1/I",
-            x_units="$\mathrm{\AA}^{-2}$",
+            x_units=r"$\mathrm{\AA}^{-2}$",
             y_units="-",
             log_x=False,
             log_y=False,
@@ -99,9 +99,9 @@ class ApplicationSANS(QApplicationWindow):
             name="Kratky",
             description="Kratky plot (q^2*I(q) vs q)",
             x_label="q",
-            y_label="$\mathrm{q}^2\cdot \mathrm{I}$",
-            x_units="$\mathrm{\AA}^{-1}$",
-            y_units="$\mathrm{\AA}^{-2}$",
+            y_label=r"$\mathrm{q}^2\cdot \mathrm{I}$",
+            x_units=r"$\mathrm{\AA}^{-1}$",
+            y_units=r"$\mathrm{\AA}^{-2}$",
             log_x=False,
             log_y=False,
             view_proc=self.viewKratky,
@@ -136,8 +136,7 @@ class ApplicationSANS(QApplicationWindow):
         self.set_views()
 
     def viewLogSANS(self, dt, file_parameters):
-        """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`
-        """
+        """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
@@ -145,8 +144,7 @@ class ApplicationSANS(QApplicationWindow):
         return x, y, True
 
     def viewSANS(self, dt, file_parameters):
-        """Scattered intensity :math:`I(q)` vs scattering vector :math:`q` (both axes in logarithmic scale)
-        """
+        """Scattered intensity :math:`I(q)` vs scattering vector :math:`q` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -154,8 +152,7 @@ class ApplicationSANS(QApplicationWindow):
         return x, y, True
 
     def viewKratky(self, dt, file_parameters):
-        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`
-        """
+        """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -163,11 +160,9 @@ class ApplicationSANS(QApplicationWindow):
         return x, y, True
 
     def viewZimm(self, dt, file_parameters):
-        """Zimm plot: :math:`I(q)^{-1}` vs :math:`q^2`
-        """
+        """Zimm plot: :math:`I(q)^{-1}` vs :math:`q^2`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0] * dt.data[:, 0]
         y[:, 0] = 1.0 / dt.data[:, 1]
         return x, y, True
-

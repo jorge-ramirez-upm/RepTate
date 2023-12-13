@@ -65,65 +65,65 @@ class ApplicationLAOS(QApplicationWindow):
         self.views["sigma,gamma(t)"] = View(
             name="sigma,gamma(t)",
             description="RAW Stress and RAW strain as a function of time",
-            x_label="$t$",
-            y_label="$\sigma^\mathrm{raw}(t),\gamma^\mathrm{raw}(t)$",
+            x_label=r"$t$",
+            y_label=r"$\sigma^\mathrm{raw}(t),\gamma^\mathrm{raw}(t)$",
             x_units="s",
             y_units="Pa, -",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmatgammatRAW,
             n=2,
-            snames=["$\sigma(t)^\mathrm{raw}$", "$\gamma(t)^\mathrm{raw}$"],
+            snames=[r"$\sigma(t)^\mathrm{raw}$", r"$\gamma(t)^\mathrm{raw}$"],
         )
 
         self.views["sigma SCA,gamma(t)"] = View(
             name="sigma SCA,gamma(t)",
             description="RAW SCALED Stress and RAW strain as a function of time",
-            x_label="$t$",
-            y_label="$\sigma^\mathrm{raw,scaled}(t),\gamma^\mathrm{raw}(t)$",
+            x_label=r"$t$",
+            y_label=r"$\sigma^\mathrm{raw,scaled}(t),\gamma^\mathrm{raw}(t)$",
             x_units="s",
             y_units="Pa, -",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmatgammatRAWSCALED,
             n=2,
-            snames=["$\sigma(t)^\mathrm{raw,scaled}$", "$\gamma(t)^\mathrm{raw}$"],
+            snames=[r"$\sigma(t)^\mathrm{raw,scaled}$", r"$\gamma(t)^\mathrm{raw}$"],
         )
 
         self.views["sigma(gamma)"] = View(
             name="sigma(gamma)",
             description="Stress as a function of strain - RAW",
-            x_label="$\gamma(t)^\mathrm{raw}$",
-            y_label="$\sigma(t)^\mathrm{raw}$",
+            x_label=r"$\gamma(t)^\mathrm{raw}$",
+            y_label=r"$\sigma(t)^\mathrm{raw}$",
             x_units="-",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammaRAW,
             n=1,
-            snames=["$\sigma^\mathrm{raw}(\gamma^\mathrm{raw})$"],
+            snames=[r"$\sigma^\mathrm{raw}(\gamma^\mathrm{raw})$"],
         )
 
         self.views["sigma(gamma) FILT"] = View(
             name="sigma(gamma) FILT",
             description="Stress as a function of strain",
-            x_label="$\gamma^\mathrm{filtered}(t)$",
-            y_label="$\sigma^\mathrm{filtered}(t)$",
+            x_label=r"$\gamma^\mathrm{filtered}(t)$",
+            y_label=r"$\sigma^\mathrm{filtered}(t)$",
             x_units="-",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammaFILTERED,
             n=1,
-            snames=["$\sigma^\mathrm{filtered}(\gamma^\mathrm{filtered})$"],
+            snames=[r"$\sigma^\mathrm{filtered}(\gamma^\mathrm{filtered})$"],
         )
 
         self.views["FFT spectrum"] = View(
             name="FFT spectrum",
             description="Full Fast Fourier Transform spectrum",
-            x_label="$\omega$",
-            y_label="$|\sigma^*_n|/|\sigma^*_1|$",
-            x_units="rad.s$^{-1}$",
+            x_label=r"$\omega$",
+            y_label=r"$|\sigma^*_n|/|\sigma^*_1|$",
+            x_units=r"rad.s$^{-1}$",
             y_units="-",
             log_x=False,
             log_y=True,
@@ -135,58 +135,58 @@ class ApplicationLAOS(QApplicationWindow):
         self.views["sigma(gdot) FILT"] = View(
             name="sigma(gdot) FILT",
             description="FILTERED Stress as a function of strain-rate",
-            x_label="$\dot\gamma^\mathrm{filtered}(t)$",
-            y_label="$\sigma^\mathrm{filtered}(t)$",
-            x_units="s$^{-1}$",
+            x_label=r"$\dot\gamma^\mathrm{filtered}(t)$",
+            y_label=r"$\sigma^\mathrm{filtered}(t)$",
+            x_units=r"s$^{-1}$",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammadot,
             n=1,
-            snames=["$\sigma(\dot\gamma)$"],
+            snames=[r"$\sigma(\dot\gamma)$"],
         )
 
         self.views["sigma(gamma) ANLS"] = View(
             name="sigma(gamma) ANLS",
             description="FILTERED Stress as a function of strain - Analysis of contributions",
-            x_label="$\gamma^\mathrm{filtered}(t)$",
-            y_label="$\sigma^\mathrm{filtered}(t)$",
-            x_units="s$^{-1}$",
+            x_label=r"$\gamma^\mathrm{filtered}(t)$",
+            y_label=r"$\sigma^\mathrm{filtered}(t)$",
+            x_units=r"s$^{-1}$",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammaANLS,
             n=3,
             snames=[
-                "$\sigma^\mathrm{filtered}$",
-                "$\sigma^\mathrm{elastic}$",
-                "$\sigma^\mathrm{Chebyshev 1+3}$",
+                r"$\sigma^\mathrm{filtered}$",
+                r"$\sigma^\mathrm{elastic}$",
+                r"$\sigma^\mathrm{Chebyshev 1+3}$",
             ],
         )
 
         self.views["sigma(gdot) ANLS"] = View(
             name="sigma(gdot) ANLS",
             description="FILTERED Stress as a function of strain-rate - Analysis of contributions",
-            x_label="$\dot\gamma^\mathrm{filtered}(t)$",
-            y_label="$\sigma^\mathrm{filtered}(t)$",
-            x_units="s$^{-1}$",
+            x_label=r"$\dot\gamma^\mathrm{filtered}(t)$",
+            y_label=r"$\sigma^\mathrm{filtered}(t)$",
+            x_units=r"s$^{-1}$",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmagammadotANLS,
             n=3,
             snames=[
-                "$\sigma^\mathrm{filtered}$",
-                "$\sigma^\mathrm{elastic}$",
-                "$\sigma^\mathrm{Chebyshev 1+3}$",
+                r"$\sigma^\mathrm{filtered}$",
+                r"$\sigma^\mathrm{elastic}$",
+                r"$\sigma^\mathrm{Chebyshev 1+3}$",
             ],
         )
 
         self.views["Cheb elastic"] = View(
             name="Cheb elastic",
             description="Chebyshev Coeff tau_elastic",
-            x_label="Polynomial order, $n$",
-            y_label="$e_n$",
+            x_label=r"Polynomial order, $n$",
+            y_label=r"$e_n$",
             x_units="-",
             y_units="Pa",
             log_x=False,
@@ -199,8 +199,8 @@ class ApplicationLAOS(QApplicationWindow):
         self.views["Cheb viscous"] = View(
             name="Cheb viscous",
             description="Chebyshev Coeff tau_viscous",
-            x_label="Polynomial order, $n$",
-            y_label="$v_n$",
+            x_label=r"Polynomial order, $n$",
+            y_label=r"$v_n$",
             x_units="-",
             y_units="Pa.s",
             log_x=False,
@@ -213,29 +213,29 @@ class ApplicationLAOS(QApplicationWindow):
         self.views["sigma(t)"] = View(
             name="sigma(t)",
             description="Stress as a function of time - RAW",
-            x_label="$t$",
-            y_label="$\sigma(t)^\mathrm{raw}$",
+            x_label=r"$t$",
+            y_label=r"$\sigma(t)^\mathrm{raw}$",
             x_units="s",
             y_units="Pa",
             log_x=False,
             log_y=False,
             view_proc=self.view_sigmatRAW,
             n=1,
-            snames=["$\sigma(t)^\mathrm{raw}$"],
+            snames=[r"$\sigma(t)^\mathrm{raw}$"],
         )
 
         self.views["gamma(t)"] = View(
             name="gamma(t)",
             description="Strain as a function of time - RAW",
-            x_label="$t$",
-            y_label="$\gamma(t)^\mathrm{raw}$",
+            x_label=r"$t$",
+            y_label=r"$\gamma(t)^\mathrm{raw}$",
             x_units="s",
             y_units="-",
             log_x=False,
             log_y=False,
             view_proc=self.view_gammatRAW,
             n=1,
-            snames=["$\gamma(t)^\mathrm{raw}$"],
+            snames=[r"$\gamma(t)^\mathrm{raw}$"],
         )
 
         self.HHSR = 15  # Highest harmonic to consider in stress reconstruction
@@ -339,7 +339,6 @@ class ApplicationLAOS(QApplicationWindow):
                 self.set_PPQC_widget_visible(False)
             except AttributeError:
                 pass
-
 
     def view_sigmatgammatRAW(self, dt, file_parameters):
         """Stress & strain vs time"""
@@ -719,11 +718,11 @@ class ApplicationLAOS(QApplicationWindow):
         """
         Find Chebyshev Polynomial components of input data vector:
 
-        .. math::        
+        .. math::
             f = A_0 T_0(x) + A_1 T_1(x) + A_2 T_2(x) + ...
 
         [An]= chebyshev_decompose(F,N,X)
-                
+
         Assumes F occupies the domain [-1 : +1]
         with an arbitrary number of data points
         Uses trapz.m to calculate integrals
@@ -913,4 +912,3 @@ class ApplicationLAOS(QApplicationWindow):
         )
 
         return gam_recon, tau_recon
-
