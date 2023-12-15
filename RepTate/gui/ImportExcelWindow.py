@@ -259,6 +259,8 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
         table, _ = self.qtables[sname]
         nrows = table.rowCount()
         ncols = table.columnCount()
+        if (col1 < 0) or (col2 < 0) or (nrows == 0) or (ncols == 0):
+            return
         header_labels = [self.list_AZ[i] for i in range(ncols)]
         header_labels[col1] = self.col_names[0]
         header_labels[col2] = self.col_names[1]
@@ -350,6 +352,36 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 except (ValueError, TypeError):
                     z.append(np.nan)
                     flag_nan = True
+
+        # Sort and clean data? JR
+        x = np.array(x)
+        y = np.array(y)
+        ind = np.argsort(x)
+        x = x[ind]
+        y = y[ind]
+        ind2 = ~np.isnan(x)
+        x = x[ind2]
+        y = y[ind2]
+        if self.cbInterpolate.isChecked():
+            xynan = x[np.isnan(y)]
+            xynotnan = x[~np.isnan(y)]
+            ynotnan = y[~np.isnan(y)]
+            yynan = np.interp(xynan, xynotnan, ynotnan, left=0, right=0)
+            y[np.isnan(y)] = yynan
+            flag_nan = False
+
+        if len(self.col_names) > 2:
+            z = np.array(z)
+            z = z[ind]
+            z = z[ind2]
+            if self.cbInterpolate.isChecked():
+                xznan = x[np.isnan(z)]
+                xznotnan = x[~np.isnan(z)]
+                znotnan = z[~np.isnan(z)]
+                zznan = np.interp(xznan, xznotnan, znotnan, left=0, right=0)
+                z[np.isnan(z)] = zznan
+        # End sort and clean data - JR
+
         res_dic = {
             "error": False,
             "file": self.selected_file_label.text(),
