@@ -70,7 +70,7 @@ class TheoryRetardationModesTime(QTheory):
     citations = []
     doi = []
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
-    single_file = True
+    single_file = False
 
     def __init__(self, name="", parent_dataset=None, ax=None):
         """**Constructor**"""
@@ -309,6 +309,10 @@ class TheoryRetardationModesTime(QTheory):
         tau = np.logspace(
             self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes
         )
+        try:
+            rec = int(f.file_parameters["rec"])
+        except (ValueError, KeyError):
+            rec = 0
 
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -316,7 +320,10 @@ class TheoryRetardationModesTime(QTheory):
             expT_tau = 1.0 - np.exp(-tt.data[:, 0] / tau[i])
             J = np.power(10, self.parameters["logJ%02d" % i].value)
             tt.data[:, 1] += stress * J * expT_tau
-        tt.data[:, 1] += stress * (J0 + tt.data[:, 0] / eta0)
+        if rec == 1:
+            tt.data[:, 1] += stress * J0
+        else:
+            tt.data[:, 1] += stress * (J0 + tt.data[:, 0] / eta0)
 
     def plot_theory_stuff(self):
         """Plot theory helpers"""

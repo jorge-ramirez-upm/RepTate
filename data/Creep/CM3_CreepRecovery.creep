@@ -1,4 +1,4 @@
-chem=PE;label=CM3;T=150;stress=10;
+chem=PE;label=CM3;T=150;stress=10;rec=1;
 t	strain	stress	T
 s	-	Pa	C
 0.01	8.98254E-5
