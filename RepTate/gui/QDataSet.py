@@ -350,6 +350,22 @@ class ThLineMode(enum.Enum):
             ("densely dashdotdotted", (0, (3, 1, 1, 1, 1, 1))),
         ]
     )
+    # Cycle over line styles - JR
+    linestylenames = [
+        "solid",
+        "dashed",
+        "dashdotted",
+        "dotted",
+        "dashdotdotted",
+        "densely dashed",
+        "densely dashdotted",
+        "densely dotted",
+        "densely dashdotdotted",
+        "loosely dashed",
+        "loosely dashdotted",
+        "loosely dotted",
+        "loosely dashdotdotted",
+    ]
 
 
 class EditFileParametersDialog(QDialog):
@@ -904,6 +920,9 @@ class QDataSet(QWidget, Ui_DataSet):
                         dt.series[nx][i].set_visible(False)
                         dt.series[nx][i].set_label("")
 
+                # Cycle over theory linestyles - JR
+                th_linestyleJR = itertools.cycle(ThLineMode.linestylenames.value)
+
                 for th in self.theories.values():
                     if th.active:
                         th.plot_theory_stuff()
@@ -933,28 +952,34 @@ class QDataSet(QWidget, Ui_DataSet):
                             tt.series[nx][i].set_visible(True)
                             if view.with_thline or i > 0:
                                 tt.series[nx][i].set_marker("")
-                                if i == 1:  # 2nd theory line with different style
-                                    if self.th_linestyle == "solid":
-                                        th_linestyle = ThLineMode.linestyles.value[
-                                            "dashed"
-                                        ]
-                                    else:
-                                        th_linestyle = ThLineMode.linestyles.value[
-                                            "solid"
-                                        ]
-                                elif i == 2:  # 3rd theory line with different style
-                                    if self.th_linestyle == "solid":
-                                        th_linestyle = ThLineMode.linestyles.value[
-                                            "dashdotted"
-                                        ]
-                                    else:
-                                        th_linestyle = ThLineMode.linestyles.value[
-                                            "dotted"
-                                        ]
-                                else:
-                                    th_linestyle = ThLineMode.linestyles.value[
-                                        self.th_linestyle
-                                    ]
+
+                                # JR - Cycle over theory linestyles
+                                th_linestyle = ThLineMode.linestyles.value[
+                                    next(th_linestyleJR)
+                                ]
+
+                                # if i == 1:  # 2nd theory line with different style
+                                #     if self.th_linestyle == "solid":
+                                #         th_linestyle = ThLineMode.linestyles.value[
+                                #             "dashed"
+                                #         ]
+                                #     else:
+                                #         th_linestyle = ThLineMode.linestyles.value[
+                                #             "solid"
+                                #         ]
+                                # elif i == 2:  # 3rd theory line with different style
+                                #     if self.th_linestyle == "solid":
+                                #         th_linestyle = ThLineMode.linestyles.value[
+                                #             "dashdotted"
+                                #         ]
+                                #     else:
+                                #         th_linestyle = ThLineMode.linestyles.value[
+                                #             "dotted"
+                                #         ]
+                                # else:
+                                #     th_linestyle = ThLineMode.linestyles.value[
+                                #         self.th_linestyle
+                                #     ]
                                 tt.series[nx][i].set_linestyle(th_linestyle)
                             else:
                                 tt.series[nx][i].set_linestyle("")
@@ -1031,12 +1056,14 @@ class QDataSet(QWidget, Ui_DataSet):
                 + file_type.extension
             )
         else:
-            filename = (
-                fname
-                + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams])
-                + "."
-                + file_type.extension
-            )
+            str = ""
+            for pname in fparams:
+                try:
+                    str += pname + "%.3g" % fparams[pname]
+                except TypeError:
+                    str += pname + fparams[pname]
+            filename = fname + str + "." + file_type.extension
+
         f = File(
             file_name=filename,
             file_type=file_type,
@@ -1170,6 +1197,50 @@ class QDataSet(QWidget, Ui_DataSet):
         else:
             print('Theory "%s" not found' % name)
 
+    def do_save(self, line="", extra_txt=""):
+        """Save the active files of the current dataset to file"""
+        counter = 0
+
+        for f in self.files:
+            ttable = self.tables[f.file_name_short]
+            ofilename = f.file_full_path
+            # print("ofilename", ofilename)
+            # print('File: ' + f.file_name_short)
+            fout = open(ofilename, "w")
+            k = list(f.file_parameters.keys())
+            k.sort()
+            for i in k:
+                fout.write(i + "=" + str(f.file_parameters[i]) + ";")
+            fout.write("\n")
+            fout.write("# Prediction of " + self.thname + " Theory\n")
+            fout.write("# ")
+            k = list(self.parameters.keys())
+            k.sort()
+            for i in k:
+                fout.write(i + "=" + str(self.parameters[i].value) + "; ")
+            fout.write("\n")
+            fout.write(
+                "# Date: "
+                + time.strftime("%Y-%m-%d %H:%M:%S")
+                + " - User: "
+                + getpass.getuser()
+                + "\n"
+            )
+            k = f.file_type.col_names
+            for i in k:
+                fout.write(i + "\t")
+            fout.write("\n")
+            for i in range(ttable.num_rows):
+                for j in range(ttable.num_columns):
+                    fout.write(str(ttable.data[i, j]) + "\t")
+                fout.write("\n")
+            fout.close()
+            counter += 1
+
+        # print information
+        msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
+        QMessageBox.information(self, "Saved Theory", msg)
+
     def new(self, line):
         """Create a new theory"""
         """Add a new theory of the type specified to the current Data Set"""
@@ -1263,6 +1334,27 @@ class QDataSet(QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             self.theories[th].paste_parameters()
+
+    def handle_action_save_current_dataset(self):
+        """Save data of the current dataset to file"""
+        dir_start = join(RepTate.root_dir, "data")
+        dilogue_name = "Select Folder"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        if isdir(folder):
+            dialog = QInputDialog(self)
+            dialog.setWindowTitle("Add label to filename(s)?")
+            dialog.setLabelText(
+                "Add the following text to each saved theory filename(s):"
+            )
+            dialog.setTextValue("")
+            dialog.setCancelButtonText("None")
+            if dialog.exec():
+                txt = dialog.textValue()
+                if txt != "":
+                    txt = "_" + txt
+            else:
+                txt = ""
+            self.do_save(folder, txt)
 
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""
