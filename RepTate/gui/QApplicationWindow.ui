@@ -34,7 +34,6 @@
      <widget class="QWidget" name="mplwidget" native="true">
       <property name="font">
        <font>
-        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -65,7 +64,6 @@
   <widget class="QDockWidget" name="DataInspectordockWidget">
    <property name="font">
     <font>
-     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
@@ -174,7 +172,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -587,6 +584,18 @@
    </property>
    <property name="toolTip">
     <string>Import from pasted data</string>
+   </property>
+  </action>
+  <action name="actionSaveDataSet">
+   <property name="icon">
+    <iconset resource="Reptate.qrc">
+     <normaloff>:/Images/Images/new_icons/icons8-save_DS.png</normaloff>:/Images/Images/new_icons/icons8-save_DS.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Data Set</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Current Data Set</string>
    </property>
   </action>
  </widget>
