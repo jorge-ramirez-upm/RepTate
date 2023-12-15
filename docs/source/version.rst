@@ -2,8 +2,10 @@
 Version History
 ===============
 
-Release 1.2.3 - 20231215
+Release 1.2.4 - 20231215
 ========================
+- Expanded shear and uext file to contain gammadot and epsdot
+- Some theories can handle time dependent flow rate
 - Fit simultaneously Creep and Creep Recovery experiments of the same sample.
 - Better import from Excel; Data imported from Excel can be fitted with theories
 - Allow to save current DataSet
