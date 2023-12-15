@@ -2,14 +2,15 @@
 Version History
 ===============
 
-Release 1.2.2 - 20231209
+Release 1.2.3 - 20231215
 ========================
+- Fit simultaneously Creep and Creep Recovery experiments of the same sample.
+- Better import from Excel; Data imported from Excel can be fitted with theories
+- Allow to save current DataSet
+- Show several theories with different linestyles
 - Changes to the code to make it compatible with modern versions of Python, Numpy and Matplotlib
 - Removed CLI (Command Line Interface). 
 - Removed high DPI option (automatically handled)
-
-Release 1.2.1 - 20231207
-========================
 - Removed spinbox to increase/decrease number of views (giving problems)
 - Removed mplcursors (data can be tracked by showing the Figure Toolbar)
 - Changed PyQt5 --> PySide6. Solved the High DPI problem on Windows
