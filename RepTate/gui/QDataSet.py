@@ -39,6 +39,8 @@ import sys
 import os
 import glob
 import enum
+import time
+import getpass
 
 from os.path import dirname, join, abspath, isdir
 from PySide6.QtGui import (
@@ -1202,8 +1204,19 @@ class QDataSet(QWidget, Ui_DataSet):
         counter = 0
 
         for f in self.files:
-            ttable = self.tables[f.file_name_short]
-            ofilename = f.file_full_path
+            table = f.data_table
+            if line == "":
+                ofilename = (
+                    os.path.splitext(f.file_full_path)[0]
+                    + os.path.splitext(f.file_full_path)[1]
+                )
+            else:
+                ofilename = os.path.join(
+                    line,
+                    f.file_name_short
+                    + extra_txt
+                    + os.path.splitext(f.file_full_path)[1],
+                )
             # print("ofilename", ofilename)
             # print('File: ' + f.file_name_short)
             fout = open(ofilename, "w")
@@ -1211,13 +1224,6 @@ class QDataSet(QWidget, Ui_DataSet):
             k.sort()
             for i in k:
                 fout.write(i + "=" + str(f.file_parameters[i]) + ";")
-            fout.write("\n")
-            fout.write("# Prediction of " + self.thname + " Theory\n")
-            fout.write("# ")
-            k = list(self.parameters.keys())
-            k.sort()
-            for i in k:
-                fout.write(i + "=" + str(self.parameters[i].value) + "; ")
             fout.write("\n")
             fout.write(
                 "# Date: "
@@ -1230,16 +1236,16 @@ class QDataSet(QWidget, Ui_DataSet):
             for i in k:
                 fout.write(i + "\t")
             fout.write("\n")
-            for i in range(ttable.num_rows):
-                for j in range(ttable.num_columns):
-                    fout.write(str(ttable.data[i, j]) + "\t")
+            for i in range(table.num_rows):
+                for j in range(table.num_columns):
+                    fout.write(str(table.data[i, j]) + "\t")
                 fout.write("\n")
             fout.close()
             counter += 1
 
         # print information
-        msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
-        QMessageBox.information(self, "Saved Theory", msg)
+        msg = 'Saved %d dataset file(s) in "%s"' % (counter, line)
+        QMessageBox.information(self, "Saved DataSet", msg)
 
     def new(self, line):
         """Create a new theory"""
@@ -1334,27 +1340,6 @@ class QDataSet(QWidget, Ui_DataSet):
         th = self.current_theory
         if th:
             self.theories[th].paste_parameters()
-
-    def handle_action_save_current_dataset(self):
-        """Save data of the current dataset to file"""
-        dir_start = join(RepTate.root_dir, "data")
-        dilogue_name = "Select Folder"
-        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
-        if isdir(folder):
-            dialog = QInputDialog(self)
-            dialog.setWindowTitle("Add label to filename(s)?")
-            dialog.setLabelText(
-                "Add the following text to each saved theory filename(s):"
-            )
-            dialog.setTextValue("")
-            dialog.setCancelButtonText("None")
-            if dialog.exec():
-                txt = dialog.textValue()
-                if txt != "":
-                    txt = "_" + txt
-            else:
-                txt = ""
-            self.do_save(folder, txt)
 
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""

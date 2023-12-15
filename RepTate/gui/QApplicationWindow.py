@@ -610,6 +610,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         menu.addAction(self.actionAdd_File_With_Function)
         menu.addAction(self.action_import_from_excel)
         menu.addAction(self.action_import_from_pasted)
+        menu.addAction(self.actionSaveDataSet)
         tbut.setMenu(menu)
         tb.addWidget(tbut)
         # view all sets / theories
@@ -683,6 +684,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         )
         connection_id = self.action_import_from_pasted.triggered.connect(
             self.handle_action_import_from_pasted
+        )
+        connection_id = self.actionSaveDataSet.triggered.connect(
+            self.handle_action_save_current_dataset
         )
         connection_id = self.actionReload_Data.triggered.connect(
             self.handle_actionReload_Data
@@ -1802,7 +1806,6 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             axes.draw_artist(self._patch)
             canvas.update()
 
-
     def delete_multiplot(self):
         """deletes the multiplot object"""
         del self.multiplots
@@ -1891,7 +1894,6 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 for nx in range(self.nplots):
                     # self.axarr[nx].lines.remove(file.data_table.series[nx][i])
                     file.data_table.series[nx][i].remove()
-
 
     def set_views(self):
         """Set current view and assign availiable view labels to viewComboBox if in GUI mode"""
@@ -2047,7 +2049,6 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             except AttributeError as e:
                 pass
                 # print("legend: %s"%e)
-
 
     def handle_apply_button_pressed(self):
         """Apply the selected marker properties to all the files in the current dataset"""
@@ -2358,6 +2359,30 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if not ds:
             return
         ds.do_reload_data()
+
+    def handle_action_save_current_dataset(self):
+        """Save data of the current dataset to file"""
+        ds = self.DataSettabWidget.currentWidget()
+        if not ds:
+            return
+        dir_start = join(RepTate.root_dir, "data")
+        dilogue_name = "Select Folder"
+        folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
+        if isdir(folder):
+            dialog = QInputDialog(self)
+            dialog.setWindowTitle("Add label to filename(s)?")
+            dialog.setLabelText(
+                "Add the following text to each saved theory filename(s):"
+            )
+            dialog.setTextValue("")
+            dialog.setCancelButtonText("None")
+            if dialog.exec():
+                txt = dialog.textValue()
+                if txt != "":
+                    txt = "_" + txt
+            else:
+                txt = ""
+            ds.do_save(folder, txt)
 
     def handle_actionView_All_SetTheories(self, checked):
         ds = self.DataSettabWidget.currentWidget()
