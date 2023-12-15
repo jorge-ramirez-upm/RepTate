@@ -170,18 +170,18 @@ class ApplicationNLVE(QApplicationWindow):
             "Start-up of shear flow",
             "shear",
             "Shear flow files",
-            ["t", "sigma_xy"],
+            ["t", "sigma_xy", "N1", "gdot"],
             ["gdot", "T"],
-            ["s", "Pa"],
+            ["s", "Pa", "Pa", "s-1"],
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
             "Elongation flow",
             "uext",
             "Elongation flow files",
-            ["t", "N1"],
+            ["t", "N1", "gdot"],
             ["gdot", "T"],
-            ["s", "Pa"],
+            ["s", "Pa", "s-1"],
         )
         self.filetypes[ftype.extension] = ftype
 
