@@ -597,6 +597,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.removeTab(index)
         self.delete(app.name)
 
+    def delete(self, name):
+        """Delete an open application"""
+        if name in self.applications.keys():
+            self.applications[name].delete_multiplot()
+            del self.applications[name]
+        else:
+            print('Application "%s" not found' % name)
+
     def new(self, appname):
         """Create a new application and open it.
 
