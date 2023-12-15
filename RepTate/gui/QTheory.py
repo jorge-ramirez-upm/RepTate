@@ -922,12 +922,20 @@ class QTheory(QWidget, Ui_TheoryTab):
                         conditiony = (yexp[:, i] > self.ymin) * (yexp[:, i] < self.ymax)
                     else:
                         conditiony = np.ones_like(yexp[:, i], dtype=bool)
-                    conditionnaninf = (
-                        (~np.isnan(xexp)[:, 0])
-                        * (~np.isnan(yexp)[:, 0])
-                        * (~np.isinf(xexp)[:, 0])
-                        * (~np.isinf(yexp)[:, 0])
-                    )
+                    if view.n > 1:
+                        conditionnaninf = (
+                            (np.prod(~np.isnan(xexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isnan(yexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isinf(xexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isinf(yexp), axis=1, dtype=bool))
+                        )
+                    else:
+                        conditionnaninf = (
+                            (~np.isnan(xexp)[:, 0])
+                            * (~np.isnan(yexp)[:, 0])
+                            * (~np.isinf(xexp)[:, 0])
+                            * (~np.isinf(yexp)[:, 0])
+                        )
                     ycond = np.extract(
                         conditionx * conditiony * conditionnaninf, yth[:, i]
                     )
@@ -989,12 +997,20 @@ class QTheory(QWidget, Ui_TheoryTab):
                         conditiony = (yexp[:, i] > self.ymin) * (yexp[:, i] < self.ymax)
                     else:
                         conditiony = np.ones_like(yexp[:, i], dtype=bool)
-                    conditionnaninf = (
-                        (~np.isnan(xexp)[:, 0])
-                        * (~np.isnan(yexp)[:, 0])
-                        * (~np.isinf(xexp)[:, 0])
-                        * (~np.isinf(yexp)[:, 0])
-                    )
+                    if view.n > 1:
+                        conditionnaninf = (
+                            (np.prod(~np.isnan(xexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isnan(yexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isinf(xexp), axis=1, dtype=bool))
+                            * (np.prod(~np.isinf(yexp), axis=1, dtype=bool))
+                        )
+                    else:
+                        conditionnaninf = (
+                            (~np.isnan(xexp)[:, 0])
+                            * (~np.isnan(yexp)[:, 0])
+                            * (~np.isinf(xexp)[:, 0])
+                            * (~np.isinf(yexp)[:, 0])
+                        )
                     xcond = np.extract(
                         conditionx * conditiony * conditionnaninf, xexp[:, i]
                     )

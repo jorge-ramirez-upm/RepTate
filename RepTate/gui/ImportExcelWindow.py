@@ -353,7 +353,7 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                     z.append(np.nan)
                     flag_nan = True
 
-        # Sort and clean data? JR
+        # Sort and clean data
         x = np.array(x)
         y = np.array(y)
         ind = np.argsort(x)
@@ -380,7 +380,6 @@ class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
                 znotnan = z[~np.isnan(z)]
                 zznan = np.interp(xznan, xznotnan, znotnan, left=0, right=0)
                 z[np.isnan(z)] = zznan
-        # End sort and clean data - JR
 
         res_dic = {
             "error": False,
