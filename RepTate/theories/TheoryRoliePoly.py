@@ -186,6 +186,13 @@ class TheoryRoliePoly(QTheory):
             connection_id = self.extensional_flow_action.triggered.connect(
                 self.select_extensional_flow
             )
+
+            self.read_gdot_action = tb.addAction(
+                QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
+                "Read gdot from file",
+            )
+            self.read_gdot_action.setCheckable(True)
+
         else:
             self.function = self.RoliePolyLAOS
 
@@ -499,6 +506,10 @@ class TheoryRoliePoly(QTheory):
         sxx, syy, sxy = sigma
         lmax, tauD, tauR, beta, delta, gammadot = p
 
+        # If the deformation rate is read from the file
+        if self.read_gdot_action.isChecked():
+            gammadot = np.interp(t, self.t, self.gfile)
+
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2 * syy
         l_sq = trace_sigma / 3.0  # stretch^2
@@ -522,6 +533,10 @@ class TheoryRoliePoly(QTheory):
         sxx, syy, sxy = sigma
         _, tauD, _, beta, _, gammadot = p
 
+        # If the deformation rate is read from the file
+        if self.read_gdot_action.isChecked():
+            gammadot = np.interp(t, self.t, self.gfile)
+
         # Create the vector with the time derivative of sigma
         return [
             2.0 * gammadot * sxy
@@ -540,6 +555,10 @@ class TheoryRoliePoly(QTheory):
             raise EndComputationRequested
         sxx, syy = sigma
         lmax, tauD, tauR, beta, delta, epsilon_dot = p
+
+        # If the deformation rate is read from the file
+        if self.read_gdot_action.isChecked():
+            epsilon_dot = np.interp(t, self.t, self.gfile)
 
         # Create the vector with the time derivative of sigma
         trace_sigma = sxx + 2 * syy
@@ -567,6 +586,10 @@ class TheoryRoliePoly(QTheory):
             raise EndComputationRequested
         sxx, syy = sigma
         _, tauD, tauR, beta, delta, epsilon_dot = p
+
+        # If the deformation rate is read from the file
+        if self.read_gdot_action.isChecked():
+            epsilon_dot = np.interp(t, self.t, self.gfile)
 
         # Create the vector with the time derivative of sigma
         trace_k_sigma = epsilon_dot * (sxx - syy)
@@ -652,8 +675,13 @@ class TheoryRoliePoly(QTheory):
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
-        t = ft.data[:, 0]
-        t = np.concatenate([[0], t])
+        self.t = ft.data[:, 0]
+        if f.file_type.extension == "shear":
+            self.gfile = ft.data[:, 3]
+        elif f.file_type.extension == "uext":
+            self.gfile = ft.data[:, 2]
+        self.t = np.concatenate([[0], self.t])
+        self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         beta = self.parameters["beta"].value
         delta = self.parameters["delta"].value
@@ -670,14 +698,19 @@ class TheoryRoliePoly(QTheory):
             if i < nstretch:
                 try:
                     sig = odeint(
-                        pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr
+                        pde_stretch, sigma0, self.t, args=(p,), atol=abserr, rtol=relerr
                     )
                 except EndComputationRequested:
                     break
             else:
                 try:
                     sig = odeint(
-                        pde_nostretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr
+                        pde_nostretch,
+                        sigma0,
+                        self.t,
+                        args=(p,),
+                        atol=abserr,
+                        rtol=relerr,
                     )
                 except EndComputationRequested:
                     break

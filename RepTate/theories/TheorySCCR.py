@@ -53,7 +53,7 @@ from RepTate.theories.theory_helpers import FlowMode
 
 class TheorySCCR(QTheory):
     """Full SCCR theory for the Non-linear transient flow of linear entangled polymers.
-        
+
     * **Parameters**
        - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`.
        - ``Ge`` : Entanglement modulus.
@@ -493,5 +493,3 @@ class TheorySCCR(QTheory):
                 ]
                 stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
                 tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge
-
-

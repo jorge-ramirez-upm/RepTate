@@ -155,6 +155,7 @@ class TheoryUCM(QTheory):
             connection_id = self.extensional_flow_action.triggered.connect(
                 self.select_extensional_flow
             )
+
         else:
             self.function = self.calculate_UCMLAOS
 
@@ -329,7 +330,7 @@ class TheoryUCM(QTheory):
                     - np.exp(-times / tauD)
                     + np.cos(w * times)
                 )
-                / (1 + w ** 2 * tauD ** 2)
+                / (1 + w**2 * tauD**2)
             )
 
     def set_param_value(self, name, value):
@@ -365,4 +366,3 @@ class TheoryUCM(QTheory):
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
         return "", True
-

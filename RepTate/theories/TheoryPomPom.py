@@ -171,6 +171,11 @@ class TheoryPomPom(QTheory):
             connection_id = self.extensional_flow_action.triggered.connect(
                 self.select_extensional_flow
             )
+            # self.read_gdot_action = tb.addAction(
+            #     QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
+            #     "Read gdot from file",
+            # )
+            # self.read_gdot_action.setCheckable(True)
         else:
             self.function = self.calculate_PomPomLAOS
 
@@ -213,7 +218,10 @@ class TheoryPomPom(QTheory):
 
         # Get filename of RepTate project to open
         fpath, _ = QFileDialog.getSaveFileName(
-            self, "Save Parameters to FowSolve", os.path.join(RepTate.root_dir, "data"), "FlowSolve (*.fsrep)"
+            self,
+            "Save Parameters to FowSolve",
+            os.path.join(RepTate.root_dir, "data"),
+            "FlowSolve (*.fsrep)",
         )
         if fpath == "":
             return
@@ -344,6 +352,11 @@ class TheoryPomPom(QTheory):
         if self.stop_theory_flag:
             raise EndComputationRequested
         q, tauB, tauS, gdot = p
+
+        # If the deformation rate is read from the file
+        # if self.read_gdot_action.isChecked():
+        #     gdot = np.interp(t, self.times, self.gfile)
+
         if (l >= q) or (q == 1):
             l = q
             dydx = 0
@@ -372,6 +385,10 @@ class TheoryPomPom(QTheory):
         if self.stop_theory_flag:
             raise EndComputationRequested
         q, tauB, tauS, edot = p
+
+        # If the deformation rate is read from the file
+        # if self.read_gdot_action.isChecked():
+        #     edot = np.interp(t, self.times, self.gfile)
 
         if (l >= q) or (q == 1):
             l = q
@@ -417,19 +434,19 @@ class TheoryPomPom(QTheory):
                 * g0
                 * w
                 * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t))
-                / (1 + w ** 2 * tauB ** 2)
+                / (1 + w**2 * tauB**2)
             )
-            Axx = 1 - tauB * g0 ** 2 * w * (
-                2 * np.cos(2 * w * t) * tauB ** 3 * w ** 3
-                + 2 * np.exp(-t / tauB) * tauB ** 3 * w ** 3
-                + 8 * np.exp(-t / tauB) * tauB ** 2 * w ** 2 * np.sin(w * t)
-                - 4 * tauB ** 3 * w ** 3
-                - 3 * np.sin(2 * w * t) * tauB ** 2 * w ** 2
+            Axx = 1 - tauB * g0**2 * w * (
+                2 * np.cos(2 * w * t) * tauB**3 * w**3
+                + 2 * np.exp(-t / tauB) * tauB**3 * w**3
+                + 8 * np.exp(-t / tauB) * tauB**2 * w**2 * np.sin(w * t)
+                - 4 * tauB**3 * w**3
+                - 3 * np.sin(2 * w * t) * tauB**2 * w**2
                 - np.cos(2 * w * t) * tauB * w
                 + 2 * tauB * np.exp(-t / tauB) * w
                 + 2 * np.exp(-t / tauB) * np.sin(w * t)
                 - tauB * w
-            ) / (4 * tauB ** 4 * w ** 4 + 5 * tauB ** 2 * w ** 2 + 1)
+            ) / (4 * tauB**4 * w**4 + 5 * tauB**2 * w**2 + 1)
             Trace = Axx + 2
             # For very fast modes, avoid integrating
             aux = tauS / exp(nustar * (l - 1))
@@ -459,8 +476,13 @@ class TheoryPomPom(QTheory):
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
-        times = ft.data[:, 0]
-        times = np.concatenate([[0], times])
+        self.times = ft.data[:, 0]
+        self.times = np.concatenate([[0], self.times])
+        if f.file_type.extension == "shear":
+            self.gfile = ft.data[:, 3]
+        elif f.file_type.extension == "uext":
+            self.gfile = ft.data[:, 2]
+        self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
 
         # create parameters list
         flow_rate = float(f.file_parameters["gdot"])
@@ -478,13 +500,19 @@ class TheoryPomPom(QTheory):
             stretch_ini = 1
             try:
                 l = odeint(
-                    pde_stretch, stretch_ini, times, args=(p,), atol=abserr, rtol=relerr
+                    pde_stretch,
+                    stretch_ini,
+                    self.times,
+                    args=(p,),
+                    atol=abserr,
+                    rtol=relerr,
                 )
             except EndComputationRequested:
                 break
             # write results in table
             l = np.delete(l, [0])  # delete the t=0 value
-            t = np.delete(times, [0])  # delete the t=0 value
+            t = np.delete(self.times, [0])  # delete the t=0 value
+            # TODO: Need to check the following lines for time dependent gdot
             if self.flow_mode == FlowMode.shear:
                 Axy_arr = flow_rate * tauB * (1 - np.exp(-t / tauB))
                 Axx_arr = (
@@ -507,7 +535,9 @@ class TheoryPomPom(QTheory):
                 ) / (1 + flow_rate * tauB)
 
                 k = np.ones(len(t))
-                k[Axx_arr < 1e240] = (Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]) / (
+                k[Axx_arr < 1e240] = (
+                    Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]
+                ) / (
                     Axx_arr[Axx_arr < 1e240] + 2 * Ayy_arr[Axx_arr < 1e240]
                 )  # k=1 if Axx > 1e240
 
@@ -565,19 +595,19 @@ class TheoryPomPom(QTheory):
                 * g0
                 * w
                 * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t))
-                / (1 + w ** 2 * tauB ** 2)
+                / (1 + w**2 * tauB**2)
             )
-            Axx_arr = 1 - tauB * g0 ** 2 * w * (
-                2 * np.cos(2 * w * t) * tauB ** 3 * w ** 3
-                + 2 * np.exp(-t / tauB) * tauB ** 3 * w ** 3
-                + 8 * np.exp(-t / tauB) * tauB ** 2 * w ** 2 * np.sin(w * t)
-                - 4 * tauB ** 3 * w ** 3
-                - 3 * np.sin(2 * w * t) * tauB ** 2 * w ** 2
+            Axx_arr = 1 - tauB * g0**2 * w * (
+                2 * np.cos(2 * w * t) * tauB**3 * w**3
+                + 2 * np.exp(-t / tauB) * tauB**3 * w**3
+                + 8 * np.exp(-t / tauB) * tauB**2 * w**2 * np.sin(w * t)
+                - 4 * tauB**3 * w**3
+                - 3 * np.sin(2 * w * t) * tauB**2 * w**2
                 - np.cos(2 * w * t) * tauB * w
                 + 2 * tauB * np.exp(-t / tauB) * w
                 + 2 * np.exp(-t / tauB) * np.sin(w * t)
                 - tauB * w
-            ) / (4 * tauB ** 4 * w ** 4 + 5 * tauB ** 2 * w ** 2 + 1)
+            ) / (4 * tauB**4 * w**4 + 5 * tauB**2 * w**2 + 1)
             tt.data[:, 2] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0)
 
     def set_param_value(self, name, value):
