@@ -2,8 +2,9 @@
 Version History
 ===============
 
-Release 1.2.4 - 20231215
+Release 1.2.5 - 20231216
 ========================
+- Optimization with integer parameters (Pom-Pom)
 - Expanded shear and uext file to contain gammadot and epsdot
 - Some theories can handle time dependent flow rate
 - Fit simultaneously Creep and Creep Recovery experiments of the same sample.
