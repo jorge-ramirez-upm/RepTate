@@ -7,7 +7,7 @@ Main RepTate Window
     :height: 15pt
     :align: bottom
 
-.. |open| image:: /gui_icons/icons8-open-view-in-new-tab.png
+.. |openmain| image:: /gui_icons/icons8-open-view-in-new-tab.png
     :width: 15pt
     :height: 15pt
     :align: bottom
@@ -31,7 +31,7 @@ Applications have three main separate areas:
   - Open data *Files* and arrange them into different *Datasets* (label **5** in :numref:`figmainwindow`). Different *Datasets* are shown as tabs, named by default as "Set" + number. The name of a *Dataset* can be changed by double-clicking on the tab.
   - Create a *Theory* associated to a given Dataset and fit it (minimize the error with respect to the Files within that Dataset, label **7** in :numref:`figmainwindow`). Currently open theories are named after the theory name + a number. The name can be changed by double-clicking on the tab.
   
-Files in the current *DataSet* are shown in a table, along with the main parameters that describe each file (label **6** in :numref:`figmainwindow`). Files can be added to a *Dataset* with the "Open Data File" button |open| (Ctrl+O) or by dragging them from the file explorer and dropping them on the RepTate window. In the *Theory* area, the parameters of the current theory are shown in a table, with their current value and error. A blue box below the table shows information during the calculation and fitting procedure (label **8** in :numref:`figmainwindow`)
+Files in the current *DataSet* are shown in a table, along with the main parameters that describe each file (label **6** in :numref:`figmainwindow`). Files can be added to a *Dataset* with the "Open Data File" button |openmain| (Ctrl+O) or by dragging them from the file explorer and dropping them on the RepTate window. In the *Theory* area, the parameters of the current theory are shown in a table, with their current value and error. A blue box below the table shows information during the calculation and fitting procedure (label **8** in :numref:`figmainwindow`)
 
 By clicling on the "Data Inspection" button |inspection| (label **1** in :numref:`figextendedwindow`), a new region on the left of the plot area is shown where the user can inspect the contents of a file, shift data and use the Tools. Two separate areas are shown:
 

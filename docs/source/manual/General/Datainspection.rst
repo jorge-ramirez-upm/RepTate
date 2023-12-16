@@ -2,7 +2,7 @@
 Inspecting the Data 
 -----------------------
 
-.. |inspection| image:: /gui_icons/icons8-microscope.png
+.. |inspectiondata| image:: /gui_icons/icons8-microscope.png
     :width: 15pt
     :height: 15pt
     :align: bottom
@@ -18,7 +18,7 @@ Inspecting the Data
     :align: bottom
 
 
-When the user clicks the button "Inspect contents of data files" |inspection| (Ctrl+I) in the Dataset area, a new panel is shown on the left side of the application window. In this panel, some operations can be done on the data, like checking the contents, copy and pasting data, shifting the curves around by dragging them with the mouse or applying Tools to the data.
+When the user clicks the button "Inspect contents of data files" |inspectiondata| (Ctrl+I) in the Dataset area, a new panel is shown on the left side of the application window. In this panel, some operations can be done on the data, like checking the contents, copy and pasting data, shifting the curves around by dragging them with the mouse or applying Tools to the data.
 
 
 View the current file data

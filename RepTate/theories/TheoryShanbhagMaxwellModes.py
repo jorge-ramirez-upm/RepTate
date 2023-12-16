@@ -1798,8 +1798,8 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
                 kernMat = matrix for faster kernel evaluation
                 G0      = optional; if plateau is nonzero
 
-        Output:   H = guessed H
-                G0 = optional guess if *argv is nonempty
+        Output: H       = guessed H
+                G0      = optional guess if *argv is nonempty
         """
         #
         # To guess spectrum, pick a negative Hgs and a large value of lambda to get a
@@ -2039,13 +2039,13 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         """
         %
         % HELPER FUNCTION: Gets Residuals r
-        Input  : H       = guessed H,
+        Input:  H       = guessed H,
                 lambda  = regularization parameter ,
                 Gexp    = experimental data,
                 kernMat = matrix for faster kernel evaluation
                 G0      = plateau
 
-        Output : a set of n+nl residuals,
+        Output: a set of n+nl residuals,
                 the first n correspond to the kernel
                 the last  nl correspond to the smoothness criterion
         %"""

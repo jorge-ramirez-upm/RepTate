@@ -7,7 +7,7 @@ Operating with Views
     :height: 20pt
     :align: bottom
 
-.. |viewall| image:: /gui_icons/icons8-binoculars.png
+.. |viewallview| image:: /gui_icons/icons8-binoculars.png
     :width: 20pt
     :height: 20pt
     :align: bottom
@@ -46,7 +46,7 @@ The data, as represented by the current View/Views, can be saved to a text file 
 Plot Area 
 -----------------------
 
-The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the "View all Datasets simultaneously" button |viewall| is clicked). Several operations can be done in the plot area:
+The plot area shows the graphical representation of the data files in the current Dataset (or all the Datasets in the current application, if the "View all Datasets simultaneously" button |viewallview| is clicked). Several operations can be done in the plot area:
 
 - By clicking on a data point, a label is shown with  its (:math:`x`, :math:`y`) coordinates, with respect to the current View (label **1** in :numref:`figplotarea`). The label can be hidden by clicking on it again.
 - By right-clicking on the plot area and dragging the mouse, the user can zoom to an specific region of the plot.
