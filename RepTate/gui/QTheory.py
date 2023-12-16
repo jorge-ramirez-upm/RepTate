@@ -1028,6 +1028,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         )  # Take the initial guess for the fit from the current value of the parameter
         self.param_min = []  # list of min values for fitting parameters
         self.param_max = []  # list of max values for fitting parameters
+        self.integrality = []  # list of integrality constraints for fitting parameters
         k = list(self.parameters.keys())
         k.sort()
         for p in k:
@@ -1036,6 +1037,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                 initial_guess.append(par.value)
                 self.param_min.append(par.min_value)
                 self.param_max.append(par.max_value)
+                self.integrality.append(par.type == ParameterType.integer)
         # Return if the list of checked parameters is empty
         if (not initial_guess) or (not self.param_min) or (not self.param_max):
             self.Qprint("No parameter to minimize")
@@ -1213,6 +1215,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     init=self.diffevolinit,
                     atol=self.diffevolatol,
                     updating=self.diffevolupdating,
+                    integrality=self.integrality,
                 )
                 initial_guess1 = ret.x
                 pars, pcov = curve_fit(

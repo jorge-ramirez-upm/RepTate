@@ -139,7 +139,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             0,
             "Max Number of Modes",
             ParameterType.integer,
-            opt_type=OptType.opt,
+            opt_type=OptType.const,
         )
         self.parameters["lam_min"] = Parameter(
             "lam_min",
@@ -1498,7 +1498,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             0,
             "Max Number of Modes",
             ParameterType.integer,
-            opt_type=OptType.opt,
+            opt_type=OptType.const,
         )
         self.parameters["lam_min"] = Parameter(
             "lam_min",

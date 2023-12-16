@@ -41,7 +41,7 @@ from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.gui.QTheory import QTheory, EndComputationRequested
+from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMethod
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
@@ -103,6 +103,10 @@ class TheoryPomPom(QTheory):
             display_flag=False,
         )
 
+        # self.mintype = MinimizationMethod.bruteforce
+        # self.BruteNs = 5
+        self.mintype = MinimizationMethod.diffevol
+
         for i in range(self.parameters["nmodes"].value):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -129,7 +133,7 @@ class TheoryPomPom(QTheory):
                 type=ParameterType.integer,
                 opt_type=OptType.opt,
                 min_value=1,
-                max_value=100,
+                max_value=10,
             )
             self.parameters["ratio%02d" % i] = Parameter(
                 name="ratio%02d" % i,
@@ -491,7 +495,7 @@ class TheoryPomPom(QTheory):
             if self.stop_theory_flag:
                 break
             G = self.parameters["G%02d" % i].value
-            q = self.parameters["q%02d" % i].value
+            q = np.round(self.parameters["q%02d" % i].value)
             tauB = self.parameters["tauB%02d" % i].value
             tauS = tauB / self.parameters["ratio%02d" % i].value
             p = [q, tauB, tauS, flow_rate]
@@ -644,7 +648,7 @@ class TheoryPomPom(QTheory):
                     type=ParameterType.integer,
                     opt_type=OptType.opt,
                     min_value=1,
-                    max_value=100,
+                    max_value=10,
                 )
                 self.parameters["ratio%02d" % i] = Parameter(
                     name="ratio%02d" % i,
