@@ -365,7 +365,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         "QApplicationManager" [href="../developers/CodeCoreGUI.html#qapplicationmanager", target="_top", shape="box", style="rounded,filled"]
         "QMainWindow" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QMainWindow.html", target="_top", style="filled"]
         "QMainWindow" -> "QApplicationWindow" [color=green];
-        "QApplicationManager" -> "QApplicationWindow" [color=red];
+        "QApplicationManager" -> "QApplicationWindow" [color=red]; 
         }
 
     """
