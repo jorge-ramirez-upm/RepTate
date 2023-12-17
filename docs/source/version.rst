@@ -2,7 +2,7 @@
 Version History
 ===============
 
-Release 1.2.5 - 20231216
+Release 1.2.6 - 20231217
 ========================
 - Optimization with integer parameters (Pom-Pom)
 - Expanded shear and uext file to contain gammadot and epsdot
