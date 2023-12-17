@@ -28,8 +28,8 @@ The following scheme shows the class inheritance diagram of the most imporatant 
       "QDataSet" [href="../developers/CodeCoreGUI.html#qdataset", target="_top", shape="box", style="rounded,filled"]
       "QTheory" [href="../developers/CodeCoreGUI.html#qtheory", target="_top", shape="box", style="rounded,filled"]
       "QTool" [href="../developers/CodeCoreGUI.html#qtool", target="_top", shape="box", style="rounded,filled"]
-      "QWidget" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qt-5/qwidget.html", target="_top", style="filled"]
-      "QMainWindow" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qt-5/qmainwindow.html", target="_top", style="filled"]
+      "QWidget" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QWidget.html", target="_top", style="filled"]
+      "QMainWindow" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QMainWindow.html", target="_top", style="filled"]
       "QWidget" -> "QApplicationWindow" [color=green];
       "QWidget" -> "QDataSet" [color=green];
       "QWidget" -> "QTheory" [color=green];

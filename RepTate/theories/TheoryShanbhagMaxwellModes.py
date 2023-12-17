@@ -2036,9 +2036,8 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             return res_lsq.x
 
     def residualLM(self, H, lam, Gexp, kernMat):
-        """
-        %
-        % HELPER FUNCTION: Gets Residuals r
+        """HELPER FUNCTION: Gets Residuals r
+
         Input:  H       = guessed H,
                 lambda  = regularization parameter ,
                 Gexp    = experimental data,

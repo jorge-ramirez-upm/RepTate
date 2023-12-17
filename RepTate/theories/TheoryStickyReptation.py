@@ -125,49 +125,32 @@ class TheoryStickyReptation(QTheory):
         return gx
 
     def calculate(self, f=None):
+        """STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
+
+        * **PARAMETERS:**
+            - Ge: elastic modulus
+            - tau_s: sticker dissociation time
+            - Zs: number of stickers per chain
+            - Ze: number of entanglements per chain
+            - alpha: magnitude of the contour-length fluctuations in the double-reptation model. This is principle a universal dimensionless number with a value around ~10.
+
+        * **IMPORTANT:**
+
+            - I. This sticky-reptation model assumes high Rouse frequencies not to affect the rheology at times of the order of the sticker time, due to which the rheology is independent of both the elementary (non-sticky) Rouse time, tau0, and the degree of polymerisation, N. See below.
+
+            - II. The results may be affected by numerical approximations, see below.
+
+        * **I. MODEL APPROXIMATION:**
+
+            - 1: The reptation time and Rouse relaxation after sticker dissociation are approximate. After sticker dissociation a strand of length N/Zs relaxes (a factor of two, to represent a strand of twice that length relaxes) is ignored. The reptation time is taken tau_rep=tau_s Zs^2*Ze, with the prefactor 3 ignored.
+
+            - 2. The model assumes that the sticker dissociation time tau_s is much larger than tau0*(N/Zs)^2. The shape of the sticker plateau in G' and G'' is therefore not affected by the early-time Rouse relaxation, and is independent of tau0 and N: Including the high frequencies requires tau0 and N as additional parameters.
+
+        * **II. NUMERICAL SETTINGS:**
+
+            - 1. The infinite sums in the double-reptation model are truncated using a numerical tolerance level.
+            - 2. To transform G(t) to G'(w) and G''(w) a time range with a finite number of samples is defined. The time range and number of samples may affect the results.
         """
-
-        STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
-
-          PARAMETERS:
-          > Ge    - elastic modulus
-          > tau_s - sticker dissociation time
-          > Zs    - number of stickers per chain
-          > Ze    - number of entanglements per chain
-          > alpha - magnitude of the contour-length fluctuations in the
-                    double-reptation model. This is principle a universal
-                    dimensionless number with a value around ~10.
-          IMPORTANT:
-          I. This sticky-reptation model assumes high Rouse frequencies
-             not to affect the rheology at times of the order of the
-             sticker time, due to which the rheology is independent
-             of both the elementary (non-sticky) Rouse time, tau0,
-             and the degree of polymerisation, N. See below.
-          II. The results may be affected by numerical approximations,
-             see below.
-
-          I. MODEL APPROXIMATION:
-          1: The reptation time and Rouse relaxation after sticker
-             dissociation are approximate. After sticker dissociation
-             a strand of length N/Zs relaxes (a factor of two, to
-             represent a strand of twice that length relaxes) is
-             ignored. The reptation time is taken tau_rep=tau_s Zs^2*Ze,
-             with the prefactor 3 ignored.
-          2. The model assumes that the sticker dissociation time tau_s
-             is much larger than tau0*(N/Zs)^2. The shape of the sticker
-             plateau in G' and G'' is therefore not affected by the
-             early-time Rouse relaxation, and is independent of tau0 and
-             N: Including the high frequencies requires tau0 and N as
-             additional parameters.
-
-          II. NUMERICAL SETTINGS:
-          Some numerical
-          1. The infinite sums in the double-reptation model are
-             truncated using a numerical tolerance level.
-          2. To transform G(t) to G'(w) and G''(w) a time range with
-             a finite number of samples is defined. The time range
-             and number of samples may affect the results."""
-
         # ---------------------------------------------
         # FUNCTION INPUT
         ft = f.data_table

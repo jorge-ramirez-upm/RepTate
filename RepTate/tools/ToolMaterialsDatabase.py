@@ -51,16 +51,16 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QFormLayout,
     QInputDialog,
-    QTreeWidgetItemIterator
+    QTreeWidgetItemIterator,
 )
 from PySide6.QtCore import QSize, QStandardPaths
 from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
 from pathlib import Path
 import RepTate.tools.polymer_data as polymer_data
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app 
+    # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
     PATH = sys._MEIPASS
 else:
@@ -78,7 +78,9 @@ materials_database = np.load(
 home_path = str(Path.home())
 file_user_database_old = os.path.join(home_path, "user_database.npy")
 if os.path.exists(file_user_database_old):
-    materials_user_database_old = np.load(file_user_database_old, allow_pickle=True).item()
+    materials_user_database_old = np.load(
+        file_user_database_old, allow_pickle=True
+    ).item()
 else:
     materials_user_database_old = {}
 
@@ -139,12 +141,12 @@ class EditMaterialParametersDialog(QDialog):
 
 
 def check_chemistry(chem):
-    """Check if the file contains chemistry. If so, check if the chemistry appears in
-    the user or general materials database.
-        Arguments:
-            - chem {str} -- Chemistry
-        Returns:
-            - code {integer} -- -1 (not found) 0 (found in user's) 1 (found in general database)
+    """Check if the file contains chemistry. If so, check if the chemistry appears in the user or general materials database.
+
+    :param chem: Chemistry
+    :type chem: str
+    :return: code -1 (not found) 0 (found in user's) 1 (found in general database)
+    :rtype: int
     """
     if chem in materials_user_database.keys():
         return 0
@@ -325,12 +327,12 @@ class ToolMaterialsDatabase(QTool):
 
         # Search for the chemistry in the first file of the first dataset (OR CURRENT DATASET?)
         self.init_chem = None
-        if len(parent_app.datasets)>0:
+        if len(parent_app.datasets) > 0:
             ds = parent_app.datasets[list(parent_app.datasets)[0]]
-            if len(ds.files)>0:
+            if len(ds.files) > 0:
                 f = ds.files[0]
-                if 'chem' in f.file_parameters:
-                    self.init_chem=f.file_parameters['chem']
+                if "chem" in f.file_parameters:
+                    self.init_chem = f.file_parameters["chem"]
 
         self.update_parameter_table()
         # self.parent_application.update_all_ds_plots()
@@ -436,7 +438,7 @@ class ToolMaterialsDatabase(QTool):
         self.isofrictional.setChecked(True)
         self.shiftdata = self.tbMwT.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-vertical-shift-data.png"),
-            "Shift all Files in the current Application"
+            "Shift all Files in the current Application",
         )
         self.verticalLayout.insertWidget(2, self.tbMwT)
         connection_id = self.isofrictional.triggered.connect(self.handle_vert_and_iso)
@@ -444,7 +446,7 @@ class ToolMaterialsDatabase(QTool):
         connection_id = self.shiftdata.triggered.connect(self.handle_shift_data)
 
         init_chem_index = self.cbmaterial.findText(self.init_chem)
-        if init_chem_index>-1:
+        if init_chem_index > -1:
             self.cbmaterial.setCurrentIndex(init_chem_index)
         self.change_material()
 
@@ -454,7 +456,7 @@ class ToolMaterialsDatabase(QTool):
     def handle_shift_data(self):
         Tr = float(self.editT.text())
         chem = self.cbmaterial.currentText()
-        msg = "Selected T=%g\nSelected material=%s\n"%(Tr, chem)
+        msg = "Selected T=%g\nSelected material=%s\n" % (Tr, chem)
         msg += "Do you want to shift all Tables in the current Dataset "
         msg += "to the chosen temperature using the WLF parameters for the chosen material?"
         ans = QMessageBox.question(
@@ -465,8 +467,8 @@ class ToolMaterialsDatabase(QTool):
         )
         if ans != QMessageBox.Yes:
             return
-        
-        # Calculate shift factors 
+
+        # Calculate shift factors
 
         B1 = self.parameters["B1"].value
         B2 = self.parameters["B2"].value
@@ -487,11 +489,11 @@ class ToolMaterialsDatabase(QTool):
             Tf = f.file_parameters["T"]
             Mw = f.file_parameters["Mw"]
             if "iso" in f.file_parameters:
-                iso_file = (f.file_parameters["iso"].upper() == "TRUE")
+                iso_file = f.file_parameters["iso"].upper() == "TRUE"
             elif "isof" in f.file_parameters:
-                iso_file = (f.file_parameters["isof"].upper() == "TRUE")
+                iso_file = f.file_parameters["isof"].upper() == "TRUE"
             else:
-                iso_file=False
+                iso_file = False
 
             if iso and not iso_file:
                 B2corrected = B2 + CTg / Mw  # - 68.7 * dx12
@@ -500,7 +502,13 @@ class ToolMaterialsDatabase(QTool):
                 B2corrected = B2
                 Trcorrected = Tr
 
-            aT = np.power(10.0, -B1 * (Tf - Trcorrected) / (B2corrected + Trcorrected) / (B2corrected + Tf))
+            aT = np.power(
+                10.0,
+                -B1
+                * (Tf - Trcorrected)
+                / (B2corrected + Trcorrected)
+                / (B2corrected + Tf),
+            )
             if vert:
                 bT = (1 + alpha * Tf) * (Tr + 273.15) / (1 + alpha * Tr) / (Tf + 273.15)
             else:
@@ -508,27 +516,32 @@ class ToolMaterialsDatabase(QTool):
 
             # Loop over file type columns
             for i, c in enumerate(f.file_type.col_names):
-                if c in ["t", "time"]: # Shift horizontally to the left
-                    f.data_table.data[:, i] = f.data_table.data[:, i]/aT
-                elif c in ["w"]: # Shift horizontally to the right
-                    f.data_table.data[:, i] = f.data_table.data[:, i]*aT
-                elif c in ["G'", "G''", "Gt", "sigma_xy", "N1", "sigma"]: # Shift vertically up
-                    f.data_table.data[:, i] = f.data_table.data[:, i]*bT
-        
+                if c in ["t", "time"]:  # Shift horizontally to the left
+                    f.data_table.data[:, i] = f.data_table.data[:, i] / aT
+                elif c in ["w"]:  # Shift horizontally to the right
+                    f.data_table.data[:, i] = f.data_table.data[:, i] * aT
+                elif c in [
+                    "G'",
+                    "G''",
+                    "Gt",
+                    "sigma_xy",
+                    "N1",
+                    "sigma",
+                ]:  # Shift vertically up
+                    f.data_table.data[:, i] = f.data_table.data[:, i] * bT
+
             # Change file parameter T to target Temperature
             f.file_parameters["T"] = Tr
 
             it = QTreeWidgetItemIterator(ds.DataSettreeWidget)
             while it.value():
-                if (it.value().text(0)==f.file_name_short):
+                if it.value().text(0) == f.file_name_short:
                     for i in range(ds.DataSettreeWidget.columnCount()):
                         if "T" == ds.DataSettreeWidget.headerItem().text(i):
                             it.value().setText(i, str(f.file_parameters["T"]))
-                it+=1;
+                it += 1
 
         self.do_plot()
-        
-
 
     def change_material(self):
         selected_material_name = self.cbmaterial.currentText()
@@ -624,7 +637,7 @@ class ToolMaterialsDatabase(QTool):
         file_user_database = os.path.join(AppData_path, "user_database.npy")
         np.save(file_user_database, materials_user_database)
         msg = "Saved user database in '%s'" % file_user_database
-        QMessageBox.information(self, 'Saved', msg)
+        QMessageBox.information(self, "Saved", msg)
 
     def copy_material(self):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
@@ -753,12 +766,11 @@ class ToolMaterialsDatabase(QTool):
         CC3 = -1.55
         Z = Mw / Me
         tR = tau_e * Z * Z
-        tD = 3 * tau_e * Z ** 3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z ** 1.5)
+        tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
         tab_data.append(["<b>Z</b>", "%g" % Z])
         tab_data.append(["<b>tau_R</b>", "%g" % tR])
         tab_data.append(["<b>tau_D</b>", "%g" % tD])
         self.Qprint(tab_data)
-
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Calculate some results related to the selected material or the file material"""
@@ -767,10 +779,10 @@ class ToolMaterialsDatabase(QTool):
 
     def do_calculate_stuff(self, line=""):
         """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
-Example:
-    calculate_stuff 35.4 240 1 1
+        Example:
+            calculate_stuff 35.4 240 1 1
 
-    Mw=35.4 T=240 isofrictional=True verticalshift=True"""
+            Mw=35.4 T=240 isofrictional=True verticalshift=True"""
         items = line.split()
         if len(items) == 4:
             Mw = float(items[0])
@@ -823,8 +835,8 @@ Example:
             tD = (
                 3
                 * tau_e
-                * Z ** 3
-                * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z ** 1.5)
+                * Z**3
+                * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
             )
             self.Qprint("<b>Z</b> = %g" % Z)
             self.Qprint("<b>tau_R</b> = %g" % tR)
@@ -834,7 +846,7 @@ Example:
             print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
     def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
-        """Calculate the tool for all views - In MatDB, only first view is needed """
+        """Calculate the tool for all views - In MatDB, only first view is needed"""
         newxy = []
         lenx = 1e9
         for i in range(n):
