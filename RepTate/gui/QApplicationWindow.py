@@ -38,6 +38,7 @@ It is the GUI counterpart of Application.
 """
 import sys
 import os
+import io
 import re
 import traceback
 from numpy import *
@@ -62,6 +63,7 @@ from matplotlib.ticker import AutoMinorLocator
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QImage, QColor
 from PySide6.QtWidgets import (
     QGroupBox,
     QFormLayout,
@@ -84,6 +86,7 @@ from PySide6.QtWidgets import (
     QSplitter,
     QTableWidgetItem,
     QRadioButton,
+    QApplication,
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
