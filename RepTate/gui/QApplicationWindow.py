@@ -2725,7 +2725,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if d.exec_():
             for i in range(d.parameterTreeWidget.topLevelItemCount()):
                 item = d.parameterTreeWidget.topLevelItem(i)
-                if item.checkState(0):
+                if item.checkState(0) == Qt.CheckState.Checked:
                     parameterstochange.append(item.text(0))
                     pmin = float(item.text(1))
                     pmax = float(item.text(2))
