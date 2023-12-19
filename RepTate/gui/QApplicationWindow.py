@@ -365,7 +365,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         "QApplicationManager" [href="../developers/CodeCoreGUI.html#qapplicationmanager", target="_top", shape="box", style="rounded,filled"]
         "QMainWindow" [shape=box,fillcolor=palegreen,href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QMainWindow.html", target="_top", style="filled"]
         "QMainWindow" -> "QApplicationWindow" [color=green];
-        "QApplicationManager" -> "QApplicationWindow" [color=red]; 
+        "QApplicationManager" -> "QApplicationWindow" [color=red];
         }
 
     """
@@ -2971,10 +2971,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         main_menu.addSeparator()
         if self._event is not None:
             self._annotation_done = False
-            add_annotation = main_menu.addAction(self.actionAdd_Annotation)
-            connection_id = self.actionAdd_Annotation.triggered.connect(
-                self.add_annotation
-            )
+            # TODO: JR removed the "Add Annotation" option. See if we can bring it back, if many people request it.
+            # add_annotation = main_menu.addAction(self.actionAdd_Annotation)
+            # connection_id = self.actionAdd_Annotation.triggered.connect(
+            #     self.add_annotation
+            # )
         refresh_chart_action = main_menu.addAction("Reset view(s)")
         refresh_chart_action.triggered.connect(self.refresh_plot)
         # change view
@@ -2987,16 +2988,17 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             if tab_ind != 0:
                 n_ax_view_to_change = tab_ind - 1
 
-            menu2 = QMenu("Select View")
-            for i in range(self.viewComboBox.count()):
-                view_name = self.viewComboBox.itemText(i)
-                pick_view = menu2.addAction(view_name)
-                pick_view.triggered.connect(
-                    lambda _, view_name=view_name: self.change_ax_view(
-                        n_ax_view_to_change, view_name
-                    )
-                )
-            main_menu.addMenu(menu2)
+            # TODO: Removed the "Select View" option. See if we can bring it back, if many people request it.
+            # menu2 = QMenu("Select View")
+            # for i in range(self.viewComboBox.count()):
+            #     view_name = self.viewComboBox.itemText(i)
+            #     pick_view = menu2.addAction(view_name)
+            #     pick_view.triggered.connect(
+            #         lambda _, view_name=view_name: self.change_ax_view(
+            #             n_ax_view_to_change, view_name
+            #         )
+            #     )
+            # main_menu.addMenu(menu2)
 
         # launch menu
         if main_menu.exec_(QCursor.pos()):
