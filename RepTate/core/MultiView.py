@@ -47,7 +47,8 @@ import matplotlib as mpl
 
 # mpl.use("Qt5Agg") # comment this as Mac uses "macosx" backend and Windows seems unaffected
 import matplotlib.pyplot as plt
-#from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+
+# from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.backends.backend_qtagg import FigureCanvas
 import matplotlib.gridspec as gridspec
 
@@ -188,15 +189,16 @@ class MultiView(QWidget):
         self.horizontalLayout.addLayout(self.plotcontainer)
 
         # Create the multiplot figure
+        self.figure = plt.figure(layout="tight")
         gs = self.organizeplots(self.pot, self.nplots, self.ncols)
         self.axarr = []
-        self.figure = plt.figure()
+        # self.figure = plt.figure()
         for i in range(self.nplots):
             self.axarr.append(self.figure.add_subplot(gs[i]))
 
         self.set_bbox()
 
-        #self.canvas = FigureCanvasQTAgg(self.figure)
+        # self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas = FigureCanvas(self.figure)
         self.canvas.setFocusPolicy(Qt.ClickFocus)
         self.canvas.setFocus()
@@ -344,43 +346,44 @@ class MultiView(QWidget):
         self.canvas.draw()
         self.parent_application.set_view_tools(view_name)
 
-    def organizeHorizontal(self, nplots):
-        gs = gridspec.GridSpec(
-            1,
-            self.nplots,
-            left=self.LEFT,
-            right=self.RIGHT,
-            bottom=self.BOTTOM,
-            top=self.TOP,
-            wspace=self.WSPACE,
-            hspace=self.HSPACE,
-        )
-        return gs
+    # def organizeHorizontal(self, nplots):
+    #     gs = gridspec.GridSpec(
+    #         1,
+    #         self.nplots,
+    #         left=self.LEFT,
+    #         right=self.RIGHT,
+    #         bottom=self.BOTTOM,
+    #         top=self.TOP,
+    #         wspace=self.WSPACE,
+    #         hspace=self.HSPACE,
+    #     )
+    #     return gs
 
-    def organizeVertical(self, nplots):
-        gs = gridspec.GridSpec(
-            self.nplots,
-            1,
-            left=self.LEFT,
-            right=self.RIGHT,
-            bottom=self.BOTTOM,
-            top=self.TOP,
-            wspace=self.WSPACE,
-            hspace=self.HSPACE,
-        )
-        return gs
+    # def organizeVertical(self, nplots):
+    #     gs = gridspec.GridSpec(
+    #         self.nplots,
+    #         1,
+    #         left=self.LEFT,
+    #         right=self.RIGHT,
+    #         bottom=self.BOTTOM,
+    #         top=self.TOP,
+    #         wspace=self.WSPACE,
+    #         hspace=self.HSPACE,
+    #     )
+    #     return gs
 
     def organizeOptimalRow(self, nplots, ncols):
         row = math.ceil(nplots / ncols)
         gstmp = gridspec.GridSpec(
             row,
             ncols,
-            left=self.LEFT,
-            right=self.RIGHT,
-            bottom=self.BOTTOM,
-            top=self.TOP,
-            wspace=self.WSPACE,
-            hspace=self.HSPACE,
+            self.figure,
+            # left=self.LEFT,
+            # right=self.RIGHT,
+            # bottom=self.BOTTOM,
+            # top=self.TOP,
+            # wspace=self.WSPACE,
+            # hspace=self.HSPACE,
         )
         gs = []
         # First row might be different
@@ -392,28 +395,28 @@ class MultiView(QWidget):
                 gs.append(gstmp[i, j])
         return gs
 
-    def organizeOptimalColumn(self, nplots, ncols):
-        row = math.ceil(nplots / ncols)
-        gstmp = gridspec.GridSpec(
-            row,
-            ncols,
-            left=self.LEFT,
-            right=self.RIGHT,
-            bottom=self.BOTTOM,
-            top=self.TOP,
-            wspace=self.WSPACE,
-            hspace=self.HSPACE,
-        )
-        gs = []
-        # First column might be different
-        gs.append(gstmp[0 : row * ncols - nplots + 1, 0])
-        for j in range(row * ncols - nplots + 1, row):
-            gs.append(gstmp[j, 0])
-        for i in range(1, ncols):
-            for j in range(row):
-                gs.append(gstmp[j, i])
+    # def organizeOptimalColumn(self, nplots, ncols):
+    #     row = math.ceil(nplots / ncols)
+    #     gstmp = gridspec.GridSpec(
+    #         row,
+    #         ncols,
+    #         left=self.LEFT,
+    #         right=self.RIGHT,
+    #         bottom=self.BOTTOM,
+    #         top=self.TOP,
+    #         wspace=self.WSPACE,
+    #         hspace=self.HSPACE,
+    #     )
+    #     gs = []
+    #     # First column might be different
+    #     gs.append(gstmp[0 : row * ncols - nplots + 1, 0])
+    #     for j in range(row * ncols - nplots + 1, row):
+    #         gs.append(gstmp[j, 0])
+    #     for i in range(1, ncols):
+    #         for j in range(row):
+    #             gs.append(gstmp[j, i])
 
-        return gs
+    #     return gs
 
     def organizeplots(self, organizationtype, nplots=1, ncols=1, gs=None):
         if organizationtype == PlotOrganizationType.Vertical:
