@@ -203,8 +203,8 @@ def start_UV(argv):
     else:
         CmdBase.calcmode = CalcMode.multithread
 
-    # ex.showMaximized()
-    ex.show()
+    ex.showMaximized()
+    # ex.show()
     # ex.showFullScreen()
     # ex.showNormal()
     sys.exit(app.exec())
