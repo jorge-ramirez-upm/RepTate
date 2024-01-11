@@ -89,12 +89,12 @@ class PlotOrganizationType(enum.Enum):
 class MultiView(QWidget):
     """Object that contains several matplotlib charts"""
 
-    LEFT = 0.15
-    RIGHT = 0.98
-    BOTTOM = 0.15
-    TOP = 0.98
-    WSPACE = 0.25
-    HSPACE = 0.35
+    LEFT = 0.07
+    RIGHT = 0.99
+    BOTTOM = 0.1
+    TOP = 0.99
+    WSPACE = 0.12
+    HSPACE = 0.25
     SAVE_DPI = 300
     FIG_DPI = plt.matplotlib.rcParams["figure.dpi"]
 
@@ -189,12 +189,25 @@ class MultiView(QWidget):
         self.horizontalLayout.addLayout(self.plotcontainer)
 
         # Create the multiplot figure
-        self.figure = plt.figure(layout="tight")
-        gs = self.organizeplots(self.pot, self.nplots, self.ncols)
+        # self.figure = plt.figure(layout="tight")
+        # self.figure = plt.figure()
+        self.figure = plt.figure(layout="constrained")
+        self.gs = self.organizeplots(self.pot, self.nplots, self.ncols)
+        self.gsmax = gridspec.GridSpec(
+            1,
+            1,
+            figure=self.figure,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
         self.axarr = []
         # self.figure = plt.figure()
         for i in range(self.nplots):
-            self.axarr.append(self.figure.add_subplot(gs[i]))
+            self.axarr.append(self.figure.add_subplot(self.gs[i]))
 
         self.set_bbox()
 
@@ -239,14 +252,14 @@ class MultiView(QWidget):
         self.plotselecttabWidget.blockSignals(True)
         nplot_old = self.nplots
         self.nplots = nplots
-        gs = self.organizeplots(self.pot, self.nplots, self.ncols)
+        self.gs = self.organizeplots(self.pot, self.nplots, self.ncols)
 
         # hide tabs if only one figure
         self.plotselecttabWidget.setVisible(nplots > 1)
 
         for i in range(nplots):
-            self.axarr[i].set_position(gs[i].get_position(self.figure))
-            self.axarr[i].set_subplotspec(gs[i])
+            self.axarr[i].set_position(self.gs[i].get_position(self.figure))
+            self.axarr[i].set_subplotspec(self.gs[i])
         for tab in self.hidden_tab:
             tab_id = tab[0]
             widget = tab[1]
@@ -286,13 +299,15 @@ class MultiView(QWidget):
     def init_plot(self, index):
         if index == 0:  # multiplots
             for i in range(self.nplots):
-                self.axarr[i].set_position(self.bbox[i])
+                # self.axarr[i].set_position(self.bbox[i])
+                self.axarr[i].set_position(self.gs[i].get_position(self.figure))
         else:  # single plot max-size
             tab_to_maxi = index - 1
             for i in range(self.nplots):
                 if i == tab_to_maxi:  # hide other plots
                     self.axarr[i].set_visible(True)
-                    self.axarr[i].set_position(self.bboxmax)
+                    # self.axarr[i].set_position(self.bboxmax)
+                    self.axarr[i].set_position(self.gsmax[0].get_position(self.figure))
                 else:
                     self.axarr[i].set_visible(False)
 
@@ -312,12 +327,13 @@ class MultiView(QWidget):
             )  # set the view combobox according to current view
             self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
-                self.axarr[i].set_position(self.bbox[i])
+                # self.axarr[i].set_position(self.bbox[i])
+                self.axarr[i].set_position(self.gs[i].get_position(self.figure))
                 self.axarr[i].set_visible(True)
-                try:
-                    plt.subplot(self.axarr[i])
-                except:
-                    pass
+                # try:
+                #     plt.subplot(self.axarr[i])
+                # except:
+                #     pass
 
         else:  # single plot max-size
             tab_to_maxi = index - 1  # in 0 1 2
@@ -331,7 +347,8 @@ class MultiView(QWidget):
             for i in range(self.nplots):
                 if i == tab_to_maxi:  # hide other plots
                     self.axarr[i].set_visible(True)
-                    self.axarr[i].set_position(self.bboxmax)
+                    # self.axarr[i].set_position(self.bboxmax)
+                    self.axarr[i].set_position(self.gsmax[0].get_position(self.figure))
                     # try:
                     #     plt.subplot(self.axarr[i])
                     # except:
@@ -343,7 +360,9 @@ class MultiView(QWidget):
                     # except:
                     #     pass
         # self.parent_application.update_datacursor_artists()
-        self.canvas.draw()
+        # self.canvas.draw()
+        # self.figure.tight_layout()
+        plt.draw()
         self.parent_application.set_view_tools(view_name)
 
     # def organizeHorizontal(self, nplots):
@@ -378,12 +397,12 @@ class MultiView(QWidget):
             row,
             ncols,
             self.figure,
-            # left=self.LEFT,
-            # right=self.RIGHT,
-            # bottom=self.BOTTOM,
-            # top=self.TOP,
-            # wspace=self.WSPACE,
-            # hspace=self.HSPACE,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
         )
         gs = []
         # First row might be different
@@ -392,6 +411,29 @@ class MultiView(QWidget):
             gs.append(gstmp[0, j])
         for i in range(1, row):
             for j in range(ncols):
+                gs.append(gstmp[i, j])
+        return gs
+
+    def update_plot_organization(self, left, bottom, ws, hs):
+        row = math.ceil(self.nplots / self.ncols)
+        gstmp = gridspec.GridSpec(
+            row,
+            self.ncols,
+            self.figure,
+            left=left,
+            right=self.RIGHT,
+            bottom=bottom,
+            top=self.TOP,
+            wspace=ws,
+            hspace=hs,
+        )
+        gs = []
+        # First row might be different
+        gs.append(gstmp[0, 0 : row * self.ncols - self.nplots + 1])
+        for j in range(row * self.ncols - self.nplots + 1, self.ncols):
+            gs.append(gstmp[0, j])
+        for i in range(1, row):
+            for j in range(self.ncols):
                 gs.append(gstmp[i, j])
         return gs
 

@@ -1513,6 +1513,35 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 ax.tick_params(which="major", labelsize=font_size)
                 ax.tick_params(which="minor", labelsize=font_size * 0.8)
 
+        # Do the same for plot padding
+        # large window settings
+        w_large = 1580
+        h_large = 994
+        l_large = 0.07
+        b_large = 0.1
+        ws_large = 0.17
+        hs_large = 0.26
+        # small window settings
+        w_small = 460
+        h_small = 537
+        l_small = 0.15
+        b_small = 0.12
+        ws_small = 0.5
+        hs_small = 0.3
+
+        l = l_small + (width - w_small) * (l_large - l_small) / (w_large - w_small)
+        b = b_small + (height - h_small) * (b_large - b_small) / (h_large - h_small)
+        ws = ws_small + (width - w_small) * (ws_large - ws_small) / (w_large - w_small)
+        hs = hs_small + (height - h_small) * (hs_large - hs_small) / (h_large - h_small)
+        self.multiplots.gsmax.update(
+            left=l, right=0.99, top=0.99, bottom=b, wspace=ws, hspace=hs
+        )
+        self.multiplots.gs = self.multiplots.update_plot_organization(l, b, ws, hs)
+        # self.multiplots.gs.update(
+        #     left=l, right=0.99, top=0.99, bottom=b, wspace=ws, hspace=hs
+        # )
+        self.multiplots.handle_plottabChanged(self.current_viewtab)
+
     def zoom_wheel(self, event):
         base_scale = 1.1
         if event.button == "up":
