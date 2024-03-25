@@ -2,13 +2,6 @@
 RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment
 ==========================================================================================
 
-![Hits](https://storage.googleapis.com/hit-counter/main.png)
-
-<p align="center">
-<a href="/LICENSE"><img src="https://img.shields.io/badge/license-GPL-blue.svg" alt="license" /></a>
-</p>
-
-
 RepTate Rheology Software
 -------------------------
 
