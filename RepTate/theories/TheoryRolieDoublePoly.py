@@ -865,9 +865,7 @@ class TheoryRolieDoublePoly(QTheory):
         if name == "nmodes":
             oldn = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryRolieDoublePoly, self).set_param_value(
-            name, value
-        )
+        message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
