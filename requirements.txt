@@ -1,7 +1,8 @@
 # GIT needs to be installed for development purposes
 matplotlib>=3.2.1
-openpyxl
-PySide6
-scipy
-xlrd
-psutil
+openpyxl>=3.1.2
+PySide6>=6.6.0
+scipy>=1.11.3
+xlrd>=2.0.1
+psutil>=5.9.6
+numpy>=1.26.0
