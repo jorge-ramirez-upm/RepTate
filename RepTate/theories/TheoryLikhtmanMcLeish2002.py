@@ -38,7 +38,7 @@ polymers.
 """
 import os
 import numpy as np
-from scipy import interp
+from numpy import interp
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
@@ -48,7 +48,7 @@ from PySide6.QtCore import QSize
 
 class TheoryLikhtmanMcLeish2002(QTheory):
     """Fit Likhtman-McLeish theory for linear rheology of linear entangled polymers
-        
+
     * **Parameters**
        - ``tau_e`` : Rouse time of one entanglement segment (of length :math:`M_e`).
        - ``Ge`` : Entanglement modulus.
@@ -261,9 +261,10 @@ class TheoryLikhtmanMcLeish2002(QTheory):
     def do_error(self, line):
         """Report the error of the current theory
 
-Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+        Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
+        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
+        """
         super().do_error(line)
         taue = self.parameters["tau_e"].value
         Me = self.parameters["Me"].value
@@ -275,12 +276,12 @@ File error is calculated as the mean square of the residual, averaged over all p
         C3 = -1.55
         for f in self.theory_files():
             Z = float(f.file_parameters["Mw"]) / Me
-            tauR = taue * Z ** 2
+            tauR = taue * Z**2
             if Z != 0:
                 tauD = (
                     3
                     * taue
-                    * Z ** 3
+                    * Z**3
                     * (1.0 - 2 * C1 / np.sqrt(Z) + C2 / Z + C3 / np.power(Z, 1.5))
                 )
             else:
@@ -294,6 +295,3 @@ File error is calculated as the mean square of the residual, averaged over all p
                 ]
             )
         self.Qprint(tab_data)
-
-
-

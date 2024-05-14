@@ -40,7 +40,7 @@ import time
 import getpass
 import numpy as np
 from os.path import join, isdir
-from scipy import interp
+from numpy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 import RepTate

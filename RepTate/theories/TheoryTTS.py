@@ -39,7 +39,7 @@ import os
 import time
 import getpass
 import numpy as np
-from scipy import interp
+from numpy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
