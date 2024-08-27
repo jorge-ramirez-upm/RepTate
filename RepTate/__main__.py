@@ -129,9 +129,9 @@ def start_RepTate(argv):
     # Get files from command line
     dictfiles = get_argument_files(args.finlist)
 
-    if args.version:
-        print(QApplicationManager.intro)
-        sys.exit()
+    #if args.version:
+    #    print(QApplicationManager.intro)
+    #    sys.exit()
 
     if args.verbose:
         loglevel = logging.DEBUG
@@ -165,6 +165,11 @@ def start_RepTate(argv):
     ex = QApplicationManager(loglevel=loglevel)
     ex.setStyleSheet("QTabBar::tab { color:black; height: 22px; }")
     # splash.showMessage("Loading RepTate...")
+
+    if args.version:
+        print(QApplicationManager.intro)
+        sys.exit()
+
 
     splash.finish(ex)
 
