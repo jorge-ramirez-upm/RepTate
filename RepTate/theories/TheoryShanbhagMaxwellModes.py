@@ -32,10 +32,11 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryShanbhagMaxwellModes
 
-Module that defines theories related to Maxwell modes, in the frequency and time domains 
+Module that defines theories related to Maxwell modes, in the frequency and time domains
 based on the codes pyRespect-time (10.1002/mats.201900005) and pyRespect-frequency (10.3933/ApplRheol-23-24628)
 
 """
+
 import sys
 import os
 import numpy as np
@@ -47,7 +48,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from scipy.optimize import nnls, minimize, least_squares
 from scipy.interpolate import interp1d
-from scipy.integrate import cumtrapz, quad
+from scipy.integrate import cumulative_trapezoid, quad
 import enum
 import RepTate
 import time
@@ -115,9 +116,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             ParameterType.integer,
             opt_type=OptType.const,
         )
-        self.parameters["lamC"] = Parameter(
-            "lamC", 0, "Specify lambda_C", ParameterType.real, opt_type=OptType.nopt
-        )
+        self.parameters["lamC"] = Parameter("lamC", 0, "Specify lambda_C", ParameterType.real, opt_type=OptType.nopt)
         self.parameters["SmFacLam"] = Parameter(
             name="SmFacLam",
             value=0,
@@ -224,19 +223,13 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         self.tbutpredmode.setMenu(menu)
         tb.addWidget(self.tbutpredmode)
 
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes/spectrum"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes/spectrum")
         self.plateauaction = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-flat-tire-80.png"),
             "is there a residual plateau?",
         )
-        self.save_modes_action = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
-        self.save_spectrum_action = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save_Ht.png"), "Save Spectrum"
-        )
+        self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
+        self.save_spectrum_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save_Ht.png"), "Save Spectrum")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.plateauaction.setCheckable(True)
@@ -463,11 +456,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         nl = ns - 2
 
         # L is a nl*ns tridiagonal matrix with 1 -2 and 1 on its diagonal.
-        L = (
-            np.diag(np.ones(ns - 1), 1)
-            + np.diag(np.ones(ns - 1), -1)
-            + np.diag(-2.0 * np.ones(ns))
-        )
+        L = np.diag(np.ones(ns - 1), 1) + np.diag(np.ones(ns - 1), -1) + np.diag(-2.0 * np.ones(ns))
         L = L[1 : nl + 1, :]
 
         Jr = np.zeros((2 * n + nl, ns))
@@ -553,16 +542,12 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # send Hplus = [H, G0], on return unpack H and G0
         if G0 > 0:
             Hplus = np.append(H, G0)
-            res_lsq = least_squares(
-                self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat)
-            )
+            res_lsq = least_squares(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x[:-1], res_lsq.x[-1]
 
         # send normal H, and collect optimized H back
         else:
-            res_lsq = least_squares(
-                self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat)
-            )
+            res_lsq = least_squares(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x
 
     def InitializeH(self, Gexp, s, kernMat, G0=0):
@@ -599,11 +584,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         helper function for lcurve in error determination"""
         # L is a ns*ns tridiagonal matrix with 1 -2 and 1 on its diagonal;
         nl = ns - 2
-        L = (
-            np.diag(np.ones(ns - 1), 1)
-            + np.diag(np.ones(ns - 1), -1)
-            + np.diag(-2.0 * np.ones(ns))
-        )
+        L = np.diag(np.ones(ns - 1), 1) + np.diag(np.ones(ns - 1), -1) + np.diag(-2.0 * np.ones(ns))
         L = L[1 : nl + 1, :]
 
         return np.dot(L.T, L)
@@ -667,9 +648,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         if rhoF(lamC) <= self.parameters["rho_cutoff"].value:
             try:
-                eridx = (
-                    np.abs(rhoF(lami) - self.parameters["rho_cutoff"].value)
-                ).argmin()
+                eridx = (np.abs(rhoF(lami) - self.parameters["rho_cutoff"].value)).argmin()
                 if lami[eridx] > lamC:
                     lamC = lami[eridx]
             except:
@@ -728,9 +707,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
             if plateau:
                 H, G0 = self.getH(lamb, Gexp, H, kernMat, G0)
-                rho[i] = np.linalg.norm(
-                    (1.0 - self.kernel_prestore(H, kernMat, G0) / Gexp)
-                )
+                rho[i] = np.linalg.norm((1.0 - self.kernel_prestore(H, kernMat, G0) / Gexp))
                 Bmat = self.getBmatrix(H, kernMat, Gexp, G0)
             else:
                 H = self.getH(lamb, Gexp, H, kernMat)
@@ -808,9 +785,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         g, error, condKp = self.nnLLS(w, tau, Gexp, isPlateau)
 
         # first remove runaway modes outside window with potentially large weight
-        izero = np.where(
-            np.logical_or(max(w) * min(tau) < 0.02, min(w) * max(tau) > 50.0)
-        )
+        izero = np.where(np.logical_or(max(w) * min(tau) < 0.02, min(w) * max(tau) > 50.0))
         tau = np.delete(tau, izero)
         g = np.delete(g, izero)
 
@@ -928,7 +903,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         xi = np.linspace(min(x), max(x), npts)  # reinterpolate on equi-spaced axis
         fint = interp1d(x, px, "cubic")  # smoothen using cubic splines
         pint = fint(xi)  # interpolation
-        ci = cumtrapz(pint, xi, initial=0)
+        ci = cumulative_trapezoid(pint, xi, initial=0)
         pint = pint / ci[npts - 1]
         ci = ci / ci[npts - 1]  # normalize ci
 
@@ -1007,9 +982,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         wmin = min(1.0 / tau1, 1.0 / tau2) / 10.0
         wmax = max(1.0 / tau1, 1.0 / tau2) * 10.0
 
-        return quad(
-            self.normKern_magic, wmin, wmax, args=(gn, taun, g1, tau1, g2, tau2)
-        )[0]
+        return quad(self.normKern_magic, wmin, wmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
 
     def FineTuneSolution(self, tau, w, Gexp, isPlateau):
         """Given a spacing of modes tau, tries to do NLLS to fine tune it further
@@ -1033,9 +1006,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         except:
             pass
 
-        g, tau, _, _ = self.MaxwellModes(
-            np.log(tau), w, Gexp, isPlateau
-        )  # Get g_i, taui
+        g, tau, _, _ = self.MaxwellModes(np.log(tau), w, Gexp, isPlateau)  # Get g_i, taui
         finalError = np.linalg.norm(self.res_wG(tau, w, Gexp, isPlateau))
 
         # keep fine tuned solution, only if it improves things
@@ -1346,9 +1317,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
             yth2 = np.copy(yexp)
             for i in range(xexp.shape[1]):
-                fint = interp1d(
-                    xth[:, i], yth[:, i], "linear"
-                )  # Get the theory at the same points as the data
+                fint = interp1d(xth[:, i], yth[:, i], "linear")  # Get the theory at the same points as the data
                 yth2[:, i] = np.copy(fint(xexp[:, i]))
             xth = np.copy(xexp)
             yth = np.copy(yth2)
@@ -1378,9 +1347,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             total_error += f_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
-            tab_data.append(
-                ["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt]
-            )
+            tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
         # table+='''</table><br>'''
         # self.Qprint(table)
         self.Qprint(tab_data)
@@ -1474,9 +1441,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             ParameterType.integer,
             opt_type=OptType.const,
         )
-        self.parameters["lamC"] = Parameter(
-            "lamC", 0, "Specify lambda_C", ParameterType.real, opt_type=OptType.nopt
-        )
+        self.parameters["lamC"] = Parameter("lamC", 0, "Specify lambda_C", ParameterType.real, opt_type=OptType.nopt)
         self.parameters["SmFacLam"] = Parameter(
             name="SmFacLam",
             value=0,
@@ -1583,19 +1548,13 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         self.tbutpredmode.setMenu(menu)
         tb.addWidget(self.tbutpredmode)
 
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.plateauaction = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-flat-tire-80.png"),
             "is there a residual plateau?",
         )
-        self.save_modes_action = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
-        self.save_spectrum_action = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save_Ht.png"), "Save Spectrum"
-        )
+        self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
+        self.save_spectrum_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save_Ht.png"), "Save Spectrum")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.plateauaction.setCheckable(True)
@@ -1823,11 +1782,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         helper function for lcurve in error determination"""
         # L is a ns*ns tridiagonal matrix with 1 -2 and 1 on its diagonal;
         nl = ns - 2
-        L = (
-            np.diag(np.ones(ns - 1), 1)
-            + np.diag(np.ones(ns - 1), -1)
-            + np.diag(-2.0 * np.ones(ns))
-        )
+        L = np.diag(np.ones(ns - 1), 1) + np.diag(np.ones(ns - 1), -1) + np.diag(-2.0 * np.ones(ns))
         L = L[1 : nl + 1, :]
 
         return np.dot(L.T, L)
@@ -1953,9 +1908,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
             if plateau:
                 H, G0 = self.getH(lamb, Gexp, H, kernMat, G0)
-                rho[i] = np.linalg.norm(
-                    (1.0 - self.kernel_prestore(H, kernMat, G0) / Gexp)
-                )
+                rho[i] = np.linalg.norm((1.0 - self.kernel_prestore(H, kernMat, G0) / Gexp))
                 Bmat = self.getBmatrix(H, kernMat, Gexp, G0)
             else:
                 H = self.getH(lamb, Gexp, H, kernMat)
@@ -2023,16 +1976,12 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # send Hplus = [H, G0], on return unpack H and G0
         if len(argv) > 0:
             Hplus = np.append(H, argv[0])
-            res_lsq = least_squares(
-                self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat)
-            )
+            res_lsq = least_squares(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x[:-1], res_lsq.x[-1]
 
         # send normal H, and collect optimized H back
         else:
-            res_lsq = least_squares(
-                self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat)
-            )
+            res_lsq = least_squares(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x
 
     def residualLM(self, H, lam, Gexp, kernMat):
@@ -2084,11 +2033,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         nl = ns - 2
 
         # L is a ns*ns tridiagonal matrix with 1 -2 and 1 on its diagonal;
-        L = (
-            np.diag(np.ones(ns - 1), 1)
-            + np.diag(np.ones(ns - 1), -1)
-            + np.diag(-2.0 * np.ones(ns))
-        )
+        L = np.diag(np.ones(ns - 1), 1) + np.diag(np.ones(ns - 1), -1) + np.diag(-2.0 * np.ones(ns))
         L = L[1 : nl + 1, :]
 
         # Furnish the Jacobian Jr (n+ns)*ns matrix
@@ -2270,7 +2215,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         xi = np.linspace(min(x), max(x), npts)  # reinterpolate on equi-spaced axis
         fint = interp1d(x, px, "cubic")  # smoothen using cubic splines
         pint = fint(xi)  # interpolation
-        ci = cumtrapz(pint, xi, initial=0)
+        ci = cumulative_trapezoid(pint, xi, initial=0)
         pint = pint / ci[npts - 1]
         ci = ci / ci[npts - 1]  # normalize ci
 
@@ -2333,9 +2278,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         tmin = min(tau1, tau2) / 10.0
         tmax = max(tau1, tau2) * 10.0
 
-        return quad(
-            self.normKern_magic, tmin, tmax, args=(gn, taun, g1, tau1, g2, tau2)
-        )[0]
+        return quad(self.normKern_magic, tmin, tmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
 
     def FineTuneSolution(self, tau, t, Gexp, isPlateau, estimateError=False):
         """Given a spacing of modes tau, tries to do NLLS to fine tune it further
@@ -2346,9 +2289,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         success = False
 
         try:
-            res = least_squares(
-                self.res_tG, tau, bounds=(0.0, np.inf), args=(t, Gexp, isPlateau)
-            )
+            res = least_squares(self.res_tG, tau, bounds=(0.0, np.inf), args=(t, Gexp, isPlateau))
             tau = res.x
             tau0 = tau.copy()
 
@@ -2364,9 +2305,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             self.Qprint("<p>Error: %s</p>" % e)
             # pass
 
-        g, tau, _, _ = self.MaxwellModes(
-            np.log(tau), t, Gexp, isPlateau
-        )  # Get g_i, taui
+        g, tau, _, _ = self.MaxwellModes(np.log(tau), t, Gexp, isPlateau)  # Get g_i, taui
 
         #
         # if mode has dropped out, then need to delete corresponding dtau mode
@@ -2589,9 +2528,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             imode = np.argmin(tauSpacing)  # merge modes imode and imode + 1
             tau = self.mergeModes_magic(g, tau, imode)
 
-            g, tau, dtau = self.FineTuneSolution(
-                tau, t, Gexp, plateau, estimateError=True
-            )
+            g, tau, dtau = self.FineTuneSolution(tau, t, Gexp, plateau, estimateError=True)
 
             if len(tau) == 1:
                 break
@@ -2603,9 +2540,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             g = g[:-1]
 
         self.Qprint("Number of optimum nodes = {0:d}".format(len(g)))
-        self.Qprint(
-            "log10(Condition number) of matrix equation: {0:.2f}".format(np.log10(cKp))
-        )
+        self.Qprint("log10(Condition number) of matrix equation: {0:.2f}".format(np.log10(cKp)))
 
         # Spectrum
         self.sdisc = tau
@@ -2695,9 +2630,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             total_error += f_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
-            tab_data.append(
-                ["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt]
-            )
+            tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
         # table+='''</table><br>'''
         # self.Qprint(table)
         self.Qprint(tab_data)

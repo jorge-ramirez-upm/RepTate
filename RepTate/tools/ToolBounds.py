@@ -34,14 +34,14 @@
 
 Remove data ouside Bounds
 """
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
 
 
 class ToolBounds(QTool):
-    """Remove points in the current view ïf :math:`x \\notin [x_{min}, x_{max}]` or :math:`y \\notin [y_{min}, y_{max}]`
-    """
+    """Remove points in the current view ïf :math:`x \\notin [x_{min}, x_{max}]` or :math:`y \\notin [y_{min}, y_{max}]`"""
 
     toolname = "Bounds"
     description = "Bounds Tool"
@@ -53,25 +53,25 @@ class ToolBounds(QTool):
         super().__init__(name, parent_app)
         self.parameters["xmin"] = Parameter(
             name="xmin",
-            value=-np.Infinity,
+            value=-np.inf,
             description="Minimum x",
             type=ParameterType.real,
         )
         self.parameters["xmax"] = Parameter(
             name="xmax",
-            value=np.Infinity,
+            value=np.inf,
             description="Maximum x",
             type=ParameterType.real,
         )
         self.parameters["ymin"] = Parameter(
             name="ymin",
-            value=-np.Infinity,
+            value=-np.inf,
             description="Minimum y",
             type=ParameterType.real,
         )
         self.parameters["ymax"] = Parameter(
             name="ymax",
-            value=np.Infinity,
+            value=np.inf,
             description="Maximum y",
             type=ParameterType.real,
         )
@@ -116,7 +116,6 @@ class ToolBounds(QTool):
                     success = False
 
         return message, success
-
 
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Bounds function limits the data shown in the view"""
