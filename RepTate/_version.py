@@ -501,7 +501,7 @@ def get_versions():
         return {"version": "0+unknown", "full-revisionid": None,
                 "dirty": None,
                 "error": "unable to find root of source tree",
-                "date": None}
+                "date": "1970-01-01T12:00:00+0100"}
 
     try:
         pieces = git_pieces_from_vcs(cfg.tag_prefix, root, verbose)
@@ -517,4 +517,4 @@ def get_versions():
 
     return {"version": "0+unknown", "full-revisionid": None,
             "dirty": None,
-            "error": "unable to compute version", "date": None}
+            "error": "unable to compute version", "date": "1970-01-01T12:00:00+0100"}
