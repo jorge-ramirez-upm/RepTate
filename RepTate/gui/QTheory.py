@@ -53,7 +53,6 @@ from scipy.optimize import (
 from scipy.stats.distributions import t
 from scipy.interpolate import interp1d
 
-from PySide6.QtUiTools import loadUiType
 import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from os.path import dirname, join, abspath
@@ -95,7 +94,7 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = dirname(abspath(__file__))
-Ui_TheoryTab, QWidget = loadUiType(join(PATH, "theorytab.ui"))
+from RepTate.gui.Ui_TheoryTab import Ui_TheoryTab
 from RepTate.gui.fittingoptions import Ui_Dialog
 import RepTate.gui.errorcalculationoptions
 

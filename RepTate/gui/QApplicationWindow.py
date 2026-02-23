@@ -58,7 +58,6 @@ from PySide6.QtGui import (
     QIntValidator,
     QDoubleValidator,
 )
-from PySide6.QtUiTools import loadUiType
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 
@@ -68,6 +67,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QColor
 from PySide6.QtWidgets import (
+    QMainWindow,
     QGroupBox,
     QFormLayout,
     QLineEdit,
@@ -123,10 +123,9 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = dirname(abspath(__file__))
-Ui_AppWindow, QMainWindow = loadUiType(join(PATH, "QApplicationWindow.ui"))
-Ui_EditAnnotation, QDialog = loadUiType(join(PATH, "annotationedit.ui"))
-Ui_AddDummyFiles, QDialog = loadUiType(join(PATH, "dummyfilesDialog.ui"))
-
+from RepTate.gui.Ui_QApplicationWindow import Ui_MainWindow as Ui_AppWindow
+from RepTate.gui.Ui_EditAnnotation import Ui_Dialog as Ui_EditAnnotation
+from RepTate.gui.Ui_AddDummyFiles import Ui_Dialog as Ui_AddDummyFiles
 
 class AddDummyFiles(QDialog, Ui_AddDummyFiles):
     def __init__(self, parent=None, filetype=None):
@@ -157,7 +156,7 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
 class AddFileFunction(QDialog):
     def __init__(self, parent=None, filetype=None):
         super(AddFileFunction, self).__init__(parent)
-        QDialog.__init__(self)
+        #QDialog.__init__(self)
         self.filetype = filetype
         self.createParametersGroupBox(filetype)
         self.createColumnsGroupBox(filetype)

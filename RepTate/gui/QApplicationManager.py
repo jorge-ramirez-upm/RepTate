@@ -40,11 +40,11 @@ ApplicationManager.
 import sys
 import os
 from os.path import dirname, join, abspath, join, isfile, basename
-from PySide6.QtUiTools import loadUiType
 from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
 from PySide6.QtCore import QUrl, Qt, QSize, QStandardPaths
 from PySide6.QtWidgets import (
     QApplication,
+    QMainWindow,
     QInputDialog,
     QMenu,
     QToolBar,
@@ -89,8 +89,7 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = dirname(abspath(__file__))
-Ui_MainWindow, QMainWindow = loadUiType(join(PATH, "ReptateMainWindow.ui"))
-
+from RepTate.gui.Ui_RepTateMainWindow import Ui_ReptateMainWindow as Ui_MainWindow
 
 class QTextEditLogger(logging.Handler):
     def __init__(self, parent):

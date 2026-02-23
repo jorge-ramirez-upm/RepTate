@@ -39,7 +39,6 @@ Module that defines the GUI counterpart of the class Tool.
 import sys
 import numpy as np
 
-from PySide6.QtUiTools import loadUiType
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import (
     QWidget,
@@ -85,8 +84,7 @@ if getattr(sys, "frozen", False):
 else:
     PATH = dirname(abspath(__file__))
 sys.path.append(PATH)
-Ui_ToolTab, QWidget = loadUiType(join(PATH, "Tooltab.ui"))
-
+from RepTate.gui.Ui_ToolTab import Ui_ToolTab
 
 # class QTool(Ui_ToolTab, QWidget, Tool):
 class QTool(QWidget, Ui_ToolTab):

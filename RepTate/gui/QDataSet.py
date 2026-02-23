@@ -53,7 +53,6 @@ from PySide6.QtGui import (
     QDoubleValidator,
     QStandardItem,
 )
-from PySide6.QtUiTools import loadUiType
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
     QWidget,
@@ -97,7 +96,7 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = dirname(abspath(__file__))
-Ui_DataSet, QWidget = loadUiType(join(PATH, "DataSet.ui"))
+from RepTate.gui.Ui_DataSet import Ui_Form as Ui_DataSet
 
 
 class ColorMode(enum.Enum):

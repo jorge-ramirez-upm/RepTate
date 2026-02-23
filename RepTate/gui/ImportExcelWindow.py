@@ -36,10 +36,10 @@
 import sys
 import os
 import numpy as np
-from PySide6.QtUiTools import loadUiType
 from PySide6.QtCore import Qt, QItemSelectionModel
 from PySide6.QtWidgets import (
     QApplication,
+    QDialog,
     QFileDialog,
     QTableWidgetItem,
     QTableWidget,
@@ -57,12 +57,10 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
-Ui_ImportExcelMainWindow, QMainWindowImportExcel = loadUiType(
-    os.path.join(PATH, "import_excel_dialog.ui")
-)
+from RepTate.gui.Ui_ImportExcelMainWindow import Ui_Dialog as Ui_ImportExcelMainWindow
 
 
-class ImportExcelWindow(QMainWindowImportExcel, Ui_ImportExcelMainWindow):
+class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
     list_AZ = [
         "A",
         "B",

@@ -37,8 +37,7 @@ import sys
 import os
 import io
 import numpy as np
-from PySide6.QtUiTools  import loadUiType
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QDialog
 import RepTate
 
 if getattr(sys, "frozen", False):
@@ -48,12 +47,10 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
-Ui_ImportPastedMainWindow, QMainWindowImportPasted = loadUiType(
-    os.path.join(PATH, "import_from_pasted_dialog.ui")
-)
+from RepTate.gui.Ui_ImportPastedMainWindow import Ui_Dialog as Ui_ImportPastedMainWindow
 
 
-class ImportFromPastedWindow(QMainWindowImportPasted, Ui_ImportPastedMainWindow):
+class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
     def __init__(self, parent=None, ftype=None):
         super().__init__()
         self.setupUi(self)

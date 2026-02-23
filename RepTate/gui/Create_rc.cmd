@@ -6,3 +6,15 @@ pyside6-rcc MainWindow.qrc -o MainWindow_rc.py
 pyside6-uic markerSettings.ui -o markerSettings.py
 pyside6-uic fittingoptions.ui -o fittingoptions.py
 pyside6-uic errorcalculationoptions.ui -o errorcalculationoptions.py
+pyside6-uic Tooltab.ui -o Ui_ToolTab.py
+pyside6-uic import_excel_dialog.ui -o Ui_ImportExcelMainWindow.py
+pyside6-uic AboutDialog.ui -o Ui_AboutReptateWindow.py
+pyside6-uic ReptateMainWindow.ui -o Ui_RepTateMainWindow.py
+pyside6-uic QApplicationWindow.ui -o Ui_QApplicationWindow.py
+pyside6-uic annotationedit.ui -o Ui_EditAnnotation.py
+pyside6-uic dummyfilesDialog.ui -o Ui_AddDummyFiles.py
+pyside6-uic DataSet.ui -o Ui_DataSet.py
+pyside6-uic theorytab.ui -o Ui_TheoryTab.py
+pyside6-uic import_excel_dialog.ui -o Ui_ImportExcelMainWindow.py
+pyside6-uic import_from_pasted_dialog.ui -o Ui_ImportPastedMainWindow.py
+
