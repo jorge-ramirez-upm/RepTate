@@ -37,10 +37,10 @@ Module that creates the basic Materials database data.
 """
 import numpy as np
 import os
-from polymer_data import polymer
+from . import polymer_data
 
 polymerdict = {}
-polymerdict["PEP"] = polymer(
+polymerdict["PEP"] = polymer_data.polymer(
     name="PEP",
     long="Polyethylene-propylene",
     author="Alexei Likhtman",
@@ -61,7 +61,7 @@ polymerdict["PEP"] = polymer(
     M0=0,
     MK=0,
 )
-polymerdict["PS"] = polymer(
+polymerdict["PS"] = polymer_data.polymer(
     name="PS",
     long="Polystyrene",
     author="Alexei Likhtman",
@@ -82,7 +82,7 @@ polymerdict["PS"] = polymer(
     M0=104,
     MK=727,
 )
-polymerdict["PI"] = polymer(
+polymerdict["PI"] = polymer_data.polymer(
     name="PI",
     long="Polyisoprene",
     author="Alexei Likhtman",
@@ -103,7 +103,7 @@ polymerdict["PI"] = polymer(
     M0=68,
     MK=140.5,
 )
-polymerdict["PBd"] = polymer(
+polymerdict["PBd"] = polymer_data.polymer(
     name="PBd",
     long="Polybutadiene",
     author="Alexei Likhtman",
@@ -124,7 +124,7 @@ polymerdict["PBd"] = polymer(
     M0=54,
     MK=103.9,
 )
-polymerdict["hPBd"] = polymer(
+polymerdict["hPBd"] = polymer_data.polymer(
     name="hPBd",
     long="Hydrogenated Polybutadiene",
     author="Richard Graham",

@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
     QFrame, QGroupBox, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QTabWidget,
     QVBoxLayout, QWidget)
-import Reptate_rc
+from . import Reptate_rc
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):

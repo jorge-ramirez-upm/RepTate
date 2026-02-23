@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QDialog, QGroupBox,
     QHBoxLayout, QPushButton, QRadioButton, QSizePolicy,
     QVBoxLayout, QWidget)
-import Reptate_rc
+from . import Reptate_rc
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):

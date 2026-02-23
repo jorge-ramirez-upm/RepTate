@@ -19,7 +19,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QSizePolicy,
     QSplitter, QTextBrowser, QTreeWidget, QTreeWidgetItem,
     QVBoxLayout, QWidget)
-import Tool_rc
+from . import Tool_rc
 
 class Ui_ToolTab(object):
     def setupUi(self, ToolTab):

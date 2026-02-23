@@ -19,7 +19,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QMainWindow,
     QSizePolicy, QTabWidget, QToolBar, QVBoxLayout,
     QWidget)
-import MainWindow_rc
+from . import MainWindow_rc
 
 class Ui_ReptateMainWindow(object):
     def setupUi(self, ReptateMainWindow):

@@ -37,6 +37,7 @@ MaterialsDatabase Viewer
 import sys
 import os
 import numpy as np
+from pathlib import Path
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
 from PySide6.QtWidgets import (
@@ -56,7 +57,8 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QSize, QStandardPaths
 from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
 from pathlib import Path
-import RepTate.tools.polymer_data as polymer_data
+from . import polymer_data
+#import RepTate.tools.polymer_data as polymer_data
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -70,9 +72,11 @@ else:
 # sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(PATH)
-materials_database = np.load(
-    os.path.join(PATH, "materials_database.npy"), allow_pickle=True
-).item()
+TOOLS_DIR = Path(__file__).resolve().parent
+materials_database = np.load(TOOLS_DIR / "materials_database.npy", allow_pickle=True).item()
+# materials_database = np.load(
+#     os.path.join(PATH, "materials_database.npy"), allow_pickle=True
+# ).item()
 
 # search user material database in the (old) location "HOME"
 home_path = str(Path.home())

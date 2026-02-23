@@ -18,8 +18,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QSizePolicy, QSplitter,
     QTabWidget, QVBoxLayout, QWidget)
-import Theory_rc
-import Reptate_rc
+from . import Theory_rc
+from . import Reptate_rc
 
 class Ui_Form(object):
     def setupUi(self, Form):
