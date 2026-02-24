@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Tooltab.ui'
+## Form generated from reading UI file 'ToolTab.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.0
 ##
@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QSizePoli
     QSplitter, QTextBrowser, QTreeWidget, QTreeWidgetItem,
     QVBoxLayout, QWidget)
 from . import Tool_rc
-
 class Ui_ToolTab(object):
     def setupUi(self, ToolTab):
         if not ToolTab.objectName():

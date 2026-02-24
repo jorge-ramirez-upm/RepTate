@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDockWidget, QHBoxLayout
     QLabel, QMainWindow, QSizePolicy, QSpinBox,
     QTabWidget, QToolButton, QVBoxLayout, QWidget)
 from . import Reptate_rc
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():

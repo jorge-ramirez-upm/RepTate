@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ReptateMainWindow.ui'
+## Form generated from reading UI file 'RepTateMainWindow.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.0
 ##
@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QDockWidget, QHBoxLayout, QMainWind
     QSizePolicy, QTabWidget, QToolBar, QVBoxLayout,
     QWidget)
 from . import MainWindow_rc
-
 class Ui_ReptateMainWindow(object):
     def setupUi(self, ReptateMainWindow):
         if not ReptateMainWindow.objectName():

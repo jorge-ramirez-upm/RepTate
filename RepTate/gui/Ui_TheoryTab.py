@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'theorytab.ui'
+## Form generated from reading UI file 'TheoryTab.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.0
 ##

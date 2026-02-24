@@ -30,9 +30,7 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module to import pasted data
-
-"""
+"""Module to import pasted data"""
 import sys
 import os
 import io
@@ -47,7 +45,9 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
-from RepTate.gui.Ui_ImportPastedMainWindow import Ui_Dialog as Ui_ImportPastedMainWindow
+from RepTate.gui.Ui_import_from_pasted_dialog import (
+    Ui_Dialog as Ui_ImportPastedMainWindow,
+)
 
 
 class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):

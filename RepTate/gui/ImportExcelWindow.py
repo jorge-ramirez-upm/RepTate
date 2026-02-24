@@ -30,9 +30,7 @@
 # along with RepTate.  If not, see <http://www.gnu.org/licenses/>.
 #
 # --------------------------------------------------------------------------------------------------------
-"""Module for importing data form Excel spreadsheets
-
-"""
+"""Module for importing data form Excel spreadsheets"""
 import sys
 import os
 import numpy as np
@@ -57,7 +55,7 @@ if getattr(sys, "frozen", False):
     PATH = sys._MEIPASS
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
-from RepTate.gui.Ui_ImportExcelMainWindow import Ui_Dialog as Ui_ImportExcelMainWindow
+from RepTate.gui.Ui_import_excel_dialog import Ui_Dialog as Ui_ImportExcelMainWindow
 
 
 class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):

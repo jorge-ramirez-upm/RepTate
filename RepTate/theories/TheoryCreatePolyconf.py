@@ -46,7 +46,7 @@ import time
 
 import ctypes
 from RepTate.theories.BobCtypesHelper import BobCtypesHelper, BobError
-from RepTate.gui import bob_gen_poly # dialog
+from RepTate.gui import Ui_bob_gen_poly  # dialog
 from PySide6.QtWidgets import (
     QDialog,
     QFormLayout,
@@ -60,7 +60,7 @@ from PySide6.QtWidgets import (
     QToolBar,
 )
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
-from PySide6.QtCore import QUrl, Signal, QSize, Qt #, QVariant
+from PySide6.QtCore import QUrl, Signal, QSize, Qt  # , QVariant
 
 
 class DistributionType(enum.Enum):
@@ -234,7 +234,7 @@ class TheoryCreatePolyconf(QTheory):
     in the BoB LVE theory, in the LVE application of RepTate.
 
     The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
-    
+
     * **Parameters**
        - ``M0`` : Mass of a Monomer
        - ``Ne`` : Number of monomers in an entanglement length
@@ -311,7 +311,7 @@ class TheoryCreatePolyconf(QTheory):
         """Create the dialog to setup the polymer configuration"""
         # create form
         self.dialog = QDialog(self)
-        self.dialog.ui = bob_gen_poly.Ui_Dialog()
+        self.dialog.ui = Ui_bob_gen_poly.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
         self.d.pb_pick_file.clicked.connect(self.get_file_name)
@@ -334,7 +334,7 @@ class TheoryCreatePolyconf(QTheory):
         # fill combobox
         i = 0
         for e in ArchitectureType:
-            #self.d.cb_type.addItem(e.value["name"], QVariant(e.name))
+            # self.d.cb_type.addItem(e.value["name"], QVariant(e.name))
             self.d.cb_type.addItem(e.value["name"], e.name)
             self.d.cb_type.setItemData(i, e.value["descr"], Qt.ToolTipRole)
             i += 1
@@ -544,7 +544,11 @@ FunH
         """
         widget = QWidget(self)
         layout = QFormLayout()
-        pol_dict = OrderedDict([("type", pol_type),])  # Arch. enum type number
+        pol_dict = OrderedDict(
+            [
+                ("type", pol_type),
+            ]
+        )  # Arch. enum type number
 
         val_double = QDoubleValidator()
         val_double.setBottom(0)  # set smallest double allowed in the form
@@ -860,7 +864,6 @@ FunH
             return True
         except UnicodeEncodeError:
             return False
-
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""

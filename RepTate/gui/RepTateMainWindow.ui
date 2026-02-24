@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReptateMainWindow</class>
+ <widget class="QMainWindow" name="ReptateMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>RepTate</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="MainWindow.qrc">
+    <normaloff>:/Icons/Images/Reptate64.ico</normaloff>:/Icons/Images/Reptate64.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="ApplicationtabWidget">
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBarProject">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolTip">
+    <string>Project Toolbar</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllToolBarAreas</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpenProject"/>
+   <addaction name="actionSaveProject"/>
+   <addaction name="actionQuit"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarApps">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolTip">
+    <string>Appications  Toolbar</string>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionMWD"/>
+   <addaction name="actionLVE"/>
+   <addaction name="actionNLVE"/>
+   <addaction name="actionGt"/>
+   <addaction name="actionCreep"/>
+   <addaction name="actionSANS"/>
+   <addaction name="actionReact"/>
+   <addaction name="actionDielectric"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarHelpAbout">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="toolTip">
+    <string>Help/About Toolbar</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QDockWidget" name="LoggerdockWidget">
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Log &amp; Terminal</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="LoggerdockWidgetContents">
+    <layout class="QHBoxLayout" name="LoggerdochorizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-exit-sign.png</normaloff>:/Icons/Images/new_icons/icons8-exit-sign.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit Reptate (Ctrl+Q)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionTTS">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/TTS.png</normaloff>:/Icons/Images/new_icons/TTS.png</iconset>
+   </property>
+   <property name="text">
+    <string>TTS</string>
+   </property>
+   <property name="toolTip">
+    <string>Time-Temperature Superposition (Ctrl+2)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="actionLVE">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/LVE.png</normaloff>:/Icons/Images/new_icons/LVE.png</iconset>
+   </property>
+   <property name="text">
+    <string>LVE</string>
+   </property>
+   <property name="toolTip">
+    <string>Linear Viscoelasticity (Ctrl+3)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
+  </action>
+  <action name="actionNLVE">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/NLVE.png</normaloff>:/Icons/Images/new_icons/NLVE.png</iconset>
+   </property>
+   <property name="text">
+    <string>NLVE</string>
+   </property>
+   <property name="toolTip">
+    <string>Start up of shear/extension (Ctrl+4)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
+  </action>
+  <action name="actionGt">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Gt.png</normaloff>:/Icons/Images/new_icons/Gt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Gt</string>
+   </property>
+   <property name="toolTip">
+    <string>Stress relaxation (Ctrl+5)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/Reptate_logo_100.png</normaloff>:/Icons/Images/Reptate_logo_100.png</iconset>
+   </property>
+   <property name="text">
+    <string> About Reptate</string>
+   </property>
+  </action>
+  <action name="actionMWD">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/MWD.png</normaloff>:/Icons/Images/new_icons/MWD.png</iconset>
+   </property>
+   <property name="text">
+    <string>MWD</string>
+   </property>
+   <property name="toolTip">
+    <string>Molecular Weight Distribution (Ctrl+1)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionCreep">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Creep.png</normaloff>:/Icons/Images/new_icons/Creep.png</iconset>
+   </property>
+   <property name="text">
+    <string>Creep</string>
+   </property>
+   <property name="toolTip">
+    <string>Creep experiments (Ctrl+6)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+6</string>
+   </property>
+  </action>
+  <action name="actionSANS">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/SANS.png</normaloff>:/Icons/Images/new_icons/SANS.png</iconset>
+   </property>
+   <property name="text">
+    <string>SANS</string>
+   </property>
+   <property name="toolTip">
+    <string>Small Angle Neutron Scattering (Ctrl+7)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+7</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/qt_logo_128.png</normaloff>:/Icons/Images/qt_logo_128.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionReact">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/React.png</normaloff>:/Icons/Images/new_icons/React.png</iconset>
+   </property>
+   <property name="text">
+    <string>React</string>
+   </property>
+   <property name="toolTip">
+    <string>React module (Ctrl+8)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+8</string>
+   </property>
+  </action>
+  <action name="actionDielectric">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Dielectric.png</normaloff>:/Icons/Images/new_icons/Dielectric.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dielectric</string>
+   </property>
+   <property name="toolTip">
+    <string>Dielectric spectroscopy (Ctrl+9)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+9</string>
+   </property>
+  </action>
+  <action name="actionDynamicStructureFactor">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/DynamicStructureFactor.png</normaloff>:/Icons/Images/new_icons/DynamicStructureFactor.png</iconset>
+   </property>
+   <property name="text">
+    <string>DynamicStructureFactor</string>
+   </property>
+   <property name="toolTip">
+    <string>Dynamic Structure Factor (Ctrl+0)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-open.png</normaloff>:/Icons/Images/new_icons/icons8-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>OpenProject</string>
+   </property>
+   <property name="toolTip">
+    <string>Open RepTate Project</string>
+   </property>
+  </action>
+  <action name="actionSaveProject">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-save.png</normaloff>:/Icons/Images/new_icons/icons8-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>SaveProject</string>
+   </property>
+   <property name="toolTip">
+    <string>Save RepTate Project</string>
+   </property>
+  </action>
+  <action name="actionShow_reptate_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</normaloff>:/Icons/Images/new_icons/icons8-user-manual.png</iconset>
+   </property>
+   <property name="text">
+    <string>RepTate Documantation</string>
+   </property>
+   <property name="toolTip">
+    <string>RepTate help</string>
+   </property>
+  </action>
+  <action name="actionShow_app_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualApp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Current Application Documentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Application help</string>
+   </property>
+  </action>
+  <action name="actionShow_th_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</normaloff>:/Icons/Images/new_icons/icons8-user-manualTh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Current Theory Documentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Theory help</string>
+   </property>
+  </action>
+  <action name="actionAboutMatplotlib">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Created_with_Matplotlib-logo2.png</normaloff>:/Icons/Images/new_icons/Created_with_Matplotlib-logo2.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Matplotlib</string>
+   </property>
+   <property name="toolTip">
+    <string>About Matplotlib</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAboutNumpy">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/numpylogo.png</normaloff>:/Icons/Images/new_icons/numpylogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Numpy</string>
+   </property>
+   <property name="toolTip">
+    <string>About Numpy</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAboutScipy">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/scipylogo.png</normaloff>:/Icons/Images/new_icons/scipylogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Scipy</string>
+   </property>
+   <property name="toolTip">
+    <string>About Scipy</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShow_offline_help">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-airplane-mode-on.png</normaloff>:/Icons/Images/new_icons/icons8-airplane-mode-on.png</iconset>
+   </property>
+   <property name="text">
+    <string>Offline Documentation</string>
+   </property>
+   <property name="toolTip">
+    <string>Current Theory help</string>
+   </property>
+  </action>
+  <action name="actionLAOS">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/LAOS.png</normaloff>:/Icons/Images/new_icons/LAOS.png</iconset>
+   </property>
+   <property name="text">
+    <string>LAOS</string>
+   </property>
+   <property name="toolTip">
+    <string>Large Amplitude Oscillatory Shear</string>
+   </property>
+  </action>
+  <action name="actionTTSFactors">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/TTSF.png</normaloff>:/Icons/Images/new_icons/TTSF.png</iconset>
+   </property>
+   <property name="text">
+    <string>TTS Factors</string>
+   </property>
+   <property name="toolTip">
+    <string>Time-Temperature Superposition Factors</string>
+   </property>
+  </action>
+  <action name="actionCheckRepTateVersion">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/Reptate_logo_100.png</normaloff>:/Icons/Images/Reptate_logo_100.png</iconset>
+   </property>
+   <property name="text">
+    <string>Check for new RepTate Version</string>
+   </property>
+   <property name="toolTip">
+    <string>Check Github for new versions of RepTate</string>
+   </property>
+  </action>
+  <action name="actionCite_RepTate">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-hot-article-96.png</normaloff>:/Icons/Images/new_icons/icons8-hot-article-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cite RepTate</string>
+   </property>
+   <property name="toolTip">
+    <string>Cite the main RepTate papers</string>
+   </property>
+  </action>
+  <action name="actionShow_Logger">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-library.png</normaloff>:/Icons/Images/new_icons/icons8-library.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Logger</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Log Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+L</string>
+   </property>
+  </action>
+  <action name="actionCrystal">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/Crystal.png</normaloff>:/Icons/Images/new_icons/Crystal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Crystal</string>
+   </property>
+   <property name="toolTip">
+    <string>Flow Induced Crystallisation</string>
+   </property>
+  </action>
+  <action name="actionLogCritical">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-fires-80.png</normaloff>:/Icons/Images/new_icons/icons8-fires-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Critical</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to CRITICAL</string>
+   </property>
+  </action>
+  <action name="actionLogError">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-obstruction-lights-error-80.png</normaloff>:/Icons/Images/new_icons/icons8-obstruction-lights-error-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Error</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to ERROR</string>
+   </property>
+  </action>
+  <action name="actionLogWarning">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-brake-warning-96.png</normaloff>:/Icons/Images/new_icons/icons8-brake-warning-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Warning</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to WARNING</string>
+   </property>
+  </action>
+  <action name="actionLogDebug">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-bug-80.png</normaloff>:/Icons/Images/new_icons/icons8-bug-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Debug</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to DEBUG</string>
+   </property>
+  </action>
+  <action name="actionLogInfo">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-info-80.png</normaloff>:/Icons/Images/new_icons/icons8-info-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Info</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to INFO</string>
+   </property>
+  </action>
+  <action name="actionLogNotSet">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-galaxy-80.png</normaloff>:/Icons/Images/new_icons/icons8-galaxy-80.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log Not Set</string>
+   </property>
+   <property name="toolTip">
+    <string>Set log level to NOTSET</string>
+   </property>
+  </action>
+  <action name="actionCopyLogText">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/Icons/Images/new_icons/icons8-copy-96.png</normaloff>:/Icons/Images/new_icons/icons8-copy-96.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Log Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy Log Text to the Clipboard</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="MainWindow.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>ReptateMainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

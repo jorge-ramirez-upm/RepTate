@@ -95,8 +95,8 @@ if getattr(sys, "frozen", False):
 else:
     PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_TheoryTab import Ui_TheoryTab
-from RepTate.gui.fittingoptions import Ui_Dialog
-import RepTate.gui.errorcalculationoptions
+from RepTate.gui.Ui_fittingoptions import Ui_Dialog
+import RepTate.gui.Ui_errorcalculationoptions
 
 
 # IMPORT FROM THEORY
@@ -471,7 +471,9 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         # Setup Error Calculation Options
         self.errorcalculationdialog = QDialog()
-        self.errorcalculationdialog.ui = RepTate.gui.errorcalculationoptions.Ui_Dialog()
+        self.errorcalculationdialog.ui = (
+            RepTate.gui.Ui_errorcalculationoptions.Ui_Dialog()
+        )
         self.errorcalculationdialog.ui.setupUi(self.errorcalculationdialog)
         self.populate_default_error_calculation_options()
 

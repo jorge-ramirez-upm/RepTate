@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QFrame, QSizePolicy, QSplitter,
     QTabWidget, QVBoxLayout, QWidget)
 from . import Theory_rc
 from . import Reptate_rc
-
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
