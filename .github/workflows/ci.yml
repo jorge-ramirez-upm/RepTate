@@ -20,7 +20,19 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Install deps
+      # Linux-only system packages needed for PySide6/Qt on GitHub runners
+      - name: Install Linux system deps for Qt
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 \
+            libgl1 \
+            libxkbcommon-x11-0 \
+            libxcb-cursor0 \
+            xvfb
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
@@ -30,12 +42,18 @@ jobs:
         run: |
           python scripts/build_ui.py
 
-      - name: Run tests (with repo on PYTHONPATH)
-        shell: bash
+      - name: Run tests (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            export PYTHONPATH="$PWD"
-          else
-            export PYTHONPATH="$PWD"
-          fi
+          set PYTHONPATH=%CD%
+          pytest -q
+
+      - name: Run tests (Linux, headless)
+        if: runner.os == 'Linux'
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          export PYTHONPATH="$PWD"
           pytest -q
