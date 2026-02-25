@@ -12,9 +12,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 GUI_DIR = REPO_ROOT / "RepTate" / "gui"
 
 
-def run(cmd: list[str]) -> None:
+def run(cmd: list[str], cwd: Path | None = None) -> None:
     print(" ".join(cmd))
-    subprocess.check_call(cmd)
+    subprocess.check_call(cmd, cwd=str(cwd) if cwd else None)
 
 
 def compile_ui(ui_path: Path, out_path: Path) -> None:
@@ -24,7 +24,8 @@ def compile_ui(ui_path: Path, out_path: Path) -> None:
 
 def compile_qrc(qrc_path: Path, out_path: Path) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    run(["pyside6-rcc", str(qrc_path), "-o", str(out_path)])
+        # Run rcc from inside the qrc folder so relative paths resolve (Images/..)
+    run(["pyside6-rcc", str(qrc_path.name), "-o", str(out_path.name)], cwd=qrc_path.parent)
 
 
 # Patch patterns in generated Ui_*.py
@@ -100,3 +101,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    
