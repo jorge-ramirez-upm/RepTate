@@ -5,6 +5,9 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -49,14 +52,15 @@ jobs:
             --include-data-files=RepTate\theories\*_win32*.so=RepTate\theories\ ^
             RepTate
 
-      - name: Zip artifact
-        shell: bash
+      - name: Zip artifact (Windows)
+        shell: pwsh
         run: |
-          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
-          echo "DIST_DIR=$DIST_DIR"
-          ZIP="RepTate-${{ github.ref_name }}-windows.zip"
-          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
-          echo "ZIP=$ZIP" >> $GITHUB_ENV
+          $zip = "RepTate-${{ github.ref_name }}-windows.zip"
+          $distDir = Get-ChildItem -Path "dist" -Directory | Where-Object { $_.Name -like "*.dist" } | Select-Object -First 1
+          if (-not $distDir) { throw "No *.dist directory found under dist/" }
+          if (Test-Path "dist\$zip") { Remove-Item "dist\$zip" -Force }
+          Compress-Archive -Path $distDir.FullName -DestinationPath "dist\$zip"
+          "ZIP=$zip" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - uses: actions/upload-artifact@v4
         with:
@@ -83,6 +87,7 @@ jobs:
           python scripts/build_ui.py
 
       - name: Build with Nuitka (Linux)
+        shell: bash
         run: |
           python -m nuitka \
             --standalone \
@@ -104,16 +109,15 @@ jobs:
             --include-data-files=RepTate/theories/*_linux*.so=RepTate/theories/ \
             RepTate
 
-    - name: Zip artifact
+      - name: Zip artifact (Linux)
         shell: bash
         run: |
-          mkdir -p dist
-          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' -o -name '*.app' | head -n 1)"
-          echo "Found: $DIST_DIR"
-          test -n "$DIST_DIR"
-          ZIP="RepTate-${{ github.ref_name }}-macos.zip"
-          (cd "$(dirname "$DIST_DIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$DIST_DIR")")
-          echo "ZIP=$ZIP" >> $GITHUB_ENV
+          ZIP="RepTate-${{ github.ref_name }}-linux.zip"
+          OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' | head -n 1)"
+          test -n "$OUTDIR"
+          rm -f "dist/$ZIP"
+          (cd "$(dirname "$OUTDIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$OUTDIR")")
+          echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -140,6 +144,7 @@ jobs:
           python scripts/build_ui.py
 
       - name: Build with Nuitka (macOS)
+        shell: bash
         run: |
           python -m nuitka \
             --mode=app \
@@ -161,16 +166,15 @@ jobs:
             --include-data-files=RepTate/theories/*_darwin*.so=RepTate/theories/ \
             RepTate
 
-    - name: Zip artifact
+      - name: Zip artifact (macOS)
         shell: bash
         run: |
-          mkdir -p dist
-          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' -o -name '*.app' | head -n 1)"
-          echo "Found: $DIST_DIR"
-          test -n "$DIST_DIR"
           ZIP="RepTate-${{ github.ref_name }}-macos.zip"
-          (cd "$(dirname "$DIST_DIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$DIST_DIR")")
-          echo "ZIP=$ZIP" >> $GITHUB_ENV
+          OUTDIR="$(find dist -maxdepth 2 -type d \( -name '*.app' -o -name '*.dist' \) | head -n 1)"
+          test -n "$OUTDIR"
+          rm -f "dist/$ZIP"
+          (cd "$(dirname "$OUTDIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$OUTDIR")")
+          echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -187,4 +191,3 @@ jobs:
         with:
           files: |
             **/*.zip
-            
