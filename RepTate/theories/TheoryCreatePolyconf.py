@@ -846,8 +846,9 @@ FunH
         """Launch a dialog for selecting a file where to save the
         result of the polymer configuration created by BoB.
         Return a string with a filename"""
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontConfirmOverwrite
+        # options = QFileDialog.Options()
+        # options |= QFileDialog.DontConfirmOverwrite
+        options = QFileDialog.Option.DontConfirmOverwrite
         dir_start = os.path.join(RepTate.root_dir, "data", "React", "BoB_polyconf.dat")
         dilogue_name = "Save BoB Polymer Configuration"
         ext_filter = "Data Files (*.dat)"
