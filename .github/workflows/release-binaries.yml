@@ -26,6 +26,7 @@ jobs:
           python scripts/build_ui.py
 
       - name: Build with Nuitka (Windows)
+        shell: cmd
         run: |
           python -m nuitka ^
             --standalone ^
@@ -103,12 +104,15 @@ jobs:
             --include-data-files=RepTate/theories/*_linux*.so=RepTate/theories/ \
             RepTate
 
-      - name: Zip artifact
+    - name: Zip artifact
+        shell: bash
         run: |
-          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
-          echo "DIST_DIR=$DIST_DIR"
-          ZIP="RepTate-${{ github.ref_name }}-linux.zip"
-          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
+          mkdir -p dist
+          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' -o -name '*.app' | head -n 1)"
+          echo "Found: $DIST_DIR"
+          test -n "$DIST_DIR"
+          ZIP="RepTate-${{ github.ref_name }}-macos.zip"
+          (cd "$(dirname "$DIST_DIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$DIST_DIR")")
           echo "ZIP=$ZIP" >> $GITHUB_ENV
 
       - uses: actions/upload-artifact@v4
@@ -138,7 +142,7 @@ jobs:
       - name: Build with Nuitka (macOS)
         run: |
           python -m nuitka \
-            --standalone \
+            --mode=app \
             --enable-plugin=pyside6 \
             --macos-app-icon=RepTate/gui/Images/RepTate_logo_new.icns \
             --output-dir=dist \
@@ -157,12 +161,15 @@ jobs:
             --include-data-files=RepTate/theories/*_darwin*.so=RepTate/theories/ \
             RepTate
 
-      - name: Zip artifact
+    - name: Zip artifact
+        shell: bash
         run: |
-          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
-          echo "DIST_DIR=$DIST_DIR"
+          mkdir -p dist
+          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' -o -name '*.app' | head -n 1)"
+          echo "Found: $DIST_DIR"
+          test -n "$DIST_DIR"
           ZIP="RepTate-${{ github.ref_name }}-macos.zip"
-          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
+          (cd "$(dirname "$DIST_DIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$DIST_DIR")")
           echo "ZIP=$ZIP" >> $GITHUB_ENV
 
       - uses: actions/upload-artifact@v4
