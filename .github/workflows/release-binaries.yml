@@ -1,0 +1,183 @@
+name: Build binaries
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install Nuitka
+
+      - name: Build UI (uic + rcc + patch imports)
+        run: |
+          python scripts/build_ui.py
+
+      - name: Build with Nuitka (Windows)
+        run: |
+          python -m nuitka ^
+            --standalone ^
+            --enable-plugin=pyside6 ^
+            --windows-console-mode=disable ^
+            --windows-icon-from-ico=RepTate\gui\Images\Reptate64.ico ^
+            --output-dir=dist ^
+            --noinclude-qt-translations ^
+            --python-flag=-m ^
+            --include-package=RepTate.tools ^
+            --include-module=RepTate.gui.Reptate_rc ^
+            --include-module=RepTate.gui.About_rc ^
+            --include-module=RepTate.gui.Theory_rc ^
+            --include-module=RepTate.gui.Tool_rc ^
+            --include-module=RepTate.gui.MainWindow_rc ^
+            --include-data-dir=data=data ^
+            --include-data-dir=RepTate\gui\Images=RepTate\gui\Images ^
+            --include-data-files=RepTate\tools\*.npy=RepTate\tools\ ^
+            --include-data-files=RepTate\theories\*.npz=RepTate\theories\ ^
+            --include-data-files=RepTate\theories\*_win32*.so=RepTate\theories\ ^
+            RepTate
+
+      - name: Zip artifact
+        shell: bash
+        run: |
+          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
+          echo "DIST_DIR=$DIST_DIR"
+          ZIP="RepTate-${{ github.ref_name }}-windows.zip"
+          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
+          echo "ZIP=$ZIP" >> $GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RepTate-${{ github.ref_name }}-windows
+          path: dist/${{ env.ZIP }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install Nuitka
+
+      - name: Build UI (uic + rcc + patch imports)
+        run: |
+          python scripts/build_ui.py
+
+      - name: Build with Nuitka (Linux)
+        run: |
+          python -m nuitka \
+            --standalone \
+            --enable-plugin=pyside6 \
+            --linux-icon=RepTate/gui/Images/RepTate_logo_new.png \
+            --output-dir=dist \
+            --noinclude-qt-translations \
+            --python-flag=-m \
+            --include-package=RepTate.tools \
+            --include-module=RepTate.gui.Reptate_rc \
+            --include-module=RepTate.gui.About_rc \
+            --include-module=RepTate.gui.Theory_rc \
+            --include-module=RepTate.gui.Tool_rc \
+            --include-module=RepTate.gui.MainWindow_rc \
+            --include-data-dir=data=data \
+            --include-data-dir=RepTate/gui/Images=RepTate/gui/Images \
+            --include-data-files=RepTate/tools/*.npy=RepTate/tools/ \
+            --include-data-files=RepTate/theories/*.npz=RepTate/theories/ \
+            --include-data-files=RepTate/theories/*_linux*.so=RepTate/theories/ \
+            RepTate
+
+      - name: Zip artifact
+        run: |
+          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
+          echo "DIST_DIR=$DIST_DIR"
+          ZIP="RepTate-${{ github.ref_name }}-linux.zip"
+          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
+          echo "ZIP=$ZIP" >> $GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RepTate-${{ github.ref_name }}-linux
+          path: dist/${{ env.ZIP }}
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install Nuitka
+
+      - name: Build UI (uic + rcc + patch imports)
+        run: |
+          python scripts/build_ui.py
+
+      - name: Build with Nuitka (macOS)
+        run: |
+          python -m nuitka \
+            --standalone \
+            --enable-plugin=pyside6 \
+            --macos-app-icon=RepTate/gui/Images/RepTate_logo_new.icns \
+            --output-dir=dist \
+            --noinclude-qt-translations \
+            --python-flag=-m \
+            --include-package=RepTate.tools \
+            --include-module=RepTate.gui.Reptate_rc \
+            --include-module=RepTate.gui.About_rc \
+            --include-module=RepTate.gui.Theory_rc \
+            --include-module=RepTate.gui.Tool_rc \
+            --include-module=RepTate.gui.MainWindow_rc \
+            --include-data-dir=data=data \
+            --include-data-dir=RepTate/gui/Images=RepTate/gui/Images \
+            --include-data-files=RepTate/tools/*.npy=RepTate/tools/ \
+            --include-data-files=RepTate/theories/*.npz=RepTate/theories/ \
+            --include-data-files=RepTate/theories/*_darwin*.so=RepTate/theories/ \
+            RepTate
+
+      - name: Zip artifact
+        run: |
+          DIST_DIR="$(find dist -maxdepth 3 -type d -name '*.dist' | head -n 1)"
+          echo "DIST_DIR=$DIST_DIR"
+          ZIP="RepTate-${{ github.ref_name }}-macos.zip"
+          (cd "$(dirname "$DIST_DIR")" && zip -r "../$ZIP" "$(basename "$DIST_DIR")")
+          echo "ZIP=$ZIP" >> $GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RepTate-${{ github.ref_name }}-macos
+          path: dist/${{ env.ZIP }}
+
+  release:
+    needs: [build-windows, build-linux, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            **/*.zip
+            
