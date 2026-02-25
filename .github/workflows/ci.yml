@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-22.04]
         python: ["3.11"]
     runs-on: ${{ matrix.os }}
 

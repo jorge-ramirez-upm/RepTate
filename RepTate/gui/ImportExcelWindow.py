@@ -401,11 +401,11 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
 
     def handle_get_file(self):
         # file browser window
-        options = QFileDialog.Options()
+        # options = QFileDialog.Options()
         dilogue_name = "Select Excel Data File"
         ext_filter = "Excel file (*.xls *xlsx)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, self.dir_start, ext_filter, options=options
+            self, dilogue_name, self.dir_start, ext_filter  # , options=options
         )
         self.handle_read_new_file(selected_file)
 

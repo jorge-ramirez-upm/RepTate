@@ -2931,12 +2931,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # file browser window
         qfdlg = QFileDialog(self)
         # options = QFileDialog.Options()
-        options = qfdlg.options()
+        # options = qfdlg.options()
         # options |= QFileDialog.DontUseNativeDialog
         dilogue_name = "Open"
         # selected_files, _ = QFileDialog.getOpenFileNames(self, dilogue_name, dir_start, ext_filter, options=options)
         selected_files, _ = qfdlg.getOpenFileNames(
-            self, dilogue_name, self.dir_start, ext_filter, options=options
+            self, dilogue_name, self.dir_start, ext_filter  # , options=options
         )
         if selected_files:
             self.dir_start = dirname(selected_files[0])

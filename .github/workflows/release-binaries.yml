@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
@@ -66,7 +66,7 @@ jobs:
         run: |
           python -m nuitka ^
             --assume-yes-for-downloads ^
-            --standalone ^
+            --mode=standalone ^
             --enable-plugin=pyside6 ^
             --windows-console-mode=disable ^
             --windows-icon-from-ico=RepTate\gui\Images\Reptate64.ico ^
@@ -92,8 +92,8 @@ jobs:
           $distDir = Get-ChildItem -Path "dist" -Directory | Where-Object { $_.Name -like "*.dist" } | Select-Object -First 1
           if (-not $distDir) { throw "No *.dist directory found under dist/" }
 
-          $target = Join-Path $distDir.FullName "docs"
-          if (Test-Path $target) { Remove-Item $target -Recurse -Force }
+          $target = Join-Path $distDir.FullName "docs\build\html"
+          if (Test-Path (Join-Path $distDir.FullName "docs")) { Remove-Item (Join-Path $distDir.FullName "docs") -Recurse -Force }
           New-Item -ItemType Directory -Path $target | Out-Null
           Copy-Item -Path "docs_html\*" -Destination $target -Recurse -Force
 
@@ -114,7 +114,7 @@ jobs:
 
   build-linux:
     needs: build-docs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
@@ -142,7 +142,7 @@ jobs:
         shell: bash
         run: |
           python -m nuitka \
-            --standalone \
+            --mode=standalone \
             --enable-plugin=pyside6 \
             --linux-icon=RepTate/gui/Images/RepTate_logo_new.png \
             --output-dir=dist \
@@ -167,8 +167,8 @@ jobs:
           OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' | head -n 1)"
           test -n "$OUTDIR"
           rm -rf "$OUTDIR/docs"
-          mkdir -p "$OUTDIR/docs"
-          cp -a docs_html/. "$OUTDIR/docs/"
+          mkdir -p "$OUTDIR/docs/build/html"
+          cp -a docs_html/. "$OUTDIR/docs/build/html/"
 
       - name: Zip artifact (Linux)
         shell: bash
@@ -240,8 +240,8 @@ jobs:
           OUTDIR="$(find dist -maxdepth 2 -type d \( -name '*.app' -o -name '*.dist' \) | head -n 1)"
           test -n "$OUTDIR"
           rm -rf "$OUTDIR/docs"
-          mkdir -p "$OUTDIR/docs"
-          cp -a docs_html/. "$OUTDIR/docs/"
+          mkdir -p "$OUTDIR/docs/build/html"
+          cp -a docs_html/. "$OUTDIR/docs/build/html/"
 
       - name: Zip artifact (macOS)
         shell: bash
@@ -260,7 +260,7 @@ jobs:
 
   release:
     needs: [build-docs, build-windows, build-linux, build-macos]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/download-artifact@v4
 
@@ -268,3 +268,5 @@ jobs:
         with:
           files: |
             **/*.zip
+            
+            

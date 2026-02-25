@@ -713,12 +713,12 @@ FunH
     def get_file_path(self):
         """Select a polyconf file for BoB to read"""
         # file browser window
-        options = QFileDialog.Options()
+        # options = QFileDialog.Options()
         dir_start = os.path.join(RepTate.root_dir, "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, dir_start, ext_filter, options=options
+            self, dilogue_name, dir_start, ext_filter  # , options=options
         )
         return selected_file
 

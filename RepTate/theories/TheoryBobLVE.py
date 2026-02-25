@@ -108,12 +108,12 @@ class TheoryBobLVE(QTheory):
     def get_file_name(self):
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
-        options = QFileDialog.Options()
+        # options = QFileDialog.Options()
         dir_start = os.path.join(RepTate.root_dir, "data", "React")
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, dir_start, ext_filter, options=options
+            self, dilogue_name, dir_start, ext_filter  # , options=options
         )
         self.selected_file = selected_file
         self.d.selected_file.setText(os.path.basename(selected_file))
