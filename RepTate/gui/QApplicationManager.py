@@ -138,7 +138,10 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     version = RepTate.__version__.split("+")[0]
     date = ""
-    build = ""
+    try:
+        build = RepTate.__version__.split("+")[1]
+    except IndexError:
+        build = ""
 
     intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
     # END COPY
@@ -595,8 +598,8 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         dlg = AboutWindow(
             self,
             "RepTate %s %s" % (self.version, self.date),
-            'Build %s<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
-            % self.build,
+            'RepTate %s - %s<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2026)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
+            % (self.version, self.build),
         )
         dlg.show()
 
@@ -935,7 +938,10 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         version_current = RepTate.__version__.split("+")[0]
         date = ""
-        build = ""
+        try:
+            build = RepTate.__version__.split("+")[1]
+        except IndexError:
+            build = ""
 
         out = OrderedDict(
             [

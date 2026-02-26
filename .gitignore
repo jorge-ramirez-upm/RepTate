@@ -299,3 +299,4 @@ RepTate/docs/source/_build
 
 # OUTPUT FROM REPTATE TESTS
 RepTate/tests/output
+/RepTate/_version.py

@@ -50,6 +50,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+            fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
 
       - uses: actions/setup-python@v5
         with:
@@ -70,6 +72,10 @@ jobs:
       - name: Build UI (uic + rcc + patch imports)
         run: |
           python scripts/build_ui.py
+
+      - name: Install RepTate (editable) so that Nuitka can read the version and other metadata
+        run: |
+          python -m pip install -e .
 
       - name: Build with Nuitka (Windows)
         shell: cmd
@@ -127,6 +133,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
 
       - uses: actions/setup-python@v5
         with:
@@ -147,6 +155,10 @@ jobs:
       - name: Build UI (uic + rcc + patch imports)
         run: |
           python scripts/build_ui.py
+
+      - name: Install RepTate (editable) so that Nuitka can read the version and other metadata
+        run: |
+          python -m pip install -e .
 
       - name: Build with Nuitka (Linux)
         shell: bash
@@ -200,6 +212,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
 
       - uses: actions/setup-python@v5
         with:
@@ -220,6 +234,10 @@ jobs:
       - name: Build UI (uic + rcc + patch imports)
         run: |
           python scripts/build_ui.py
+
+      - name: Install RepTate (editable) so that Nuitka can read the version and other metadata
+        run: |
+          python -m pip install -e .
 
       - name: Build with Nuitka (macOS)
         shell: bash

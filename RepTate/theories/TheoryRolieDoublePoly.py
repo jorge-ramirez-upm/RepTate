@@ -327,7 +327,10 @@ class TheoryRolieDoublePoly(QTheory):
             # build = verdata["version"]
             version = RepTate.__version__.split("+")[0]
             date = ""
-            build = ""
+            try:
+                build = RepTate.__version__.split("+")[1]
+            except IndexError:
+                build = ""
             header = "#flowGen input\n"
             header += "# Generated with RepTate %s %s (build %s)\n" % (
                 version,

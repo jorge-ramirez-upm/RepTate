@@ -451,7 +451,10 @@ class TheoryGoPolyStrand(QTheory):
 
             version = RepTate.__version__.split("+")[0]
             date = ""
-            build = ""
+            try:
+                build = RepTate.__version__.split("+")[1]
+            except IndexError:
+                build = ""
 
             header += "# Generated with RepTate %s %s (build %s)\n" % (
                 version,
