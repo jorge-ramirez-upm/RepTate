@@ -48,6 +48,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="RepTate",
+    use_scm_version={"version_file": "RepTate/_version.py"},
     # version=versioneer.get_version(),
     # cmdclass=versioneer.get_cmdclass(),
     description="Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment",
