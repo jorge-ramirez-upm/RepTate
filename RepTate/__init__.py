@@ -3,10 +3,15 @@ import os
 import traceback
 import logging
 import numpy as np
-from ._version import get_versions
 
-__version__ = get_versions()["version"]
-del get_versions
+try:
+    from ._version import version as __version__
+except Exception:
+    __version__ = "0+unknown"
+# from ._version import get_versions
+
+# __version__ = get_versions()["version"]
+# del get_versions
 
 # RepTate root directory where the "data/" and "docs/" folders are located
 if getattr(sys, "frozen", False):

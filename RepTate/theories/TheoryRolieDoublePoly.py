@@ -321,10 +321,13 @@ class TheoryRolieDoublePoly(QTheory):
             return
 
         with open(fpath, "w") as f:
-            verdata = RepTate._version.get_versions()
-            version = verdata["version"].split("+")[0]
-            date = verdata["date"].split("T")[0]
-            build = verdata["version"]
+            # verdata = RepTate._version.get_versions()
+            # version = verdata["version"].split("+")[0]
+            # date = verdata["date"].split("T")[0]
+            # build = verdata["version"]
+            version = RepTate.__version__.split("+")[0]
+            date = ""
+            build = ""
             header = "#flowGen input\n"
             header += "# Generated with RepTate %s %s (build %s)\n" % (
                 version,

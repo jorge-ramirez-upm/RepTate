@@ -2248,10 +2248,15 @@ class QTheory(QWidget, Ui_TheoryTab):
                 return
 
             header = "# Maxwell modes\n"
-            verdata = RepTate._version.get_versions()
-            version = verdata["version"].split("+")[0]
-            date = verdata["date"].split("T")[0]
-            build = verdata["version"]
+            # verdata = RepTate._version.get_versions()
+            # version = verdata["version"].split("+")[0]
+            # date = verdata["date"].split("T")[0]
+            # build = verdata["version"]
+
+            version = RepTate.__version__.split("+")[0]
+            date = ""
+            build = ""
+
             header += "# Generated with RepTate %s %s (build %s)\n" % (
                 version,
                 date,

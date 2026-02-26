@@ -1,8 +1,5 @@
 version: 2
 
-#conda:
-#    file: environment.yml
-   
 build:
   os: ubuntu-22.04
   tools:
@@ -15,9 +12,10 @@ sphinx:
   configuration: docs/source/conf.py    
     
 python:
-#  version: 3.7
   install:
-#    - method: pip
+    - requirements: requirements.txt
     - requirements: docs/requirements.txt    
-#  system_packages: true
+    - method: pip
+      path: .
+
     

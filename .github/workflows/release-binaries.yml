@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
 
       - uses: actions/setup-python@v5
         with:
@@ -24,6 +26,14 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
           python -m pip install sphinx
+      
+      - name: Install RepTate (editable) so Sphinx can read the version and other metadata
+        run: |
+          python -m pip install -e .
+
+      - name: Set build date for docs
+        run: |
+          echo "REPTATE_BUILD_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
 
       - name: Build Sphinx HTML docs
         run: |

@@ -41,6 +41,7 @@ from PySide6.QtGui import QPixmap, QFont, QColor
 import RepTate
 import RepTate.gui.About_rc
 
+
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress"""
 
@@ -49,13 +50,18 @@ class SplashScreen(QSplashScreen):
         QSplashScreen.__init__(self, QPixmap(":/Images/Images/logo_with_uni_logo.png"))
         lblVersion = QLabel(self)
 
-        verdata = RepTate._version.get_versions()
-        version = verdata["version"].split("+")[0]
-        date = verdata["date"].split("T")[0]
-        build = verdata["version"]
+        # verdata = RepTate._version.get_versions()
+        # version = verdata["version"].split("+")[0]
+        # date = verdata["date"].split("T")[0]
+        # build = verdata["version"]
+
+        version = RepTate.__version__.split("+")[0]
+        date = ""
+        build = ""
 
         lblVersion.setText(
-            "RepTate %s %s (build %s)<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href=\"https://dx.doi.org/10.1122/8.0000002\">Cite RepTate</a>" % (version, date, build)
+            'RepTate %s %s (build %s)<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
+            % (version, date, build)
         )
         font = self.font()
         font.setPixelSize(11)
@@ -64,7 +70,7 @@ class SplashScreen(QSplashScreen):
         lblVersion.adjustSize()
         # lblVersion.setStyleSheet("QLabel { color : white; }")
         # lblVersion.move(425 - lblVersion.width(), 195)
-        #QApplication.flush()
+        # QApplication.flush()
 
     def showMessage(self, msg):
         """Procedure to update message in splash"""

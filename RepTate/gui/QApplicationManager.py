@@ -91,6 +91,7 @@ else:
     PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_RepTateMainWindow import Ui_ReptateMainWindow as Ui_MainWindow
 
+
 class QTextEditLogger(logging.Handler):
     def __init__(self, parent):
         super().__init__()
@@ -130,10 +131,15 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     html_help_file = "http://reptate.readthedocs.io/index.html"
     # COPIED FROM APPLICATIONMANAGER
-    verdata = RepTate._version.get_versions()
-    version = verdata["version"].split("+")[0]
-    date = verdata["date"].split("T")[0]
-    build = verdata["version"]
+    # verdata = RepTate._version.get_versions()
+    # version = verdata["version"].split("+")[0]
+    # date = verdata["date"].split("T")[0]
+    # build = verdata["version"]
+
+    version = RepTate.__version__.split("+")[0]
+    date = ""
+    build = ""
+
     intro = "RepTate %s - %s command processor (Build %s)" % (version, date, build)
     # END COPY
 
@@ -150,9 +156,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.available_applications = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS
-        self.available_applications[
-            ApplicationTTSFactors.appname
-        ] = ApplicationTTSFactors
+        self.available_applications[ApplicationTTSFactors.appname] = (
+            ApplicationTTSFactors
+        )
         self.available_applications[ApplicationLVE.appname] = ApplicationLVE
         self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
         self.available_applications[ApplicationCrystal.appname] = ApplicationCrystal
@@ -160,9 +166,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.available_applications[ApplicationCreep.appname] = ApplicationCreep
         self.available_applications[ApplicationSANS.appname] = ApplicationSANS
         self.available_applications[ApplicationReact.appname] = ApplicationReact
-        self.available_applications[
-            ApplicationDielectric.appname
-        ] = ApplicationDielectric
+        self.available_applications[ApplicationDielectric.appname] = (
+            ApplicationDielectric
+        )
         self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
 
         # LOGGING STUFF
@@ -507,8 +513,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         tag = release_dict["tag_name"]
         version_github = tag
         # version_github = tag.split("v")[1]
-        verdata = RepTate._version.get_versions()
-        version_current = verdata["version"].split("+")[0]
+        # verdata = RepTate._version.get_versions()
+        # version_current = verdata["version"].split("+")[0]
+        version_current = RepTate.__version__.split("+")[0]
         items = version_current.split("v")
         if len(items) > 1:
             version_current = items[1]
@@ -588,7 +595,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         dlg = AboutWindow(
             self,
             "RepTate %s %s" % (self.version, self.date),
-            'Build %s<br><small>\u00A9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00A9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
+            'Build %s<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
             % self.build,
         )
         dlg.show()
@@ -921,10 +928,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             apps_dic[app.name] = app_dic
 
         current_app_indx = self.ApplicationtabWidget.currentIndex()
-        verdata = RepTate._version.get_versions()
-        version_current = verdata["version"].split("+")[0]
-        date = verdata["date"].split("T")[0]
-        build = verdata["version"]
+        # verdata = RepTate._version.get_versions()
+        # version_current = verdata["version"].split("+")[0]
+        # date = verdata["date"].split("T")[0]
+        # build = verdata["version"]
+
+        version_current = RepTate.__version__.split("+")[0]
+        date = ""
+        build = ""
 
         out = OrderedDict(
             [
