@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68", "wheel", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RepTate"
+dynamic = ["version"]
+
+[tool.setuptools_scm]
+version_file = "RepTate/_version.py"
+# Optional: if you tag like v1.2.3 and want 1.2.3
+tag_regex = "^(?:v)?(?P<version>\\d+\\.\\d+\\.\\d+(?:[.-].+)?)$"
