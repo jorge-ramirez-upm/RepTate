@@ -52,6 +52,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
             fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
+            fetch-tags: true
 
       - uses: actions/setup-python@v5
         with:
@@ -135,6 +136,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
+          fetch-tags: true
 
       - uses: actions/setup-python@v5
         with:
@@ -214,6 +216,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # important if you later use setuptools-scm to get the version from git tags
+          fetch-tags: true
 
       - uses: actions/setup-python@v5
         with:
