@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2026): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -70,7 +70,7 @@ class SplashScreen(QSplashScreen):
             build = ""
 
         lblVersion.setText(
-            'RepTate %s %s (build %s)<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2023)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
+            'RepTate %s %s (build %s)<br><small>\u00a9 Jorge Ramírez, Universidad Politécnica de Madrid<br>\u00a9 Victor Boudara, University of Leeds</small><br>(2017-2026)<br><a href="https://dx.doi.org/10.1122/8.0000002">Cite RepTate</a>'
             % (version, date, build)
         )
         font = self.font()

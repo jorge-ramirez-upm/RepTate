@@ -12,7 +12,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 #
-# Copyright (2017-2023): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
+# Copyright (2017-2026): Jorge Ramirez, Victor Boudara, Universidad Politécnica de Madrid, University of Leeds
 #
 # This file is part of RepTate.
 #
@@ -97,7 +97,7 @@ def start_UV(argv):
 
     parser = argparse.ArgumentParser(
         description="RepTate: Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment.",
-        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2023)",
+        epilog="(c) Jorge Ramirez (jorge.ramirez@upm.es, UPM), Victor Boudara (U. Leeds) (2017-2026)",
     )
     parser.add_argument(
         "-l", "--tool", help="Open the tool L (if available)", default="", metavar="L"

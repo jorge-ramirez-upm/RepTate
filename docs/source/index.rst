@@ -43,7 +43,7 @@ More info:
 Authors:
 --------
 
-- Jorge Ramirez (jorge.ramirez AT upm.es, `personal page <http://blogs.upm.es/compsoftmatter>`_) 
+- Jorge Ramirez (jorge.ramirez AT upm.es, `personal page <https://diquima.industriales.upm.es/personal/jorge-ramirez/>`_) 
 - Victor Boudara (victor.boudara AT gmail.com)
 
 Cite RepTate
