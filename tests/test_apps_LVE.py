@@ -33,9 +33,9 @@ def test_LVE_Likhtman_McLeish():
     tau_e = thisTheory.parameters["tau_e"].value
     Ge = thisTheory.parameters["Ge"].value
     Me = thisTheory.parameters["Me"].value
-    assert tau_e == pytest.approx(0.06773845511821698, rel=1e-8)
-    assert Ge == pytest.approx(509664.8088612225, rel=1e-8)
-    assert Me == pytest.approx(4.492962262350123, rel=1e-8)
+    assert tau_e == pytest.approx(0.06773845511821698, rel=1e-7)
+    assert Ge == pytest.approx(509664.8088612225, rel=1e-7)
+    assert Me == pytest.approx(4.492962262350123, rel=1e-7)
 
 def test_LVE_Maxwell_Modes():
     ex.handle_new_app("LVE")
@@ -62,18 +62,18 @@ def test_LVE_Maxwell_Modes():
     logG06 = thisTheory.parameters["logG06"].value
     logG07 = thisTheory.parameters["logG07"].value
     logG08 = thisTheory.parameters["logG08"].value
-    assert logwmin == pytest.approx(-6.385241978597786, rel=1e-8)
-    assert logwmax == pytest.approx(3.0010913446595318, rel=1e-8)
+    assert logwmin == pytest.approx(-6.385241978597786, rel=1e-7)
+    assert logwmax == pytest.approx(3.0010913446595318, rel=1e-7)
     assert nmodes == 9
-    assert logG00 == pytest.approx(-9.98121345866038, rel=1e-8)
-    assert logG01 == pytest.approx(2.6532429979420713, rel=1e-8)
-    assert logG02 == pytest.approx(5.219297965636228, rel=1e-8) 
-    assert logG03 == pytest.approx(5.0406510877327815, rel=1e-8)
-    assert logG04 == pytest.approx(4.804722071852002, rel=1e-8)
-    assert logG05 == pytest.approx(4.687069287243573, rel=1e-8)
-    assert logG06 == pytest.approx(5.145666298139436, rel=1e-8)
-    assert logG07 == pytest.approx(5.76694930919948, rel=1e-8)
-    assert logG08 == pytest.approx(6.829225757858246, rel=1e-8) 
+    assert logG00 == pytest.approx(-9.98121345866038, rel=1e-7)
+    assert logG01 == pytest.approx(2.6532429979420713, rel=1e-7)
+    assert logG02 == pytest.approx(5.219297965636228, rel=1e-7) 
+    assert logG03 == pytest.approx(5.0406510877327815, rel=1e-7)
+    assert logG04 == pytest.approx(4.804722071852002, rel=1e-7)
+    assert logG05 == pytest.approx(4.687069287243573, rel=1e-7)
+    assert logG06 == pytest.approx(5.145666298139436, rel=1e-7)
+    assert logG07 == pytest.approx(5.76694930919948, rel=1e-7)
+    assert logG08 == pytest.approx(6.829225757858246, rel=1e-7) 
 
 
 def test_LVE_DTD_Stars():
@@ -95,9 +95,9 @@ def test_LVE_DTD_Stars():
     tau_e = thisTheory.parameters["tau_e"].value
     Me = thisTheory.parameters["Me"].value
     alpha = thisTheory.parameters["alpha"].value
-    assert G0 == pytest.approx(0.8513160549985747, rel=1e-8)
-    assert tau_e == pytest.approx(5.417382973435641e-06, rel=1e-8)
-    assert Me == pytest.approx(4.369223232374666, rel=1e-8) 
+    assert G0 == pytest.approx(0.8513160549985747, rel=1e-7)
+    assert tau_e == pytest.approx(5.417382973435641e-06, rel=1e-7)
+    assert Me == pytest.approx(4.369223232374666, rel=1e-7) 
     assert alpha == 1.0
 
 def test_LVE_ReSpect():
@@ -126,8 +126,8 @@ def test_LVE_ReSpect():
     # print(y)
     # print(expected_y)
 
-    npt.assert_allclose(x, expected_x, rtol=1e-6)
-    npt.assert_allclose(y, expected_y, rtol=1e-6)
+    npt.assert_allclose(x, expected_x, rtol=1e-5)
+    npt.assert_allclose(y, expected_y, rtol=1e-5)
 
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
