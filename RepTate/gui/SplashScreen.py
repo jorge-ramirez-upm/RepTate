@@ -39,7 +39,14 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QSplashScreen, QApplication, QLabel
 from PySide6.QtGui import QPixmap, QFont, QColor
 import RepTate
-import RepTate.gui.About_rc
+try:
+    import RepTate.gui.About_rc
+except ImportError:
+    import logging
+    import sys
+    l = logging.getLogger("RepTate.gui.SplashScreen")
+    l.fatal("Error importing RepTate.gui.About_rc. Please, run ""python scripts/build_ui.py"" or contact the developers.")
+    sys.exit(1)
 
 
 class SplashScreen(QSplashScreen):
