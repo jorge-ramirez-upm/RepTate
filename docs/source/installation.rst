@@ -18,7 +18,7 @@ RepTate can be installed in three ways:
 The "shortcut"
 ==============
 
-Binary packages (containing all the needed files and libraries), for the latest version (|release|) can be downloaded from the **Releases** section of the RepTate GitHub repository: `here <https://github.com/jorge-ramirez-upm/RepTate/releases>`_. Unzip the downloaded file and look for the RepTate executable.
+Binary packages (containing all the needed files and libraries), for the latest version (|release|) can be downloaded from the **Releases** section of the RepTate GitHub repository: `here <https://github.com/jorge-ramirez-upm/RepTate/releases>`_. Unzip the downloaded file and look for the RepTate executable. The Linux binary packages should work on Ubuntu 22.04.
 
 Previous versions of the binary packages can be downloaded from the following `folder 
 <https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz>`_.
