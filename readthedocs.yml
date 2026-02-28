@@ -6,16 +6,17 @@ build:
     python: "3.11"
   apt_packages:
     - graphviz
-   
-# Build documentation in the docs/ directory with Sphinx
+
+  jobs:
+    pre_build:
+      - python scripts/build_ui.py
+
 sphinx:
-  configuration: docs/source/conf.py    
-    
+  configuration: docs/source/conf.py
+
 python:
   install:
     - requirements: requirements.txt
-    - requirements: docs/requirements.txt    
+    - requirements: docs/requirements.txt
     - method: pip
       path: .
-
-    
