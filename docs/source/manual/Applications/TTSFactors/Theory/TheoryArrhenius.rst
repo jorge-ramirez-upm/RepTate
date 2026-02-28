@@ -5,4 +5,4 @@ Arrhenius Equation
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryArrhenius.TheoryArrhenius()
+.. automodule:: RepTate.theories.TheoryArrhenius.TheoryArrhenius

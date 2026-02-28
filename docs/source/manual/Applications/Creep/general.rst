@@ -12,7 +12,7 @@ Creep: General description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationCreep.ApplicationCreep()	
+.. automodule:: RepTate.applications.ApplicationCreep.ApplicationCreep	
 
 ----------
 Data Files

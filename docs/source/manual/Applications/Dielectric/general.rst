@@ -12,7 +12,7 @@ Dielectric: General Description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationDielectric.ApplicationDielectric()	
+.. automodule:: RepTate.applications.ApplicationDielectric.ApplicationDielectric	
 	
 ----------
 Data Files

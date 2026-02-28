@@ -5,6 +5,6 @@ DTD Stars Time
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryDTDStars.TheoryDTDStarsTime()
+.. automodule:: RepTate.theories.TheoryDTDStars.TheoryDTDStarsTime
 
 

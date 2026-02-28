@@ -8,7 +8,7 @@ Havriliak-Negami modes
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency()
+.. automodule:: RepTate.theories.TheoryHavriliakNegamiModes.TheoryHavriliakNegamiModesFrequency
 
 Description
 -----------

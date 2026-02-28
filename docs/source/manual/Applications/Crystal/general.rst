@@ -12,7 +12,7 @@ Flow Induced Crystallization: General description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationCrystal.ApplicationCrystal()	
+.. automodule:: RepTate.applications.ApplicationCrystal.ApplicationCrystal	
 
 .. _Crystal_Data_Description:
 

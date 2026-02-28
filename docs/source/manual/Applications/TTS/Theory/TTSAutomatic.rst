@@ -8,7 +8,7 @@ Automatic TTS Shift
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic()
+.. automodule:: RepTate.theories.TheoryTTS_Automatic.TheoryTTSShiftAutomatic
    
 Description
 -----------

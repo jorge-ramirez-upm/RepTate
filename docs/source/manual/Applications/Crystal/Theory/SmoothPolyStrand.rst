@@ -8,7 +8,7 @@ Smooth-polySTRAND model for flow-induced nucleation
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheorySmoothPolyStrand.TheorySmoothPolyStrand()
+.. automodule:: RepTate.theories.TheorySmoothPolyStrand.TheorySmoothPolyStrand
    
 Description
 -----------

@@ -12,7 +12,7 @@ TTS Shift Factors: General description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors()	
+.. automodule:: RepTate.applications.ApplicationTTSFactors.ApplicationTTSFactors
 
 ----------
 Data Files

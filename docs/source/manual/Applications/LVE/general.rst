@@ -12,7 +12,7 @@ LVE: General Description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationLVE.ApplicationLVE()	
+.. automodule:: RepTate.applications.ApplicationLVE.ApplicationLVE
 
 .. _LVE_Data_Description:
 

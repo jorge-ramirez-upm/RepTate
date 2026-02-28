@@ -8,7 +8,7 @@ BoB LVE
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryBobLVE.TheoryBobLVE()
+.. automodule:: RepTate.theories.TheoryBobLVE.TheoryBobLVE
 
 Publications related to BoB: :cite:`LVE-Das2006`  :cite:`LVE-Das2006b` :cite:`LVE-Chambon2008b`.
 

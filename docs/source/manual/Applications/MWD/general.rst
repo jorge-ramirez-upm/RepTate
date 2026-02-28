@@ -12,7 +12,7 @@ MWD: General description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationMWD.ApplicationMWD()	
+.. automodule:: RepTate.applications.ApplicationMWD.ApplicationMWD
 
 .. _MWD_Data_Description:
 

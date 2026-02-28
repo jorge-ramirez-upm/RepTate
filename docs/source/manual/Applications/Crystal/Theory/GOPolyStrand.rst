@@ -8,7 +8,7 @@ GO-polySTRAND model for flow-induced nucleation
 Summary
 -------
 
-.. automodule:: RepTate.theories.TheoryGoPolyStrand.TheoryGoPolyStrand()
+.. automodule:: RepTate.theories.TheoryGoPolyStrand.TheoryGoPolyStrand
    
 Description
 -----------

@@ -12,7 +12,7 @@ LAOS: General Description
 Purpose
 -------
 
-.. automodule:: RepTate.applications.ApplicationLAOS.ApplicationLAOS()	
+.. automodule:: RepTate.applications.ApplicationLAOS.ApplicationLAOS
 	
 ----------
 Data Files
