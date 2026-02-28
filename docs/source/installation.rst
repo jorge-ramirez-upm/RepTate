@@ -37,7 +37,7 @@ Executive summary
 #. Clone RepTate's repository via ``git clone https://github.com/jorge-ramirez-upm/RepTate.git``
 #. Install RepTate's package dependencies (pyqt, matplotlib, scipy, (py)readline, openpyxl, xlrd, psutil) via ``conda install <package>`` (or via ``pip install <package>`` if you are using a different Python distribution). Alternatively, you can go to the RepTate code tree and run ``pip install -r requirements.txt``. This will take care of installing all the packages that RepTate needs.
 #. Compile the user interface resources via ``python scripts/build_ui.py`` (or ``python3 scripts/build_ui.py`` depending on your system).
-#. Try launching RepTate application: ``cd RepTate`` then again ``cd RepTate`` then ``python RepTate.py``
+#. Try launching RepTate application: ``python -m RepTate``
 #. From time to time, check for updates via ``git pull``
 
 Should anything go wrong, please read the detailed explanations below. 
