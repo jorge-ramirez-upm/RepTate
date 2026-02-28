@@ -56,7 +56,8 @@ class TheoryBobNLVE(QTheory):
     using BoB v2.5 (Chinmay Das and Daniel Read).
     Polymer configuration files can be generated from the React application in RepTate.
 
-    The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
+    The original documentation of BoB can be found here:
+    `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.5/bob2p5.pdf/download>`_.
     """
 
     thname = "BOB"
