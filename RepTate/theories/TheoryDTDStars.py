@@ -163,9 +163,9 @@ class TheoryDTDStarsTime(QTheory):
 
     * **Parameters**
        - ``G0`` :math:`\\equiv G_N^0`: Plateau modulus
-       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
+       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
          Entanglement equilibration time
-       - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
+       - ``Me`` :math:`\\equiv M_\\mathrm e^\\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
        - ``alpha``: Dilution exponent
        
        where:

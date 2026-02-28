@@ -65,7 +65,7 @@ class TheoryWLFShift(QTheory):
 
     * **Parameters**
        - :math:`T_r`: Reference temperature to which the experimental data will be shifted.
-       - :math:`B_1`: Material parameter, corresponding to :math:`C_1\cdot C_2`, with :math:`C_1` and :math:`C_2` being the standard WLF material parameters.
+       - :math:`B_1`: Material parameter, corresponding to :math:`C_1\\cdot C_2`, with :math:`C_1` and :math:`C_2` being the standard WLF material parameters.
        - :math:`B_2`: Material parameter, corresponding to :math:`C_2-T_r`, :math:`C_2` being the standard WLF material parameter.
        - logalpha: Decimal logarithm of the thermal expansion coefficient of the polymer at 0 °C.
        - :math:`C_{T_g}`: Material parameter that describes the dependence of :math:`T_g` with :math:`M_w`.

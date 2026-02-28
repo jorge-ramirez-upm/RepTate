@@ -54,7 +54,7 @@ from PySide6.QtGui import QDoubleValidator
 from PySide6.QtCore import Qt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 
-"""
+r"""
  _____                           
 | ____|_ __  _   _ _ __ ___  ___ 
 |  _| | '_ \| | | | '_ ` _ \/ __|
@@ -128,7 +128,7 @@ class SingleSpeciesMode(enum.Enum):
     with_single = 1
 
 
-"""
+r"""
  ____  _       _                 
 |  _ \(_) __ _| | ___   __ _ ___ 
 | | | | |/ _` | |/ _ \ / _` / __|
@@ -362,7 +362,7 @@ class EditMWDDialog(QDialog):
             self.table.setItem(i, 1, QTableWidgetItem("1000"))
 
 
-"""
+r"""
   ___  _   _                   
  / _ \| |_| |__   ___ _ __ ___ 
 | | | | __| '_ \ / _ \ '__/ __|

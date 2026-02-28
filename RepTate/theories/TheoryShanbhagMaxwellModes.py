@@ -573,7 +573,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             return res_lsq.x
 
     def InitializeH(self, Gexp, s, kernMat, G0=0):
-        """
+        r"""
         Function: InitializeH(input)
 
         Input:  Gexp    = 2n\*1 vector [G';G"],

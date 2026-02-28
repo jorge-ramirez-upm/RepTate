@@ -70,8 +70,8 @@ class ApplicationLVE(QApplicationWindow):
         self.views["log(G',G''(w))"] = View(
             name="log(G',G''(w))",
             description="log Storage,Loss moduli",
-            x_label="log($\omega$)",
-            y_label="log(G'($\omega$),G''($\omega$))",
+            x_label=r"log($\omega$)",
+            y_label=r"log(G'($\omega$),G''($\omega$))",
             x_units="rad/s",
             y_units="Pa",
             log_x=False,

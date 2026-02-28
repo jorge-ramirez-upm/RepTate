@@ -43,7 +43,7 @@ from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
 from PySide6.QtCore import QSize
 
-"""
+r"""
              _                             _       _ 
  _ __   ___ | |_   _ _ __   ___  _ __ ___ (_) __ _| |
 | '_ \ / _ \| | | | | '_ \ / _ \| '_ ` _ \| |/ _` | |
@@ -162,7 +162,7 @@ class TheoryPolynomial(QTheory):
 
 
 
-"""
+r"""
  _ __   _____      _____ _ __  | | __ ___      __
 | '_ \ / _ \ \ /\ / / _ \ '__| | |/ _` \ \ /\ / /
 | |_) | (_) \ V  V /  __/ |    | | (_| |\ V  V / 
@@ -215,7 +215,7 @@ class TheoryPowerLaw(QTheory):
 
 
 
-"""
+r"""
                                         _   _       _ 
   _____  ___ __   ___  _ __   ___ _ __ | |_(_) __ _| |
  / _ \ \/ / '_ \ / _ \| '_ \ / _ \ '_ \| __| |/ _` | |
@@ -269,7 +269,7 @@ class TheoryExponential(QTheory):
 
 
 
-"""
+r"""
  ____                                           _   _       _     
 |___ \    _____  ___ __   ___  _ __   ___ _ __ | |_(_) __ _| |___ 
   __) |  / _ \ \/ / '_ \ / _ \| '_ \ / _ \ '_ \| __| |/ _` | / __|
@@ -338,7 +338,7 @@ class TheoryTwoExponentials(QTheory):
                 -tt.data[:, 0] / T2)
 
 
-"""
+r"""
        _            _               _      
   __ _| | __ _  ___| |__  _ __ __ _(_) ___ 
  / _` | |/ _` |/ _ \ '_ \| '__/ _` | |/ __|

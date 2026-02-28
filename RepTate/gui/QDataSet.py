@@ -1113,7 +1113,7 @@ class QDataSet(QWidget, Ui_DataSet):
             return None, False
 
     def do_open(self, line):
-        """Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
+        r"""Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
         f_names = line
         newtables = []
         if line == "" or len(f_names) == 0:
