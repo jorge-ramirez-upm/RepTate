@@ -54,8 +54,8 @@ Views
 
 log(G',G"(w))
 -------------------------------------------
-.. automethod:: RepTate.applications.ApplicationLVE.ApplicationLVE.viewLogG1G2()
-   
+.. automethod:: RepTate.applications.ApplicationLVE.ApplicationLVE.viewLogG1G2
+	
 .. image:: images/LVE_logG1G2.png
     :width: 45%
     :align: center

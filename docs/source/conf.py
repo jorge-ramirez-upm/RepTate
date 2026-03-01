@@ -23,7 +23,7 @@ import shlex
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("."))
 
-import RepTate
+#import RepTate
 
 # -- General configuration ------------------------------------------------
 
@@ -40,9 +40,19 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.viewcode",
+#    "sphinx.ext.viewcode",
     "sphinxcontrib.bibtex",
     "sphinx.ext.graphviz",
+]
+
+# Mock heavy GUI dependencies so autodoc doesn't require Qt at build time
+autodoc_mock_imports = [
+    "PySide6",
+    "PySide6.QtCore",
+    "PySide6.QtGui",
+    "PySide6.QtWidgets",
+    "PySide6.QtSvg",
+    "PySide6.QtOpenGL",
 ]
 
 # -- Options for graphviz extension ---------------------------------------
