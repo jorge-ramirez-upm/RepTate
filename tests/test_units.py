@@ -11,6 +11,9 @@ from RepTate.core.units import (
 
 
 def test_time_conversions():
+    assert convert_value(1, "s", "ms") == pytest.approx(1000)
+    assert convert_value(1, "ms", "μs") == pytest.approx(1000)
+    assert convert_value(1, "μs", "ns") == pytest.approx(1000)
     assert convert_value(120, "s", "min") == pytest.approx(2)
     assert convert_value(2, "h", "min") == pytest.approx(120)
     assert convert_value(0.5, "h", "s") == pytest.approx(1800)
@@ -48,7 +51,7 @@ def test_units_are_compatible():
 
 def test_available_units():
     symbols = {unit.symbol for unit in available_units("time")}
-    assert {"s", "min", "h"} <= symbols
+    assert {"ns", "μs", "ms", "s", "min", "h"} <= symbols
 
 
 def test_get_unit():

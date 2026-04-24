@@ -36,6 +36,9 @@ class ColumnSpec:
 
 _UNITS = {
     "-": Unit("-", "dimensionless", 1.0),
+    "ns": Unit("ns", "time", 1.0e-9),
+    "μs": Unit("μs", "time", 1.0e-6),
+    "ms": Unit("ms", "time", 1.0e-3),
     "s": Unit("s", "time", 1.0),
     "min": Unit("min", "time", 60.0),
     "h": Unit("h", "time", 3600.0),

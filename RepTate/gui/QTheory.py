@@ -78,6 +78,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QObject, QThread, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
+from RepTate.core.units import units_are_compatible
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from RepTate.tools.ToolMaterialsDatabase import check_chemistry, get_all_parameters
@@ -86,6 +87,8 @@ from collections import OrderedDict
 from math import ceil, floor, log
 import RepTate
 from html.parser import HTMLParser
+
+TIME_PARAMETER_DISPLAY_UNITS = ("ns", "μs", "ms", "s", "min", "h")
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -247,11 +250,26 @@ class EditThParametersDialog(QDialog):
                 cb.addItem("False")
                 cb.setCurrentText("%s" % p_attributes[attr_name])
                 a_new.append(cb)
+            elif attr_name == "display_unit" and p.quantity == "time":
+                cb = QComboBox()
+                # Prototype only: currently exposes display-unit choices for
+                # time-valued theory parameters. This can later be generalized
+                # by mapping each parameter quantity to its allowed display units.
+                for unit_symbol in TIME_PARAMETER_DISPLAY_UNITS:
+                    if units_are_compatible(unit_symbol, p.internal_unit):
+                        cb.addItem(unit_symbol)
+                cb.setCurrentText("%s" % p_attributes[attr_name])
+                a_new.append(cb)
             elif attr_name in ["value", "error"]:
                 continue
             else:
                 qline = QLineEdit()
-                if attr_name in ["name", "description"]:
+                if attr_name in [
+                    "name",
+                    "description",
+                    "quantity",
+                    "internal_unit",
+                ]:
                     qline.setReadOnly(True)
                 a_new.append(qline)
                 a_new[i].setText("%s" % p_attributes[attr_name])
@@ -1697,6 +1715,17 @@ class QTheory(QWidget, Ui_TheoryTab):
             print("In set_param_value:", e)
             return "", False
 
+    def set_param_value_from_display(self, name, value):
+        """Set a parameter from the value currently displayed in the GUI."""
+        p = self.parameters[name]
+        if not (p.internal_unit and p.display_unit):
+            return self.set_param_value(name, value)
+        try:
+            internal_value = p.value_from_display(float(value))
+        except ValueError:
+            return "Value must be a float", False
+        return self.set_param_value(name, internal_value)
+
     def default(self, line):
         """Called when the input command is not recognized
 
@@ -2098,52 +2127,61 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def update_parameter_table(self):
         """Update the theory parameter table"""
+        previous_block_state = self.thParamTable.blockSignals(True)
         # clean table
-        self.thParamTable.clear()
+        try:
+            self.thParamTable.clear()
 
-        # populate table
-        for param in self.parameters:
-            p = self.parameters[param]
-            if p.display_flag:  # only allowed param enter the table
-                if p.opt_type == OptType.const:
-                    if p.type == ParameterType.string:
-                        item = QTreeWidgetItem(
-                            self.thParamTable, [p.name, p.value, "N/A"]
-                        )
+            # populate table
+            for param in self.parameters:
+                p = self.parameters[param]
+                if p.display_flag:  # only allowed param enter the table
+                    p_label = p.display_label()
+                    if p.opt_type == OptType.const:
+                        if p.type == ParameterType.string:
+                            item = QTreeWidgetItem(
+                                self.thParamTable, [p_label, p.value, "N/A"]
+                            )
+                        else:
+                            item = QTreeWidgetItem(
+                                self.thParamTable,
+                                [p_label, "%0.3g" % p.display_value(), "N/A"],
+                            )
+                        item.setData(0, Qt.UserRole, p.name)
+                        item.setCheckState(0, Qt.PartiallyChecked)
+                        item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
                     else:
-                        item = QTreeWidgetItem(
-                            self.thParamTable, [p.name, "%0.3g" % p.value, "N/A"]
-                        )
-                    item.setCheckState(0, Qt.PartiallyChecked)
-                    item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
-                else:
-                    try:
-                        err = "%0.3g" % p.error
-                    except:
-                        err = "-"
-                    if p.type == ParameterType.string:
-                        item = QTreeWidgetItem(
-                            self.thParamTable, [p.name, p.value, "N/A"]
-                        )
-                    else:
-                        item = QTreeWidgetItem(
-                            self.thParamTable, [p.name, "%0.3g" % p.value, err]
-                        )
-                    if p.opt_type == OptType.opt:
-                        item.setCheckState(0, Qt.Checked)
-                    elif p.opt_type == OptType.nopt:
-                        item.setCheckState(0, Qt.Unchecked)
+                        try:
+                            err = "%0.3g" % p.display_value(p.error)
+                        except:
+                            err = "-"
+                        if p.type == ParameterType.string:
+                            item = QTreeWidgetItem(
+                                self.thParamTable, [p_label, p.value, "N/A"]
+                            )
+                        else:
+                            item = QTreeWidgetItem(
+                                self.thParamTable,
+                                [p_label, "%0.3g" % p.display_value(), err],
+                            )
+                        item.setData(0, Qt.UserRole, p.name)
+                        if p.opt_type == OptType.opt:
+                            item.setCheckState(0, Qt.Checked)
+                        elif p.opt_type == OptType.nopt:
+                            item.setCheckState(0, Qt.Unchecked)
 
-                item.setFlags(item.flags() | Qt.ItemIsEditable)
-                item.setToolTip(0, p.description)
-        self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+                    item.setFlags(item.flags() | Qt.ItemIsEditable)
+                    item.setToolTip(0, p.description)
+            self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        finally:
+            self.thParamTable.blockSignals(previous_block_state)
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked
         Or edit all parameters fittingoptionsdialog if parameter name is double clicked
         """
         if column == 0:
-            p_name = item.text(0)
+            p_name = item.data(0, Qt.UserRole) or item.text(0)
             d = EditThParametersDialog(self, p_name)
             if d.exec_():
                 for pname in self.parameters:
@@ -2161,12 +2199,22 @@ class QTheory(QWidget, Ui_TheoryTab):
                                 attr_dict[attr_name].currentText()
                             )  # bool
                             setattr(p, attr_name, val)
+                        elif attr_name == "display_unit":
+                            if isinstance(attr_dict[attr_name], QComboBox):
+                                val = attr_dict[attr_name].currentText()
+                                if units_are_compatible(val, p.internal_unit):
+                                    setattr(p, attr_name, val)
                         elif attr_name == "discrete_values":
                             val = attr_dict[attr_name].text()
                             l = ast.literal_eval(val)
                             if isinstance(l, list):
                                 setattr(p, attr_name, l)
-                        elif attr_name in ["name", "description"]:
+                        elif attr_name in [
+                            "name",
+                            "description",
+                            "quantity",
+                            "internal_unit",
+                        ]:
                             continue
                         else:
                             val = float(attr_dict[attr_name].text())
@@ -2180,7 +2228,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the theory table"""
-        param_changed = item.text(0)
+        param_changed = item.data(0, Qt.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
             if item.checkState(0) == Qt.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
@@ -2189,7 +2237,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             return
         # else, assign the entered value
         new_value = item.text(1)
-        message, success = self.set_param_value(param_changed, new_value)
+        message, success = self.set_param_value_from_display(param_changed, new_value)
         if not success:
             msg = QMessageBox()
             msg.setWindowTitle("Error")
@@ -2198,7 +2246,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             else:
                 msg.setText("Not a valid value")
             msg.exec_()
-            item.setText(1, str(self.parameters[param_changed].value))
+            item.setText(1, str(self.parameters[param_changed].display_value()))
         else:
             self.update_parameter_table()
             if self.autocalculate:

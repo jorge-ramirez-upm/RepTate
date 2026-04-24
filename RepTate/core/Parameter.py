@@ -38,6 +38,8 @@ Module that defines theory parameters and their properties.
 import enum
 import numpy as np
 
+from RepTate.core.units import convert_value
+
 
 class ParameterType(enum.Enum):
     """Types of parameters that can be used in a Theory
@@ -86,6 +88,9 @@ class Parameter(object):
         max_value=np.inf,
         display_flag=True,
         discrete_values=[],
+        quantity="",
+        internal_unit="",
+        display_unit="",
     ):
         """**Constructor**
 
@@ -99,6 +104,9 @@ class Parameter(object):
             - max_value {real} -- Maximum allowed value
             - display_flag {bool} -- This parameter will be shown in the Theory table
             - discrete_values {list} -- Allowed values that the parameter can take
+            - quantity {str} -- Physical quantity of the parameter, if known
+            - internal_unit {str} -- Unit used by numerical calculations
+            - display_unit {str} -- Unit shown to users
         """
         self.name = name
         self.description = description
@@ -127,6 +135,9 @@ class Parameter(object):
         self.max_value = max_value
         self.display_flag = display_flag
         self.discrete_values = discrete_values
+        self.quantity = quantity
+        self.internal_unit = internal_unit
+        self.display_unit = display_unit
 
     def copy(self, par2):
         """Copy the contents of another parameter"""
@@ -137,6 +148,28 @@ class Parameter(object):
         self.opt_type = par2.opt_type
         self.min_value = par2.min_value
         self.max_value = par2.max_value
+        self.quantity = par2.quantity
+        self.internal_unit = par2.internal_unit
+        self.display_unit = par2.display_unit
+
+    def display_label(self):
+        """Return the parameter label shown to users."""
+        if self.display_unit:
+            return "%s [%s]" % (self.name, self.display_unit)
+        return self.name
+
+    def display_value(self, value=None):
+        """Return a value converted from internal to display units."""
+        value = self.value if value is None else value
+        if self.internal_unit and self.display_unit:
+            return convert_value(value, self.internal_unit, self.display_unit)
+        return value
+
+    def value_from_display(self, value):
+        """Convert a user-facing value to the internal unit."""
+        if self.internal_unit and self.display_unit:
+            return convert_value(value, self.display_unit, self.internal_unit)
+        return value
 
     def __str__(self):
         """String representation"""

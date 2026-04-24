@@ -76,6 +76,10 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             opt_type=OptType.opt,
             min_value=1e-7,
             max_value=1e2,
+            # Theory calculations use seconds internally.
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Ge"] = Parameter(
             "Ge",
