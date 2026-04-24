@@ -64,3 +64,19 @@ def test_parameter_display_value_supports_small_time_units():
 
     assert parameter.display_value() == 2.0
     assert parameter.value_from_display(500.0) == 5e-4
+
+
+def test_dimensionless_parameter_omits_unit_from_label():
+    parameter = Parameter(
+        "c_nu",
+        0.1,
+        "Constraint release parameter",
+        ParameterType.real,
+        quantity="dimensionless",
+        internal_unit="-",
+        display_unit="-",
+    )
+
+    assert parameter.display_label() == "c_nu"
+    assert parameter.display_value() == 0.1
+    assert parameter.value_from_display(0.2) == 0.2

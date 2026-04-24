@@ -80,6 +80,9 @@ class TheoryCarreauYasuda(QTheory):
             description="Zero shear rate viscosity",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="viscosity",
+            internal_unit="Pa.s",
+            display_unit="Pa.s",
         )
         self.parameters["etainf"] = Parameter(
             name="etainf",
@@ -87,6 +90,9 @@ class TheoryCarreauYasuda(QTheory):
             description="Infinite shear rate viscosity",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="viscosity",
+            internal_unit="Pa.s",
+            display_unit="Pa.s",
         )
         self.parameters["lambda"] = Parameter(
             name="lambda",
@@ -94,6 +100,9 @@ class TheoryCarreauYasuda(QTheory):
             description="Characteristic time",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["n"] = Parameter(
             name="n",
@@ -101,6 +110,9 @@ class TheoryCarreauYasuda(QTheory):
             description="Characteristic exponent",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["a"] = Parameter(
             name="a",
@@ -108,6 +120,9 @@ class TheoryCarreauYasuda(QTheory):
             description="Exponent a",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
 
         # Estimate initial values of fitting parameters

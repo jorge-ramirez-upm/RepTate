@@ -84,6 +84,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=0,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["tauD"] = Parameter(
             name="tauD",
@@ -92,6 +95,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=EPSILON,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["tauS"] = Parameter(
             name="tauS",
@@ -100,6 +106,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=EPSILON,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["tau_as"] = Parameter(
             name="tau_as",
@@ -108,6 +117,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=EPSILON,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["tau_free"] = Parameter(
             name="tau_free",
@@ -116,6 +128,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=EPSILON,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["lmax"] = Parameter(
             name="lmax",
@@ -125,6 +140,9 @@ class TheoryPETS(QTheory):
             opt_type=OptType.const,
             display_flag=True,
             min_value=1.01,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["beta"] = Parameter(
             name="beta",
@@ -134,6 +152,9 @@ class TheoryPETS(QTheory):
             opt_type=OptType.const,
             min_value=0,
             max_value=2,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["delta"] = Parameter(
             name="delta",
@@ -141,6 +162,9 @@ class TheoryPETS(QTheory):
             description="CCR exponent",
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["Z"] = Parameter(
             name="Z",
@@ -149,6 +173,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=1,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["r_a"] = Parameter(
             name="r_a",
@@ -157,6 +184,9 @@ class TheoryPETS(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=EPSILON,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
 
         self.view_LVEenvelope = False

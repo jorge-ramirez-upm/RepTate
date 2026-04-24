@@ -154,7 +154,7 @@ class Parameter(object):
 
     def display_label(self):
         """Return the parameter label shown to users."""
-        if self.display_unit:
+        if self.display_unit and self.display_unit != "-":
             return "%s [%s]" % (self.name, self.display_unit)
         return self.name
 

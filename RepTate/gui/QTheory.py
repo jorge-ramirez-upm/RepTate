@@ -78,7 +78,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QObject, QThread, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
-from RepTate.core.units import units_are_compatible
+from RepTate.core.units import available_units, units_are_compatible
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
 from RepTate.tools.ToolMaterialsDatabase import check_chemistry, get_all_parameters
@@ -87,8 +87,6 @@ from collections import OrderedDict
 from math import ceil, floor, log
 import RepTate
 from html.parser import HTMLParser
-
-TIME_PARAMETER_DISPLAY_UNITS = ("ns", "μs", "ms", "s", "min", "h")
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -250,16 +248,26 @@ class EditThParametersDialog(QDialog):
                 cb.addItem("False")
                 cb.setCurrentText("%s" % p_attributes[attr_name])
                 a_new.append(cb)
-            elif attr_name == "display_unit" and p.quantity == "time":
-                cb = QComboBox()
-                # Prototype only: currently exposes display-unit choices for
-                # time-valued theory parameters. This can later be generalized
-                # by mapping each parameter quantity to its allowed display units.
-                for unit_symbol in TIME_PARAMETER_DISPLAY_UNITS:
-                    if units_are_compatible(unit_symbol, p.internal_unit):
+            elif attr_name == "display_unit" and p.quantity and p.internal_unit:
+                try:
+                    compatible_units = [
+                        unit.symbol
+                        for unit in available_units(p.quantity)
+                        if units_are_compatible(unit.symbol, p.internal_unit)
+                    ]
+                except ValueError:
+                    compatible_units = []
+                if compatible_units:
+                    cb = QComboBox()
+                    for unit_symbol in compatible_units:
                         cb.addItem(unit_symbol)
-                cb.setCurrentText("%s" % p_attributes[attr_name])
-                a_new.append(cb)
+                    cb.setCurrentText("%s" % p_attributes[attr_name])
+                    a_new.append(cb)
+                else:
+                    qline = QLineEdit()
+                    qline.setReadOnly(True)
+                    qline.setText("%s" % p_attributes[attr_name])
+                    a_new.append(qline)
             elif attr_name in ["value", "error"]:
                 continue
             else:

@@ -74,6 +74,9 @@ class TheoryStickyReptation(QTheory):
             opt_type=OptType.opt,
             min_value=1,
             max_value=1e8,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["tau_s"] = Parameter(
             name="tau_s",
@@ -83,6 +86,9 @@ class TheoryStickyReptation(QTheory):
             opt_type=OptType.opt,
             min_value=1e-5,
             max_value=1e2,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Zs"] = Parameter(
             name="Zs",
@@ -92,6 +98,9 @@ class TheoryStickyReptation(QTheory):
             opt_type=OptType.opt,
             min_value=0,
             max_value=100,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["Ze"] = Parameter(
             name="Ze",
@@ -101,6 +110,9 @@ class TheoryStickyReptation(QTheory):
             opt_type=OptType.opt,
             min_value=0,
             max_value=100,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["alpha"] = Parameter(
             name="alpha",
@@ -108,6 +120,9 @@ class TheoryStickyReptation(QTheory):
             description="CLF parameter",
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
 
     def g_descloizeaux(self, x, tol):

@@ -84,6 +84,9 @@ class TheoryRoliePoly(QTheory):
             description="CCR coefficient",
             type=ParameterType.real,
             opt_type=OptType.nopt,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["delta"] = Parameter(
             name="delta",
@@ -91,6 +94,9 @@ class TheoryRoliePoly(QTheory):
             description="CCR exponent",
             type=ParameterType.real,
             opt_type=OptType.nopt,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["lmax"] = Parameter(
             name="lmax",
@@ -100,6 +106,9 @@ class TheoryRoliePoly(QTheory):
             opt_type=OptType.nopt,
             display_flag=False,
             min_value=1.01,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
@@ -127,6 +136,9 @@ class TheoryRoliePoly(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="stress",
+                internal_unit="Pa",
+                display_unit="Pa",
             )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -136,6 +148,9 @@ class TheoryRoliePoly(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
             )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
@@ -144,6 +159,9 @@ class TheoryRoliePoly(QTheory):
                 type=ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=1e-12,
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
             )
 
         self.view_LVEenvelope = False
@@ -829,6 +847,9 @@ class TheoryRoliePoly(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="stress",
+                    internal_unit="Pa",
+                    display_unit="Pa",
                 )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -838,6 +859,9 @@ class TheoryRoliePoly(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
                 )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
@@ -847,6 +871,9 @@ class TheoryRoliePoly(QTheory):
                     opt_type=OptType.opt,
                     display_flag=True,
                     min_value=0,
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
                 )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):

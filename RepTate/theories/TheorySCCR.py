@@ -86,6 +86,9 @@ class TheorySCCR(QTheory):
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=np.inf,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Ge"] = Parameter(
             "Ge",
@@ -95,6 +98,9 @@ class TheorySCCR(QTheory):
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=np.inf,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["Me"] = Parameter(
             "Me",
@@ -104,6 +110,9 @@ class TheorySCCR(QTheory):
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=np.inf,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["c_nu"] = Parameter(
             name="c_nu",
@@ -112,6 +121,9 @@ class TheorySCCR(QTheory):
             type=ParameterType.discrete_real,
             opt_type=OptType.const,
             discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10],
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["Rs"] = Parameter(
             name="Rs",
@@ -121,6 +133,9 @@ class TheorySCCR(QTheory):
             opt_type=OptType.const,
             min_value=0.0,
             max_value=4.0,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["N"] = Parameter(
             name="N",

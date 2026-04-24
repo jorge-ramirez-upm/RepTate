@@ -86,6 +86,9 @@ class TheoryDTDStarsFreq(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["tau_e"] = Parameter(
             "tau_e",
@@ -94,6 +97,9 @@ class TheoryDTDStarsFreq(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Me"] = Parameter(
             "Me",
@@ -102,6 +108,9 @@ class TheoryDTDStarsFreq(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["alpha"] = Parameter(
             "alpha",
@@ -110,6 +119,9 @@ class TheoryDTDStarsFreq(QTheory):
             ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
 
         self.get_material_parameters()
@@ -197,6 +209,9 @@ class TheoryDTDStarsTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["tau_e"] = Parameter(
             "tau_e",
@@ -205,6 +220,9 @@ class TheoryDTDStarsTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Me"] = Parameter(
             "Me",
@@ -213,6 +231,9 @@ class TheoryDTDStarsTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["alpha"] = Parameter(
             "alpha",
@@ -221,6 +242,9 @@ class TheoryDTDStarsTime(QTheory):
             ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
 
         self.get_material_parameters()

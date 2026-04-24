@@ -1,7 +1,8 @@
 """Minimal unit conversion helpers for RepTate.
 
-The module intentionally uses only multiplicative conversion factors. Offset
-units such as Celsius are not included until the conversion model needs them.
+Units may use either multiplicative or affine conversions to the internal
+canonical unit for their quantity. Generic conversions are only allowed within a
+single quantity; frequency and angular frequency require explicit helpers.
 """
 
 from dataclasses import dataclass
@@ -14,6 +15,7 @@ class Unit:
     symbol: str
     quantity: str
     factor_to_internal: float
+    offset_to_internal: float = 0.0
     label: str = ""
 
     def __post_init__(self):
@@ -52,8 +54,10 @@ _UNITS = {
     "Pa.s": Unit("Pa.s", "viscosity", 1.0),
     "kPa.s": Unit("kPa.s", "viscosity", 1.0e3),
     "K": Unit("K", "temperature", 1.0),
-    "g/mol": Unit("g/mol", "molar_mass", 1.0),
-    "kg/mol": Unit("kg/mol", "molar_mass", 1.0e3),
+    "ºC": Unit("ºC", "temperature", 1.0, 273.15),
+    "°C": Unit("°C", "temperature", 1.0, 273.15, "ºC"),
+    "g/mol": Unit("g/mol", "molar_mass", 1.0e-3),
+    "kg/mol": Unit("kg/mol", "molar_mass", 1.0),
 }
 
 _INTERNAL_UNITS = {
@@ -64,13 +68,8 @@ _INTERNAL_UNITS = {
     "stress": "Pa",
     "viscosity": "Pa.s",
     "temperature": "K",
-    "molar_mass": "g/mol",
+    "molar_mass": "kg/mol",
 }
-
-_CONTEXTUAL_CONVERSIONS = {
-    ("Hz", "rad/s"): 2.0 * np.pi,
-}
-
 
 def get_unit(symbol):
     """Return the Unit registered for *symbol*."""
@@ -94,7 +93,10 @@ def make_column_spec(name, unit_symbol, expected_unit_symbol=None):
     Unknown units preserve RepTate's current implicit behavior: values are kept
     unchanged and the declared unit is treated as the internal unit.
     """
-    if (unit_symbol, expected_unit_symbol) in _CONTEXTUAL_CONVERSIONS:
+    # This explicit boundary conversion supports legacy/application files that
+    # declare frequency where RepTate expects angular frequency. It is not a
+    # generic compatibility rule: convert_value("Hz", "rad/s") still raises.
+    if (unit_symbol, expected_unit_symbol) in (("Hz", "rad/s"), ("rad/s", "Hz")):
         expected_unit = get_unit(expected_unit_symbol)
         return ColumnSpec(
             name=name,
@@ -134,7 +136,7 @@ def units_are_compatible(from_unit, to_unit):
     return source.quantity == target.quantity
 
 
-def _conversion_factor(from_unit, to_unit):
+def _check_compatible_units(from_unit, to_unit):
     source = get_unit(from_unit)
     target = get_unit(to_unit)
     if source.quantity != target.quantity:
@@ -142,23 +144,48 @@ def _conversion_factor(from_unit, to_unit):
             "Incompatible units: %s (%s) and %s (%s)"
             % (source.symbol, source.quantity, target.symbol, target.quantity)
         )
-    return source.factor_to_internal / target.factor_to_internal
+    return source, target
+
+
+def _to_internal(values, unit):
+    return values * unit.factor_to_internal + unit.offset_to_internal
+
+
+def _from_internal(values, unit):
+    return (values - unit.offset_to_internal) / unit.factor_to_internal
+
+
+def _convert(values, from_unit, to_unit):
+    source, target = _check_compatible_units(from_unit, to_unit)
+    return _from_internal(_to_internal(values, source), target)
 
 
 def convert_value(value, from_unit, to_unit):
     """Convert a scalar value between compatible units."""
-    return value * _conversion_factor(from_unit, to_unit)
+    return _convert(value, from_unit, to_unit)
 
 
 def convert_array(values, from_unit, to_unit):
     """Convert array-like values between compatible units."""
-    return np.asarray(values) * _conversion_factor(from_unit, to_unit)
+    return _convert(np.asarray(values), from_unit, to_unit)
+
+
+def frequency_to_angular_frequency(values):
+    """Convert frequency in Hz to angular frequency in rad/s."""
+    return np.asarray(values) * (2.0 * np.pi)
+
+
+def angular_frequency_to_frequency(values):
+    """Convert angular frequency in rad/s to frequency in Hz."""
+    return np.asarray(values) / (2.0 * np.pi)
 
 
 def convert_array_to_internal(values, unit_symbol, internal_unit_symbol=None):
     """Convert values to the registered internal unit, preserving unknown units."""
-    if (unit_symbol, internal_unit_symbol) in _CONTEXTUAL_CONVERSIONS:
-        return np.asarray(values) * _CONTEXTUAL_CONVERSIONS[(unit_symbol, internal_unit_symbol)]
+    if (unit_symbol, internal_unit_symbol) == ("Hz", "rad/s"):
+        return frequency_to_angular_frequency(values)
+    if (unit_symbol, internal_unit_symbol) == ("rad/s", "Hz"):
+        return angular_frequency_to_frequency(values)
     try:
         unit = get_unit(unit_symbol)
     except ValueError:

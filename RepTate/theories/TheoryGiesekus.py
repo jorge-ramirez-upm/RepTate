@@ -105,6 +105,9 @@ class TheoryGiesekus(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="stress",
+                internal_unit="Pa",
+                display_unit="Pa",
             )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -114,6 +117,9 @@ class TheoryGiesekus(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
             )
             self.parameters["alpha%02d" % i] = Parameter(
                 name="alpha%02d" % i,
@@ -123,6 +129,9 @@ class TheoryGiesekus(QTheory):
                 opt_type=OptType.opt,
                 min_value=0,
                 max_value=1,
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
             )
 
         self.MAX_MODES = 40
@@ -524,6 +533,9 @@ class TheoryGiesekus(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="stress",
+                    internal_unit="Pa",
+                    display_unit="Pa",
                 )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -533,6 +545,9 @@ class TheoryGiesekus(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
                 )
                 self.parameters["alpha%02d" % i] = Parameter(
                     name="alpha%02d" % i,
@@ -543,6 +558,9 @@ class TheoryGiesekus(QTheory):
                     display_flag=True,
                     min_value=0,
                     max_value=1,
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
                 )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):

@@ -114,6 +114,9 @@ class TheoryUCM(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="stress",
+                internal_unit="Pa",
+                display_unit="Pa",
             )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
@@ -123,6 +126,9 @@ class TheoryUCM(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
             )
 
         self.MAX_MODES = 40
@@ -350,6 +356,9 @@ class TheoryUCM(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="stress",
+                    internal_unit="Pa",
+                    display_unit="Pa",
                 )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
@@ -359,6 +368,9 @@ class TheoryUCM(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
                 )
 
             if oldn > self.parameters["nmodes"].value:

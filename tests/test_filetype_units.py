@@ -26,14 +26,14 @@ def test_txt_column_file_attaches_column_specs_and_converts_known_units(tmp_path
     assert [spec.internal_unit for spec in file.data_table.column_specs] == [
         "s",
         "Pa",
-        "g/mol",
+        "kg/mol",
     ]
     np.testing.assert_allclose(
         file.data_table.data,
         np.array(
             [
-                [60, 2000, 3],
-                [120, 4000, 6],
+                [60, 2000, 0.003],
+                [120, 4000, 0.006],
             ]
         ),
     )
@@ -92,7 +92,7 @@ def test_txt_column_file_uses_units_declared_in_header(tmp_path):
     )
 
 
-def test_txt_column_file_converts_mwd_molar_mass_to_g_per_mol(tmp_path):
+def test_txt_column_file_converts_mwd_molar_mass_to_kg_per_mol(tmp_path):
     data_file = tmp_path / "sample_mwd.dat"
     data_file.write_text(
         "\n"
@@ -113,15 +113,15 @@ def test_txt_column_file_converts_mwd_molar_mass_to_g_per_mol(tmp_path):
 
     assert file.data_table.column_units == ["kg/mol", "-"]
     assert [spec.internal_unit for spec in file.data_table.column_specs] == [
-        "g/mol",
+        "kg/mol",
         "-",
     ]
     np.testing.assert_allclose(
         file.data_table.data,
         np.array(
             [
-                [1000, 0.2],
-                [2000, 0.4],
+                [1, 0.2],
+                [2, 0.4],
             ]
         ),
     )

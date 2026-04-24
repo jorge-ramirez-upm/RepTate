@@ -116,6 +116,9 @@ class TheoryPomPom(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="stress",
+                internal_unit="Pa",
+                display_unit="Pa",
             )
             self.parameters["tauB%02d" % i] = Parameter(
                 name="tauB%02d" % i,
@@ -125,6 +128,9 @@ class TheoryPomPom(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
             )
             self.parameters["q%02d" % i] = Parameter(
                 name="q%02d" % i,
@@ -134,6 +140,9 @@ class TheoryPomPom(QTheory):
                 opt_type=OptType.opt,
                 min_value=1,
                 max_value=10,
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
             )
             self.parameters["ratio%02d" % i] = Parameter(
                 name="ratio%02d" % i,
@@ -144,6 +153,9 @@ class TheoryPomPom(QTheory):
                 opt_type=OptType.const,
                 min_value=1,
                 max_value=5,
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
             )
 
         self.MAX_MODES = 40
@@ -637,6 +649,9 @@ class TheoryPomPom(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="stress",
+                    internal_unit="Pa",
+                    display_unit="Pa",
                 )
                 self.parameters["tauB%02d" % i] = Parameter(
                     name="tauB%02d" % i,
@@ -646,6 +661,9 @@ class TheoryPomPom(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
                 )
                 self.parameters["q%02d" % i] = Parameter(
                     name="q%02d" % i,
@@ -655,6 +673,9 @@ class TheoryPomPom(QTheory):
                     opt_type=OptType.opt,
                     min_value=1,
                     max_value=10,
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
                 )
                 self.parameters["ratio%02d" % i] = Parameter(
                     name="ratio%02d" % i,
@@ -665,6 +686,9 @@ class TheoryPomPom(QTheory):
                     opt_type=OptType.const,
                     min_value=1,
                     max_value=5,
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
                 )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):

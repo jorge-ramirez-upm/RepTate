@@ -89,6 +89,9 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             opt_type=OptType.opt,
             min_value=1e3,
             max_value=1e7,
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["Me"] = Parameter(
             "Me",
@@ -98,6 +101,9 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             opt_type=OptType.opt,
             min_value=0.4,
             max_value=50.0,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["c_nu"] = Parameter(
             name="c_nu",
@@ -106,6 +112,9 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             type=ParameterType.discrete_real,
             opt_type=OptType.const,
             discrete_values=[0, 0.01, 0.03, 0.1, 0.3, 1, 3, 10],
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["linkMeGe"] = Parameter(
             name="linkMeGe",
