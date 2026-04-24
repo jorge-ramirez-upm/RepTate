@@ -53,6 +53,9 @@ from PySide6.QtWidgets import QApplication
 
 
 def main():
+    from RepTate.runtime import bootstrap_gui_runtime
+
+    bootstrap_gui_runtime()
     start_RepTate(sys.argv[1:])
 
 

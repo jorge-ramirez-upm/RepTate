@@ -55,6 +55,9 @@ from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversal
 
 
 def main():
+    from RepTate.runtime import bootstrap_gui_runtime
+
+    bootstrap_gui_runtime()
     start_UV(sys.argv[1:])
 
 

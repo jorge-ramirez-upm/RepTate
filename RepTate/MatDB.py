@@ -51,6 +51,9 @@ from PySide6.QtCore import QUrl, Qt, QCoreApplication
 
 
 def main():
+    from RepTate.runtime import bootstrap_gui_runtime
+
+    bootstrap_gui_runtime()
     start_MatDB(sys.argv[1:])
 
 
