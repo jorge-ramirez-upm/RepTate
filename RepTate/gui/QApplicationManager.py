@@ -36,6 +36,7 @@ Module for the main Graphical User Interface of RepTate. It is the GUI counterpa
 ApplicationManager.
 
 """
+
 # import logging
 import sys
 import os
@@ -106,9 +107,7 @@ class QTextEditLogger(logging.Handler):
 
         self.widget.moveCursor(QTextCursor.End)
         self.widget.insertHtml(msg + "<br>")
-        self.widget.verticalScrollBar().setValue(
-            self.widget.verticalScrollBar().maximum()
-        )
+        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum())
         self.widget.moveCursor(QTextCursor.End)
 
 
@@ -159,9 +158,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.available_applications = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS
-        self.available_applications[ApplicationTTSFactors.appname] = (
-            ApplicationTTSFactors
-        )
+        self.available_applications[ApplicationTTSFactors.appname] = ApplicationTTSFactors
         self.available_applications[ApplicationLVE.appname] = ApplicationLVE
         self.available_applications[ApplicationNLVE.appname] = ApplicationNLVE
         self.available_applications[ApplicationCrystal.appname] = ApplicationCrystal
@@ -169,16 +166,12 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.available_applications[ApplicationCreep.appname] = ApplicationCreep
         self.available_applications[ApplicationSANS.appname] = ApplicationSANS
         self.available_applications[ApplicationReact.appname] = ApplicationReact
-        self.available_applications[ApplicationDielectric.appname] = (
-            ApplicationDielectric
-        )
+        self.available_applications[ApplicationDielectric.appname] = ApplicationDielectric
         self.available_applications[ApplicationLAOS.appname] = ApplicationLAOS
 
         # LOGGING STUFF
         # Setup AppName and platform-dependent path to AppData
-        path_to_AppData = QStandardPaths.writableLocation(
-            QStandardPaths.AppDataLocation
-        )
+        path_to_AppData = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
         try:
             os.mkdir(path_to_AppData)
         except FileExistsError:
@@ -188,16 +181,12 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logger.setLevel(loglevel)
         # home_path = str(Path.home())
         logfile = os.path.join(path_to_AppData, "RepTate.log")
-        fh = logging.handlers.RotatingFileHandler(
-            logfile, maxBytes=100000, backupCount=5
-        )
+        fh = logging.handlers.RotatingFileHandler(logfile, maxBytes=100000, backupCount=5)
         fh.setLevel(loglevel)
         ch = logging.StreamHandler()
         ch.setLevel(logging.WARNING)
         # create formatter and add it to the handlers
-        formatter = logging.Formatter(
-            "%(asctime)s %(name)s %(levelname)s: %(message)s", "%Y%m%d %H%M%S"
-        )
+        formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s", "%Y%m%d %H%M%S")
         fh.setFormatter(formatter)
         ch.setFormatter(formatter)
         # add the handlers to the logger
@@ -206,9 +195,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logger.debug("New ApplicationManager")
 
         if CmdBase.calcmode == CalcMode.singlethread:
-            self.setWindowTitle(
-                "RepTate " + self.version + " " + self.date + " - SINGLE THREAD!!"
-            )
+            self.setWindowTitle("RepTate " + self.version + " " + self.date + " - SINGLE THREAD!!")
         else:
             self.setWindowTitle("RepTate " + self.version + " " + self.date)
 
@@ -301,9 +288,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.actionCreep.triggered.connect(lambda: self.handle_new_app("Creep"))
         self.actionSANS.triggered.connect(lambda: self.handle_new_app("SANS"))
         self.actionReact.triggered.connect(lambda: self.handle_new_app("React"))
-        self.actionDielectric.triggered.connect(
-            lambda: self.handle_new_app("Dielectric")
-        )
+        self.actionDielectric.triggered.connect(lambda: self.handle_new_app("Dielectric"))
         self.actionLAOS.triggered.connect(lambda: self.handle_new_app("LAOS"))
         # self.actionLAOS.triggered.connect(lambda: self.handle_app_coming_soon('LAOS'))
         # self.actionDynamicStructureFactor.triggered.connect(lambda: self.handle_app_coming_soon('DynamicStructureFactor'))
@@ -314,29 +299,21 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
         self.actionAbout.triggered.connect(self.show_about)
 
-        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(
-            self.handle_doubleClickTab
-        )
+        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
         # help buttons
         self.actionShow_reptate_help.triggered.connect(self.handle_show_reptate_help)
         self.actionShow_app_help.triggered.connect(self.handle_show_app_help)
         self.actionShow_th_help.triggered.connect(self.handle_show_th_help)
-        self.actionShow_offline_help.triggered.connect(
-            self.handle_actionShow_offline_help
-        )
+        self.actionShow_offline_help.triggered.connect(self.handle_actionShow_offline_help)
 
         # additional about buttons
         self.actionAboutMatplotlib.triggered.connect(self.handle_about_matplotlib)
         self.actionAboutNumpy.triggered.connect(self.handle_about_numpy)
         self.actionAboutScipy.triggered.connect(self.handle_about_scipy)
         self.actionCite_RepTate.triggered.connect(self.handle_cite_RepTate)
-        self.actionCheckRepTateVersion.triggered.connect(
-            self.handle_check_RepTate_version
-        )
+        self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
 
-        connection_id = self.LoggerdockWidget.visibilityChanged.connect(
-            self.handle_loggerVisibilityChanged
-        )
+        connection_id = self.LoggerdockWidget.visibilityChanged.connect(self.handle_loggerVisibilityChanged)
         connection_id = self.actionShow_Logger.triggered.connect(self.showLogger)
 
         tb = QToolBar()
@@ -465,9 +442,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             html_help_file = self.ApplicationtabWidget.currentWidget().html_help_file
         except AttributeError as e:
             print('in "handle_show_help":', e)
-            html_help_file = (
-                "http://reptate.readthedocs.io/manual/Applications/applications.html"
-            )
+            html_help_file = "http://reptate.readthedocs.io/manual/Applications/applications.html"
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_show_th_help(self):
@@ -479,9 +454,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             html_help_file = th.html_help_file
         except Exception as e:
             print('in "handle_show_help":', e)
-            html_help_file = (
-                "http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html"
-            )
+            html_help_file = "http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html"
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
     def handle_actionShow_offline_help(self):
@@ -490,9 +463,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def handle_about_matplotlib(self):
         """Show matplotlib web site"""
-        QDesktopServices.openUrl(
-            QUrl.fromUserInput(("https://matplotlib.org/index.html"))
-        )
+        QDesktopServices.openUrl(QUrl.fromUserInput(("https://matplotlib.org/index.html")))
 
     def handle_about_numpy(self):
         """Show numpy web site"""
@@ -504,9 +475,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def handle_cite_RepTate(self):
         """Visit the web site of the RepTatepaper"""
-        QDesktopServices.openUrl(
-            QUrl.fromUserInput(("https://dx.doi.org/10.1122/8.0000002"))
-        )
+        QDesktopServices.openUrl(QUrl.fromUserInput(("https://dx.doi.org/10.1122/8.0000002")))
 
     def check_version(self):
         url = "https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases"
@@ -538,11 +507,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 QMessageBox.Yes,
             )
             if ans == QMessageBox.Yes:
-                QDesktopServices.openUrl(
-                    QUrl.fromUserInput(
-                        ("https://github.com/jorge-ramirez-upm/RepTate/releases")
-                    )
-                )
+                QDesktopServices.openUrl(QUrl.fromUserInput(("https://github.com/jorge-ramirez-upm/RepTate/releases")))
         else:
             QMessageBox.information(
                 self,
@@ -567,12 +532,8 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.has_modes and th != th_exclude:
-                        get_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.get_modes
-                        set_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.set_modes
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.get_modes
+                        set_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.set_modes
         return get_dict, set_dict
 
     def handle_doubleClickTab(self, index):
@@ -634,9 +595,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         if appname in self.available_applications:
             self.application_counter += 1
-            newapp = self.available_applications[appname](
-                appname + str(self.application_counter), self
-            )
+            newapp = self.available_applications[appname](appname + str(self.application_counter), self)
             self.applications[newapp.name] = newapp
             return newapp
         else:
@@ -655,13 +614,12 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def handle_new_app(self, app_name=""):
         """Open a new application window from name"""
-        self.Qopen_app(app_name, ":/Icons/Images/new_icons/%s.png" % app_name)
+        newapp = self.Qopen_app(app_name, ":/Icons/Images/new_icons/%s.png" % app_name)
+        return newapp
 
     def handle_app_coming_soon(self, appname=""):
         """Show message"""
-        QMessageBox.warning(
-            self, "new %s application" % appname, "%s coming soon..." % appname
-        )
+        QMessageBox.warning(self, "new %s application" % appname, "%s coming soon..." % appname)
 
     ############################
     # SAVE/LOAD REPTATE SESSION
@@ -686,9 +644,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     def launch_open_dialog(self):
         """Get filename of RepTate project to open"""
         if self.load_path:
-            fpath, _ = QFileDialog.getOpenFileName(
-                self, "Open RepTate Project", self.load_path, "RepTate Project (*.rept)"
-            )
+            fpath, _ = QFileDialog.getOpenFileName(self, "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getOpenFileName(
                 self,
@@ -703,9 +659,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     def launch_save_dialog(self):
         """Get filename of RepTate project to save"""
         if self.load_path:
-            fpath, _ = QFileDialog.getSaveFileName(
-                self, "Save RepTate Project", self.load_path, "RepTate Project (*.rept)"
-            )
+            fpath, _ = QFileDialog.getSaveFileName(self, "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
             fpath, _ = QFileDialog.getSaveFileName(
                 self,
@@ -737,12 +691,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 files_dic = OrderedDict()
                 for f in ds.files:
                     nfile_saved += 1
-                    param_dic = OrderedDict(
-                        [
-                            (pname, f.file_parameters[pname])
-                            for pname in f.file_parameters
-                        ]
-                    )
+                    param_dic = OrderedDict([(pname, f.file_parameters[pname]) for pname in f.file_parameters])
 
                     file_dic = OrderedDict(
                         [
@@ -767,9 +716,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 for k in range(ntheories):
                     nth_saved += 1
                     th = ds.TheorytabWidget.widget(k)
-                    param_dic = OrderedDict(
-                        [(pname, th.parameters[pname].value) for pname in th.parameters]
-                    )
+                    param_dic = OrderedDict([(pname, th.parameters[pname].value) for pname in th.parameters])
                     th_table_dic = OrderedDict(
                         [
                             (
@@ -811,8 +758,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                             (
                                 "th_textbox",
                                 str(th.thTextBox.toHtml())
-                                + "<br><i>Saved at %s on %s<i><br>"
-                                % (time.strftime("%X"), time.strftime("%a %b %d, %Y")),
+                                + "<br><i>Saved at %s on %s<i><br>" % (time.strftime("%X"), time.strftime("%a %b %d, %Y")),
                             ),
                             ("th_tables", th_table_dic),
                             ("th_extra_table_dic", th_extra_table_dic),
@@ -872,8 +818,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                             "tool_txtbox",
                             str(
                                 tool.toolTextBox.toHtml()
-                                + "<br><i>Saved at %s on %s<i><br>"
-                                % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
+                                + "<br><i>Saved at %s on %s<i><br>" % (time.strftime("%X"), time.strftime("%a %b %d, %Y"))
                             ),
                         ),
                     ]
@@ -1136,9 +1081,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             ann_x = ann["ann_x"]
             ann_y = ann["ann_y"]
             ann_opts = ann["ann_opts"]
-            app.add_annotation(
-                text=ann_text, x=ann_x, y=ann_y, annotation_opts=ann_opts
-            )
+            app.add_annotation(text=ann_text, x=ann_x, y=ann_y, annotation_opts=ann_opts)
 
     def open_project(self, project_path):
         """Open file and load project"""

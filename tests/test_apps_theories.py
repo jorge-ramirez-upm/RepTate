@@ -36,31 +36,35 @@ import numpy as np
 import numpy.testing as npt
 import pytest
 
+from RepTate.runtime import configure_numpy_errors
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from PySide6.QtWidgets import QApplication
+
+configure_numpy_errors()
+
 
 CmdBase.calcmode = CalcMode.singlethread
 app = QApplication()
 ex = QApplicationManager()
 
+
 def test_LVE_Likhtman_McLeish():
-    ex.handle_new_app("LVE")
+    thisApp = ex.handle_new_app("LVE")
     pi_dir = "data%sPI_LINEAR%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["LVE1"]
-    thisApp.new_tables_from_files([
-                pi_dir + "PI_13.5k_T-35.tts",
-                pi_dir + "PI_23.4k_T-35.tts",
-                pi_dir + "PI_33.6k_T-35.tts",
-                pi_dir + "PI_94.9k_T-35.tts",
-                pi_dir + "PI_225.9k_T-35.tts",
-                pi_dir + "PI_483.1k_T-35.tts",
-                pi_dir + "PI_634.5k_T-35.tts",
-                pi_dir + "PI_1131k_T-35.tts",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("Likhtman-McLeish")
-    thisTheory = thisSet.theories["LML1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "PI_13.5k_T-35.tts",
+            pi_dir + "PI_23.4k_T-35.tts",
+            pi_dir + "PI_33.6k_T-35.tts",
+            pi_dir + "PI_94.9k_T-35.tts",
+            pi_dir + "PI_225.9k_T-35.tts",
+            pi_dir + "PI_483.1k_T-35.tts",
+            pi_dir + "PI_634.5k_T-35.tts",
+            pi_dir + "PI_1131k_T-35.tts",
+        ]
+    )
+    thisTheory = thisSet.new_theory("Likhtman-McLeish")
     thisSet.handle_actionMinimize_Error()
     tau_e = thisTheory.parameters["tau_e"].value
     Ge = thisTheory.parameters["Ge"].value
@@ -69,16 +73,16 @@ def test_LVE_Likhtman_McLeish():
     assert Ge == pytest.approx(509664.8088612225, rel=1e-4)
     assert Me == pytest.approx(4.492962262350123, rel=1e-4)
 
+
 def test_LVE_Maxwell_Modes():
-    ex.handle_new_app("LVE")
+    thisApp = ex.handle_new_app("LVE")
     pi_dir = "data%sPI_LINEAR%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["LVE2"]
-    thisApp.new_tables_from_files([
-                pi_dir + "PI_225.9k_T-35.tts",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("Maxwell Modes")
-    thisTheory = thisSet.theories["MM1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "PI_225.9k_T-35.tts",
+        ]
+    )
+    thisTheory = thisSet.new_theory("Maxwell Modes")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -99,27 +103,26 @@ def test_LVE_Maxwell_Modes():
     assert nmodes == 9
     # assert logG00 == pytest.approx(-9.98121345866038, rel=1e-4)
     assert logG01 == pytest.approx(2.6532429979420713, rel=1e-4)
-    assert logG02 == pytest.approx(5.219297965636228, rel=1e-4) 
+    assert logG02 == pytest.approx(5.219297965636228, rel=1e-4)
     assert logG03 == pytest.approx(5.0406510877327815, rel=1e-4)
     assert logG04 == pytest.approx(4.804722071852002, rel=1e-4)
     assert logG05 == pytest.approx(4.687069287243573, rel=1e-4)
     assert logG06 == pytest.approx(5.145666298139436, rel=1e-4)
     assert logG07 == pytest.approx(5.76694930919948, rel=1e-4)
-    assert logG08 == pytest.approx(6.829225757858246, rel=1e-4) 
+    assert logG08 == pytest.approx(6.829225757858246, rel=1e-4)
 
 
 def test_LVE_DTD_Stars():
-    ex.handle_new_app("LVE")
+    thisApp = ex.handle_new_app("LVE")
     pi_dir = "data%sPI_STAR%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["LVE3"]
-    thisApp.new_tables_from_files([
-                pi_dir + "S6Z12T40.tts",
-                pi_dir + "S6Z16T40.tts",
-                pi_dir + "S6Z8.1T40.tts",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("DTD Stars")
-    thisTheory = thisSet.theories["DTDS1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "S6Z12T40.tts",
+            pi_dir + "S6Z16T40.tts",
+            pi_dir + "S6Z8.1T40.tts",
+        ]
+    )
+    thisTheory = thisSet.new_theory("DTD Stars")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -129,29 +132,61 @@ def test_LVE_DTD_Stars():
     alpha = thisTheory.parameters["alpha"].value
     assert G0 == pytest.approx(0.8513160549985747, rel=1e-4)
     assert tau_e == pytest.approx(5.417382973435641e-06, rel=1e-4)
-    assert Me == pytest.approx(4.369223232374666, rel=1e-4) 
+    assert Me == pytest.approx(4.369223232374666, rel=1e-4)
     assert alpha == 1.0
 
+
 def test_LVE_ReSpect():
-    ex.handle_new_app("LVE")
+    thisApp = ex.handle_new_app("LVE")
     pi_dir = "data%sReSpect%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["LVE4"]
-    thisApp.new_tables_from_files([
-                pi_dir + "test1.tts",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("ReSpect")
-    thisTheory = thisSet.theories["RS1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "test1.tts",
+        ]
+    )
+    thisTheory = thisSet.new_theory("ReSpect")
     thisSet.handle_actionCalculate_Theory()
     x = np.array(thisTheory.discspectrum.get_xdata())
     y = np.array(thisTheory.discspectrum.get_ydata())
 
-    expected_x = np.array([3.64858328,  3.09262379,  2.56845089,  2.0418679,   1.50298628,  0.95004366,
-  0.38634846, -0.18185822, -0.7471834,  -1.30218474, -1.84069882, -2.35960542,
- -2.86032535, -3.35203179,  -3.87576257])
-    expected_y = np.array([0.38900764, 1.01140786, 1.30106978, 1.39058669, 1.36537465, 1.29553195,
-  1.23776055, 1.22736189, 1.26972821, 1.33873382, 1.3839094,   1.34192586,
-  1.14501827, 0.72009324, -0.05033049])
+    expected_x = np.array(
+        [
+            3.64858328,
+            3.09262379,
+            2.56845089,
+            2.0418679,
+            1.50298628,
+            0.95004366,
+            0.38634846,
+            -0.18185822,
+            -0.7471834,
+            -1.30218474,
+            -1.84069882,
+            -2.35960542,
+            -2.86032535,
+            -3.35203179,
+            -3.87576257,
+        ]
+    )
+    expected_y = np.array(
+        [
+            0.38900764,
+            1.01140786,
+            1.30106978,
+            1.39058669,
+            1.36537465,
+            1.29553195,
+            1.23776055,
+            1.22736189,
+            1.26972821,
+            1.33873382,
+            1.3839094,
+            1.34192586,
+            1.14501827,
+            0.72009324,
+            -0.05033049,
+        ]
+    )
 
     # print(x)
     # print(expected_x)
@@ -172,16 +207,16 @@ def test_LVE_ReSpect():
     # assert Me == 4.369223232374666
     # assert alpha == 1.0
 
+
 def test_MWD_Discretize_MWD():
-    ex.handle_new_app("MWD")
+    thisApp = ex.handle_new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["MWD5"]
-    thisApp.new_tables_from_files([
-                pi_dir + "Munstedt_PSIV.gpc",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("Discretize MWD")
-    thisTheory = thisSet.theories["DMWD1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "Munstedt_PSIV.gpc",
+        ]
+    )
+    thisTheory = thisSet.new_theory("Discretize MWD")
     # thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -216,16 +251,16 @@ def test_MWD_Discretize_MWD():
     assert logM06 == pytest.approx(5.958885262723915, rel=1e-4)
     assert logM07 == pytest.approx(6.283637463659533, rel=1e-4)
 
+
 def test_MWD_GEX():
-    ex.handle_new_app("MWD")
+    thisApp = ex.handle_new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["MWD6"]
-    thisApp.new_tables_from_files([
-                pi_dir + "Munstedt_PSIV.gpc",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("GEX")
-    thisTheory = thisSet.theories["GEX1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "Munstedt_PSIV.gpc",
+        ]
+    )
+    thisTheory = thisSet.new_theory("GEX")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -238,16 +273,16 @@ def test_MWD_GEX():
     assert a == pytest.approx(1.3426251741114326, rel=1e-4)
     assert b == pytest.approx(1.2517441353471008, rel=1e-4)
 
+
 def test_MWD_LogNormal():
-    ex.handle_new_app("MWD")
+    thisApp = ex.handle_new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["MWD7"]
-    thisApp.new_tables_from_files([
-                pi_dir + "Munstedt_PSIV.gpc",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("LogNormal")
-    thisTheory = thisSet.theories["LN1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "Munstedt_PSIV.gpc",
+        ]
+    )
+    thisTheory = thisSet.new_theory("LogNormal")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -258,89 +293,89 @@ def test_MWD_LogNormal():
     assert logM0 == pytest.approx(4.997549485273925, rel=1e-4)
     assert sigma == pytest.approx(0.8015827090542221, rel=1e-4)
 
-def test_TTS_WLF():
-    ex.handle_new_app("TTS")
-    pi_dir = "data%sPI_LINEAR%sosc%s" % ((os.sep,) * 3)
-    thisApp = ex.applications["TTS8"]
-    thisApp.new_tables_from_files([
-                pi_dir + "PI1000k-02_-10C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_-20C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_-30C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_-40C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_0C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_10C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_20C_FS_PP10.osc",
-                pi_dir + "PI1000k-02_30C_FS3_PP10.osc",
-                pi_dir + "PI1000k-02_30C_FS6_PP10.osc",
-                pi_dir + "PI1000k-02_50C_FS_PP10.osc",
-                pi_dir + "PI14k-02_-10C_FS2_PP-10.osc",
-                pi_dir + "PI14k-02_-10C_FS_PP-10.osc",
-                pi_dir + "PI14k-02_-20C_FS_PP-10.osc",
-                pi_dir + "PI14k-02_-30C_FS_PP-10.osc",
-                pi_dir + "PI14k-02_-40C_FS_PP-10.osc",
-                pi_dir + "PI14k-02_0C_FS_PP-10.osc",
-                pi_dir + "PI223k-14b_0C_FS4_PP10.osc",
-                pi_dir + "PI223k-14b_25C_FS3_PP10.osc",
-                pi_dir + "PI223k-14c_-20C_FS_PP10.osc",
-                pi_dir + "PI223k-14c_-30C_FS_PP10.osc",
-                pi_dir + "PI223k-14c_-40C_FS_PP10.osc",
-                pi_dir + "PI223k-14c_-45C_FS2_PP10.osc",
-                pi_dir + "PI223k-14c_30C_FS3_PP10.osc",
-                pi_dir + "PI223k-14_-10C_FS_PP10.osc", 
-                pi_dir + "PI223k-14_10C_FS_PP10.osc",
-                pi_dir + "PI223k-14_25C_FS3_PP10.osc",
-                pi_dir + "PI223k-14_40C_FS_PP10.osc",
-                pi_dir + "PI223k-14_50C_FS_PP10.osc",
-                pi_dir + "PI26k-16_FS_-10C_PP10.osc",
-                pi_dir + "PI26k-16_FS_-20C_PP10.osc",
-                pi_dir + "PI26k-16_FS_-30C_PP10.osc",
-                pi_dir + "PI26k-16_FS_-40C_PP10.osc",
-                pi_dir + "PI26k-16_FS_0C_PP10.osc",
-                pi_dir + "PI2K-30d.osc",
-                pi_dir + "PI2K-40d.osc",
-                pi_dir + "PI2K-45d.osc",
-                pi_dir + "PI2K-50d.osc",
-                pi_dir + "PI2K-55d.osc",
-                pi_dir + "PI2K-60d.osc",
-                pi_dir + "PI33K-8_-10C_FS_PP10.osc",
-                pi_dir + "PI33K-8_-20C_FS_PP10.osc",
-                pi_dir + "PI33K-8_-30C_FS_PP10.osc",
-                pi_dir + "PI33K-8_-40C_FS_PP10.osc",
-                pi_dir + "PI33K-8_0C_FS_PP10.osc",
-                pi_dir + "PI400k-03_-10C_FS_PP10.osc",
-                pi_dir + "PI400k-03_-20C_FS_PP10.osc",
-                pi_dir + "PI400k-03_-30C_FS2_PP10.osc",
-                pi_dir + "PI400k-03_-40C_FS_PP10.osc",
-                pi_dir + "PI400k-03_0C_FS_PP10.osc",
-                pi_dir + "PI400k-03_15C_FS_PP10.osc",
-                pi_dir + "PI400k-03_30C_FS2_PP10.osc",
-                pi_dir + "PI400k-03_30C_FS_PP10.osc",
-                pi_dir + "PI400k-03_50C_FS_PP10.osc",
-                pi_dir + "PI4k-02_-30C_FS_PP10.osc",
-                pi_dir + "PI4k-02_-40C_FS_PP10.osc",
-                pi_dir + "PI4k-02_-45C_FS_PP10.osc",
-                pi_dir + "PI600k_-10C_02b.osc",
-                pi_dir + "PI600k_-20C_02b.osc",
-                pi_dir + "PI600k_-30C_02b.osc",
-                pi_dir + "PI600k_-40C_02bn.osc",
-                pi_dir + "PI600k_0C_02bn.osc",
-                pi_dir + "PI600k_100C_02bn.osc",
-                pi_dir + "PI600k_30C_02b.osc",
-                pi_dir + "PI600k_60C_02bn.osc",
-                pi_dir + "PI600k_80C_02bn.osc",
-                pi_dir + "PI88K-09_FS_-10C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_-20C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_-30C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_-40C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_-45C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_0C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_10C_PP-10.osc",
-                pi_dir + "PI88K-09_FS_25C_PP-10.osc",
-            ])
 
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("WLF Shift")
-    thisTheory = thisSet.theories["WLFS1"]
+def test_TTS_WLF():
+    thisApp = ex.handle_new_app("TTS")
+    pi_dir = "data%sPI_LINEAR%sosc%s" % ((os.sep,) * 3)
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "PI1000k-02_-10C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_-20C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_-30C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_-40C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_0C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_10C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_20C_FS_PP10.osc",
+            pi_dir + "PI1000k-02_30C_FS3_PP10.osc",
+            pi_dir + "PI1000k-02_30C_FS6_PP10.osc",
+            pi_dir + "PI1000k-02_50C_FS_PP10.osc",
+            pi_dir + "PI14k-02_-10C_FS2_PP-10.osc",
+            pi_dir + "PI14k-02_-10C_FS_PP-10.osc",
+            pi_dir + "PI14k-02_-20C_FS_PP-10.osc",
+            pi_dir + "PI14k-02_-30C_FS_PP-10.osc",
+            pi_dir + "PI14k-02_-40C_FS_PP-10.osc",
+            pi_dir + "PI14k-02_0C_FS_PP-10.osc",
+            pi_dir + "PI223k-14b_0C_FS4_PP10.osc",
+            pi_dir + "PI223k-14b_25C_FS3_PP10.osc",
+            pi_dir + "PI223k-14c_-20C_FS_PP10.osc",
+            pi_dir + "PI223k-14c_-30C_FS_PP10.osc",
+            pi_dir + "PI223k-14c_-40C_FS_PP10.osc",
+            pi_dir + "PI223k-14c_-45C_FS2_PP10.osc",
+            pi_dir + "PI223k-14c_30C_FS3_PP10.osc",
+            pi_dir + "PI223k-14_-10C_FS_PP10.osc",
+            pi_dir + "PI223k-14_10C_FS_PP10.osc",
+            pi_dir + "PI223k-14_25C_FS3_PP10.osc",
+            pi_dir + "PI223k-14_40C_FS_PP10.osc",
+            pi_dir + "PI223k-14_50C_FS_PP10.osc",
+            pi_dir + "PI26k-16_FS_-10C_PP10.osc",
+            pi_dir + "PI26k-16_FS_-20C_PP10.osc",
+            pi_dir + "PI26k-16_FS_-30C_PP10.osc",
+            pi_dir + "PI26k-16_FS_-40C_PP10.osc",
+            pi_dir + "PI26k-16_FS_0C_PP10.osc",
+            pi_dir + "PI2K-30d.osc",
+            pi_dir + "PI2K-40d.osc",
+            pi_dir + "PI2K-45d.osc",
+            pi_dir + "PI2K-50d.osc",
+            pi_dir + "PI2K-55d.osc",
+            pi_dir + "PI2K-60d.osc",
+            pi_dir + "PI33K-8_-10C_FS_PP10.osc",
+            pi_dir + "PI33K-8_-20C_FS_PP10.osc",
+            pi_dir + "PI33K-8_-30C_FS_PP10.osc",
+            pi_dir + "PI33K-8_-40C_FS_PP10.osc",
+            pi_dir + "PI33K-8_0C_FS_PP10.osc",
+            pi_dir + "PI400k-03_-10C_FS_PP10.osc",
+            pi_dir + "PI400k-03_-20C_FS_PP10.osc",
+            pi_dir + "PI400k-03_-30C_FS2_PP10.osc",
+            pi_dir + "PI400k-03_-40C_FS_PP10.osc",
+            pi_dir + "PI400k-03_0C_FS_PP10.osc",
+            pi_dir + "PI400k-03_15C_FS_PP10.osc",
+            pi_dir + "PI400k-03_30C_FS2_PP10.osc",
+            pi_dir + "PI400k-03_30C_FS_PP10.osc",
+            pi_dir + "PI400k-03_50C_FS_PP10.osc",
+            pi_dir + "PI4k-02_-30C_FS_PP10.osc",
+            pi_dir + "PI4k-02_-40C_FS_PP10.osc",
+            pi_dir + "PI4k-02_-45C_FS_PP10.osc",
+            pi_dir + "PI600k_-10C_02b.osc",
+            pi_dir + "PI600k_-20C_02b.osc",
+            pi_dir + "PI600k_-30C_02b.osc",
+            pi_dir + "PI600k_-40C_02bn.osc",
+            pi_dir + "PI600k_0C_02bn.osc",
+            pi_dir + "PI600k_100C_02bn.osc",
+            pi_dir + "PI600k_30C_02b.osc",
+            pi_dir + "PI600k_60C_02bn.osc",
+            pi_dir + "PI600k_80C_02bn.osc",
+            pi_dir + "PI88K-09_FS_-10C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_-20C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_-30C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_-40C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_-45C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_0C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_10C_PP-10.osc",
+            pi_dir + "PI88K-09_FS_25C_PP-10.osc",
+        ]
+    )
+
+    thisTheory = thisSet.new_theory("WLF Shift")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
@@ -355,18 +390,18 @@ def test_TTS_WLF():
     assert logalpha == pytest.approx(-3.2147, rel=1e-4)
     assert CTg == pytest.approx(14.65, rel=1e-4)
 
+
 def test_SANS_Debye():
-    ex.handle_new_app("SANS")
+    thisApp = ex.handle_new_app("SANS")
     pi_dir = "data%sPS_SANS%s" % ((os.sep,) * 2)
-    thisApp = ex.applications["SANS9"]
-    thisApp.new_tables_from_files([
-                pi_dir + "100k.sans",
-                pi_dir + "250k.sans",
-                pi_dir + "400k.sans",
-            ])
-    thisSet = thisApp.datasets["Set1"]
-    thisSet.new_theory("Debye")
-    thisTheory = thisSet.theories["D1"]
+    thisSet = thisApp.new_tables_from_files(
+        [
+            pi_dir + "100k.sans",
+            pi_dir + "250k.sans",
+            pi_dir + "400k.sans",
+        ]
+    )
+    thisTheory = thisSet.new_theory("Debye")
     thisSet.handle_actionMinimize_Error()
     # for k in thisTheory.parameters:
     #     print(k, thisTheory.parameters[k].value)
