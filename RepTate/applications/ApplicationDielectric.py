@@ -37,6 +37,7 @@ Module for the analysis of small angle oscillatory shear data - Master curves
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -209,6 +210,9 @@ class ApplicationDielectric(QApplicationWindow):
             ["w", "e'", "e''"],
             ["Mw", "T"],
             ["rad/s", "-", "-"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
 

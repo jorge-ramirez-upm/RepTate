@@ -37,6 +37,7 @@ Module for handling data from start up of shear and extensional flow experiments
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -275,6 +276,9 @@ class ApplicationCrystal(QApplicationWindow):
             ["t", "sigma_xy", "Ndot", "phi_X", "N"],
             ["gdot", "T", "tstop"],
             ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
@@ -284,6 +288,9 @@ class ApplicationCrystal(QApplicationWindow):
             ["t", "N1", "Ndot", "phi_X", "N"],
             ["gdot", "T", "tstop"],
             ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
 
         # THEORIES

@@ -83,7 +83,10 @@ class TheoryRouseTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-        )
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
+            )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
@@ -91,7 +94,10 @@ class TheoryRouseTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
@@ -99,7 +105,10 @@ class TheoryRouseTime(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0.01,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
 
     def calculate(self, f=None):
         """RouseTime function"""
@@ -183,7 +192,10 @@ class TheoryRouseFrequency(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-        )
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
+            )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
@@ -191,7 +203,10 @@ class TheoryRouseFrequency(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
@@ -199,7 +214,10 @@ class TheoryRouseFrequency(QTheory):
             ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
 
     def calculate(self, f=None):
         """RouseFrequency function"""

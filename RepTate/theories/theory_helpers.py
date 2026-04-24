@@ -161,7 +161,12 @@ class EditModesDialog(QDialog):
         self.table = SpreadsheetWidget()  # allows copy/paste
         self.table.setRowCount(nmodes)
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["tauD", "G"])
+        self.table.setHorizontalHeaderLabels(
+            [
+                self._mode_column_label(parent, "tauD", ("tauD", "tauB", "tau")),
+                self._mode_column_label(parent, "G", ("G",)),
+            ]
+        )
         for i in range(nmodes):
             tau = "%g" % times[i]
             mod = "%g" % G[i]
@@ -180,6 +185,19 @@ class EditModesDialog(QDialog):
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged
         )
+
+    @staticmethod
+    def _mode_column_label(parent, fallback_name, prefixes):
+        """Return a mode-table column label with units when metadata exists."""
+        parameters = getattr(parent, "parameters", {})
+        for prefix in prefixes:
+            for parameter in parameters.values():
+                if not parameter.name.startswith(prefix):
+                    continue
+                display_unit = getattr(parameter, "display_unit", "")
+                if display_unit and display_unit != "-":
+                    return "%s [%s]" % (fallback_name, display_unit)
+        return fallback_name
 
     def handle_spinboxValueChanged(self, value):
         nrow_old = self.table.rowCount()

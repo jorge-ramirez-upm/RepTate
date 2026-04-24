@@ -37,6 +37,7 @@ Large Amplitude Oscillatory Shear
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from PySide6.QtWidgets import QSpinBox
@@ -260,6 +261,10 @@ class ApplicationLAOS(QApplicationWindow):
             col_names=["time", "gamma", "sigma"],
             basic_file_parameters=["omega", "gamma"],
             col_units=["s", "-", "Pa"],
+            file_parameter_specs=[
+                FileParameterSpec("omega", "angular_frequency", "rad/s", "rad/s"),
+                FileParameterSpec("gamma", "dimensionless", "-", "-"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype  # add each the file type to dictionary
 

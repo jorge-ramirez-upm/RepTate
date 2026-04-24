@@ -37,6 +37,7 @@ Module for the analysis of data from Creep experiments
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
@@ -186,6 +187,9 @@ class ApplicationCreep(QApplicationWindow):
             ["t", "strain"],
             ["stress", "Mw", "T"],
             ["s", "-", "Pa", "C"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
 

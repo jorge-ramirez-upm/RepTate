@@ -2308,10 +2308,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
     def addTableToCurrentDataSet(self, dt, ext):
         """Add file table to curent dataset tab"""
         ds = self.DataSettabWidget.currentWidget()
+        header = ds.DataSettreeWidget.headerItem()
         lnew = []
-        for param in self.filetypes[ext].basic_file_parameters[:]:
+        for i, param in enumerate(self.filetypes[ext].basic_file_parameters[:]):
+            header.setText(i + 1, dt.file_parameter_label(param))
             try:
-                s_param = dt.file_parameters[param]
+                s_param = dt.file_parameter_value_to_display(param)
             except KeyError as e:
                 # header = "Missing Parameter"
                 message = "Parameter %s not found in file '%s'." % (
@@ -2325,7 +2327,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 try:
                     s_param = "%.3g" % float(s_param)
                 except ValueError:
-                    s_param = str(dt.file_parameters[param])
+                    s_param = str(s_param)
                 lnew.append(s_param)
 
         file_name_short = dt.file_name_short

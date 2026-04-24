@@ -37,6 +37,7 @@ Module for the analysis of small angle oscillatory shear data - Master curves
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile, ExcelFile
 import numpy as np
 
@@ -305,6 +306,12 @@ class ApplicationLVE(QApplicationWindow):
             ["w", "G'", "G''"],
             ["Mw", "T"],
             ["rad/s", "Pa", "Pa"],
+            # Legacy RepTate theory code expects file parameter T in Celsius
+            # and converts to Kelvin locally when needed.
+            [
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
         self.filetypes["osc"] = TXTColumnFile(
@@ -314,6 +321,10 @@ class ApplicationLVE(QApplicationWindow):
             ["w", "G'", "G''"],
             ["Mw", "T"],
             ["rad/s", "Pa", "Pa"],
+            [
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
 
         self.filetypes["xlsx"] = ExcelFile(

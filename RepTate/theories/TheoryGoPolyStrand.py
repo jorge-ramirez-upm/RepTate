@@ -157,21 +157,30 @@ class TheoryGoPolyStrand(QTheory):
             description="Order parameter prefactor",
             type=ParameterType.real,
             opt_type=OptType.opt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["Ne"] = Parameter(
             name="Ne",
             value=25,
             description="Monomers between entanglements",
             type=ParameterType.real,
             opt_type=OptType.opt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["epsilonB"] = Parameter(
             name="epsilonB",
             value=-0.117,
             description="Bulk free energy per monomer",
             type=ParameterType.real,
             opt_type=OptType.opt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["muS"] = Parameter(
             name="muS",
             value=0.85,
@@ -180,14 +189,20 @@ class TheoryGoPolyStrand(QTheory):
             opt_type=OptType.opt,
             min_value=0.0,
             max_value=1.125,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["tau0"] = Parameter(
             name="tau0",
             value=0.38e-9,
             description="Monomer attachment time",
             type=ParameterType.real,
             opt_type=OptType.opt,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["rhoK"] = Parameter(
             name="rhoK",
             value=2.7e9,
@@ -208,21 +223,30 @@ class TheoryGoPolyStrand(QTheory):
             description="Hetrogeneous nucleation density",
             type=ParameterType.real,
             opt_type=OptType.opt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["beta"] = Parameter(
             name="beta",
             value=1,
             description="CCR coefficient",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
             description="CCR exponent",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
@@ -231,7 +255,10 @@ class TheoryGoPolyStrand(QTheory):
             opt_type=OptType.nopt,
             display_flag=False,
             min_value=1.01,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -247,7 +274,10 @@ class TheoryGoPolyStrand(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
-        )
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
+            )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -256,7 +286,10 @@ class TheoryGoPolyStrand(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -265,7 +298,10 @@ class TheoryGoPolyStrand(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         nmode = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
@@ -276,7 +312,10 @@ class TheoryGoPolyStrand(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-            )
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
+                )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -285,7 +324,10 @@ class TheoryGoPolyStrand(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-            )
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
+                )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
                 value=1,
@@ -293,7 +335,10 @@ class TheoryGoPolyStrand(QTheory):
                 type=ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=0,
-            )
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
+                )
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label="")
@@ -1226,7 +1271,10 @@ class TheoryGoPolyStrand(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
+                    )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -1235,7 +1283,10 @@ class TheoryGoPolyStrand(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
+                    )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
                     value=1,
@@ -1244,7 +1295,10 @@ class TheoryGoPolyStrand(QTheory):
                     opt_type=OptType.opt,
                     display_flag=True,
                     min_value=0,
-                )
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
+                    )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]

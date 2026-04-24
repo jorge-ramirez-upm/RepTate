@@ -84,7 +84,10 @@ class TheoryDieneCSTR(QTheory):
             description="Collection time",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["tau"] = Parameter(
             name="tau",
             value=200,
@@ -92,23 +95,24 @@ class TheoryDieneCSTR(QTheory):
             type=ParameterType.real,
             min_value=0,
             opt_type=OptType.const,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["D0"] = Parameter(
             name="D0",
             value=1e-4,
             min_value=0,
             description="Rate of diene feed to the reactor",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["C0"] = Parameter(
             name="C0",
             value=2e-3,
             min_value=0,
             description="Rate of catalyst feed to the reactor",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["kpM"] = Parameter(
             name="kpM",
             value=150,
@@ -164,15 +168,17 @@ class TheoryDieneCSTR(QTheory):
             description="Number of molecules made in the simulation",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
             value=28,
             min_value=0,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1000,
@@ -180,7 +186,10 @@ class TheoryDieneCSTR(QTheory):
             description="Entanglement molecular weight",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["nbin"] = Parameter(
             name="nbin",
             value=100,
@@ -188,7 +197,10 @@ class TheoryDieneCSTR(QTheory):
             description="Number of molecular weight bins",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
 
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)

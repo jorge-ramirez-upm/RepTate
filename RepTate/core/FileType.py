@@ -103,6 +103,7 @@ class TXTColumnFile(object):
         col_names=[],
         basic_file_parameters=[],
         col_units=[],
+        file_parameter_specs=[],
     ):
         """
         **Constructor**
@@ -114,6 +115,7 @@ class TXTColumnFile(object):
             - col_names {list of str}: list with names of columns to read
             - basic_file_parameters {list of str}: list with file parameters that should always be included in the header line
             - col_units {list of str}: Default units of columns
+            - file_parameter_specs {list}: optional unit metadata for file parameters
         """
         self.name = name
         self.extension = extension
@@ -126,6 +128,9 @@ class TXTColumnFile(object):
             basic_file_parameters  # Those that will show by default in the dataset
         )
         self.col_units = col_units
+        self.file_parameter_specs = {
+            spec.name: spec for spec in file_parameter_specs
+        }
         # self.logger = logging.getLogger('ReptateLogger')
 
     def is_number(self, s):
@@ -145,9 +150,9 @@ class TXTColumnFile(object):
             par = items[i].split("=")
             if len(par) > 1:
                 if self.is_number(par[1]):
-                    file.file_parameters[par[0]] = float(par[1])
+                    file.set_file_parameter(par[0], float(par[1]))
                 else:
-                    file.file_parameters[par[0]] = par[1]
+                    file.set_file_parameter(par[0], par[1])
 
     def find_col_names_and_first_data_lines(self, lines, file):
         """Find column names and first row with data"""
@@ -276,6 +281,7 @@ class ExcelFile(object):
         col_names=[],
         basic_file_parameters=[],
         col_units=[],
+        file_parameter_specs=[],
     ):
 
         self.name = name
@@ -287,6 +293,9 @@ class ExcelFile(object):
             basic_file_parameters  # Those that will show by default in the dataset
         )
         self.col_units = col_units
+        self.file_parameter_specs = {
+            spec.name: spec for spec in file_parameter_specs
+        }
         # self.logger = logging.getLogger('ReptateLogger')
 
     def read_file(self, filename, parent_dataset, axarr):

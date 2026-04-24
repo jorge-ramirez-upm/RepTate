@@ -1,5 +1,6 @@
 import numpy as np
 
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 
 
@@ -161,3 +162,57 @@ def test_txt_column_file_converts_hz_to_rad_per_s_when_app_expects_angular_frequ
             ]
         ),
     )
+
+
+def test_txt_column_file_converts_file_parameters_with_specs(tmp_path):
+    data_file = tmp_path / "sample_pressure.dat"
+    data_file.write_text(
+        "stress=1;\n"
+        "time\n"
+        "1\n",
+        encoding="latin-1",
+    )
+    ftype = TXTColumnFile(
+        name="Sample",
+        extension="dat",
+        description="Sample data",
+        col_names=["time"],
+        basic_file_parameters=["stress"],
+        col_units=["s"],
+        file_parameter_specs=[
+            FileParameterSpec("stress", "stress", "Pa", "atm"),
+        ],
+    )
+
+    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+
+    assert file.file_parameters["stress"] == 101325.0
+    assert file.file_parameter_value_to_display("stress") == 1.0
+    assert file.file_parameter_label("stress") == "stress [atm]"
+
+
+def test_txt_column_file_keeps_legacy_temperature_file_parameter_in_celsius(tmp_path):
+    data_file = tmp_path / "sample_temperature.dat"
+    data_file.write_text(
+        "T=25;\n"
+        "time\n"
+        "1\n",
+        encoding="latin-1",
+    )
+    ftype = TXTColumnFile(
+        name="Sample",
+        extension="dat",
+        description="Sample data",
+        col_names=["time"],
+        basic_file_parameters=["T"],
+        col_units=["s"],
+        file_parameter_specs=[
+            FileParameterSpec("T", "temperature", "ºC", "ºC"),
+        ],
+    )
+
+    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+
+    assert file.file_parameters["T"] == 25.0
+    assert file.file_parameter_value_to_display("T") == 25.0
+    assert file.file_parameter_label("T") == "T [ºC]"

@@ -402,12 +402,13 @@ class EditFileParametersDialog(QDialog):
         self.p_new = []
         for i, pname in enumerate(parameters):  # loop over the Parameters
             self.p_new.append(QLineEdit())
+            value = file.file_parameter_value_to_display(pname)
             if isinstance(parameters[pname], str):  # the parameter is a string
-                self.p_new[i].setText("%s" % parameters[pname])
+                self.p_new[i].setText("%s" % value)
             else:  # parameter is a number:
                 self.p_new[i].setValidator(QDoubleValidator())  # prevent letters
-                self.p_new[i].setText("%.4g" % parameters[pname])
-            layout.addRow("%s:" % pname, self.p_new[i])
+                self.p_new[i].setText("%.4g" % value)
+            layout.addRow("%s:" % file.file_parameter_label(pname), self.p_new[i])
             self.param_dict[pname] = self.p_new[i]
         self.formGroupBox.setLayout(layout)
 
@@ -1906,7 +1907,11 @@ class QDataSet(QWidget, Ui_DataSet):
         #     return
         if self.DataSettreeWidget.topLevelItemCount() > 0:
             # sort iff there are some files in the dataset
-            sort_param = self.DataSettreeWidget.headerItem().text(column)
+            if column > 0 and self.current_file:
+                basic_params = self.current_file.file_type.basic_file_parameters
+                sort_param = basic_params[column - 1]
+            else:
+                sort_param = self.DataSettreeWidget.headerItem().text(column)
             rev = True if order == Qt.AscendingOrder else False
             if rev:
                 sort_param = sort_param + ",reverse"
@@ -1963,12 +1968,19 @@ class QDataSet(QWidget, Ui_DataSet):
                             file.file_parameters[p] = d.param_dict[p].text()
                         else:
                             try:
-                                file.file_parameters[p] = float(d.param_dict[p].text())
+                                file.file_parameters[p] = file.file_parameter_value_from_display(
+                                    p, float(d.param_dict[p].text())
+                                )
                             except Exception as e:
                                 print(e)
-                        for i in range(self.DataSettreeWidget.columnCount()):
-                            if p == self.DataSettreeWidget.headerItem().text(i):
-                                item.setText(i, str(file.file_parameters[p]))
+                        for i, pname in enumerate(file.file_type.basic_file_parameters):
+                            if p == pname:
+                                value = file.file_parameter_value_to_display(p)
+                                try:
+                                    value = "%.3g" % float(value)
+                                except ValueError:
+                                    value = str(value)
+                                item.setText(i + 1, value)
                     # theory xmin/max
                     try:
                         file.theory_xmin = float(d.th_xmin.text())

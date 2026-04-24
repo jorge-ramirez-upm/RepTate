@@ -94,64 +94,83 @@ class TheoryTobitaBatch(QTheory):
             value=0.002,
             description="Ratio (term. by dispropor. + chain transf. to small mol.) to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["beta"] = Parameter(
             name="beta",
             value=0.0,
             description="Ratio term. by combin. to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["Cb"] = Parameter(
             name="Cb",
             value=0.02,
             description="Ratio long-chain-branch. to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["Cs"] = Parameter(
             name="Cs",
             value=0.0005,
             description="Ratio scission to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["fin_conv"] = Parameter(
             name="fin_conv",
             value=0.4,
             description="Monomer conversion at the end of the reaction",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["num_to_make"] = Parameter(
             name="num_to_make",
             value=1000,
             description="Number of molecules made in the simulation",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
             value=28,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1000,
             description="Entanglement molecular weight",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["nbin"] = Parameter(
             name="nbin",
             value=100,
             description="Number of molecular weight bins",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
 
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)

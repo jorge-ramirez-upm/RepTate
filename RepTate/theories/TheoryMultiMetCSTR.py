@@ -82,28 +82,36 @@ class TheoryMultiMetCSTR(QTheory):
             description="Number of molecules made in the simulation",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
             value=28,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1000,
             description="Entanglement molecular weight",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["nbin"] = Parameter(
             name="nbin",
             value=50,
             description="Number of molecular weight bins",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.NUMCAT_MAX = 30
         # default parameters value
         self.init_param_values()

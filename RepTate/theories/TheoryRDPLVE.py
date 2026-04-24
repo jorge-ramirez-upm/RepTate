@@ -93,7 +93,10 @@ class TheoryRDPLVE(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
-        )
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
+            )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -102,7 +105,10 @@ class TheoryRDPLVE(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -111,7 +117,10 @@ class TheoryRDPLVE(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -132,7 +141,10 @@ class TheoryRDPLVE(QTheory):
                 display_flag=False,
                 min_value=0,
                 max_value=1,
-            )
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
+                )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -141,7 +153,10 @@ class TheoryRDPLVE(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-            )
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
+                )
         self.with_gcorr = GcorrMode.none
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
@@ -385,7 +400,10 @@ class TheoryRDPLVE(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
+                    )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -394,7 +412,10 @@ class TheoryRDPLVE(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
+                    )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]

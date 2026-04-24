@@ -38,6 +38,7 @@ time-temperature superposition principle.
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -296,6 +297,9 @@ class ApplicationTTS(QApplicationWindow):
             ["w", "G'", "G''"],
             ["Mw", "T"],
             ["rad/s", "Pa", "Pa"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
 

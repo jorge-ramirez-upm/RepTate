@@ -37,6 +37,7 @@ Module for handling data from start up of shear and extensional flow experiments
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -173,6 +174,9 @@ class ApplicationNLVE(QApplicationWindow):
             ["t", "sigma_xy", "N1", "gdot"],
             ["gdot", "T"],
             ["s", "Pa", "Pa", "s-1"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
@@ -182,6 +186,9 @@ class ApplicationNLVE(QApplicationWindow):
             ["t", "N1", "gdot"],
             ["gdot", "T"],
             ["s", "Pa", "s-1"],
+            file_parameter_specs=[
+                FileParameterSpec("T", "temperature", "ºC", "ºC"),
+            ],
         )
         self.filetypes[ftype.extension] = ftype
 

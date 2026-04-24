@@ -91,57 +91,73 @@ reactor during free-radical polymerisation.
             value=1.11e-3,
             description="Ratio (term. by dispropor. + chain transf. to small mol.) to polym. rates",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["beta"] = Parameter(
             name="beta",
             value=9.75e-6,
             description="Ratio term. by combin. to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["lambda"] = Parameter(
             name="lambda",
             value=2e-3,
             description="Ratio long-chain-branch. to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["sigma"] = Parameter(
             name="sigma",
             value=1.8e-4,
             description="Ratio scission to polym. rates",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["num_to_make"] = Parameter(
             name="num_to_make",
             value=1000,
             description="Number of molecules made in the simulation",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
             value=28,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const,
-        )
+            opt_type=OptType.const,)
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1000,
             description="Entanglement molecular weight",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["nbin"] = Parameter(
             name="nbin",
             value=100,
             description="Number of molecular weight bins",
             type=ParameterType.real,
             opt_type=OptType.const,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
 
         self.signal_request_dist.connect(rgt.request_more_dist)
         self.signal_request_polymer.connect(rgt.request_more_polymer)

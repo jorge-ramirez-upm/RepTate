@@ -117,14 +117,20 @@ class TheoryRolieDoublePoly(QTheory):
             description="CCR coefficient",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
             description="CCR exponent",
             type=ParameterType.real,
             opt_type=OptType.nopt,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
@@ -133,7 +139,10 @@ class TheoryRolieDoublePoly(QTheory):
             opt_type=OptType.nopt,
             display_flag=False,
             min_value=1.01,
-        )
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+            )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -149,7 +158,10 @@ class TheoryRolieDoublePoly(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             min_value=0,
-        )
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
+            )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -158,7 +170,10 @@ class TheoryRolieDoublePoly(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+            )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -167,7 +182,10 @@ class TheoryRolieDoublePoly(QTheory):
             opt_type=OptType.const,
             min_value=0,
             display_flag=False,
-        )
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+            )
         nmode = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
@@ -178,7 +196,10 @@ class TheoryRolieDoublePoly(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-            )
+                quantity="dimensionless",
+                internal_unit="-",
+                display_unit="-",
+                )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -187,7 +208,10 @@ class TheoryRolieDoublePoly(QTheory):
                 opt_type=OptType.nopt,
                 display_flag=False,
                 min_value=0,
-            )
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
+                )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
                 value=1,
@@ -195,7 +219,10 @@ class TheoryRolieDoublePoly(QTheory):
                 type=ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=0,
-            )
+                quantity="time",
+                internal_unit="s",
+                display_unit="s",
+                )
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label="")
@@ -884,7 +911,10 @@ class TheoryRolieDoublePoly(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="dimensionless",
+                    internal_unit="-",
+                    display_unit="-",
+                    )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -893,7 +923,10 @@ class TheoryRolieDoublePoly(QTheory):
                     opt_type=OptType.nopt,
                     display_flag=False,
                     min_value=0,
-                )
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
+                    )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
                     value=1,
@@ -902,7 +935,10 @@ class TheoryRolieDoublePoly(QTheory):
                     opt_type=OptType.opt,
                     display_flag=True,
                     min_value=0,
-                )
+                    quantity="time",
+                    internal_unit="s",
+                    display_unit="s",
+                    )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]

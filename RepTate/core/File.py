@@ -36,7 +36,63 @@ Module that defines a basic File, with headers, columns and data.
 
 """
 import os
+from dataclasses import dataclass
 from RepTate.core.DataTable import DataTable
+from RepTate.core.units import convert_value, get_unit
+
+
+@dataclass(frozen=True)
+class FileParameterSpec:
+    """Optional metadata for a file-level parameter.
+
+    Values stored in ``File.file_parameters`` remain plain Python values. When a
+    spec declares units, helper methods convert values at the boundary so stored
+    numeric values use RepTate's canonical internal units.
+    """
+
+    name: str
+    quantity: str = ""
+    internal_unit: str = ""
+    display_unit: str = ""
+
+    def __post_init__(self):
+        if not any((self.quantity, self.internal_unit, self.display_unit)):
+            return
+        if not all((self.quantity, self.internal_unit, self.display_unit)):
+            raise ValueError(
+                "File parameter '%s' has incomplete unit metadata" % self.name
+            )
+        internal = get_unit(self.internal_unit)
+        display = get_unit(self.display_unit)
+        if internal.quantity != self.quantity:
+            raise ValueError(
+                "File parameter '%s' internal unit %s has quantity %s, expected %s"
+                % (self.name, internal.symbol, internal.quantity, self.quantity)
+            )
+        if display.quantity != self.quantity:
+            raise ValueError(
+                "File parameter '%s' display unit %s has quantity %s, expected %s"
+                % (self.name, display.symbol, display.quantity, self.quantity)
+            )
+
+    def value_to_display(self, value):
+        """Convert an internally stored value to the display unit."""
+        if self.internal_unit and self.display_unit:
+            return convert_value(value, self.internal_unit, self.display_unit)
+        return value
+
+    def value_from_display(self, value):
+        """Convert a display/input value to the internal unit."""
+        if self.internal_unit and self.display_unit:
+            return convert_value(value, self.display_unit, self.internal_unit)
+        return value
+
+    def label_with_unit(self):
+        """Return a user-facing label for this parameter."""
+        if self.display_unit and self.display_unit != "-":
+            return "%s [%s]" % (self.name, self.display_unit)
+        return self.name
+
 
 class File(object):
     """Basic class that describes elements of a DataSet"""
@@ -63,6 +119,11 @@ class File(object):
 
         self.header_lines=[]
         self.file_parameters={}
+        self.file_parameter_specs={}
+        if file_type is not None:
+            self.file_parameter_specs.update(
+                getattr(file_type, "file_parameter_specs", {})
+            )
         self.active = True
         self.data_table = DataTable(axarr, self.file_name_short)
         # extra theory xrange
@@ -90,3 +151,38 @@ class File(object):
     def maxcol(self, col):
         """Maximum value in data_table column col"""
         return self.data_table.maxcol(col)
+
+    def set_file_parameter_spec(self, spec):
+        """Attach optional metadata to a file parameter."""
+        self.file_parameter_specs[spec.name] = spec
+
+    def set_file_parameter(self, name, value, spec=None, from_display=True):
+        """Set a file parameter, converting to internal units when possible."""
+        if spec is not None:
+            self.set_file_parameter_spec(spec)
+        spec = self.file_parameter_specs.get(name)
+        if spec is not None and from_display:
+            value = spec.value_from_display(value)
+        self.file_parameters[name] = value
+
+    def file_parameter_value_to_display(self, name, value=None):
+        """Return a file parameter value converted to display units."""
+        value = self.file_parameters[name] if value is None else value
+        spec = self.file_parameter_specs.get(name)
+        if spec is None:
+            return value
+        return spec.value_to_display(value)
+
+    def file_parameter_value_from_display(self, name, value):
+        """Convert a display value to this parameter's internal units."""
+        spec = self.file_parameter_specs.get(name)
+        if spec is None:
+            return value
+        return spec.value_from_display(value)
+
+    def file_parameter_label(self, name):
+        """Return the parameter label with display unit metadata when present."""
+        spec = self.file_parameter_specs.get(name)
+        if spec is None:
+            return name
+        return spec.label_with_unit()
