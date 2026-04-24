@@ -48,6 +48,7 @@ class DataTable(object):
         self.num_rows=0
         self.column_names=[]
         self.column_units=[]
+        self.column_specs=[]
         self.data=np.zeros((self.num_rows, self.num_columns))
         self.series=[]
         self.extra_tables = {}

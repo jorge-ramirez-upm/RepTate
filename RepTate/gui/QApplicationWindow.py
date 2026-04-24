@@ -93,6 +93,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
+from RepTate.core.axis_labels import axis_label_from_column_specs
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
@@ -1833,8 +1834,13 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())
 
-            ax.set_xlabel(view.x_label + " [" + view.x_units + "]")
-            ax.set_ylabel(view.y_label + " [" + view.y_units + "]")
+            column_specs = []
+            for ds in self.datasets.values():
+                if ds.files:
+                    column_specs = ds.files[0].data_table.column_specs
+                    break
+            ax.set_xlabel(axis_label_from_column_specs(view.x_label, view.x_units, column_specs))
+            ax.set_ylabel(axis_label_from_column_specs(view.y_label, view.y_units, column_specs))
 
             if not self.ax_opts["label_size_auto"]:
                 ax.xaxis.label.set_size(self.ax_opts["fontsize"])

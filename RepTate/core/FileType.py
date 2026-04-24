@@ -41,6 +41,8 @@ import numpy as np
 # import logging
 from openpyxl import load_workbook
 from RepTate.core.File import File
+from RepTate.core.unit_parsing import parse_column_label
+from RepTate.core.units import convert_array_to_internal, make_column_specs
 
 
 class TXTColumnFile(object):
@@ -164,6 +166,42 @@ class TXTColumnFile(object):
                 file.header_lines.append(lines[i])
         return colnameline, firstdata
 
+    def parse_column_header(self, line):
+        """Map expected columns to data indexes and units declared in a header.
+
+        If no unit is declared in the file header, fall back to the application
+        file type units. Those units are RepTate's current implicit input units.
+        """
+        tokens = line.split()
+        col_index = []
+        col_labels = []
+        col_units = []
+        data_col_index = 0
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            unit_token = ""
+            if i + 1 < len(tokens) and (
+                tokens[i + 1].startswith("[") or tokens[i + 1].startswith("(")
+            ):
+                unit_token = tokens[i + 1]
+                i += 1
+            if token in self.col_names:
+                default_unit = (
+                    self.col_units[self.col_names.index(token)]
+                    if self.col_names.index(token) < len(self.col_units)
+                    else "-"
+                )
+                label, unit, _ = parse_column_label(
+                    "%s %s" % (token, unit_token) if unit_token else token
+                )
+                col_index.append(data_col_index)
+                col_labels.append(label)
+                col_units.append(unit or default_unit)
+            data_col_index += 1
+            i += 1
+        return col_index, col_labels, col_units
+
     def read_file(self, filename, parent_dataset, axarr):
         """Gets all the data from the file"""
         if not os.path.isfile(filename):
@@ -181,16 +219,25 @@ class TXTColumnFile(object):
 
         self.col_index = []
         if self.col_names_line > 0:
-            items = lines[self.col_names_line].split()
-            for col in self.col_names:
-                for j in range(len(items)):
-                    if col == items[j]:
-                        self.col_index.append(int(j))
-                        break
+            col_labels = self.col_names[:]
+            self.col_index, col_labels, col_units = self.parse_column_header(
+                lines[self.col_names_line]
+            )
         else:
             self.col_index = list(range(len(self.col_names)))
+            col_labels = self.col_names[:]
+            col_units = self.col_units[:]
+        expected_units = [
+            self.col_units[self.col_names.index(label)]
+            if label in self.col_names and self.col_names.index(label) < len(self.col_units)
+            else unit
+            for label, unit in zip(col_labels, col_units)
+        ]
 
         file.data_table.num_columns = len(self.col_index)
+        file.data_table.column_names = col_labels
+        file.data_table.column_units = col_units
+        file.data_table.column_specs = make_column_specs(col_labels, col_units, expected_units)
         rawdata = []
         for i in range(self.first_data_line, len(lines)):
             items = lines[i].split()
@@ -207,6 +254,13 @@ class TXTColumnFile(object):
         file.data_table.data = file.data_table.data[
             file.data_table.data[:, 0].argsort()
         ]
+        # TXTColumnFile units are application-declared implicit input/display
+        # units. Known units are converted to RepTate's internal canonical units;
+        # unknown legacy unit strings keep the existing numerical convention.
+        for j, spec in enumerate(file.data_table.column_specs):
+            file.data_table.data[:, j] = convert_array_to_internal(
+                file.data_table.data[:, j], spec.display_unit, spec.internal_unit
+            )
 
         return file
 
