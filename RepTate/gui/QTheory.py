@@ -269,6 +269,7 @@ class EditThParametersDialog(QDialog):
                     "description",
                     "quantity",
                     "internal_unit",
+                    "display_unit",
                 ]:
                     qline.setReadOnly(True)
                 a_new.append(qline)
