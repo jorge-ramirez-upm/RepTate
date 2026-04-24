@@ -1,3 +1,55 @@
 [build-system]
 requires = ["setuptools>=68", "wheel", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "RepTate"
+description = "Rheology of Entangled Polymers: Toolkit for the Analysis of Theory and Experiment"
+readme = {file = "README.rst", content-type = "text/x-rst"}
+license = {text = "GNU General Public License v3 or later (GPLv3+)"}
+authors = [
+    {name = "Jorge Ramirez"},
+    {name = "Victor Boudara"},
+]
+maintainers = [
+    {name = "RepTate developers", email = "reptate.rheology@gmail.com"},
+]
+dynamic = ["version"]
+dependencies = [
+    "matplotlib==3.8.0",
+    "openpyxl==3.1.2",
+    "PySide6==6.6.0",
+    "scipy==1.15.3",
+    "xlrd==2.0.1",
+    "psutil==5.9.6",
+    "numpy==1.26.4",
+]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "http://github.com/jorge-ramirez-upm/RepTate"
+Repository = "http://github.com/jorge-ramirez-upm/RepTate"
+
+[project.gui-scripts]
+RepTate = "RepTate.__main__:main"
+MatDB = "RepTate.MatDB:main"
+UV = "RepTate.UV:main"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.package-data]
+"*" = ["*.ui", "*.qrc", "*.npy", "*.so", "*.npz"]
+
+[tool.setuptools.packages.find]
+include = ["RepTate*"]
+
+[tool.setuptools_scm]
+version_file = "RepTate/_version.py"
+tag_regex = "^(?:v)?(?P<version>\\d+\\.\\d+\\.\\d+(?:[.-].+)?)$"
