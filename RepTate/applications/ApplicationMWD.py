@@ -35,6 +35,7 @@
 Module for handling Molecular weight distributions from GPC experiments.
 
 """
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
@@ -63,7 +64,7 @@ class ApplicationMWD(QApplicationWindow):
             description="MWD lin W vs log M",
             x_label="M",
             y_label="dW/dlogM",
-            x_units="g/mol",
+            x_units="kg/mol",
             y_units="-",
             log_x=True,
             log_y=False,
@@ -76,7 +77,7 @@ class ApplicationMWD(QApplicationWindow):
             description="MWD log W vs log M",
             x_label="log(M)",
             y_label="log(dW/dlogM)",
-            x_units="g/mol",
+            x_units="kg/mol",
             y_units="-",
             log_x=False,
             log_y=False,
@@ -89,7 +90,7 @@ class ApplicationMWD(QApplicationWindow):
             description="MWD lin W vs lin M",
             x_label="M",
             y_label="dW/dlogM",
-            x_units="g/mol",
+            x_units="kg/mol",
             y_units="-",
             log_x=False,
             log_y=False,
@@ -113,7 +114,7 @@ class ApplicationMWD(QApplicationWindow):
             "Molecular Weight Distribution",
             ["M", "W(logM)"],
             ["Mn", "Mw", "PDI"],
-            ["g/mol", "-"],
+            ["kg/mol", "-"],
         )
         # ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension] = ftype
@@ -137,8 +138,7 @@ class ApplicationMWD(QApplicationWindow):
         self.set_views()
 
     def view_WM(self, dt, file_parameters):
-        """:math:`W(M)` vs :math:`M`
-        """
+        """:math:`W(M)` vs :math:`M`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
@@ -146,11 +146,9 @@ class ApplicationMWD(QApplicationWindow):
         return x, y, True
 
     def view_logWM(self, dt, file_parameters):
-        """:math:`\\log(W(M))` vs :math:`\\log(M)`
-        """
+        """:math:`\\log(W(M))` vs :math:`\\log(M)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
-
