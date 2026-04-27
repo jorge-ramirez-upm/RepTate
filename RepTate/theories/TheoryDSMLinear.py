@@ -66,13 +66,13 @@ class TheoryDSMLinear(QTheory):
         # Declare theory parameters and Material parameters
         self.parameters["MK"] = Parameter(
             name=r"MK",
-            value=300,
+            value=0.3,
             description="Molecular weight of Kuhn step (Da)",
             type=ParameterType.real,
             opt_type=OptType.const,
             display_flag=True,
             quantity="molar_mass",
-            internal_unit="Da",
+            internal_unit="kg/mol",
             display_unit="Da",
         )
 
@@ -90,13 +90,13 @@ class TheoryDSMLinear(QTheory):
 
         self.parameters["Mc"] = Parameter(
             name=r"Mc",
-            value=2000,
+            value=2.0,
             description="Molecular weight of a cluster in Da",
             type=ParameterType.real,
             opt_type=OptType.opt,
             display_flag=True,
             quantity="molar_mass",
-            internal_unit="Da",
+            internal_unit="kg/mol",
             display_unit="Da",
         )
 

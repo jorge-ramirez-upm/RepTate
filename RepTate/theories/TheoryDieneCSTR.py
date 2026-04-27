@@ -174,13 +174,13 @@ class TheoryDieneCSTR(QTheory):
             )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
-            value=28,
+            value=0.028,
             min_value=0,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
             opt_type=OptType.const,
             quantity="molar_mass",
-            internal_unit="g/mol",
+            internal_unit="kg/mol",
             display_unit="g/mol")
         self.parameters["Me"] = Parameter(
             name="Me",
@@ -261,7 +261,7 @@ class TheoryDieneCSTR(QTheory):
         D0 = self.parameters["D0"].value
         C0 = self.parameters["C0"].value
         numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].value
+        monmass = self.parameters["mon_mass"].display_value()
         Me = self.parameters["Me"].value
         nbins = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))

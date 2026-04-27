@@ -1,4 +1,4 @@
-from RepTate.core.unit_parsing import parse_column_label
+from RepTate.core.units import parse_column_label
 
 
 def test_parse_square_bracket_unit():

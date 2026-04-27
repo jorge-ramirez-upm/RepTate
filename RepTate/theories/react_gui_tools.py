@@ -347,7 +347,7 @@ def handle_save_bob_configuration(parent_theory):
         rch.react_dist[ndist].contents.M_e = parent_theory.parameters["Me"].value
         rch.react_dist[ndist].contents.monmass = parent_theory.parameters[
             "mon_mass"
-        ].value
+        ].display_value()
 
         dir_start = os.path.join(RepTate.root_dir, "data", "React", "polyconf.dat")
         dilogue_name = "Save"

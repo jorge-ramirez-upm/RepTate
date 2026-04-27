@@ -409,8 +409,8 @@ def test_SANS_Debye():
     C_gyr = thisTheory.parameters["C_gyr"].value
     M_mono = thisTheory.parameters["M_mono"].value
     Bckgrnd = thisTheory.parameters["Bckgrnd"].value
-    Chi = thisTheory.parameters["Chi"].value
-    Lambda = thisTheory.parameters["Lambda"].value
+    Chi = thisTheory.parameters["chi"].value
+    Lambda = thisTheory.parameters["lambda"].value
     assert Contrast == pytest.approx(0.4203, rel=1e-4)
     assert C_gyr == pytest.approx(62.3, rel=1e-4)
     assert M_mono == pytest.approx(0.104, rel=1e-4)

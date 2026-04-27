@@ -147,12 +147,12 @@ class TheoryTobitaBatch(QTheory):
             )
         self.parameters["mon_mass"] = Parameter(
             name="mon_mass",
-            value=28,
+            value=0.028,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
             opt_type=OptType.const,
             quantity="molar_mass",
-            internal_unit="g/mol",
+            internal_unit="kg/mol",
             display_unit="g/mol")
         self.parameters["Me"] = Parameter(
             name="Me",
@@ -224,7 +224,7 @@ class TheoryTobitaBatch(QTheory):
         Cs = self.parameters["Cs"].value
         fin_conv = self.parameters["fin_conv"].value
         numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].value
+        monmass = self.parameters["mon_mass"].display_value()
         Me = self.parameters["Me"].value
         nbins = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
