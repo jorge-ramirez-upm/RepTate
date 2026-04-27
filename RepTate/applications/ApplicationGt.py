@@ -36,7 +36,7 @@ Module for the analysis of stress relaxation data from simulations and experimen
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -74,6 +74,10 @@ class ApplicationGt(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        time_units = ("ns", "μs", "ms", "s", "min", "h")
+        frequency_units = ("rad/s", "Hz")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+
         # time range for view conversion to frequency domain
         self.tmin_view = -np.inf
         self.tmax_view = np.inf
@@ -91,6 +95,18 @@ class ApplicationGt(QApplicationWindow):
             view_proc=self.viewLogGt,
             n=1,
             snames=["log(G)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label="log(G)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
@@ -104,6 +120,16 @@ class ApplicationGt(QApplicationWindow):
             view_proc=self.viewiRheo,
             n=2,
             snames=["G'", "G''"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label="G',G''",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
@@ -117,6 +143,16 @@ class ApplicationGt(QApplicationWindow):
             view_proc=self.viewiRheoOver,
             n=2,
             snames=["G'", "G''"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label="G',G''",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["Schwarzl G',G''"] = View(
             name="Schwarzl G',G''",
@@ -130,6 +166,16 @@ class ApplicationGt(QApplicationWindow):
             view_proc=self.viewSchwarzl_Gt,
             n=2,
             snames=["G'", "G''"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label="G',G''",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["G(t)"] = View(
             name="G(t)",
@@ -143,6 +189,16 @@ class ApplicationGt(QApplicationWindow):
             view_proc=self.viewGt,
             n=1,
             snames=["G"],
+            x_axis=AxisSpec(
+                label="t",
+                internal_unit="s",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label="G",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling

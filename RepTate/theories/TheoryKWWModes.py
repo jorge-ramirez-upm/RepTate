@@ -92,34 +92,34 @@ class TheoryKWWModesFrequency(QTheory):
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
         self.parameters["einf"] = Parameter(
-            "einf",
-            0.0,
-            "Unrelaxed permittivity",
-            ParameterType.real,
+            name = "einf",
+            value = 0.0,
+            description = "Unrelaxed permittivity",
+            type = ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["beta"] = Parameter(
-            "beta",
-            0.5,
-            "Stretched exponential parameter",
-            ParameterType.real,
+            name = "beta",
+            value = 0.5,
+            description = "Stretched exponential parameter",
+            type = ParameterType.real,
             opt_type=OptType.opt,
             min_value=0.1,
             max_value=2.0,
         )
         self.parameters["logwmin"] = Parameter(
-            "logwmin",
-            np.log10(wmin),
-            "Log of frequency range minimum",
-            ParameterType.real,
+            name = "logwmin",
+            value = np.log10(wmin),
+            description = "log10(wmin) of frequency range minimum expressed in rad/s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logwmax"] = Parameter(
-            "logwmax",
-            np.log10(wmax),
-            "Log of frequency range maximum",
-            ParameterType.real,
+            name = "logwmax",
+            value = np.log10(wmax),
+            description = "log10(wmax) of frequency range maximum expressed in rad/s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -141,10 +141,10 @@ class TheoryKWWModesFrequency(QTheory):
         )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logDe%02d" % i] = Parameter(
-                "logDe%02d" % i,
-                np.log10(eps[i]),
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
+                name = "logDe%02d" % i,
+                value = np.log10(eps[i]),
+                description = "Log of Mode %d amplitude" % i,
+                type = ParameterType.real,
                 opt_type=OptType.opt,
             )
 
@@ -216,15 +216,16 @@ class TheoryKWWModesFrequency(QTheory):
 
     def drag_mode(self, dx, dy):
         """Drag modes"""
+        dx, dy = self.convert_view_data_to_internal(dx, dy)
         nmodes = self.parameters["nmodes"].value
-        if self.parent_dataset.parent_application.current_view.log_x:
+        if self.current_view().log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
             self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
         else:
             self.set_param_value("logwmin", dx[0])
             self.set_param_value("logwmax", dx[nmodes - 1])
 
-        if self.parent_dataset.parent_application.current_view.log_y:
+        if self.current_view().log_y:
             for i in range(nmodes):
                 self.set_param_value("logDe%02d" % i, np.log10(dy[i]))
         else:
@@ -350,6 +351,7 @@ class TheoryKWWModesFrequency(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):

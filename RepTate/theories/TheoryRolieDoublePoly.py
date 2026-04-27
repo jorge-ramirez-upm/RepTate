@@ -622,6 +622,7 @@ class TheoryRolieDoublePoly(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
         # remove tmp artist form ax
         for i in range(data_table_tmp.MAX_NUM_SERIES):

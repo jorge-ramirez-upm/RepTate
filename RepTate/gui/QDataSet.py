@@ -949,6 +949,8 @@ class QDataSet(QWidget, Ui_DataSet):
                             file.file_parameters,
                         )
 
+                x, y = view.convert_xy_to_display(x, y)
+
                 # Apply current shifts to data
                 for i in range(view.n):
                     if file.isshifted[i]:
@@ -1045,6 +1047,8 @@ class QDataSet(QWidget, Ui_DataSet):
                                 color,
                                 file.file_parameters,
                             )
+
+                    x, y = view.convert_xy_to_display(x, y)
 
                     for i in range(tt.MAX_NUM_SERIES):
                         if i < view.n and file.active and th.active:

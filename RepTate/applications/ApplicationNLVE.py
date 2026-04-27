@@ -36,7 +36,7 @@ Module for handling data from start up of shear and extensional flow experiments
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -63,6 +63,11 @@ class ApplicationNLVE(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        time_units = ("ns", "μs", "ms", "s", "min", "h")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units = ("Pa.s", "kPa.s")
+        deformation_rate_units = ("1/s", "s-1", "s^-1", "s⁻¹", "1/min", "1/h")
+
         # VIEWS
         self.views["log(eta(t))"] = View(
             name="log(eta(t))",
@@ -76,6 +81,18 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.viewLogeta,
             n=1,
             snames=["log(eta)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log($\eta^+$)",
+                internal_unit="Pa.s",
+                transform="log10",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["eta(t)"] = View(
             name="eta(t)",
@@ -89,6 +106,12 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.vieweta,
             n=1,
             snames=["eta"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\eta^+$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
@@ -102,6 +125,12 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.viewLogSigmaGamma,
             n=1,
             snames=["log(sigma)"],
+            y_axis=AxisSpec(
+                label=r"log($\sigma^+$)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["sigma(gamma)"] = View(
             name="sigma(gamma)",
@@ -115,6 +144,11 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.viewSigmaGamma,
             n=1,
             snames=["sigma"],
+            y_axis=AxisSpec(
+                label=r"$\sigma^+$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
@@ -128,6 +162,18 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.viewLogSigmaTime,
             n=1,
             snames=["log(sigma)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log($\sigma^+$)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["sigma(t)"] = View(
             name="sigma(t)",
@@ -141,6 +187,12 @@ class ApplicationNLVE(QApplicationWindow):
             view_proc=self.viewSigmaTime,
             n=1,
             snames=["sigma"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\sigma^+$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["Flow Curve"] = View(
             name="Flow Curve",
@@ -156,6 +208,16 @@ class ApplicationNLVE(QApplicationWindow):
             snames=["sigma"],
             with_thline=False,
             filled=True,
+            x_axis=AxisSpec(
+                label="Flow rate",
+                internal_unit="1/s",
+                unit_choices=deformation_rate_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\sigma$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         # set multiviews
@@ -168,14 +230,15 @@ class ApplicationNLVE(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "Start-up of shear flow",
-            "shear",
-            "Shear flow files",
-            ["t", "sigma_xy", "N1", "gdot"],
-            ["gdot", "T"],
-            ["s", "Pa", "Pa", "s-1"],
+            name = "Start-up of shear flow",
+            extension = "shear",
+            description = "Shear flow files",
+            col_names = ["t", "sigma_xy", "N1", "gdot"],
+            basic_file_parameters = ["gdot", "T"],
+            col_units = ["s", "Pa", "Pa", "s-1"],
             file_parameter_specs=[
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
+                FileParameterSpec("gdot", "deformation_rate","1/s", "1/s")
             ],
         )
         self.filetypes[ftype.extension] = ftype

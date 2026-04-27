@@ -37,7 +37,7 @@ Module for handling Molecular weight distributions from GPC experiments.
 """
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -59,6 +59,8 @@ class ApplicationMWD(QApplicationWindow):
 
         super().__init__(name, parent, nplot_max=3)
 
+        molar_mass_units = ("g/mol", "kg/mol", "Da", "kDa")
+
         # VIEWS
         self.views["log-lin"] = View(
             name="log-lin",
@@ -72,6 +74,11 @@ class ApplicationMWD(QApplicationWindow):
             view_proc=self.view_WM,
             n=1,
             snames=["W"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
         )
         self.views["log-log"] = View(
             name="log-log",
@@ -85,6 +92,12 @@ class ApplicationMWD(QApplicationWindow):
             view_proc=self.view_logWM,
             n=1,
             snames=["log(W)"],
+            x_axis=AxisSpec(
+                label="log(M)",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
         )
         self.views["lin-lin"] = View(
             name="lin-lin",
@@ -98,6 +111,11 @@ class ApplicationMWD(QApplicationWindow):
             view_proc=self.view_WM,
             n=1,
             snames=["W"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
         )
 
         # set multiviews

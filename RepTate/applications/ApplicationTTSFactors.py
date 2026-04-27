@@ -36,7 +36,7 @@ Module for handling time-temperature superposition factors and fit theories.
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -60,6 +60,9 @@ class ApplicationTTSFactors(QApplicationWindow):
         # from TheoryArrhenius import TheoryArrhenius
         super().__init__(name, parent)
 
+        temperature_units = ("K", "ºC", "°C")
+        inverse_temperature_units = ("1/K", "K^-1", "K⁻¹")
+
         # VIEWS
         self.views["log(aT)"] = View(
             name="log(aT)",
@@ -73,6 +76,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewLogaT,
             n=1,
             snames=["log(aT)"],
+            x_axis=AxisSpec(
+                label="T",
+                internal_unit="K",
+                unit_choices=temperature_units,
+            ),
         )
         self.views["aT"] = View(
             name="aT",
@@ -86,6 +94,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewaT,
             n=1,
             snames=["aT"],
+            x_axis=AxisSpec(
+                label="T",
+                internal_unit="K",
+                unit_choices=temperature_units,
+            ),
         )
         self.views["log(bT)"] = View(
             name="log(bT)",
@@ -99,6 +112,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewLogbT,
             n=1,
             snames=["log(bT)"],
+            x_axis=AxisSpec(
+                label="T",
+                internal_unit="K",
+                unit_choices=temperature_units,
+            ),
         )
         self.views["bT"] = View(
             name="bT",
@@ -112,6 +130,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewbT,
             n=1,
             snames=["bT"],
+            x_axis=AxisSpec(
+                label="T",
+                internal_unit="K",
+                unit_choices=temperature_units,
+            ),
         )
 
         self.views["log(aT, bT)"] = View(
@@ -126,6 +149,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewLogaTbT,
             n=2,
             snames=["log(aT)", "log(bT)"],
+            x_axis=AxisSpec(
+                label="T",
+                internal_unit="K",
+                unit_choices=temperature_units,
+            ),
         )
 
         self.views["log(aT) vs 1/T"] = View(
@@ -140,6 +168,11 @@ class ApplicationTTSFactors(QApplicationWindow):
             view_proc=self.viewLogaT_invT,
             n=1,
             snames=["log(aT)"],
+            x_axis=AxisSpec(
+                label="1/T",
+                internal_unit="1/K",
+                unit_choices=inverse_temperature_units,
+            ),
         )
 
         # set multiviews

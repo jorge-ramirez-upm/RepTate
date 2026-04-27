@@ -93,7 +93,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
-from RepTate.core.axis_labels import axis_label_from_column_specs
+from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
@@ -1833,14 +1833,8 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             else:
                 ax.set_yscale("linear")
                 ax.yaxis.set_minor_locator(AutoMinorLocator())
-
-            column_specs = []
-            for ds in self.datasets.values():
-                if ds.files:
-                    column_specs = ds.files[0].data_table.column_specs
-                    break
-            ax.set_xlabel(axis_label_from_column_specs(view.x_label, view.x_units, column_specs))
-            ax.set_ylabel(axis_label_from_column_specs(view.y_label, view.y_units, column_specs))
+            ax.set_xlabel(view.x_axis.axis_label())
+            ax.set_ylabel(view.y_axis.axis_label())
 
             if not self.ax_opts["label_size_auto"]:
                 ax.xaxis.label.set_size(self.ax_opts["fontsize"])
@@ -2752,6 +2746,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             tab_ind = self.multiplots.plotselecttabWidget.currentIndex()
             if tab_ind != 0:
                 n_ax_view_to_change = tab_ind - 1
+            view = self.multiviews[n_ax_view_to_change]
+            self._add_axis_unit_menu(main_menu, "X Axis Units", view, "x")
+            self._add_axis_unit_menu(main_menu, "Y Axis Units", view, "y")
 
             # TODO: Removed the "Select View" option. See if we can bring it back, if many people request it.
             # menu2 = QMenu("Select View")
@@ -2779,3 +2776,35 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             self.multiviews[n_ax] = self.views[view_name]
             self.refresh_plot()
+
+    def _add_axis_unit_menu(self, main_menu, title, view, axis_name):
+        axis_spec = view.x_axis if axis_name == "x" else view.y_axis
+        units = axis_spec.available_display_units()
+        if len(units) <= 1:
+            return
+        menu = QMenu(title, self)
+        for unit_symbol in units:
+            action = menu.addAction(self._axis_unit_label(unit_symbol))
+            action.setCheckable(True)
+            action.setChecked(unit_symbol == axis_spec.display_unit)
+            action.triggered.connect(
+                lambda checked=False, v=view, a=axis_name, u=unit_symbol: self.set_view_axis_display_unit(
+                    v, a, u
+                )
+            )
+        main_menu.addMenu(menu)
+
+    def _axis_unit_label(self, unit_symbol):
+        try:
+            return get_unit(unit_symbol).label
+        except ValueError:
+            return unit_symbol
+
+    def set_view_axis_display_unit(self, view, axis_name, unit_symbol):
+        axis_spec = view.x_axis if axis_name == "x" else view.y_axis
+        axis_spec.set_display_unit(unit_symbol)
+        if axis_name == "x":
+            view.x_units = unit_symbol
+        else:
+            view.y_units = unit_symbol
+        self.refresh_plot()

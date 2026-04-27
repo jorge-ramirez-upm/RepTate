@@ -1412,6 +1412,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.contspectrum.set_data(x[:, 0], y[:, 0])
 
         data_table_tmp.num_columns = 3
@@ -1426,6 +1427,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.discspectrum.set_data(x[:, 0], y[:, 0])
 
 
@@ -2734,6 +2736,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.contspectrum.set_data(x, y)
 
         data_table_tmp.num_columns = 2
@@ -2747,4 +2750,5 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.discspectrum.set_data(x, y)

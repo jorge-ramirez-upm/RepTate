@@ -95,6 +95,12 @@ that column header opens a pop-up menu with the registered compatible units for
 that quantity. Selecting one changes the display unit for that parameter in the
 current Dataset only.
 
+If the current plot view has unit-aware axes, right-clicking on the plot area
+also opens axis-unit menus for the current x and y axes whenever compatible
+alternative units are available. Selecting one changes the display unit for the
+current view axis, updates the axis label, and replots all visible data and
+theory curves in that view.
+
 .. _figsortfiles:
 .. figure:: images/SortingFiles.png
     :width: 50%
@@ -153,4 +159,8 @@ Reloading the data
 ------------------
 
 Some times, the user may be representing some data that is being updated in real time (because an experiment or simulation is running at the same time as the RepTate session). In this cases, it is interesting to update the data in RepTate by reading again the file. This can be done by clicking the button "Reload Data Files & Theories" |filereload| (Ctrl+R).
+
+When reloading data files, RepTate also refreshes unit-aware file parameters
+from the file header, including changes in both value and unit, and updates the
+Dataset display accordingly.
 

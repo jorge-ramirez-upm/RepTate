@@ -24,6 +24,26 @@ If no unit metadata exist for a given column, file parameter, or theory
 parameter, RepTate preserves the legacy numerical convention and no automatic
 conversion is applied.
 
+View axes
+---------
+
+RepTate views can also be unit-aware. When a view axis has explicit metadata,
+RepTate keeps the numerical data in canonical internal units and converts the
+plotted coordinates to the currently selected display unit only at plotting
+time.
+
+For unit-aware view axes:
+
+* the default axis unit is the canonical RepTate unit for that quantity
+* right-clicking on a plot opens axis-unit menus for the current view when
+  compatible alternative units are available
+* changing the axis unit affects the plotted coordinates and axis label, but
+  does not alter the stored data or theory parameters
+
+This currently works best for axes that represent a single physical quantity.
+Mixed axes, such as plots combining stress and dimensionless quantities on the
+same axis, remain only partially unit-aware.
+
 Supported quantities and canonical units
 ----------------------------------------
 
@@ -62,12 +82,21 @@ The current unit registry supports the following quantities.
    * - Stress or modulus
      - ``Pa``, ``kPa``, ``MPa``, ``bar``, ``atm``
      - ``Pa``
+   * - Compliance
+     - ``1/Pa``, ``1/kPa``, ``1/MPa``, ``1/bar``, ``1/atm``
+     - ``1/Pa``
    * - Viscosity
      - ``Pa.s``, ``kPa.s``
      - ``Pa.s``
+   * - Angle
+     - ``rad``, ``deg``
+     - ``rad``
    * - Density
      - ``kg/m3``, ``kg/m^3``, ``kg/m³``, ``g/cm3``, ``g/cm^3``, ``g/cm³``, ``g/cc``, ``g/mL``, ``kg/L``
      - ``kg/m3``
+   * - Inverse temperature
+     - ``1/K``, ``K^-1``, ``K⁻¹``
+     - ``1/K``
    * - Temperature
      - ``K``, ``ºC``, ``°C``
      - ``K``
@@ -130,8 +159,9 @@ Data columns
 
 Unit-aware data columns are converted to canonical internal units when the file
 is imported. When a plotted axis directly corresponds to an imported column,
-that axis uses the column metadata. Derived views may still use the view's
-legacy hard-coded unit string.
+that axis uses the column metadata. Unit-aware derived views may also declare
+their own axis metadata explicitly, so view axes can stay consistent even when
+the plotted quantity is not a direct copy of an imported column.
 
 File parameters in a Dataset
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -150,6 +180,23 @@ Theory parameters
 Unit-aware theory parameters show their display unit in the theory parameter
 table. The theory parameter editor lets users choose among compatible display
 units when that theory parameter carries explicit unit metadata.
+
+For logarithmic theory parameters such as ``logwmin`` or ``logG00``, the
+stored value remains dimensionless and tied to the canonical internal unit
+system used by the theory. RepTate does not currently change those displayed
+numbers when plot-axis units are changed. Instead, their meaning should be
+documented in the parameter description or tooltip.
+
+Theory helper graphics
+^^^^^^^^^^^^^^^^^^^^^^
+
+Theory-side helper graphics that are plotted in data coordinates, such as
+mode markers, LVE envelopes, helper spectra, or discretized-MWD markers, now
+follow the current display units of the active view. RepTate converts those
+helper coordinates from internal units to display units before plotting them.
+
+When such helper graphics are draggable, the dragged coordinates are converted
+back to internal units before theory parameters are updated.
 
 Frequency and angular frequency
 -------------------------------
@@ -187,8 +234,9 @@ read as dimensionless decimal logarithms of an underlying dimensional quantity,
 not as dimensional quantities themselves.
 
 For example, ``logG01`` represents :math:`\log_{10}(G_{01}/G_\mathrm{unit})`.
-Changing the display unit of the underlying dimensional quantity shifts the
-displayed logarithmic value additively.
+RepTate currently keeps these displayed parameter values fixed and tied to the
+canonical internal unit system rather than shifting them when plot-axis units
+change.
 
 Current use in applications
 ---------------------------
@@ -203,29 +251,29 @@ The table below summarizes the current state of the application layer.
    * - FRS
      - Text columns use declared ``col_units``; file parameters remain legacy
    * - Creep
-     - Text columns; file parameters ``Mw``, ``stress``, and ``T``
+     - Text columns; file parameters ``Mw``, ``stress``, and ``T``; unit-aware view axes for time, compliance, viscosity, frequency, and stress
    * - Crystal
-     - Text columns; file parameters ``gdot``, ``T``, and ``tstop``
+     - Text columns; file parameters ``gdot``, ``T``, and ``tstop``; unit-aware view axes for time, viscosity, stress, deformation rate, nucleation rate, and number density
    * - Dielectric
      - Text columns; file parameters ``Mw`` and ``T``
    * - Gt
-     - Text columns; file parameters ``Mw`` and ``gamma``
+     - Text columns; file parameters ``Mw`` and ``gamma``; unit-aware view axes for time, frequency, and modulus
    * - LAOS
-     - Text columns; file parameters ``omega`` and ``gamma``
+     - Text columns; file parameters ``omega`` and ``gamma``; unit-aware view axes for time, stress, deformation rate, viscosity, and FFT frequency where the plotted quantity is unambiguous
    * - LVE
-     - Text columns in ``tts`` and ``osc`` files; file parameters ``Mw`` and ``T``. The Excel importer remains separate from the unit-aware text-column path
+     - Text columns in ``tts`` and ``osc`` files; file parameters ``Mw`` and ``T``; unit-aware view axes for frequency, stress, viscosity, and compliance. The Excel importer remains separate from the unit-aware text-column path
    * - MWD
-     - Text columns; file parameters ``Mn`` and ``Mw``
+     - Text columns; file parameters ``Mn`` and ``Mw``; unit-aware view axes for molar mass
    * - NLVE
-     - Text columns; file parameter ``T``. The flow-rate file parameter is still legacy
+     - Text columns; file parameter ``T``. The flow-rate file parameter is still legacy, but main view axes are unit-aware for time, viscosity, stress, and deformation rate
    * - React
-     - Text columns use declared units; file parameters remain legacy
+     - Text columns use declared units; file parameters remain legacy; unit-aware view axes for molar mass and branch-segment molar mass
    * - SANS
-     - Text columns, including inverse-distance units such as ``Å⁻¹``; file parameters ``Mw`` and ``phi``
+     - Text columns, including inverse-distance units such as ``Å⁻¹``; file parameters ``Mw`` and ``phi``; unit-aware inverse-distance axes for ``I(q)``, ``log(I(q))``, and ``Kratky``
    * - TTS
-     - Text columns; file parameters ``Mw`` and ``T``
+     - Text columns; file parameters ``Mw`` and ``T``; unit-aware view axes for frequency, stress, viscosity, and compliance
    * - TTS Factors
-     - Text columns; file parameter ``Mw``
+     - Text columns; file parameter ``Mw``; unit-aware view axes for temperature and inverse temperature
    * - Universal Viewer
      - Text columns can participate when the configured unit strings match the registry
    * - Template

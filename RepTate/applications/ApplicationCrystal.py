@@ -36,7 +36,7 @@ Module for handling data from start up of shear and extensional flow experiments
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -59,6 +59,13 @@ class ApplicationCrystal(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        time_units = ("ns", "μs", "ms", "s", "min", "h")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units = ("Pa.s", "kPa.s")
+        deformation_rate_units = ("1/s", "s-1", "s^-1", "s⁻¹", "1/min", "1/h")
+        nucleation_rate_units = ("1/s/m3", "1/s/cm3", "1/s/mm3", "1/s/um3", "1/s/nm3")
+        unit_density_units = ("1/m3", "1/cm3", "1/mm3", "1/um3", "1/nm3")
+
         # VIEWS
         self.views["log(eta(t))"] = View(
             name="log(eta(t))",
@@ -72,6 +79,18 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewLogeta,
             n=1,
             snames=["log(eta)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log($\eta^+$)",
+                internal_unit="Pa.s",
+                transform="log10",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["Ndot(t) [log-log]"] = View(
             name="Ndot(t) [log-log]",
@@ -85,6 +104,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewNdot,
             n=1,
             snames=["Ndot"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\dot{N}$",
+                internal_unit="1/s/m3",
+                unit_choices=nucleation_rate_units,
+            ),
         )
         self.views["N(t) [log-log]"] = View(
             name="N(t) [log-log]",
@@ -98,6 +123,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewNt,
             n=1,
             snames=["N"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label="N",
+                internal_unit="1/m3",
+                unit_choices=unit_density_units,
+            ),
         )
         self.views["phiX(t) [log-log]"] = View(
             name="phiX(t) [log-log]",
@@ -111,6 +142,7 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewphiX,
             n=1,
             snames=["phiX"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
         )
         self.views["Ndot(t) [log-lin]"] = View(
             name="Ndot(t) [log-lin]",
@@ -124,6 +156,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewNdot,
             n=1,
             snames=["Ndot"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\dot{N}$",
+                internal_unit="1/s/m3",
+                unit_choices=nucleation_rate_units,
+            ),
         )
         self.views["N(t) [log-lin]"] = View(
             name="N(t) [log-lin]",
@@ -137,6 +175,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewNt,
             n=1,
             snames=["N"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label="N",
+                internal_unit="1/m3",
+                unit_choices=unit_density_units,
+            ),
         )
         self.views["phiX(t) [log-lin]"] = View(
             name="phiX(t) [log-lin]",
@@ -150,6 +194,7 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewphiX,
             n=1,
             snames=["phiX"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
         )
         self.views["eta(t)"] = View(
             name="eta(t)",
@@ -163,6 +208,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.vieweta,
             n=1,
             snames=["eta"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\eta^+$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["log(sigma(gamma))"] = View(
             name="log(sigma(gamma))",
@@ -176,6 +227,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewLogSigmaGamma,
             n=1,
             snames=["log(sigma)"],
+            y_axis=AxisSpec(
+                label=r"log($\sigma^+$)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["sigma(gamma)"] = View(
             name="sigma(gamma)",
@@ -189,6 +246,11 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewSigmaGamma,
             n=1,
             snames=["sigma"],
+            y_axis=AxisSpec(
+                label=r"$\sigma^+$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["log(sigma(t))"] = View(
             name="log(sigma(t))",
@@ -202,6 +264,18 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewLogSigmaTime,
             n=1,
             snames=["log(sigma)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log($\sigma^+$)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["sigma(t)"] = View(
             name="sigma(t)",
@@ -215,6 +289,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewSigmaTime,
             n=1,
             snames=["sigma"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\sigma^+$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["sigma(t) [log-lin]"] = View(
             name="sigma(t) [log-lin]",
@@ -228,6 +308,12 @@ class ApplicationCrystal(QApplicationWindow):
             view_proc=self.viewSigmaTime,
             n=1,
             snames=["sigma"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\sigma^+$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["Flow Curve"] = View(
             name="Flow Curve",
@@ -243,6 +329,16 @@ class ApplicationCrystal(QApplicationWindow):
             snames=["sigma"],
             with_thline=False,
             filled=True,
+            x_axis=AxisSpec(
+                label="Flow rate",
+                internal_unit="1/s",
+                unit_choices=deformation_rate_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\sigma$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["Steady Nucleation"] = View(
             name="Steady Nucleation",
@@ -258,6 +354,16 @@ class ApplicationCrystal(QApplicationWindow):
             snames=["Ndot"],
             with_thline=False,
             filled=True,
+            x_axis=AxisSpec(
+                label="Flow rate",
+                internal_unit="1/s",
+                unit_choices=deformation_rate_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\dot{N}$",
+                internal_unit="1/s/m3",
+                unit_choices=nucleation_rate_units,
+            ),
         )
 
         # set multiviews

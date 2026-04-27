@@ -36,7 +36,7 @@ React module
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -59,6 +59,8 @@ class ApplicationReact(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        molar_mass_units = ("g/mol", "kg/mol", "Da", "kDa")
+
         # VIEWS
         # set the views that can be selected in the view combobox
         self.views["w(M)"] = View(
@@ -72,7 +74,13 @@ class ApplicationReact(QApplicationWindow):
             log_y=False,
             view_proc=self.view_wM,
             n=1,
-            snames=["w"])
+            snames=["w"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views["g(M)"] = View(
             name="g(M)",
             description="g(M)",
@@ -84,7 +92,13 @@ class ApplicationReact(QApplicationWindow):
             log_y=False,
             view_proc=self.view_gM,
             n=1,
-            snames=["g(M)"])
+            snames=["g(M)"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views['br/1000C'] = View(
             name="br/1000C",
             description="br/1000C(M)",
@@ -96,7 +110,13 @@ class ApplicationReact(QApplicationWindow):
             log_y=False,
             view_proc=self.view_br_1000C,
             n=1,
-            snames=["br/1000C"])
+            snames=["br/1000C"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views["log(w(M))"] = View(
             name="log(w(M))",
             description="Molecular weight distribution",
@@ -108,7 +128,14 @@ class ApplicationReact(QApplicationWindow):
             log_y=False,
             view_proc=self.view_logwM,
             n=1,
-            snames=["log(w)"])
+            snames=["log(w)"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views["log(g(M))"] = View(
             name="log(g(M))",
             description="log(g(M))",
@@ -120,7 +147,14 @@ class ApplicationReact(QApplicationWindow):
             log_y=False,
             view_proc=self.view_loggM,
             n=1,
-            snames=["log(g)"])
+            snames=["log(g)"],
+            x_axis=AxisSpec(
+                label="M",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views['p(mass br) log-lin'] = View(
             name="p(mass br) log-lin",
             description="Prob. dist. of mass segement b/w branch pt log-lin scale",
@@ -133,7 +167,14 @@ class ApplicationReact(QApplicationWindow):
             view_proc=self.thview_proba_mass_br,
             n=1,
             snames=["p(M segment)"],
-            with_thline=False)
+            with_thline=False,
+            x_axis=AxisSpec(
+                label="M segment",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views['p(br/molecule) log-lin'] = View(
             name="p(br/molecule) log-lin",
             description="Prob. dist. of num. branch pt per molecule log-lin scale",
@@ -307,7 +348,14 @@ class ApplicationReact(QApplicationWindow):
             view_proc=self.thview_avarmlen_v_senio,
             n=1,
             snames=["av_strand_length"],
-            with_thline=False)
+            with_thline=False,
+            y_axis=AxisSpec(
+                label="Av. strand length",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views['<mass br(senio)> lin-lin'] = View(
             name="<mass br(senio)> lin-lin",
             description="Average mol. mass b/w branch pt vs seniority lin-lin scale",
@@ -320,7 +368,13 @@ class ApplicationReact(QApplicationWindow):
             view_proc=self.thview_avarmlen_v_senio,
             n=1,
             snames=["av_strand_length"],
-            with_thline=False)
+            with_thline=False,
+            y_axis=AxisSpec(
+                label="Av. strand length",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
+        )
         ####
         self.views['<mass br(prio)> log-log'] = View(
             name="<mass br(prio)> log-log",
@@ -334,7 +388,14 @@ class ApplicationReact(QApplicationWindow):
             view_proc=self.thview_avarmlen_v_prio,
             n=1,
             snames=["av_strand_length"],
-            with_thline=False)
+            with_thline=False,
+            y_axis=AxisSpec(
+                label="Av. strand length",
+                internal_unit="kg/mol",
+                transform="log10",
+                unit_choices=molar_mass_units,
+            ),
+        )
         self.views['<mass br(prio)> lin-lin'] = View(
             name="<mass br(prio)> lin-lin",
             description="Average mol. mass b/w branch pt vs priority lin-lin scale",
@@ -347,7 +408,13 @@ class ApplicationReact(QApplicationWindow):
             view_proc=self.thview_avarmlen_v_prio,
             n=1,
             snames=["av_strand_length"],
-            with_thline=False)
+            with_thline=False,
+            y_axis=AxisSpec(
+                label="Av. strand length",
+                internal_unit="kg/mol",
+                unit_choices=molar_mass_units,
+            ),
+        )
 
         self.extra_view_names = [
             '<senio(prio)> log-log', '<senio(prio)> lin-log', '<senio(prio)> lin-lin',

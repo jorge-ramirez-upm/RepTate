@@ -276,6 +276,7 @@ class TheoryPETS(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
 
     def select_shear_flow(self):

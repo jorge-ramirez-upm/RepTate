@@ -60,6 +60,10 @@ The plot area shows the graphical representation of the data files in the curren
     - An annotation label can be added to the plot (label **2** in :numref:`figplotarea`). LaTeX commands can be used in the text of the annotation. Annotation labels can be moved around by dragging them with the mouse and edited by double-clicking on them.
     - The view can be reset to the default zoom.
     - The view can be changed to any of the available views in the current application.
+    - If the current view uses unit-aware axes, the display unit of the x and y
+      axes can be changed from the corresponding axis-unit submenus. RepTate
+      then updates the axis label and replots the visible data and theory in
+      the selected units.
 	
 .. _figplotarea:
 .. figure:: images/Plot_Area.png

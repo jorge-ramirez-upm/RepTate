@@ -36,7 +36,7 @@ Large Amplitude Oscillatory Shear
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -61,6 +61,18 @@ class ApplicationLAOS(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        time_units = ("ns", "us", "μs", "ms", "s", "min", "h")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units = ("Pa.s", "kPa.s")
+        deformation_rate_units = (
+            "1/s",
+            "s-1",
+            "1/min",
+            "min-1",
+            "1/h",
+            "h-1",
+        )
+
         # VIEWS
         # set the views that can be selected in the view combobox
         self.views["sigma,gamma(t)"] = View(
@@ -75,6 +87,7 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmatgammatRAW,
             n=2,
             snames=[r"$\sigma(t)^\mathrm{raw}$", r"$\gamma(t)^\mathrm{raw}$"],
+            x_axis=AxisSpec(label=r"$t$", internal_unit="s", unit_choices=time_units),
         )
 
         self.views["sigma SCA,gamma(t)"] = View(
@@ -89,6 +102,7 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmatgammatRAWSCALED,
             n=2,
             snames=[r"$\sigma(t)^\mathrm{raw,scaled}$", r"$\gamma(t)^\mathrm{raw}$"],
+            x_axis=AxisSpec(label=r"$t$", internal_unit="s", unit_choices=time_units),
         )
 
         self.views["sigma(gamma)"] = View(
@@ -103,6 +117,11 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmagammaRAW,
             n=1,
             snames=[r"$\sigma^\mathrm{raw}(\gamma^\mathrm{raw})$"],
+            y_axis=AxisSpec(
+                label=r"$\sigma(t)^\mathrm{raw}$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["sigma(gamma) FILT"] = View(
@@ -117,6 +136,11 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmagammaFILTERED,
             n=1,
             snames=[r"$\sigma^\mathrm{filtered}(\gamma^\mathrm{filtered})$"],
+            y_axis=AxisSpec(
+                label=r"$\sigma^\mathrm{filtered}(t)$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["FFT spectrum"] = View(
@@ -131,6 +155,11 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_fftspectrum,
             n=1,
             snames=["FFT"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=("rad/s", "Hz"),
+            ),
         )
 
         self.views["sigma(gdot) FILT"] = View(
@@ -145,6 +174,16 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmagammadot,
             n=1,
             snames=[r"$\sigma(\dot\gamma)$"],
+            x_axis=AxisSpec(
+                label=r"$\dot\gamma^\mathrm{filtered}(t)$",
+                internal_unit="1/s",
+                unit_choices=deformation_rate_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\sigma^\mathrm{filtered}(t)$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["sigma(gamma) ANLS"] = View(
@@ -163,6 +202,11 @@ class ApplicationLAOS(QApplicationWindow):
                 r"$\sigma^\mathrm{elastic}$",
                 r"$\sigma^\mathrm{Chebyshev 1+3}$",
             ],
+            y_axis=AxisSpec(
+                label=r"$\sigma^\mathrm{filtered}(t)$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["sigma(gdot) ANLS"] = View(
@@ -181,6 +225,16 @@ class ApplicationLAOS(QApplicationWindow):
                 r"$\sigma^\mathrm{elastic}$",
                 r"$\sigma^\mathrm{Chebyshev 1+3}$",
             ],
+            x_axis=AxisSpec(
+                label=r"$\dot\gamma^\mathrm{filtered}(t)$",
+                internal_unit="1/s",
+                unit_choices=deformation_rate_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\sigma^\mathrm{filtered}(t)$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["Cheb elastic"] = View(
@@ -195,6 +249,11 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_chebelastic,
             n=1,
             snames=["chebelastic"],
+            y_axis=AxisSpec(
+                label=r"$e_n$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["Cheb viscous"] = View(
@@ -209,6 +268,11 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_chebviscous,
             n=1,
             snames=["chebviscous"],
+            y_axis=AxisSpec(
+                label=r"$v_n$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
 
         self.views["sigma(t)"] = View(
@@ -223,6 +287,12 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_sigmatRAW,
             n=1,
             snames=[r"$\sigma(t)^\mathrm{raw}$"],
+            x_axis=AxisSpec(label=r"$t$", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label=r"$\sigma(t)^\mathrm{raw}$",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
 
         self.views["gamma(t)"] = View(
@@ -237,6 +307,7 @@ class ApplicationLAOS(QApplicationWindow):
             view_proc=self.view_gammatRAW,
             n=1,
             snames=[r"$\gamma(t)^\mathrm{raw}$"],
+            x_axis=AxisSpec(label=r"$t$", internal_unit="s", unit_choices=time_units),
         )
 
         self.HHSR = 15  # Highest harmonic to consider in stress reconstruction

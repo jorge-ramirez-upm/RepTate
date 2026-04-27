@@ -178,8 +178,15 @@ _UNITS = {
     "MPa": Unit("MPa", "stress", 1.0e6),
     "bar": Unit("bar", "stress", 1.0e5),
     "atm": Unit("atm", "stress", 101325.0),
+    "1/Pa": Unit("1/Pa", "compliance", 1.0),
+    "1/kPa": Unit("1/kPa", "compliance", 1.0e-3),
+    "1/MPa": Unit("1/MPa", "compliance", 1.0e-6),
+    "1/bar": Unit("1/bar", "compliance", 1.0e-5),
+    "1/atm": Unit("1/atm", "compliance", 1.0 / 101325.0),
     "Pa.s": Unit("Pa.s", "viscosity", 1.0),
     "kPa.s": Unit("kPa.s", "viscosity", 1.0e3),
+    "rad": Unit("rad", "angle", 1.0),
+    "deg": Unit("deg", "angle", np.pi / 180.0),
     "kg/m3": Unit("kg/m3", "density", 1.0),
     "kg/m^3": Unit("kg/m^3", "density", 1.0, 0.0, "kg/m3"),
     "kg/m³": Unit("kg/m³", "density", 1.0, 0.0, "kg/m3"),
@@ -189,6 +196,9 @@ _UNITS = {
     "g/cc": Unit("g/cc", "density", 1.0e3),
     "g/mL": Unit("g/mL", "density", 1.0e3),
     "kg/L": Unit("kg/L", "density", 1.0e3),
+    "1/K": Unit("1/K", "inverse_temperature", 1.0),
+    "K^-1": Unit("K^-1", "inverse_temperature", 1.0, 0.0, "1/K"),
+    "K⁻¹": Unit("K⁻¹", "inverse_temperature", 1.0, 0.0, "1/K"),
     "K": Unit("K", "temperature", 1.0),
     "ºC": Unit("ºC", "temperature", 1.0, 273.15),
     "°C": Unit("°C", "temperature", 1.0, 273.15, "ºC"),
@@ -209,8 +219,11 @@ _INTERNAL_UNITS = {
     "angular_frequency": "rad/s",
     "frequency": "Hz",
     "stress": "Pa",
+    "compliance": "1/Pa",
     "viscosity": "Pa.s",
+    "angle": "rad",
     "density": "kg/m3",
+    "inverse_temperature": "1/K",
     "temperature": "K",
     "molar_mass": "kg/mol",
 }
@@ -367,3 +380,10 @@ def convert_array_to_internal(values, unit_symbol, internal_unit_symbol=None):
     except ValueError:
         return np.asarray(values)
     return convert_array(values, unit.symbol, internal_unit_symbol or _INTERNAL_UNITS[unit.quantity])
+
+
+def convert_array_from_internal(values, internal_unit_symbol, unit_symbol=None):
+    """Convert values from an internal unit to a requested display unit."""
+    if unit_symbol in (None, "", internal_unit_symbol):
+        return np.asarray(values)
+    return convert_array_to_internal(values, internal_unit_symbol, unit_symbol)

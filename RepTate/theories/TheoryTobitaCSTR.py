@@ -358,11 +358,11 @@ reactor during free-radical polymerisation.
             tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
             for i in range(1, rch.react_dist[ndist].contents.nummwdbins + 1):
-                tt.data[i - 1, 0] = np.power(
-                    10, rch.react_dist[ndist].contents.lgmid[i]
+                tt.data[i - 1, 0] = (
+                    np.power(10, rch.react_dist[ndist].contents.lgmid[i]) * 1.0e-3
                 )
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
-                tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
+                tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i] * 1.0e-3
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
             rch.end_print(self, ndist, self.do_priority_seniority)
             rch.prio_and_senio(self, f, ndist, self.do_priority_seniority)

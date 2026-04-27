@@ -82,19 +82,19 @@ class TheoryMaxwellModesFrequency(QTheory):
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
         self.parameters["logwmin"] = Parameter(
-            "logwmin",
-            np.log10(wmin),
-            "Log of frequency range minimum",
-            ParameterType.real,
+            name = "logwmin",
+            value = np.log10(wmin),
+            description = "log10(wmin) of frequency range minimum expressed in rad/s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
             min_value=-10,
             max_value=10,
         )
         self.parameters["logwmax"] = Parameter(
-            "logwmax",
-            np.log10(wmax),
-            "Log of frequency range maximum",
-            ParameterType.real,
+            name = "logwmax",
+            value = np.log10(wmax),
+            description = "log10(wmax) of frequency range maximum expressed in rad/s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
             min_value=-10,
             max_value=10,
@@ -124,10 +124,10 @@ class TheoryMaxwellModesFrequency(QTheory):
         )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d" % i] = Parameter(
-                "logG%02d" % i,
-                np.log10(G[i]),
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
+                name = "logG%02d" % i,
+                value = np.log10(G[i]),
+                description = "log10(G%02d) of Mode %d amplitude expressed in Pa" % (i, i),
+                type = ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=-10,
                 max_value=10,
@@ -226,15 +226,16 @@ class TheoryMaxwellModesFrequency(QTheory):
 
     def drag_mode(self, dx, dy):
         """Drag modes around"""
+        dx, dy = self.convert_view_data_to_internal(dx, dy)
         nmodes = self.parameters["nmodes"].value
-        if self.parent_dataset.parent_application.current_view.log_x:
+        if self.current_view().log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
             self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
         else:
             self.set_param_value("logwmin", dx[0])
             self.set_param_value("logwmax", dx[nmodes - 1])
 
-        if self.parent_dataset.parent_application.current_view.log_y:
+        if self.current_view().log_y:
             for i in range(nmodes):
                 self.set_param_value("logG%02d" % i, np.log10(dy[i]))
         else:
@@ -394,6 +395,7 @@ class TheoryMaxwellModesFrequency(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
@@ -441,17 +443,17 @@ class TheoryMaxwellModesTime(QTheory):
         nmodes = int(np.round(np.log10(tmax / tmin)))
 
         self.parameters["logtmin"] = Parameter(
-            "logtmin",
-            np.log10(tmin),
-            "Log of time range minimum",
-            ParameterType.real,
+            name = "logtmin",
+            value = np.log10(tmin),
+            description = "log10(tmin) of time range minimum expressed in s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logtmax"] = Parameter(
-            "logtmax",
-            np.log10(tmax),
-            "Log of time range maximum",
-            ParameterType.real,
+            name = "logtmax",
+            value = np.log10(tmax),
+            description = "log10(tmax) of time range maximum expressed in s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -477,10 +479,10 @@ class TheoryMaxwellModesTime(QTheory):
         )
         for i in range(self.parameters["nmodes"].value):
             self.parameters["logG%02d" % i] = Parameter(
-                "logG%02d" % i,
-                np.log10(G[i]),
-                "Log of Mode %d amplitude" % i,
-                ParameterType.real,
+                name = "logG%02d" % i,
+                value = np.log10(G[i]),
+                description = "log10(G%02d) of Mode %d amplitude expressed in Pa" % (i, i), 
+                type = ParameterType.real,
                 opt_type=OptType.opt,
             )
 
@@ -579,6 +581,7 @@ class TheoryMaxwellModesTime(QTheory):
 
     def drag_mode(self, dx, dy):
         """Drag modes around"""
+        dx, dy = self.convert_view_data_to_internal(dx, dy)
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("logtmin", dx[0])
         self.set_param_value("logtmax", dx[nmodes - 1])
@@ -740,6 +743,7 @@ class TheoryMaxwellModesTime(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):

@@ -37,7 +37,7 @@ time-temperature superposition principle.
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -58,6 +58,11 @@ class ApplicationTTS(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        frequency_units = ("rad/s", "Hz")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units = ("Pa.s", "kPa.s")
+        compliance_units = ("1/Pa", "1/kPa", "1/MPa", "1/bar", "1/atm")
+
         # VIEWS
         self.views["log(G',G''(w))"] = View(
             name="log(G',G''(w))",
@@ -71,6 +76,18 @@ class ApplicationTTS(QApplicationWindow):
             view_proc=self.viewLogG1G2,
             n=2,
             snames=["log(G'(w))", "log(G''(w))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log(G'($\omega$),G''($\omega$))",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["G',G''(w)"] = View(
             "G',G''(w)",
@@ -84,6 +101,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewG1G2,
             2,
             ["G'(w)", "G''(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"G'($\omega$),G''($\omega$)",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["etastar"] = View(
             "etastar",
@@ -97,6 +124,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewEtaStar,
             1,
             ["eta*(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$|\eta^*(\omega)|$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["logetastar"] = View(
             "logetastar",
@@ -110,6 +147,18 @@ class ApplicationTTS(QApplicationWindow):
             self.viewLogEtaStar,
             1,
             ["log(eta*(w))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log$|\eta^*(\omega)|$",
+                internal_unit="Pa.s",
+                transform="log10",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["delta"] = View(
             "delta",
@@ -123,6 +172,11 @@ class ApplicationTTS(QApplicationWindow):
             self.viewDelta,
             1,
             ["delta(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
         )
         self.views["tan(delta)"] = View(
             "tan(delta)",
@@ -136,6 +190,11 @@ class ApplicationTTS(QApplicationWindow):
             self.viewTanDelta,
             1,
             ["tan(delta((w))"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
         )
         self.views["log(tan(delta))"] = View(
             "log(tan(delta))",
@@ -149,6 +208,12 @@ class ApplicationTTS(QApplicationWindow):
             self.viewLogTanDelta,
             1,
             ["log(tan(delta((w)))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
         )
         self.views["log(G*)"] = View(
             "log(G*)",
@@ -162,6 +227,18 @@ class ApplicationTTS(QApplicationWindow):
             self.viewLogGstar,
             1,
             ["log(G*)"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log(G*($\omega$))",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["log(tan(delta),G*)"] = View(
             "log(tan(delta),G*)",
@@ -175,6 +252,12 @@ class ApplicationTTS(QApplicationWindow):
             self.viewLogtandeltaGstar,
             1,
             [r"log(tan($\delta))"],
+            x_axis=AxisSpec(
+                label="log(G*)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["delta(G*)"] = View(
             "delta(G*)",
@@ -188,6 +271,12 @@ class ApplicationTTS(QApplicationWindow):
             self.viewdeltatanGstar,
             1,
             ["delta"],
+            x_axis=AxisSpec(
+                label="log(G*)",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["J',J''(w)"] = View(
             "J',J''(w)",
@@ -201,6 +290,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewJ1J2,
             2,
             ["J'(w)", "J''(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"J'($\omega$),J''($\omega$)",
+                internal_unit="1/Pa",
+                unit_choices=compliance_units,
+            ),
         )
         self.views["Cole-Cole"] = View(
             "Cole-Cole",
@@ -214,6 +313,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewColeCole,
             1,
             ["$eta'$"],
+            x_axis=AxisSpec(
+                label=r"$\eta'$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"$\eta''$",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["log(G')"] = View(
             name="log(G')",
@@ -227,6 +336,18 @@ class ApplicationTTS(QApplicationWindow):
             view_proc=self.viewLogG1,
             n=1,
             snames=["log(G'(w))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log(G'($\omega$))",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["G'"] = View(
             "G'",
@@ -240,6 +361,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewG1,
             1,
             ["G'(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"G'($\omega$)",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["log(G'')"] = View(
             name="log(G'')",
@@ -253,6 +384,18 @@ class ApplicationTTS(QApplicationWindow):
             view_proc=self.viewLogG2,
             n=1,
             snames=["log(G''(w))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"log(G'($\omega$))",
+                internal_unit="Pa",
+                transform="log10",
+                unit_choices=stress_units,
+            ),
         )
         self.views["G''"] = View(
             "G''",
@@ -266,6 +409,16 @@ class ApplicationTTS(QApplicationWindow):
             self.viewG2,
             1,
             ["G''(w)"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label=r"G''($\omega$)",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["log(G',G''(w),tan(delta))"] = View(
             name="log(G',G''(w),tan(delta))",
@@ -279,6 +432,12 @@ class ApplicationTTS(QApplicationWindow):
             view_proc=self.viewLogG1G2tandelta,
             n=3,
             snames=["log(G'(w))", "log(G''(w)),log(tan(delta))"],
+            x_axis=AxisSpec(
+                label=r"log($\omega$)",
+                internal_unit="rad/s",
+                transform="log10",
+                unit_choices=frequency_units,
+            ),
         )
 
         # set multiviews

@@ -237,6 +237,11 @@ The important attributes of the view called "y(x)" are:
   are done on the data before plotting them (see below),
 - ``n`` defines the number of series the view is plotting.
 
+For new unit-aware applications, prefer defining explicit axis metadata with
+``AxisSpec`` instead of relying only on the legacy ``x_units`` and ``y_units``
+strings. This lets the plotting layer convert view coordinates between
+canonical internal units and the currently selected GUI display units.
+
 In the line below, you can define the default number of view, 
 i.e., the number of views that appear when you open the appliction.
 In case the new application would benefit from having multiple views
@@ -292,6 +297,28 @@ In the ``__init__`` method of ``class ApplicationXY``, add
         view_proc=self.view_sqrt_y,
         n=1,
         snames=['sqrt(y)'])
+
+For a unit-aware view, the same pattern becomes:
+
+.. code-block:: python
+
+    self.views['G(t)'] = View(
+        name='G(t)',
+        description='Relaxation modulus',
+        x_label='t',
+        y_label='G',
+        x_units='s',
+        y_units='Pa',
+        log_x=True,
+        log_y=True,
+        view_proc=self.viewGt,
+        n=1,
+        snames=['G'],
+        x_axis=AxisSpec(label='t', internal_unit='s'),
+        y_axis=AxisSpec(label='G', internal_unit='Pa'))
+
+``view_proc`` should still return arrays in canonical internal units. The GUI
+will convert them to the selected display units only when plotting.
 
 .. tip::
     The ``x_label`` and ``y_label`` support LaTeX-like syntax.

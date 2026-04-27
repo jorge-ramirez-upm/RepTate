@@ -84,31 +84,31 @@ class TheoryRetardationModesTime(QTheory):
         nmodes = int(np.round(np.log10(tmax / tmin)))
 
         self.parameters["logJini"] = Parameter(
-            "logJini",
-            -4.0,
-            "Log of Instantaneous Compliance",
-            ParameterType.real,
+            name = "logJini",
+            value = -4.0,
+            description = "Log of Instantaneous Compliance expressed in 1/Pa",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logeta0"] = Parameter(
-            "logeta0",
-            0.0,
-            "Log of Terminal Viscosity",
-            ParameterType.real,
+            name = "logeta0",
+            value = 0.0,
+            description = "Log of Terminal Viscosity expressed in Pa.s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logtmin"] = Parameter(
-            "logtmin",
-            np.log10(tmin),
-            "Log of time range minimum",
-            ParameterType.real,
+            name = "logtmin",
+            value = np.log10(tmin),
+            description = "log10(tmin) of time range minimum expressed in s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logtmax"] = Parameter(
-            "logtmax",
-            np.log10(tmax),
-            "Log of time range maximum",
-            ParameterType.real,
+            name = "logtmax",
+            value = np.log10(tmax),
+            description = "log10(tmax) of time range maximum expressed in s",
+            type = ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -217,6 +217,7 @@ class TheoryRetardationModesTime(QTheory):
 
     def drag_mode(self, dx, dy):
         """Drag modes around"""
+        dx, dy = self.convert_view_data_to_internal(dx, dy)
         nmodes = self.parameters["nmodes"].value
         self.set_param_value("logtmin", dx[0])
         self.set_param_value("logtmax", dx[nmodes - 1])
@@ -350,6 +351,7 @@ class TheoryRetardationModesTime(QTheory):
         except TypeError as e:
             print(e)
             return
+        x, y = self.convert_view_data_to_display(x, y, view)
         self.graphicmodes.set_data(x, y)
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):

@@ -511,6 +511,17 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.handle_parameterItemChanged
         )
 
+    def current_view(self):
+        return self.parent_dataset.parent_application.current_view
+
+    def convert_view_data_to_display(self, x, y, view=None):
+        view = view or self.current_view()
+        return view.convert_xy_to_display(x, y)
+
+    def convert_view_data_to_internal(self, x, y, view=None):
+        view = view or self.current_view()
+        return view.convert_xy_to_internal(x, y)
+
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
         self.logger.info("numpy: %s (flag %s)" % (type, flag))

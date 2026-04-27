@@ -358,6 +358,7 @@ class TheoryDiscrMWD(QTheory):
 
     def drag_bin(self, newx, newy):
         """Move edges of the bins"""
+        newx = self._plot_x_to_internal_mass(newx)
         nbin = self.parameters["nbin"].value
         newx = np.sort(newx)
         self.parameters["logmmin"].value = np.log10(newx[0])
@@ -540,16 +541,17 @@ class TheoryDiscrMWD(QTheory):
         y = np.zeros(nbin + 1)
         for i in range(nbin + 1):
             x[i] = self.parameters["logM%02d" % i].value
-        self.graphic_bins.set_data(np.power(10, x), y)
+        view = self.current_view()
+        x = self._internal_mass_to_plot(np.power(10, x))
+        self.graphic_bins.set_data(x, y)
 
         # set the bar plot
         self.set_bar_plot(True)
 
         # set the tick marks of for each bin Mw value
-        self.Mw_bin.set_data(
-            self.extra_data["saved_th"][:, 0],
-            np.zeros(len(self.extra_data["saved_th"][:, 0])),
-        )
+        x = self._internal_mass_to_plot(self.extra_data["saved_th"][:, 0])
+        y = np.zeros(len(self.extra_data["saved_th"][:, 0]))
+        self.Mw_bin.set_data(x, y)
         self.Mw_bin.set_visible(True)
 
     def set_bar_plot(self, visible=True):
@@ -560,11 +562,9 @@ class TheoryDiscrMWD(QTheory):
             pass  # no bar plot to remove
         if visible:
             bin_e = self.extra_data["bin_edges"]
-            edges = bin_e[:-1]  # remove last bin
-            nbin = len(edges)
-            width = np.zeros(nbin)
-            for i in range(nbin):
-                width[i] = bin_e[i + 1] - bin_e[i]
+            disp_edges = self._internal_mass_to_plot(bin_e)
+            edges = disp_edges[:-1]  # remove last bin
+            width = disp_edges[1:] - disp_edges[:-1]
             self.bar_bins = self.ax.bar(
                 edges,
                 self.extra_data["bin_height"],
@@ -574,6 +574,22 @@ class TheoryDiscrMWD(QTheory):
                 edgecolor="black",
                 alpha=0.5,
             )
+
+    def _internal_mass_to_plot(self, mass_values):
+        """Convert internal molar-mass values to plotted x coordinates."""
+        view = self.current_view()
+        x = np.asarray(mass_values)
+        if view.name == "log-log":
+            x = np.log10(x)
+        return view.x_axis.convert_from_internal(x)
+
+    def _plot_x_to_internal_mass(self, plot_x_values):
+        """Convert plotted x coordinates back to internal molar-mass values."""
+        view = self.current_view()
+        x = view.x_axis.convert_to_internal(np.asarray(plot_x_values))
+        if view.name == "log-log":
+            x = np.power(10.0, x)
+        return x
 
     def get_mwd(self):
         m = np.copy(self.extra_data["saved_th"][:, 0])

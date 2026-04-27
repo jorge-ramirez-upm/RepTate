@@ -36,7 +36,7 @@ Module for the analysis of data from Creep experiments
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -70,6 +70,12 @@ class ApplicationCreep(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        time_units = ("ns", "μs", "ms", "s", "min", "h")
+        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units = ("Pa.s", "kPa.s")
+        compliance_units = ("1/Pa", "1/kPa", "1/MPa", "1/bar", "1/atm")
+        frequency_units = ("rad/s", "Hz")
+
         # time range for view conversion to frequency domain
         self.eta = 10000
         self.tmin_view = -np.inf
@@ -88,6 +94,12 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewLogStraint,
             n=1,
             snames=["log(gamma)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
         )
         self.views["gamma(t)"] = View(
             name="gamma(t)",
@@ -101,6 +113,7 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewStraint,
             n=1,
             snames=["gamma"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
         )
         self.views["log(J(t))"] = View(
             name="log(J(t))",
@@ -114,6 +127,18 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewLogJt,
             n=1,
             snames=["log(J)"],
+            x_axis=AxisSpec(
+                label="log(t)",
+                internal_unit="s",
+                transform="log10",
+                unit_choices=time_units,
+            ),
+            y_axis=AxisSpec(
+                label="log(J)",
+                internal_unit="1/Pa",
+                transform="log10",
+                unit_choices=compliance_units,
+            ),
         )
         self.views["J(t)"] = View(
             name="J(t)",
@@ -127,6 +152,12 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewJt,
             n=1,
             snames=["J"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label="J",
+                internal_unit="1/Pa",
+                unit_choices=compliance_units,
+            ),
         )
         self.views["t/J(t)"] = View(
             name="t/J(t)",
@@ -140,6 +171,12 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewt_Jt,
             n=1,
             snames=["t/J"],
+            x_axis=AxisSpec(label="t", internal_unit="s", unit_choices=time_units),
+            y_axis=AxisSpec(
+                label="t/J",
+                internal_unit="Pa.s",
+                unit_choices=viscosity_units,
+            ),
         )
         self.views["i-Rheo G',G''"] = View(
             name="i-Rheo G',G''",
@@ -153,6 +190,16 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewiRheo,
             n=2,
             snames=["G'", "G''"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label="G',G''",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.views["i-Rheo-Over G',G''"] = View(
             name="i-Rheo-Over G',G''",
@@ -166,6 +213,16 @@ class ApplicationCreep(QApplicationWindow):
             view_proc=self.viewiRheoOver,
             n=2,
             snames=["G'", "G''"],
+            x_axis=AxisSpec(
+                label=r"$\omega$",
+                internal_unit="rad/s",
+                unit_choices=frequency_units,
+            ),
+            y_axis=AxisSpec(
+                label="G',G''",
+                internal_unit="Pa",
+                unit_choices=stress_units,
+            ),
         )
         self.OVER = 100  # initial oversampling
         self.MIN_OVER = 1  # min oversampling

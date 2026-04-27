@@ -36,7 +36,7 @@ Module for the analysis of data from SANS experiments
 
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
-from RepTate.core.View import View
+from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
@@ -56,6 +56,22 @@ class ApplicationSANS(QApplicationWindow):
 
         super().__init__(name, parent)
 
+        inverse_distance_units = (
+            "1/A",
+            "1/Å",
+            "Å⁻¹",
+            "1/nm",
+            "nm⁻¹",
+            "1/um",
+            "μm⁻¹",
+            "1/mm",
+            "mm⁻¹",
+            "1/cm",
+            "cm⁻¹",
+            "1/m",
+            "m⁻¹",
+        )
+
         # VIEWS
         self.views["log(I(q))"] = View(
             name="log(I(q))",
@@ -69,6 +85,12 @@ class ApplicationSANS(QApplicationWindow):
             view_proc=self.viewLogSANS,
             n=1,
             snames=["log(I)"],
+            x_axis=AxisSpec(
+                label="log(q)",
+                internal_unit="1/A",
+                transform="log10",
+                unit_choices=inverse_distance_units,
+            ),
         )
         self.views["I(q)"] = View(
             name="I(q)",
@@ -82,6 +104,11 @@ class ApplicationSANS(QApplicationWindow):
             view_proc=self.viewSANS,
             n=1,
             snames=["I"],
+            x_axis=AxisSpec(
+                label="q",
+                internal_unit="1/A",
+                unit_choices=inverse_distance_units,
+            ),
         )
         self.views["Zimm"] = View(
             name="Zimm",
@@ -108,6 +135,11 @@ class ApplicationSANS(QApplicationWindow):
             view_proc=self.viewKratky,
             n=1,
             snames=["q2*I"],
+            x_axis=AxisSpec(
+                label="q",
+                internal_unit="1/A",
+                unit_choices=inverse_distance_units,
+            ),
         )
 
         # set multiviews
