@@ -222,6 +222,9 @@ class TheorySmoothPolyStrand(QTheory):
             description="Kuhn step density",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="unit_density",
+            internal_unit="1/μm³",
+            display_unit="1/μm³",
         )
         self.parameters["G_C"] = Parameter(
             name="G_C",
@@ -229,6 +232,9 @@ class TheorySmoothPolyStrand(QTheory):
             description="Crystal growth rate",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="rate",
+            internal_unit="μm/s",
+            display_unit="μm/s",
         )
         self.parameters["N_0"] = Parameter(
             name="N_0",
@@ -236,9 +242,9 @@ class TheorySmoothPolyStrand(QTheory):
             description="Hetrogeneous nucleation density",
             type=ParameterType.real,
             opt_type=OptType.opt,
-            quantity="dimensionless",
-            internal_unit="-",
-            display_unit="-",
+            quantity="unit_density",
+            internal_unit="1/μm³",
+            display_unit="1/μm³",
             )
         self.parameters["beta"] = Parameter(
             name="beta",

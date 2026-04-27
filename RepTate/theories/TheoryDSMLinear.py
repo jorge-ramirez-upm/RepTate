@@ -71,6 +71,9 @@ class TheoryDSMLinear(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             display_flag=True,
+            quantity="molar_mass",
+            internal_unit="Da",
+            display_unit="Da",
         )
 
         self.parameters["rho0"] = Parameter(
@@ -80,6 +83,9 @@ class TheoryDSMLinear(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             display_flag=True,
+            quantity="density",
+            internal_unit="g/cc",
+            display_unit="g/cc",
         )
 
         self.parameters["Mc"] = Parameter(
@@ -89,6 +95,9 @@ class TheoryDSMLinear(QTheory):
             type=ParameterType.real,
             opt_type=OptType.opt,
             display_flag=True,
+            quantity="molar_mass",
+            internal_unit="Da",
+            display_unit="Da",
         )
 
         self.parameters["tau_c"] = Parameter(
@@ -98,6 +107,9 @@ class TheoryDSMLinear(QTheory):
             type=ParameterType.real,
             opt_type=OptType.opt,
             display_flag=True,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
 
         # self.parameters["beta"] = Parameter(

@@ -37,6 +37,7 @@ Module for the analysis of data from SANS experiments
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -119,12 +120,16 @@ class ApplicationSANS(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "SANS files",
-            "sans",
-            "SANS files",
-            ["q", "I(q)"],
-            ["Mw", "Phi"],
-            ["1/A", "-"],
+            name = "SANS files",
+            extension = "sans",
+            description = "SANS files",
+            col_names = ["q", "I(q)"],
+            basic_file_parameters = ["Mw", "phi"],
+            col_units = ["Å⁻¹", "-"],
+            file_parameter_specs= [
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("phi", "dimensionless", "-", "-"),
+            ]
         )
         self.filetypes[ftype.extension] = ftype
 

@@ -204,13 +204,14 @@ class ApplicationDielectric(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "Dielectric Spectroscopy files",
-            "dls",
-            "Dielectric Spectroscopy files",
-            ["w", "e'", "e''"],
-            ["Mw", "T"],
-            ["rad/s", "-", "-"],
+            name = "Dielectric Spectroscopy files",
+            extension = "dls",
+            description = "Dielectric Spectroscopy files",
+            col_names = ["w", "e'", "e''"],
+            basic_file_parameters = ["Mw", "T"],
+            col_units = ["rad/s", "-", "-"],
             file_parameter_specs=[
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )

@@ -38,6 +38,7 @@ Module for handling Molecular weight distributions from GPC experiments.
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -115,6 +116,10 @@ class ApplicationMWD(QApplicationWindow):
             ["M", "W(logM)"],
             ["Mn", "Mw", "PDI"],
             ["kg/mol", "-"],
+            file_parameter_specs=[
+                FileParameterSpec("Mn", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+            ]
         )
         # ftype=TXTColumnFile("GPC Files", "gpc", "Molecular Weight Distribution", ['M','W(logM)'], [], ['kDa', '-'])
         self.filetypes[ftype.extension] = ftype

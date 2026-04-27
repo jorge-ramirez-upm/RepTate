@@ -80,6 +80,9 @@ class TheoryWLF(QTheory):
             description="Reference T to WLF shift the data to",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="temperature",
+            internal_unit="ºC",
+            display_unit="ºC",
         )
         self.parameters["B1"] = Parameter(
             name="B1",
@@ -94,6 +97,9 @@ class TheoryWLF(QTheory):
             description="Material parameter B2 for WLF Shift",
             type=ParameterType.real,
             opt_type=OptType.opt,
+            quantity="temperature",
+            internal_unit="ºC",
+            display_unit="ºC",
         )
         self.parameters["logalpha"] = Parameter(
             name="logalpha",

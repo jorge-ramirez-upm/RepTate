@@ -368,12 +368,14 @@ class ApplicationReact(QApplicationWindow):
         # FILES
         # set the type of files that ApplicationReact can open
         ftype = TXTColumnFile(
-            name='React files',
-            extension='reac',
-            description='Reatc file',
-            col_names=['M', 'w(M)', 'g', 'br/1000C'],
-            basic_file_parameters=[],
-            col_units=['g/mol', '-', '-', '-'])
+            name = 'React files',
+            extension = 'reac',
+            description = 'Reatc file',
+            col_names = ['M', 'w(M)', 'g', 'br/1000C'],
+            basic_file_parameters = [],
+            col_units = ['g/mol', '-', '-', '-'],
+            file_parameter_specs=[]
+        )
         self.filetypes[
             ftype.extension] = ftype  #add each the file type to dictionary
 

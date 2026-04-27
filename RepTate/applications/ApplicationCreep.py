@@ -181,13 +181,15 @@ class ApplicationCreep(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "Creep files",
-            "creep",
-            "Creep files",
-            ["t", "strain"],
-            ["stress", "Mw", "T"],
-            ["s", "-", "Pa", "C"],
+            name = "Creep files",
+            extension = "creep",
+            description = "Creep files",
+            col_names = ["t", "strain"],
+            basic_file_parameters = ["stress", "Mw", "T"],
+            col_units = ["s", "-", "Pa", "C"],
             file_parameter_specs=[
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("stress", "stress", "Pa", "Pa"),                              
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )

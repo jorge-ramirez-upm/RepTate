@@ -69,6 +69,9 @@ class TheoryArrhenius(QTheory):
             description="Reference Temperature (°C)",
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="temperature",
+            internal_unit="ºC",
+            display_unit="ºC",
         )
         self.parameters["Ea"] = Parameter(
             name="Ea",

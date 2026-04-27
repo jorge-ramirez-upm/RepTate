@@ -4,268 +4,311 @@
 Units
 -----
 
-RepTate can read, display, and convert units for the parts of the program that
-have been made unit-aware. This page describes the user-visible behavior and the
-current coverage.
+RepTate can now read, store, display, and convert units for the parts of the
+program that have been made unit-aware. This page describes the current
+user-visible behavior and the present coverage in applications and theories.
 
-Supported units
----------------
+General behavior
+----------------
 
-The supported unit quantities are:
+RepTate keeps numerical values internally in canonical units whenever explicit
+unit metadata are available. Conversion happens only at input and output
+boundaries:
+
+* when reading text-column data files
+* when reading unit-aware file parameters from the first line of a text file
+* when displaying file parameters in a Dataset
+* when displaying or editing unit-aware theory parameters
+
+If no unit metadata exist for a given column, file parameter, or theory
+parameter, RepTate preserves the legacy numerical convention and no automatic
+conversion is applied.
+
+Supported quantities and canonical units
+----------------------------------------
+
+The current unit registry supports the following quantities.
 
 .. list-table::
    :header-rows: 1
 
    * - Quantity
-     - Supported input/display units
-     - Internal unit used by RepTate
+     - Registered units
+     - Canonical internal unit
    * - Time
      - ``ns``, ``μs``, ``ms``, ``s``, ``min``, ``h``
      - ``s``
+   * - Deformation rate
+     - ``1/s``, ``s-1``, ``s^-1``, ``s⁻¹``, ``1/min``, ``min-1``, ``1/h``, ``h-1``
+     - ``1/s``
+   * - Inverse distance
+     - ``1/A``, ``1/Å``, ``A-1``, ``Å-1``, ``1/nm``, ``1/um``, ``1/μm``, ``1/mm``, ``1/cm``, ``1/m``
+     - ``1/A``
+   * - Nucleation rate
+     - ``1/s/m3``, ``1/m3/s``, ``1/s/cm3``, ``1/cm3/s``, ``1/s/mm3``, ``1/mm3/s``, ``1/s/μm3``, ``1/μm3/s``, ``1/s/nm3``, ``1/nm3/s``
+     - ``1/s/m3``
+   * - Linear rate
+     - ``m/s``, ``m/min``, ``m/h``, ``cm/s``, ``mm/s``, ``um/s``, ``μm/s``, ``nm/s``
+     - ``m/s``
+   * - Unit density
+     - ``1/m3``, ``1/L``, ``1/cm3``, ``1/mL``, ``1/mm3``, ``1/um3``, ``1/μm3``, ``1/nm3``
+     - ``1/m3``
    * - Angular frequency
      - ``rad/s``
      - ``rad/s``
    * - Frequency
      - ``Hz``
-     - ``Hz`` when used as frequency, or converted to ``rad/s`` for angular-frequency data
+     - ``Hz``
    * - Stress or modulus
      - ``Pa``, ``kPa``, ``MPa``, ``bar``, ``atm``
      - ``Pa``
    * - Viscosity
      - ``Pa.s``, ``kPa.s``
      - ``Pa.s``
+   * - Density
+     - ``kg/m3``, ``kg/m^3``, ``kg/m³``, ``g/cm3``, ``g/cm^3``, ``g/cm³``, ``g/cc``, ``g/mL``, ``kg/L``
+     - ``kg/m3``
    * - Temperature
      - ``K``, ``ºC``, ``°C``
-     - ``K`` for unit-aware calculations
+     - ``K``
    * - Molecular mass
-     - ``kg/mol``, ``g/mol``
+     - ``kg/mol``, ``g/mol``, ``Da``, ``kDa``
      - ``kg/mol``
    * - Dimensionless
      - ``-``
      - ``-``
 
-In practice, this means that a data file may contain, for example, time in
-``s`` or ``min``, modulus in ``Pa``, ``kPa``, or ``MPa``, pressure in ``Pa``,
-``bar``, or ``atm``, molecular mass in ``kg/mol`` or ``g/mol``, and temperature
-in ``K`` or ``ºC`` where the corresponding importer or parameter is unit-aware.
+Many quantities also accept equivalent ASCII, superscript, and Unicode variants
+of the same symbol, for example ``1/m^3`` and ``1/m³``.
 
 Specifying units in data files
 ------------------------------
 
-For unit-aware text files, units can be written in the column header using
-square brackets or parentheses:
+For unit-aware text files, units can be specified in two places.
+
+Column headers
+^^^^^^^^^^^^^^
+
+Column headers may include units in square brackets or parentheses:
 
 .. code-block:: text
 
-   Mw=100;T=25;
+   Mw=100 kg/mol;T=25 ºC;
    w [Hz] G' [kPa] G'' [kPa]
    0.1 12.0 3.0
    1.0 25.0 8.0
 
-If the file header does not include units, RepTate uses the default units
-declared by the selected application file type. For example, LVE files expect
-angular frequency and moduli, while MWD files expect molecular mass and
-distribution columns.
+If the file header does not include units for a column, RepTate uses the
+default ``col_units`` declared by the selected application file type.
 
-Unknown unit strings are kept as legacy labels and the numbers are not
-converted. This preserves old files, but it also means that only the supported
-units listed above are converted automatically.
+File parameters on the first line
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The first line of a text file may also include units on individual file
+parameters:
+
+.. code-block:: text
+
+   Mw=1131 Da;T=25 ºC;gdot=0.1 1/s;
+
+If a file parameter is unit-aware in the corresponding application,
+RepTate converts that value to the internal canonical unit when the file is
+loaded. Legacy unitless headers such as ``Mw=1131;T=25;`` still work.
+
+Unknown unit strings
+^^^^^^^^^^^^^^^^^^^^
+
+Unknown unit strings are preserved as legacy labels and the corresponding
+numbers are not converted. This preserves old files, but automatic conversion
+only applies to registered units.
 
 How units appear in RepTate
 ---------------------------
 
-Unit-aware data columns are converted when the file is imported. Plot axes show
-the internal unit when a view axis directly corresponds to a data column. For
-example, a column loaded as ``time [min]`` is plotted as ``time [s]`` after
-conversion.
+Data columns
+^^^^^^^^^^^^
 
-Unit-aware file parameters, such as selected ``T`` and ``Mw`` parameters, are
-stored internally in RepTate's internal units and displayed in their configured
-display units. Unit-aware theory parameters show the unit in the parameter
-table, and the theory parameter dialog lets users choose among compatible
-display units.
+Unit-aware data columns are converted to canonical internal units when the file
+is imported. When a plotted axis directly corresponds to an imported column,
+that axis uses the column metadata. Derived views may still use the view's
+legacy hard-coded unit string.
 
-Saved or exported data should currently be treated with care. Some exported
-tables contain converted internal values but do not yet consistently write unit
-annotations in the output header. This is listed below as a current limitation.
+File parameters in a Dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Unit-aware file parameters are stored internally in their canonical units and
+displayed in the parameter's configured display unit.
+
+When a Dataset column corresponds to a unit-aware file parameter, right-clicking
+that column header opens a pop-up menu listing all registered compatible units
+for that quantity. Choosing one changes the display unit for that parameter in
+that Dataset and updates all file rows in that Dataset.
+
+Theory parameters
+^^^^^^^^^^^^^^^^^
+
+Unit-aware theory parameters show their display unit in the theory parameter
+table. The theory parameter editor lets users choose among compatible display
+units when that theory parameter carries explicit unit metadata.
 
 Frequency and angular frequency
 -------------------------------
 
-Frequency in ``Hz`` and angular frequency in ``rad/s`` are not treated as
-interchangeable units. When an application expects angular frequency but the
-input column is declared as ``Hz``, RepTate converts using
+Frequency in ``Hz`` and angular frequency in ``rad/s`` are intentionally
+different quantities.
+
+When an application expects angular frequency but an imported column is declared
+as ``Hz``, RepTate performs the explicit boundary conversion
 
 .. math::
 
    \omega = 2\pi f
 
-The reverse relation is used only at explicit conversion boundaries. Generic
-unit conversion does not silently treat ``Hz`` and ``rad/s`` as the same
+The reverse relation is only used at explicit import/export boundaries.
+Generic unit conversion does not treat ``Hz`` and ``rad/s`` as the same
 quantity.
 
 Temperature
 -----------
 
-Temperature conversion is affine. For example, ``25 ºC`` is converted to
-``298.15 K`` for unit-aware calculations. Legacy rheology applications that have
-historically used Celsius file parameters still display those file parameters in
-``ºC`` where the corresponding file parameter is unit-aware.
+Temperature conversion is affine rather than purely multiplicative. For
+example, ``25 ºC`` is converted to ``298.15 K`` in the canonical temperature
+system.
+
+Some legacy rheology applications and theories still keep temperature parameters
+internally in ``ºC`` because their numerical code has not yet been migrated to
+canonical ``K``. The tables below reflect the code as it currently exists.
 
 Logarithmic quantities
 ----------------------
 
 Parameters such as ``logwmin``, ``logwmax``, ``logG01``, or ``logM0`` should be
 read as dimensionless decimal logarithms of an underlying dimensional quantity,
-not as quantities that have units themselves.
+not as dimensional quantities themselves.
 
 For example, ``logG01`` represents :math:`\log_{10}(G_{01}/G_\mathrm{unit})`.
-Changing the display unit of the underlying dimensional quantity changes the
-displayed logarithmic value by an additive shift. For example, changing a
-stress scale from ``Pa`` to ``kPa`` subtracts 3 from the displayed
-:math:`\log_{10}` value. Changing molecular mass from ``kg/mol`` to ``g/mol``
-adds 3.
+Changing the display unit of the underlying dimensional quantity shifts the
+displayed logarithmic value additively.
 
-Current legacy logarithmic theory parameters are not yet all unit-aware. When no
-unit metadata is attached to a logarithmic parameter, RepTate displays and saves
-the stored dimensionless logarithmic value without unit conversion.
+Current use in applications
+---------------------------
 
-Current unit-awareness coverage and limitations
------------------------------------------------
-
-The tables below are based on the current code. An application or theory is
-listed as unit-aware only when it contains explicit unit metadata or uses a
-unit-aware importer with supported units.
-
-Unit-aware applications
-^^^^^^^^^^^^^^^^^^^^^^^
+The table below summarizes the current state of the application layer.
 
 .. list-table::
    :header-rows: 1
 
    * - Application
-     - Unit-aware items
-   * - Creep
-     - Text data columns; file parameter ``T``
-   * - Crystal
-     - Text data columns where units are supported; file parameter ``T``
-   * - Dielectric
-     - Text data columns; file parameter ``T``
+     - Current unit-aware coverage
    * - FRS
-     - Text data columns with supported units
+     - Text columns use declared ``col_units``; file parameters remain legacy
+   * - Creep
+     - Text columns; file parameters ``Mw``, ``stress``, and ``T``
+   * - Crystal
+     - Text columns; file parameters ``gdot``, ``T``, and ``tstop``
+   * - Dielectric
+     - Text columns; file parameters ``Mw`` and ``T``
    * - Gt
-     - Text data columns with supported units
+     - Text columns; file parameters ``Mw`` and ``gamma``
    * - LAOS
-     - Text data columns; file parameters ``omega`` and ``gamma``
+     - Text columns; file parameters ``omega`` and ``gamma``
    * - LVE
-     - Text data columns; file parameters ``Mw`` and ``T``
+     - Text columns in ``tts`` and ``osc`` files; file parameters ``Mw`` and ``T``. The Excel importer remains separate from the unit-aware text-column path
    * - MWD
-     - Text data columns for molecular mass distributions
+     - Text columns; file parameters ``Mn`` and ``Mw``
    * - NLVE
-     - Text data columns; file parameter ``T``
+     - Text columns; file parameter ``T``. The flow-rate file parameter is still legacy
    * - React
-     - Text data columns for molecular mass distributions
-   * - TTS
-     - Text data columns; file parameter ``T``
-   * - TTS Factors
-     - Text data columns with supported units
-
-Partially unit-aware or unknown applications
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :header-rows: 1
-
-   * - Application
-     - Current limitation
+     - Text columns use declared units; file parameters remain legacy
    * - SANS
-     - Uses legacy scattering-vector labels such as ``1/A``; those units are not registered for conversion
+     - Text columns, including inverse-distance units such as ``Å⁻¹``; file parameters ``Mw`` and ``phi``
+   * - TTS
+     - Text columns; file parameters ``Mw`` and ``T``
+   * - TTS Factors
+     - Text columns; file parameter ``Mw``
    * - Universal Viewer
-     - Units come from the user configuration file; conversion coverage depends on whether those strings match supported units
-
-Applications not yet unit-aware
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :header-rows: 1
-
-   * - Application
-     - Current limitation
+     - Text columns can participate when the configured unit strings match the registry
    * - Template
-     - Placeholder units are not registered and are not converted
+     - Placeholder example only; its default unit strings are not intended for conversion
 
-Unit-aware theories
-^^^^^^^^^^^^^^^^^^^
+Current use in theories
+-----------------------
 
-.. list-table::
-   :header-rows: 1
+Theory coverage is heterogeneous. Many theories now attach unit metadata to
+some or all user-editable parameters, but this is not yet universal.
 
-   * - Theory
-     - Coverage
-   * - Carreau-Yasuda
-     - All detected parameters include unit metadata
-   * - DTD Stars
-     - All detected parameters include unit metadata
-   * - PETS
-     - All detected parameters include unit metadata
-   * - Rouse
-     - All detected parameters include unit metadata
-   * - Sticky Reptation
-     - All detected parameters include unit metadata
-
-Partially unit-aware theories
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Theories with explicit unit metadata on at least one parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
 
    * - Theory
-     - Coverage
-   * - Diene CSTR
-     - Some parameters include unit metadata
-   * - Giesekus
-     - Some parameters include unit metadata
-   * - GO PolySTRAND
-     - Some parameters include unit metadata
-   * - LDPE Batch
-     - Some parameters include unit metadata
-   * - Likhtman-McLeish 2002
-     - Some parameters include unit metadata
-   * - Multi Metallocene CSTR
-     - Some parameters include unit metadata
-   * - Pom-Pom
-     - Some parameters include unit metadata
-   * - RDP LVE
-     - Some parameters include unit metadata
-   * - Rolie Double Poly
-     - Some parameters include unit metadata
-   * - Rolie-Poly
-     - Some parameters include unit metadata
-   * - SCCR
-     - Some parameters include unit metadata
-   * - Smooth PolySTRAND
-     - Some parameters include unit metadata
-   * - Tobita CSTR
-     - Some parameters include unit metadata
-   * - UCM
-     - Some parameters include unit metadata
-
-Theories not yet unit-aware
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. list-table::
-   :header-rows: 1
-
-   * - Theory
+     - Notes
    * - Arrhenius
+     - Temperature metadata present
+   * - Carreau-Yasuda
+     - Explicit metadata on main fit parameters
+   * - Debye
+     - Explicit metadata on selected parameters
+   * - Diene CSTR
+     - Explicit metadata on selected parameters
+   * - DSM Linear
+     - Explicit metadata on selected parameters
+   * - DTD Stars
+     - Explicit metadata on main parameters
+   * - Giesekus
+     - Explicit metadata on selected parameters
+   * - GO PolySTRAND
+     - Extensive metadata coverage
+   * - LDPE Batch
+     - Explicit metadata on selected parameters
+   * - Likhtman-McLeish 2002
+     - Explicit metadata on selected parameters
+   * - Multi Metallocene CSTR
+     - Explicit metadata on selected parameters
+   * - PETS
+     - Explicit metadata on main parameters
+   * - Pom-Pom
+     - Explicit metadata on selected parameters
+   * - RDPLVE
+     - Explicit metadata on selected parameters
+   * - Rolie Double Poly
+     - Explicit metadata on selected parameters
+   * - Rolie-Poly
+     - Explicit metadata on selected parameters
+   * - Rouse
+     - Explicit metadata on main parameters
+   * - SCCR
+     - Explicit metadata on selected parameters
+   * - Smooth PolySTRAND
+     - Extensive metadata coverage
+   * - Sticky Reptation
+     - Explicit metadata on main parameters
+   * - Tobita CSTR
+     - Explicit metadata on selected parameters
+   * - TTS
+     - Temperature metadata present
+   * - TTS Automatic
+     - Temperature metadata present
+   * - UCM
+     - Explicit metadata on selected parameters
+   * - WLF
+     - Temperature metadata present
+
+Theories without explicit parameter-unit metadata
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+
+   * - Theory
    * - Basic theories
    * - BoB LVE
    * - BoB NLVE
    * - Create Polyconf
-   * - Debye
    * - Debye Modes
    * - Discretize MWD
-   * - DSM Linear
    * - GEX
    * - Havriliak-Negami Modes
    * - KWW Modes
@@ -275,23 +318,21 @@ Theories not yet unit-aware
    * - Retardation Modes
    * - Shanbhag Maxwell Modes
    * - Template theory
-   * - TTS
-   * - TTS Automatic
-   * - WLF
 
-Other current limitations
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Important limitations
+---------------------
 
-* Unit conversion is implemented for text column files. Excel import is not yet
-  unit-aware.
-* Plot axis labels use column metadata only when the view axis label directly
-  matches an imported data column. Derived views may still show the view's
-  legacy unit string.
-* Compound units outside the registered list, such as SANS ``1/A`` and several
-  inverse or mixed units, are not converted.
+* Unit conversion is implemented for text-column importers. Excel import is not
+  yet generally unit-aware.
+* A theory having explicit parameter metadata does not imply that every
+  parameter in that theory has been migrated.
+* Many legacy rheology theories still use Celsius internally for temperature
+  parameters even though the canonical temperature unit in the registry is
+  ``K``.
 * File parameters are unit-aware only when the application declares explicit
-  metadata for that parameter.
+  ``FileParameterSpec`` metadata for that parameter.
 * Theory parameters are unit-aware only when that theory declares explicit
-  metadata for that parameter.
+  ``quantity``, ``internal_unit``, and ``display_unit`` metadata.
 * Saved datasets, saved views, and some theory-specific exports do not yet
-  consistently include unit annotations or convert values back to display units.
+  consistently include unit annotations or convert values back to display
+  units.

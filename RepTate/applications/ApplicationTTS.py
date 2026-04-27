@@ -291,13 +291,14 @@ class ApplicationTTS(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "OSC files",
-            "osc",
-            "Small-angle oscillatory masurements from the Rheometer",
-            ["w", "G'", "G''"],
-            ["Mw", "T"],
-            ["rad/s", "Pa", "Pa"],
+            name = "OSC files",
+            extension = "osc",
+            description = "Small-angle oscillatory masurements from the Rheometer",
+            col_names = ["w", "G'", "G''"],
+            basic_file_parameters = ["Mw", "T"],
+            col_units = ["rad/s", "Pa", "Pa"],
             file_parameter_specs=[
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )

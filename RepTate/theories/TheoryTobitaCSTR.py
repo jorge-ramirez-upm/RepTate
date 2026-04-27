@@ -137,7 +137,10 @@ reactor during free-radical polymerisation.
             value=28,
             description="Mass, in a.m.u., of a monomer (usually set to 28 for PE)",
             type=ParameterType.real,
-            opt_type=OptType.const,)
+            opt_type=OptType.const,
+            quantity="molar_mass",
+            internal_unit="g/mol",
+            display_unit="g/mol")
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1000,

@@ -77,8 +77,9 @@ from PySide6.QtWidgets import (
     QCheckBox,
 )
 import RepTate
-from RepTate.core.File import File
+from RepTate.core.File import File, FileParameterSpec
 from RepTate.core.DataTable import DataTable
+from RepTate.core.units import available_units, units_are_compatible
 from RepTate.gui.QTheory import MinimizationMethod, ErrorCalculationMethod
 from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
@@ -524,6 +525,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.num_theories = 0
         self.inactive_files = {}
         self.current_theory = None
+        self.file_parameter_display_units = {}
         self.table_icon_list = []  # save the file's marker shape, fill and color there
         self.selected_file = None
 
@@ -545,6 +547,7 @@ class QDataSet(QWidget, Ui_DataSet):
         )  # QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
+        hd.setContextMenuPolicy(Qt.CustomContextMenu)
         w = self.DataSettreeWidget.width()
         w /= hd.count()
         for i in range(hd.count()):
@@ -639,6 +642,9 @@ class QDataSet(QWidget, Ui_DataSet):
         connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(
             self.handle_sortIndicatorChanged
         )
+        connection_id = self.DataSettreeWidget.header().customContextMenuRequested.connect(
+            self.handle_header_context_menu
+        )
         connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(
             self.handle_itemSelectionChanged
         )
@@ -719,6 +725,98 @@ class QDataSet(QWidget, Ui_DataSet):
             except KeyError:
                 pass
         self.do_plot()
+
+    def _get_file_parameter_spec(self, pname):
+        """Return the first unit-aware spec found for a file parameter."""
+        for file in self.files:
+            spec = file.file_parameter_specs.get(pname)
+            if spec is not None and spec.quantity and spec.internal_unit:
+                return spec
+        return None
+
+    def apply_file_parameter_display_unit_overrides(self, file):
+        """Apply dataset-local display unit overrides to a file specs table."""
+        for pname, display_unit in self.file_parameter_display_units.items():
+            spec = file.file_parameter_specs.get(pname)
+            if spec is None or not (spec.quantity and spec.internal_unit):
+                continue
+            if not units_are_compatible(display_unit, spec.internal_unit):
+                continue
+            file.file_parameter_specs[pname] = FileParameterSpec(
+                spec.name, spec.quantity, spec.internal_unit, display_unit
+            )
+
+    def refresh_parameter_column_headers(self):
+        """Refresh dataset header labels from the current parameter specs."""
+        header = self.DataSettreeWidget.headerItem()
+        if header is None or not self.files:
+            return
+        basic_params = self.files[0].file_type.basic_file_parameters
+        for i, pname in enumerate(basic_params):
+            header.setText(i + 1, self.files[0].file_parameter_label(pname))
+
+    def refresh_parameter_column_values(self):
+        """Refresh displayed file parameter values for all dataset rows."""
+        if not self.files:
+            return
+        self.DataSettreeWidget.blockSignals(True)
+        for file in self.files:
+            items = self.DataSettreeWidget.findItems(
+                file.file_name_short, Qt.MatchExactly, 0
+            )
+            if not items:
+                continue
+            item = items[0]
+            for i, pname in enumerate(file.file_type.basic_file_parameters):
+                try:
+                    value = file.file_parameter_value_to_display(pname)
+                    try:
+                        value = "%.3g" % float(value)
+                    except ValueError:
+                        value = str(value)
+                    item.setText(i + 1, value)
+                except KeyError:
+                    item.setText(i + 1, "0")
+        self.DataSettreeWidget.blockSignals(False)
+
+    def set_dataset_file_parameter_display_unit(self, pname, display_unit):
+        """Set the display unit for a file parameter across this dataset."""
+        self.file_parameter_display_units[pname] = display_unit
+        for file in self.files:
+            self.apply_file_parameter_display_unit_overrides(file)
+        self.refresh_parameter_column_headers()
+        self.refresh_parameter_column_values()
+
+    def handle_header_context_menu(self, pos):
+        """Show a context menu for unit-aware file parameter columns."""
+        column = self.DataSettreeWidget.header().logicalIndexAt(pos)
+        if column <= 0 or not self.files:
+            return
+        basic_params = self.files[0].file_type.basic_file_parameters
+        if column - 1 >= len(basic_params):
+            return
+        pname = basic_params[column - 1]
+        spec = self._get_file_parameter_spec(pname)
+        if spec is None:
+            return
+        units = [
+            unit
+            for unit in available_units(spec.quantity)
+            if units_are_compatible(unit.symbol, spec.internal_unit)
+        ]
+        if not units:
+            return
+        menu = QMenu(self)
+        for unit in units:
+            action = menu.addAction(unit.label)
+            action.setCheckable(True)
+            action.setChecked(unit.symbol == spec.display_unit)
+            action.triggered.connect(
+                lambda checked=False, p=pname, u=unit.symbol: self.set_dataset_file_parameter_display_unit(
+                    p, u
+                )
+            )
+        menu.exec_(self.DataSettreeWidget.header().mapToGlobal(pos))
 
     def do_show_all(self, line):
         """Show all files in the current DataSet"""
@@ -1138,6 +1236,7 @@ class QDataSet(QWidget, Ui_DataSet):
                     ):  # check if file already exists in current ds
                         unique = False
                 if unique:
+                    self.apply_file_parameter_display_unit_overrides(df)
                     self.files.append(df)
                     self.current_file = df
                     newtables.append(df)
@@ -1153,6 +1252,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def do_reload_data(self, line=""):
         """Reload data files in the current DataSet"""
+        self.DataSettreeWidget.blockSignals(True)
         for file in self.files:
             if not file.active:
                 continue
@@ -1164,12 +1264,21 @@ class QDataSet(QWidget, Ui_DataSet):
                 )
                 continue
             df = ft.read_file(path, self, None)
+            self.apply_file_parameter_display_unit_overrides(df)
             file.header_lines = df.header_lines[:]
+            file.file_parameter_specs.clear()
+            file.file_parameter_specs.update(df.file_parameter_specs)
             file.file_parameters.clear()
             file.file_parameters.update(df.file_parameters)
+            file.data_table.column_names = df.data_table.column_names[:]
+            file.data_table.column_units = df.data_table.column_units[:]
+            file.data_table.column_specs = df.data_table.column_specs[:]
             file.data_table.data = np.array(df.data_table.data)
             file.data_table.num_columns = df.data_table.num_columns
             file.data_table.num_rows = df.data_table.num_rows
+        self.DataSettreeWidget.blockSignals(False)
+        self.refresh_parameter_column_headers()
+        self.refresh_parameter_column_values()
         self.do_plot("")
 
     def __listdir(self, root):

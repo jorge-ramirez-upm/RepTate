@@ -78,6 +78,9 @@ class TheoryTTSShiftAutomatic(QTheory):
             type=ParameterType.real,
             opt_type=OptType.const,
             display_flag=False,
+            quantity="temperature",
+            internal_unit="ºC",
+            display_unit="ºC",
         )
         self.parameters["vert"] = Parameter(
             name="vert",

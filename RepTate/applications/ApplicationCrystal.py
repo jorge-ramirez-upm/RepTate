@@ -270,26 +270,32 @@ class ApplicationCrystal(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "Start-up of shear flow with crystallisation",
-            "shearxs",
-            "Shear crystallisation files",
-            ["t", "sigma_xy", "Ndot", "phi_X", "N"],
-            ["gdot", "T", "tstop"],
-            ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            name = "Start-up of shear flow with crystallisation",
+            extension = "shearxs",
+            description = "Shear crystallisation files",
+            col_names = ["t", "sigma_xy", "Ndot", "phi_X", "N"],
+            basic_file_parameters = ["gdot", "T", "tstop"],
+            #col_units = ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            col_units = ["s", "Pa.s", "1/s/m³", "-", "1/m³"],
             file_parameter_specs=[
+                FileParameterSpec("gdot", "deformation_rate", "1/s", "1/s"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
+                FileParameterSpec("tstop", "time", "s", "s"),
             ],
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
-            "Elongation flow with crystallisation",
-            "uextxs",
-            "Elongation crystallisation files",
-            ["t", "N1", "Ndot", "phi_X", "N"],
-            ["gdot", "T", "tstop"],
-            ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            name = "Elongation flow with crystallisation",
+            extension = "uextxs",
+            description = "Elongation crystallisation files",
+            col_names = ["t", "N1", "Ndot", "phi_X", "N"],
+            basic_file_parameters = ["gdot", "T", "tstop"],
+            #col_units=["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            col_units = ["s", "Pa.s", "1/s/m³", "-", "1/m³"],
             file_parameter_specs=[
+                FileParameterSpec("gdot", "deformation_rate", "1/s", "1/s"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
+                FileParameterSpec("tstop", "time", "s", "s"),
             ],
         )
 

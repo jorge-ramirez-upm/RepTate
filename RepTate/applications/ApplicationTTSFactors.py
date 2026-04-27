@@ -37,6 +37,7 @@ Module for handling time-temperature superposition factors and fit theories.
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
@@ -151,12 +152,13 @@ class ApplicationTTSFactors(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "TTS factors",
-            "ttsf",
-            "TTS shift factors",
-            ["T", "aT", "bT"],
-            ["Mw"],
-            ["°C", "-", "-"],
+            name = "TTS factors",
+            extension = "ttsf",
+            description = "TTS shift factors",
+            col_names = ["T", "aT", "bT"],
+            basic_file_parameters = ["Mw"],
+            col_units = ["°C", "-", "-"],
+            file_parameter_specs=[FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol")]
         )
         self.filetypes[ftype.extension] = ftype
 

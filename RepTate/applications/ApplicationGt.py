@@ -37,6 +37,7 @@ Module for the analysis of stress relaxation data from simulations and experimen
 """
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
+from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 from scipy import interpolate
@@ -164,12 +165,16 @@ class ApplicationGt(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "G(t) files",
-            "gt",
-            "Relaxation modulus",
-            ["t", "Gt"],
-            ["Mw", "gamma"],
-            ["s", "Pa"],
+            name = "G(t) files",
+            extension = "gt",
+            description = "Relaxation modulus",
+            col_names = ["t", "Gt"],
+            basic_file_parameters = ["Mw", "gamma"],
+            col_units = ["s", "Pa"],
+            file_parameter_specs=[
+                FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
+                FileParameterSpec("gamma", "dimensionless", "-", "-"),
+            ]
         )
         self.filetypes[ftype.extension] = ftype
 

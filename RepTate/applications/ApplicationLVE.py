@@ -300,40 +300,40 @@ class ApplicationLVE(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            "LVE files",
-            "tts",
-            "LVE files",
-            ["w", "G'", "G''"],
-            ["Mw", "T"],
-            ["rad/s", "Pa", "Pa"],
+            name = "LVE files",
+            extension = "tts",
+            description = "LVE files",
+            col_names = ["w", "G'", "G''"],
+            basic_file_parameters = ["Mw", "T"],
+            col_units = ["rad/s", "Pa", "Pa"],
             # Legacy RepTate theory code expects file parameter T in Celsius
             # and converts to Kelvin locally when needed.
-            [
+            file_parameter_specs = [
                 FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )
         self.filetypes[ftype.extension] = ftype
         self.filetypes["osc"] = TXTColumnFile(
-            "OSC files",
-            "osc",
-            "Small-angle oscillatory masurements from the Rheometer",
-            ["w", "G'", "G''"],
-            ["Mw", "T"],
-            ["rad/s", "Pa", "Pa"],
-            [
+            name = "OSC files",
+            extension = "osc",
+            description = "Small-angle oscillatory masurements from the Rheometer",
+            col_names = ["w", "G'", "G''"],
+            basic_file_parameters = ["Mw", "T"],
+            col_units = ["rad/s", "Pa", "Pa"],
+            file_parameter_specs = [
                 FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )
 
         self.filetypes["xlsx"] = ExcelFile(
-            "Excel files",
-            "xlsx",
-            "Excel File",
-            ["w", "G'", "G''"],
-            [],
-            ["rad/s", "Pa", "Pa"],
+            name = "Excel files",
+            extension = "xlsx",
+            description = "Excel File",
+            col_names = ["w", "G'", "G''"],
+            basic_file_parameters = [],
+            col_units = ["rad/s", "Pa", "Pa"],
         )
 
         # THEORIES

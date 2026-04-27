@@ -41,8 +41,12 @@ import numpy as np
 # import logging
 from openpyxl import load_workbook
 from RepTate.core.File import File
-from RepTate.core.unit_parsing import parse_column_label
-from RepTate.core.units import convert_array_to_internal, make_column_specs
+from RepTate.core.units import (
+    convert_array_to_internal,
+    make_column_specs,
+    parse_column_label,
+    parse_parameter_value,
+)
 
 
 class TXTColumnFile(object):
@@ -143,16 +147,24 @@ class TXTColumnFile(object):
 
     def get_parameters(self, line, file):
         """Get the file parameters"""
-        line = line.replace(" ", "")  # remove all spaces
         items = line.split(";")
         file.file_parameters = {}
         for i in range(len(items)):
-            par = items[i].split("=")
+            par = items[i].split("=", 1)
             if len(par) > 1:
-                if self.is_number(par[1]):
-                    file.set_file_parameter(par[0], float(par[1]))
+                name = par[0].strip()
+                parsed_value, unit_symbol = parse_parameter_value(par[1].strip())
+                if unit_symbol is not None and not isinstance(parsed_value, str):
+                    file.set_file_parameter(
+                        name,
+                        parsed_value,
+                        from_display=False,
+                        source_unit=unit_symbol,
+                    )
+                elif isinstance(parsed_value, float):
+                    file.set_file_parameter(name, parsed_value)
                 else:
-                    file.set_file_parameter(par[0], par[1])
+                    file.set_file_parameter(name, parsed_value)
 
     def find_col_names_and_first_data_lines(self, lines, file):
         """Find column names and first row with data"""

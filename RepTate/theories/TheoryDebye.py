@@ -104,6 +104,9 @@ class TheoryDebye(QTheory):
             description="Molecular weight of a monomer",
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["Bckgrnd"] = Parameter(
             name="Bckgrnd",
@@ -112,19 +115,25 @@ class TheoryDebye(QTheory):
             type=ParameterType.real,
             opt_type=OptType.opt,
         )
-        self.parameters["Chi"] = Parameter(
-            name="Chi",
+        self.parameters["chi"] = Parameter(
+            name="chi",
             value=1e-4,
             description='Effect of weak interaction between "<sup>2</sup>H and H"',
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
-        self.parameters["Lambda"] = Parameter(
-            name="Lambda",
+        self.parameters["lambda"] = Parameter(
+            name="lambda",
             value=1,
             description="Shift of the radius of gyration",
             type=ParameterType.real,
             opt_type=OptType.const,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
         )
         self.parameters["stretched"] = Parameter(
             name="stretched",
@@ -184,7 +193,10 @@ class TheoryDebye(QTheory):
 
         try:
             Mw = float(f.file_parameters["Mw"])
-            Phi = float(f.file_parameters["Phi"])
+            try:
+                Phi = float(f.file_parameters["phi"])
+            except KeyError:
+                Phi = float(f.file_parameters["Phi"])
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw or Phi value")
             return
@@ -193,8 +205,8 @@ class TheoryDebye(QTheory):
         CRg = self.parameters["C_gyr"].value
         Mmono = self.parameters["M_mono"].value
         Bck = self.parameters["Bckgrnd"].value
-        Chi = self.parameters["Chi"].value
-        Lambda = self.parameters["Lambda"].value
+        Chi = self.parameters["chi"].value
+        Lambda = self.parameters["lambda"].value
         stretched = self.parameters["stretched"].value
         nonideal = self.parameters["non-ideal"].value
 
@@ -224,7 +236,7 @@ File error is calculated as the mean square of the residual, averaged over all p
             self.Qprint("")
             self.Qprint("%12s %8s %8s" % ("File", "Mw", "Rg"))
             CRg = self.parameters["C_gyr"].value
-            Lambda = self.parameters["Lambda"].value
+            Lambda = self.parameters["lambda"].value
             stretched = self.parameters["stretched"].value
             nfiles = len(self.parent_dataset.files)
             for i in range(nfiles):

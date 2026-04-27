@@ -2656,7 +2656,10 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 # QMessageBox.warning(self, header, message)
                 self.logger.warning(message)
                 for e_param in e_list:
-                    dt.file_parameters[e_param] = "0"
+                    if e_param in dt.file_parameter_specs:
+                        dt.set_file_parameter(e_param, 0.0, from_display=False)
+                    else:
+                        dt.file_parameters[e_param] = "0"
 
     def openFileNamesDialog(self, ext_filter="All Files (*)"):
         """Open Files"""

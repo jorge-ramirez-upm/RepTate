@@ -77,14 +77,29 @@ class FileParameterSpec:
 
     def value_to_display(self, value):
         """Convert an internally stored value to the display unit."""
+        if isinstance(value, str):
+            try:
+                value = float(value)
+            except ValueError:
+                return value
         if self.internal_unit and self.display_unit:
             return convert_value(value, self.internal_unit, self.display_unit)
         return value
 
     def value_from_display(self, value):
         """Convert a display/input value to the internal unit."""
+        if isinstance(value, str):
+            value = float(value)
         if self.internal_unit and self.display_unit:
             return convert_value(value, self.display_unit, self.internal_unit)
+        return value
+
+    def value_from_unit(self, value, unit_symbol):
+        """Convert a value expressed in ``unit_symbol`` to the internal unit."""
+        if isinstance(value, str):
+            value = float(value)
+        if self.internal_unit and unit_symbol:
+            return convert_value(value, unit_symbol, self.internal_unit)
         return value
 
     def label_with_unit(self):
@@ -156,13 +171,18 @@ class File(object):
         """Attach optional metadata to a file parameter."""
         self.file_parameter_specs[spec.name] = spec
 
-    def set_file_parameter(self, name, value, spec=None, from_display=True):
+    def set_file_parameter(
+        self, name, value, spec=None, from_display=True, source_unit=None
+    ):
         """Set a file parameter, converting to internal units when possible."""
         if spec is not None:
             self.set_file_parameter_spec(spec)
         spec = self.file_parameter_specs.get(name)
-        if spec is not None and from_display:
-            value = spec.value_from_display(value)
+        if spec is not None:
+            if source_unit is not None:
+                value = spec.value_from_unit(value, source_unit)
+            elif from_display:
+                value = spec.value_from_display(value)
         self.file_parameters[name] = value
 
     def file_parameter_value_to_display(self, name, value=None):

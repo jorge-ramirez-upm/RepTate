@@ -90,6 +90,11 @@ Sorting Files in a Dataset
 
 The files in a Dataset can be sorted by name or parameter value, in increasing and decreasing order, by clicking in the corresponding column header. Clicking several times on the same header will invert the sorting order. A small arrow next to a column header name will indicate how the files in the current Dataset are sorted (see :numref:`figsortfiles`). 
 
+If a Dataset column corresponds to a unit-aware file parameter, right-clicking
+that column header opens a pop-up menu with the registered compatible units for
+that quantity. Selecting one changes the display unit for that parameter in the
+current Dataset only.
+
 .. _figsortfiles:
 .. figure:: images/SortingFiles.png
     :width: 50%
