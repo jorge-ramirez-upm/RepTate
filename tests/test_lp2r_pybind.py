@@ -93,6 +93,28 @@ def test_lp2r_discrete_component_and_cancel():
     assert solver.step() is False
 
 
+def test_lp2r_progress_advances_and_cancel_stops_relaxation():
+    from RepTate.theories import _lp2r
+
+    solver = _lp2r.Solver(_material(), _lp2r.Controls())
+    solver.add_lognormal_component(weight=1.0, n=8, mw=100000.0, pdi=1.05)
+    solver.prepare()
+
+    progress = [solver.progress()]
+    for _ in range(10):
+        assert solver.step() is True
+        progress.append(solver.progress())
+
+    assert progress[0] == 0.0
+    assert progress[-1] > progress[0]
+    assert all(a <= b for a, b in zip(progress, progress[1:]))
+
+    solver.cancel()
+
+    assert solver.cancelled()
+    assert solver.step() is False
+
+
 def test_lp2r_lognormal_matches_original_reference():
     from RepTate.theories import _lp2r
 

@@ -208,6 +208,20 @@ class TheoryLP2RLVE(QTheory):
             display_unit="-",
         )
 
+    def _clear_table(self, tt):
+        """Leave the theory table empty after validation errors or cancellation."""
+        tt.num_rows = 0
+        tt.data = np.zeros((0, tt.num_columns))
+
+    def _report_progress(self, progress, last_percent):
+        """Report relaxation progress in coarse increments."""
+        percent = int(100.0 * max(0.0, min(1.0, progress)))
+        if percent >= last_percent + 5:
+            self.Qprint("%d%% " % percent, end="")
+            QApplication.processEvents()
+            return percent
+        return last_percent
+
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
@@ -252,8 +266,7 @@ class TheoryLP2RLVE(QTheory):
         omega_data = omega_data[np.isfinite(omega_data) & (omega_data > 0)]
         if len(omega_data) == 0:
             self.Qprint("<font color=red><b>LP2R needs positive frequencies</b></font>")
-            tt.num_rows = 0
-            tt.data = np.zeros((0, tt.num_columns))
+            self._clear_table(tt)
             return
 
         freq_min = float(np.min(omega_data))
@@ -261,25 +274,43 @@ class TheoryLP2RLVE(QTheory):
         freq_ratio = self.parameters["freq_ratio"].value
         if freq_ratio <= 1.0:
             self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
-            tt.num_rows = 0
-            tt.data = np.zeros((0, tt.num_columns))
+            self._clear_table(tt)
             return
 
         try:
             self.solver = self._build_solver()
             self.solver.prepare()
+            last_progress = 0
+            if not self.is_fitting:
+                self.Qprint("LP2R relaxation: 0% ", end="")
             while self.solver.step():
                 if self.stop_theory_flag:
                     self.solver.cancel()
+                    self._clear_table(tt)
+                    self.Qprint(
+                        "<br><font color=red><b>LP2R calculation cancelled</b></font>"
+                    )
                     return
+                if not self.is_fitting:
+                    last_progress = self._report_progress(
+                        self.solver.progress(), last_progress
+                    )
                 QApplication.processEvents()
             if self.solver.cancelled():
+                self._clear_table(tt)
+                self.Qprint(
+                    "<br><font color=red><b>LP2R calculation cancelled</b></font>"
+                )
                 return
+            if not self.is_fitting:
+                if last_progress < 100:
+                    self.Qprint("100%")
+                else:
+                    self.Qprint("")
             result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
         except Exception as exc:
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
-            tt.num_rows = 0
-            tt.data = np.zeros((0, tt.num_columns))
+            self._clear_table(tt)
             return
         finally:
             self.solver = None
