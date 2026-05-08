@@ -163,6 +163,23 @@ def test_lp2r_lve_discrete_distribution_parser():
         TheoryLP2RLVE._parse_discrete_distribution("50, -120", "0.4, 0.6")
 
 
+def test_lp2r_lve_mwd_import_formatting_helpers():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    masses, weights = TheoryLP2RLVE._normalise_discrete_distribution(
+        [50.0, 120.0],
+        [2.0, 3.0],
+    )
+
+    assert masses == [50.0, 120.0]
+    assert weights == [0.4, 0.6]
+    assert TheoryLP2RLVE._format_number_list(masses) == "50, 120"
+    assert TheoryLP2RLVE._format_number_list(weights) == "0.4, 0.6"
+
+    with pytest.raises(ValueError, match="positive total"):
+        TheoryLP2RLVE._normalise_discrete_distribution([50.0], [0.0])
+
+
 def test_lp2r_lve_application_registration():
     from PySide6.QtWidgets import QApplication
 

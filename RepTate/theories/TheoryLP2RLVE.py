@@ -33,11 +33,14 @@
 """LP2R linear viscoelastic theory backed by the pybind11 solver."""
 
 import numpy as np
-from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QMessageBox, QToolBar
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r
+from RepTate.theories.theory_helpers import GetMwdRepTate
 
 
 class TheoryLP2RLVE(QTheory):
@@ -235,6 +238,15 @@ class TheoryLP2RLVE(QTheory):
             display_unit="-",
         )
 
+        tb = QToolBar()
+        tb.setIconSize(QSize(24, 24))
+        self.get_mwd_action = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Get MWD (MWD app)",
+        )
+        self.thToolsLayout.insertWidget(0, tb)
+        self.get_mwd_action.triggered.connect(self.get_mwd_reptate)
+
     def _clear_table(self, tt):
         """Leave the theory table empty after validation errors or cancellation."""
         tt.num_rows = 0
@@ -274,6 +286,79 @@ class TheoryLP2RLVE(QTheory):
         if sum(weights) <= 0:
             raise ValueError("discrete_weights must have positive total weight")
         return masses, weights
+
+    @staticmethod
+    def _format_number_list(values):
+        """Format numeric arrays for storage in string theory parameters."""
+        return ", ".join("%.12g" % value for value in values)
+
+    @classmethod
+    def _normalise_discrete_distribution(cls, masses, weights):
+        """Validate and normalize a discrete MWD in RepTate internal units."""
+        masses = [float(mass) for mass in masses]
+        weights = [float(weight) for weight in weights]
+        if len(masses) != len(weights) or not masses:
+            raise ValueError("MWD masses and weights must be non-empty and have the same length")
+        if any(mass <= 0 for mass in masses):
+            raise ValueError("MWD masses must be positive")
+        if any(weight < 0 for weight in weights):
+            raise ValueError("MWD weights must be non-negative")
+        total_weight = sum(weights)
+        if total_weight <= 0:
+            raise ValueError("MWD weights must have positive total weight")
+        return masses, [weight / total_weight for weight in weights]
+
+    def set_discrete_distribution_from_mwd(self, masses, weights):
+        """Populate LP2R discrete parameters from MWD masses and weights."""
+        masses, weights = self._normalise_discrete_distribution(masses, weights)
+        self.set_param_value("discrete_masses", self._format_number_list(masses))
+        self.set_param_value("discrete_weights", self._format_number_list(weights))
+        self.set_param_value("input_mode", self.INPUT_DISCRETE)
+        self.update_parameter_table()
+        self.Qprint("Got %d LP2R discrete MWD components" % len(masses))
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+
+    def _collect_mwd_getters(self):
+        """Collect available Discretize MWD theory outputs from RepTate apps."""
+        apmng = self.parent_dataset.parent_application.parent_manager
+        get_dict = {}
+        for app in apmng.applications.values():
+            app_index = apmng.ApplicationtabWidget.indexOf(app)
+            app_tab_name = apmng.ApplicationtabWidget.tabText(app_index)
+            for ds in app.datasets.values():
+                ds_index = app.DataSettabWidget.indexOf(ds)
+                ds_tab_name = app.DataSettabWidget.tabText(ds_index)
+                for th in ds.theories.values():
+                    th_index = ds.TheorytabWidget.indexOf(th)
+                    th_tab_name = ds.TheorytabWidget.tabText(th_index)
+                    if th.thname == "Discretize MWD":
+                        get_dict[
+                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
+                        ] = th.get_mwd
+        return get_dict
+
+    def get_mwd_reptate(self):
+        """Import discrete molecular weights from a Discretize MWD theory."""
+        get_dict = self._collect_mwd_getters()
+        if not get_dict:
+            QMessageBox.warning(
+                self, "Get MW distribution", 'No "Discretize MWD" theory found'
+            )
+            return
+
+        dialog = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
+        if dialog.exec_() and dialog.btngrp.checkedButton() is not None:
+            _, success1 = self.set_param_value("tau_e", dialog.taue_text.text())
+            _, success2 = self.set_param_value("M_e", dialog.Me_text.text())
+            if not success1 * success2:
+                self.Qprint("Could not understand M_e or tau_e, try again")
+                return
+            item = dialog.btngrp.checkedButton().text()
+            masses, weights = get_dict[item]()
+            try:
+                self.set_discrete_distribution_from_mwd(masses, weights)
+            except ValueError as exc:
+                self.Qprint("<font color=red><b>%s</b></font>" % exc)
 
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""

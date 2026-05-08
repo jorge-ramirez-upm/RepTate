@@ -280,7 +280,8 @@ class GetMwdRepTate(QDialog):
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
         hlayout.addWidget(QLabel("Me"))
-        self.Me_text = QLineEdit("%.3g" % parent.parameters["Me"].value)
+        parent_me = parent.parameters.get("Me", parent.parameters.get("M_e"))
+        self.Me_text = QLineEdit("%.3g" % parent_me.value)
         self.Me_text.setValidator(validator)
         hlayout.addWidget(self.Me_text)
 
