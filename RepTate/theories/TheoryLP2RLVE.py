@@ -53,6 +53,8 @@ class TheoryLP2RLVE(QTheory):
     citations = []
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file = True
+    INPUT_LOGNORMAL = 0
+    INPUT_DISCRETE = 1
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """Constructor."""
@@ -60,6 +62,15 @@ class TheoryLP2RLVE(QTheory):
         self.function = self.calculate
         self.has_modes = False
         self.solver = None
+
+        self.parameters["input_mode"] = Parameter(
+            name="input_mode",
+            value=self.INPUT_LOGNORMAL,
+            description="Polymer input mode: 0=lognormal, 1=discrete masses/weights",
+            type=ParameterType.discrete_integer,
+            opt_type=OptType.const,
+            discrete_values=[self.INPUT_LOGNORMAL, self.INPUT_DISCRETE],
+        )
 
         self.parameters["Mw"] = Parameter(
             name="Mw",
@@ -93,6 +104,22 @@ class TheoryLP2RLVE(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
+        )
+        self.parameters["discrete_masses"] = Parameter(
+            name="discrete_masses",
+            value="50, 120",
+            description="Discrete polymer masses in kg/mol",
+            type=ParameterType.string,
+            opt_type=OptType.const,
+            display_flag=False,
+        )
+        self.parameters["discrete_weights"] = Parameter(
+            name="discrete_weights",
+            value="0.4, 0.6",
+            description="Discrete polymer weights",
+            type=ParameterType.string,
+            opt_type=OptType.const,
+            display_flag=False,
         )
         self.parameters["M_Kuhn"] = Parameter(
             name="M_Kuhn",
@@ -222,6 +249,32 @@ class TheoryLP2RLVE(QTheory):
             return percent
         return last_percent
 
+    @staticmethod
+    def _parse_number_list(value, name):
+        """Parse a comma, semicolon, or whitespace separated list of floats."""
+        tokens = str(value).replace(",", " ").replace(";", " ").split()
+        if not tokens:
+            raise ValueError("%s must contain at least one value" % name)
+        try:
+            return [float(token) for token in tokens]
+        except ValueError as exc:
+            raise ValueError("%s must contain only numbers" % name) from exc
+
+    @classmethod
+    def _parse_discrete_distribution(cls, masses_value, weights_value):
+        """Parse and validate discrete mass and weight arrays."""
+        masses = cls._parse_number_list(masses_value, "discrete_masses")
+        weights = cls._parse_number_list(weights_value, "discrete_weights")
+        if len(masses) != len(weights):
+            raise ValueError("discrete_masses and discrete_weights must have the same length")
+        if any(m <= 0 for m in masses):
+            raise ValueError("discrete_masses values must be positive")
+        if any(w <= 0 for w in weights):
+            raise ValueError("discrete_weights values must be positive")
+        if sum(weights) <= 0:
+            raise ValueError("discrete_weights must have positive total weight")
+        return masses, weights
+
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
@@ -238,12 +291,22 @@ class TheoryLP2RLVE(QTheory):
         controls.time_ratio = self.parameters["time_ratio"].value
 
         solver = _lp2r.Solver(material, controls)
-        solver.add_lognormal_component(
-            weight=1.0,
-            n=self.parameters["n"].value,
-            mw=self.parameters["Mw"].value * 1000.0,
-            pdi=self.parameters["PDI"].value,
-        )
+        if self.parameters["input_mode"].value == self.INPUT_DISCRETE:
+            masses, weights = self._parse_discrete_distribution(
+                self.parameters["discrete_masses"].value,
+                self.parameters["discrete_weights"].value,
+            )
+            solver.add_discrete_component(
+                mass=[mass * 1000.0 for mass in masses],
+                weight=weights,
+            )
+        else:
+            solver.add_lognormal_component(
+                weight=1.0,
+                n=self.parameters["n"].value,
+                mw=self.parameters["Mw"].value * 1000.0,
+                pdi=self.parameters["PDI"].value,
+            )
         return solver
 
     def request_stop_computations(self):

@@ -1,5 +1,7 @@
 import math
 
+import pytest
+
 
 LP2R_ORIGINAL_LOGNORMAL_REFERENCE = [
     (0.01, 0.0442951, 49.1957),
@@ -141,6 +143,24 @@ def test_lp2r_lve_theory_import():
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 
     assert TheoryLP2RLVE.thname == "LP2R LVE"
+
+
+def test_lp2r_lve_discrete_distribution_parser():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    masses, weights = TheoryLP2RLVE._parse_discrete_distribution(
+        "50, 120; 200",
+        "0.2 0.3, 0.5",
+    )
+
+    assert masses == [50.0, 120.0, 200.0]
+    assert weights == [0.2, 0.3, 0.5]
+
+    with pytest.raises(ValueError, match="same length"):
+        TheoryLP2RLVE._parse_discrete_distribution("50, 120", "1.0")
+
+    with pytest.raises(ValueError, match="positive"):
+        TheoryLP2RLVE._parse_discrete_distribution("50, -120", "0.4, 0.6")
 
 
 def test_lp2r_lve_application_registration():
