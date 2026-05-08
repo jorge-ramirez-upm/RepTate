@@ -59,6 +59,7 @@ class ApplicationLVE(QApplicationWindow):
         from RepTate.theories.TheoryRouse import TheoryRouseFrequency
         from RepTate.theories.TheoryDTDStars import TheoryDTDStarsFreq
         from RepTate.theories.TheoryBobLVE import TheoryBobLVE
+        from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
         from RepTate.theories.TheoryRDPLVE import TheoryRDPLVE
         from RepTate.theories.TheoryStickyReptation import TheoryStickyReptation
         from RepTate.theories.TheoryShanbhagMaxwellModes import (
@@ -503,6 +504,7 @@ class ApplicationLVE(QApplicationWindow):
         self.theories[TheoryRouseFrequency.thname] = TheoryRouseFrequency
         self.theories[TheoryDTDStarsFreq.thname] = TheoryDTDStarsFreq
         self.theories[TheoryBobLVE.thname] = TheoryBobLVE
+        self.theories[TheoryLP2RLVE.thname] = TheoryLP2RLVE
         self.theories[TheoryRDPLVE.thname] = TheoryRDPLVE
         self.theories[TheoryStickyReptation.thname] = TheoryStickyReptation
         self.theories[

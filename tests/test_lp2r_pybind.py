@@ -113,3 +113,21 @@ def test_lp2r_discrete_matches_original_reference():
     result = solver.run(freq_min=1.0e-2, freq_max=1.0e2, freq_ratio=2.0)
 
     _assert_matches_reference(result, LP2R_ORIGINAL_DISCRETE_REFERENCE)
+
+
+def test_lp2r_lve_theory_import():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    assert TheoryLP2RLVE.thname == "LP2R LVE"
+
+
+def test_lp2r_lve_application_registration():
+    from PySide6.QtWidgets import QApplication
+
+    from RepTate.gui.QApplicationManager import QApplicationManager
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    QApplication.instance() or QApplication([])
+    app = QApplicationManager().handle_new_app("LVE")
+
+    assert app.theories[TheoryLP2RLVE.thname] is TheoryLP2RLVE
