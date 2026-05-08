@@ -27,6 +27,10 @@ public:
     bool cancelled() const;
     double progress() const;
     bool prepared() const;
+    int relaxation_points() const;
+    double current_time() const;
+    double phi_true() const;
+    double phi_st() const;
 
 private:
     struct LPoly {

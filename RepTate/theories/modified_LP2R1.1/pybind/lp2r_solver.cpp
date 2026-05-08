@@ -266,6 +266,26 @@ bool LP2RSolver::prepared() const
     return prepared_;
 }
 
+int LP2RSolver::relaxation_points() const
+{
+    return static_cast<int>(t_ar_.size());
+}
+
+double LP2RSolver::current_time() const
+{
+    return cur_time_ * material_.tau_e;
+}
+
+double LP2RSolver::phi_true() const
+{
+    return phi_true_;
+}
+
+double LP2RSolver::phi_st() const
+{
+    return phi_st_;
+}
+
 LP2RResult LP2RSolver::calculate_spectra(double freq_min, double freq_max, double freq_ratio) const
 {
     if (!prepared_) {
@@ -408,20 +428,27 @@ double LP2RSolver::get_phi_eq()
 {
     double phi_eq = 1.0;
     int n1 = phi_eq_indx_;
-    const int n = static_cast<int>(t_ar_.size());
-    for (int i = n1; i < n; ++i) {
-        if (t_eq_ar_[i] > cur_time_) {
-            n1 = i - 1;
-            break;
-        }
+    while (n1 < static_cast<int>(t_eq_ar_.size()) && cur_time_ > t_eq_ar_[n1]) {
+        ++n1;
     }
-    if (n1 < n - 1) {
-        const double deltat = cur_time_ - t_eq_ar_[n1];
-        const double phidel = phi_ar_[n1 + 1] - phi_ar_[n1];
-        phi_eq = phi_ar_[n1] + phidel * deltat / (t_eq_ar_[n1 + 1] - t_eq_ar_[n1]);
-        phi_eq_indx_ = n1;
+    if (n1 > 0) {
+        --n1;
+    }
+    phi_eq_indx_ = n1;
+
+    if (cur_time_ >= 1.0) {
+        if (n1 > 5) {
+            phi_eq = phi_st_ar_[n1];
+            const double deltat = cur_time_ - t_eq_ar_[n1];
+            if (deltat > 1.0e-6 && n1 + 1 < static_cast<int>(phi_st_ar_.size())) {
+                phi_eq += (phi_st_ar_[n1 + 1] - phi_st_ar_[n1]) *
+                          std::log(cur_time_ / t_eq_ar_[n1]) / log_dt_mult_;
+            }
+        } else {
+            phi_eq = 1.0;
+        }
     } else {
-        phi_eq = phi_ar_[n - 1];
+        phi_eq = 1.0;
     }
     return phi_eq;
 }

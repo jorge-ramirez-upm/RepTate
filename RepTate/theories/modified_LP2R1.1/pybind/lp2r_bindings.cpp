@@ -63,5 +63,9 @@ PYBIND11_MODULE(_lp2r, m)
         .def("cancel", &LP2RSolver::cancel)
         .def("cancelled", &LP2RSolver::cancelled)
         .def("progress", &LP2RSolver::progress)
-        .def("prepared", &LP2RSolver::prepared);
+        .def("prepared", &LP2RSolver::prepared)
+        .def("relaxation_points", &LP2RSolver::relaxation_points)
+        .def("current_time", &LP2RSolver::current_time)
+        .def("phi_true", &LP2RSolver::phi_true)
+        .def("phi_st", &LP2RSolver::phi_st);
 }
