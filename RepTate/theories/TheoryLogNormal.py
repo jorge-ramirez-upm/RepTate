@@ -118,7 +118,7 @@ File error is calculated as the mean square of the residual, averaged over all p
             Mz = M0 * np.exp(5 * sigma ** 2 / 2)
             # table='''<table border="1" width="100%">'''
             # table+='''<tr><th>Mn</th><th>Mw</th><th>Mz</th><th>D</th></tr>'''
-            # table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn / 1000, Mw / 1000, Mz/1000 , Mw/Mn)
+            # table+='''<tr><td>%6.3gk</td><td>%6.3gk</td><td>%6.3gk</td><td>%7.3g</td></tr>'''%(Mn, Mw, Mz, Mw/Mn)
             # table+='''</table><br>'''
             table = [
                 [
@@ -130,8 +130,8 @@ File error is calculated as the mean square of the residual, averaged over all p
             ]
             table.append(
                 [
-                    "%-12.3g" % (Mn / 1000),
-                    "%-12.3g" % (Mw / 1000),
+                    "%-12.3g" % Mn,
+                    "%-12.3g" % Mw,
                     "%-9.3g" % (Mw / Mn),
                     "%-9.3g" % (Mz / Mw),
                 ]

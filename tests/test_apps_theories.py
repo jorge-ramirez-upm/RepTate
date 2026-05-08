@@ -239,17 +239,18 @@ def test_MWD_Discretize_MWD():
     assert Mw == pytest.approx(230.72627779194102, rel=1e-4)
     assert Mz == pytest.approx(362.3487007759203, rel=1e-4)
     assert PDI == pytest.approx(1.9698283858846906, rel=1e-4)
-    assert logmmin == pytest.approx(4.01037205711021, rel=1e-4)
-    assert logmmax == pytest.approx(6.283637463659533, rel=1e-4)
+    assert logmmin == pytest.approx(1.01037205711021, rel=1e-4)
+    assert logmmax == pytest.approx(3.283637463659533, rel=1e-4)
     assert nbin == 7
-    assert logM00 == pytest.approx(4.01037205711021, rel=1e-4)
-    assert logM01 == pytest.approx(4.335124258045828, rel=1e-4)
-    assert logM02 == pytest.approx(4.659876458981445, rel=1e-4)
-    assert logM03 == pytest.approx(4.984628659917063, rel=1e-4)
-    assert logM04 == pytest.approx(5.309380860852681, rel=1e-4)
-    assert logM05 == pytest.approx(5.634133061788297, rel=1e-4)
-    assert logM06 == pytest.approx(5.958885262723915, rel=1e-4)
-    assert logM07 == pytest.approx(6.283637463659533, rel=1e-4)
+    assert logM00 == pytest.approx(1.01037205711021, rel=1e-4)
+    assert logM01 == pytest.approx(1.335124258045828, rel=1e-4)
+    assert logM02 == pytest.approx(1.659876458981445, rel=1e-4)
+    assert logM03 == pytest.approx(1.984628659917063, rel=1e-4)
+    assert logM04 == pytest.approx(2.309380860852681, rel=1e-4)
+    assert logM05 == pytest.approx(2.634133061788297, rel=1e-4)
+    assert logM06 == pytest.approx(2.958885262723915, rel=1e-4)
+    assert logM07 == pytest.approx(3.283637463659533, rel=1e-4)
+
 
 
 def test_MWD_GEX():
@@ -268,10 +269,10 @@ def test_MWD_GEX():
     logM0 = thisTheory.parameters["logM0"].value
     a = thisTheory.parameters["a"].value
     b = thisTheory.parameters["b"].value
-    assert logW0 == pytest.approx(7.691229139481297, rel=1e-4)
-    assert logM0 == pytest.approx(5.328714760610867, rel=1e-4)
-    assert a == pytest.approx(1.3426251741114326, rel=1e-4)
-    assert b == pytest.approx(1.2517441353471008, rel=1e-4)
+    assert logW0 == pytest.approx(4.69123, rel=1e-4)
+    assert logM0 == pytest.approx(2.32872, rel=1e-4)
+    assert a == pytest.approx(1.34262, rel=1e-4)
+    assert b == pytest.approx(1.25175, rel=1e-4)
 
 
 def test_MWD_LogNormal():
@@ -290,7 +291,7 @@ def test_MWD_LogNormal():
     logM0 = thisTheory.parameters["logM0"].value
     sigma = thisTheory.parameters["sigma"].value
     assert logW0 == pytest.approx(2.3556795406749935, rel=1e-4)
-    assert logM0 == pytest.approx(4.997549485273925, rel=1e-4)
+    assert logM0 == pytest.approx(1.997549485273925, rel=1e-4)
     assert sigma == pytest.approx(0.8015827090542221, rel=1e-4)
 
 
