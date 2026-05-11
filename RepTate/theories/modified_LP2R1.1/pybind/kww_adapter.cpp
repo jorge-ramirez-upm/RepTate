@@ -116,8 +116,8 @@ double kww_mid_safe(double omega, double beta, bool storage)
                 k -= 0.5L;
             }
             const long double u = k * h;
-            const long double chi = 2.0L * p * std::sinhl(u) + 2.0L * q * u;
-            const long double dchi = 2.0L * p * std::coshl(u) + 2.0L * q;
+            const long double chi = 2.0L * p * std::sinh(u) + 2.0L * q * u;
+            const long double dchi = 2.0L * p * std::cosh(u) + 2.0L * q;
 
             long double ahk = 0.0L;
             long double dhk = 0.0L;
@@ -130,23 +130,23 @@ double kww_mid_safe(double omega, double beta, bool storage)
                 if (-chi > std::numeric_limits<double>::max_exponent / 2) {
                     continue;
                 }
-                const long double e = std::expl(-chi);
+                const long double e = std::exp(-chi);
                 ahk = PI / h * u / (1.0L - e);
                 dhk = 1.0L / (1.0L - e) -
                       u * e * dchi / ((1.0L - e) * (1.0L - e));
                 if (e > 1.0L) {
-                    chk = kind ? std::sinl(PI * k / (1.0L - e)) :
-                                 std::cosl(PI * k / (1.0L - e));
+                    chk = kind ? std::sin(PI * k / (1.0L - e)) :
+                                 std::cos(PI * k / (1.0L - e));
                 } else {
-                    chk = alternating_sign * std::sinl(PI * k * e / (1.0L - e));
+                    chk = alternating_sign * std::sin(PI * k * e / (1.0L - e));
                 }
             }
 
             const long double tk = ahk / w;
-            const long double f = std::expl(-std::powl(tk, b));
+            const long double f = std::exp(-std::pow(tk, b));
             const long double term = dhk * chk * f;
             sum += term;
-            total_abs += std::fabsl(term);
+            total_abs += std::fabs(term);
             alternating_sign = -alternating_sign;
         }
 
@@ -154,13 +154,13 @@ double kww_mid_safe(double omega, double beta, bool storage)
             best = sum * PI / w;
         }
         if (iter > 0 && sum > 0.0L && std::isfinite(static_cast<double>(sum))) {
-            const long double change = std::fabsl(sum - previous);
-            const long double threshold = KWW_DELTA * std::fabsl(sum);
+            const long double change = std::fabs(sum - previous);
+            const long double threshold = KWW_DELTA * std::fabs(sum);
             if (change + KWW_EPS * total_abs < threshold) {
                 return static_cast<double>(sum * PI / w);
             }
             if (std::isfinite(static_cast<double>(best)) &&
-                change < 1.0e-10L * std::fabsl(sum)) {
+                change < 1.0e-10L * std::fabs(sum)) {
                 return static_cast<double>(best);
             }
         }
