@@ -2,6 +2,47 @@
 Version History
 ===============
 
+Release 1.3.18 - 20260511
+=========================
+- Added the LP2R LVE theory backed by the original LP2R C++ code through a pybind11 solver
+- Added LP2R validation tests against the original command-line output and reference data in ``data/L2PR/LVE``
+- Added LP2R support for lognormal, discrete and imported MWD polymer inputs, including ``.gpc`` import with mass-unit conversion
+- Added the LP2R components dialog for adding, editing, removing, importing and normalizing polymer components
+- Added LP2R advanced numerical controls and improved KWW/glass calculations (MSVC-safe)
+- Added Materials Database unit awareness
+- Updated DSMLinear unit handling so legacy molar-mass calculations remain in Da 
+
+Release 1.3.16 - 20260427
+=========================
+- Added a core unit-conversion system with canonical internal units and display-unit conversion helpers
+- Added unit-aware data columns, axis labels, file parameters, application parameters and selected theory parameters
+- Added unit metadata for several rheology theories while preserving existing numerical calculations
+- Updated user and developer documentation for the unit-aware behavior and its current coverage
+- Added and adjusted tests for unit conversions, GUI setup and application/theory behavior
+
+Release 1.3.15 - 20260228
+=========================
+- Added tests for selected LVE theories, MWD, TTS and SANS
+- Added pyproject.toml
+- Removed versioneer.py from the version-tracking workflow
+- Added documentation for the packaging workflow
+- Fixed Nuitka flags
+- Corrected the release workflow
+- Updated the Linux CI workflow to install required packages
+
+Release 1.3.4 - 20260225
+========================
+- Added GitHub workflows for package creation with Nuitka and commented out older workflows
+- Added scripts and generated files needed to build distributions without runtime UI compilation
+- Added ``build_ui.py`` to generate ``Ui_*.py`` files from ``.ui`` files and ``*_rc.py`` files from ``.qrc`` files
+- Updated resource and UI handling so the application can run in packaged builds on Windows and Linux
+- Added a Linux distribution script with Nuitka
+- Updated dependency pins and requirements for Python 3.11 and newer Python/Numpy/Scipy combinations
+- Added and reorganized tests, including data files for shear flow of PI
+- Fixed a Rolie-Double-Poly issue and plot-layout behavior when RepTate is resized
+- Improved version display when git metadata is unavailable
+- Updated README and packaging-related documentation
+
 Release 1.3.3 - 20231219
 ========================
 - Optimization with integer parameters (Pom-Pom)
