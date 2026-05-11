@@ -33,6 +33,7 @@
 """Module TheoryDSMLinear"""
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.units import convert_value
 from RepTate.gui.QTheory import QTheory
 from scipy import special, optimize
 
@@ -147,7 +148,7 @@ class TheoryDSMLinear(QTheory):
         )  # In units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
         rho0 = self.parameters["rho0"].value
-        MK = self.parameters["MK"].value
+        MK = self._parameter_mass_in_da("MK")
         # ---------------------------------------------
         # CALCULATE DSM PARAMETERS FROM CROSSOVER FREQUENCY
         crossover_limits = self.find_crossover_limits(data=ft.data)
@@ -156,13 +157,29 @@ class TheoryDSMLinear(QTheory):
         if solNc > 0:
             self.Nc = solNc
             self.Mc = Mw / self.Nc
-            self.set_param_value("Mc", self.Mc)
+            self._set_parameter_mass_from_da("Mc", self.Mc)
             self.tau_c = 151.148 / (omega_x * self.Nc**3.50)
             self.set_param_value("tau_c", self.tau_c)
             self.beta = Mw / (0.56 * self.Nc * MK) - 1
             # self.set_param_value("beta", self.beta)
             self.tau_K = self.tau_c / (0.265 * self.beta ** (8.0 / 3.0))
             self.N_K = Mw / MK
+
+    def _parameter_mass_in_da(self, name):
+        """Return a molar-mass parameter in Da for the legacy DSM formulas."""
+        parameter = self.parameters[name]
+        if parameter.internal_unit:
+            return float(convert_value(parameter.value, parameter.internal_unit, "Da"))
+        return parameter.value
+
+    def _set_parameter_mass_from_da(self, name, value_da):
+        """Store a molar-mass value given in Da in the parameter internal unit."""
+        parameter = self.parameters[name]
+        if parameter.internal_unit:
+            value = convert_value(value_da, "Da", parameter.internal_unit)
+        else:
+            value = value_da
+        return self.set_param_value(name, value)
 
     def tandelta(self, omega, data):
         """Calculate the interpolated tan(delta)"""
@@ -342,10 +359,10 @@ class TheoryDSMLinear(QTheory):
     def print_DSM_params(self):
         """Print out parameters for DSM simulations"""
 
-        Mc = self.parameters["Mc"].value
+        Mc = self._parameter_mass_in_da("Mc")
         tau_c = self.parameters["tau_c"].value
         # beta = self.parameters["beta"].value
-        MK = self.parameters["MK"].value
+        MK = self._parameter_mass_in_da("MK")
         beta = Mc / 0.56 / MK - 1.0
         tau_K = tau_c / (0.265 * beta ** (8.0 / 3.0))
 
@@ -385,13 +402,13 @@ class TheoryDSMLinear(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        MK = self.parameters["MK"].value
+        MK = self._parameter_mass_in_da("MK")
         rho0 = self.parameters["rho0"].value
         Mw = float(f.file_parameters["Mw"]) * 1000.0  # units of Da
         T = float(f.file_parameters["T"]) + 273.15  # units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
 
-        Mc = self.parameters["Mc"].value
+        Mc = self._parameter_mass_in_da("Mc")
         tau_c = self.parameters["tau_c"].value
         # beta = self.parameters["beta"].value
         beta = Mc / 0.56 / MK - 1.0

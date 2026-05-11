@@ -37,22 +37,31 @@ Module that defines the GUI counterpart of the class Tool.
 """
 # from PySide6.QtCore import *
 import sys
+import ast
 import numpy as np
 
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import (
     QWidget,
+    QTabWidget,
     QTreeWidget,
     QTreeWidgetItem,
     QFrame,
     QHeaderView,
     QMessageBox,
+    QDialog,
+    QVBoxLayout,
+    QDialogButtonBox,
+    QFormLayout,
+    QLineEdit,
+    QComboBox,
     QToolBar,
     QAbstractItemView,
 )
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
+from RepTate.core.units import available_units, units_are_compatible
 from math import ceil, floor
 from collections import OrderedDict
 
@@ -85,6 +94,106 @@ else:
     PATH = dirname(abspath(__file__))
 sys.path.append(PATH)
 from RepTate.gui.Ui_ToolTab import Ui_ToolTab
+
+
+class EditToolParametersDialog(QDialog):
+    """Create the form used to modify a tool's parameter properties."""
+
+    def __init__(self, parent, p_name):
+        super().__init__(parent)
+        self.parent_tool = parent
+        self.tabs = QTabWidget()
+        self.all_pattr = {}
+        index = 0
+        for pname in self.parent_tool.parameters:
+            tab = self.create_param_tab(pname)
+            self.tabs.addTab(tab, pname)
+            if pname == p_name:
+                index = self.tabs.indexOf(tab)
+        self.tabs.setCurrentIndex(index)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.tabs)
+        mainLayout.addWidget(buttonBox)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Tool Parameters")
+
+    def create_param_tab(self, p_name):
+        """Create a form to edit one tool parameter's properties."""
+        tab = QWidget()
+        layout = QFormLayout()
+
+        p = self.parent_tool.parameters[p_name]
+        attr_dict = {}
+        for attr_name, attr_value in p.__dict__.items():
+            if attr_name == "type":
+                widget = QComboBox()
+                for option in [
+                    "real",
+                    "integer",
+                    "discrete_real",
+                    "discrete_integer",
+                    "boolean",
+                    "string",
+                ]:
+                    widget.addItem(option)
+                widget.setCurrentText(str(attr_value).split(".")[-1])
+            elif attr_name == "opt_type":
+                widget = QComboBox()
+                for option in ["opt", "nopt", "const"]:
+                    widget.addItem(option)
+                widget.setCurrentText(str(attr_value).split(".")[-1])
+            elif attr_name == "display_flag":
+                widget = QComboBox()
+                widget.addItem("True")
+                widget.addItem("False")
+                widget.setCurrentText("%s" % attr_value)
+            elif attr_name == "display_unit" and p.quantity and p.internal_unit:
+                widget = self._display_unit_widget(p, attr_value)
+            elif attr_name in ["value", "error"]:
+                continue
+            else:
+                widget = QLineEdit()
+                if attr_name in [
+                    "name",
+                    "description",
+                    "quantity",
+                    "internal_unit",
+                    "display_unit",
+                ]:
+                    widget.setReadOnly(True)
+                widget.setText("%s" % attr_value)
+            layout.addRow("%s:" % attr_name, widget)
+            attr_dict[attr_name] = widget
+
+        tab.setLayout(layout)
+        self.all_pattr[p_name] = attr_dict
+        return tab
+
+    def _display_unit_widget(self, parameter, current_unit):
+        try:
+            compatible_units = [
+                unit.symbol
+                for unit in available_units(parameter.quantity)
+                if units_are_compatible(unit.symbol, parameter.internal_unit)
+            ]
+        except ValueError:
+            compatible_units = []
+        if compatible_units:
+            widget = QComboBox()
+            for unit_symbol in compatible_units:
+                widget.addItem(unit_symbol)
+            widget.setCurrentText("%s" % current_unit)
+            return widget
+        widget = QLineEdit()
+        widget.setReadOnly(True)
+        widget.setText("%s" % current_unit)
+        return widget
+
 
 # class QTool(Ui_ToolTab, QWidget, Tool):
 class QTool(QWidget, Ui_ToolTab):
@@ -315,6 +424,17 @@ class QTool(QWidget, Ui_ToolTab):
             print("In set_param_value:", e)
             return "", False
 
+    def set_param_value_from_display(self, name, value):
+        """Set a tool parameter from the value currently displayed in the GUI."""
+        p = self.parameters[name]
+        if not (p.internal_unit and p.display_unit):
+            return self.set_param_value(name, value)
+        try:
+            internal_value = p.value_from_display(float(value))
+        except ValueError:
+            return "Value must be a float", False
+        return self.set_param_value(name, internal_value)
+
     def Qprint(self, msg, end="<br>"):
         """Print a message on the Tool info area"""
         if isinstance(msg, list):
@@ -387,27 +507,35 @@ class QTool(QWidget, Ui_ToolTab):
 
     def update_parameter_table(self):
         """Update the Tool parameter table"""
-        # clean table
-        self.toolParamTable.clear()
+        previous_block_state = self.toolParamTable.blockSignals(True)
+        try:
+            # clean table
+            self.toolParamTable.clear()
 
-        # populate table
-        for param in self.parameters:
-            p = self.parameters[param]
-            if p.display_flag:  # only allowed param enter the table
-                if p.type == ParameterType.string:
-                    item = QTreeWidgetItem(self.toolParamTable, [p.name, p.value])
-                else:
-                    item = QTreeWidgetItem(
-                        self.toolParamTable, [p.name, "%0.4g" % p.value]
-                    )
-                item.setToolTip(0, p.description)
+            # populate table
+            for param in self.parameters:
+                p = self.parameters[param]
+                if p.display_flag:  # only allowed param enter the table
+                    if p.type == ParameterType.string:
+                        item = QTreeWidgetItem(
+                            self.toolParamTable, [p.display_label(), p.value]
+                        )
+                    else:
+                        item = QTreeWidgetItem(
+                            self.toolParamTable,
+                            [p.display_label(), "%0.4g" % p.display_value()],
+                        )
+                    item.setData(0, Qt.UserRole, p.name)
+                    item.setToolTip(0, p.description)
 
-                item.setFlags(item.flags() | Qt.ItemIsEditable)
-        self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+                    item.setFlags(item.flags() | Qt.ItemIsEditable)
+            self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        finally:
+            self.toolParamTable.blockSignals(previous_block_state)
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the Tool table"""
-        param_changed = item.text(0)
+        param_changed = item.data(0, Qt.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
             if item.checkState(0) == Qt.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
@@ -416,7 +544,7 @@ class QTool(QWidget, Ui_ToolTab):
             return
         # else, assign the entered value
         new_value = item.text(1)
-        message, success = self.set_param_value(param_changed, new_value)
+        message, success = self.set_param_value_from_display(param_changed, new_value)
         if not success:
             msg = QMessageBox()
             msg.setWindowTitle("Error")
@@ -425,7 +553,7 @@ class QTool(QWidget, Ui_ToolTab):
             else:
                 msg.setText("Not a valid value")
             msg.exec_()
-            item.setText(1, str(self.parameters[param_changed].value))
+            item.setText(1, str(self.parameters[param_changed].display_value()))
         self.parent_application.update_all_ds_plots()
 
     def handle_actionActivepressed(self, checked):
@@ -460,5 +588,45 @@ class QTool(QWidget, Ui_ToolTab):
 
     def onTreeWidgetItemDoubleClicked(self, item, column):
         """Start editing text when a table cell is double clicked"""
-        if column == 1:
+        if column == 0:
+            p_name = item.data(0, Qt.UserRole) or item.text(0)
+            dialog = EditToolParametersDialog(self, p_name)
+            if dialog.exec_():
+                self.apply_tool_parameter_properties(dialog)
+        elif column == 1:
             self.toolParamTable.editItem(item, column)
+
+    def apply_tool_parameter_properties(self, dialog):
+        """Apply edited tool parameter properties from the properties dialog."""
+        for pname in self.parameters:
+            p = self.parameters[pname]
+            attr_dict = dialog.all_pattr[pname]
+            for attr_name, widget in attr_dict.items():
+                if attr_name == "type":
+                    setattr(p, attr_name, ParameterType[widget.currentText()])
+                elif attr_name == "opt_type":
+                    setattr(p, attr_name, OptType[widget.currentText()])
+                elif attr_name == "display_flag":
+                    setattr(p, attr_name, ast.literal_eval(widget.currentText()))
+                elif attr_name == "display_unit":
+                    if isinstance(widget, QComboBox):
+                        val = widget.currentText()
+                        if units_are_compatible(val, p.internal_unit):
+                            setattr(p, attr_name, val)
+                elif attr_name == "discrete_values":
+                    val = widget.text()
+                    values = ast.literal_eval(val)
+                    if isinstance(values, list):
+                        setattr(p, attr_name, values)
+                elif attr_name in [
+                    "name",
+                    "description",
+                    "quantity",
+                    "internal_unit",
+                ]:
+                    continue
+                else:
+                    val = float(widget.text())
+                    setattr(p, attr_name, val)
+        self.update_parameter_table()
+        self.parent_application.update_all_ds_plots()

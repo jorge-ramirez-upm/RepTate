@@ -74,6 +74,7 @@ else:
 sys.path.append(PATH)
 TOOLS_DIR = Path(__file__).resolve().parent
 materials_database = np.load(TOOLS_DIR / "materials_database.npy", allow_pickle=True).item()
+polymer_data.canonicalize_database(materials_database)
 # materials_database = np.load(
 #     os.path.join(PATH, "materials_database.npy"), allow_pickle=True
 # ).item()
@@ -87,6 +88,7 @@ if os.path.exists(file_user_database_old):
     ).item()
 else:
     materials_user_database_old = {}
+polymer_data.canonicalize_database(materials_user_database_old)
 
 # search user material database in the (new) location "AppData"
 AppData_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
@@ -95,6 +97,7 @@ if os.path.exists(file_user_database):
     materials_user_database = np.load(file_user_database, allow_pickle=True).item()
 else:
     materials_user_database = {}
+polymer_data.canonicalize_database(materials_user_database)
 
 materials_user_database.update(materials_user_database_old)
 materials_db = [materials_user_database, materials_database]
@@ -130,16 +133,22 @@ class EditMaterialParametersDialog(QDialog):
         self.param_dict = {}
         self.p_new = []
         for i, pname in enumerate(material.data.keys()):
+            parameter = parameterdata.get(pname)
             self.p_new.append(QLineEdit())
             if isinstance(material.data[pname], str):  # the parameter is a string
                 self.p_new[i].setText("%s" % material.data[pname])
             else:  # parameter is a number:
                 self.p_new[i].setValidator(QDoubleValidator())  # prevent letters
-                self.p_new[i].setText("%.4g" % material.data[pname])
-            self.p_new[i].setToolTip(parameterdata[pname].description)
+                value = material.data[pname]
+                if parameter is not None:
+                    value = parameter.display_value(value)
+                self.p_new[i].setText("%.4g" % value)
+            if parameter is not None:
+                self.p_new[i].setToolTip(parameter.description)
             if pname == "name":
                 self.p_new[i].setReadOnly(True)
-            layout.addRow("%s:" % pname, self.p_new[i])
+            label = parameter.display_label() if parameter is not None else pname
+            layout.addRow("%s:" % label, self.p_new[i])
             self.param_dict[pname] = self.p_new[i]
         self.formGroupBox.setLayout(layout)
 
@@ -175,6 +184,9 @@ def get_all_parameters(chem, theory, fparam, dbindex):
         if p in materials_db[dbindex][chem].data.keys():
             value, success = get_single_parameter(chem, p, fparam, dbindex)
             if success:
+                value = polymer_data.convert_database_value_to_parameter(
+                    p, value, theory.parameters[p]
+                )
                 theory.set_param_value(p, value)
 
 
@@ -289,7 +301,13 @@ class ToolMaterialsDatabase(QTool):
             display_flag=False,
         )
         self.parameters["B1"] = Parameter(name="B1", description="WLF TTS parameter 1")
-        self.parameters["B2"] = Parameter(name="B2", description="WLF TTS parameter 2")
+        self.parameters["B2"] = Parameter(
+            name="B2",
+            description="WLF TTS parameter 2",
+            quantity="temperature",
+            internal_unit="°C",
+            display_unit="°C",
+        )
         self.parameters["logalpha"] = Parameter(
             name="logalpha",
             description="Log_10 of the thermal expansion coefficient at 0 °C",
@@ -298,19 +316,35 @@ class ToolMaterialsDatabase(QTool):
             name="CTg", description="Molecular weight dependence of Tg"
         )
         self.parameters["tau_e"] = Parameter(
-            name="tau_e", description="Entanglement time (s)"
+            name="tau_e",
+            description="Entanglement time",
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
         )
         self.parameters["Ge"] = Parameter(
-            name="Ge", description="Entanglement modulus (Pa)"
+            name="Ge",
+            description="Entanglement modulus",
+            quantity="stress",
+            internal_unit="Pa",
+            display_unit="Pa",
         )
         self.parameters["Me"] = Parameter(
-            name="Me", description="Entanglement molecular weight (kDa)"
+            name="Me",
+            description="Entanglement molar mass",
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
         )
         self.parameters["c_nu"] = Parameter(
             name="c_nu", description="Constraint release parameter"
         )
         self.parameters["rho0"] = Parameter(
-            name="rho0", description="Density of the polymer melt (g/cm3) at 0 °C"
+            name="rho0",
+            description="Density of the polymer melt at 0 °C",
+            quantity="density",
+            internal_unit="kg/m3",
+            display_unit="g/cm3",
         )
         self.parameters["chem"] = Parameter(
             name="chem", description="Repeating unit", type=ParameterType.string
@@ -318,12 +352,23 @@ class ToolMaterialsDatabase(QTool):
         self.parameters["Te"] = Parameter(
             name="Te",
             description="Temperature at which the tube parameters have been determined (°C)",
+            quantity="temperature",
+            internal_unit="°C",
+            display_unit="°C",
         )
         self.parameters["M0"] = Parameter(
-            name="M0", description="Mass of Repeating unit (g/mol)"
+            name="M0",
+            description="Mass of repeating unit",
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="g/mol",
         )
         self.parameters["MK"] = Parameter(
-            name="MK", description="Molecular weight of Kuhn step (Da)"
+            name="MK",
+            description="Molar mass of Kuhn step",
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="Da",
         )
         self.parameters["C_inf"] = Parameter(
             name="C_inf", description="Characteristic ratio"
@@ -557,9 +602,10 @@ class ToolMaterialsDatabase(QTool):
             materials_db[dbindex][selected_material_name].data["long"]
         )
         for k in materials_db[dbindex][selected_material_name].data.keys():
-            self.set_param_value(
-                k, materials_db[dbindex][selected_material_name].data[k]
-            )
+            if k in self.parameters:
+                self.set_param_value(
+                    k, materials_db[dbindex][selected_material_name].data[k]
+                )
         self.update_parameter_table()
         self.do_plot()
 
@@ -598,7 +644,9 @@ class ToolMaterialsDatabase(QTool):
             chem="C6H6",
             Te=25,
             M0=0,
+            MK=0,
         )
+        polymer_data.canonicalize_material(newmaterial)
         newmaterial.data["name"] = name
         materials_user_database[name] = newmaterial
         item = QStandardItem(name)
@@ -630,10 +678,16 @@ class ToolMaterialsDatabase(QTool):
                     material.data[p] = d.param_dict[p].text()
                 else:
                     try:
-                        material.data[p] = float(d.param_dict[p].text())
+                        value = float(d.param_dict[p].text())
+                        parameter = self.parameters.get(p)
+                        if parameter is not None:
+                            value = parameter.value_from_display(value)
+                        material.data[p] = value
                     except Exception as e:
                         print(e)
-                self.set_param_value(p, material.data[p])
+                if p in self.parameters:
+                    self.set_param_value(p, material.data[p])
+            polymer_data.canonicalize_material(material)
             self.change_material()
 
     def save_usermaterials(self):
@@ -665,7 +719,8 @@ class ToolMaterialsDatabase(QTool):
             dbindex = 1
         else:
             dbindex = 0
-        aux = materials_db[dbindex][selected_material_name].data
+        selected_material = materials_db[dbindex][selected_material_name]
+        aux = selected_material.data
         newmaterial = polymer_data.polymer(
             name=name,
             long=aux["long"],
@@ -685,6 +740,12 @@ class ToolMaterialsDatabase(QTool):
             chem=aux["chem"],
             Te=aux["Te"],
             M0=aux["M0"],
+            MK=aux.get("MK", 0),
+            unit_system=getattr(
+                selected_material,
+                "unit_system",
+                polymer_data.MATERIAL_DATABASE_UNIT_SYSTEM,
+            ),
         )
         materials_user_database[name] = newmaterial
         item = QStandardItem(name)

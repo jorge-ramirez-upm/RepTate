@@ -36,12 +36,108 @@ Module to define the basic information about a polymer for the materials databas
 
 """
 
+from RepTate.core.units import convert_value
+
+
+MATERIAL_DATABASE_UNIT_SYSTEM = "RepTate internal units v1"
+
+
+MATERIAL_PARAMETER_UNITS = {
+    "tau_e": {
+        "quantity": "time",
+        "internal_unit": "s",
+        "display_unit": "s",
+        "legacy_unit": "s",
+    },
+    "Ge": {
+        "quantity": "stress",
+        "internal_unit": "Pa",
+        "display_unit": "Pa",
+        "legacy_unit": "Pa",
+    },
+    "B2": {
+        "quantity": "temperature",
+        "internal_unit": "°C",
+        "display_unit": "°C",
+        "legacy_unit": "°C",
+    },
+    "Me": {
+        "quantity": "molar_mass",
+        "internal_unit": "kg/mol",
+        "display_unit": "kg/mol",
+        "legacy_unit": "kDa",
+    },
+    "rho0": {
+        "quantity": "density",
+        "internal_unit": "kg/m3",
+        "display_unit": "g/cm3",
+        "legacy_unit": "g/cm3",
+    },
+    "Te": {
+        "quantity": "temperature",
+        "internal_unit": "°C",
+        "display_unit": "°C",
+        "legacy_unit": "°C",
+    },
+    "M0": {
+        "quantity": "molar_mass",
+        "internal_unit": "kg/mol",
+        "display_unit": "g/mol",
+        "legacy_unit": "g/mol",
+    },
+    "MK": {
+        "quantity": "molar_mass",
+        "internal_unit": "kg/mol",
+        "display_unit": "Da",
+        "legacy_unit": "Da",
+    },
+}
+
+
+def material_parameter_units(name):
+    """Return unit metadata for a material parameter, if known."""
+    return MATERIAL_PARAMETER_UNITS.get(name, {})
+
+
+def canonicalize_material(material):
+    """Convert a material from legacy database units to RepTate internal units."""
+    if getattr(material, "unit_system", "") == MATERIAL_DATABASE_UNIT_SYSTEM:
+        return material
+    for name, units in MATERIAL_PARAMETER_UNITS.items():
+        if name not in material.data:
+            continue
+        value = material.data[name]
+        if not isinstance(value, (int, float)):
+            continue
+        material.data[name] = float(
+            convert_value(value, units["legacy_unit"], units["internal_unit"])
+        )
+    material.unit_system = MATERIAL_DATABASE_UNIT_SYSTEM
+    return material
+
+
+def canonicalize_database(database):
+    """Convert all materials in a database dictionary to internal units."""
+    for material in database.values():
+        canonicalize_material(material)
+    return database
+
+
+def convert_database_value_to_parameter(name, value, target_parameter):
+    """Convert a database value to the target parameter's declared internal unit."""
+    units = material_parameter_units(name)
+    target_unit = getattr(target_parameter, "internal_unit", "")
+    if not units or not target_unit or target_unit == units["internal_unit"]:
+        return value
+    return convert_value(value, units["internal_unit"], target_unit)
+
 
 class polymer:
     """Defines the basic information held by the materials database"""
 
     def __init__(self, **kwargs):
         """**Constructor**"""
+        self.unit_system = kwargs.pop("unit_system", "legacy")
         self.data = {
             # Basic info
             "name": "",  # Short name

@@ -148,6 +148,8 @@ polymerdict["hPBd"] = polymer_data.polymer(
 
 polymeruserdict = {}
 
+polymer_data.canonicalize_database(polymerdict)
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 np.save(os.path.join(dir_path, "materials_database.npy"), polymerdict)
 np.save(os.path.join(dir_path, "user_database.npy"), polymeruserdict)

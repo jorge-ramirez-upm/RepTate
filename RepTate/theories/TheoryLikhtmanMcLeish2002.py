@@ -127,10 +127,13 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.parameters["rho0"] = Parameter(
             name="rho0",
             value=1.0,
-            description="Density of the polymer melt (kg/m3)",
+            description="Density of the polymer melt",
             type=ParameterType.real,
             opt_type=OptType.const,
             display_flag=False,
+            quantity="density",
+            internal_unit="g/cm3",
+            display_unit="g/cm3",
         )
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
