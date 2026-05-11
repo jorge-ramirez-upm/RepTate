@@ -251,6 +251,43 @@ def test_lp2r_lve_mwd_import_formatting_helpers():
         TheoryLP2RLVE._normalise_discrete_distribution([50.0], [0.0])
 
 
+def test_lp2r_mwd_dialog_shows_input_units():
+    from PySide6.QtWidgets import QApplication, QLabel, QWidget
+
+    from RepTate.core.Parameter import OptType, Parameter, ParameterType
+    from RepTate.theories.theory_helpers import EditMWDDialog
+
+    QApplication.instance() or QApplication([])
+    parent = QWidget()
+    parent.parameters = {
+        "Me": Parameter(
+            name="Me",
+            value=5.0,
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            quantity="molar_mass",
+            internal_unit="kg/mol",
+            display_unit="kg/mol",
+        ),
+        "tau_e": Parameter(
+            name="tau_e",
+            value=1.0e-5,
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            quantity="time",
+            internal_unit="s",
+            display_unit="s",
+        ),
+    }
+
+    dialog = EditMWDDialog(parent, [50.0, 120.0], [0.4, 0.6], 200)
+
+    assert dialog.table.horizontalHeaderItem(0).text() == "M [kg/mol]"
+    labels = {label.text() for label in dialog.findChildren(QLabel)}
+    assert "Me [kg/mol]" in labels
+    assert "tau_e [s]" in labels
+
+
 def test_lp2r_lve_component_default_and_validation():
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 

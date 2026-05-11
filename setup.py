@@ -15,7 +15,6 @@ except ImportError as exc:
 ROOT = Path(__file__).resolve().parent
 LP2R_DIR = ROOT / "RepTate" / "theories" / "modified_LP2R1.1"
 LP2R_PYBIND_DIR = LP2R_DIR / "pybind"
-LP2R_ORIGINAL_DIR = LP2R_DIR / "original"
 
 lp2r_extension = Extension(
     "RepTate.theories._lp2r",
@@ -23,7 +22,7 @@ lp2r_extension = Extension(
         str(LP2R_PYBIND_DIR / "lp2r_bindings.cpp"),
         str(LP2R_PYBIND_DIR / "lp2r_solver.cpp"),
         str(LP2R_PYBIND_DIR / "kww_adapter.cpp"),
-        str(LP2R_ORIGINAL_DIR / "Rheology" / "kww.c"),
+        str(LP2R_PYBIND_DIR / "kww_cpp.cpp"),
     ],
     include_dirs=[
         pybind11.get_include(),

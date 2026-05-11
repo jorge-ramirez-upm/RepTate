@@ -54,6 +54,30 @@ from PySide6.QtGui import QDoubleValidator
 from PySide6.QtCore import Qt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 
+
+def _parameter_by_name(parent, *names):
+    """Return the first matching theory parameter from a list of names."""
+    parameters = getattr(parent, "parameters", {})
+    for name in names:
+        parameter = parameters.get(name)
+        if parameter is not None:
+            return parameter
+    return None
+
+
+def _parameter_label_with_unit(parent, label, *parameter_names):
+    """Return a label with the parameter internal unit when available."""
+    parameter = _parameter_by_name(parent, *parameter_names)
+    if parameter is None:
+        return label
+    unit = getattr(parameter, "internal_unit", "") or getattr(
+        parameter, "display_unit", ""
+    )
+    if unit and unit != "-":
+        return "%s [%s]" % (label, unit)
+    return label
+
+
 r"""
  _____                           
 | ____|_ __  _   _ _ __ ___  ___ 
@@ -279,13 +303,13 @@ class GetMwdRepTate(QDialog):
 
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
-        hlayout.addWidget(QLabel("Me"))
         parent_me = parent.parameters.get("Me", parent.parameters.get("M_e"))
+        hlayout.addWidget(QLabel(_parameter_label_with_unit(parent, "Me", "Me", "M_e")))
         self.Me_text = QLineEdit("%.3g" % parent_me.value)
         self.Me_text.setValidator(validator)
         hlayout.addWidget(self.Me_text)
 
-        hlayout.addWidget(QLabel("taue"))
+        hlayout.addWidget(QLabel(_parameter_label_with_unit(parent, "tau_e", "tau_e")))
         self.taue_text = QLineEdit("%.3g" % parent.parameters["tau_e"].value)
         self.taue_text.setValidator(validator)
         hlayout.addWidget(self.taue_text)
@@ -324,12 +348,12 @@ class EditMWDDialog(QDialog):
 
         validator = QDoubleValidator()
         hlayout = QHBoxLayout()
-        hlayout.addWidget(QLabel("Me"))
+        hlayout.addWidget(QLabel(_parameter_label_with_unit(parent, "Me", "Me", "M_e")))
         self.Me_text = QLineEdit("%.4g" % parent.parameters["Me"].value)
         self.Me_text.setValidator(validator)
         hlayout.addWidget(self.Me_text)
 
-        hlayout.addWidget(QLabel("taue"))
+        hlayout.addWidget(QLabel(_parameter_label_with_unit(parent, "tau_e", "tau_e")))
         self.taue_text = QLineEdit("%.4g" % parent.parameters["tau_e"].value)
         self.taue_text.setValidator(validator)
         hlayout.addWidget(self.taue_text)
@@ -346,7 +370,9 @@ class EditMWDDialog(QDialog):
         self.table = SpreadsheetWidget()  # allows copy/paste
         self.table.setRowCount(nmodes)
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["M", "phi"])
+        self.table.setHorizontalHeaderLabels(
+            [_parameter_label_with_unit(parent, "M", "Me", "M_e"), "phi"]
+        )
         for i in range(nmodes):
             self.table.setItem(i, 0, QTableWidgetItem("%g" % m[i]))
             self.table.setItem(i, 1, QTableWidgetItem("%g" % phi[i]))
