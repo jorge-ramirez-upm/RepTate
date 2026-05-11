@@ -1,5 +1,6 @@
 import math
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -62,6 +63,75 @@ def _assert_matches_reference(result, reference):
         for actual_value, expected_value in zip(actual_row, expected_row):
             scale = max(abs(expected_value), 1.0)
             assert abs(actual_value - expected_value) / scale < 5.0e-6
+
+
+def _read_lp2r_expected(path):
+    expected = []
+    for line in Path(path).read_text().splitlines():
+        if line and not line.startswith("#") and "=" not in line:
+            expected.append(tuple(map(float, line.split()[:3])))
+    return expected
+
+
+def _meaningful_lp2r_input_lines(path):
+    lines = []
+    for raw_line in Path(path).read_text().splitlines():
+        line = raw_line.split("%", 1)[0].strip()
+        if line:
+            lines.append(line)
+    return lines
+
+
+def _run_lp2r_lve_input(input_path):
+    from RepTate.theories import _lp2r
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    lines = _meaningful_lp2r_input_lines(input_path)
+    freq_min, freq_max, freq_ratio = map(float, lines[0].split()[:3])
+    m_kuhn, m_e, g0, tau_e = map(float, lines[1].split()[:4])
+    g_glass, tau_glass, beta_glass = map(float, lines[2].split()[:3])
+    ncomponents = int(lines[3].split()[0])
+
+    material = _lp2r.Material()
+    material.m_kuhn = m_kuhn
+    material.m_e = m_e
+    material.g0 = g0
+    material.tau_e = tau_e
+    material.g_glass = g_glass
+    material.tau_glass = tau_glass
+    material.beta_glass = beta_glass
+
+    controls = _lp2r.Controls()
+    controls.time_ratio = 1.02
+    solver = _lp2r.Solver(material, controls)
+
+    index = 4
+    for _ in range(ncomponents):
+        ptype, weight = lines[index].split()[:2]
+        index += 1
+        if int(ptype) == 0:
+            npoly, mw, pdi = lines[index].split()[:3]
+            solver.add_lognormal_component(
+                weight=float(weight),
+                n=int(npoly),
+                mw=float(mw),
+                pdi=float(pdi),
+            )
+            index += 1
+        elif int(ptype) == 2:
+            mwd_path = input_path.parent / lines[index].split()[0]
+            if not mwd_path.exists() and mwd_path.suffix == ".dat":
+                mwd_path = mwd_path.with_suffix(".gpc")
+            masses, weights = TheoryLP2RLVE.read_gpc_mwd(mwd_path)
+            solver.add_discrete_component(
+                [mass * 1000.0 for mass in masses],
+                weights,
+                component_weight=float(weight),
+            )
+            index += 1
+        else:
+            raise ValueError("Unsupported LP2R test ptype %s" % ptype)
+    return solver.run(freq_min, freq_max, freq_ratio)
 
 
 def test_lp2r_import_and_lognormal_smoke():
@@ -181,6 +251,242 @@ def test_lp2r_lve_mwd_import_formatting_helpers():
         TheoryLP2RLVE._normalise_discrete_distribution([50.0], [0.0])
 
 
+def test_lp2r_lve_component_default_and_validation():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    component = TheoryLP2RLVE.make_lognormal_component(
+        weight=0.25,
+        npoly=12,
+        mw=250.0,
+        pdi=1.2,
+        label="PI blend",
+        source="test",
+    )
+
+    assert component == {
+        "kind": "lognormal",
+        "weight": 0.25,
+        "npoly": 12,
+        "Mw": 250.0,
+        "PDI": 1.2,
+        "label": "PI blend",
+        "source": "test",
+    }
+
+    with pytest.raises(ValueError, match="PDI"):
+        TheoryLP2RLVE.make_lognormal_component(pdi=0.99)
+
+
+def test_lp2r_lve_component_mwd_normalization_and_weight_normalization():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    components = [
+        TheoryLP2RLVE.make_lognormal_component(weight=2.0),
+        TheoryLP2RLVE.make_mwd_component(
+            [50.0, 120.0],
+            [2.0, 3.0],
+            weight=3.0,
+        ),
+    ]
+
+    assert components[1]["weights"] == [0.4, 0.6]
+    normalized = TheoryLP2RLVE.normalize_component_weights(components)
+
+    assert normalized[0]["weight"] == pytest.approx(0.4)
+    assert normalized[1]["weight"] == pytest.approx(0.6)
+
+
+def test_lp2r_lve_gpc_import_parsing_and_normalization(tmp_path):
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    gpc_file = tmp_path / "blend.gpc"
+    gpc_file.write_text(
+        "# M W(logM)\n"
+        "100 1\n"
+        "10 1\n"
+        "1000 1\n",
+        encoding="latin-1",
+    )
+
+    masses, weights = TheoryLP2RLVE.read_gpc_mwd(gpc_file)
+
+    assert masses == [10.0, 100.0, 1000.0]
+    assert sum(weights) == pytest.approx(1.0)
+    assert all(weight > 0 for weight in weights)
+
+
+def test_lp2r_lve_gpc_import_converts_declared_mass_units():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    masses, weights = TheoryLP2RLVE.read_gpc_mwd(
+        "data/L2PR/LVE/03MWD/MWD.gpc"
+    )
+
+    assert masses == pytest.approx([100.0, 1000.0, 10000.0])
+    assert weights == pytest.approx([1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0])
+
+
+def test_lp2r_lve_extra_data_roundtrip_and_legacy_migration():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    components = [
+        TheoryLP2RLVE.make_lognormal_component(weight=0.7, mw=200.0),
+        TheoryLP2RLVE.make_mwd_component(
+            [50.0, 120.0],
+            [0.4, 0.6],
+            weight=0.3,
+        ),
+    ]
+    copied = TheoryLP2RLVE.copy_lp2r_components(components)
+    copied[1]["masses"][0] = 1.0
+
+    assert components[1]["masses"][0] == 50.0
+    restored = TheoryLP2RLVE.migrate_old_lp2r_state(
+        {"lp2r_components": components}
+    )
+    legacy = TheoryLP2RLVE.migrate_old_lp2r_state(
+        {"MWD_m": [50.0, 120.0], "MWD_phi": [2.0, 3.0]}
+    )
+
+    assert restored == components
+    assert legacy[0]["kind"] == "mwd"
+    assert legacy[0]["weights"] == [0.4, 0.6]
+
+
+def test_lp2r_lve_build_solver_uses_mixed_components(monkeypatch):
+    import RepTate.theories.TheoryLP2RLVE as lp2r_module
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    class FakeSolver:
+        calls = []
+
+        def __init__(self, material, controls):
+            self.material = material
+            self.controls = controls
+
+        def add_lognormal_component(self, weight, n, mw, pdi):
+            self.calls.append(("lognormal", weight, n, mw, pdi))
+
+        def add_discrete_component(self, mass, weight, component_weight=1.0):
+            self.calls.append(("mwd", mass, weight, component_weight))
+
+    monkeypatch.setattr(lp2r_module._lp2r, "Solver", FakeSolver)
+
+    def parameter(value):
+        return SimpleNamespace(value=value)
+
+    theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+    theory.parameters = {
+        "MK": parameter(0.5),
+        "Me": parameter(5.0),
+        "G0": parameter(2.0e5),
+        "tau_e": parameter(1.0e-5),
+        "G_glass": parameter(1.0e9),
+        "tau_glass": parameter(1.0e-8),
+        "beta_glass": parameter(0.7),
+        "alpha": parameter(1.0),
+        "t_cr_start": parameter(1.0),
+        "delta_cr": parameter(0.3),
+        "b_zeta": parameter(2.0),
+        "a_eq": parameter(2.0),
+        "b_eq": parameter(10.0),
+        "ret_pref": parameter(0.189),
+        "ret_pref_0": parameter(0.020),
+        "ret_switch_exponent": parameter(0.42),
+        "rept_switch_factor": parameter(1.664),
+        "rouse_switch_factor": parameter(1.5),
+        "disentanglement_switch": parameter(1.0),
+        "start_time": parameter(1.0e-3),
+        "time_ratio": parameter(1.02),
+    }
+    theory.lp2r_components = [
+        TheoryLP2RLVE.make_lognormal_component(
+            weight=0.25,
+            npoly=6,
+            mw=150.0,
+            pdi=1.1,
+        ),
+        TheoryLP2RLVE.make_mwd_component(
+            [50.0, 120.0],
+            [0.4, 0.6],
+            weight=0.75,
+        ),
+    ]
+
+    FakeSolver.calls = []
+    solver = theory._build_solver()
+
+    assert isinstance(solver, FakeSolver)
+    assert FakeSolver.calls == [
+        ("lognormal", 0.25, 6, 150000.0, 1.1),
+        ("mwd", [50000.0, 120000.0], [0.4, 0.6], 0.75),
+    ]
+
+
+def test_lp2r_lve_default_component_tracks_visible_parameters():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    def parameter(value):
+        return SimpleNamespace(value=value)
+
+    theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+    theory.parameters = {
+        "n": parameter(12),
+        "Mw": parameter(250.0),
+        "PDI": parameter(1.2),
+    }
+    theory.lp2r_components = [
+        {
+            "kind": "lognormal",
+            "weight": 1.0,
+            "npoly": 8,
+            "Mw": 100.0,
+            "PDI": 1.05,
+            "label": "Lognormal",
+            "source": "parameters",
+        }
+    ]
+
+    assert theory.current_lp2r_components()[0]["npoly"] == 12
+    assert theory.current_lp2r_components()[0]["Mw"] == 250.0
+    assert theory.current_lp2r_components()[0]["PDI"] == 1.2
+
+
+def test_lp2r_lve_default_component_file_moments_use_defaults_and_derivations():
+    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+
+    def parameter(value):
+        return SimpleNamespace(value=value)
+
+    def theory_with_file_params(file_parameters):
+        theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+        theory.parameters = {
+            "n": parameter(0),
+            "Mw": parameter(0.0),
+            "PDI": parameter(0.0),
+        }
+        theory.parent_dataset = SimpleNamespace(
+            files=[SimpleNamespace(file_parameters=file_parameters)]
+        )
+        return theory
+
+    theory = theory_with_file_params({"Mw": "0", "Mn": "0", "PDI": "0"})
+    assert theory._read_default_component_params_from_first_file() is False
+    assert theory.parameters["n"].value == TheoryLP2RLVE.DEFAULT_NPOLY
+    assert theory.parameters["Mw"].value == TheoryLP2RLVE.DEFAULT_MW
+    assert theory.parameters["PDI"].value == TheoryLP2RLVE.DEFAULT_PDI
+
+    theory = theory_with_file_params({"Mn": "200", "PDI": "1.4"})
+    assert theory._read_default_component_params_from_first_file() is True
+    assert theory.parameters["Mw"].value == pytest.approx(280.0)
+    assert theory.parameters["PDI"].value == pytest.approx(1.4)
+
+    theory = theory_with_file_params({"Mw": "300", "Mn": "200"})
+    assert theory._read_default_component_params_from_first_file() is True
+    assert theory.parameters["Mw"].value == pytest.approx(300.0)
+    assert theory.parameters["PDI"].value == pytest.approx(1.5)
+
+
 def test_lp2r_lve_application_registration():
     from PySide6.QtWidgets import QApplication
 
@@ -194,29 +500,39 @@ def test_lp2r_lve_application_registration():
 
 
 def test_lp2r_auhl_reference_matches_expected_output():
-    from RepTate.theories import _lp2r
+    case_dir = Path("data/L2PR/LVE/01rcdefault")
+    result = _run_lp2r_lve_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
 
-    material = _lp2r.Material()
-    material.m_kuhn = 113.0
-    material.m_e = 4350.0
-    material.g0 = 476000.0
-    material.tau_e = 1.30e-5
-    material.g_glass = 1.0e9
-    material.tau_glass = 7.0e-11
-    material.beta_glass = 0.370
+    assert len(result.omega) == len(expected)
+    for actual_row, expected_row in zip(
+        zip(result.omega, result.gp, result.gpp),
+        expected,
+    ):
+        for actual_value, expected_value in zip(actual_row, expected_row):
+            scale = max(abs(expected_value), 1.0)
+            assert abs(actual_value - expected_value) / scale < 1.0e-5
 
-    controls = _lp2r.Controls()
-    controls.time_ratio = 1.02
 
-    solver = _lp2r.Solver(material, controls)
-    solver.add_lognormal_component(weight=1.0, n=50, mw=634500.0, pdi=1.03)
-    result = solver.run(freq_min=1.0e-4, freq_max=1.0e7, freq_ratio=1.1)
+def test_lp2r_pi_blend_reference_matches_expected_output():
+    case_dir = Path("data/L2PR/LVE/02PIblend")
+    result = _run_lp2r_lve_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
 
-    expected_file = Path("data/L2PR/01rcdefault/Expected_Output.tts")
-    expected = []
-    for line in expected_file.read_text().splitlines():
-        if line and not line.startswith("#") and not line.startswith("Mw="):
-            expected.append(tuple(map(float, line.split()[:3])))
+    assert len(result.omega) == len(expected)
+    for actual_row, expected_row in zip(
+        zip(result.omega, result.gp, result.gpp),
+        expected,
+    ):
+        for actual_value, expected_value in zip(actual_row, expected_row):
+            scale = max(abs(expected_value), 1.0)
+            assert abs(actual_value - expected_value) / scale < 1.0e-5
+
+
+def test_lp2r_gpc_mwd_reference_matches_expected_output():
+    case_dir = Path("data/L2PR/LVE/03MWD")
+    result = _run_lp2r_lve_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
 
     assert len(result.omega) == len(expected)
     for actual_row, expected_row in zip(

@@ -53,13 +53,18 @@ PYBIND11_MODULE(_lp2r, m)
              py::arg("weight"), py::arg("n"), py::arg("mw"), py::arg("pdi"))
         .def("add_discrete_component", &LP2RSolver::add_discrete_component,
              py::arg("mass"), py::arg("weight"), py::arg("component_weight") = 1.0)
-        .def("prepare", &LP2RSolver::prepare)
-        .def("step", &LP2RSolver::step)
-        .def("run_relaxation", &LP2RSolver::run_relaxation)
+        .def("prepare", &LP2RSolver::prepare,
+             py::call_guard<py::gil_scoped_release>())
+        .def("step", &LP2RSolver::step,
+             py::call_guard<py::gil_scoped_release>())
+        .def("run_relaxation", &LP2RSolver::run_relaxation,
+             py::call_guard<py::gil_scoped_release>())
         .def("calculate_spectra", &LP2RSolver::calculate_spectra,
-             py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"))
+             py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"),
+             py::call_guard<py::gil_scoped_release>())
         .def("run", &LP2RSolver::run,
-             py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"))
+             py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"),
+             py::call_guard<py::gil_scoped_release>())
         .def("cancel", &LP2RSolver::cancel)
         .def("cancelled", &LP2RSolver::cancelled)
         .def("progress", &LP2RSolver::progress)

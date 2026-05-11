@@ -36,19 +36,25 @@ import numpy as np
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
-    QApplication,
+    QAbstractItemView,
     QDialog,
     QDialogButtonBox,
+    QFileDialog,
     QFormLayout,
+    QHBoxLayout,
     QLineEdit,
     QMenu,
     QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
     QToolBar,
     QToolButton,
     QVBoxLayout,
 )
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
+from RepTate.core.units import convert_array_to_internal, parse_column_label
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r
 from RepTate.theories.theory_helpers import EditMWDDialog, GetMwdRepTate
@@ -87,12 +93,200 @@ class LP2RAdvancedControlsDialog(QDialog):
         return {name: float(edit.text()) for name, edit in self.edits.items()}
 
 
+class LP2RLognormalComponentDialog(QDialog):
+    """Edit one LP2R lognormal polymer component."""
+
+    def __init__(self, parent, component=None):
+        super().__init__(parent)
+        self.setWindowTitle("LP2R Lognormal Component")
+        component = component or {}
+
+        layout = QVBoxLayout()
+        form = QFormLayout()
+        self.label_edit = QLineEdit(component.get("label", "Lognormal"))
+        self.weight_edit = QLineEdit("%g" % component.get("weight", 1.0))
+        self.npoly_edit = QLineEdit("%g" % component.get("npoly", 8))
+        self.mw_edit = QLineEdit("%g" % component.get("Mw", 100.0))
+        self.pdi_edit = QLineEdit("%g" % component.get("PDI", 1.05))
+        form.addRow("Label", self.label_edit)
+        form.addRow("Weight fraction", self.weight_edit)
+        form.addRow("npoly", self.npoly_edit)
+        form.addRow("Mw [kg/mol]", self.mw_edit)
+        form.addRow("PDI", self.pdi_edit)
+        layout.addLayout(form)
+
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
+        self.setLayout(layout)
+
+    def component(self):
+        return TheoryLP2RLVE.make_lognormal_component(
+            weight=float(self.weight_edit.text()),
+            npoly=int(float(self.npoly_edit.text())),
+            mw=float(self.mw_edit.text()),
+            pdi=float(self.pdi_edit.text()),
+            label=self.label_edit.text().strip() or "Lognormal",
+        )
+
+
+class LP2RComponentsDialog(QDialog):
+    """Display and edit the list of LP2R polymer components."""
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent_theory = parent
+        self.components = parent.copy_lp2r_components(parent.lp2r_components)
+        self.setWindowTitle("LP2R Components")
+
+        layout = QVBoxLayout()
+        self.table = QTableWidget()
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setColumnCount(5)
+        self.table.setHorizontalHeaderLabels(
+            ["Type", "Weight", "Label", "Source", "Summary"]
+        )
+        layout.addWidget(self.table)
+
+        buttons = QHBoxLayout()
+        self.add_lognormal_button = QPushButton("Add lognormal")
+        self.add_mwd_button = QPushButton("Add MWD data")
+        self.edit_button = QPushButton("Edit")
+        self.remove_button = QPushButton("Remove")
+        self.normalize_button = QPushButton("Normalize weights")
+        for button in (
+            self.add_lognormal_button,
+            self.add_mwd_button,
+            self.edit_button,
+            self.remove_button,
+            self.normalize_button,
+        ):
+            buttons.addWidget(button)
+        layout.addLayout(buttons)
+
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
+        self.setLayout(layout)
+
+        self.add_lognormal_button.clicked.connect(self.add_lognormal)
+        self.add_mwd_button.clicked.connect(self.add_mwd)
+        self.edit_button.clicked.connect(self.edit_selected)
+        self.remove_button.clicked.connect(self.remove_selected)
+        self.normalize_button.clicked.connect(self.normalize_weights)
+        self.table.cellDoubleClicked.connect(lambda *_: self.edit_selected())
+        self.refresh()
+
+    def refresh(self):
+        self.table.setRowCount(len(self.components))
+        for row, component in enumerate(self.components):
+            values = [
+                component["kind"],
+                "%.6g" % component["weight"],
+                component.get("label", ""),
+                component.get("source", ""),
+                TheoryLP2RLVE.component_summary(component),
+            ]
+            for col, value in enumerate(values):
+                self.table.setItem(row, col, QTableWidgetItem(value))
+        self.table.resizeColumnsToContents()
+        if self.components and self.table.currentRow() < 0:
+            self.table.selectRow(0)
+
+    def selected_row(self):
+        indexes = self.table.selectionModel().selectedRows()
+        if indexes:
+            return indexes[0].row()
+        row = self.table.currentRow()
+        if 0 <= row < len(self.components):
+            return row
+        if len(self.components) == 1:
+            return 0
+        return None
+
+    def add_lognormal(self):
+        dialog = LP2RLognormalComponentDialog(self.parent_theory)
+        if dialog.exec_():
+            try:
+                self.components.append(dialog.component())
+            except ValueError as exc:
+                QMessageBox.warning(self, "LP2R Components", str(exc))
+                return
+            self.refresh()
+
+    def add_mwd(self):
+        dialog = EditMWDDialog(self.parent_theory, [50.0, 120.0], [0.4, 0.6], 200)
+        if dialog.exec_():
+            component = self.parent_theory.component_from_mwd_dialog(dialog)
+            if component is not None:
+                self.components.append(component)
+                self.refresh()
+
+    def edit_selected(self):
+        row = self.selected_row()
+        if row is None:
+            return
+        component = self.components[row]
+        if component["kind"] == "lognormal":
+            dialog = LP2RLognormalComponentDialog(self.parent_theory, component)
+            if dialog.exec_():
+                try:
+                    self.components[row] = dialog.component()
+                except ValueError as exc:
+                    QMessageBox.warning(self, "LP2R Components", str(exc))
+                    return
+        else:
+            dialog = EditMWDDialog(
+                self.parent_theory,
+                component["masses"],
+                component["weights"],
+                200,
+            )
+            if dialog.exec_():
+                updated = self.parent_theory.component_from_mwd_dialog(
+                    dialog,
+                    label=component.get("label", "MWD"),
+                    source=component.get("source", "manual"),
+                    weight=component.get("weight", 1.0),
+                )
+                if updated is not None:
+                    self.components[row] = updated
+        self.refresh()
+
+    def remove_selected(self):
+        row = self.selected_row()
+        if row is None:
+            return
+        del self.components[row]
+        self.refresh()
+
+    def normalize_weights(self):
+        try:
+            self.components = TheoryLP2RLVE.normalize_component_weights(
+                self.components
+            )
+        except ValueError as exc:
+            QMessageBox.warning(self, "LP2R Components", str(exc))
+            return
+        self.refresh()
+
+    def accept(self):
+        try:
+            self.components = TheoryLP2RLVE.validate_lp2r_components(self.components)
+        except ValueError as exc:
+            QMessageBox.warning(self, "LP2R Components", str(exc))
+            return
+        super().accept()
+
+
 class TheoryLP2RLVE(QTheory):
     """Linear viscoelastic predictions from the LP2R solver.
 
-    This first integration exposes one lognormal linear polymer component. RepTate
-    owns GUI state and parameter handling, while the pybind11 solver owns the
-    numerical relaxation and spectra calculation.
+    RepTate owns GUI state and parameter handling, while the pybind11 solver owns
+    the numerical relaxation and spectra calculation.
     """
 
     thname = "LP2R LVE"
@@ -100,8 +294,9 @@ class TheoryLP2RLVE(QTheory):
     citations = []
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file = True
-    INPUT_LOGNORMAL = 0
-    INPUT_DISCRETE = 1
+    DEFAULT_MW = 100.0
+    DEFAULT_PDI = 1.05
+    DEFAULT_NPOLY = 8
     ADVANCED_CONTROLS = [
         "alpha",
         "t_cr_start",
@@ -126,63 +321,41 @@ class TheoryLP2RLVE(QTheory):
         self.has_modes = False
         self.solver = None
 
-        self.parameters["input_mode"] = Parameter(
-            name="input_mode",
-            value=self.INPUT_LOGNORMAL,
-            description="Polymer input mode: 0=lognormal, 1=discrete masses/weights",
-            type=ParameterType.discrete_integer,
-            opt_type=OptType.const,
-            discrete_values=[self.INPUT_LOGNORMAL, self.INPUT_DISCRETE],
-        )
-
         self.parameters["Mw"] = Parameter(
             name="Mw",
-            value=100.0,
+            value=self.DEFAULT_MW,
             description="Weight-average molar mass of the lognormal component",
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=0,
+            display_flag=False,
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
         )
         self.parameters["PDI"] = Parameter(
             name="PDI",
-            value=1.05,
+            value=self.DEFAULT_PDI,
             description="Polydispersity index of the lognormal component",
             type=ParameterType.real,
             opt_type=OptType.nopt,
             min_value=1.0,
+            display_flag=False,
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
         )
         self.parameters["n"] = Parameter(
             name="n",
-            value=8,
+            value=self.DEFAULT_NPOLY,
             description="Number of lognormal bins",
             type=ParameterType.integer,
             opt_type=OptType.const,
             min_value=1,
+            display_flag=False,
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-        )
-        self.parameters["discrete_masses"] = Parameter(
-            name="discrete_masses",
-            value="50, 120",
-            description="Discrete polymer masses in kg/mol",
-            type=ParameterType.string,
-            opt_type=OptType.const,
-            display_flag=False,
-        )
-        self.parameters["discrete_weights"] = Parameter(
-            name="discrete_weights",
-            value="0.4, 0.6",
-            description="Discrete polymer weights",
-            type=ParameterType.string,
-            opt_type=OptType.const,
-            display_flag=False,
         )
         self.parameters["MK"] = Parameter(
             name="MK",
@@ -443,17 +616,22 @@ class TheoryLP2RLVE(QTheory):
         )
 
         self.get_material_parameters()
-        self._read_mw_from_first_file()
+        self._read_default_component_params_from_first_file()
         self.autocalculate = False
         self.MWD_m = [50.0, 120.0]
         self.MWD_phi = [0.4, 0.6]
+        self.lp2r_components = [self.default_lognormal_component()]
 
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutmwd = QToolButton()
-        self.tbutmwd.setPopupMode(QToolButton.MenuButtonPopup)
+        self.tbutcomponents = QToolButton()
+        self.tbutcomponents.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu(self)
+        self.edit_components_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"),
+            "LP2R components",
+        )
         self.get_mwd_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get MWD (MWD app)",
@@ -462,18 +640,31 @@ class TheoryLP2RLVE(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get MWD (MWD data)",
         )
-        self.tbutmwd.setDefaultAction(self.get_mwd_action)
-        self.tbutmwd.setMenu(menu)
-        tb.addWidget(self.tbutmwd)
+        self.get_mwd_file_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-opened-folder.png"),
+            "Get MWD (.gpc file)",
+        )
+        self.normalize_components_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-scales.png"),
+            "Normalize LP2R component weights",
+        )
+        self.tbutcomponents.setDefaultAction(self.edit_components_action)
+        self.tbutcomponents.setMenu(menu)
+        tb.addWidget(self.tbutcomponents)
 
         self.advanced_controls_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
             "Advanced LP2R controls",
         )
         self.thToolsLayout.insertWidget(0, tb)
+        self.edit_components_action.triggered.connect(self.edit_lp2r_components)
         self.advanced_controls_action.triggered.connect(self.edit_advanced_controls)
         self.get_mwd_action.triggered.connect(self.get_mwd_reptate)
         self.get_mwd_data_action.triggered.connect(self.edit_mwd_data)
+        self.get_mwd_file_action.triggered.connect(self.import_mwd_gpc)
+        self.normalize_components_action.triggered.connect(
+            self.normalize_lp2r_component_weights
+        )
 
     def edit_advanced_controls(self):
         """Open a dialog for the LP2R resource-file style controls."""
@@ -490,6 +681,12 @@ class TheoryLP2RLVE(QTheory):
                 return
             for name, value in values.items():
                 self.parameters[name].value = value
+
+    def edit_lp2r_components(self):
+        """Open the LP2R polymer component manager."""
+        dialog = LP2RComponentsDialog(self)
+        if dialog.exec_():
+            self.set_lp2r_components(dialog.components)
 
     def get_material_parameters(self):
         """Get common LP2R material parameters from the materials database."""
@@ -514,14 +711,298 @@ class TheoryLP2RLVE(QTheory):
             return True
         return False
 
-    def _read_mw_from_first_file(self):
-        """Use the first dataset file's Mw as the lognormal Mw when available."""
+    def _read_default_component_params_from_first_file(self):
+        """Use valid first-file Mw/Mn/PDI values for the default component."""
+        success = False
+        self.parameters["Mw"].value = self.DEFAULT_MW
+        self.parameters["PDI"].value = self.DEFAULT_PDI
+        self.parameters["n"].value = self.DEFAULT_NPOLY
         try:
-            mw = float(self.parent_dataset.files[0].file_parameters["Mw"])
-        except (AttributeError, IndexError, KeyError, TypeError, ValueError):
-            return False
-        self.parameters["Mw"].value = mw
-        return True
+            fparam = self.parent_dataset.files[0].file_parameters
+        except (AttributeError, IndexError):
+            return success
+
+        mw = self._positive_file_parameter(fparam, "Mw")
+        mn = self._positive_file_parameter(fparam, "Mn")
+        pdi = self._positive_file_parameter(fparam, "PDI")
+        if pdi is not None and pdi < 1.0:
+            pdi = None
+
+        if pdi is None and mw is not None and mn is not None:
+            derived_pdi = mw / mn
+            if derived_pdi >= 1.0 and np.isfinite(derived_pdi):
+                pdi = derived_pdi
+        if mw is None and mn is not None and pdi is not None:
+            derived_mw = mn * pdi
+            if derived_mw > 0 and np.isfinite(derived_mw):
+                mw = derived_mw
+
+        if mw is not None:
+            self.parameters["Mw"].value = mw
+            success = True
+        if pdi is not None:
+            self.parameters["PDI"].value = pdi
+            success = True
+        return success
+
+    @staticmethod
+    def _positive_file_parameter(file_parameters, name):
+        """Return a positive finite file parameter, otherwise None."""
+        try:
+            value = float(file_parameters[name])
+        except (KeyError, TypeError, ValueError):
+            return None
+        if value > 0.0 and np.isfinite(value):
+            return value
+        return None
+
+    def default_lognormal_component(self):
+        """Return a default lognormal component from the visible Mw/PDI/n values."""
+        return self.make_lognormal_component(
+            weight=1.0,
+            npoly=self.parameters["n"].value,
+            mw=self.parameters["Mw"].value,
+            pdi=self.parameters["PDI"].value,
+            label="Lognormal",
+            source="parameters",
+        )
+
+    def current_lp2r_components(self):
+        """Return LP2R components, syncing the default component from parameters."""
+        components = self.copy_lp2r_components(self.lp2r_components)
+        if (
+            len(components) == 1
+            and components[0].get("kind") == "lognormal"
+            and components[0].get("source") == "parameters"
+        ):
+            return [self.default_lognormal_component()]
+        return components
+
+    @staticmethod
+    def copy_lp2r_components(components):
+        """Return a plain-Python deep copy of LP2R component dictionaries."""
+        copied = []
+        for component in components:
+            new_component = dict(component)
+            if "masses" in new_component:
+                new_component["masses"] = list(new_component["masses"])
+            if "weights" in new_component:
+                new_component["weights"] = list(new_component["weights"])
+            copied.append(new_component)
+        return copied
+
+    @staticmethod
+    def make_lognormal_component(
+        weight=1.0,
+        npoly=8,
+        mw=100.0,
+        pdi=1.05,
+        label="Lognormal",
+        source="manual",
+    ):
+        """Create and validate a lognormal LP2R component."""
+        component = {
+            "kind": "lognormal",
+            "weight": float(weight),
+            "npoly": int(npoly),
+            "Mw": float(mw),
+            "PDI": float(pdi),
+            "label": str(label or "Lognormal"),
+            "source": str(source or "manual"),
+        }
+        return TheoryLP2RLVE.validate_lp2r_component(component)
+
+    @staticmethod
+    def make_mwd_component(
+        masses,
+        weights,
+        weight=1.0,
+        label="MWD",
+        source="manual",
+    ):
+        """Create and validate a discrete-MWD LP2R component."""
+        masses, weights = TheoryLP2RLVE._normalise_discrete_distribution(
+            masses,
+            weights,
+        )
+        component = {
+            "kind": "mwd",
+            "weight": float(weight),
+            "masses": masses,
+            "weights": weights,
+            "label": str(label or "MWD"),
+            "source": str(source or "manual"),
+        }
+        return TheoryLP2RLVE.validate_lp2r_component(component)
+
+    @staticmethod
+    def validate_lp2r_component(component):
+        """Validate one LP2R component and return a normalized copy."""
+        component = dict(component)
+        kind = component.get("kind")
+        if kind not in ("lognormal", "mwd"):
+            raise ValueError("LP2R component kind must be lognormal or mwd")
+        weight = float(component.get("weight", 1.0))
+        if weight < 0:
+            raise ValueError("LP2R component weight fractions must be non-negative")
+        component["weight"] = weight
+        component["label"] = str(component.get("label") or kind)
+        component["source"] = str(component.get("source") or "manual")
+        if kind == "lognormal":
+            component["npoly"] = int(component.get("npoly", component.get("n", 8)))
+            component["Mw"] = float(component.get("Mw", 100.0))
+            component["PDI"] = float(component.get("PDI", 1.05))
+            if component["npoly"] <= 0:
+                raise ValueError("Lognormal npoly must be positive")
+            if component["Mw"] <= 0:
+                raise ValueError("Lognormal Mw must be positive")
+            if component["PDI"] < 1.0:
+                raise ValueError("Lognormal PDI must be at least 1")
+        else:
+            masses, weights = TheoryLP2RLVE._normalise_discrete_distribution(
+                component.get("masses", []),
+                component.get("weights", []),
+            )
+            component["masses"] = masses
+            component["weights"] = weights
+        return component
+
+    @staticmethod
+    def validate_lp2r_components(components):
+        """Validate the full LP2R component list."""
+        validated = [
+            TheoryLP2RLVE.validate_lp2r_component(component)
+            for component in components
+        ]
+        if not validated:
+            raise ValueError("LP2R needs at least one polymer component")
+        if sum(component["weight"] for component in validated) <= 0:
+            raise ValueError("LP2R component weights must have positive total weight")
+        return validated
+
+    @staticmethod
+    def normalize_component_weights(components):
+        """Normalize component weight fractions to sum to one."""
+        normalized = TheoryLP2RLVE.validate_lp2r_components(components)
+        total = sum(component["weight"] for component in normalized)
+        for component in normalized:
+            component["weight"] /= total
+        return normalized
+
+    @staticmethod
+    def component_summary(component):
+        """Return a compact table summary for one LP2R component."""
+        if component["kind"] == "lognormal":
+            return "npoly=%d, Mw=%g, PDI=%g" % (
+                component["npoly"],
+                component["Mw"],
+                component["PDI"],
+            )
+        return "%d MWD points" % len(component["masses"])
+
+    @staticmethod
+    def component_table(components):
+        """Return an HTML-table-compatible summary of LP2R components."""
+        table = [["#", "Type", "Weight", "Label", "Source", "Details"]]
+        for i, component in enumerate(components, 1):
+            table.append(
+                [
+                    str(i),
+                    component["kind"],
+                    "%.6g" % component["weight"],
+                    component.get("label", ""),
+                    component.get("source", ""),
+                    TheoryLP2RLVE.component_summary(component),
+                ]
+            )
+        return table
+
+    @staticmethod
+    def migrate_old_lp2r_state(extra_data=None, parameters=None):
+        """Return components migrated from older LP2R hidden MWD state."""
+        extra_data = extra_data or {}
+        parameters = parameters or {}
+        if "lp2r_components" in extra_data:
+            return TheoryLP2RLVE.validate_lp2r_components(
+                extra_data["lp2r_components"]
+            )
+        if "MWD_m" in extra_data and "MWD_phi" in extra_data:
+            return [
+                TheoryLP2RLVE.make_mwd_component(
+                    extra_data["MWD_m"],
+                    extra_data["MWD_phi"],
+                    label="MWD",
+                    source="legacy",
+                )
+            ]
+        if "discrete_masses" in parameters and "discrete_weights" in parameters:
+            masses_value = getattr(parameters["discrete_masses"], "value", parameters["discrete_masses"])
+            weights_value = getattr(parameters["discrete_weights"], "value", parameters["discrete_weights"])
+            masses, weights = TheoryLP2RLVE._parse_discrete_distribution(
+                masses_value,
+                weights_value,
+            )
+            return [
+                TheoryLP2RLVE.make_mwd_component(
+                    masses,
+                    weights,
+                    label="MWD",
+                    source="legacy",
+                )
+            ]
+        return None
+
+    @staticmethod
+    def read_gpc_mwd(path):
+        """Read a RepTate .gpc file as kg/mol masses and normalized weights."""
+        masses = []
+        density = []
+        mass_unit = "kg/mol"
+        with open(path, "r", encoding="latin-1") as file_handle:
+            for line in file_handle:
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#"):
+                    continue
+                fields = stripped.split()
+                if len(fields) >= 2:
+                    label, unit, _ = parse_column_label(
+                        "%s %s" % (fields[0], fields[1])
+                        if fields[0] == "M" and fields[1].startswith(("(", "["))
+                        else fields[0]
+                    )
+                    if label == "M" and unit:
+                        mass_unit = unit
+                        continue
+                if len(fields) < 2:
+                    continue
+                try:
+                    mass = float(fields[0])
+                    value = float(fields[1])
+                except ValueError:
+                    continue
+                if mass > 0 and np.isfinite(mass) and np.isfinite(value):
+                    masses.append(mass)
+                    density.append(max(value, 0.0))
+        if len(masses) < 1:
+            raise ValueError("No MWD data found in .gpc file")
+
+        order = np.argsort(masses)
+        masses = convert_array_to_internal(
+            np.asarray(masses, dtype=float)[order],
+            mass_unit,
+            "kg/mol",
+        )
+        density = np.asarray(density, dtype=float)[order]
+        if len(masses) == 1:
+            weights = np.ones(1)
+        else:
+            logm = np.log10(masses)
+            widths = np.empty(len(masses))
+            widths[1:-1] = 0.5 * (logm[2:] - logm[:-2])
+            widths[0] = logm[1] - logm[0]
+            widths[-1] = logm[-1] - logm[-2]
+            weights = density * np.maximum(widths, 0.0)
+        return TheoryLP2RLVE._normalise_discrete_distribution(masses, weights)
 
     def _clear_table(self, tt):
         """Leave the theory table empty after validation errors or cancellation."""
@@ -534,7 +1015,6 @@ class TheoryLP2RLVE(QTheory):
         while percent >= last_percent + 10 and last_percent < 100:
             self.Qprint("-", end="")
             last_percent += 10
-        QApplication.processEvents()
         return last_percent
 
     @staticmethod
@@ -585,16 +1065,39 @@ class TheoryLP2RLVE(QTheory):
         return masses, [weight / total_weight for weight in weights]
 
     def set_discrete_distribution_from_mwd(self, masses, weights):
-        """Populate LP2R discrete parameters from MWD masses and weights."""
-        masses, weights = self._normalise_discrete_distribution(masses, weights)
-        self.MWD_m = np.copy(masses)
-        self.MWD_phi = np.copy(weights)
-        self.set_param_value("discrete_masses", self._format_number_list(masses))
-        self.set_param_value("discrete_weights", self._format_number_list(weights))
-        self.set_param_value("input_mode", self.INPUT_DISCRETE)
-        self.update_parameter_table()
-        self.Qprint("Got %d LP2R discrete MWD components" % len(masses))
+        """Append one LP2R MWD component from masses and weights."""
+        component = self.make_mwd_component(masses, weights)
+        self.add_lp2r_component(component)
+        self.Qprint("Added LP2R MWD component with %d points" % len(component["masses"]))
         self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
+
+    def set_lp2r_components(self, components):
+        """Set the full LP2R polymer component list."""
+        self.lp2r_components = self.validate_lp2r_components(components)
+        mwd_components = [
+            component
+            for component in self.lp2r_components
+            if component["kind"] == "mwd"
+        ]
+        if mwd_components:
+            self.MWD_m = np.copy(mwd_components[-1]["masses"])
+            self.MWD_phi = np.copy(mwd_components[-1]["weights"])
+        self.Qprint("LP2R has %d polymer component(s)" % len(self.lp2r_components))
+
+    def add_lp2r_component(self, component):
+        """Append one LP2R polymer component."""
+        components = self.copy_lp2r_components(self.lp2r_components)
+        components.append(component)
+        self.set_lp2r_components(components)
+
+    def normalize_lp2r_component_weights(self):
+        """Normalize LP2R component weights from the toolbar action."""
+        try:
+            self.set_lp2r_components(
+                self.normalize_component_weights(self.lp2r_components)
+            )
+        except ValueError as exc:
+            QMessageBox.warning(self, "LP2R Components", str(exc))
 
     def _collect_mwd_getters(self):
         """Collect available Discretize MWD theory outputs from RepTate apps."""
@@ -634,33 +1137,90 @@ class TheoryLP2RLVE(QTheory):
             item = dialog.btngrp.checkedButton().text()
             masses, weights = get_dict[item]()
             try:
-                self.set_discrete_distribution_from_mwd(masses, weights)
+                component = self.make_mwd_component(
+                    masses,
+                    weights,
+                    label=item,
+                    source="RepTate",
+                )
+                self.add_lp2r_component(component)
+                self.Qprint(
+                    "Added LP2R MWD component from %s with %d points"
+                    % (item, len(component["masses"]))
+                )
+                self.Qprint(
+                    '<font color=green><b>Press "Calculate" to update theory</b></font>'
+                )
             except ValueError as exc:
                 self.Qprint("<font color=red><b>%s</b></font>" % exc)
 
+    def component_from_mwd_dialog(
+        self,
+        dialog,
+        label="MWD",
+        source="manual",
+        weight=1.0,
+    ):
+        """Build an MWD component from an EditMWDDialog instance."""
+        nmodes = dialog.table.rowCount()
+        masses = []
+        weights = []
+        _, success1 = self.set_param_value("tau_e", dialog.taue_text.text())
+        _, success2 = self.set_param_value("Me", dialog.Me_text.text())
+        if not success1 * success2:
+            self.Qprint("Could not understand Me or tau_e, try again")
+            return None
+        for i in range(nmodes):
+            try:
+                masses.append(float(dialog.table.item(i, 0).text()))
+                weights.append(float(dialog.table.item(i, 1).text()))
+            except (AttributeError, ValueError):
+                self.Qprint("Could not understand line %d, try again" % (i + 1))
+                return None
+        try:
+            return self.make_mwd_component(
+                masses,
+                weights,
+                weight=weight,
+                label=label,
+                source=source,
+            )
+        except ValueError as exc:
+            self.Qprint("<font color=red><b>%s</b></font>" % exc)
+            return None
+
     def edit_mwd_data(self):
-        """Edit discrete MWD data directly, matching the RDP LVE MWD workflow."""
+        """Append MWD data entered directly by the user."""
         dialog = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
         if dialog.exec_():
-            nmodes = dialog.table.rowCount()
-            masses = []
-            weights = []
-            _, success1 = self.set_param_value("tau_e", dialog.taue_text.text())
-            _, success2 = self.set_param_value("Me", dialog.Me_text.text())
-            if not success1 * success2:
-                self.Qprint("Could not understand Me or tau_e, try again")
-                return
-            for i in range(nmodes):
-                try:
-                    masses.append(float(dialog.table.item(i, 0).text()))
-                    weights.append(float(dialog.table.item(i, 1).text()))
-                except (AttributeError, ValueError):
-                    self.Qprint("Could not understand line %d, try again" % (i + 1))
-                    return
-            try:
-                self.set_discrete_distribution_from_mwd(masses, weights)
-            except ValueError as exc:
-                self.Qprint("<font color=red><b>%s</b></font>" % exc)
+            component = self.component_from_mwd_dialog(dialog)
+            if component is not None:
+                self.add_lp2r_component(component)
+                self.Qprint(
+                    '<font color=green><b>Press "Calculate" to update theory</b></font>'
+                )
+
+    def import_mwd_gpc(self):
+        """Append an MWD component imported from a RepTate .gpc file."""
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open MWD .gpc file",
+            "",
+            "GPC Files (*.gpc);;All Files (*)",
+        )
+        if not path:
+            return
+        try:
+            masses, weights = self.read_gpc_mwd(path)
+            component = self.make_mwd_component(
+                masses,
+                weights,
+                label=path.split("/")[-1].split("\\")[-1],
+                source="gpc",
+            )
+            self.add_lp2r_component(component)
+        except ValueError as exc:
+            QMessageBox.warning(self, "LP2R Components", str(exc))
 
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
@@ -690,23 +1250,37 @@ class TheoryLP2RLVE(QTheory):
         controls.time_ratio = self.parameters["time_ratio"].value
 
         solver = _lp2r.Solver(material, controls)
-        if self.parameters["input_mode"].value == self.INPUT_DISCRETE:
-            masses, weights = self._parse_discrete_distribution(
-                self.parameters["discrete_masses"].value,
-                self.parameters["discrete_weights"].value,
-            )
-            solver.add_discrete_component(
-                mass=[mass * 1000.0 for mass in masses],
-                weight=weights,
-            )
-        else:
-            solver.add_lognormal_component(
-                weight=1.0,
-                n=self.parameters["n"].value,
-                mw=self.parameters["Mw"].value * 1000.0,
-                pdi=self.parameters["PDI"].value,
-            )
+        components = self.validate_lp2r_components(self.current_lp2r_components())
+        for component in components:
+            if component["kind"] == "lognormal":
+                solver.add_lognormal_component(
+                    weight=component["weight"],
+                    n=component["npoly"],
+                    mw=component["Mw"] * 1000.0,
+                    pdi=component["PDI"],
+                )
+            else:
+                solver.add_discrete_component(
+                    mass=[mass * 1000.0 for mass in component["masses"]],
+                    weight=component["weights"],
+                    component_weight=component["weight"],
+                )
         return solver
+
+    def set_extra_data(self, extra_data):
+        """Set LP2R component state when loading a project."""
+        self.extra_data = extra_data
+        migrated = self.migrate_old_lp2r_state(extra_data, self.parameters)
+        if migrated is not None:
+            self.lp2r_components = migrated
+        else:
+            self.lp2r_components = [self.default_lognormal_component()]
+
+    def get_extra_data(self):
+        """Save LP2R component state into project extra data."""
+        self.extra_data["lp2r_components"] = self.copy_lp2r_components(
+            self.current_lp2r_components()
+        )
 
     def request_stop_computations(self):
         """Called when the user wants to terminate the current computation."""
@@ -740,6 +1314,16 @@ class TheoryLP2RLVE(QTheory):
             return
 
         try:
+            components = self.validate_lp2r_components(self.current_lp2r_components())
+        except ValueError as exc:
+            self.Qprint("<font color=red><b>LP2R calculation stopped: %s</b></font>" % exc)
+            self._clear_table(tt)
+            return
+        if not self.is_fitting:
+            self.Qprint("<b>LP2R components for current calculation</b>")
+            self.Qprint(self.component_table(components))
+
+        try:
             self.solver = self._build_solver()
             self.solver.prepare()
             last_progress = 0
@@ -757,7 +1341,6 @@ class TheoryLP2RLVE(QTheory):
                     last_progress = self._report_progress(
                         self.solver.progress(), last_progress
                     )
-                QApplication.processEvents()
             if self.solver.cancelled():
                 self._clear_table(tt)
                 self.Qprint(

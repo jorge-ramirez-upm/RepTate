@@ -1,0 +1,5 @@
+% Just add G(t) and Dielectric calculation
+% Retain rest at default values
+
+% CalcDielectric=yes 
+% Output_G_of_t=yes
