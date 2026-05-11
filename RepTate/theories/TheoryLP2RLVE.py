@@ -35,12 +35,54 @@
 import numpy as np
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QMessageBox, QToolBar
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QLineEdit,
+    QMessageBox,
+    QToolBar,
+    QVBoxLayout,
+)
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r
 from RepTate.theories.theory_helpers import GetMwdRepTate
+from RepTate.tools.ToolMaterialsDatabase import (
+    check_chemistry,
+    get_single_parameter,
+)
+
+
+class LP2RAdvancedControlsDialog(QDialog):
+    """Edit the LP2R resource-file style controls."""
+
+    def __init__(self, parent, control_names):
+        super().__init__(parent)
+        self.parent_theory = parent
+        self.edits = {}
+
+        layout = QVBoxLayout()
+        form = QFormLayout()
+        for name in control_names:
+            edit = QLineEdit()
+            edit.setText("%g" % self.parent_theory.parameters[name].value)
+            edit.setToolTip(self.parent_theory.parameters[name].description)
+            self.edits[name] = edit
+            form.addRow(name, edit)
+        layout.addLayout(form)
+
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
+        self.setLayout(layout)
+        self.setWindowTitle("Advanced LP2R Controls")
+
+    def values(self):
+        return {name: float(edit.text()) for name, edit in self.edits.items()}
 
 
 class TheoryLP2RLVE(QTheory):
@@ -58,6 +100,22 @@ class TheoryLP2RLVE(QTheory):
     single_file = True
     INPUT_LOGNORMAL = 0
     INPUT_DISCRETE = 1
+    ADVANCED_CONTROLS = [
+        "alpha",
+        "t_cr_start",
+        "delta_cr",
+        "b_zeta",
+        "a_eq",
+        "b_eq",
+        "ret_pref",
+        "ret_pref_0",
+        "ret_switch_exponent",
+        "rept_switch_factor",
+        "rouse_switch_factor",
+        "disentanglement_switch",
+        "start_time",
+        "time_ratio",
+    ]
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """Constructor."""
@@ -124,8 +182,8 @@ class TheoryLP2RLVE(QTheory):
             opt_type=OptType.const,
             display_flag=False,
         )
-        self.parameters["M_Kuhn"] = Parameter(
-            name="M_Kuhn",
+        self.parameters["MK"] = Parameter(
+            name="MK",
             value=0.5,
             description="Kuhn molar mass",
             type=ParameterType.real,
@@ -135,8 +193,8 @@ class TheoryLP2RLVE(QTheory):
             internal_unit="kg/mol",
             display_unit="kg/mol",
         )
-        self.parameters["M_e"] = Parameter(
-            name="M_e",
+        self.parameters["Me"] = Parameter(
+            name="Me",
             value=5.0,
             description="Entanglement molar mass",
             type=ParameterType.real,
@@ -225,6 +283,150 @@ class TheoryLP2RLVE(QTheory):
             internal_unit="-",
             display_unit="-",
         )
+        self.parameters["t_cr_start"] = Parameter(
+            name="t_cr_start",
+            value=1.0,
+            description="Constraint-release start time",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["delta_cr"] = Parameter(
+            name="delta_cr",
+            value=0.30,
+            description="Fractional tube-constraint drop at CR events",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["b_zeta"] = Parameter(
+            name="b_zeta",
+            value=2.0,
+            description="LP2R B_zeta resource parameter",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["a_eq"] = Parameter(
+            name="a_eq",
+            value=2.0,
+            description="LP2R A_eq resource parameter",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["b_eq"] = Parameter(
+            name="b_eq",
+            value=10.0,
+            description="LP2R B_eq resource parameter",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["ret_pref"] = Parameter(
+            name="ret_pref",
+            value=0.189,
+            description="Long-time arm-retraction prefactor",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["ret_pref_0"] = Parameter(
+            name="ret_pref_0",
+            value=0.020,
+            description="Short-time arm-retraction prefactor",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["ret_switch_exponent"] = Parameter(
+            name="ret_switch_exponent",
+            value=0.42,
+            description="Arm-retraction prefactor switch exponent",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["rept_switch_factor"] = Parameter(
+            name="rept_switch_factor",
+            value=1.664,
+            description="CLF-to-reptation switch factor",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["rouse_switch_factor"] = Parameter(
+            name="rouse_switch_factor",
+            value=1.5,
+            description="Minimum bare entanglements for entangled dynamics",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["disentanglement_switch"] = Parameter(
+            name="disentanglement_switch",
+            value=1.0,
+            description="LP2R disentanglement switch",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
+        self.parameters["start_time"] = Parameter(
+            name="start_time",
+            value=1.0e-3,
+            description="Start time for LP2R relaxation integration",
+            type=ParameterType.real,
+            opt_type=OptType.const,
+            min_value=0,
+            display_flag=False,
+            quantity="dimensionless",
+            internal_unit="-",
+            display_unit="-",
+        )
         self.parameters["time_ratio"] = Parameter(
             name="time_ratio",
             value=1.02,
@@ -238,14 +440,71 @@ class TheoryLP2RLVE(QTheory):
             display_unit="-",
         )
 
+        self.get_material_parameters()
+        self._read_mw_from_first_file()
+        self.autocalculate = False
+
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.get_mwd_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get MWD (MWD app)",
         )
+        self.advanced_controls_action = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
+            "Advanced LP2R controls",
+        )
         self.thToolsLayout.insertWidget(0, tb)
+        self.advanced_controls_action.triggered.connect(self.edit_advanced_controls)
         self.get_mwd_action.triggered.connect(self.get_mwd_reptate)
+
+    def edit_advanced_controls(self):
+        """Open a dialog for the LP2R resource-file style controls."""
+        dialog = LP2RAdvancedControlsDialog(self, self.ADVANCED_CONTROLS)
+        if dialog.exec_():
+            try:
+                values = dialog.values()
+            except ValueError:
+                QMessageBox.warning(
+                    self,
+                    "Advanced LP2R controls",
+                    "All LP2R controls must be numeric.",
+                )
+                return
+            for name, value in values.items():
+                self.parameters[name].value = value
+
+    def get_material_parameters(self):
+        """Get common LP2R material parameters from the materials database."""
+        success = super().get_material_parameters()
+        if success:
+            self._set_g0_from_material_ge()
+        return success
+
+    def _set_g0_from_material_ge(self):
+        """Set LP2R G0 from the material database Ge value when available."""
+        try:
+            fparam = self.parent_dataset.files[0].file_parameters
+            chem = fparam["chem"]
+        except (AttributeError, IndexError, KeyError):
+            return False
+        dbindex = check_chemistry(chem)
+        if dbindex < 0:
+            return False
+        ge, success = get_single_parameter(chem, "Ge", fparam, dbindex)
+        if success:
+            self.parameters["G0"].value = 0.8 * ge
+            return True
+        return False
+
+    def _read_mw_from_first_file(self):
+        """Use the first dataset file's Mw as the lognormal Mw when available."""
+        try:
+            mw = float(self.parent_dataset.files[0].file_parameters["Mw"])
+        except (AttributeError, IndexError, KeyError, TypeError, ValueError):
+            return False
+        self.parameters["Mw"].value = mw
+        return True
 
     def _clear_table(self, tt):
         """Leave the theory table empty after validation errors or cancellation."""
@@ -253,12 +512,12 @@ class TheoryLP2RLVE(QTheory):
         tt.data = np.zeros((0, tt.num_columns))
 
     def _report_progress(self, progress, last_percent):
-        """Report relaxation progress in coarse increments."""
+        """Report relaxation progress as GLaMM-style dash markers."""
         percent = int(100.0 * max(0.0, min(1.0, progress)))
-        if percent >= last_percent + 5:
-            self.Qprint("%d%% " % percent, end="")
-            QApplication.processEvents()
-            return percent
+        while percent >= last_percent + 10 and last_percent < 100:
+            self.Qprint("-", end="")
+            last_percent += 10
+        QApplication.processEvents()
         return last_percent
 
     @staticmethod
@@ -349,9 +608,9 @@ class TheoryLP2RLVE(QTheory):
         dialog = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
         if dialog.exec_() and dialog.btngrp.checkedButton() is not None:
             _, success1 = self.set_param_value("tau_e", dialog.taue_text.text())
-            _, success2 = self.set_param_value("M_e", dialog.Me_text.text())
+            _, success2 = self.set_param_value("Me", dialog.Me_text.text())
             if not success1 * success2:
-                self.Qprint("Could not understand M_e or tau_e, try again")
+                self.Qprint("Could not understand Me or tau_e, try again")
                 return
             item = dialog.btngrp.checkedButton().text()
             masses, weights = get_dict[item]()
@@ -363,8 +622,8 @@ class TheoryLP2RLVE(QTheory):
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
-        material.m_kuhn = self.parameters["M_Kuhn"].value * 1000.0
-        material.m_e = self.parameters["M_e"].value * 1000.0
+        material.m_kuhn = self.parameters["MK"].value * 1000.0
+        material.m_e = self.parameters["Me"].value * 1000.0
         material.g0 = self.parameters["G0"].value
         material.tau_e = self.parameters["tau_e"].value
         material.g_glass = self.parameters["G_glass"].value
@@ -373,6 +632,18 @@ class TheoryLP2RLVE(QTheory):
 
         controls = _lp2r.Controls()
         controls.alpha = self.parameters["alpha"].value
+        controls.t_cr_start = self.parameters["t_cr_start"].value
+        controls.delta_cr = self.parameters["delta_cr"].value
+        controls.b_zeta = self.parameters["b_zeta"].value
+        controls.a_eq = self.parameters["a_eq"].value
+        controls.b_eq = self.parameters["b_eq"].value
+        controls.ret_pref = self.parameters["ret_pref"].value
+        controls.ret_pref_0 = self.parameters["ret_pref_0"].value
+        controls.ret_switch_exponent = self.parameters["ret_switch_exponent"].value
+        controls.rept_switch_factor = self.parameters["rept_switch_factor"].value
+        controls.rouse_switch_factor = self.parameters["rouse_switch_factor"].value
+        controls.disentanglement_switch = self.parameters["disentanglement_switch"].value
+        controls.start_time = self.parameters["start_time"].value
         controls.time_ratio = self.parameters["time_ratio"].value
 
         solver = _lp2r.Solver(material, controls)
@@ -430,7 +701,7 @@ class TheoryLP2RLVE(QTheory):
             self.solver.prepare()
             last_progress = 0
             if not self.is_fitting:
-                self.Qprint("LP2R relaxation: 0% ", end="")
+                self.Qprint("LP2R relaxation:<br>  0% ", end="")
             while self.solver.step():
                 if self.stop_theory_flag:
                     self.solver.cancel()
@@ -451,10 +722,10 @@ class TheoryLP2RLVE(QTheory):
                 )
                 return
             if not self.is_fitting:
-                if last_progress < 100:
-                    self.Qprint("100%")
-                else:
-                    self.Qprint("")
+                while last_progress < 100:
+                    self.Qprint("-", end="")
+                    last_progress += 10
+                self.Qprint(" 100%")
             result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
         except Exception as exc:
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)

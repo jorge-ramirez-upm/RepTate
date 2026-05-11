@@ -51,5 +51,6 @@
         <file>Images/new_icons/linkGeMe.png</file>
         <file>Images/new_icons/icons8-light-on-N.png</file>
         <file>Images/new_icons/activation_energy.png</file>
+		<file>Images/new_icons/icons8-maintenance.png</file>
     </qresource>
 </RCC>

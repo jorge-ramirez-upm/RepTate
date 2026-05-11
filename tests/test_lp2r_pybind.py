@@ -1,4 +1,5 @@
 import math
+from pathlib import Path
 
 import pytest
 
@@ -190,3 +191,54 @@ def test_lp2r_lve_application_registration():
     app = QApplicationManager().handle_new_app("LVE")
 
     assert app.theories[TheoryLP2RLVE.thname] is TheoryLP2RLVE
+
+
+def test_lp2r_auhl_reference_matches_expected_output():
+    from RepTate.theories import _lp2r
+
+    material = _lp2r.Material()
+    material.m_kuhn = 113.0
+    material.m_e = 4350.0
+    material.g0 = 476000.0
+    material.tau_e = 1.30e-5
+    material.g_glass = 1.0e9
+    material.tau_glass = 7.0e-11
+    material.beta_glass = 0.370
+
+    controls = _lp2r.Controls()
+    controls.time_ratio = 1.02
+
+    solver = _lp2r.Solver(material, controls)
+    solver.add_lognormal_component(weight=1.0, n=50, mw=634500.0, pdi=1.03)
+    result = solver.run(freq_min=1.0e-4, freq_max=1.0e7, freq_ratio=1.1)
+
+    expected_file = Path("data/L2PR/01rcdefault/Expected_Output.tts")
+    expected = []
+    for line in expected_file.read_text().splitlines():
+        if line and not line.startswith("#") and not line.startswith("Mw="):
+            expected.append(tuple(map(float, line.split()[:3])))
+
+    assert len(result.omega) == len(expected)
+    for actual_row, expected_row in zip(
+        zip(result.omega, result.gp, result.gpp),
+        expected,
+    ):
+        for actual_value, expected_value in zip(actual_row, expected_row):
+            scale = max(abs(expected_value), 1.0)
+            assert abs(actual_value - expected_value) / scale < 1.0e-5
+
+
+def test_lp2r_kww_midrange_failure_reports_as_exception_not_abort():
+    from RepTate.theories import _lp2r
+
+    material = _material()
+    material.tau_glass = 1.0e-6
+    material.beta_glass = 0.7
+
+    solver = _lp2r.Solver(material, _lp2r.Controls())
+    solver.add_lognormal_component(weight=1.0, n=8, mw=100000.0, pdi=1.05)
+    result = solver.run(freq_min=1.0e5, freq_max=2.0e5, freq_ratio=1.1)
+
+    assert len(result.omega) > 0
+    assert all(math.isfinite(value) for value in result.gp)
+    assert all(math.isfinite(value) for value in result.gpp)
