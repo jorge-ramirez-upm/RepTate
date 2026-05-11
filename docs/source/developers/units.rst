@@ -90,6 +90,92 @@ editing may use ``display_unit`` via ``display_value()`` and
 ``value_from_display()``. Fitting and theory calculations should continue to
 use ``Parameter.value`` directly.
 
+Tool Parameter Metadata
+-----------------------
+
+Tool parameters use the same ``Parameter`` class and unit metadata as theory
+parameters. ``QTool`` displays ``Parameter.display_label()`` and
+``Parameter.display_value()`` in the tool parameter table, and converts values
+entered by the user through ``Parameter.value_from_display()``.
+
+Double-clicking a tool parameter name opens the tool-parameter properties
+dialog. If a parameter defines ``quantity``, ``internal_unit`` and
+``display_unit``, compatible display units are populated from the unit registry.
+
+When adding a unit-aware tool parameter, follow the same rule used for
+theories: numerical tool calculations must use ``Parameter.value`` in
+``internal_unit`` and conversion must remain at the GUI boundary.
+
+Materials Database
+------------------
+
+The Materials Database is unit-aware through metadata in
+``RepTate.tools.polymer_data``. Built-in and user material databases are
+canonicalized on load with ``canonicalize_database()``. New material database
+files should be saved with values already converted to internal units and with
+``polymer.unit_system`` set to ``MATERIAL_DATABASE_UNIT_SYSTEM``.
+
+Current unit-aware material fields are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field
+     - Internal unit
+     - Legacy/display unit
+   * - ``tau_e``
+     - ``s``
+     - ``s``
+   * - ``Ge``
+     - ``Pa``
+     - ``Pa``
+   * - ``Me``
+     - ``kg/mol``
+     - ``kg/mol`` or legacy ``kDa``
+   * - ``rho0``
+     - ``kg/m3``
+     - ``g/cm3``
+   * - ``M0``
+     - ``kg/mol``
+     - ``g/mol``
+   * - ``MK``
+     - ``kg/mol``
+     - ``Da``
+   * - ``B2``
+     - ``°C``
+     - ``°C``
+   * - ``Te``
+     - ``°C``
+     - ``°C``
+
+``ToolMaterialsDatabase.get_all_parameters()`` applies
+``convert_database_value_to_parameter()`` before assigning a database value to a
+theory parameter. This lets a database field stored in canonical units feed a
+legacy theory whose parameter intentionally declares a different internal unit.
+
+Do not bypass this conversion when importing material parameters into a theory.
+If a theory needs a derived material parameter, obtain the database value in
+internal database units and explicitly convert it to the target theory
+parameter's internal unit before assignment.
+
+Temperature caveat
+^^^^^^^^^^^^^^^^^^
+
+The canonical registry unit for temperature is ``K``, but WLF-style material
+parameters ``B2`` and ``Te`` are stored as ``°C`` because the existing WLF shift
+equations are written in Celsius differences and Celsius offsets. Do not change
+those fields to Kelvin unless all WLF formulas that use them are migrated at
+the same time.
+
+Legacy theory formulas
+^^^^^^^^^^^^^^^^^^^^^^
+
+Some theories still use historical numerical conventions internally even though
+their parameters are unit-aware. Keep conversions local and explicit. For
+example, ``TheoryDSMLinear`` declares ``MK`` and ``Mc`` as molar masses stored
+in ``kg/mol`` but converts them to ``Da`` inside the DSM formulas, because the
+legacy equations also convert file ``Mw`` to ``Da``.
+
 View Axis Metadata
 ------------------
 

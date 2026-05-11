@@ -16,6 +16,7 @@ LVE Theories
 .. include:: DTD_stars.rst
 .. include:: BoB_LVE.rst
 .. include:: RDP_LVE.rst
+.. include:: LP2R_LVE.rst
 .. include:: StickyReptation.rst
 .. include:: ReSpect.rst
 

@@ -60,6 +60,14 @@ TheoryDSMLinear
     :show-inheritance:
     :noindex:
 
+.. note::
+
+   ``TheoryDSMLinear`` is unit-aware at the parameter boundary, but its legacy
+   DSM formulas use molar masses in ``Da``. Keep conversions to ``Da`` local to
+   this theory's calculation helpers. Do not store generated values such as
+   ``Mc`` directly in ``Parameter.value`` unless they have first been converted
+   to the parameter's declared internal unit.
+
 TheoryDTDStars
 --------------
 .. automodule:: RepTate.theories.TheoryDTDStars
@@ -151,6 +159,14 @@ TheoryLDPEBatch
 TheoryLikhtmanMcLeish2002
 -------------------------
 .. automodule:: RepTate.theories.TheoryLikhtmanMcLeish2002
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :noindex:
+
+TheoryLP2RLVE
+-------------
+.. automodule:: RepTate.theories.TheoryLP2RLVE
     :members:
     :undoc-members:
     :show-inheritance:

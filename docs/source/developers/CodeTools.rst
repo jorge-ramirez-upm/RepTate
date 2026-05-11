@@ -67,6 +67,21 @@ ToolMaterialsDatabase
     :show-inheritance:
     :noindex:
 
+Unit-aware material parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Material unit metadata is defined in ``RepTate.tools.polymer_data``. The
+Materials Database stores canonical internal values and marks converted
+``polymer`` objects with ``MATERIAL_DATABASE_UNIT_SYSTEM``. Existing user
+databases without that marker are migrated on load.
+
+When applying material parameters to a theory, use
+``ToolMaterialsDatabase.get_all_parameters()`` or the same conversion path:
+database value in database internal units, then
+``polymer_data.convert_database_value_to_parameter()`` for the target
+``Parameter``. This is required for theories that intentionally keep a
+different legacy internal unit.
+
 ToolPowerLaw
 ------------
 

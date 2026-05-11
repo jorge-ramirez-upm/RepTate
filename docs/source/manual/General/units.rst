@@ -19,6 +19,8 @@ boundaries:
 * when reading unit-aware file parameters from the first line of a text file
 * when displaying file parameters in a Dataset
 * when displaying or editing unit-aware theory parameters
+* when displaying or editing unit-aware tool parameters
+* when applying unit-aware Materials Database values to theory parameters
 
 If no unit metadata exist for a given column, file parameter, or theory
 parameter, RepTate preserves the legacy numerical convention and no automatic
@@ -186,6 +188,33 @@ stored value remains dimensionless and tied to the canonical internal unit
 system used by the theory. RepTate does not currently change those displayed
 numbers when plot-axis units are changed. Instead, their meaning should be
 documented in the parameter description or tooltip.
+
+Tool parameters
+^^^^^^^^^^^^^^^
+
+Unit-aware tool parameters follow the same display/editing convention as theory
+parameters. The tool table shows the display unit in the parameter label, stores
+the numerical value in the parameter's internal unit, and converts values typed
+by the user from the display unit back to the internal unit.
+
+Double-clicking a tool parameter name opens a tool-parameter properties dialog.
+For unit-aware parameters, the dialog offers compatible display units from the
+unit registry.
+
+Materials Database
+^^^^^^^^^^^^^^^^^^
+
+The Materials Database keeps common material parameters in internal units and
+converts them when applying them to a theory. This is important because some
+legacy theories still use historical internal conventions. For example,
+``DSM Linear`` displays ``MK`` and ``Mc`` in ``Da`` and converts those values to
+the units expected by its legacy formulas, while the database stores molar
+masses internally in ``kg/mol``.
+
+The following Materials Database fields are unit-aware: ``tau_e`` in ``s``,
+``Ge`` in ``Pa``, ``Me`` in ``kg/mol``, ``rho0`` in ``kg/m3``, ``M0`` and
+``MK`` in ``kg/mol``, and the WLF temperature fields ``B2`` and ``Te`` in
+``°C``.
 
 Theory helper graphics
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -381,6 +410,11 @@ Important limitations
   ``FileParameterSpec`` metadata for that parameter.
 * Theory parameters are unit-aware only when that theory declares explicit
   ``quantity``, ``internal_unit``, and ``display_unit`` metadata.
+* Tool parameters are unit-aware only when that tool declares explicit
+  ``quantity``, ``internal_unit``, and ``display_unit`` metadata.
+* Materials Database values are stored in internal units, but temperature-shift
+  formulas for WLF-style parameters still use the established Celsius
+  convention.
 * Saved datasets, saved views, and some theory-specific exports do not yet
   consistently include unit annotations or convert values back to display
   units.

@@ -52,6 +52,12 @@ Theory parameters have properties, and some of these properties are very importa
 - **max_value**: maximum value that the parameter can adopt. If the parameter is not bounded, the maximum value is *inf*. The bounds should not be exceeded during minimization. If the user inputs manually a value that is outside the bounds, RepTate will issue a warning and set the parameter value to the bound that has been exceeded.
 - **display_flag**: whether the parameter will be shown in the parameter table or not.
 - **discrete_values**: comma-separated list of values that the parameter can adopt. Only relevant if the parameter type is either *discrete_real* or *discrete_integer*.
+- **quantity**, **internal_unit** and **display_unit**: unit metadata for unit-aware parameters. The parameter value used by the theory is stored in ``internal_unit``. The value shown in the table is converted to ``display_unit``. If compatible units are registered, ``display_unit`` can be changed from the parameter-properties dialog without changing the stored physical value.
+
+For unit-aware parameters, editing the value in the theory table uses the
+display unit shown next to the parameter name. For example, a parameter stored
+internally in ``kg/mol`` may be displayed and edited in ``Da``; RepTate converts
+the entered value back to ``kg/mol`` before the calculation.
 
 .. _figparameterproperties:
 .. figure:: images/ParameterProperties.png
