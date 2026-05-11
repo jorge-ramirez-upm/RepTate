@@ -75,7 +75,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QAbstractItemView,
 )
-from PySide6.QtCore import Qt, QObject, QThread, Signal
+from PySide6.QtCore import Qt, QObject, QThread, QTimer, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from RepTate.core.units import available_units, units_are_compatible
@@ -2268,9 +2268,13 @@ class QTheory(QWidget, Ui_TheoryTab):
             msg.exec_()
             item.setText(1, str(self.parameters[param_changed].display_value()))
         else:
-            self.update_parameter_table()
-            if self.autocalculate:
-                self.parent_dataset.handle_actionCalculate_Theory()
+            QTimer.singleShot(0, self._finish_parameter_item_change)
+
+    def _finish_parameter_item_change(self):
+        """Refresh after Qt has finished closing the active tree editor."""
+        self.update_parameter_table()
+        if self.autocalculate:
+            self.parent_dataset.handle_actionCalculate_Theory()
 
     def Qcopy_modes(self):
         """Copy Maxwell modes between theories"""

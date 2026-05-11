@@ -41,15 +41,17 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QFormLayout,
     QLineEdit,
+    QMenu,
     QMessageBox,
     QToolBar,
+    QToolButton,
     QVBoxLayout,
 )
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r
-from RepTate.theories.theory_helpers import GetMwdRepTate
+from RepTate.theories.theory_helpers import EditMWDDialog, GetMwdRepTate
 from RepTate.tools.ToolMaterialsDatabase import (
     check_chemistry,
     get_single_parameter,
@@ -443,13 +445,27 @@ class TheoryLP2RLVE(QTheory):
         self.get_material_parameters()
         self._read_mw_from_first_file()
         self.autocalculate = False
+        self.MWD_m = [50.0, 120.0]
+        self.MWD_phi = [0.4, 0.6]
 
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        self.get_mwd_action = tb.addAction(
+
+        self.tbutmwd = QToolButton()
+        self.tbutmwd.setPopupMode(QToolButton.MenuButtonPopup)
+        menu = QMenu(self)
+        self.get_mwd_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get MWD (MWD app)",
         )
+        self.get_mwd_data_action = menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Get MWD (MWD data)",
+        )
+        self.tbutmwd.setDefaultAction(self.get_mwd_action)
+        self.tbutmwd.setMenu(menu)
+        tb.addWidget(self.tbutmwd)
+
         self.advanced_controls_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
             "Advanced LP2R controls",
@@ -457,6 +473,7 @@ class TheoryLP2RLVE(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
         self.advanced_controls_action.triggered.connect(self.edit_advanced_controls)
         self.get_mwd_action.triggered.connect(self.get_mwd_reptate)
+        self.get_mwd_data_action.triggered.connect(self.edit_mwd_data)
 
     def edit_advanced_controls(self):
         """Open a dialog for the LP2R resource-file style controls."""
@@ -570,6 +587,8 @@ class TheoryLP2RLVE(QTheory):
     def set_discrete_distribution_from_mwd(self, masses, weights):
         """Populate LP2R discrete parameters from MWD masses and weights."""
         masses, weights = self._normalise_discrete_distribution(masses, weights)
+        self.MWD_m = np.copy(masses)
+        self.MWD_phi = np.copy(weights)
         self.set_param_value("discrete_masses", self._format_number_list(masses))
         self.set_param_value("discrete_weights", self._format_number_list(weights))
         self.set_param_value("input_mode", self.INPUT_DISCRETE)
@@ -614,6 +633,30 @@ class TheoryLP2RLVE(QTheory):
                 return
             item = dialog.btngrp.checkedButton().text()
             masses, weights = get_dict[item]()
+            try:
+                self.set_discrete_distribution_from_mwd(masses, weights)
+            except ValueError as exc:
+                self.Qprint("<font color=red><b>%s</b></font>" % exc)
+
+    def edit_mwd_data(self):
+        """Edit discrete MWD data directly, matching the RDP LVE MWD workflow."""
+        dialog = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
+        if dialog.exec_():
+            nmodes = dialog.table.rowCount()
+            masses = []
+            weights = []
+            _, success1 = self.set_param_value("tau_e", dialog.taue_text.text())
+            _, success2 = self.set_param_value("Me", dialog.Me_text.text())
+            if not success1 * success2:
+                self.Qprint("Could not understand Me or tau_e, try again")
+                return
+            for i in range(nmodes):
+                try:
+                    masses.append(float(dialog.table.item(i, 0).text()))
+                    weights.append(float(dialog.table.item(i, 1).text()))
+                except (AttributeError, ValueError):
+                    self.Qprint("Could not understand line %d, try again" % (i + 1))
+                    return
             try:
                 self.set_discrete_distribution_from_mwd(masses, weights)
             except ValueError as exc:
