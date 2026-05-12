@@ -88,7 +88,7 @@ class AxisSpec:
         if not self.unit_choices and self.quantity:
             self.unit_choices = tuple(unit.symbol for unit in available_units(self.quantity))
 
-    def is_unit_aware(self):
+    def is_unit_aware(self) -> bool:
         return self.internal_unit not in ("", "-") and self.display_unit not in ("", "-")
 
     def axis_label(self) -> str:

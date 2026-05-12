@@ -37,8 +37,13 @@ Module that defines a basic File, with headers, columns and data.
 """
 import os
 from dataclasses import dataclass
+from typing import Any, TypeAlias
 from RepTate.core.DataTable import DataTable
 from RepTate.core.units import convert_value, get_unit
+
+
+FileParameterValue: TypeAlias = Any
+FileParameters: TypeAlias = dict[str, FileParameterValue]
 
 
 @dataclass(frozen=True)
@@ -55,7 +60,7 @@ class FileParameterSpec:
     internal_unit: str = ""
     display_unit: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not any((self.quantity, self.internal_unit, self.display_unit)):
             return
         if not all((self.quantity, self.internal_unit, self.display_unit)):
@@ -75,7 +80,9 @@ class FileParameterSpec:
                 % (self.name, display.symbol, display.quantity, self.quantity)
             )
 
-    def value_to_display(self, value):
+    def value_to_display(
+        self, value: FileParameterValue
+    ) -> FileParameterValue:
         """Convert an internally stored value to the display unit."""
         if isinstance(value, str):
             try:
@@ -86,7 +93,9 @@ class FileParameterSpec:
             return convert_value(value, self.internal_unit, self.display_unit)
         return value
 
-    def value_from_display(self, value):
+    def value_from_display(
+        self, value: FileParameterValue
+    ) -> FileParameterValue:
         """Convert a display/input value to the internal unit."""
         if isinstance(value, str):
             value = float(value)
@@ -94,7 +103,9 @@ class FileParameterSpec:
             return convert_value(value, self.display_unit, self.internal_unit)
         return value
 
-    def value_from_unit(self, value, unit_symbol):
+    def value_from_unit(
+        self, value: FileParameterValue, unit_symbol: str
+    ) -> FileParameterValue:
         """Convert a value expressed in ``unit_symbol`` to the internal unit."""
         if isinstance(value, str):
             value = float(value)
@@ -102,78 +113,92 @@ class FileParameterSpec:
             return convert_value(value, unit_symbol, self.internal_unit)
         return value
 
-    def label_with_unit(self):
+    def label_with_unit(self) -> str:
         """Return a user-facing label for this parameter."""
         if self.display_unit and self.display_unit != "-":
             return "%s [%s]" % (self.name, self.display_unit)
         return self.name
 
 
+FileParameterSpecs: TypeAlias = dict[str, FileParameterSpec]
+
+
 class File(object):
     """Basic class that describes elements of a DataSet"""
 
-    def __init__(self, file_name="", file_type=None, parent_dataset=None, axarr=None):
+    def __init__(
+        self,
+        file_name: str = "",
+        file_type: Any = None,
+        parent_dataset: Any = None,
+        axarr: Any = None,
+    ) -> None:
         """**Constructor**"""
-        self.file_full_path = os.path.abspath(file_name)
+        self.file_full_path: str = os.path.abspath(file_name)
         tmpname = os.path.basename(self.file_full_path)
-        self.file_name_short = os.path.splitext(tmpname)[0]
-        self.file_type = file_type
-        self.parent_dataset = parent_dataset
-        self.axarr = axarr
+        self.file_name_short: str = os.path.splitext(tmpname)[0]
+        self.file_type: Any = file_type
+        self.parent_dataset: Any = parent_dataset
+        self.axarr: Any = axarr
 
         #plot attributes
-        self.marker = None
-        self.color = None
-        self.filled = None
-        self.size = None
+        self.marker: Any = None
+        self.color: Any = None
+        self.filled: Any = None
+        self.size: Any = None
 
         # Shift variables
-        self.isshifted = [False]*DataTable.MAX_NUM_SERIES
-        self.xshift = [0]*DataTable.MAX_NUM_SERIES
-        self.yshift = [0]*DataTable.MAX_NUM_SERIES
+        self.isshifted: list[bool] = [False]*DataTable.MAX_NUM_SERIES
+        self.xshift: list[float | int] = [0]*DataTable.MAX_NUM_SERIES
+        self.yshift: list[float | int] = [0]*DataTable.MAX_NUM_SERIES
 
-        self.header_lines=[]
-        self.file_parameters={}
-        self.file_parameter_specs={}
+        self.header_lines: list[str] = []
+        self.file_parameters: FileParameters = {}
+        self.file_parameter_specs: FileParameterSpecs = {}
         if file_type is not None:
             self.file_parameter_specs.update(
                 getattr(file_type, "file_parameter_specs", {})
             )
-        self.active = True
-        self.data_table = DataTable(axarr, self.file_name_short)
+        self.active: bool = True
+        self.data_table: DataTable = DataTable(axarr, self.file_name_short)
         # extra theory xrange
-        self.with_extra_x = False
-        self.theory_xmin = "None"
-        self.theory_xmax = "None"
-        self.theory_logspace = True
-        self.th_num_pts = 10 # number of points
-        self.nextramin = 0
-        self.nextramax = 0
+        self.with_extra_x: bool = False
+        self.theory_xmin: Any = "None"
+        self.theory_xmax: Any = "None"
+        self.theory_logspace: bool = True
+        self.th_num_pts: int = 10 # number of points
+        self.nextramin: int = 0
+        self.nextramax: int = 0
 
-    def __str__(self):
+    def __str__(self) -> Any:
         """Return a string"""
         # return Fore.YELLOW + 'File: ' + Fore.RESET  + '%s\n'%self.file_name_short + Fore.CYAN  + 'Path: ' + Fore.RESET + '%s\n'%self.file_full_path + Fore.RED + 'Parameters: ' + Fore.RESET + '%s'%self.file_parameters
         pass
 
-    def mincol(self, col):
+    def mincol(self, col: int) -> Any:
         """Minimum value in data_table column col"""
         return self.data_table.mincol(col)
 
-    def minpositivecol(self, col):
+    def minpositivecol(self, col: int) -> Any:
         """Minimum positive value in data_table column col"""
         return self.data_table.minpositivecol(col)
 
-    def maxcol(self, col):
+    def maxcol(self, col: int) -> Any:
         """Maximum value in data_table column col"""
         return self.data_table.maxcol(col)
 
-    def set_file_parameter_spec(self, spec):
+    def set_file_parameter_spec(self, spec: FileParameterSpec) -> None:
         """Attach optional metadata to a file parameter."""
         self.file_parameter_specs[spec.name] = spec
 
     def set_file_parameter(
-        self, name, value, spec=None, from_display=True, source_unit=None
-    ):
+        self,
+        name: str,
+        value: FileParameterValue,
+        spec: FileParameterSpec | None = None,
+        from_display: bool = True,
+        source_unit: str | None = None,
+    ) -> None:
         """Set a file parameter, converting to internal units when possible."""
         if spec is not None:
             self.set_file_parameter_spec(spec)
@@ -185,7 +210,9 @@ class File(object):
                 value = spec.value_from_display(value)
         self.file_parameters[name] = value
 
-    def file_parameter_value_to_display(self, name, value=None):
+    def file_parameter_value_to_display(
+        self, name: str, value: FileParameterValue | None = None
+    ) -> FileParameterValue:
         """Return a file parameter value converted to display units."""
         value = self.file_parameters[name] if value is None else value
         spec = self.file_parameter_specs.get(name)
@@ -193,14 +220,16 @@ class File(object):
             return value
         return spec.value_to_display(value)
 
-    def file_parameter_value_from_display(self, name, value):
+    def file_parameter_value_from_display(
+        self, name: str, value: FileParameterValue
+    ) -> FileParameterValue:
         """Convert a display value to this parameter's internal units."""
         spec = self.file_parameter_specs.get(name)
         if spec is None:
             return value
         return spec.value_from_display(value)
 
-    def file_parameter_label(self, name):
+    def file_parameter_label(self, name: str) -> str:
         """Return the parameter label with display unit metadata when present."""
         spec = self.file_parameter_specs.get(name)
         if spec is None:
