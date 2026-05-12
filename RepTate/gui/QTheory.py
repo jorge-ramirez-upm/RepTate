@@ -1372,18 +1372,24 @@ class QTheory(QWidget, Ui_TheoryTab):
         ]
         for p in k:
             par = self.parameters[p]
+            par_label = par.display_label()
             if par.opt_type == OptType.opt:
                 par.error = par_error[ind]
                 ind += 1
                 # table+='''<tr><td>%s</td><td>%10.4g ± %-9.4g</td></tr>'''%(par.name, par.value, par.error)
-                val_err = "%.4g ± %.4g" % (par.value, par.error)
-                table.append(["%-18s" % par.name, "%-18s" % val_err])
+                val_err = "%.4g ± %.4g" % (
+                    par.display_value(),
+                    par.display_value(par.error),
+                )
+                table.append(["%-18s" % par_label, "%-18s" % val_err])
             else:
                 # table+='''<tr><td>%s</td><td>%10.4g</td></tr>'''%(par.name, par.value)
                 if par.type == ParameterType.string:
-                    table.append(["%-18s" % par.name, "%18s" % par.value])
+                    table.append(["%-18s" % par_label, "%18s" % par.value])
                 else:
-                    table.append(["%-18s" % par.name, "%-18.4g" % par.value])
+                    table.append(
+                        ["%-18s" % par_label, "%-18.4g" % par.display_value()]
+                    )
         # table+='''</table><br>'''
         self.Qprint(table)
         self.is_fitting = False
@@ -2240,6 +2246,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                             val = float(attr_dict[attr_name].text())
                             setattr(p, attr_name, val)
                 self.update_parameter_table()
+                self.handle_parameter_metadata_changed()
 
         elif column == 1:
             self.thParamTable.editItem(item, column)
@@ -2273,8 +2280,13 @@ class QTheory(QWidget, Ui_TheoryTab):
     def _finish_parameter_item_change(self):
         """Refresh after Qt has finished closing the active tree editor."""
         self.update_parameter_table()
+        self.handle_parameter_metadata_changed()
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
+
+    def handle_parameter_metadata_changed(self):
+        """Hook for theories with auxiliary widgets derived from parameter metadata."""
+        pass
 
     def Qcopy_modes(self):
         """Copy Maxwell modes between theories"""

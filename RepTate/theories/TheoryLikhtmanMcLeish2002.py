@@ -164,15 +164,14 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         )
         self.linkMeGeaction.setCheckable(True)
         self.linkMeGeaction.setChecked(False)
-        lbl = QLabel("<P><b>rho</b> (g/cm<sup>3</sup>)</P></br>", self)
-        tb.addWidget(lbl)
-        self.txtrho = QLineEdit("%.4g" % self.parameters["rho0"].value)
+        self.lblrho = QLabel(self)
+        tb.addWidget(self.lblrho)
+        self.txtrho = QLineEdit()
         self.txtrho.setReadOnly(True)
         self.txtrho.setDisabled(True)
         dvalidator = QDoubleValidator()  # prevent letters etc.
-        dvalidator.setBottom(0)  # minimum allowed value
-        dvalidator.setTop(10)  # maximum allowed value
         self.txtrho.setValidator(dvalidator)
+        self.update_rho0_toolbar()
         tb.addWidget(self.txtrho)
         self.thToolsLayout.insertWidget(0, tb)
 
@@ -204,15 +203,33 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             QMessageBox.warning(
                 self, "Error", 'Could not convert "%s" to float' % new_text
             )
-            self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
+            self.txtrho.setText("%.4g" % self.parameters["rho0"].display_value())
         else:
-            self.set_param_value("rho0", val)
+            message, success = self.set_param_value_from_display("rho0", val)
+            if not success:
+                QMessageBox.warning(self, "Error", message)
+                self.txtrho.setText("%.4g" % self.parameters["rho0"].display_value())
+                return
             if self.autocalculate:
                 self.handle_actionCalculate_Theory()
 
+    def update_rho0_toolbar(self):
+        """Update rho0 toolbar widgets from the parameter display metadata."""
+        rho0 = self.parameters["rho0"]
+        self.lblrho.setText("<P><b>%s</b></P></br>" % rho0.display_label())
+        self.txtrho.setText("%.4g" % rho0.display_value())
+        validator = self.txtrho.validator()
+        if validator is not None:
+            validator.setBottom(rho0.display_value(0))
+            validator.setTop(rho0.display_value(10))
+
+    def handle_parameter_metadata_changed(self):
+        """Refresh auxiliary widgets after the theory parameter dialog changes units."""
+        self.update_rho0_toolbar()
+
     def set_extra_data(self, _):
         """Restore the check state of button and text value"""
-        self.txtrho.setText("%.4g" % self.parameters["rho0"].value)
+        self.update_rho0_toolbar()
         checked = self.parameters["linkMeGe"].value
         self.linkMeGeaction.setChecked(checked)
         self.linkMeGeaction_change(checked)
