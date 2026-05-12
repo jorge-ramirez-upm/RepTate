@@ -7,8 +7,14 @@ single quantity; frequency and angular frequency require explicit helpers.
 
 from dataclasses import dataclass
 import re
+from collections.abc import Sequence
+from typing import Any, TypeAlias, cast
 
 import numpy as np
+from numpy.typing import ArrayLike, NDArray
+
+
+NumericArray: TypeAlias = NDArray[Any]
 
 
 @dataclass(frozen=True)
@@ -19,7 +25,7 @@ class Unit:
     offset_to_internal: float = 0.0
     label: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.label:
             object.__setattr__(self, "label", self.symbol)
 
@@ -31,7 +37,7 @@ class ColumnSpec:
     internal_unit: str
     quantity: str = ""
 
-    def axis_label(self):
+    def axis_label(self) -> str:
         if self.internal_unit in ("", "-"):
             return self.name
         return "%s [%s]" % (self.name, self.internal_unit)
@@ -45,7 +51,7 @@ _PARAMETER_VALUE_UNIT_RE = re.compile(
 )
 
 
-_UNITS = {
+_UNITS: dict[str, Unit] = {
     "-": Unit("-", "dimensionless", 1.0),
     "ns": Unit("ns", "time", 1.0e-9),
     "μs": Unit("μs", "time", 1.0e-6),
@@ -208,7 +214,7 @@ _UNITS = {
     "kDa": Unit("kDa", "molar_mass", 1.0)
 }
 
-_INTERNAL_UNITS = {
+_INTERNAL_UNITS: dict[str, str] = {
     "dimensionless": "-",
     "time": "s",
     "inverse_distance": "1/A",
@@ -228,7 +234,7 @@ _INTERNAL_UNITS = {
     "molar_mass": "kg/mol",
 }
 
-def get_unit(symbol):
+def get_unit(symbol: str) -> Unit:
     """Return the Unit registered for *symbol*."""
     try:
         return _UNITS[symbol]
@@ -236,7 +242,7 @@ def get_unit(symbol):
         raise ValueError("Unknown unit: %s" % symbol) from exc
 
 
-def available_units(quantity):
+def available_units(quantity: str) -> tuple[Unit, ...]:
     """Return registered units for a quantity."""
     units = tuple(unit for unit in _UNITS.values() if unit.quantity == quantity)
     if not units:
@@ -244,7 +250,7 @@ def available_units(quantity):
     return units
 
 
-def parse_column_label(label):
+def parse_column_label(label: str) -> tuple[str, str | None, str]:
     """Return ``(base_label, unit_symbol, original_label)`` for a column label.
 
     Unit symbols are parsed but not validated here. Validation belongs to the
@@ -258,7 +264,7 @@ def parse_column_label(label):
     return match.group("label").strip(), unit_symbol.strip(), label
 
 
-def parse_parameter_value(value):
+def parse_parameter_value(value: Any) -> tuple[Any, str | None]:
     """Parse a file parameter value with an optional trailing unit.
 
     Returns ``(parsed_value, unit_symbol)`` where ``unit_symbol`` is ``None``
@@ -276,7 +282,9 @@ def parse_parameter_value(value):
         return value, None
 
 
-def make_column_spec(name, unit_symbol, expected_unit_symbol=None):
+def make_column_spec(
+    name: str, unit_symbol: str, expected_unit_symbol: str | None = None
+) -> ColumnSpec:
     """Create metadata for a data column.
 
     Unknown units preserve RepTate's current implicit behavior: values are kept
@@ -286,7 +294,7 @@ def make_column_spec(name, unit_symbol, expected_unit_symbol=None):
     # declare frequency where RepTate expects angular frequency. It is not a
     # generic compatibility rule: convert_value("Hz", "rad/s") still raises.
     if (unit_symbol, expected_unit_symbol) in (("Hz", "rad/s"), ("rad/s", "Hz")):
-        expected_unit = get_unit(expected_unit_symbol)
+        expected_unit = get_unit(cast(str, expected_unit_symbol))
         return ColumnSpec(
             name=name,
             display_unit=unit_symbol,
@@ -305,7 +313,11 @@ def make_column_spec(name, unit_symbol, expected_unit_symbol=None):
     )
 
 
-def make_column_specs(names, unit_symbols, expected_unit_symbols=None):
+def make_column_specs(
+    names: Sequence[str],
+    unit_symbols: Sequence[str],
+    expected_unit_symbols: Sequence[str] | None = None,
+) -> list[ColumnSpec]:
     """Create column metadata from parallel column name and unit lists."""
     expected_unit_symbols = expected_unit_symbols or unit_symbols
     return [
@@ -318,14 +330,14 @@ def make_column_specs(names, unit_symbols, expected_unit_symbols=None):
     ]
 
 
-def units_are_compatible(from_unit, to_unit):
+def units_are_compatible(from_unit: str, to_unit: str) -> bool:
     """Return True when both units describe the same quantity."""
     source = get_unit(from_unit)
     target = get_unit(to_unit)
     return source.quantity == target.quantity
 
 
-def _check_compatible_units(from_unit, to_unit):
+def _check_compatible_units(from_unit: str, to_unit: str) -> tuple[Unit, Unit]:
     source = get_unit(from_unit)
     target = get_unit(to_unit)
     if source.quantity != target.quantity:
@@ -336,40 +348,42 @@ def _check_compatible_units(from_unit, to_unit):
     return source, target
 
 
-def _to_internal(values, unit):
+def _to_internal(values: Any, unit: Unit) -> Any:
     return values * unit.factor_to_internal + unit.offset_to_internal
 
 
-def _from_internal(values, unit):
+def _from_internal(values: Any, unit: Unit) -> Any:
     return (values - unit.offset_to_internal) / unit.factor_to_internal
 
 
-def _convert(values, from_unit, to_unit):
+def _convert(values: Any, from_unit: str, to_unit: str) -> Any:
     source, target = _check_compatible_units(from_unit, to_unit)
     return _from_internal(_to_internal(values, source), target)
 
 
-def convert_value(value, from_unit, to_unit):
+def convert_value(value: Any, from_unit: str, to_unit: str) -> Any:
     """Convert a scalar value between compatible units."""
     return _convert(value, from_unit, to_unit)
 
 
-def convert_array(values, from_unit, to_unit):
+def convert_array(values: ArrayLike, from_unit: str, to_unit: str) -> NumericArray:
     """Convert array-like values between compatible units."""
     return _convert(np.asarray(values), from_unit, to_unit)
 
 
-def frequency_to_angular_frequency(values):
+def frequency_to_angular_frequency(values: ArrayLike) -> NumericArray:
     """Convert frequency in Hz to angular frequency in rad/s."""
     return np.asarray(values) * (2.0 * np.pi)
 
 
-def angular_frequency_to_frequency(values):
+def angular_frequency_to_frequency(values: ArrayLike) -> NumericArray:
     """Convert angular frequency in rad/s to frequency in Hz."""
     return np.asarray(values) / (2.0 * np.pi)
 
 
-def convert_array_to_internal(values, unit_symbol, internal_unit_symbol=None):
+def convert_array_to_internal(
+    values: ArrayLike, unit_symbol: str, internal_unit_symbol: str | None = None
+) -> NumericArray:
     """Convert values to the registered internal unit, preserving unknown units."""
     if (unit_symbol, internal_unit_symbol) == ("Hz", "rad/s"):
         return frequency_to_angular_frequency(values)
@@ -382,7 +396,9 @@ def convert_array_to_internal(values, unit_symbol, internal_unit_symbol=None):
     return convert_array(values, unit.symbol, internal_unit_symbol or _INTERNAL_UNITS[unit.quantity])
 
 
-def convert_array_from_internal(values, internal_unit_symbol, unit_symbol=None):
+def convert_array_from_internal(
+    values: ArrayLike, internal_unit_symbol: str, unit_symbol: str | None = None
+) -> NumericArray:
     """Convert values from an internal unit to a requested display unit."""
     if unit_symbol in (None, "", internal_unit_symbol):
         return np.asarray(values)

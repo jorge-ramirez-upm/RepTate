@@ -1,0 +1,42 @@
+{
+  "include": [
+    "RepTate/core/axis_labels.py",
+    "RepTate/core/Parameter.py",
+    "RepTate/core/units.py"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    ".git",
+    ".pytest_cache",
+    ".tmp_*",
+    ".vscode",
+    "build",
+    "dist",
+    "RepTate.egg-info",
+    "docs/_build",
+    "docs/build",
+    "docs/source/_build",
+    "RepTate/gui/Ui_*.py",
+    "RepTate/gui/*_rc.py",
+    "RepTate/theories/BuildLandscape_Linux",
+    "RepTate/theories/modified_LP2R1.1",
+    "RepTate/theories/modified_bob2.5",
+    "RepTate/theories/modified_bob2.6",
+    "RepTate/theories/*_source_c_code",
+    "RepTate/theories/kww_source_c_code"
+  ],
+  "ignore": [
+    "RepTate/gui/Ui_*.py",
+    "RepTate/gui/*_rc.py"
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "reportMissingImports": "warning",
+  "reportMissingModuleSource": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownParameterType": "none",
+  "reportUnknownVariableType": "none",
+  "reportUntypedFunctionDecorator": "none"
+}
