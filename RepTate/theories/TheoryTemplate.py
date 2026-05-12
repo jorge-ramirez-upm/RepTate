@@ -39,6 +39,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
+from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 
@@ -47,12 +48,12 @@ class TheoryTemplate(QTheory):
     """The basic documentation of the theory goes here. Please, add as much information as possible 
     (references, equations, qualitative descriptions, etc. """
 
-    thname = "TemplateTheory"
-    description = "Template Theory"
+    thname: str = "TemplateTheory"
+    description: str = "Template Theory"
     citations: list[str] = []
     doi: list[str] = []
     # html_help_file = ''
-    single_file = (
+    single_file: bool = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
@@ -94,8 +95,8 @@ If not, you can safely delete it."""
 
     def calculate(self, f: Any = None) -> None:
         """THIS IS THE FUNCTION THAT CALCULATES THE THEORY"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))

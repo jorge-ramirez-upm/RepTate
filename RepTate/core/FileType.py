@@ -36,17 +36,22 @@ Module for the basic definition of file types.
 
 """
 import os
+from typing import Any, TypeAlias
+
 import numpy as np
 
 # import logging
 from openpyxl import load_workbook
-from RepTate.core.File import File
+from RepTate.core.File import File, FileParameterSpec
 from RepTate.core.units import (
     convert_array_to_internal,
     make_column_specs,
     parse_column_label,
     parse_parameter_value,
 )
+
+
+FileParameterSpecs: TypeAlias = dict[str, FileParameterSpec]
 
 
 class TXTColumnFile(object):
@@ -101,14 +106,14 @@ class TXTColumnFile(object):
 
     def __init__(
         self,
-        name="TXTColumn",
-        extension="txt",
-        description="Generic text file with columns",
-        col_names=[],
-        basic_file_parameters=[],
-        col_units=[],
-        file_parameter_specs=[],
-    ):
+        name: str = "TXTColumn",
+        extension: str = "txt",
+        description: str = "Generic text file with columns",
+        col_names: list[str] = [],
+        basic_file_parameters: list[str] = [],
+        col_units: list[str] = [],
+        file_parameter_specs: list[FileParameterSpec] = [],
+    ) -> None:
         """
         **Constructor**
 
@@ -121,23 +126,23 @@ class TXTColumnFile(object):
             - col_units {list of str}: Default units of columns
             - file_parameter_specs {list}: optional unit metadata for file parameters
         """
-        self.name = name
-        self.extension = extension
-        self.description = description
-        self.col_names_line = 0
-        self.first_data_line = 0
-        self.col_names = col_names
-        self.col_index = list(range(len(self.col_names)))
-        self.basic_file_parameters = (
+        self.name: str = name
+        self.extension: str = extension
+        self.description: str = description
+        self.col_names_line: int = 0
+        self.first_data_line: int = 0
+        self.col_names: list[str] = col_names
+        self.col_index: list[int] = list(range(len(self.col_names)))
+        self.basic_file_parameters: list[str] = (
             basic_file_parameters  # Those that will show by default in the dataset
         )
-        self.col_units = col_units
-        self.file_parameter_specs = {
+        self.col_units: list[str] = col_units
+        self.file_parameter_specs: FileParameterSpecs = {
             spec.name: spec for spec in file_parameter_specs
         }
         # self.logger = logging.getLogger('ReptateLogger')
 
-    def is_number(self, s):
+    def is_number(self, s: str) -> bool:
         """Checks if the input string contains a number"""
         try:
             float(s)
@@ -145,7 +150,7 @@ class TXTColumnFile(object):
         except ValueError:
             return False
 
-    def get_parameters(self, line, file):
+    def get_parameters(self, line: str, file: File) -> None:
         """Get the file parameters"""
         items = line.split(";")
         file.file_parameters = {}
@@ -166,7 +171,9 @@ class TXTColumnFile(object):
                 else:
                     file.set_file_parameter(name, parsed_value)
 
-    def find_col_names_and_first_data_lines(self, lines, file):
+    def find_col_names_and_first_data_lines(
+        self, lines: list[str], file: File
+    ) -> tuple[int, int]:
         """Find column names and first row with data"""
         colnameline = 0
         firstdata = 0
@@ -183,16 +190,16 @@ class TXTColumnFile(object):
                 file.header_lines.append(lines[i])
         return colnameline, firstdata
 
-    def parse_column_header(self, line):
+    def parse_column_header(self, line: str) -> tuple[list[int], list[str], list[str]]:
         """Map expected columns to data indexes and units declared in a header.
 
         If no unit is declared in the file header, fall back to the application
         file type units. Those units are RepTate's current implicit input units.
         """
         tokens = line.split()
-        col_index = []
-        col_labels = []
-        col_units = []
+        col_index: list[int] = []
+        col_labels: list[str] = []
+        col_units: list[str] = []
         data_col_index = 0
         i = 0
         while i < len(tokens):
@@ -219,10 +226,12 @@ class TXTColumnFile(object):
             i += 1
         return col_index, col_labels, col_units
 
-    def read_file(self, filename, parent_dataset, axarr):
+    def read_file(
+        self, filename: str, parent_dataset: Any, axarr: Any
+    ) -> File | None:
         """Gets all the data from the file"""
         if not os.path.isfile(filename):
-            print('File "%s" does not exists' % f)
+            print('File "%s" does not exists' % f)  # pyright: ignore[reportUnboundVariable]
             return
         file = File(filename, self, parent_dataset, axarr)
         f = open(filename, "r", encoding="latin-1")
@@ -236,7 +245,7 @@ class TXTColumnFile(object):
 
         self.col_index = []
         if self.col_names_line > 0:
-            col_labels = self.col_names[:]
+            col_labels: list[str] = self.col_names[:]
             self.col_index, col_labels, col_units = self.parse_column_header(
                 lines[self.col_names_line]
             )
@@ -255,7 +264,7 @@ class TXTColumnFile(object):
         file.data_table.column_names = col_labels
         file.data_table.column_units = col_units
         file.data_table.column_specs = make_column_specs(col_labels, col_units, expected_units)
-        rawdata = []
+        rawdata: list[float] = []
         for i in range(self.first_data_line, len(lines)):
             items = lines[i].split()
             if len(items) > 0:
@@ -287,33 +296,35 @@ class ExcelFile(object):
 
     def __init__(
         self,
-        name="Excel File",
-        extension="xlsx",
-        description="Generic Excel file",
-        col_names=[],
-        basic_file_parameters=[],
-        col_units=[],
-        file_parameter_specs=[],
-    ):
+        name: str = "Excel File",
+        extension: str = "xlsx",
+        description: str = "Generic Excel file",
+        col_names: list[str] = [],
+        basic_file_parameters: list[str] = [],
+        col_units: list[str] = [],
+        file_parameter_specs: list[FileParameterSpec] = [],
+    ) -> None:
 
-        self.name = name
-        self.extension = extension
-        self.description = description
-        self.col_names = col_names
-        self.col_index = list(range(len(self.col_names)))
-        self.basic_file_parameters = (
+        self.name: str = name
+        self.extension: str = extension
+        self.description: str = description
+        self.col_names: list[str] = col_names
+        self.col_index: list[int] = list(range(len(self.col_names)))
+        self.basic_file_parameters: list[str] = (
             basic_file_parameters  # Those that will show by default in the dataset
         )
-        self.col_units = col_units
-        self.file_parameter_specs = {
+        self.col_units: list[str] = col_units
+        self.file_parameter_specs: FileParameterSpecs = {
             spec.name: spec for spec in file_parameter_specs
         }
         # self.logger = logging.getLogger('ReptateLogger')
 
-    def read_file(self, filename, parent_dataset, axarr):
+    def read_file(
+        self, filename: str, parent_dataset: Any, axarr: Any
+    ) -> File | None:
         """Read Excel File"""
         if not os.path.isfile(filename):
-            print('File "%s" does not exists' % f)
+            print('File "%s" does not exists' % f)  # pyright: ignore[reportUndefinedVariable]
             return
         file = File(filename, self, parent_dataset, axarr)
         wb = load_workbook(filename)

@@ -3,6 +3,7 @@
     "RepTate/core/axis_labels.py",
     "RepTate/core/DataTable.py",
     "RepTate/core/File.py",
+    "RepTate/core/FileType.py",
     "RepTate/core/Parameter.py",
     "RepTate/core/units.py",
     "RepTate/core/View.py",
