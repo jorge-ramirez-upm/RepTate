@@ -5,7 +5,8 @@
     "RepTate/core/File.py",
     "RepTate/core/Parameter.py",
     "RepTate/core/units.py",
-    "RepTate/core/View.py"
+    "RepTate/core/View.py",
+    "RepTate/theories/TheoryTemplate.py"
   ],
   "exclude": [
     "**/__pycache__",

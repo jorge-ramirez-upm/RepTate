@@ -34,7 +34,11 @@
 
 Template file for creating a new theory
 """
+from typing import Any
+
 import numpy as np
+from numpy.typing import NDArray
+
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 
@@ -45,14 +49,16 @@ class TheoryTemplate(QTheory):
 
     thname = "TemplateTheory"
     description = "Template Theory"
-    citations = []
-    doi = []
+    citations: list[str] = []
+    doi: list[str] = []
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -68,25 +74,25 @@ class TheoryTemplate(QTheory):
         # add widgets specific to the theory here:
 
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[NDArray[Any], NDArray[Any], bool]:
         """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
 If the theory does not provide modes, simply delete this function."""
         tau = np.ones(1)
         G = np.ones(1)
         return tau, G, False
 
-    def set_modes(self):
+    def set_modes(self) -> bool:
         """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
 If the theory does not provide modes, simply delete this function."""
-        self.logger.info("set_modes not allowed in this theory (%s)" % elf.thname)
+        self.logger.info("set_modes not allowed in this theory (%s)" % self.thname)
         return False
 
-    def destructor(self):
+    def destructor(self) -> None:
         """If the theory needs to clear up memory in a very special way, fill up the contents of this function.
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """THIS IS THE FUNCTION THAT CALCULATES THE THEORY"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
