@@ -1,0 +1,104 @@
+/* =========================================================
+   Customizations for sphinx_rtd_theme
+   RepTate documentation
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Sidebar width
+   --------------------------------------------------------- */
+
+.wy-nav-side {
+    width: 260px;
+}
+
+.wy-side-scroll {
+    width: 260px;
+}
+
+.wy-side-nav-search {
+    width: 260px;
+    box-sizing: border-box;
+}
+
+.wy-menu-vertical {
+    width: 260px;
+}
+
+/* Main content offset */
+.wy-nav-content-wrap {
+    margin-left: 260px;
+}
+
+/* ---------------------------------------------------------
+   Logo size
+   --------------------------------------------------------- */
+
+.wy-side-nav-search .wy-dropdown > a img.logo,
+.wy-side-nav-search > a img.logo {
+    width: 160px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+/* ---------------------------------------------------------
+   Navigation menu formatting
+   Prevent clipping/overflow of long entries
+   --------------------------------------------------------- */
+
+.wy-menu-vertical a {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-size: 95%;
+}
+
+/* Prevent sidebar text from overflowing into content */
+div.sphinxsidebarwrapper {
+    overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------
+   Improve content readability
+   --------------------------------------------------------- */
+
+.wy-nav-content {
+    max-width: 1000px;
+}
+
+/* Slightly more breathing room */
+.rst-content {
+    line-height: 1.6;
+}
+
+/* ---------------------------------------------------------
+   Better formatting for code signatures
+   --------------------------------------------------------- */
+
+.sig {
+    overflow-x: auto;
+}
+
+/* Wrap long API signatures more gracefully */
+.sig-prename,
+.sig-name,
+.sig-param {
+    overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------
+   Optional: nicer tables
+   --------------------------------------------------------- */
+
+.rst-content table.docutils {
+    width: 100%;
+}
+
+/* ---------------------------------------------------------
+   Optional: cleaner sidebar spacing
+   --------------------------------------------------------- */
+
+.wy-menu-vertical li.current > a {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
