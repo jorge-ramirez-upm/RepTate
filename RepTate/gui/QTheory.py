@@ -41,6 +41,9 @@ import enum
 import time
 import getpass
 import ast
+from collections.abc import Callable
+from typing import Any, TypeAlias, cast
+
 import numpy as np
 from scipy.optimize import (
     curve_fit,
@@ -77,7 +80,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QObject, QThread, QTimer, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
-from RepTate.core.Parameter import OptType, ParameterType
+from RepTate.core.File import File
+from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.core.units import available_units, units_are_compatible
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
@@ -92,12 +96,17 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_TheoryTab import Ui_TheoryTab
 from RepTate.gui.Ui_fittingoptions import Ui_Dialog
 import RepTate.gui.Ui_errorcalculationoptions
+
+
+TheoryParameters: TypeAlias = OrderedDict[str, Parameter]
+TheoryTables: TypeAlias = dict[str, DataTable]
+TheoryFunction: TypeAlias = Callable[..., Any]
 
 
 # IMPORT FROM THEORY
@@ -346,7 +355,9 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     print_signal = Signal(str)
 
-    def __init__(self, name="QTheory", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "QTheory", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """
         **Constructor**
 
@@ -374,17 +385,17 @@ class QTheory(QWidget, Ui_TheoryTab):
         # super().__init__(name=name, parent_dataset=parent_dataset, axarr=axarr)
         self.setupUi(self)
 
-        self.name = name
-        self.parent_dataset = parent_dataset
-        self.axarr = axarr
-        self.ax = axarr[0]  # theory calculation only on this plot
-        self.parameters = (
+        self.name: str = name
+        self.parent_dataset: Any = parent_dataset
+        self.axarr: Any = axarr
+        self.ax: Any = axarr[0]  # theory calculation only on this plot
+        self.parameters: TheoryParameters = (
             OrderedDict()
         )  # keep the dictionary key in order for the parameter table
-        self.tables = {}
-        self.function = None
-        self.active = True  # defines if the theory is plotted
-        self.calculate_is_busy = False
+        self.tables: TheoryTables = {}
+        self.function: TheoryFunction | None = None
+        self.active: bool = True  # defines if the theory is plotted
+        self.calculate_is_busy: bool = False
         self.axarr[0].autoscale(False)
         self.autocalculate = True
         self.extra_data = {}  # Dictionary saved during "Save Project"
@@ -511,14 +522,18 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.handle_parameterItemChanged
         )
 
-    def current_view(self):
+    def current_view(self) -> Any:
         return self.parent_dataset.parent_application.current_view
 
-    def convert_view_data_to_display(self, x, y, view=None):
+    def convert_view_data_to_display(
+        self, x: Any, y: Any, view: Any = None
+    ) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_display(x, y)
 
-    def convert_view_data_to_internal(self, x, y, view=None):
+    def convert_view_data_to_internal(
+        self, x: Any, y: Any, view: Any = None
+    ) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_internal(x, y)
 
@@ -594,16 +609,16 @@ class QTheory(QWidget, Ui_TheoryTab):
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
         before execution (for example, variable substitution) do it here."""
-        super(Theory, self).precmd(line)
+        super(Theory, self).precmd(line)  # pyright: ignore[reportUndefinedVariable]
         return line
 
-    def update_parameter_table(self):
+    def update_parameter_table(self):  # pyright: ignore[reportRedeclaration]
         """
         Added so that Maxwell modes works in CL
         """
         pass
 
-    def handle_actionCalculate_Theory(self):
+    def handle_actionCalculate_Theory(self):  # pyright: ignore[reportRedeclaration]
         """Used only in non GUI mode"""
         self.do_calculate("")
 
@@ -612,7 +627,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
         self.stop_theory_flag = True
 
-    def do_calculate(self, line, timing=True):
+    def do_calculate(self, line: str, timing: bool = True) -> None:
         """Calculate the theory"""
         if self.calculate_is_busy:
             return
@@ -629,7 +644,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                 if f.with_extra_x:
                     data_copy = f.data_table.data.copy()
                     self.extend_xrange(f)
-                self.function(f)
+                cast(TheoryFunction, self.function)(f)
                 if f.with_extra_x:
                     # restore f
                     f.data_table.data = data_copy
@@ -651,7 +666,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.do_cite("")
         self.calculate_is_busy = False
 
-    def extend_xrange(self, fcopy):
+    def extend_xrange(self, fcopy: File) -> None:
         """Extend the xrange of the fcopy data"""
         # xmin/xmax of current data
         ncol = fcopy.data_table.data.shape[1]
@@ -696,7 +711,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                 )
         fcopy.data_table.num_rows = fcopy.data_table.data.shape[0]
 
-    def get_non_extended_th_table(self, f):
+    def get_non_extended_th_table(self, f: File) -> DataTable:
         """return a copy of the theory table associated with f, where the extra rows are deleted"""
         if f.with_extra_x:
             tmp_dt = DataTable(axarr=[])
@@ -710,8 +725,8 @@ class QTheory(QWidget, Ui_TheoryTab):
         else:
             return self.tables[f.file_name_short]
 
-    def theory_files(self):
-        f_list = []
+    def theory_files(self) -> list[File]:
+        f_list: list[File] = []
         if self.single_file:
             selected_file = self.parent_dataset.selected_file
             if selected_file:
@@ -944,7 +959,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         # 3. Constructs the y vector that contains all the Y values from the theory after
         #    applying the current view and respecting the {xmin, xmax} & {ymin, ymax} limits
-        y = []
+        y: Any = []
         view = self.parent_dataset.parent_application.current_view
 
         for f in self.theory_files():
@@ -1006,8 +1021,8 @@ class QTheory(QWidget, Ui_TheoryTab):
         view = self.parent_dataset.parent_application.current_view
         self.Qprint("""<hr><h2>Parameter Fitting</h2>""")
         # Vectors that contain all X and Y in the files & view
-        x = []
-        y = []
+        x: Any = []
+        y: Any = []
 
         if self.xrange.get_visible():
             if self.xmin > self.xmax:
@@ -1659,7 +1674,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         p = self.parameters[name]
         try:
@@ -1741,7 +1756,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             print("In set_param_value:", e)
             return "", False
 
-    def set_param_value_from_display(self, name, value):
+    def set_param_value_from_display(self, name: str, value: Any) -> tuple[str, bool]:
         """Set a parameter from the value currently displayed in the GUI."""
         p = self.parameters[name]
         if not (p.internal_unit and p.display_unit):
@@ -1768,7 +1783,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             print(self.parameters[line])
             print(self.parameters[line].__repr__())
         else:
-            super(Theory, self).default(line)
+            super(Theory, self).default(line)  # pyright: ignore[reportUndefinedVariable]
 
     def show_theory_extras(self, show):
         pass

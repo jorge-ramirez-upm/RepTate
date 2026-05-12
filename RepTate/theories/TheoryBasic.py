@@ -38,6 +38,9 @@ Module that defines the basic theories that should be available for all Applicat
 from numpy import *
 import numpy as np
 import re
+from typing import Any
+
+from RepTate.core.DataTable import DataTable
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
@@ -63,12 +66,14 @@ class TheoryPolynomial(QTheory):
        - :math:`n`: degree of the polynomial function.
        - :math:`A_i`: polynomial coefficeints.
     """
-    thname = "Polynomial"
-    description = "Fit a polynomial of degree n"
-    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
-    single_file = True
+    thname: str = "Polynomial"
+    description: str = "Fit a polynomial of degree n"
+    html_help_file: str = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial'
+    single_file: bool = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**
 
         Keyword Arguments:
@@ -77,7 +82,7 @@ class TheoryPolynomial(QTheory):
             - ax {Axes array} -- Matplotlib axes where the theory will plot the data (default: {None})
         """
         super().__init__(name, parent_dataset, ax)
-        self.MAX_DEGREE = 10
+        self.MAX_DEGREE: int = 10
         self.function = self.polynomial
         self.parameters["n"] = Parameter(
             name="n",
@@ -86,7 +91,8 @@ class TheoryPolynomial(QTheory):
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False)
-        for i in range(self.parameters["n"].value + 1):
+        n: Any = self.parameters["n"].value
+        for i in range(n + 1):
             self.parameters["A%d" % i] = Parameter(
                 "A%d" % i,
                 1.0,
@@ -107,22 +113,22 @@ class TheoryPolynomial(QTheory):
         connection_id = self.spinbox.valueChanged.connect(
             self.handle_spinboxValueChanged)
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: Any) -> None:
         """Handle a change of the parameter 'nmode'"""
         self.set_param_value("n", value)
 
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change a parameter value, in particular *n*
         """
         if name == 'n':
-            nold = self.parameters["n"].value
+            nold: Any = self.parameters["n"].value
             Aold = np.zeros(nold + 1)
             for i in range(nold + 1):
                 Aold[i] = self.parameters["A%d" % i].value
                 del self.parameters["A%d" % i]
 
-            nnew = value
+            nnew: Any = value
             message, success = super().set_param_value("n", nnew)
             for i in range(nnew + 1):
                 if i <= nold:
@@ -143,19 +149,20 @@ class TheoryPolynomial(QTheory):
         self.update_parameter_table()
         return message, success
 
-    def polynomial(self, f=None):
+    def polynomial(self, f: Any = None) -> None:
         """Actual polynomial function.
 
         .. math::
             y(x) = \\sum_{i=0}^n A_i x^i
         """
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        for i in range(self.parameters["n"].value + 1):
+        n: Any = self.parameters["n"].value
+        for i in range(n + 1):
             a = self.parameters["A%d" % i].value
             for j in range(1, tt.num_columns):
                 tt.data[:, j] += a * tt.data[:, 0]**i
@@ -181,12 +188,14 @@ class TheoryPowerLaw(QTheory):
        - :math:`a`: prefactor.
        - :math:`b`: exponent.
     """
-    thname = "Power Law"
-    description = "Fit Power Law"
-    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
-    single_file = True
+    thname: str = "Power Law"
+    description: str = "Fit Power Law"
+    html_help_file: str = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law'
+    single_file: bool = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.powerlaw
@@ -196,15 +205,15 @@ class TheoryPowerLaw(QTheory):
             "b", 1.0, "Exponent", ParameterType.real, opt_type=OptType.opt)
         self.Qprint("%s: a*x^b" % self.thname)
 
-    def powerlaw(self, f=None):
+    def powerlaw(self, f: Any = None) -> None:
         """Actual function
 
     * **Function**
         .. math::
             y(x) = a x^b
         """
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -236,12 +245,14 @@ class TheoryExponential(QTheory):
        - :math:`T`: exponential "time" constant.
 
     """
-    thname = "Exponential"
-    description = "Fit Exponential"
-    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
-    single_file = True
+    thname: str = "Exponential"
+    description: str = "Fit Exponential"
+    html_help_file: str = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential'
+    single_file: bool = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.exponential
@@ -255,10 +266,10 @@ class TheoryExponential(QTheory):
             opt_type=OptType.opt)
         self.Qprint("%s: a*exp(-x/T)" % self.thname)
 
-    def exponential(self, f=None):
+    def exponential(self, f: Any = None) -> None:
         """**Function** :math:`y(x) = a \\exp(-x/T)`"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -289,12 +300,14 @@ class TheoryTwoExponentials(QTheory):
        - :math:`a_1`, :math:`a_2`: prefactors.
        - :math:`T_1`, :math:`T_2`: exponential "time" constants.
     """
-    thname = "Two Exponentials"
-    description = "Fit two exponentials"
-    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
-    single_file = True
+    thname: str = "Two Exponentials"
+    description: str = "Fit two exponentials"
+    html_help_file: str = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential'
+    single_file: bool = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.two_exponentials
@@ -316,23 +329,23 @@ class TheoryTwoExponentials(QTheory):
             opt_type=OptType.opt)
         self.Qprint("%s: a1*exp(-x/T1) + a2*exp(-x/T2)" % self.thname)
 
-    def two_exponentials(self, f=None):
+    def two_exponentials(self, f: Any = None) -> None:
         """Actual function
 
     * **Function**
         .. math::
             y(x) = a_1 \\exp(x/T_1) + a_2 \\exp(-x/T_2)
         """
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        a1 = self.parameters["a1"].value
-        a2 = self.parameters["a2"].value
-        T1 = self.parameters["T1"].value
-        T2 = self.parameters["T2"].value
+        a1: Any = self.parameters["a1"].value
+        a2: Any = self.parameters["a2"].value
+        T1: Any = self.parameters["T1"].value
+        T2: Any = self.parameters["T2"].value
         for j in range(1, tt.num_columns):
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(
                 -tt.data[:, 0] / T2)
@@ -368,15 +381,17 @@ class TheoryAlgebraicExpression(QTheory):
        - :math:`n`: number of parameters.
        - :math:`A_i`: coefficeints of the algebraic expression
     """
-    thname = "Algebraic Expression"
-    description = "Fit an algebraic expression with n parameters"
-    html_help_file = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
-    single_file = False
+    thname: str = "Algebraic Expression"
+    description: str = "Fit an algebraic expression with n parameters"
+    html_help_file: str = 'http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression'
+    single_file: bool = False
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
-        self.MAX_DEGREE = 10
+        self.MAX_DEGREE: int = 10
         self.function = self.algebraicexpression
         self.parameters["n"] = Parameter(
             name="n",
@@ -392,7 +407,8 @@ class TheoryAlgebraicExpression(QTheory):
             type=ParameterType.string,
             opt_type=OptType.const,
             display_flag=False)
-        for i in range(self.parameters["n"].value):
+        n: Any = self.parameters["n"].value
+        for i in range(n):
             self.parameters["A%d" % i] = Parameter(
                 "A%d" % i,
                 1.0,
@@ -401,7 +417,7 @@ class TheoryAlgebraicExpression(QTheory):
                 opt_type=OptType.opt)
 
         safe_list = ['sin', 'cos', 'tan', 'arccos', 'arcsin', 'arctan', 'arctan2', 'deg2rad', 'rad2deg', 'sinh', 'cosh', 'tanh', 'arcsinh', 'arccosh', 'arctanh', 'around', 'round_', 'rint', 'floor', 'ceil','trunc', 'exp', 'log', 'log10', 'fabs', 'mod', 'e', 'pi', 'power', 'sqrt']
-        self.safe_dict = {}
+        self.safe_dict: dict[str, Any] = {}
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
 
@@ -428,26 +444,26 @@ class TheoryAlgebraicExpression(QTheory):
         connection_id = self.expressionCB.currentIndexChanged.connect(
             self.handle_expressionChanged)
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: Any) -> None:
         """Handle a change of the parameter 'n'"""
         self.set_param_value("n", value)
 
-    def handle_expressionChanged(self, item):
+    def handle_expressionChanged(self, item: int) -> None:
         """Handle a change in the algebraic expression"""
         self.set_param_value("expression", self.expressionCB.itemText(item))
         
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change a parameter value, in particular *n*
         """
         if name == 'n':
-            nold = self.parameters["n"].value
+            nold: Any = self.parameters["n"].value
             Aold = np.zeros(nold)
             for i in range(nold):
                 Aold[i] = self.parameters["A%d" % i].value
                 del self.parameters["A%d" % i]
 
-            nnew = value
+            nnew: Any = value
             message, success = super().set_param_value("n", nnew)
             for i in range(nnew):
                 if i < nold:
@@ -468,35 +484,35 @@ class TheoryAlgebraicExpression(QTheory):
         self.update_parameter_table()
         return message, success
 
-    def algebraicexpression(self, f=None):
+    def algebraicexpression(self, f: Any = None) -> None:
         """Actual function.
 
     * **Function**
         .. math::
             y(x) = f({A_i}, x)
         """
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        ft: DataTable = f.data_table
+        tt: DataTable = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        expression = self.parameters["expression"].value
-        params = set(re.findall( "A\d{1,2}", expression))
+        expression: Any = self.parameters["expression"].value
+        params = set(re.findall( r"A\d{1,2}", expression))
         nparams=len(params)
         maxparamindex=-1;
         for p in params:
             paramindex=int(p.split('A')[1])
             if paramindex>maxparamindex:
                 maxparamindex = paramindex
-        n = self.parameters["n"].value
+        n: Any = self.parameters["n"].value
         if (maxparamindex!=n-1) or (nparams!=n):
             self.logger.warning("Wrong expression or number of parameters. Review your theory")
             self.Qprint("<b><font color=red>Wrong expression or number of parameters</font></b>. Review your theory")
         else:
             # Find FILE PARAMETERS IN THE EXPRESSION
-            fparams = re.findall("\[(.*?)\]",expression)
+            fparams = re.findall(r"\[(.*?)\]",expression)
             for fp in fparams:
                 if fp in f.file_parameters:
                     self.safe_dict[fp]=float(f.file_parameters[fp])
@@ -526,7 +542,7 @@ class TheoryAlgebraicExpression(QTheory):
                 #print (e.__class__, ":", e)
 
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> None:
         super().do_error(line)
         self.Qprint("%s: <b>%s</b>" % (self.thname, self.parameters["expression"].value))
 

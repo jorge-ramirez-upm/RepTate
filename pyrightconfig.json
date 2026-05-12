@@ -6,6 +6,8 @@
     "RepTate/core/Parameter.py",
     "RepTate/core/units.py",
     "RepTate/core/View.py",
+    "RepTate/gui/QTheory.py",
+    "RepTate/theories/TheoryBasic.py",
     "RepTate/theories/TheoryTemplate.py"
   ],
   "exclude": [
