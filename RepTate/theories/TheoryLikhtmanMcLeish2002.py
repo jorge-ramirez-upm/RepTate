@@ -41,9 +41,15 @@ import numpy as np
 from numpy import interp
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.DraggableArtists import DragType, DraggableHLine, DraggableVLine
 from PySide6.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
 from PySide6.QtGui import QIcon, QDoubleValidator
 from PySide6.QtCore import QSize
+
+
+class _NoFitOnDrag(object):
+    def handle_actionMinimize_Error(self):
+        pass
 
 
 class TheoryLikhtmanMcLeish2002(QTheory):
@@ -159,6 +165,11 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
+        self.ge_taue_helper_action = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"),
+            "Show Ge and tau_e helpers",
+        )
+        self.ge_taue_helper_action.setCheckable(True)
         self.linkMeGeaction = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge"
         )
@@ -179,6 +190,76 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             self.linkMeGeaction_change
         )
         connection_id = self.txtrho.textEdited.connect(self.handle_txtrho_edited)
+        connection_id = self.ge_taue_helper_action.triggered.connect(
+            self.ge_taue_helper_visible
+        )
+
+        self._drag_no_fit = _NoFitOnDrag()
+        self.ge_helper_line = self.ax.axhline(
+            1.0,
+            color="darkgreen",
+            linestyle="--",
+            marker="o",
+            visible=False,
+            picker=5,
+            zorder=5,
+        )
+        self.taue_helper_line = self.ax.axvline(
+            1.0,
+            color="darkorange",
+            linestyle="--",
+            marker="o",
+            visible=False,
+            picker=5,
+            zorder=5,
+        )
+        helper_label_box = {
+            "boxstyle": "round,pad=0.2",
+            "facecolor": "white",
+            "edgecolor": "none",
+            "alpha": 0.65,
+        }
+        self.ge_helper_label = self.ax.annotate(
+            "Ge",
+            xy=(0.98, 1.0),
+            xycoords=("axes fraction", "data"),
+            xytext=(-4, 4),
+            textcoords="offset points",
+            ha="right",
+            va="bottom",
+            color="darkgreen",
+            fontsize="medium",
+            bbox=helper_label_box,
+            visible=False,
+            zorder=6,
+        )
+        self.taue_helper_label = self.ax.annotate(
+            "1/tau_e",
+            xy=(1.0, 0.98),
+            xycoords=("data", "axes fraction"),
+            xytext=(4, -4),
+            textcoords="offset points",
+            ha="left",
+            va="top",
+            color="darkorange",
+            fontsize="medium",
+            bbox=helper_label_box,
+            visible=False,
+            zorder=6,
+        )
+        self.ge_helper_drag = DraggableHLine(
+            self.ge_helper_line,
+            DragType.vertical,
+            self.drag_ge_helper,
+            self._drag_no_fit,
+        )
+        self.taue_helper_drag = DraggableVLine(
+            self.taue_helper_line,
+            DragType.horizontal,
+            self.drag_taue_helper,
+            self._drag_no_fit,
+        )
+        self.plot_theory_stuff()
 
     def linkMeGeaction_change(self, checked):
         self.set_param_value("linkMeGe", checked)
@@ -226,6 +307,106 @@ class TheoryLikhtmanMcLeish2002(QTheory):
     def handle_parameter_metadata_changed(self):
         """Refresh auxiliary widgets after the theory parameter dialog changes units."""
         self.update_rho0_toolbar()
+        self.plot_theory_stuff()
+
+    def _axis_supports(self, axis_spec, quantity):
+        return axis_spec.quantity == quantity
+
+    def _parameter_value_to_plot_axis(self, value, axis_spec):
+        if axis_spec.transform == "log10":
+            if value <= 0.0:
+                return None
+            value = np.log10(value)
+        return axis_spec.convert_from_internal(value).item()
+
+    def _plot_axis_to_parameter_value(self, value, axis_spec):
+        value = axis_spec.convert_to_internal(value).item()
+        if axis_spec.transform == "log10":
+            value = np.power(10.0, value)
+        return value
+
+    def _ge_plot_y(self):
+        view = self.current_view()
+        if not self._axis_supports(view.y_axis, "stress"):
+            return None
+        return self._parameter_value_to_plot_axis(
+            self.parameters["Ge"].value, view.y_axis
+        )
+
+    def _taue_plot_x(self):
+        view = self.current_view()
+        if view.x_axis.quantity not in ("angular_frequency", "frequency"):
+            return None
+        taue = self.parameters["tau_e"].value
+        if taue <= 0.0:
+            return None
+        return self._parameter_value_to_plot_axis(1.0 / taue, view.x_axis)
+
+    def plot_theory_stuff(self):
+        """Update the graphical parameter helpers for the current view."""
+        ge_y = self._ge_plot_y()
+        helpers_visible = self.ge_taue_helper_action.isChecked()
+        ge_visible = helpers_visible and ge_y is not None
+        if ge_y is not None:
+            self.ge_helper_line.set_ydata([ge_y, ge_y])
+            self.ge_helper_label.xy = (0.98, ge_y)
+        self.ge_helper_line.set_visible(ge_visible and self.active)
+        self.ge_helper_label.set_visible(ge_visible and self.active)
+
+        taue_x = self._taue_plot_x()
+        taue_visible = helpers_visible and taue_x is not None
+        if taue_x is not None:
+            self.taue_helper_line.set_xdata([taue_x, taue_x])
+            self.taue_helper_label.xy = (taue_x, 0.98)
+        self.taue_helper_line.set_visible(taue_visible and self.active)
+        self.taue_helper_label.set_visible(taue_visible and self.active)
+
+    def ge_taue_helper_visible(self, checked):
+        self.plot_theory_stuff()
+        self.parent_dataset.parent_application.update_plot()
+
+    def drag_ge_helper(self, dx, dy):
+        view = self.current_view()
+        if not self._axis_supports(view.y_axis, "stress"):
+            return
+        y = self.ge_helper_line.get_ydata()[0]
+        Ge = self._plot_axis_to_parameter_value(y, view.y_axis)
+        if Ge <= 0.0:
+            return
+        self.set_param_value("Ge", Ge)
+        self.do_calculate("")
+        self.update_parameter_table()
+        self.plot_theory_stuff()
+
+    def drag_taue_helper(self, dx, dy):
+        view = self.current_view()
+        if view.x_axis.quantity not in ("angular_frequency", "frequency"):
+            return
+        x = self.taue_helper_line.get_xdata()[0]
+        omega = self._plot_axis_to_parameter_value(x, view.x_axis)
+        if omega <= 0.0:
+            return
+        self.set_param_value("tau_e", 1.0 / omega)
+        self.do_calculate("")
+        self.update_parameter_table()
+        self.plot_theory_stuff()
+
+    def show_theory_extras(self, show=False):
+        self.plot_theory_stuff()
+        if not show:
+            self.ge_helper_line.set_visible(False)
+            self.taue_helper_line.set_visible(False)
+            self.ge_helper_label.set_visible(False)
+            self.taue_helper_label.set_visible(False)
+        self.parent_dataset.parent_application.update_plot()
+
+    def destructor(self):
+        self.ge_helper_drag.disconnect()
+        self.taue_helper_drag.disconnect()
+        self.ge_helper_label.remove()
+        self.taue_helper_label.remove()
+        self.ge_helper_line.remove()
+        self.taue_helper_line.remove()
 
     def set_extra_data(self, _):
         """Restore the check state of button and text value"""
