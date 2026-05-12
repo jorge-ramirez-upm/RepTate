@@ -3,7 +3,8 @@
     "RepTate/core/axis_labels.py",
     "RepTate/core/DataTable.py",
     "RepTate/core/Parameter.py",
-    "RepTate/core/units.py"
+    "RepTate/core/units.py",
+    "RepTate/core/View.py"
   ],
   "exclude": [
     "**/__pycache__",

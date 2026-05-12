@@ -38,10 +38,17 @@ the data graphically.
 """
 import enum
 from dataclasses import dataclass
+from collections.abc import Callable, Sequence
+from typing import Any, TypeAlias
 
 import numpy as np
+from numpy.typing import ArrayLike, NDArray
 
 from RepTate.core.units import available_units, convert_array_to_internal, get_unit
+
+
+NumericArray: TypeAlias = NDArray[Any]
+ViewCallback: TypeAlias = Callable[..., Any]
 
 
 class ViewMode(enum.Enum):
@@ -68,9 +75,9 @@ class AxisSpec:
     display_unit: str = ""
     quantity: str = ""
     transform: str = "identity"
-    unit_choices: tuple = ()
+    unit_choices: tuple[str, ...] = ()
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.display_unit:
             self.display_unit = self.internal_unit
         if not self.quantity and self.internal_unit not in ("", "-"):
@@ -84,12 +91,12 @@ class AxisSpec:
     def is_unit_aware(self):
         return self.internal_unit not in ("", "-") and self.display_unit not in ("", "-")
 
-    def axis_label(self):
+    def axis_label(self) -> str:
         if self.display_unit in ("", "-"):
             return self.label
         return "%s [%s]" % (self.label, self.display_unit)
 
-    def available_display_units(self):
+    def available_display_units(self) -> list[str]:
         units = []
         for unit_symbol in self.unit_choices:
             if self.transform == "log10":
@@ -104,10 +111,10 @@ class AxisSpec:
                 units.append(unit_symbol)
         return units
 
-    def set_display_unit(self, unit_symbol):
+    def set_display_unit(self, unit_symbol: str) -> None:
         self.display_unit = unit_symbol
 
-    def convert_from_internal(self, values):
+    def convert_from_internal(self, values: ArrayLike) -> NumericArray:
         arr = np.asarray(values)
         if not self.is_unit_aware() or self.display_unit == self.internal_unit:
             return arr
@@ -117,7 +124,7 @@ class AxisSpec:
             return arr + np.log10(self._conversion_factor_from_internal())
         raise ValueError("Unknown axis transform: %s" % self.transform)
 
-    def convert_to_internal(self, values):
+    def convert_to_internal(self, values: ArrayLike) -> NumericArray:
         arr = np.asarray(values)
         if not self.is_unit_aware() or self.display_unit == self.internal_unit:
             return arr
@@ -127,7 +134,7 @@ class AxisSpec:
             return arr - np.log10(self._conversion_factor_from_internal())
         raise ValueError("Unknown axis transform: %s" % self.transform)
 
-    def _conversion_factor_from_internal(self):
+    def _conversion_factor_from_internal(self) -> float:
         internal = get_unit(self.internal_unit)
         display = get_unit(self.display_unit)
         if internal.offset_to_internal != 0.0 or display.offset_to_internal != 0.0:
@@ -151,26 +158,26 @@ class View(object):
 
     def __init__(
         self,
-        name="",
-        description="",
-        x_label="",
-        y_label="",
-        x_units="",
-        y_units="",
-        log_x=False,
-        log_y=False,
-        view_proc=None,
-        n=1,
-        snames=[],
-        inverse_view_proc=None,
-        index=0,
-        with_thline=True,
-        filled=False,
-        viewmode_data=ViewMode.symbol,
-        viewmode_theory=ViewMode.line,
-        x_axis=None,
-        y_axis=None,
-    ):
+        name: str = "",
+        description: str = "",
+        x_label: str = "",
+        y_label: str = "",
+        x_units: str = "",
+        y_units: str = "",
+        log_x: bool = False,
+        log_y: bool = False,
+        view_proc: ViewCallback | None = None,
+        n: int = 1,
+        snames: Sequence[str] = [],
+        inverse_view_proc: ViewCallback | None = None,
+        index: int = 0,
+        with_thline: bool = True,
+        filled: bool = False,
+        viewmode_data: ViewMode = ViewMode.symbol,
+        viewmode_theory: ViewMode = ViewMode.line,
+        x_axis: AxisSpec | None = None,
+        y_axis: AxisSpec | None = None,
+    ) -> None:
         """**Constructor**
         
         Keyword Arguments:
@@ -189,27 +196,31 @@ class View(object):
             - with_thline {bool} -- if True, plot the theory with lines, else use symbols
             - filled {bool} -- if True, use filled symbols (when with_thline=False)
         """
-        self.name = name
-        self.description = description
-        self.x_label = x_label
-        self.y_label = y_label
-        self.x_units = x_units
-        self.y_units = y_units
-        self.x_axis = x_axis or AxisSpec(label=x_label, display_unit=x_units)
-        self.y_axis = y_axis or AxisSpec(label=y_label, display_unit=y_units)
-        self.log_x = log_x
-        self.log_y = log_y
-        self.view_proc = view_proc
-        self.inverse_view_proc = inverse_view_proc
-        self.n = n
-        self.snames = snames
-        self.with_thline = with_thline
-        self.filled = filled
-        self.viewmode_data = viewmode_data
-        self.viewmode_theory = viewmode_theory
+        self.name: str = name
+        self.description: str = description
+        self.x_label: str = x_label
+        self.y_label: str = y_label
+        self.x_units: str = x_units
+        self.y_units: str = y_units
+        self.x_axis: AxisSpec = x_axis or AxisSpec(label=x_label, display_unit=x_units)
+        self.y_axis: AxisSpec = y_axis or AxisSpec(label=y_label, display_unit=y_units)
+        self.log_x: bool = log_x
+        self.log_y: bool = log_y
+        self.view_proc: ViewCallback | None = view_proc
+        self.inverse_view_proc: ViewCallback | None = inverse_view_proc
+        self.n: int = n
+        self.snames: Sequence[str] = snames
+        self.with_thline: bool = with_thline
+        self.filled: bool = filled
+        self.viewmode_data: ViewMode = viewmode_data
+        self.viewmode_theory: ViewMode = viewmode_theory
 
-    def convert_xy_to_display(self, x, y):
+    def convert_xy_to_display(
+        self, x: ArrayLike, y: ArrayLike
+    ) -> tuple[NumericArray, NumericArray]:
         return self.x_axis.convert_from_internal(x), self.y_axis.convert_from_internal(y)
 
-    def convert_xy_to_internal(self, x, y):
+    def convert_xy_to_internal(
+        self, x: ArrayLike, y: ArrayLike
+    ) -> tuple[NumericArray, NumericArray]:
         return self.x_axis.convert_to_internal(x), self.y_axis.convert_to_internal(y)
