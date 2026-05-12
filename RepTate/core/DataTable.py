@@ -35,23 +35,32 @@
 Module for the actual object that contains the data, both for experiments and theory. 
 
 """ 
+from typing import Any, TypeAlias
+
 import numpy as np
+from numpy.typing import NDArray
+
+
+NumericArray: TypeAlias = NDArray[Any]
+SeriesGrid: TypeAlias = list[list[Any]]
+ColumnSpecs: TypeAlias = list[Any]
+ExtraTables: TypeAlias = dict[str, Any]
 
 class DataTable(object):
     """Class that stores data and series"""
     MAX_NUM_SERIES=3
     PICKRADIUS = 10
 
-    def __init__(self, axarr=None, _name=''):
+    def __init__(self, axarr: Any = None, _name: str = '') -> None:
         """**Constructor**"""
-        self.num_columns=0
-        self.num_rows=0
-        self.column_names=[]
-        self.column_units=[]
-        self.column_specs=[]
-        self.data=np.zeros((self.num_rows, self.num_columns))
-        self.series=[]
-        self.extra_tables = {}
+        self.num_columns: int = 0
+        self.num_rows: int = 0
+        self.column_names: list[str] = []
+        self.column_units: list[str] = []
+        self.column_specs: ColumnSpecs = []
+        self.data: NumericArray = np.zeros((self.num_rows, self.num_columns))
+        self.series: SeriesGrid = []
+        self.extra_tables: ExtraTables = {}
         
         if axarr != None:
             for nx in range(len(axarr)): #create series for each plot
@@ -65,7 +74,7 @@ class DataTable(object):
                     series_nx.append(ss[0])
                 self.series.append(series_nx)
 
-    def __str__(self):
+    def __str__(self) -> Any:
         """Returns a string describing the data
 
         .. todo:: Refine this. It doesn't work
@@ -73,18 +82,18 @@ class DataTable(object):
         """
         return self.data
         
-    def mincol(self, col):
+    def mincol(self, col: int) -> Any:
         """Minimum value in table column col
         
         .. todo:: Example **todo** in the code
         """
         return np.min(self.data[:,col])
         
-    def minpositivecol(self, col):
+    def minpositivecol(self, col: int) -> Any:
         """Minimum positive value in table column col"""
         return (self.data[self.data[:,col]>0,col]).min()
 
-    def maxcol(self, col):
+    def maxcol(self, col: int) -> Any:
         """Maximum value in table column col"""
         return np.max(self.data[:,col])
         

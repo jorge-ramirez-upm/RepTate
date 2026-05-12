@@ -1,6 +1,7 @@
 {
   "include": [
     "RepTate/core/axis_labels.py",
+    "RepTate/core/DataTable.py",
     "RepTate/core/Parameter.py",
     "RepTate/core/units.py"
   ],
