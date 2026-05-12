@@ -36,9 +36,15 @@ Module that defines theory parameters and their properties.
 
 """
 import enum
+from typing import Any, TypeAlias
+
 import numpy as np
 
 from RepTate.core.units import convert_value
+
+
+ParameterValue: TypeAlias = Any
+DiscreteValues: TypeAlias = list[Any]
 
 
 class ParameterType(enum.Enum):
@@ -79,19 +85,19 @@ class Parameter(object):
 
     def __init__(
         self,
-        name="",
-        value=0,
-        description="",
-        type=ParameterType.real,
-        opt_type=OptType.opt,
-        min_value=-np.inf,
-        max_value=np.inf,
-        display_flag=True,
-        discrete_values=[],
-        quantity="",
-        internal_unit="",
-        display_unit="",
-    ):
+        name: str = "",
+        value: ParameterValue = 0,
+        description: str = "",
+        type: ParameterType = ParameterType.real,
+        opt_type: OptType = OptType.opt,
+        min_value: float = -np.inf,
+        max_value: float = np.inf,
+        display_flag: bool = True,
+        discrete_values: DiscreteValues = [],
+        quantity: str = "",
+        internal_unit: str = "",
+        display_unit: str = "",
+    ) -> None:
         """**Constructor**
 
         Arguments:
@@ -139,7 +145,7 @@ class Parameter(object):
         self.internal_unit = internal_unit
         self.display_unit = display_unit
 
-    def copy(self, par2):
+    def copy(self, par2: "Parameter") -> None:
         """Copy the contents of another parameter"""
         self.name = par2.name
         self.description = par2.description
@@ -152,30 +158,30 @@ class Parameter(object):
         self.internal_unit = par2.internal_unit
         self.display_unit = par2.display_unit
 
-    def display_label(self):
+    def display_label(self) -> str:
         """Return the parameter label shown to users."""
         if self.display_unit and self.display_unit != "-":
             return "%s [%s]" % (self.name, self.display_unit)
         return self.name
 
-    def display_value(self, value=None):
+    def display_value(self, value: ParameterValue | None = None) -> ParameterValue:
         """Return a value converted from internal to display units."""
         value = self.value if value is None else value
         if self.internal_unit and self.display_unit:
             return convert_value(value, self.internal_unit, self.display_unit)
         return value
 
-    def value_from_display(self, value):
+    def value_from_display(self, value: ParameterValue) -> ParameterValue:
         """Convert a user-facing value to the internal unit."""
         if self.internal_unit and self.display_unit:
             return convert_value(value, self.display_unit, self.internal_unit)
         return value
 
-    def __str__(self):
+    def __str__(self) -> str:
         """String representation"""
         return "%s=%g" % (self.name, self.value)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Another string representation"""
         return (
             "Parameter(name,value,description,type,opt_type,min_value,max_value,display_flag)\n"
