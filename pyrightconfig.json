@@ -8,7 +8,6 @@
     "RepTate/applications/ApplicationMWD.py",
     "RepTate/applications/ApplicationTemplate.py",
     "RepTate/applications/ApplicationUniversalViewer.py",
-    "RepTate/applications/application_frs.py",
     "RepTate/core/axis_labels.py",
     "RepTate/core/CmdBase.py",
     "RepTate/core/DataTable.py",
