@@ -40,6 +40,7 @@ import sys
 import argparse
 import traceback
 import logging
+from collections.abc import Sequence
 
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
@@ -50,14 +51,14 @@ from PySide6.QtGui import QDesktopServices, QIcon, QKeySequence, QShortcut
 from PySide6.QtCore import QUrl, Qt, QCoreApplication
 
 
-def main():
+def main() -> None:
     from RepTate.runtime import bootstrap_gui_runtime
 
     bootstrap_gui_runtime()
     start_MatDB(sys.argv[1:])
 
 
-def start_MatDB(argv):
+def start_MatDB(argv: Sequence[str]) -> None:
     """
     Materials Database application.
 

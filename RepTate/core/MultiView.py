@@ -38,6 +38,8 @@ Organise the mmultiple Matplotlib views
 import sys
 import enum
 import math
+from typing import Any, ClassVar, TypeAlias
+
 from RepTate.core.CmdBase import CmdBase
 
 # from UI_Multimatplotlib import Ui_Form
@@ -51,6 +53,9 @@ import matplotlib.pyplot as plt
 # from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.backends.backend_qtagg import FigureCanvas
 import matplotlib.gridspec as gridspec
+
+GridSpecList: TypeAlias = list[Any]
+HiddenTabList: TypeAlias = list[list[Any]]
 
 
 class PlotOrganizationType(enum.Enum):
@@ -89,31 +94,47 @@ class PlotOrganizationType(enum.Enum):
 class MultiView(QWidget):
     """Object that contains several matplotlib charts"""
 
-    LEFT = 0.07
-    RIGHT = 0.99
-    BOTTOM = 0.1
-    TOP = 0.99
-    WSPACE = 0.12
-    HSPACE = 0.25
-    SAVE_DPI = 300
-    FIG_DPI = plt.matplotlib.rcParams["figure.dpi"]
+    LEFT: ClassVar[float] = 0.07
+    RIGHT: ClassVar[float] = 0.99
+    BOTTOM: ClassVar[float] = 0.1
+    TOP: ClassVar[float] = 0.99
+    WSPACE: ClassVar[float] = 0.12
+    HSPACE: ClassVar[float] = 0.25
+    SAVE_DPI: ClassVar[int] = 300
+    FIG_DPI: ClassVar[Any] = plt.matplotlib.rcParams["figure.dpi"]
 
     def __init__(
-        self, pot=PlotOrganizationType.Vertical, nplots=1, ncols=1, parent=None
-    ):
+        self,
+        pot: PlotOrganizationType = PlotOrganizationType.Vertical,
+        nplots: int = 1,
+        ncols: int = 1,
+        parent: Any = None,
+    ) -> None:
         """**Constructor**"""
         # QDialog.__init__(self)
         # super().__init__(self)
         # QWidget.__init__()
         super().__init__()
-        self.parent_application = parent
-        self.pot = pot
-        self.nplots = nplots
-        self.ncols = ncols
+        self.parent_application: Any = parent
+        self.pot: PlotOrganizationType = pot
+        self.nplots: int = nplots
+        self.ncols: int = ncols
+        self.horizontalLayout: Any
+        self.plotselecttabWidget: Any
+        self.tab: Any
+        self.plotcontainer: Any
+        self.figure: Any
+        self.gs: Any
+        self.gsmax: Any
+        self.axarr: list[Any]
+        self.canvas: Any
+        self.hidden_tab: HiddenTabList
+        self.bbox: list[Any]
+        self.bboxmax: list[Any]
         self.setupUi()
         mpl.rcParams["savefig.dpi"] = self.SAVE_DPI
 
-    def setupUi(self):
+    def setupUi(self) -> None:
         # Remove seaborn dependency
         dark_gray = ".15"
         light_gray = ".8"
@@ -230,7 +251,7 @@ class MultiView(QWidget):
             ax_i.yaxis.tick_left()
         self.hidden_tab = []
 
-    def set_bbox(self):
+    def set_bbox(self) -> None:
         self.bbox = []
         x0min = y0min = 1e9
         x1max = y1max = -1e9
@@ -243,7 +264,7 @@ class MultiView(QWidget):
             y1max = max(y1max, bboxnow.y1)
         self.bboxmax = [x0min, y0min, x1max - x0min, y1max - y0min]
 
-    def reorg_fig(self, nplots):
+    def reorg_fig(self, nplots: int) -> None:
         """Reorganise the views to show nplots"""
         self.parent_application.sp_nviews.blockSignals(True)
         self.parent_application.sp_nviews.setValue(nplots)
@@ -296,7 +317,7 @@ class MultiView(QWidget):
         self.handle_plottabChanged(0)  # switch to all plot tab
         self.plotselecttabWidget.blockSignals(False)
 
-    def init_plot(self, index):
+    def init_plot(self, index: int) -> None:
         if index == 0:  # multiplots
             for i in range(self.nplots):
                 # self.axarr[i].set_position(self.bbox[i])
@@ -314,7 +335,7 @@ class MultiView(QWidget):
         self.parent_application.current_viewtab = index
         self.canvas.draw()
 
-    def handle_plottabChanged(self, index):
+    def handle_plottabChanged(self, index: int) -> None:
         self.parent_application.current_viewtab = index
         if index == 0:  # multiplots
             view_name = self.parent_application.multiviews[0].name
@@ -391,7 +412,7 @@ class MultiView(QWidget):
     #     )
     #     return gs
 
-    def organizeOptimalRow(self, nplots, ncols):
+    def organizeOptimalRow(self, nplots: int, ncols: int) -> GridSpecList:
         row = math.ceil(nplots / ncols)
         gstmp = gridspec.GridSpec(
             row,
@@ -404,7 +425,7 @@ class MultiView(QWidget):
             wspace=self.WSPACE,
             hspace=self.HSPACE,
         )
-        gs = []
+        gs: GridSpecList = []
         # First row might be different
         gs.append(gstmp[0, 0 : row * ncols - nplots + 1])
         for j in range(row * ncols - nplots + 1, ncols):
@@ -414,7 +435,9 @@ class MultiView(QWidget):
                 gs.append(gstmp[i, j])
         return gs
 
-    def update_plot_organization(self, left, bottom, ws, hs):
+    def update_plot_organization(
+        self, left: Any, bottom: Any, ws: Any, hs: Any
+    ) -> GridSpecList:
         row = math.ceil(self.nplots / self.ncols)
         gstmp = gridspec.GridSpec(
             row,
@@ -427,7 +450,7 @@ class MultiView(QWidget):
             wspace=ws,
             hspace=hs,
         )
-        gs = []
+        gs: GridSpecList = []
         # First row might be different
         gs.append(gstmp[0, 0 : row * self.ncols - self.nplots + 1])
         for j in range(row * self.ncols - self.nplots + 1, self.ncols):
@@ -460,7 +483,13 @@ class MultiView(QWidget):
 
     #     return gs
 
-    def organizeplots(self, organizationtype, nplots=1, ncols=1, gs=None):
+    def organizeplots(
+        self,
+        organizationtype: PlotOrganizationType,
+        nplots: int = 1,
+        ncols: int = 1,
+        gs: Any = None,
+    ) -> Any:
         if organizationtype == PlotOrganizationType.Vertical:
             return self.organizeVertical(nplots)
         elif organizationtype == PlotOrganizationType.Horizontal:
@@ -471,5 +500,5 @@ class MultiView(QWidget):
             return self.organizeOptimalColumn(nplots, ncols)
         elif organizationtype == PlotOrganizationType.Specified:
             pass
-        elif organizationtype == PlotOrganizationType.DefaultOrganization:
+        elif organizationtype == PlotOrganizationType.DefaultOrganization:  # pyright: ignore[reportAttributeAccessIssue]
             pass

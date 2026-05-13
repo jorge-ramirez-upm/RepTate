@@ -1,15 +1,26 @@
 {
   "include": [
+    "RepTate/__init__.py",
+    "RepTate/__main__.py",
+    "RepTate/MatDB.py",
+    "RepTate/RepTate.py",
+    "RepTate/UV.py",
     "RepTate/core/axis_labels.py",
+    "RepTate/core/CmdBase.py",
     "RepTate/core/DataTable.py",
+    "RepTate/core/DraggableArtists.py",
     "RepTate/core/File.py",
     "RepTate/core/FileType.py",
+    "RepTate/core/MultiView.py",
     "RepTate/core/Parameter.py",
     "RepTate/core/units.py",
     "RepTate/core/View.py",
+    "RepTate/runtime.py",
+    "RepTate/gui/error_handling.py",
     "RepTate/gui/QTheory.py",
     "RepTate/theories/TheoryBasic.py",
-    "RepTate/theories/TheoryTemplate.py"
+    "RepTate/theories/TheoryTemplate.py",
+    "RepTate/tools/polymer_data.py"
   ],
   "exclude": [
     "**/__pycache__",

@@ -290,13 +290,14 @@ class TheoryLP2RLVE(QTheory):
     """
 
     thname = "LP2R LVE"
-    description = "Linear viscoelastic predictions of the LP2R model"
-    citations = []
+    description = "Linear rheology of polydisperse linear polymers"
+    citations = ["Das, C. and Read, D. J., J. Rheol. 2023, 67, 693–721."]
+    doi = ["https://doi.org/10.1122/8.0000605"]
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file = True
     DEFAULT_MW = 100.0
-    DEFAULT_PDI = 1.05
-    DEFAULT_NPOLY = 8
+    DEFAULT_PDI = 1.03
+    DEFAULT_NPOLY = 50
     ADVANCED_CONTROLS = [
         "alpha",
         "t_cr_start",

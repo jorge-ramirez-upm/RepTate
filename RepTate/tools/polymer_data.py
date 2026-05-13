@@ -36,13 +36,18 @@ Module to define the basic information about a polymer for the materials databas
 
 """
 
+from typing import Any, TypeAlias
+
 from RepTate.core.units import convert_value
 
 
-MATERIAL_DATABASE_UNIT_SYSTEM = "RepTate internal units v1"
+MaterialParameterUnits: TypeAlias = dict[str, str]
 
 
-MATERIAL_PARAMETER_UNITS = {
+MATERIAL_DATABASE_UNIT_SYSTEM: str = "RepTate internal units v1"
+
+
+MATERIAL_PARAMETER_UNITS: dict[str, MaterialParameterUnits] = {
     "tau_e": {
         "quantity": "time",
         "internal_unit": "s",
@@ -94,12 +99,12 @@ MATERIAL_PARAMETER_UNITS = {
 }
 
 
-def material_parameter_units(name):
+def material_parameter_units(name: str) -> MaterialParameterUnits:
     """Return unit metadata for a material parameter, if known."""
     return MATERIAL_PARAMETER_UNITS.get(name, {})
 
 
-def canonicalize_material(material):
+def canonicalize_material(material: Any) -> Any:
     """Convert a material from legacy database units to RepTate internal units."""
     if getattr(material, "unit_system", "") == MATERIAL_DATABASE_UNIT_SYSTEM:
         return material
@@ -116,14 +121,16 @@ def canonicalize_material(material):
     return material
 
 
-def canonicalize_database(database):
+def canonicalize_database(database: dict[Any, Any]) -> dict[Any, Any]:
     """Convert all materials in a database dictionary to internal units."""
     for material in database.values():
         canonicalize_material(material)
     return database
 
 
-def convert_database_value_to_parameter(name, value, target_parameter):
+def convert_database_value_to_parameter(
+    name: str, value: Any, target_parameter: Any
+) -> Any:
     """Convert a database value to the target parameter's declared internal unit."""
     units = material_parameter_units(name)
     target_unit = getattr(target_parameter, "internal_unit", "")
@@ -135,10 +142,10 @@ def convert_database_value_to_parameter(name, value, target_parameter):
 class polymer:
     """Defines the basic information held by the materials database"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         """**Constructor**"""
-        self.unit_system = kwargs.pop("unit_system", "legacy")
-        self.data = {
+        self.unit_system: str = kwargs.pop("unit_system", "legacy")
+        self.data: dict[str, Any] = {
             # Basic info
             "name": "",  # Short name
             "long": "",  # Full name

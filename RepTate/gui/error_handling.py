@@ -1,12 +1,15 @@
 import logging
 import traceback
+from types import TracebackType
 
 from RepTate import __version__
 
 
-def my_excepthook(type, value, tb):
+def my_excepthook(
+    type: type[BaseException], value: BaseException, tb: TracebackType | None
+) -> None:
     """Show unexpected GUI errors and guide users to the issue tracker."""
-    tb_msg = ""
+    tb_msg: str = ""
     for e in traceback.format_tb(tb):
         tb_msg += str(e)
     tb_msg += "%s: %s\n" % (type.__name__, str(value))

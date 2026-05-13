@@ -42,32 +42,34 @@ import argparse
 import traceback
 import logging
 import configparser
+from collections.abc import Sequence
+from typing import cast
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtGui import QDesktopServices, QIcon, QKeySequence, QShortcut
 from PySide6.QtCore import QUrl, Qt, QCoreApplication
 from RepTate.core.DataTable import DataTable
 
-DataTable.MAX_NUM_SERIES = 10
+DataTable.MAX_NUM_SERIES = 10  # pyright: ignore[reportAttributeAccessIssue]
 from RepTate.core.CmdBase import CmdBase, CalcMode
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversalViewer
 
 
-def main():
+def main() -> None:
     from RepTate.runtime import bootstrap_gui_runtime
 
     bootstrap_gui_runtime()
     start_UV(sys.argv[1:])
 
 
-def get_argument_files(finlist):
+def get_argument_files(finlist: Sequence[str] | None) -> dict[str, list[str]]:
     """
     Parse files from command line and group them by extension
 
     :param list finlist: List of files from argparse
     """
-    df = {}
+    df: dict[str, list[str]] = {}
     if not finlist:
         return df
     full_paths = [os.path.join(os.getcwd(), path) for path in finlist]
@@ -91,7 +93,7 @@ def get_argument_files(finlist):
     return df
 
 
-def start_UV(argv):
+def start_UV(argv: Sequence[str]) -> None:
     """
     Start Universal Viewer app.
 
@@ -153,8 +155,8 @@ def start_UV(argv):
         tmpex.logger.error("Universal Viewer must be invoked with at least one file!")
         sys.exit()
     # 2. Find if in the folder of the first file there is an ini file that describes that extension
-    inifile = None
-    inifilepath = None
+    inifile: str | None = None
+    inifilepath: str | None = None
     nplots_max = 1
     pathtofirstfile = os.path.dirname(list(dictfiles.values())[0][0])
     for file in os.listdir(pathtofirstfile):
@@ -177,7 +179,7 @@ def start_UV(argv):
     ex = ApplicationUniversalViewer(
         "UniversalViewer",
         tmpex,
-        inifile=inifilepath + os.sep + inifile,
+        inifile=cast(str, inifilepath) + os.sep + inifile,
         nplot_max=nplot_max,
     )
     ex.setWindowIcon(QIcon("RepTate/gui/Images/UView_Icon.ico"))

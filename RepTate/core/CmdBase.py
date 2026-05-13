@@ -36,6 +36,8 @@ Module that defines the basic command line interaction with the user.
 
 """
 import enum
+from logging import Logger
+from typing import ClassVar
 
 from numpy import *
 
@@ -50,7 +52,7 @@ class CalcMode(enum.Enum):
         "Calc and Min in separate threads to GUI",
     ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """String representation of the class"""
         return "Single thread: %d\nMulti-thread: %d" % (
             self.modes.value[0],
@@ -61,9 +63,10 @@ class CalcMode(enum.Enum):
 class CmdBase:
     """Basic Cmd Console that is inherited by most Reptate objects"""
 
-    calcmode = CalcMode.multithread
+    calcmode: ClassVar[CalcMode] = CalcMode.multithread
 
-    def __init__(self):
+    def __init__(self) -> None:
         """**Constructor**"""
 
+        self.logger: Logger | None
         self.logger = None

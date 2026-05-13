@@ -41,6 +41,7 @@ import glob
 import argparse
 import numpy as np
 import logging
+from collections.abc import Sequence
 
 from RepTate.core.CmdBase import CmdBase, CalcMode
 #from RepTate.gui.QApplicationManager import QApplicationManager
@@ -52,20 +53,20 @@ from PySide6.QtWidgets import QApplication
 # from time import time, sleep
 
 
-def main():
+def main() -> None:
     from RepTate.runtime import bootstrap_gui_runtime
 
     bootstrap_gui_runtime()
     start_RepTate(sys.argv[1:])
 
 
-def get_argument_files(finlist):
+def get_argument_files(finlist: Sequence[str] | None) -> dict[str, list[str]]:
     """
     Parse files from command line and group them by extension
 
     :param list finlist: List of files from argparse
     """
-    df = {}
+    df: dict[str, list[str]] = {}
     if not finlist:
         return df
     full_paths = [os.path.join(os.getcwd(), path) for path in finlist]
@@ -89,7 +90,7 @@ def get_argument_files(finlist):
     return df
 
 
-def start_RepTate(argv):
+def start_RepTate(argv: Sequence[str]) -> None:
     """
     Main RepTate application.
 

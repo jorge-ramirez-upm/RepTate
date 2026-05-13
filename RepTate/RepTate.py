@@ -1,6 +1,8 @@
 import sys
 import os
-sys.path.insert(0, '../')
+
+PARENT_PATH: str = "../"
+sys.path.insert(0, PARENT_PATH)
 
 import RepTate.__main__
 
