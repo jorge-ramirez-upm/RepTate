@@ -36,6 +36,8 @@ Module for handling Molecular weight distributions from GPC experiments.
 
 """
 
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -46,12 +48,12 @@ import numpy as np
 class ApplicationMWD(QApplicationWindow):
     """Application to analyze Molecular Weight Distributions"""
 
-    appname = "MWD"
-    description = "Experimental Molecular weight distributions"
-    extension = "gpc"
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html"
+    appname: ClassVar[str] = "MWD"
+    description: ClassVar[str] = "Experimental Molecular weight distributions"
+    extension: ClassVar[str] = "gpc"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/MWD/MWD.html"
 
-    def __init__(self, name="MWD", parent=None):
+    def __init__(self, name: str = "MWD", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDiscrMWD import TheoryDiscrMWD
         from RepTate.theories.TheoryGEX import TheoryGEX
@@ -59,7 +61,7 @@ class ApplicationMWD(QApplicationWindow):
 
         super().__init__(name, parent, nplot_max=3)
 
-        molar_mass_units = ("g/mol", "kg/mol", "Da", "kDa")
+        molar_mass_units: tuple[str, ...] = ("g/mol", "kg/mol", "Da", "kDa")
 
         # VIEWS
         self.views["log-lin"] = View(
@@ -160,7 +162,7 @@ class ApplicationMWD(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def view_WM(self, dt, file_parameters):
+    def view_WM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """:math:`W(M)` vs :math:`M`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -168,7 +170,7 @@ class ApplicationMWD(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_logWM(self, dt, file_parameters):
+    def view_logWM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """:math:`\\log(W(M))` vs :math:`\\log(M)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

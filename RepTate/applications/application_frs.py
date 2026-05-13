@@ -35,17 +35,21 @@
 Module for handling FRS experiments and simulations.
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
+from RepTate.core.View import View
+from RepTate.core.FileType import TXTColumnFile
 import numpy as np
 
 
 class ApplicationFRS_I(QApplicationWindow):
     """Application to FRS Intensity simulations"""
 
-    name = "FRS_I"
-    description = "FRS Intensity"
+    name: ClassVar[str] = "FRS_I"
+    description: ClassVar[str] = "FRS Intensity"
 
-    def __init__(self, name="FRS_I", parent=None):
+    def __init__(self, name: str = "FRS_I", parent: Any = None) -> None:
         """**Constructor**"""
         super(ApplicationFRS_I, self).__init__(name, parent)
 
@@ -95,7 +99,7 @@ class ApplicationFRS_I(QApplicationWindow):
         # Theories
         self.add_common_theories()
 
-    def viewIt(self, dt, file_parameters):
+    def viewIt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Intensity as a function of time"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -103,7 +107,7 @@ class ApplicationFRS_I(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogIt(self, dt, file_parameters):
+    def viewLogIt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Log I vs log t"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
