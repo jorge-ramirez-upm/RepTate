@@ -35,6 +35,8 @@
 Definition of a new Application for viewing generic txt data
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
@@ -47,15 +49,23 @@ import configparser
 class ViewParseExpression(object):
     """Auxiliary class to define views that must parse an expression before being shown"""
 
-    def __init__(self, name="", n=1, col_names=[], xexpr=[], yexpr=[], parent=None):
-        self.parent = parent
-        self.name = name
-        self.n = n
-        self.col_names = col_names
-        self.xexpr = xexpr
-        self.yexpr = yexpr
+    def __init__(
+        self,
+        name: str = "",
+        n: int = 1,
+        col_names: list[str] = [],
+        xexpr: list[str] = [],
+        yexpr: list[str] = [],
+        parent: Any = None,
+    ) -> None:
+        self.parent: Any = parent
+        self.name: str = name
+        self.n: int = n
+        self.col_names: list[str] = col_names
+        self.xexpr: list[str] = xexpr
+        self.yexpr: list[str] = yexpr
 
-        safe_list = [
+        safe_list: list[str] = [
             "sin",
             "cos",
             "tan",
@@ -87,11 +97,11 @@ class ViewParseExpression(object):
             "power",
             "sqrt",
         ]
-        self.safe_dict = {}
+        self.safe_dict: dict[str, Any] = {}
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
 
-    def view(self, dt, file_parameters):
+    def view(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Actual function that processes the expression, extracts variables, file parameters and columns, and produces the view"""
         x = np.zeros((dt.num_rows, self.n))
         y = np.zeros((dt.num_rows, self.n))
@@ -105,7 +115,7 @@ class ViewParseExpression(object):
                     "^", "**"
                 )  # For x, it is not necessary to provide all expressions
             # Find FILE PARAMETERS IN THE EXPRESSION
-            fparams = re.findall("\[(.*?)\]", expression)
+            fparams = re.findall(r"\[(.*?)\]", expression)
             for fp in fparams:
                 if fp in file_parameters:
                     self.safe_dict[fp] = float(file_parameters[fp])
@@ -116,7 +126,7 @@ class ViewParseExpression(object):
                     self.safe_dict[fp] = 0.0
             expression = expression.replace("[", "").replace("]", "")
             # Find Columns in the expression
-            cols = re.findall("\{(.*?)\}", expression)
+            cols = re.findall(r"\{(.*?)\}", expression)
             for cl in cols:
                 if cl in self.col_names:
                     ind = self.col_names.index(cl)
@@ -143,7 +153,7 @@ class ViewParseExpression(object):
             # Now do the same for y
             expression = self.yexpr[i].replace("^", "**")
             # Find FILE PARAMETERS IN THE EXPRESSION
-            fparams = re.findall("\[(.*?)\]", expression)
+            fparams = re.findall(r"\[(.*?)\]", expression)
             for fp in fparams:
                 if fp in file_parameters:
                     self.safe_dict[fp] = float(file_parameters[fp])
@@ -154,7 +164,7 @@ class ViewParseExpression(object):
                     self.safe_dict[fp] = 0.0
             expression = expression.replace("[", "").replace("]", "")
             # Find Columns in the expression
-            cols = re.findall("\{(.*?)\}", expression)
+            cols = re.findall(r"\{(.*?)\}", expression)
             for cl in cols:
                 if cl in self.col_names:
                     ind = self.col_names.index(cl)
@@ -184,16 +194,22 @@ class ViewParseExpression(object):
 class ApplicationUniversalViewer(QApplicationWindow):
     """Application for viewing generic txt data described by ini files"""
 
-    appname = "Universal Viewer"
-    description = "Universal Viewer Application"  # used in the command-line Reptate
-    extension = ""  # drag and drop this extension automatically opens this application
+    appname: ClassVar[str] = "Universal Viewer"
+    description: ClassVar[str] = "Universal Viewer Application"  # used in the command-line Reptate
+    extension: ClassVar[str] = ""  # drag and drop this extension automatically opens this application
     # html_help_file = ''
 
-    def __init__(self, name="Universal Viewer", parent=None, inifile=None, nplot_max=1):
+    def __init__(
+        self,
+        name: str = "Universal Viewer",
+        parent: Any = None,
+        inifile: Any = None,
+        nplot_max: int = 1,
+    ) -> None:
         """**Constructor**"""
 
-        self.inifile = inifile
-        self.config = configparser.ConfigParser()
+        self.inifile: Any = inifile
+        self.config: configparser.ConfigParser = configparser.ConfigParser()
         self.config.read_file(open(inifile))
 
         super().__init__(name, parent, nplot_max=nplot_max)
@@ -212,9 +228,9 @@ class ApplicationUniversalViewer(QApplicationWindow):
 
         # VIEWS
         # set the views that can be selected in the view combobox
-        nv = 0
-        moreviews = True
-        self.viewclasses = {}
+        nv: int = 0
+        moreviews: bool = True
+        self.viewclasses: dict[str, ViewParseExpression] = {}
         while moreviews:
             if "view%d" % (nv + 1) in self.config.sections():
                 nv += 1
@@ -269,7 +285,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewyx(self, dt, file_parameters):
+    def viewyx(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Example View function"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

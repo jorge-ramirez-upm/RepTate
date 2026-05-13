@@ -5,6 +5,8 @@
     "RepTate/MatDB.py",
     "RepTate/RepTate.py",
     "RepTate/UV.py",
+    "RepTate/applications/ApplicationTemplate.py",
+    "RepTate/applications/ApplicationUniversalViewer.py",
     "RepTate/core/axis_labels.py",
     "RepTate/core/CmdBase.py",
     "RepTate/core/DataTable.py",
@@ -20,6 +22,7 @@
     "RepTate/gui/QTheory.py",
     "RepTate/theories/TheoryBasic.py",
     "RepTate/theories/TheoryTemplate.py",
+    "RepTate/tools/__init__.py",
     "RepTate/tools/polymer_data.py"
   ],
   "exclude": [

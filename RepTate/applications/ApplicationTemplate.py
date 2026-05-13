@@ -35,6 +35,8 @@
 Template file for the definition of a new Application Module
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
@@ -44,14 +46,14 @@ import numpy as np
 class ApplicationTemplate(QApplicationWindow):
     """Application for [THE BASIC DOCUMENTATION OF THE APPLICATION GOES HERE]"""
 
-    appname = "Template"
-    description = "Template Application"  # used in the command-line Reptate
-    extension = (
+    appname: ClassVar[str] = "Template"
+    description: ClassVar[str] = "Template Application"  # used in the command-line Reptate
+    extension: ClassVar[str] = (
         "txt"  # drag and drop this extension automatically opens this application
     )
     # html_help_file = ''
 
-    def __init__(self, name="Template", parent=None):
+    def __init__(self, name: str = "Template", parent: Any = None) -> None:
         """**Constructor**"""
 
         # IMPORT THEORIES
@@ -108,7 +110,7 @@ class ApplicationTemplate(QApplicationWindow):
 
         # add the GUI-specific objects here:
 
-    def viewyx(self, dt, file_parameters):
+    def viewyx(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Function that defines how the view is shown. In this example, just the 1st and 2nd columns are shown.
 
         The view must handle objects of type DataTable and can make use of the file parameters
