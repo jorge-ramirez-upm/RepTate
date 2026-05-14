@@ -54,7 +54,6 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
-# from RepTate.gui.Theory_rc import *
 from math import sqrt
 import RepTate
 import time

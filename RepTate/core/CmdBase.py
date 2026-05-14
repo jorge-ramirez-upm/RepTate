@@ -35,11 +35,10 @@
 Module that defines the basic command line interaction with the user.
 
 """
+
 import enum
 from logging import Logger
 from typing import ClassVar
-
-from numpy import *
 
 
 class CalcMode(enum.Enum):

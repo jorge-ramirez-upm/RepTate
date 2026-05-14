@@ -35,12 +35,44 @@
 Definition of a new Application for viewing generic txt data
 
 """
+
 from typing import Any, ClassVar
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
-from numpy import *
+
+from numpy import (
+    sin,
+    cos,
+    tan,
+    arccos,
+    arcsin,
+    arctan,
+    arctan2,
+    deg2rad,
+    rad2deg,
+    sinh,
+    cosh,
+    tanh,
+    arcsinh,
+    arccosh,
+    arctanh,
+    around,
+    rint,
+    floor,
+    ceil,
+    trunc,
+    exp,
+    log,
+    log10,
+    fabs,
+    mod,
+    e,
+    pi,
+    power,
+    sqrt,
+)
 import numpy as np
 import re
 import configparser
@@ -111,18 +143,14 @@ class ViewParseExpression(object):
             if i < len(self.xexpr):
                 expression = self.xexpr[i].replace("^", "**")
             else:
-                expression = self.xexpr[0].replace(
-                    "^", "**"
-                )  # For x, it is not necessary to provide all expressions
+                expression = self.xexpr[0].replace("^", "**")  # For x, it is not necessary to provide all expressions
             # Find FILE PARAMETERS IN THE EXPRESSION
             fparams = re.findall(r"\[(.*?)\]", expression)
             for fp in fparams:
                 if fp in file_parameters:
                     self.safe_dict[fp] = float(file_parameters[fp])
                 else:
-                    self.parent.logger.warning(
-                        "File parameter not found. Review your views"
-                    )
+                    self.parent.logger.warning("File parameter not found. Review your views")
                     self.safe_dict[fp] = 0.0
             expression = expression.replace("[", "").replace("]", "")
             # Find Columns in the expression
@@ -138,17 +166,11 @@ class ViewParseExpression(object):
             try:
                 x[:, i] = eval(expression, {"__builtins__": None}, self.safe_dict)
             except NameError as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) x[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
             except TypeError as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) x[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
             except Exception as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) x[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
 
             # Now do the same for y
             expression = self.yexpr[i].replace("^", "**")
@@ -158,9 +180,7 @@ class ViewParseExpression(object):
                 if fp in file_parameters:
                     self.safe_dict[fp] = float(file_parameters[fp])
                 else:
-                    self.parent.logger.warning(
-                        "File parameter not found. Review your views"
-                    )
+                    self.parent.logger.warning("File parameter not found. Review your views")
                     self.safe_dict[fp] = 0.0
             expression = expression.replace("[", "").replace("]", "")
             # Find Columns in the expression
@@ -176,17 +196,11 @@ class ViewParseExpression(object):
             try:
                 y[:, i] = eval(expression, {"__builtins__": None}, self.safe_dict)
             except NameError as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) y[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
             except TypeError as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) y[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
             except Exception as e:
-                self.parent.logger.exception(
-                    "Error in view (%s) y[%d]" % (self.name, i)
-                )
+                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
 
         return x, y, True
 
@@ -236,12 +250,8 @@ class ApplicationUniversalViewer(QApplicationWindow):
                 nv += 1
                 xexpr = self.config.get("view%d" % nv, "xexpr").split(",")
                 yexpr = self.config.get("view%d" % nv, "yexpr").split(",")
-                name, x_label, y_label = self.config.get("view%d" % nv, "name").split(
-                    ","
-                )
-                x_units, y_units = self.config.get(
-                    "view%d" % nv, "units", fallback="-,-"
-                ).split(",")
+                name, x_label, y_label = self.config.get("view%d" % nv, "name").split(",")
+                x_units, y_units = self.config.get("view%d" % nv, "units", fallback="-,-").split(",")
                 n = self.config.getint("view%d" % nv, "n", fallback=1)
                 self.viewclasses[name] = ViewParseExpression(
                     name,
@@ -253,7 +263,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
                 )
                 log_x = self.config.getboolean("view%d" % nv, "logx", fallback=False)
                 log_y = self.config.getboolean("view%d" % nv, "logy", fallback=False)
-                snames = self.config.get("view%d" % nv, "snames", fallback=',,,,,,,,,,,,').split(",")
+                snames = self.config.get("view%d" % nv, "snames", fallback=",,,,,,,,,,,,").split(",")
                 self.views[name] = View(
                     name=name,
                     description=name,
@@ -292,4 +302,3 @@ class ApplicationUniversalViewer(QApplicationWindow):
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1]
         return x, y, True
-

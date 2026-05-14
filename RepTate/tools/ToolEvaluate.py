@@ -34,8 +34,39 @@
 
 Evaluate algebraic expressions in the current view
 """
+
 import traceback
-from numpy import *
+from numpy import (
+    sin,
+    cos,
+    tan,
+    arccos,
+    arcsin,
+    arctan,
+    arctan2,
+    deg2rad,
+    rad2deg,
+    sinh,
+    cosh,
+    tanh,
+    arcsinh,
+    arccosh,
+    arctanh,
+    around,
+    rint,
+    floor,
+    ceil,
+    trunc,
+    exp,
+    log,
+    log10,
+    fabs,
+    mod,
+    e,
+    pi,
+    power,
+    sqrt,
+)
 import re
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
@@ -106,7 +137,6 @@ class ToolEvaluate(QTool):
 
         # add widgets specific to the Tool here:
 
-
     def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
         """Evaluate function that returns the square of the y, according to the view"""
         xexpr = self.parameters["x"].value
@@ -120,12 +150,8 @@ class ToolEvaluate(QTool):
             if fp in file_parameters:
                 self.safe_dict[fp] = float(file_parameters[fp])
             else:
-                self.logger.warning(
-                    "File parameter not found. Review your Tool expression for x"
-                )
-                self.Qprint(
-                    "<b><font color=red>File parameter not found</font></b>. Review your Tool expression for x"
-                )
+                self.logger.warning("File parameter not found. Review your Tool expression for x")
+                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for x")
                 self.safe_dict[fp] = 0.0
         xexpr = xexpr.replace("[", "").replace("]", "")
 
@@ -134,12 +160,8 @@ class ToolEvaluate(QTool):
             if fp in file_parameters:
                 self.safe_dict[fp] = float(file_parameters[fp])
             else:
-                self.logger.warning(
-                    "File parameter not found. Review your Tool expression for y"
-                )
-                self.Qprint(
-                    "<b><font color=red>File parameter not found</font></b>. Review your Tool expression for y"
-                )
+                self.logger.warning("File parameter not found. Review your Tool expression for y")
+                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for y")
                 self.safe_dict[fp] = 0.0
         yexpr = yexpr.replace("[", "").replace("]", "")
 
@@ -152,4 +174,3 @@ class ToolEvaluate(QTool):
         except Exception as e:
             self.Qprint("in ToolEvaluate.calculate(): %s" % traceback.format_exc())
             return x, y
-

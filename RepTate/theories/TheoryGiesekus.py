@@ -46,7 +46,6 @@ from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBo
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
-# from RepTate.gui.Theory_rc import *
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 

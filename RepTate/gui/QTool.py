@@ -35,7 +35,6 @@
 Module that defines the GUI counterpart of the class Tool.
 
 """
-# from PySide6.QtCore import *
 import sys
 import ast
 import numpy as np

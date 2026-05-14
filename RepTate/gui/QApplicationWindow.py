@@ -43,8 +43,38 @@ import io
 import math
 import re
 import traceback
-from numpy import *
-from numpy.random import *
+from numpy import (
+    sin,
+    cos,
+    tan,
+    arccos,
+    arcsin,
+    arctan,
+    arctan2,
+    deg2rad,
+    rad2deg,
+    sinh,
+    cosh,
+    tanh,
+    arcsinh,
+    arccosh,
+    arctanh,
+    around,
+    rint,
+    floor,
+    ceil,
+    trunc,
+    exp,
+    log,
+    log10,
+    fabs,
+    mod,
+    e,
+    pi,
+    power,
+    sqrt,
+)
+from numpy.random import rand
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 import builtins
@@ -2787,11 +2817,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             action = menu.addAction(self._axis_unit_label(unit_symbol))
             action.setCheckable(True)
             action.setChecked(unit_symbol == axis_spec.display_unit)
-            action.triggered.connect(
-                lambda checked=False, v=view, a=axis_name, u=unit_symbol: self.set_view_axis_display_unit(
-                    v, a, u
-                )
-            )
+            action.triggered.connect(lambda checked=False, v=view, a=axis_name, u=unit_symbol: self.set_view_axis_display_unit(v, a, u))
         main_menu.addMenu(menu)
 
     def _axis_unit_label(self, unit_symbol):

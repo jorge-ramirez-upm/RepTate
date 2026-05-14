@@ -45,7 +45,6 @@ from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDial
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
-# from RepTate.gui.Theory_rc import *
 from math import sqrt, exp, pow
 import time
 import RepTate.theories.sccr_ctypes_helper as sch
