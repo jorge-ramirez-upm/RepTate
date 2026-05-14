@@ -33,14 +33,13 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
-from ctypes import *
+
+from ctypes import c_double, c_int, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "schwarzl_lib_%s.so" % (sys.platform))
 else:
@@ -56,7 +55,6 @@ schwarzl_gt.restype = None
 
 
 def do_schwarzl_gt(n_data, value_g_of_t, time_g_of_t):
-
     c_gt = (c_double * n_data)()
     c_time = (c_double * n_data)()
     out_wp = (c_double * n_data)()
