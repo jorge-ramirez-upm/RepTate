@@ -129,8 +129,8 @@ In a new file, write the following and save it as, for example,
     lib_path = 'theories/basic_function_%s.so' % (sys.platform)
     try:
         basic_function_lib = CDLL(lib_path)
-    except:
-        print('OS %s not recognized' % (sys.platform))
+    except OSError as exc:
+        print(f"OS {sys.platform} not recognized: {exc}")
 
     python_c_square = basic_function_lib.c_square
     python_c_square.restype = None

@@ -1,15 +1,14 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 import numpy as np
 from ctypes import c_double, c_int, c_bool, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "dtd_lib_%s.so" % (sys.platform))
 else:
@@ -17,8 +16,8 @@ else:
     lib_path = os.path.join(dir_path, "dtd_lib_%s_i686.so" % (sys.platform))
 try:
     dtd_lib = CDLL(lib_path)
-except:
-    print("OS %s not recognized in DTD CH" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized in DTD CH: {exc}")
 
 dynamic_tube_dilution_freq = dtd_lib.dynamic_tube_dilution_freq
 dynamic_tube_dilution_freq.restype = c_bool

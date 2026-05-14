@@ -6,10 +6,8 @@ from ctypes import c_double, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "landscape_%s.so" % (sys.platform))
 else:
@@ -18,11 +16,12 @@ else:
 
 try:
     landscape_function_lib = CDLL(lib_path)
-except:
-    print("OS %s not recognized" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized: {exc}")
 
 python_c_landscape = landscape_function_lib.landscape
 python_c_landscape.restype = c_double
+
 
 def GO_Landscape(NT, epsilon, mu):
     """Wrapper functions to call c code to compute quiescent landscape"""
@@ -30,4 +29,3 @@ def GO_Landscape(NT, epsilon, mu):
     c_doub_mu = (c_double)(mu)
     c_doub_epsilon = (c_double)(epsilon)
     return python_c_landscape(c_doub_NT, c_doub_mu, c_doub_epsilon)
-

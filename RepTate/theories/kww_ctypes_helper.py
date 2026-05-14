@@ -1,14 +1,13 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 from ctypes import c_double, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "kww_lib_%s.so" % (sys.platform))
 else:
@@ -16,8 +15,8 @@ else:
     lib_path = os.path.join(dir_path, "kww_lib_%s_i686.so" % (sys.platform))
 try:
     kww_lib = CDLL(lib_path)
-except:
-    print("OS %s not recognized in DTD CH" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized in KWW CH: {exc}")
 
 kwwc = kww_lib.kwwc
 kwwc.argtypes = [c_double, c_double]
@@ -25,4 +24,3 @@ kwwc.restype = c_double
 kwws = kww_lib.kwws
 kwws.argtypes = [c_double, c_double]
 kwws.restype = c_double
-

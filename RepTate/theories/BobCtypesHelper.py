@@ -33,6 +33,7 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 from ctypes import (
     CFUNCTYPE,
     CDLL,
@@ -53,6 +54,7 @@ if sys.platform == "darwin" or sys.platform == "linux":
 else:
     CHARCODE = "latin-1"
 
+
 class BobError(Exception):
     """Class for BoB exceptions"""
 
@@ -62,25 +64,18 @@ class BobError(Exception):
 class BobCtypesHelper:
     """Wrapper class to call BoB C++ functions"""
 
-    CB_FTYPE_NONE_PCHAR = CFUNCTYPE(
-        None, POINTER(c_char), c_int
-    )  # callback [return type, [args types]]
+    CB_FTYPE_NONE_PCHAR = CFUNCTYPE(None, POINTER(c_char), c_int)  # callback [return type, [args types]]
 
-    CB_FTYPE_NONE_CHAR = CFUNCTYPE(
-        None, c_char_p
-    )  # callback [return type, [args types]]
+    CB_FTYPE_NONE_CHAR = CFUNCTYPE(None, c_char_p)  # callback [return type, [args types]]
 
-    CB_FTYPE_DOUBLE_NONE = CFUNCTYPE(
-        c_double, c_void_p
-    )  # callback [return type, [args types]]
+    CB_FTYPE_DOUBLE_NONE = CFUNCTYPE(c_double, c_void_p)  # callback [return type, [args types]]
 
     def __init__(self, parent_theory):
-
         self.parent_theory = parent_theory
         # get the directory path of current file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         # load the sharedlibrary
-        if sys.maxsize > 2 ** 32:
+        if sys.maxsize > 2**32:
             # 64-bit system
             self.lib_path = os.path.join(dir_path, "bob2p5_lib_%s.so" % (sys.platform))
         else:
@@ -88,20 +83,18 @@ class BobCtypesHelper:
             self.lib_path = os.path.join(dir_path, "bob2p5_lib_%s_i686.so" % (sys.platform))
         try:
             self.bob_lib = CDLL(self.lib_path)
-        except:
-            print('Could not load shared library "%s"' % (self.lib_path))
+        except OSError as exc:
+            print(f"Could not load shared library {self.lib_path}: {exc}")
         # link the C function to Python
         self.link_c_functions()
 
     def send_string(self, pointer_to_str, case):
         """BoB calls this function to send a string to C
-        case 0: send filename containing polyconf input 
+        case 0: send filename containing polyconf input
         case 1: send polymer name (max 9 caracters)
         """
         if case == 0:
-            s = self.parent_theory.from_file_filename[
-                self.parent_theory.from_file_filename_counter
-            ]
+            s = self.parent_theory.from_file_filename[self.parent_theory.from_file_filename_counter]
             for i, c in enumerate(s):
                 pointer_to_str[i] = c.encode(CHARCODE)
             self.parent_theory.from_file_filename_counter += 1
@@ -136,14 +129,14 @@ class BobCtypesHelper:
         return self.parent_theory.freqint
 
     def print_err_from_c(self, char):
-        """Function called by BoB from the C++ code. 
+        """Function called by BoB from the C++ code.
         Called when error occured during BoB execution
         """
         err_msg = "<b>ERROR encountered in BoB:</b><br>%s<hr>" % (char.decode())
         self.parent_theory.Qprint(err_msg)
 
     def print_from_c(self, char):
-        """Function called by BoB from the C++ code. 
+        """Function called by BoB from the C++ code.
         Called during normal BoB execution
         """
         msg = "%s" % (char.decode())
@@ -151,9 +144,7 @@ class BobCtypesHelper:
 
     def link_c_functions(self):
         """Declare the Python functions equivalents to the C functions"""
-        self.bob_save_polyconf_and_return_gpc = (
-            self.bob_lib.reptate_save_polyconf_and_return_gpc
-        )
+        self.bob_save_polyconf_and_return_gpc = self.bob_lib.reptate_save_polyconf_and_return_gpc
         self.bob_save_polyconf_and_return_gpc.restype = c_bool
 
         self.run_bob_lve = self.bob_lib.run_bob_lve
@@ -198,19 +189,11 @@ class BobCtypesHelper:
         self.cb_get_freqint = self.CB_FTYPE_DOUBLE_NONE(self.get_freqint)
         self.bob_lib.def_get_freqint(self.cb_get_freqint)
 
-        self.cb_get_next_item_from_inp_file = self.CB_FTYPE_DOUBLE_NONE(
-            self.get_next_item_from_inp_file
-        )
-        self.bob_lib.def_get_next_item_from_inp_file(
-            self.cb_get_next_item_from_inp_file
-        )
+        self.cb_get_next_item_from_inp_file = self.CB_FTYPE_DOUBLE_NONE(self.get_next_item_from_inp_file)
+        self.bob_lib.def_get_next_item_from_inp_file(self.cb_get_next_item_from_inp_file)
 
-        self.cb_get_next_item_from_proto_file = self.CB_FTYPE_DOUBLE_NONE(
-            self.get_next_item_from_proto_file
-        )
-        self.bob_lib.def_get_next_item_from_proto_file(
-            self.cb_get_next_item_from_proto_file
-        )
+        self.cb_get_next_item_from_proto_file = self.CB_FTYPE_DOUBLE_NONE(self.get_next_item_from_proto_file)
+        self.bob_lib.def_get_next_item_from_proto_file(self.cb_get_next_item_from_proto_file)
 
         self.cb_send_string = self.CB_FTYPE_NONE_PCHAR(self.send_string)
         self.bob_lib.def_get_string(self.cb_send_string)
@@ -231,9 +214,7 @@ class BobCtypesHelper:
         self.parent_theory.protoname_counter = 0
 
         # prepare the arguments for GPC
-        nbin = self.parent_theory.parameters[
-            "nbin"
-        ].value  # set the number of bins from param
+        nbin = self.parent_theory.parameters["nbin"].value  # set the number of bins from param
         ncomp = c_int(-1)  # -1: all components
         ni = c_int(0)
         nf = c_int(npol_tot)  # all polymers
@@ -259,7 +240,6 @@ class BobCtypesHelper:
             brbin_arr,
             gbin_arr,
         ):
-
             # return results
             arrs = [lgmid_arr[:], wtbin_arr[:], brbin_arr[:], gbin_arr[:]]
             return [mn.value, mw.value, arrs]
@@ -319,9 +299,7 @@ class BobCtypesHelper:
             stress_arr = (c_double * out_size.value)()
             N1_arr = (c_double * out_size.value)()
 
-            if self.get_bob_nlve_results(
-                time_arr, stress_arr, N1_arr, c_bool(is_shear)
-            ):
+            if self.get_bob_nlve_results(time_arr, stress_arr, N1_arr, c_bool(is_shear)):
                 return [time_arr[:], stress_arr[:]]
 
         # BoB encountered error

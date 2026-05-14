@@ -33,15 +33,14 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 import numpy as np
 import ctypes as ct
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "react_lib_%s.so" % (sys.platform))
 else:
@@ -49,8 +48,8 @@ else:
     lib_path = os.path.join(dir_path, "react_lib_%s_i686.so" % (sys.platform))
 try:
     react_lib = ct.CDLL(lib_path)
-except:
-    print("OS %s not recognized in React CH module" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized in React CH module: {exc}")
 
 ###############
 # polybits.c
@@ -271,14 +270,7 @@ def link_react_dist():
     global reactresults_pointers
     global react_dist
     reactresults_pointers = reactresults_pointer * (pb_global_const.maxreact + 1)
-    react_dist = reactresults_pointers(
-        *list(
-            [
-                return_react_dist(ct.c_int(i))
-                for i in range(pb_global_const.maxreact + 1)
-            ]
-        )
-    )
+    react_dist = reactresults_pointers(*list([return_react_dist(ct.c_int(i)) for i in range(pb_global_const.maxreact + 1)]))
 
 
 react_pool_init()
@@ -422,7 +414,7 @@ mulmetCSTR.restype = ct.c_bool
 
 
 def end_print(parent_theory, ndist, do_architecture):
-    """Print the simulation information at the end of the run. 
+    """Print the simulation information at the end of the run.
     Print priority and seniority information if needed"""
     parent_theory.Qprint("<b>Simulation Results:</b>")
 
@@ -473,9 +465,7 @@ def end_print(parent_theory, ndist, do_architecture):
                 )
             )
             table = """<table border="1" width="100%">"""
-            table += (
-                """<tr><th>Type</th><th>Prop.</th><th>&lt;Mw&gt; (g/mol)</th></tr>"""
-            )
+            table += """<tr><th>Type</th><th>Prop.</th><th>&lt;Mw&gt; (g/mol)</th></tr>"""
             for i in range(len(nlist)):
                 table += """<tr><td>%s</td><td>%.3g%%</td><td>%.3g</td></tr>""" % (
                     name_list[i],
@@ -499,10 +489,7 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
         10,
         [lgmin + ibin * lgstep - 0.5 * lgstep for ibin in range(1, num_armwt_bin + 1)],
     )
-    tmp_y = [
-        react_dist[ndist].contents.numin_armwt_bin[ibin]
-        for ibin in range(1, num_armwt_bin + 1)
-    ]
+    tmp_y = [react_dist[ndist].contents.numin_armwt_bin[ibin] for ibin in range(1, num_armwt_bin + 1)]
     # trim right zeros
     tmp_y = np.trim_zeros(tmp_y, "b")
     new_len = len(tmp_y)
@@ -517,9 +504,7 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     tt.extra_tables["proba_arm_wt"][:, 1] = tmp_y
     # normalize
     try:
-        tt.extra_tables["proba_arm_wt"][:, 1] /= tt.extra_tables["proba_arm_wt"][
-            :, 1
-        ].sum()
+        tt.extra_tables["proba_arm_wt"][:, 1] /= tt.extra_tables["proba_arm_wt"][:, 1].sum()
     except ZeroDivisionError:
         pass
 
@@ -530,13 +515,9 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     rmax = min(max_num_br + 1, pb_global_const.MAX_NBR)
     tt.extra_tables["proba_br_pt"] = np.zeros((max_num_br + 1, 2))
     tt.extra_tables["proba_br_pt"][:, 0] = np.arange(max_num_br + 1)
-    tt.extra_tables["proba_br_pt"][:, 1] = [
-        react_dist[ndist].contents.numin_num_br_bin[i] for i in range(max_num_br + 1)
-    ]
+    tt.extra_tables["proba_br_pt"][:, 1] = [react_dist[ndist].contents.numin_num_br_bin[i] for i in range(max_num_br + 1)]
     try:
-        tt.extra_tables["proba_br_pt"][:, 1] /= tt.extra_tables["proba_br_pt"][
-            :, 1
-        ].sum()
+        tt.extra_tables["proba_br_pt"][:, 1] /= tt.extra_tables["proba_br_pt"][:, 1].sum()
     except ZeroDivisionError:
         pass
     # else:
@@ -554,21 +535,11 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     max_prio = return_max_prio()
     max_senio = return_max_senio()
 
-    avarmlen_v_senio = [
-        return_avarmlen_v_senio(ct.c_int(s), ct.c_int(ndist))
-        for s in range(1, max_senio + 1)
-    ]
-    avarmlen_v_prio = [
-        return_avarmlen_v_prio(ct.c_int(p), ct.c_int(ndist))
-        for p in range(1, max_prio + 1)
-    ]
+    avarmlen_v_senio = [return_avarmlen_v_senio(ct.c_int(s), ct.c_int(ndist)) for s in range(1, max_senio + 1)]
+    avarmlen_v_prio = [return_avarmlen_v_prio(ct.c_int(p), ct.c_int(ndist)) for p in range(1, max_prio + 1)]
 
-    avprio_v_senio = [
-        return_avprio_v_senio(ct.c_int(s)) for s in range(1, max_senio + 1)
-    ]
-    avsenio_v_prio = [
-        return_avsenio_v_prio(ct.c_int(p)) for p in range(1, max_prio + 1)
-    ]
+    avprio_v_senio = [return_avprio_v_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]
+    avsenio_v_prio = [return_avsenio_v_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
 
     proba_senio = [return_proba_senio(ct.c_int(s)) for s in range(1, max_senio + 1)]
     proba_prio = [return_proba_prio(ct.c_int(p)) for p in range(1, max_prio + 1)]
@@ -596,4 +567,3 @@ def prio_and_senio(parent_theory, f, ndist, do_architecture):
     tt.extra_tables["proba_prio"] = np.zeros((max_prio, 2))
     tt.extra_tables["proba_prio"][:, 0] = np.arange(1, max_prio + 1)
     tt.extra_tables["proba_prio"][:, 1] = proba_prio[:]
-

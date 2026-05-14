@@ -1,14 +1,13 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 from ctypes import c_double, c_int, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "sccr_lib_%s.so" % (sys.platform))
 else:
@@ -16,8 +15,8 @@ else:
     lib_path = os.path.join(dir_path, "sccr_lib_%s_i686.so" % (sys.platform))
 try:
     sccr_lib = CDLL(lib_path)
-except:
-    print("OS %s not recognized in SCCR CH" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized in SCCR CH: {exc}")
 
 set_static_int = sccr_lib.set_static_int
 set_static_int.restype = None

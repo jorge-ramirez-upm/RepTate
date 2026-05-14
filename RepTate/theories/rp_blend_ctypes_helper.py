@@ -1,15 +1,14 @@
 """
 Define the C-variables and functions from the C-files that are needed in Python
 """
+
 import numpy as np
 from ctypes import c_double, CDLL
 import sys
 import os
 
-dir_path = os.path.dirname(
-    os.path.realpath(__file__)
-)  # get the directory path of current file
-if sys.maxsize > 2 ** 32:
+dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
+if sys.maxsize > 2**32:
     # 64-bit system
     lib_path = os.path.join(dir_path, "rp_blend_lib_%s.so" % (sys.platform))
 else:
@@ -17,8 +16,8 @@ else:
     lib_path = os.path.join(dir_path, "rp_blend_lib_%s_i686.so" % (sys.platform))
 try:
     rp_blend_lib = CDLL(lib_path)
-except:
-    print("OS %s not recognized in Rouse CH module" % (sys.platform))
+except OSError as exc:
+    print(f"OS {sys.platform} not recognized in Rouse CH module: {exc}")
 
 derivs_rp_blend_shear = rp_blend_lib.derivs_rp_blend_shear
 derivs_rp_blend_shear.restype = None
@@ -47,9 +46,7 @@ def compute_derivs_shear(sigma, p, t, with_fene):
     taud_arr = (c_double * n)(*np.array(taud) / 2.0)  # hard coded factor 2 in C routine
     taus_arr = (c_double * n)(*taus[:])
 
-    derivs_rp_blend_shear(
-        deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr, p_arr, c_double(t)
-    )
+    derivs_rp_blend_shear(deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr, p_arr, c_double(t))
 
     # return results as numpy array
     return deriv_arr[:]
@@ -76,9 +73,7 @@ def compute_derivs_uext(sigma, p, t, with_fene):
     taud_arr = (c_double * n)(*np.array(taud) / 2.0)  # hard coded factor 2 in C routine
     taus_arr = (c_double * n)(*taus[:])
 
-    derivs_rp_blend_uext(
-        deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr, p_arr, c_double(t)
-    )
+    derivs_rp_blend_uext(deriv_arr, sigma_arr, phi_arr, taus_arr, taud_arr, p_arr, c_double(t))
 
     # return results as numpy array
     return deriv_arr[:]
