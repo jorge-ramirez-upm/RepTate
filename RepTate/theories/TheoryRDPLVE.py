@@ -36,6 +36,7 @@ Template file for creating a new theory
 """
 
 import numpy as np
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
@@ -53,7 +54,7 @@ from RepTate.theories.theory_helpers import (
 
 
 class TheoryRDPLVE(QTheory):
-    """Rolie-Double-Poly equation for the linear predictions of polydispere entangled linear polymers
+    r"""Rolie-Double-Poly equation for the linear predictions of polydispere entangled linear polymers
 
     * **Function**
         .. math::
@@ -74,13 +75,17 @@ class TheoryRDPLVE(QTheory):
 
     """
 
-    thname = "RDP LVE"
-    description = "Linear ViscoElastic predictions of the Rolie-Double-Poly model"
-    citations = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
-    single_file = True  # False if the theory can be applied to multiple files simultaneously
+    thname: ClassVar[str] = "RDP LVE"
+    description: ClassVar[str] = "Linear ViscoElastic predictions of the Rolie-Double-Poly model"
+    citations: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
+    single_file: ClassVar[bool] = True  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -129,7 +134,7 @@ class TheoryRDPLVE(QTheory):
             display_flag=False,
             min_value=1,
         )
-        nmode = self.parameters["nmodes"].value
+        nmode: Any = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -167,7 +172,8 @@ class TheoryRDPLVE(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.get_modes_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
@@ -200,7 +206,7 @@ class TheoryRDPLVE(QTheory):
         self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
         self.save_modes_action.triggered.connect(self.save_modes)
 
-    def handle_with_gcorr_button(self, checked):
+    def handle_with_gcorr_button(self, checked: Any) -> None:
         if checked:
             if len(self.Zeff) > 0:
                 # if Zeff contains something
@@ -213,14 +219,14 @@ class TheoryRDPLVE(QTheory):
             self.with_gcorr = GcorrMode.none
         self.parent_dataset.handle_actionCalculate_Theory()
 
-    def Qhide_theory_extras(self, show):
+    def Qhide_theory_extras(self, show: Any) -> None:
         """Called when current theory is changed"""
         self.parent_dataset.actionMinimize_Error.setDisabled(show)
         self.parent_dataset.actionShow_Limits.setDisabled(show)
         self.parent_dataset.actionVertical_Limits.setDisabled(show)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         apmng = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
@@ -254,8 +260,8 @@ class TheoryRDPLVE(QTheory):
             QMessageBox.warning(self, "Get MW distribution", 'No "Discretize MWD" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
-    def edit_modes_window(self):
-        nmodes = self.parameters["nmodes"].value
+    def edit_modes_window(self) -> None:
+        nmodes: Any = self.parameters["nmodes"].value
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         for i in range(nmodes):
@@ -283,7 +289,7 @@ class TheoryRDPLVE(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def edit_mwd_modes(self):
+    def edit_mwd_modes(self) -> None:
         d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
         if d.exec_():
             nmodes = d.table.rowCount()
@@ -305,7 +311,7 @@ class TheoryRDPLVE(QTheory):
             self.MWD_phi = np.copy(phi)
             self.set_modes_from_mwd(m, phi)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
         self.MWD_m = extra_data["MWD_m"]
         self.MWD_phi = extra_data["MWD_phi"]
@@ -313,40 +319,40 @@ class TheoryRDPLVE(QTheory):
 
         # G button
         if extra_data["with_gcorr"]:
-            self.with_gcorr == GcorrMode.with_gcorr
+            self.with_gcorr == GcorrMode.with_gcorr  # pyright: ignore[reportUnusedExpression]
             self.with_gcorr_button.setChecked(True)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Set extra_data when saving project"""
         self.extra_data["MWD_m"] = self.MWD_m
         self.extra_data["MWD_phi"] = self.MWD_phi
         self.extra_data["Zeff"] = self.Zeff
         self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0 = self.parameters["GN0"].value
+        GN0: Any = self.parameters["GN0"].value
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = GN0 * self.parameters["phi%02d" % i].value
         return tau, G, True
 
-    def fZ(self, z):
+    def fZ(self, z: Any) -> Any:
         """CLF correction function Likthman-McLeish (2002)"""
         return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
 
-    def gZ(self, z):
+    def gZ(self, z: Any) -> Any:
         """CLF correction function for modulus Likthman-McLeish (2002)"""
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
 
-    def set_modes_from_mwd(self, m, phi):
+    def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
-        res = Dilution(m, phi, taue, Me, self).res
+        res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
             return
@@ -361,15 +367,16 @@ class TheoryRDPLVE(QTheory):
         self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
         self.parent_dataset.handle_actionCalculate_Theory()
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
         message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,
                     value=0.0,
@@ -394,13 +401,13 @@ class TheoryRDPLVE(QTheory):
                     internal_unit="s",
                     display_unit="s",
                 )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["phi%02d" % i]
                     del self.parameters["tauD%02d" % i]
         return "", True
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -409,7 +416,7 @@ class TheoryRDPLVE(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         taud = []
         phi = []
         for i in range(nmodes):
@@ -419,7 +426,7 @@ class TheoryRDPLVE(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["GN0"].value
+            G: Any = self.parameters["GN0"].value
             if self.with_gcorr == GcorrMode.with_gcorr:
                 # G = G * sqrt(self.fZ(self.Zeff[i]))
                 G = G * self.gZ(self.Zeff[i])

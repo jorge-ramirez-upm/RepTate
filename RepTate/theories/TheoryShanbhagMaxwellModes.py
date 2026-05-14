@@ -39,6 +39,7 @@ based on the codes pyRespect-time (10.1002/mats.201900005) and pyRespect-frequen
 
 import sys
 import os
+from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -52,6 +53,9 @@ from scipy.integrate import cumulative_trapezoid, quad
 import enum
 import RepTate
 import time
+
+least_squares_any: Any = least_squares
+interp1d_any: Any = interp1d
 
 
 class PredictionMode(enum.Enum):
@@ -84,14 +88,19 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
     """
 
-    thname = "ReSpect"
-    description = "Relaxation spectra from dynamic moduli"
-    citations = ["Takeh, A. and Shanbhag, S., Appl. Rheol. 2013, 23, 24628"]
-    doi = ["http://dx.doi.org/10.3933/ApplRheol-23-24628"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes"
-    single_file = True
+    thname: ClassVar[str] = "ReSpect"
+    description: ClassVar[str] = "Relaxation spectra from dynamic moduli"
+    citations: ClassVar[list[str]] = ["Takeh, A. and Shanbhag, S., Appl. Rheol. 2013, 23, 24628"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.3933/ApplRheol-23-24628"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes"
+    single_file: ClassVar[bool] = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+    axarr: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.ShanBhagMaxwellModesFrequency
@@ -188,7 +197,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # GRAPHIC MODES
         self.graphicmodes = []
         self.spectrum = []
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         self.scont = np.zeros(ns)
         self.Hcont = np.zeros(ns)
         self.sdisc = np.zeros(ns)
@@ -197,16 +206,17 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         self.prediction_mode = PredictionMode.cont
 
-        self.GstM = None
-        self.K = None
-        self.n = 0
+        self.GstM: Any = None
+        self.K: Any = None
+        self.n: Any = 0
 
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
         self.tbutpredmode = QToolButton()
-        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutpredmode.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.cont_pred_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png"),
@@ -532,7 +542,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return np.vstack((ws2 / (1 + ws2), ws / (1 + ws2))) * hsv
 
-    def getH(self, lam, Gexp, H, kernMat, G0=0):
+    def getH(self, lam: Any, Gexp: Any, H: Any, kernMat: Any, G0: Any = 0) -> Any:
         """
         minimize_H  V(lambda) := ||Gexp - kernel(H)||^2 +  lambda * ||L H||^2
 
@@ -548,12 +558,12 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # send Hplus = [H, G0], on return unpack H and G0
         if G0 > 0:
             Hplus = np.append(H, G0)
-            res_lsq = least_squares(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
+            res_lsq = least_squares_any(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x[:-1], res_lsq.x[-1]
 
         # send normal H, and collect optimized H back
         else:
-            res_lsq = least_squares(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
+            res_lsq = least_squares_any(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x
 
     def InitializeH(self, Gexp, s, kernMat, G0=0):
@@ -619,7 +629,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return B
 
-    def oldLamC(self, lam, rho, eta):
+    def oldLamC(self, lam: Any, rho: Any, eta: Any) -> Any:
         #
         # 8/1/2018: Making newer strategy more accurate and robust: dividing by minimum rho/eta
         # which is not as sensitive to lam_min, lam_max. This makes lamC robust to range of lam explored
@@ -633,7 +643,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # change 3/20/2019: Scipy 0.17 has a bug with extrapolation: so making lami tad smaller
         lami = np.logspace(np.log10(min(lam) + 1e-15), np.log10(max(lam) - 1e-15), 1000)
         erri = np.exp(
-            interp1d(
+            interp1d_any(
                 np.log(lam),
                 np.log(er),
                 kind="cubic",
@@ -650,7 +660,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # 2/2: Copying 12/18 edit from pyReSpect-time;
         #      for rough data have cutoff at rho = rho_cutoff?
         #
-        rhoF = interp1d(lam, rho, bounds_error=False, fill_value=(rho[0], rho[-1]))
+        rhoF = interp1d_any(lam, rho, bounds_error=False, fill_value=(rho[0], rho[-1]))
 
         if rhoF(lamC) <= self.parameters["rho_cutoff"].value:
             try:
@@ -662,7 +672,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return lamC
 
-    def lcurve(self, Gexp, Hgs, kernMat, *argv):
+    def lcurve(self, Gexp: Any, Hgs: Any, kernMat: Any, *argv: Any) -> Any:
         """
         Function: lcurve(input)
 
@@ -684,9 +694,9 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         if plateau:
             G0 = argv[0]
 
-        lamDensity = self.parameters["lamDensity"].value
-        lam_max = self.parameters["lam_max"].value
-        lam_min = self.parameters["lam_min"].value
+        lamDensity: Any = self.parameters["lamDensity"].value
+        lam_max: Any = self.parameters["lam_max"].value
+        lam_min: Any = self.parameters["lam_min"].value
         npoints = int(lamDensity * (np.log10(lam_max) - np.log10(lam_min)))
         hlam = (lam_max / lam_min) ** (1.0 / (npoints - 1.0))
         lam = lam_min * hlam ** np.arange(npoints)
@@ -907,7 +917,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         npts = 100
         # can potentially change
         xi = np.linspace(min(x), max(x), npts)  # reinterpolate on equi-spaced axis
-        fint = interp1d(x, px, "cubic")  # smoothen using cubic splines
+        fint = interp1d_any(x, px, "cubic")  # smoothen using cubic splines
         pint = fint(xi)  # interpolation
         ci = cumulative_trapezoid(pint, xi, initial=0)
         pint = pint / ci[npts - 1]
@@ -926,7 +936,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         beta = np.arange(0.5, N - 0.5) * alfa
         zij[0] = z[0]
         zij[N] = z[N - 1]
-        fint = interp1d(ci, xi, "cubic")
+        fint = interp1d_any(ci, xi, "cubic")
         zij[1:N] = fint(beta)
         h = np.diff(zij)
 
@@ -990,7 +1000,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return quad(self.normKern_magic, wmin, wmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
 
-    def FineTuneSolution(self, tau, w, Gexp, isPlateau):
+    def FineTuneSolution(self, tau: Any, w: Any, Gexp: Any, isPlateau: Any) -> Any:
         """Given a spacing of modes tau, tries to do NLLS to fine tune it further
         If it fails, then it returns the old tau back
         Uses helper function: res_wG which computes residuals
@@ -1000,7 +1010,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         initError = np.linalg.norm(self.res_wG(tau, w, Gexp, isPlateau))
 
         try:
-            res = least_squares(
+            res = least_squares_any(
                 self.res_wG,
                 tau,
                 bounds=(0.02 / max(w), 50 / min(w)),
@@ -1045,7 +1055,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return residual
 
-    def ShanBhagMaxwellModesFrequency(self, f=None):
+    def ShanBhagMaxwellModesFrequency(self, f: Any = None) -> None:
         """Function that calculates the spectrum"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -1067,8 +1077,8 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         w, indices = np.unique(w, return_index=True)
         Gp = Gp[indices]
         Gpp = Gpp[indices]
-        fp = interp1d(w, Gp, fill_value="extrapolate")
-        fpp = interp1d(w, Gpp, fill_value="extrapolate")
+        fp = interp1d_any(w, Gp, fill_value="extrapolate")
+        fpp = interp1d_any(w, Gpp, fill_value="extrapolate")
         w = np.logspace(np.log10(np.min(w)), np.log10(np.max(w)), max(len(w), 200))
         Gp = fp(w)
         Gpp = fpp(w)
@@ -1081,9 +1091,11 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = w
 
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         wmin = w[0]
         wmax = w[n - 1]
+        smin: Any
+        smax: Any
 
         # determine frequency window
         if self.parameters["FreqEnd"].value == 1:
@@ -1096,7 +1108,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             smin = np.exp(+np.pi / 2) / wmax
             smax = np.exp(-np.pi / 2) / wmin
 
-        hs = (smax / smin) ** (1.0 / (ns - 1))
+        hs = (smax / smin) ** (1.0 / (ns - 1))  # pyright: ignore[reportOperatorIssue]
         s = smin * hs ** np.arange(ns)
 
         kernMat = self.getKernMat(s, w)
@@ -1323,7 +1335,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
             yth2 = np.copy(yexp)
             for i in range(xexp.shape[1]):
-                fint = interp1d(xth[:, i], yth[:, i], "linear")  # Get the theory at the same points as the data
+                fint = interp1d_any(xth[:, i], yth[:, i], "linear")  # Get the theory at the same points as the data
                 yth2[:, i] = np.copy(fint(xexp[:, i]))
             xth = np.copy(xexp)
             yth = np.copy(yth2)
@@ -1358,7 +1370,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # self.Qprint(table)
         self.Qprint(tab_data)
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
         if not self.view_modes:
             return
@@ -1367,7 +1379,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         view = self.parent_dataset.parent_application.current_view
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         data_table_tmp.num_rows = ns
         data_table_tmp.data = np.zeros((ns, 3))
         data_table_tmp.data[:, 0] = np.reciprocal(self.scont)
@@ -1420,14 +1432,19 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
     """
 
-    thname = "ReSpect"
-    description = "Relaxation spectra from relaxation modulus"
-    citations = ["Shanbhag, S., Macromolecular Theory and Simulations, 2019, 1900005"]
-    doi = ["http://dx.doi.org/10.1002/mats.201900005"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes"
-    single_file = True
+    thname: ClassVar[str] = "ReSpect"
+    description: ClassVar[str] = "Relaxation spectra from relaxation modulus"
+    citations: ClassVar[list[str]] = ["Shanbhag, S., Macromolecular Theory and Simulations, 2019, 1900005"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1002/mats.201900005"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes"
+    single_file: ClassVar[bool] = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+    axarr: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
@@ -1521,7 +1538,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # GRAPHIC MODES
         self.graphicmodes = []
         self.spectrum = []
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         self.scont = np.zeros(ns)
         self.Hcont = np.zeros(ns)
         self.sdisc = np.zeros(ns)
@@ -1530,16 +1547,17 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         self.prediction_mode = PredictionMode.cont
 
-        self.GtM = None
-        self.K = None
-        self.tfit = None
+        self.GtM: Any = None
+        self.K: Any = None
+        self.tfit: Any = None
 
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
         self.tbutpredmode = QToolButton()
-        self.tbutpredmode.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutpredmode.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.cont_pred_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png"),
@@ -1827,7 +1845,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return B
 
-    def oldLamC(self, lam, rho, eta):
+    def oldLamC(self, lam: Any, rho: Any, eta: Any) -> Any:
         #
         # 8/1/2018: Making newer strategy more accurate and robust: dividing by minimum rho/eta
         # which is not as sensitive to lam_min, lam_max. This makes lamC robust to range of lam explored
@@ -1841,7 +1859,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # change 3/20/2019: Scipy 0.17 has a bug with extrapolation: so making lami tad smaller
         lami = np.logspace(np.log10(min(lam) + 1e-15), np.log10(max(lam) - 1e-15), 1000)
         erri = np.exp(
-            interp1d(
+            interp1d_any(
                 np.log(lam),
                 np.log(er),
                 kind="cubic",
@@ -1858,7 +1876,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # 2/2: Copying 12/18 edit from pyReSpect-time;
         #      for rough data have cutoff at rho = rho_cutoff?
         #
-        rhoF = interp1d(lam, rho)
+        rhoF = interp1d_any(lam, rho)
 
         rho_cutoff = self.parameters["rho_cutoff"].value
         if rhoF(lamC) <= rho_cutoff:
@@ -1871,7 +1889,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return lamC
 
-    def lcurve(self, Gexp, Hgs, kernMat, *argv):
+    def lcurve(self, Gexp: Any, Hgs: Any, kernMat: Any, *argv: Any) -> Any:
         """
         Function: lcurve(input)
 
@@ -1893,9 +1911,9 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         if plateau:
             G0 = argv[0]
 
-        lamDensity = self.parameters["lamDensity"].value
-        lam_max = self.parameters["lam_max"].value
-        lam_min = self.parameters["lam_min"].value
+        lamDensity: Any = self.parameters["lamDensity"].value
+        lam_max: Any = self.parameters["lam_max"].value
+        lam_min: Any = self.parameters["lam_min"].value
         npoints = int(lamDensity * (np.log10(lam_max) - np.log10(lam_min)))
         hlam = (lam_max / lam_min) ** (1.0 / (npoints - 1.0))
         lam = lam_min * hlam ** np.arange(npoints)
@@ -1972,7 +1990,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return lamM, lam, rho, eta, logP, Hlambda
 
-    def getH(self, lam, Gexp, H, kernMat, *argv):
+    def getH(self, lam: Any, Gexp: Any, H: Any, kernMat: Any, *argv: Any) -> Any:
         """Purpose: Given a lambda, this function finds the H_lambda(s) that minimizes V(lambda)
 
                 V(lambda) := ||Gexp - kernel(H)||^2 +  lambda * ||L H||^2
@@ -1990,12 +2008,12 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # send Hplus = [H, G0], on return unpack H and G0
         if len(argv) > 0:
             Hplus = np.append(H, argv[0])
-            res_lsq = least_squares(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
+            res_lsq = least_squares_any(self.residualLM, Hplus, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x[:-1], res_lsq.x[-1]
 
         # send normal H, and collect optimized H back
         else:
-            res_lsq = least_squares(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
+            res_lsq = least_squares_any(self.residualLM, H, jac=self.jacobianLM, args=(lam, Gexp, kernMat))
             return res_lsq.x
 
     def residualLM(self, H, lam, Gexp, kernMat):
@@ -2227,7 +2245,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         npts = 100
         # can potentially change
         xi = np.linspace(min(x), max(x), npts)  # reinterpolate on equi-spaced axis
-        fint = interp1d(x, px, "cubic")  # smoothen using cubic splines
+        fint = interp1d_any(x, px, "cubic")  # smoothen using cubic splines
         pint = fint(xi)  # interpolation
         ci = cumulative_trapezoid(pint, xi, initial=0)
         pint = pint / ci[npts - 1]
@@ -2244,7 +2262,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         beta = np.arange(0.5, N - 0.5) * alfa
         zij[0] = z[0]
         zij[N] = z[N - 1]
-        fint = interp1d(ci, xi, "cubic")
+        fint = interp1d_any(ci, xi, "cubic")
         zij[1:N] = fint(beta)
         h = np.diff(zij)
 
@@ -2294,7 +2312,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return quad(self.normKern_magic, tmin, tmax, args=(gn, taun, g1, tau1, g2, tau2))[0]
 
-    def FineTuneSolution(self, tau, t, Gexp, isPlateau, estimateError=False):
+    def FineTuneSolution(self, tau: Any, t: Any, Gexp: Any, isPlateau: Any, estimateError: bool = False) -> Any:
         """Given a spacing of modes tau, tries to do NLLS to fine tune it further
         If it fails, then it returns the old tau back
 
@@ -2303,7 +2321,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         success = False
 
         try:
-            res = least_squares(self.res_tG, tau, bounds=(0.0, np.inf), args=(t, Gexp, isPlateau))
+            res = least_squares_any(self.res_tG, tau, bounds=(0.0, np.inf), args=(t, Gexp, isPlateau))
             tau = res.x
             tau0 = tau.copy()
 
@@ -2355,7 +2373,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return residual
 
-    def MaxwellModesTime(self, f=None):
+    def MaxwellModesTime(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -2374,15 +2392,17 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # Sanitize the input: remove repeated values and space data homogeneously
         t, indices = np.unique(t, return_index=True)
         Gexp = Gexp[indices]
-        f = interp1d(t, Gexp, fill_value="extrapolate")
+        f = interp1d_any(t, Gexp, fill_value="extrapolate")
         t = np.logspace(np.log10(np.min(t)), np.log10(np.max(t)), max(len(t), 100))
         Gexp = f(t)
         self.tfit = np.copy(t)
 
         n = len(t)
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         tmin = t[0]
         tmax = t[n - 1]
+        smin: Any
+        smax: Any
 
         # determine frequency window
         if self.parameters["FreqEnd"].value == 1:
@@ -2395,7 +2415,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             smin = np.exp(+np.pi / 2) * tmin
             smax = np.exp(-np.pi / 2) * tmax
 
-        hs = (smax / smin) ** (1.0 / (ns - 1))
+        hs = (smax / smin) ** (1.0 / (ns - 1))  # pyright: ignore[reportOperatorIssue]
         s = smin * hs ** np.arange(ns)
 
         kernMat = self.getKernMat(s, t)
@@ -2588,7 +2608,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
     def do_fit(self, line=""):
         self.Qprint("Fitting not allowed in this theory")
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> Any:
         """Report the error of the current theory
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
@@ -2613,7 +2633,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
             yth2 = np.copy(yexp)
             for i in range(xexp.shape[1]):
-                fint = interp1d(
+                fint = interp1d_any(
                     xth[:, i], yth[:, i], "cubic", bounds_error=False
                 )  # , fill_value=nan) # Get the theory at the same points as the data
                 yth2[:, i] = np.copy(fint(xexp[:, i]))
@@ -2650,7 +2670,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # self.Qprint(table)
         self.Qprint(tab_data)
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
         if not self.view_modes:
             return
@@ -2659,7 +2679,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         view = self.parent_dataset.parent_application.current_view
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
-        ns = self.parameters["ns"].value
+        ns: Any = self.parameters["ns"].value
         data_table_tmp.num_rows = ns
         data_table_tmp.data = np.zeros((ns, 2))
         data_table_tmp.data[:, 0] = self.scont

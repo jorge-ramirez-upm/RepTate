@@ -38,6 +38,7 @@ Module for the pseudo theory for Time-Temperature superposition shift of LVE dat
 import os
 import time
 import getpass
+from typing import Any, ClassVar
 import numpy as np
 from os.path import join, isdir
 from numpy import interp
@@ -59,14 +60,18 @@ class TheoryTTSShiftAutomatic(QTheory):
 
     """
 
-    thname = "Automatic TTS Shift"
-    description = "Shift data automatically for best overlap"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
-    single_file = False
+    thname: ClassVar[str] = "Automatic TTS Shift"
+    description: ClassVar[str] = "Shift data automatically for best overlap"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic
@@ -90,12 +95,15 @@ class TheoryTTSShiftAutomatic(QTheory):
             opt_type=OptType.const,
             display_flag=False,
         )
+        self.Mwset: Any
+        self.Mw: Any
+        self.Tdict: Any
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
-        self.current_master_curve = None
-        self.current_table = None
-        self.current_file_min = None
-        self.shiftParameters = {}
-        self.aT_vs_T = {}
+        self.current_master_curve: Any = None
+        self.current_table: Any = None
+        self.current_file_min: Any = None
+        self.shiftParameters: Any = {}
+        self.aT_vs_T: Any = {}
         for k in self.tables.keys():
             self.shiftParameters[k] = (0.0, 0.0)  # log10 of horizontal, then vertical
 
@@ -136,7 +144,7 @@ class TheoryTTSShiftAutomatic(QTheory):
 
         self.dir_start = os.path.join(RepTate.root_dir, "data")
 
-    def print_activation_energy(self):
+    def print_activation_energy(self) -> None:
         # Evaluate activation ennergy from Arrhenius fit
         if self.aT_vs_T == []:
             self.Qprint("<h3>Apply TTS first</h3>")
@@ -172,7 +180,7 @@ class TheoryTTSShiftAutomatic(QTheory):
                 table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
             self.Qprint(table)
 
-    def populate_TempComboBox(self):
+    def populate_TempComboBox(self) -> None:
         k = list(self.Tdict.keys())
         a = sorted(list(set([x[0] for x in self.Tdict[k[0]]])))
         for i in range(1, len(k)):
@@ -185,7 +193,7 @@ class TheoryTTSShiftAutomatic(QTheory):
             self.set_param_value("T", float(self.cbTemp.currentText()))
         self.update_parameter_table()
 
-    def do_vertical_shift(self):
+    def do_vertical_shift(self) -> None:
         self.set_param_value("vert", self.verticalshift.isChecked())
 
     # def do_save_dialog(self):
@@ -194,18 +202,18 @@ class TheoryTTSShiftAutomatic(QTheory):
     #             self, "Select Directory to save Master curves"))
     #     self.do_save(folder)
 
-    def change_temperature(self):
+    def change_temperature(self) -> None:
         try:
             self.set_param_value("T", float(self.cbTemp.currentText()))
             self.update_parameter_table()
         except:
             pass
 
-    def refresh_temperatures(self):
+    def refresh_temperatures(self) -> None:
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
         self.populate_TempComboBox()
 
-    def save_shift_factors(self):
+    def save_shift_factors(self) -> None:
         dilogue_name = "Select Folder for Saving Shift Factors"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
         if not isdir(folder):
@@ -247,7 +255,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         QMessageBox.information(self, "Saved Files", msg)
 
-    def TheoryTTSShiftAutomatic(self, f=None):
+    def TheoryTTSShiftAutomatic(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -265,7 +273,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         tt.data[:, 1] = ft.data[:, 1] * np.power(10.0, V)
         tt.data[:, 2] = ft.data[:, 2] * np.power(10.0, V)
 
-    def get_cases(self):
+    def get_cases(self) -> tuple[Any, Any, Any]:
         """Get all different samples in the dataset
 
         Samples are different if Mw, Mw2, phi, phi2 are different
@@ -302,7 +310,7 @@ class TheoryTTSShiftAutomatic(QTheory):
             Tdict[Mw[i]].append([Tlist[i], i, Filei.file_name_short, Filei])
         return p, Mw, Tdict
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> Any:
         """Override the error calculation for TTS
 
         The error is calculated as the vertical distance between theory points, in the current view,\
@@ -414,7 +422,7 @@ class TheoryTTSShiftAutomatic(QTheory):
             self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         return total_error
 
-    def func_fitTTS(self, *param_in):
+    def func_fitTTS(self, *param_in: Any) -> Any:
         """Overload the fit function"""
         ind = 0
         k = list(self.parameters.keys())
@@ -428,7 +436,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         error = self.do_error("none")
         return error
 
-    def func_fitTTS_one(self, *param_in):
+    def func_fitTTS_one(self, *param_in: Any) -> Any:
         """fit one Mw and phi"""
         H = param_in[0][0]
         V = 0
@@ -465,7 +473,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         # input("HELLO")
         return error / npt
 
-    def do_fit(self, line):
+    def do_fit(self, line: Any) -> None:
         """Minimize the error"""
         self.fitting = True
         start_time = time.time()
@@ -612,7 +620,7 @@ class TheoryTTSShiftAutomatic(QTheory):
     #         completions = [f for f in file_names if f.startswith(text)]
     #     return completions
 
-    def do_save(self, line, extra_txt=""):
+    def do_save(self, line: Any, extra_txt: str = "") -> None:
         """Save the results from TTSShiftAutomatic theory predictions to a TTS file"""
         nfiles = len(self.parent_dataset.files)
         MwUnique = list(set(self.Mw))

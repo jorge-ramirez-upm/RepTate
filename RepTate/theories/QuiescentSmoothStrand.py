@@ -7,6 +7,7 @@ Created on Fri Nov 30 13:15:57 2018
 
 import math
 from scipy import optimize
+from typing import Any
 
 
 def wholeLandscape(NT, E0_param, mus_param, Kappa0_param):
@@ -50,7 +51,7 @@ def Freequi(NS, NT):
 
 
 def Free1qui(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Freequi, bounds=(0.00001, 0.999999 * NT), args=(NT), method="bounded"
     )
     # print res
@@ -58,7 +59,7 @@ def Free1qui(NT):
 
 
 def Freeflucqui(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Freequi, bounds=(0.0000001, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x

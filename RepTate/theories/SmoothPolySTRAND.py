@@ -9,6 +9,7 @@ import math
 
 from scipy import optimize
 import numpy as np
+from typing import Any
 
 
 def wfun(phi, Df, P, B, NS):
@@ -202,7 +203,7 @@ def findDfStar_Direct(params):
     search_frac = 0.1
     upper = NTprevious * (1 + search_frac / 100.0)
     lower = NTprevious * (1 - search_frac)
-    res = optimize.minimize_scalar(FreeTrue, bounds=(lower, upper), method="bounded")
+    res: Any = optimize.minimize_scalar(FreeTrue, bounds=(lower, upper), method="bounded")
     return -res.fun, res.x, NSprevious, Pprevious, Bprevious
 
 

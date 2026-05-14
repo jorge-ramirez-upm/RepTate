@@ -9,6 +9,7 @@ import math
 
 # import matplotlib.pyplot as plt
 from scipy import optimize
+from typing import Any
 
 # import pandas as pa
 
@@ -89,14 +90,14 @@ def Freequi(NS, NT):
 
 
 def Free1(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Free2, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     return res.fun
 
 
 def Freefluc(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Free2, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x
@@ -109,14 +110,14 @@ def Freefluc(NT):
 
 
 def Free1qui(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Freequi, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     return res.fun
 
 
 def Freeflucqui(NT):
-    res = optimize.minimize_scalar(
+    res: Any = optimize.minimize_scalar(
         Freequi, bounds=(1, 0.999999 * NT), args=(NT), method="bounded"
     )
     nsmid = res.x

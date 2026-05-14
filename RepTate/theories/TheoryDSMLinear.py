@@ -32,6 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryDSMLinear"""
 import numpy as np
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.units import convert_value
 from RepTate.gui.QTheory import QTheory
@@ -43,22 +44,26 @@ class TheoryDSMLinear(QTheory):
 
     * **Parameters**"""
 
-    thname = "CFSM+Rouse"
-    description = "Clustered Fixed Slip Link theory for linear entangled polymers"
-    citations = [
+    thname: ClassVar[str] = "CFSM+Rouse"
+    description: ClassVar[str] = "Clustered Fixed Slip Link theory for linear entangled polymers"
+    citations: ClassVar[list[str]] = [
         "Katzarova, M. et al, Rheol Acta 2015, 54(3), 169-183.",
         "Andreev, M. et al., J. Rheol. 2014, 58(3), 723-736",
     ]
-    doi = [
+    doi: ClassVar[list[str]] = [
         "https://doi.org/10.1007/s00397-015-0836-0",
         "https://doi.org/10.1122%2F1.4869252",
     ]
     # html_help_file = ''
-    single_file = (
+    single_file: ClassVar[bool] = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -147,13 +152,13 @@ class TheoryDSMLinear(QTheory):
             float(parent_dataset.files[0].file_parameters["T"]) + 273.15
         )  # In units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
-        rho0 = self.parameters["rho0"].value
+        rho0: Any = self.parameters["rho0"].value
         MK = self._parameter_mass_in_da("MK")
         # ---------------------------------------------
         # CALCULATE DSM PARAMETERS FROM CROSSOVER FREQUENCY
         crossover_limits = self.find_crossover_limits(data=ft.data)
         [omega_x, Gx] = self.Gslfx(crossover_limits, data=ft.data)
-        solNc = optimize.brentq(self.solveNc, a=1, b=1000, args=(Gx, Mw, rho0, R, T))
+        solNc: Any = optimize.brentq(self.solveNc, a=1, b=1000, args=(Gx, Mw, rho0, R, T))
         if solNc > 0:
             self.Nc = solNc
             self.Mc = Mw / self.Nc
@@ -165,14 +170,14 @@ class TheoryDSMLinear(QTheory):
             self.tau_K = self.tau_c / (0.265 * self.beta ** (8.0 / 3.0))
             self.N_K = Mw / MK
 
-    def _parameter_mass_in_da(self, name):
+    def _parameter_mass_in_da(self, name: Any) -> Any:
         """Return a molar-mass parameter in Da for the legacy DSM formulas."""
         parameter = self.parameters[name]
         if parameter.internal_unit:
             return float(convert_value(parameter.value, parameter.internal_unit, "Da"))
         return parameter.value
 
-    def _set_parameter_mass_from_da(self, name, value_da):
+    def _set_parameter_mass_from_da(self, name: Any, value_da: Any) -> Any:
         """Store a molar-mass value given in Da in the parameter internal unit."""
         parameter = self.parameters[name]
         if parameter.internal_unit:
@@ -181,7 +186,7 @@ class TheoryDSMLinear(QTheory):
             value = value_da
         return self.set_param_value(name, value)
 
-    def tandelta(self, omega, data):
+    def tandelta(self, omega: Any, data: Any) -> Any:
         """Calculate the interpolated tan(delta)"""
 
         wGp = data[:, 0]
@@ -191,7 +196,7 @@ class TheoryDSMLinear(QTheory):
 
         return np.interp(omega, wGdp, Gdp) / np.interp(omega, wGp, Gp) - 1
 
-    def solveNc(self, x, Gx, Mw, rho, R, T):
+    def solveNc(self, x: Any, Gx: Any, Mw: Any, rho: Any, R: Any, T: Any) -> Any:
         """Function to solve for Nc from frequency crossover data (linear chains only)"""
 
         GxGN0 = [9.191488, 2336.3116, 14232.0515, 33.81303697, 13102.47993, 1068.7744]
@@ -206,15 +211,15 @@ class TheoryDSMLinear(QTheory):
 
         return func * G0 - Gx / 1000  # Gx has units of Pa
 
-    def Gslfx(self, crossover_limits, data):
+    def Gslfx(self, crossover_limits: Any, data: Any) -> tuple[Any, Any]:
         """Function to find crossover frequency from limits"""
 
-        sol = optimize.brentq(
+        sol: Any = optimize.brentq(
             self.tandelta, crossover_limits[0], crossover_limits[1], args=(data)
         )
         return sol, np.interp(sol, data[:, 0], data[:, 1])
 
-    def find_crossover_limits(self, data):
+    def find_crossover_limits(self, data: Any) -> Any:
         """Find the lower and upper limits of the crossover frequency"""
 
         omega = data[:, 0]
@@ -238,7 +243,7 @@ class TheoryDSMLinear(QTheory):
 
         return omega_range
 
-    def set_linear_params(self, Nc):
+    def set_linear_params(self, Nc: Any) -> list[Any]:
         """Returns fixed parameters for calculating linear chain G* data"""
 
         alpha1 = [-0.00051, -0.0205]
@@ -273,7 +278,7 @@ class TheoryDSMLinear(QTheory):
 
         return [alpha, tau, alphaR, tauR, GR]
 
-    def supp_prod(self, tau, alpha, i):
+    def supp_prod(self, tau: Any, alpha: Any, i: Any) -> Any:
         """Returns the product operator used in the G* calculation"""
         result = 1
         for j in range(1, i + 1):
@@ -281,7 +286,7 @@ class TheoryDSMLinear(QTheory):
 
         return result
 
-    def Gstar(self, omega, params, Rouse=False):
+    def Gstar(self, omega: Any, params: Any, Rouse: Any = False) -> Any:
         """Calculates G* using DSM or Rouse parameters"""
 
         if Rouse:
@@ -346,7 +351,7 @@ class TheoryDSMLinear(QTheory):
 
         return G0 * omega**2 * sumGp1 / sumGp2 + 1j * (G0 * omega * sumGdp1 / sumGdp2)
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> None:
         """Report the error of the current theory
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
@@ -356,11 +361,11 @@ class TheoryDSMLinear(QTheory):
         super().do_error(line)
         self.print_DSM_params()
 
-    def print_DSM_params(self):
+    def print_DSM_params(self) -> None:
         """Print out parameters for DSM simulations"""
 
         Mc = self._parameter_mass_in_da("Mc")
-        tau_c = self.parameters["tau_c"].value
+        tau_c: Any = self.parameters["tau_c"].value
         # beta = self.parameters["beta"].value
         MK = self._parameter_mass_in_da("MK")
         beta = Mc / 0.56 / MK - 1.0
@@ -380,7 +385,7 @@ class TheoryDSMLinear(QTheory):
             tab_data.append(["%-18s" % f.file_name_short, "%18.4g" % NK, "%18.4g" % Nc])
         self.Qprint(tab_data)
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """
         CLUSTERED FIXED SLIP-LINK (CFSM) + ROUSE MODEL FOR LINEAR VISCOELASTICITY
 
@@ -403,13 +408,13 @@ class TheoryDSMLinear(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
 
         MK = self._parameter_mass_in_da("MK")
-        rho0 = self.parameters["rho0"].value
+        rho0: Any = self.parameters["rho0"].value
         Mw = float(f.file_parameters["Mw"]) * 1000.0  # units of Da
         T = float(f.file_parameters["T"]) + 273.15  # units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
 
         Mc = self._parameter_mass_in_da("Mc")
-        tau_c = self.parameters["tau_c"].value
+        tau_c: Any = self.parameters["tau_c"].value
         # beta = self.parameters["beta"].value
         beta = Mc / 0.56 / MK - 1.0
         Nc = Mw / Mc

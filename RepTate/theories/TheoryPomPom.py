@@ -38,6 +38,7 @@ Module for the Pom-Pom model for the non-linear flow of entangled polymers.
 
 import os
 import numpy as np
+from typing import Any, ClassVar
 from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
@@ -54,7 +55,7 @@ from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
 class TheoryPomPom(QTheory):
-    """Multi-mode PomPom Model based on :cite:`NLVE-Blackwell2000`:
+    r"""Multi-mode PomPom Model based on :cite:`NLVE-Blackwell2000`:
     
     .. math::
         \\boldsymbol \\sigma &= 3 \\sum_{i=1}^n G_i  \\lambda_i^2(t) \\boldsymbol S_i (t),\\\\
@@ -83,14 +84,18 @@ class TheoryPomPom(QTheory):
 
     """
 
-    thname = "Pom-Pom"
-    description = "Pom-Pom constitutive equation"
-    citations = ["McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110"]
-    doi = ["http://dx.doi.org/10.1122/1.550933"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
-    single_file = False
+    thname: ClassVar[str] = "Pom-Pom"
+    description: ClassVar[str] = "Pom-Pom constitutive equation"
+    citations: ClassVar[list[str]] = ["McLeish T.C.B. and Larson R.G., J. Rheol. 1998, 42, 81-110"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.550933"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_PomPom
@@ -108,7 +113,8 @@ class TheoryPomPom(QTheory):
         # self.BruteNs = 5
         self.mintype = MinimizationMethod.diffevol
 
-        for i in range(self.parameters["nmodes"].value):
+        nmodes_value: Any = self.parameters["nmodes"].value
+        for i in range(nmodes_value):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
                 value=1000.0,
@@ -167,7 +173,8 @@ class TheoryPomPom(QTheory):
 
         if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
             self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+            self.tbutflow.setPopupMode(menu_button_popup)
             menu = QMenu(self)
             self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
             self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
@@ -188,7 +195,8 @@ class TheoryPomPom(QTheory):
             self.function = self.calculate_PomPomLAOS
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.get_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes")
         self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
@@ -213,7 +221,7 @@ class TheoryPomPom(QTheory):
         self.save_modes_action.triggered.connect(self.save_modes)
         self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
-    def handle_flowsolve_btn(self):
+    def handle_flowsolve_btn(self) -> None:
         """Save theory parameters in FlowSolve format"""
 
         # Get filename of RepTate project to open
@@ -255,7 +263,7 @@ class TheoryPomPom(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n = self.parameters["nmodes"].value
+            n: Any = self.parameters["nmodes"].value
             td = np.zeros(n)
             for i in range(n):
                 td[i] = self.parameters["tauB%02d" % i].value
@@ -279,18 +287,18 @@ class TheoryPomPom(QTheory):
 
         QMessageBox.information(self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath)
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         self.Qcopy_modes()
 
-    def edit_modes_window(self):
+    def edit_modes_window(self) -> None:
         times, G, success = self.get_modes()
         if not success:
             self.logger.warning("Could not get modes successfully")
@@ -313,10 +321,10 @@ class TheoryPomPom(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def plot_modes_graph(self):
+    def plot_modes_graph(self) -> None:
         pass
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -328,9 +336,9 @@ class TheoryPomPom(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -338,7 +346,7 @@ class TheoryPomPom(QTheory):
             G[i] = self.parameters["G%02d" % i].value
         return tau, G, True
 
-    def set_modes(self, tau, G):
+    def set_modes(self, tau: Any, G: Any) -> bool:
         """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -347,7 +355,7 @@ class TheoryPomPom(QTheory):
             self.set_param_value("G%02d" % i, G[i])
         return True
 
-    def sigmadot_shear(self, l, t, p):
+    def sigmadot_shear(self, l: Any, t: Any, p: Any) -> Any:
         """PomPom model in shear"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -376,7 +384,7 @@ class TheoryPomPom(QTheory):
                 dydx = l * gdot * Axy / Trace - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
-    def sigmadot_uext(self, l, t, p):
+    def sigmadot_uext(self, l: Any, t: Any, p: Any) -> Any:
         """PomPom model in uniaxial extension"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -407,7 +415,7 @@ class TheoryPomPom(QTheory):
                 dydx = firstterm - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
-    def sigmadot_shearLAOS(self, l, t, p):
+    def sigmadot_shearLAOS(self, l: Any, t: Any, p: Any) -> Any:
         """PomPom model in shear LAOS"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -442,7 +450,7 @@ class TheoryPomPom(QTheory):
                 dydx = l * gdot * Axy / Trace - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
-    def calculate_PomPom(self, f=None):
+    def calculate_PomPom(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -472,14 +480,15 @@ class TheoryPomPom(QTheory):
 
         # create parameters list
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            q = np.round(self.parameters["q%02d" % i].value)
-            tauB = self.parameters["tauB%02d" % i].value
-            tauS = tauB / self.parameters["ratio%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            q: Any = np.round(self.parameters["q%02d" % i].value)
+            tauB: Any = self.parameters["tauB%02d" % i].value
+            ratio: Any = self.parameters["ratio%02d" % i].value
+            tauS = tauB / ratio
             p = [q, tauB, tauS, flow_rate]
 
             # solve ODEs
@@ -519,7 +528,7 @@ class TheoryPomPom(QTheory):
 
                 tt.data[:, 1] += 3 * G * l * l * k
 
-    def calculate_PomPomLAOS(self, f=None):
+    def calculate_PomPomLAOS(self, f: Any = None) -> None:
         """Calculate the theory in LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -537,17 +546,18 @@ class TheoryPomPom(QTheory):
         # create parameters list
         g0 = float(f.file_parameters["gamma"])
         w = float(f.file_parameters["omega"])
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         times = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * times)
         times = np.concatenate([[0], times])
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            q = self.parameters["q%02d" % i].value
-            tauB = self.parameters["tauB%02d" % i].value
-            tauS = tauB / self.parameters["ratio%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            q: Any = self.parameters["q%02d" % i].value
+            tauB: Any = self.parameters["tauB%02d" % i].value
+            ratio: Any = self.parameters["ratio%02d" % i].value
+            tauS = tauB / ratio
             p = [q, tauB, tauS, g0, w]
 
             # solve ODEs
@@ -580,15 +590,16 @@ class TheoryPomPom(QTheory):
             ) / (4 * tauB**4 * w**4 + 5 * tauB**2 * w**2 + 1)
             tt.data[:, 2] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0)
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
         message, success = super(TheoryPomPom, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,
                     value=1000.0,
@@ -637,8 +648,8 @@ class TheoryPomPom(QTheory):
                     internal_unit="-",
                     display_unit="-",
                 )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauB%02d" % i]
                     del self.parameters["ratio%02d" % i]
