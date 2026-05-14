@@ -34,6 +34,8 @@
 
 RouseTime file for creating a new theory
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -62,16 +64,18 @@ class TheoryRouseTime(QTheory):
             - :math:`M_w`: weight-average molecular mass
     """
 
-    thname = "Rouse"
-    description = "Rouse model"
-    citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
-    doi = ["http://dx.doi.org/10.1063/1.1699180"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
+    thname: ClassVar[str] = "Rouse"
+    description: ClassVar[str] = "Rouse model"
+    citations: ClassVar[list[str]] = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1063/1.1699180"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -110,7 +114,7 @@ class TheoryRouseTime(QTheory):
             display_unit="kg/mol",
             )
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """RouseTime function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -121,9 +125,9 @@ class TheoryRouseTime(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        G0 = self.parameters["G0"].value
-        tau0 = self.parameters["tau0"].value
-        M0 = self.parameters["M0"].value
+        G0: Any = self.parameters["G0"].value
+        tau0: Any = self.parameters["tau0"].value
+        M0: Any = self.parameters["M0"].value
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):
@@ -171,16 +175,18 @@ class TheoryRouseFrequency(QTheory):
             - :math:`M_w`: weight-average molecular mass
     """
 
-    thname = "Rouse"
-    description = "Rouse model"
-    citations = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
-    doi = ["http://dx.doi.org/10.1063/1.1699180"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
+    thname: ClassVar[str] = "Rouse"
+    description: ClassVar[str] = "Rouse model"
+    citations: ClassVar[list[str]] = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1063/1.1699180"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -219,16 +225,16 @@ class TheoryRouseFrequency(QTheory):
             display_unit="kg/mol",
             )
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """RouseFrequency function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        G0 = self.parameters["G0"].value
-        tau0 = self.parameters["tau0"].value
-        M0 = self.parameters["M0"].value
+        G0: Any = self.parameters["G0"].value
+        tau0: Any = self.parameters["tau0"].value
+        M0: Any = self.parameters["M0"].value
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):

@@ -35,16 +35,19 @@
 Module for the Rolie-Double-Poly theory for the non-linear flow of entangled polymers.
 
 """
+
 import os
 import numpy as np
 from scipy.integrate import odeint
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from math import sqrt
 import time
 import RepTate
@@ -63,7 +66,7 @@ from RepTate.theories.theory_helpers import (
 
 
 class TheoryRolieDoublePoly(QTheory):
-    """Rolie-Double-Poly equations for the nonlinear predictions of polydisperse melts of entangled linear polymers
+    r"""Rolie-Double-Poly equations for the nonlinear predictions of polydisperse melts of entangled linear polymers
 
     * **Function**
         .. math::
@@ -98,14 +101,20 @@ class TheoryRolieDoublePoly(QTheory):
        - ``lmax`` :math:`\\equiv\\lambda_\\text{max}`: Maximum stretch ratio (active only when the "fene button" is pressed)
     """
 
-    thname = "Rolie-Double-Poly"
-    description = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
-    citations = ["Boudara V.A.H. et al., J. Rheol. 63, 71-91 (2019)"]
-    doi = ["http://dx.doi.org/10.1122/1.5052320"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations"
-    single_file = False
+    thname: ClassVar[str] = "Rolie-Double-Poly"
+    description: ClassVar[str] = "Rolie-Double-Poly const. eq. for polydisperse melts of entangled linear polymers"
+    citations: ClassVar[list[str]] = ["Boudara V.A.H. et al., J. Rheol. 63, 71-91 (2019)"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.5052320"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+    ax: Any
+    axarr: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RolieDoublePoly
@@ -120,7 +129,7 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
@@ -130,7 +139,7 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
@@ -142,7 +151,7 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -161,7 +170,7 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -173,7 +182,7 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -185,8 +194,8 @@ class TheoryRolieDoublePoly(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
-        nmode = self.parameters["nmodes"].value
+        )
+        nmode: Any = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -199,7 +208,7 @@ class TheoryRolieDoublePoly(QTheory):
                 quantity="dimensionless",
                 internal_unit="-",
                 display_unit="-",
-                )
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -211,7 +220,7 @@ class TheoryRolieDoublePoly(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
                 value=1,
@@ -222,7 +231,7 @@ class TheoryRolieDoublePoly(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label="")
@@ -247,14 +256,11 @@ class TheoryRolieDoublePoly(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutflow.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -263,7 +269,8 @@ class TheoryRolieDoublePoly(QTheory):
         tb.addWidget(self.tbutflow)
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.get_modes_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
@@ -273,22 +280,16 @@ class TheoryRolieDoublePoly(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get Modes (MWD data)",
         )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
         # self.plot_modes_action = menu.addAction(
         #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
         #     "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
         # #Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
-        )
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
         # Finite extensibility button
@@ -314,27 +315,19 @@ class TheoryRolieDoublePoly(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes
-        )
+        connection_id = self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
         connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         # connection_id = self.plot_modes_action.triggered.connect(
         #     self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
         connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.with_fene_button.triggered.connect(
-            self.handle_with_fene_button
-        )
-        connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button
-        )
+        connection_id = self.with_fene_button.triggered.connect(self.handle_with_fene_button)
+        connection_id = self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
         connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
-    def handle_flowsolve_btn(self):
+    def handle_flowsolve_btn(self) -> None:
         """Save theory parameters in FlowSolve format"""
 
         # Get filename of RepTate project to open
@@ -376,7 +369,7 @@ class TheoryRolieDoublePoly(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n = self.parameters["nmodes"].value
+            n: Any = self.parameters["nmodes"].value
 
             td = np.zeros(n)
             for i in range(n):
@@ -394,9 +387,7 @@ class TheoryRolieDoublePoly(QTheory):
                 tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
                 lmax += " %.6g" % self.parameters["lmax"].value
             f.write("%s\n%s\n%s\n" % (taud, tauR, fraction))
-            if (
-                self.with_fene == FeneMode.with_fene
-            ):  # don't output lmax at all for infinite ex
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
             f.write("modulus %.6g\n" % self.parameters["GN0"].value)
             f.write("beta %.6gn" % self.parameters["beta"].value)
@@ -404,50 +395,38 @@ class TheoryRolieDoublePoly(QTheory):
 
             f.write("\n#end")
 
-        QMessageBox.information(
-            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
-        )
+        QMessageBox.information(self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath)
 
-    def handle_with_gcorr_button(self, checked):
+    def handle_with_gcorr_button(self, checked: Any) -> None:
         if checked:
             if len(self.Zeff) > 0:
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint(
-                    "<font color=orange><b>Modulus correction needs Z from MWD</b></font>"
-                )
+                self.Qprint("<font color=orange><b>Modulus correction needs Z from MWD</b></font>")
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def handle_with_fene_button(self, checked):
+    def handle_with_fene_button(self, checked: Any) -> None:
         if checked:
             self.with_fene = FeneMode.with_fene
             self.with_fene_button.setChecked(True)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png"))
             self.parameters["lmax"].display_flag = True
             self.parameters["lmax"].opt_type = OptType.nopt
         else:
             self.with_fene = FeneMode.none
             self.with_fene_button.setChecked(False)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-infinite.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-infinite.png"))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def Qhide_theory_extras(self, show):
+    def Qhide_theory_extras(self, show: Any) -> None:
         """Uncheck the LVE button. Called when curent theory is changed"""
         if show:
             self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
@@ -458,22 +437,22 @@ class TheoryRolieDoublePoly(QTheory):
         self.parent_dataset.actionVertical_Limits.setDisabled(show)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
-    def show_linear_envelope(self, state):
+    def show_linear_envelope(self, state: Any) -> None:
         self.plot_theory_stuff()
         self.extra_graphic_visible(state)
         # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         # self.plot_theory_stuff()
         # self.parent_dataset.parent_application.update_plot()
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         apmng = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
@@ -486,9 +465,7 @@ class TheoryRolieDoublePoly(QTheory):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.thname == "Discretize MWD":
-                        get_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.get_mwd
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.get_mwd
 
         if get_dict:
             d = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
@@ -506,13 +483,11 @@ class TheoryRolieDoublePoly(QTheory):
                 self.set_modes_from_mwd(m, phi)
         else:
             # no theory Discretise MWD found
-            QMessageBox.warning(
-                self, "Get MW distribution", 'No "Discretize MWD" theory found'
-            )
+            QMessageBox.warning(self, "Get MW distribution", 'No "Discretize MWD" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
-    def edit_modes_window(self):
-        nmodes = self.parameters["nmodes"].value
+    def edit_modes_window(self) -> None:
+        nmodes: Any = self.parameters["nmodes"].value
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         taur = np.zeros(nmodes)
@@ -531,15 +506,9 @@ class TheoryRolieDoublePoly(QTheory):
             # self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "phi%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 1).text()
-                )
-                msg, success3 = self.set_param_value(
-                    "tauR%02d" % i, d.table.item(i, 2).text()
-                )
+                msg, success1 = self.set_param_value("phi%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("tauD%02d" % i, d.table.item(i, 1).text())
+                msg, success3 = self.set_param_value("tauR%02d" % i, d.table.item(i, 2).text())
                 success *= success1 * success2 * success3
             if not success:
                 QMessageBox.warning(
@@ -550,7 +519,7 @@ class TheoryRolieDoublePoly(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def edit_mwd_modes(self):
+    def edit_mwd_modes(self) -> None:
         d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
         if d.exec_():
             nmodes = d.table.rowCount()
@@ -575,19 +544,19 @@ class TheoryRolieDoublePoly(QTheory):
     # def plot_modes_graph(self):
     #     pass
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
         logtmin = np.log10(self.parent_dataset.minpositivecol(0))
         logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
         ntimes = int((logtmax - logtmin) * 20)
-        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
         data_table_tmp.num_rows = ntimes
         data_table_tmp.data = np.zeros((ntimes, 2))
 
         times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         data_table_tmp.data[:, 1] = 0
         fparamaux = {"gdot": 1e-8}
 
@@ -600,20 +569,13 @@ class TheoryRolieDoublePoly(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["GN0"].value
+            G: Any = self.parameters["GN0"].value
             if self.with_gcorr == GcorrMode.with_gcorr:
                 G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
                 # TODO: use symetry to reduce number of loops
                 tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
-                data_table_tmp.data[:, 1] += (
-                    G
-                    * phi[i]
-                    * phi[j]
-                    * fparamaux["gdot"]
-                    * tau
-                    * (1 - np.exp(-times / tau))
-                )
+                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux["gdot"] * tau * (1 - np.exp(-times / tau))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -630,7 +592,7 @@ class TheoryRolieDoublePoly(QTheory):
                 # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
                 data_table_tmp.series[nx][i].remove()
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
         self.MWD_m = extra_data["MWD_m"]
         self.MWD_phi = extra_data["MWD_phi"]
@@ -641,10 +603,10 @@ class TheoryRolieDoublePoly(QTheory):
 
         # G button
         if extra_data["with_gcorr"]:
-            self.with_gcorr == GcorrMode.with_gcorr
+            self.with_gcorr == GcorrMode.with_gcorr  # pyright: ignore[reportUnusedExpression]
             self.with_gcorr_button.setChecked(True)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Set extra_data when saving project"""
         self.extra_data["MWD_m"] = self.MWD_m
         self.extra_data["MWD_phi"] = self.MWD_phi
@@ -652,7 +614,7 @@ class TheoryRolieDoublePoly(QTheory):
         self.extra_data["with_fene"] = self.with_fene == FeneMode.with_fene
         self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -664,39 +626,39 @@ class TheoryRolieDoublePoly(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.show_theory_extras(False)
         # self.ax.lines.remove(self.LVEenvelopeseries)
         self.LVEenvelopeseries.remove()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: Any = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(show)
 
-    def extra_graphic_visible(self, state):
+    def extra_graphic_visible(self, state: Any) -> None:
         """Change visibility of graphic helpers"""
         self.view_LVEenvelope = state
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0 = self.parameters["GN0"].value
+        GN0: Any = self.parameters["GN0"].value
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = GN0 * self.parameters["phi%02d" % i].value
         return tau, G, True
 
-    def set_modes_from_mwd(self, m, phi):
+    def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
-        res = Dilution(m, phi, taue, Me, self).res
+        res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
             return
@@ -709,11 +671,9 @@ class TheoryRolieDoublePoly(QTheory):
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def set_modes(self, tau, G):
+    def set_modes(self, tau: Any, G: Any) -> bool:
         """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -725,15 +685,15 @@ class TheoryRolieDoublePoly(QTheory):
         self.update_parameter_table()
         return True
 
-    def fZ(self, z):
+    def fZ(self, z: Any) -> Any:
         """CLF correction function Likthman-McLeish (2002)"""
         return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
 
-    def gZ(self, z):
+    def gZ(self, z: Any) -> Any:
         """CLF correction function for modulus Likthman-McLeish (2002)"""
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
 
-    def sigmadot_shear(self, sigma, t, p):
+    def sigmadot_shear(self, sigma: Any, t: Any, p: Any) -> Any:
         """Rolie-Poly differential equation under *shear* flow
         with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
@@ -750,7 +710,7 @@ class TheoryRolieDoublePoly(QTheory):
             wfene = 0
         return rpch.compute_derivs_shear(sigma, p, t, wfene)
 
-    def sigmadot_uext(self, sigma, t, p):
+    def sigmadot_uext(self, sigma: Any, t: Any, p: Any) -> Any:
         """Rolie-Poly differential equation under *uniaxial elongational* flow
         with stretching and finite extensibility if selecter"""
         if self.stop_theory_flag:
@@ -768,13 +728,13 @@ class TheoryRolieDoublePoly(QTheory):
             wfene = 0
         return rpch.compute_derivs_uext(sigma, p, t, wfene)
 
-    def calculate_fene(self, l_square, lmax):
+    def calculate_fene(self, l_square: Any, lmax: Any) -> Any:
         """calculate finite extensibility function value"""
         ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
         l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
-    def RolieDoublePoly(self, f=None):
+    def RolieDoublePoly(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -789,11 +749,11 @@ class TheoryRolieDoublePoly(QTheory):
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta = self.parameters["beta"].value
-        delta = self.parameters["delta"].value
-        lmax = self.parameters["lmax"].value
+        beta: Any = self.parameters["beta"].value
+        delta: Any = self.parameters["delta"].value
+        lmax: Any = self.parameters["lmax"].value
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
 
         # flow geometry
         if self.flow_mode == FlowMode.shear:
@@ -836,9 +796,7 @@ class TheoryRolieDoublePoly(QTheory):
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
                         # trace_arr += phi_arr[j] * (sxx_t[:, I + j] + 2 * syy_t[:, I + j])
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -873,9 +831,7 @@ class TheoryRolieDoublePoly(QTheory):
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -894,16 +850,17 @@ class TheoryRolieDoublePoly(QTheory):
 
             tt.data[:, 1] *= self.parameters["GN0"].value
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
         message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,
                     value=0.0,
@@ -915,7 +872,7 @@ class TheoryRolieDoublePoly(QTheory):
                     quantity="dimensionless",
                     internal_unit="-",
                     display_unit="-",
-                    )
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -927,7 +884,7 @@ class TheoryRolieDoublePoly(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
+                )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
                     value=1,
@@ -939,16 +896,14 @@ class TheoryRolieDoublePoly(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+                )
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["phi%02d" % i]
                     del self.parameters["tauD%02d" % i]
                     del self.parameters["tauR%02d" % i]
         return "", True
 
-    def do_fit(self, line):
+    def do_fit(self, line: Any) -> None:
         """Minimisation procedure disabled in this theory"""
-        self.Qprint(
-            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
-        )
+        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")

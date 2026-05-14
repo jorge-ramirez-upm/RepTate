@@ -34,6 +34,8 @@
 
 Template file for creating a new theory
 """
+from typing import Any, ClassVar, cast
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -51,16 +53,20 @@ class TheoryStickyReptation(QTheory):
        - ``alpha`` : dimensionless constant.
     """
 
-    thname = "Sticky Reptation"
-    description = "Sticky Reptation"
-    citations = ["L. Leibler et al., Macromolecules, 1991, 24, 4701-4704"]
-    doi = ["http://dx.doi.org/10.1021/ma00016a034"]
+    thname: ClassVar[str] = "Sticky Reptation"
+    description: ClassVar[str] = "Sticky Reptation"
+    citations: ClassVar[list[str]] = [
+        "L. Leibler et al., Macromolecules, 1991, 24, 4701-4704"
+    ]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma00016a034"]
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -125,7 +131,7 @@ class TheoryStickyReptation(QTheory):
             display_unit="-",
         )
 
-    def g_descloizeaux(self, x, tol):
+    def g_descloizeaux(self, x: Any, tol: float) -> Any:
         N = len(x)
         gx = np.zeros(len(x))  # output array
         for n in range(0, N):
@@ -139,7 +145,7 @@ class TheoryStickyReptation(QTheory):
                 err = dgx / gx[n]
         return gx
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
 
         * **PARAMETERS:**
@@ -172,11 +178,11 @@ class TheoryStickyReptation(QTheory):
         tt = self.tables[f.file_name_short]
         w = ft.data[:, 0]  # angular frequency [rad/s]
 
-        Ge = self.parameters["Ge"].value
-        tau_s = self.parameters["tau_s"].value
-        Zs = self.parameters["Zs"].value
-        Ze = self.parameters["Ze"].value
-        alpha = self.parameters["alpha"].value
+        Ge: Any = self.parameters["Ge"].value
+        tau_s: Any = self.parameters["tau_s"].value
+        Zs: Any = self.parameters["Zs"].value
+        Ze: Any = self.parameters["Ze"].value
+        alpha: Any = self.parameters["alpha"].value
         # END FUNCTION INPUT
         # ---------------------------------------------
 
@@ -242,7 +248,7 @@ class TheoryStickyReptation(QTheory):
 
         # ---------------------------------------------
         # GET DYNAMIC MODULI G(w) from G(t)
-        f = interpolate.interp1d(
+        f = cast(Any, interpolate.interp1d)(
             t, G, kind="cubic", assume_sorted=True, fill_value="extrapolate"
         )
         g0 = f(0)
@@ -274,10 +280,10 @@ class TheoryStickyReptation(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((ft.num_rows, ft.num_columns))
-        f1 = interpolate.interp1d(
+        f1 = cast(Any, interpolate.interp1d)(
             wp, G1G2[:, 1], kind="cubic", assume_sorted=True, fill_value="extrapolate"
         )
-        f2 = interpolate.interp1d(
+        f2 = cast(Any, interpolate.interp1d)(
             wp, G1G2[:, 2], kind="cubic", assume_sorted=True, fill_value="extrapolate"
         )
         tt.data[:, 0] = ft.data[:, 0]

@@ -34,6 +34,8 @@
 
 Carreau-Yasuda equation for the complex viscosity
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from math import sqrt
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -59,16 +61,18 @@ class TheoryCarreauYasuda(QTheory):
 
     """
 
-    thname = "Carreau-Yasuda"
-    description = "Carreau-Yasuda equation"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation"
+    thname: ClassVar[str] = "Carreau-Yasuda"
+    description: ClassVar[str] = "Carreau-Yasuda equation"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#carreau-yasuda-equation"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.function_CarreauYasuda  # main theory function
@@ -164,7 +168,7 @@ class TheoryCarreauYasuda(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-    def function_CarreauYasuda(self, f=None):
+    def function_CarreauYasuda(self, f: Any = None) -> None:
         """Carreau-Yasuda equation for the complex viscosity"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -173,11 +177,11 @@ class TheoryCarreauYasuda(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        eta0 = self.parameters["eta0"].value
-        etainf = self.parameters["etainf"].value
-        lamda = self.parameters["lambda"].value
-        n = self.parameters["n"].value
-        a = self.parameters["a"].value
+        eta0: Any = self.parameters["eta0"].value
+        etainf: Any = self.parameters["etainf"].value
+        lamda: Any = self.parameters["lambda"].value
+        n: Any = self.parameters["n"].value
+        a: Any = self.parameters["a"].value
 
         tt.data[:, 1] = tt.data[:, 2] = (
             (

@@ -32,6 +32,8 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryArrhenius
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -50,15 +52,17 @@ class TheoryArrhenius(QTheory):
        - :math:`R`: Gas Constant
     """
 
-    thname = "ArrheniusTheory"
-    description = "Arrhenius Theory"
-    citations = []
+    thname: ClassVar[str] = "ArrheniusTheory"
+    description: ClassVar[str] = "Arrhenius Theory"
+    citations: ClassVar[list[str]] = []
     # html_help_file = ''
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -81,7 +85,7 @@ class TheoryArrhenius(QTheory):
             opt_type=OptType.opt,
         )
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Arrhenius function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -89,12 +93,14 @@ class TheoryArrhenius(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
+        Ea: Any = self.parameters["Ea"].value
+        Tref: Any = self.parameters["Tref"].value
         tt.data[:, 1] = np.exp(
-            self.parameters["Ea"].value
+            Ea
             / 8.314
             * (
                 1 / (ft.data[:, 0] + 273.15)
-                - 1 / (self.parameters["Tref"].value + 273.15)
+                - 1 / (Tref + 273.15)
             )
         )
 

@@ -36,6 +36,8 @@ Module that defines the theory to discretize a molecular weight distribution.
 
 """
 import os
+from typing import Any, ClassVar
+
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 import numpy as np
@@ -48,14 +50,16 @@ from RepTate.core.DraggableArtists import DragType, DraggableBinSeries
 class TheoryDiscrMWD(QTheory):
     """Discretize a Molecular Weight Distribution"""
 
-    thname = "Discretize MWD"
-    description = "Discretize a Molecular Weight Distribution"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
-    single_file = True
+    thname: ClassVar[str] = "Discretize MWD"
+    description: ClassVar[str] = "Discretize a Molecular Weight Distribution"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
+    single_file: ClassVar[bool] = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.discretise_mwd
@@ -140,7 +144,8 @@ class TheoryDiscrMWD(QTheory):
             self.NBIN_MIN, self.NBIN_MAX
         )  # min and max number of modes
         self.spinbox.setSuffix(" bins")
-        self.spinbox.setValue(self.parameters["nbin"].value)  # initial value
+        nbin_value: Any = self.parameters["nbin"].value
+        self.spinbox.setValue(nbin_value)  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
         # view bins button
@@ -166,13 +171,13 @@ class TheoryDiscrMWD(QTheory):
         self.parent_dataset.actionVertical_Limits.setDisabled(True)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(True)
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nbin'"""
         self.spinbox.setValue(value)
         self.set_param_value("nbin", value)
         self.update_parameter_table()
 
-    def Qhide_theory_extras(self, state):
+    def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the view_bins_button button and change button activation state.
         Called when curent theory is changed"""
         self.view_bins_button.setChecked(state)
@@ -181,15 +186,15 @@ class TheoryDiscrMWD(QTheory):
         self.parent_dataset.actionVertical_Limits.setDisabled(state)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(state)
 
-    def handle_view_bins_button_triggered(self, checked):
+    def handle_view_bins_button_triggered(self, checked: bool) -> None:
         """Set visibility of bins"""
         self.graphic_bins_visible(checked)
         self.set_bar_plot(True)  # leave the bar plot on
         self.parent_dataset.parent_application.update_plot()
 
-    def do_save(self, dir, extra_txt=""):
+    def do_save(self, dir: str, extra_txt: str = "") -> None:
         """Save discrete MWD"""
-        nbin = self.parameters["nbin"].value
+        nbin: Any = self.parameters["nbin"].value
         file_out = os.path.join(
             dir,
             "%s_TH_%dbins%s.txt" % (self.extra_data["current_fname"], nbin, extra_txt),
@@ -211,7 +216,7 @@ class TheoryDiscrMWD(QTheory):
         QMessageBox.information(self, "Saved discretized MWD", msg)
 
 
-    def set_equally_spaced_bins(self):
+    def set_equally_spaced_bins(self) -> None:
         """Find the first active file in the dataset and setup the bins"""
         for f in self.theory_files():
             ft = f.data_table.data
@@ -225,7 +230,7 @@ class TheoryDiscrMWD(QTheory):
                 mmax = m_arr[-1]
             self.parameters["logmmin"].value = np.log10(mmin)
             self.parameters["logmmax"].value = np.log10(mmax)
-            nbin = self.parameters["nbin"].value
+            nbin: Any = self.parameters["nbin"].value
             bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
             for i in range(nbin + 1):
                 self.parameters["logM%02d" % i] = Parameter(
@@ -238,17 +243,17 @@ class TheoryDiscrMWD(QTheory):
                 )
             self.current_file = f
 
-    def set_param_value(self, name, new_value):
+    def set_param_value(self, name: str, new_value: Any) -> tuple[str, bool]:
         """Set value of theory parameter"""
         if name == "nbin":
-            nbinold = self.parameters["nbin"].value
+            nbinold: Any = self.parameters["nbin"].value
         message, success = super().set_param_value(name, new_value)
         if not success:
             return message, success
         if name == "nbin":
-            new_nbin = self.parameters["nbin"].value
-            mminold = self.parameters["logmmin"].value
-            mmaxold = self.parameters["logmmax"].value
+            new_nbin: Any = self.parameters["nbin"].value
+            mminold: Any = self.parameters["logmmin"].value
+            mmaxold: Any = self.parameters["logmmax"].value
             for i in range(nbinold + 1):
                 del self.parameters["logM%02d" % i]
             mnew = np.logspace(mminold, mmaxold, new_nbin + 1)
@@ -266,9 +271,9 @@ class TheoryDiscrMWD(QTheory):
         elif (name == "logmmin") or (
             name == "logmmax"
         ):  # make bins equally spaced again
-            nbin = self.parameters["nbin"].value
-            mmin = self.parameters["logmmin"].value
-            mmax = self.parameters["logmmax"].value
+            nbin: Any = self.parameters["nbin"].value
+            mmin: Any = self.parameters["logmmin"].value
+            mmax: Any = self.parameters["logmmax"].value
             mnew = np.logspace(mmin, mmax, nbin + 1)
             for i in range(nbin + 1):
                 self.parameters["logM%02d" % i].value = np.log10(mnew[i])
@@ -276,9 +281,9 @@ class TheoryDiscrMWD(QTheory):
                 self.do_calculate("")
         return "", True
 
-    def setup_graphic_bins(self):
+    def setup_graphic_bins(self) -> None:
         """Setup graphic helpers for the theory"""
-        nbin = self.parameters["nbin"].value
+        nbin: Any = self.parameters["nbin"].value
         # marker at the Mw value of the bin
         self.Mw_bin = self.ax.plot(np.zeros(nbin), np.zeros(nbin))[0]
         self.Mw_bin.set_marker("|")
@@ -291,9 +296,9 @@ class TheoryDiscrMWD(QTheory):
         self.Mw_bin.set_alpha(1)
 
         # setup the movable edge bins
-        self.bins = np.logspace(
-            self.parameters["logmmin"].value, self.parameters["logmmax"].value, nbin + 1
-        )
+        logmmin: Any = self.parameters["logmmin"].value
+        logmmax: Any = self.parameters["logmmax"].value
+        self.bins = np.logspace(logmmin, logmmax, nbin + 1)
         self.graphic_bins = self.ax.plot(self.bins, np.zeros(nbin + 1), picker=10)[0]
         self.graphic_bins.set_marker("d")
         self.graphic_bins.set_linestyle("")
@@ -318,7 +323,7 @@ class TheoryDiscrMWD(QTheory):
                 10, self.parameters["logM%02d" % i].value
             )
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Define the extra_data dict and set the bin number
         Redefinition of the QTheory function"""
         self.extra_data = extra_data
@@ -331,18 +336,18 @@ class TheoryDiscrMWD(QTheory):
             # in CL mode
             pass
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.graphic_bins_visible(False)
         # self.ax.lines.remove(self.graphic_bins)
         self.graphic_bins.remove()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: bool = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         self.graphic_bins_visible(show)
 
-    def graphic_bins_visible(self, state):
+    def graphic_bins_visible(self, state: bool) -> None:
         """Set visibility of graphic helpers"""
         self.view_bins = state
         self.graphic_bins.set_visible(state)  # movable edge bins
@@ -356,10 +361,10 @@ class TheoryDiscrMWD(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def drag_bin(self, newx, newy):
+    def drag_bin(self, newx: Any, newy: Any) -> None:
         """Move edges of the bins"""
         newx = self._plot_x_to_internal_mass(newx)
-        nbin = self.parameters["nbin"].value
+        nbin: Any = self.parameters["nbin"].value
         newx = np.sort(newx)
         self.parameters["logmmin"].value = np.log10(newx[0])
         self.parameters["logmmax"].value = np.log10(newx[nbin])
@@ -368,15 +373,15 @@ class TheoryDiscrMWD(QTheory):
         self.do_calculate("")
         self.update_parameter_table()
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> None:
         """This theory does not calculate the error"""
         pass
 
-    def do_fit(self, line=""):
+    def do_fit(self, line: str = "") -> None:
         """Fit not allowed in this theory"""
         pass
 
-    def calculate_moments(self, f, line=""):
+    def calculate_moments(self, f: Any, line: str = "") -> Any:
         """Calculate the moments Mn, Mw, and Mz of a molecular mass distribution"""
         n = f[:, 0].size
         Mw = 0
@@ -436,7 +441,7 @@ class TheoryDiscrMWD(QTheory):
             )
             self.Qprint(table)
 
-    def discretise_mwd(self, f=None):
+    def discretise_mwd(self, f: Any = None) -> None:
         """Discretize a molecular weight distribution"""
         self.extra_data["current_fname"] = f.file_name_short
         # sort M, w with M increasing in ft
@@ -460,7 +465,7 @@ class TheoryDiscrMWD(QTheory):
             temp[:, 1] /= temp_area
         self.calculate_moments(temp, "input")
 
-        nbin = self.parameters["nbin"].value
+        nbin: Any = self.parameters["nbin"].value
         edge_bins = np.zeros(nbin + 1)
         for i in range(nbin + 1):
             edge_bins[i] = np.power(10, self.parameters["logM%02d" % i].value)
@@ -534,9 +539,9 @@ class TheoryDiscrMWD(QTheory):
         self.calculate_moments(saved_th, "discretized")
         self.extra_data["saved_th"] = saved_th
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory graphic helpers"""
-        nbin = self.parameters["nbin"].value
+        nbin: Any = self.parameters["nbin"].value
         x = np.zeros(nbin + 1)
         y = np.zeros(nbin + 1)
         for i in range(nbin + 1):
@@ -554,7 +559,7 @@ class TheoryDiscrMWD(QTheory):
         self.Mw_bin.set_data(x, y)
         self.Mw_bin.set_visible(True)
 
-    def set_bar_plot(self, visible=True):
+    def set_bar_plot(self, visible: bool = True) -> None:
         """Hide/Show the bar plot"""
         try:
             self.bar_bins.remove()  # remove existing bars, if any
@@ -575,7 +580,7 @@ class TheoryDiscrMWD(QTheory):
                 alpha=0.5,
             )
 
-    def _internal_mass_to_plot(self, mass_values):
+    def _internal_mass_to_plot(self, mass_values: Any) -> Any:
         """Convert internal molar-mass values to plotted x coordinates."""
         view = self.current_view()
         x = np.asarray(mass_values)
@@ -583,7 +588,7 @@ class TheoryDiscrMWD(QTheory):
             x = np.log10(x)
         return view.x_axis.convert_from_internal(x)
 
-    def _plot_x_to_internal_mass(self, plot_x_values):
+    def _plot_x_to_internal_mass(self, plot_x_values: Any) -> Any:
         """Convert plotted x coordinates back to internal molar-mass values."""
         view = self.current_view()
         x = view.x_axis.convert_to_internal(np.asarray(plot_x_values))
@@ -591,7 +596,7 @@ class TheoryDiscrMWD(QTheory):
             x = np.power(10.0, x)
         return x
 
-    def get_mwd(self):
+    def get_mwd(self) -> tuple[Any, Any]:
         m = np.copy(self.extra_data["saved_th"][:, 0])
         phi = np.copy(self.extra_data["saved_th"][:, 1])
         return m, phi

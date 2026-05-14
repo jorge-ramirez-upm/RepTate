@@ -35,6 +35,9 @@
 Module for the Giesekus model for the non-linear flow of entangled polymers.
 
 """
+
+from typing import Any, ClassVar
+
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -42,13 +45,14 @@ from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
 class TheoryGiesekus(QTheory):
-    """Multi-mode Giesekus Model (see Chapter 6 of :cite:`NLVE-Larson1988`):
+    r"""Multi-mode Giesekus Model (see Chapter 6 of :cite:`NLVE-Larson1988`):
     
     .. math::
         \\boldsymbol \\sigma &= \\sum_{i=1}^n G_i \\boldsymbol  {A_i},\\\\
@@ -67,14 +71,16 @@ class TheoryGiesekus(QTheory):
 
     """
 
-    thname = "Giesekus"
-    description = "Giesekus constitutive equation"
-    citations = ["Giesekus H., Rheol. Acta 1966, 5, 29"]
-    doi = ["http://dx.doi.org/10.1007/BF01973575"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model"
-    single_file = False
+    thname: ClassVar[str] = "Giesekus"
+    description: ClassVar[str] = "Giesekus constitutive equation"
+    citations: ClassVar[list[str]] = ["Giesekus H., Rheol. Acta 1966, 5, 29"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1007/BF01973575"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_giesekus
@@ -96,7 +102,8 @@ class TheoryGiesekus(QTheory):
             display_flag=False,
         )
 
-        for i in range(self.parameters["nmodes"].value):
+        nmodes: Any = self.parameters["nmodes"].value
+        for i in range(nmodes):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
                 value=1000.0,
@@ -143,26 +150,19 @@ class TheoryGiesekus(QTheory):
 
         if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
             self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+            self.tbutflow.setPopupMode(menu_button_popup)
             menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-            )
-            self.extensional_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-            )
+            self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+            self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
             if self.flow_mode == FlowMode.shear:
                 self.tbutflow.setDefaultAction(self.shear_flow_action)
             else:
                 self.tbutflow.setDefaultAction(self.extensional_flow_action)
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow
-            )
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow
-            )
+            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
 
             self.read_gdot_action = tb.addAction(
                 QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
@@ -173,32 +173,24 @@ class TheoryGiesekus(QTheory):
             self.function = self.calculate_giesekusLAOS
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
-        )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
-        self.plot_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
-        )
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.get_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes")
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
+        self.plot_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes")
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
         # SpinBox "n-stretch modes"
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(
-            0, self.parameters["nmodes"].value
-        )  # min and max number of modes
+        nmodes_value: Any = self.parameters["nmodes"].value
+        self.spinbox.setRange(0, nmodes_value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
+        self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
 
         self.thToolsLayout.insertWidget(0, tb)
@@ -207,28 +199,26 @@ class TheoryGiesekus(QTheory):
         connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
         connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
-    def handle_spinboxValueChanged(self, value):
-        nmodes = self.parameters["nmodes"].value
+    def handle_spinboxValueChanged(self, value: int) -> None:
+        nmodes: Any = self.parameters["nmodes"].value
         self.set_param_value("nstretch", min(nmodes, value))
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         self.Qcopy_modes()
 
-    def edit_modes_window(self):
+    def edit_modes_window(self) -> None:
         times, G, success = self.get_modes()
         if not success:
             self.logger.warning("Could not get modes successfully")
@@ -240,12 +230,8 @@ class TheoryGiesekus(QTheory):
             self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "G%02d" % i, d.table.item(i, 1).text()
-                )
+                msg, success1 = self.set_param_value("tauD%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
@@ -256,10 +242,10 @@ class TheoryGiesekus(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def plot_modes_graph(self):
+    def plot_modes_graph(self) -> None:
         pass
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -271,9 +257,9 @@ class TheoryGiesekus(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -281,7 +267,7 @@ class TheoryGiesekus(QTheory):
             G[i] = self.parameters["G%02d" % i].value
         return tau, G, True
 
-    def set_modes(self, tau, G):
+    def set_modes(self, tau: Any, G: Any) -> bool:
         """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -292,7 +278,7 @@ class TheoryGiesekus(QTheory):
             self.set_param_value("G%02d" % i, G[i])
         return True
 
-    def n1_uext(self, p, times):
+    def n1_uext(self, p: Any, times: Any) -> Any:
         """Upper Convected Maxwell model in uniaxial extension.
         Returns N1 = (XX -YY) component of stress tensor"""
         _, G, tauD, ed = p
@@ -302,27 +288,21 @@ class TheoryGiesekus(QTheory):
 
         return G * (sxx - syy)
 
-    def sigma_xy_shear(self, p, times):
+    def sigma_xy_shear(self, p: Any, times: Any) -> Any:
         """Upper Convected Maxwell model in shear.
         Returns XY component of stress tensor"""
         _, G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
-    def sigma_xy_shearLAOS(self, p, times):
+    def sigma_xy_shearLAOS(self, p: Any, times: Any) -> Any:
         """Giesekus model in LAOS"""
         _, G, tauD, g0, w = p
         eta = G * tauD
 
-        return (
-            eta
-            * g0
-            * w
-            * (tauD * w * np.sin(w * times) - np.exp(-times / tauD) + np.cos(w * times))
-            / (1 + w**2 * tauD**2)
-        )
+        return eta * g0 * w * (tauD * w * np.sin(w * times) - np.exp(-times / tauD) + np.cos(w * times)) / (1 + w**2 * tauD**2)
 
-    def sigmadot_shear(self, sigma, times, p):
+    def sigmadot_shear(self, sigma: Any, times: Any, p: Any) -> list[Any]:
         """Giesekus model in shear"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -333,25 +313,15 @@ class TheoryGiesekus(QTheory):
         if self.read_gdot_action.isChecked():
             gdot = np.interp(times, self.t, self.gfile)
 
-        dsxx = (
-            2 * gdot * sxy
-            + (alpha - 1) * (sxx - 1) / tau
-            - alpha / tau * (sxx * sxx + sxy * sxy - sxx)
-        )
+        dsxx = 2 * gdot * sxy + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (sxx * sxx + sxy * sxy - sxx)
 
-        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (
-            sxy * sxy + syy * syy - syy
-        )
+        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (sxy * sxy + syy * syy - syy)
 
-        dsxy = (
-            gdot * syy
-            + (alpha - 1) * sxy / tau
-            - alpha / tau * (sxx * sxy + sxy * syy - sxy)
-        )
+        dsxy = gdot * syy + (alpha - 1) * sxy / tau - alpha / tau * (sxx * sxy + sxy * syy - sxy)
 
         return [dsxx, dsyy, dsxy]
 
-    def sigmadot_uext(self, sigma, times, p):
+    def sigmadot_uext(self, sigma: Any, times: Any, p: Any) -> list[Any]:
         """Giesekus model in uniaxial extension"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -362,17 +332,9 @@ class TheoryGiesekus(QTheory):
         if self.read_gdot_action.isChecked():
             edot = np.interp(times, self.t, self.gfile)
 
-        dsxx = (
-            2 * edot * sxx
-            + (alpha - 1) * (sxx - 1) / tau
-            - alpha / tau * (sxx * sxx - sxx)
-        )
+        dsxx = 2 * edot * sxx + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (sxx * sxx - sxx)
 
-        dsyy = (
-            -edot * syy
-            + (alpha - 1) * (syy - 1) / tau
-            - alpha / tau * (syy * syy - syy)
-        )
+        dsyy = -edot * syy + (alpha - 1) * (syy - 1) / tau - alpha / tau * (syy * syy - syy)
 
         return [dsxx, dsyy]
 
@@ -385,7 +347,7 @@ class TheoryGiesekus(QTheory):
     #     dsyy = -gdot * syy - (syy - 1) / tau - alpha / tau * syy * (syy - 1)
     #     return [dsxx, dsyy]
 
-    def sigmadot_shearLAOS(self, sigma, times, p):
+    def sigmadot_shearLAOS(self, sigma: Any, times: Any, p: Any) -> list[Any]:
         """Giesekus model in shear"""
         if self.stop_theory_flag:
             raise EndComputationRequested
@@ -393,25 +355,15 @@ class TheoryGiesekus(QTheory):
         sxx, syy, sxy = sigma
         gdot = g0 * w * np.cos(w * times)
 
-        dsxx = (
-            2 * gdot * sxy
-            + (alpha - 1) * (sxx - 1) / tau
-            - alpha / tau * (sxx * sxx + sxy * sxy - sxx)
-        )
+        dsxx = 2 * gdot * sxy + (alpha - 1) * (sxx - 1) / tau - alpha / tau * (sxx * sxx + sxy * sxy - sxx)
 
-        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (
-            sxy * sxy + syy * syy - syy
-        )
+        dsyy = (alpha - 1) * (syy - 1) / tau - alpha / tau * (sxy * sxy + syy * syy - syy)
 
-        dsxy = (
-            gdot * syy
-            + (alpha - 1) * sxy / tau
-            - alpha / tau * (sxx * sxy + sxy * syy - sxy)
-        )
+        dsxy = gdot * syy + (alpha - 1) * sxy / tau - alpha / tau * (sxx * sxy + sxy * syy - sxy)
 
         return [dsxx, dsyy, dsxy]
 
-    def calculate_giesekus(self, f=None):
+    def calculate_giesekus(self, f: Any = None) -> None:
         """Calculate Giesekus"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -442,20 +394,18 @@ class TheoryGiesekus(QTheory):
         self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes = self.parameters["nmodes"].value
-        nstretch = self.parameters["nstretch"].value
+        nmodes: Any = self.parameters["nmodes"].value
+        nstretch: Any = self.parameters["nstretch"].value
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            tauD = self.parameters["tauD%02d" % i].value
-            alpha = self.parameters["alpha%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            tauD: Any = self.parameters["tauD%02d" % i].value
+            alpha: Any = self.parameters["alpha%02d" % i].value
             p = [alpha, G, tauD, flow_rate]
             if i < nstretch:
                 try:
-                    sig = odeint(
-                        pde_stretch, sigma0, self.t, args=(p,), atol=abserr, rtol=relerr
-                    )
+                    sig = odeint(pde_stretch, sigma0, self.t, args=(p,), atol=abserr, rtol=relerr)
                 except EndComputationRequested:
                     break
                 if self.flow_mode == FlowMode.shear:
@@ -473,7 +423,7 @@ class TheoryGiesekus(QTheory):
                 elif self.flow_mode == FlowMode.uext:
                     tt.data[:, 1] += self.n1_uext(p, ft.data[:, 0])
 
-    def calculate_giesekusLAOS(self, f=None):
+    def calculate_giesekusLAOS(self, f: Any = None) -> None:
         """Calculate Giesekus for LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -490,23 +440,21 @@ class TheoryGiesekus(QTheory):
         relerr = 1.0e-6
         g0 = float(f.file_parameters["gamma"])
         w = float(f.file_parameters["omega"])
-        nmodes = self.parameters["nmodes"].value
-        nstretch = self.parameters["nstretch"].value
+        nmodes: Any = self.parameters["nmodes"].value
+        nstretch: Any = self.parameters["nstretch"].value
         t = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * t)
         t = np.concatenate([[0], t])
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            tauD = self.parameters["tauD%02d" % i].value
-            alpha = self.parameters["alpha%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            tauD: Any = self.parameters["tauD%02d" % i].value
+            alpha: Any = self.parameters["alpha%02d" % i].value
             p = [alpha, G, tauD, g0, w]
             if i < nstretch:
                 try:
-                    sig = odeint(
-                        pde_stretchLAOS, sigma0, t, args=(p,), atol=abserr, rtol=relerr
-                    )
+                    sig = odeint(pde_stretchLAOS, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
                 except EndComputationRequested:
                     break
                 sxy = np.delete(sig[:, 2], [0])
@@ -515,16 +463,17 @@ class TheoryGiesekus(QTheory):
                 # use UCM for non stretching modes
                 tt.data[:, 1] += self.sigma_xy_shearLAOS(p, ft.data[:, 0])
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set value of a theory parameter"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
             self.spinbox.setMaximum(int(value))
         message, success = super(TheoryGiesekus, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,
                     value=1000.0,
@@ -562,8 +511,8 @@ class TheoryGiesekus(QTheory):
                     internal_unit="-",
                     display_unit="-",
                 )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
                     del self.parameters["alpha%02d" % i]

@@ -35,14 +35,17 @@
 Module for the SCCR theory for the non-linear flow of entangled polymers.
 
 """
+
 import numpy as np
 from scipy.integrate import odeint
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from math import sqrt, exp, pow
 import time
 import RepTate.theories.sccr_ctypes_helper as sch
@@ -62,16 +65,20 @@ class TheorySCCR(QTheory):
        - ``R_S`` : Retraction rate parameter
     """
 
-    thname = "GLaMM"
-    description = "SCCR theory for linear entangled polymers"
-    citations = ["Graham, R.S. et al., J. Rheol., 2003, 47, 1171-1200"]
-    doi = ["http://dx.doi.org/10.1122/1.1595099"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory"
-    single_file = False
+    thname: ClassVar[str] = "GLaMM"
+    description: ClassVar[str] = "SCCR theory for linear entangled polymers"
+    citations: ClassVar[list[str]] = ["Graham, R.S. et al., J. Rheol., 2003, 47, 1171-1200"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.1595099"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#sccr-theory"
+    single_file: ClassVar[bool] = False
 
-    signal_get_MW = Signal(object)
+    signal_get_MW: ClassVar[Any] = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.SCCR
@@ -163,14 +170,11 @@ class TheorySCCR(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutflow.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -183,7 +187,8 @@ class TheorySCCR(QTheory):
         self.spinbox.setPrefix("N=")
         self.spinbox.setSuffix("*Z")
         self.spinbox.setToolTip("Precision of SCCR Calculation")
-        self.spinbox.setValue(self.parameters["N"].value)
+        n_value: Any = self.parameters["N"].value
+        self.spinbox.setValue(n_value)
         self.spinbox.setSingleStep(2)
         tb.addWidget(self.spinbox)
 
@@ -196,36 +201,34 @@ class TheorySCCR(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         connection_id = self.recommendedN.triggered.connect(self.handle_recommendedN)
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def handle_recommendedN(self, checked):
+    def handle_recommendedN(self, checked: Any) -> None:
         self.spinbox.setEnabled(not checked)
         self.set_param_value("recommendedN", checked)
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: Any) -> None:
         self.set_param_value("N", value)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
-        self.spinbox.setValue(self.parameters["N"].value)
-        self.recommendedN.setChecked(self.parameters["recommendedN"].value)
-        self.handle_recommendedN(self.parameters["recommendedN"].value)
+        n_value: Any = self.parameters["N"].value
+        recommended_n: Any = self.parameters["recommendedN"].value
+        self.spinbox.setValue(n_value)
+        self.recommendedN.setChecked(recommended_n)
+        self.handle_recommendedN(recommended_n)
 
-    def launch_get_MW_dialog(self):
+    def launch_get_MW_dialog(self) -> None:
         title = 'Missing "Mw" value'
         msg = 'Set "Mw" value for file "%s"' % self.fname_missing_mw
         def_val = 10
@@ -234,7 +237,7 @@ class TheorySCCR(QTheory):
         self.success_MW = success
         self.new_MW_val = val
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -246,21 +249,19 @@ class TheorySCCR(QTheory):
             print("in SCCR init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def do_fit(self, line):
+    def do_fit(self, line: Any) -> None:
         """Minimisation procedure disabled in this theory"""
-        self.Qprint(
-            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
-        )
+        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: Any = False) -> None:
         """Called when the active theory is changed"""
         pass
 
-    def extra_graphic_visible(self, state):
+    def extra_graphic_visible(self, state: Any) -> None:
         """Do nothing"""
         pass
 
-    def Get_Recommended_N(self, cnu, z):
+    def Get_Recommended_N(self, cnu: Any, z: Any) -> Any:
         n = 0
         if cnu > 0.1:
             if z < 5:
@@ -292,23 +293,17 @@ class TheorySCCR(QTheory):
                 n = z
         return n
 
-    def Set_beta_rcr(self, z, cnu):
+    def Set_beta_rcr(self, z: Any, cnu: Any) -> Any:
         beta_rcr = 1
         if cnu > 0:
             logcnu = np.log10(cnu)
             Zeq = z * (1.0923 - 0.38008 * logcnu - 0.041605 * logcnu * logcnu)
-            fZ = (
-                0.65237
-                - 0.4223 / sqrt(Zeq)
-                + 2.1586 / Zeq
-                - 17.581 / pow(Zeq, 1.5)
-                + 25.071 / Zeq / Zeq
-            )
+            fZ = 0.65237 - 0.4223 / sqrt(Zeq) + 2.1586 / Zeq - 17.581 / pow(Zeq, 1.5) + 25.071 / Zeq / Zeq
             gcnu = 1.2065 + 0.65493 * logcnu + 0.073027 * logcnu * logcnu
             beta_rcr = fZ * gcnu
         return beta_rcr
 
-    def ind(self, k, i, j):
+    def ind(self, k: Any, i: Any, j: Any) -> Any:
         """
         Convert k,i,j (3D array) indices to ind (1D array), considering the symmetry of the problem
          \  1 /  (j=i diagonal)
@@ -324,21 +319,9 @@ class TheorySCCR(QTheory):
                 return ind0 + i * (i + 3) // 2 + j - self.N
             else:
                 if self.N % 2 == 0:
-                    return (
-                        ind0
-                        - i * i // 2
-                        + (2 * self.N + 1) * i // 2
-                        + j
-                        - self.N * (2 + self.N) // 4
-                    )
+                    return ind0 - i * i // 2 + (2 * self.N + 1) * i // 2 + j - self.N * (2 + self.N) // 4
                 else:
-                    return (
-                        ind0
-                        - i * i // 2
-                        + (2 * self.N + 1) * i // 2
-                        + j
-                        - ((self.N + 1) // 2) ** 2
-                    )
+                    return ind0 - i * i // 2 + (2 * self.N + 1) * i // 2 + j - ((self.N + 1) // 2) ** 2
         elif j >= i and j < (self.N - i):  # 2nd Quadrant
             # Reflection of point on J=self.N-I line
             auxi = self.N - j
@@ -355,7 +338,7 @@ class TheorySCCR(QTheory):
             auxj = i
             return self.ind(k, auxi, auxj)
 
-    def set_yeq(self):
+    def set_yeq(self) -> None:
         aux = self.N / self.Z / 2.0
         ind = 0
         for k in range(3):
@@ -366,7 +349,7 @@ class TheorySCCR(QTheory):
                         self.yeq[ind] = 1.0 / 3.0
                     ind += 1
 
-    def pde_shear(self, y, t):
+    def pde_shear(self, y: Any, t: Any) -> Any:
         if self.stop_theory_flag:
             raise EndComputationRequested
         if t >= self.tmax * self.count:
@@ -378,7 +361,7 @@ class TheorySCCR(QTheory):
         sch.sccr_dy(y_arr, dy_arr, c_double(t))
         return dy_arr[:]
 
-    def SCCR(self, f=None):
+    def SCCR(self, f: Any = None) -> None:
         """Calculates the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -388,8 +371,8 @@ class TheorySCCR(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
 
         self.taue = self.parameters["tau_e"].value
-        Ge = self.parameters["Ge"].value
-        Me = self.parameters["Me"].value
+        Ge: Any = self.parameters["Ge"].value
+        Me: Any = self.parameters["Me"].value
         self.cnu = self.parameters["c_nu"].value
         self.Rs = self.parameters["Rs"].value
         try:
@@ -404,10 +387,7 @@ class TheorySCCR(QTheory):
                 f.file_parameters["Mw"] = self.new_MW_val
                 Mw = self.new_MW_val
             else:
-                self.Qprint(
-                    '<big><font color=red><b>Mw value is missing in file "%s"</b></font></big>'
-                    % f.file_name_short
-                )
+                self.Qprint('<big><font color=red><b>Mw value is missing in file "%s"</b></font></big>' % f.file_name_short)
                 return
         gdot = float(f.file_parameters["gdot"])
         gdot = gdot * self.taue
@@ -428,9 +408,7 @@ class TheorySCCR(QTheory):
         else:
             self.SIZE = (self.N + 1) * (self.N + 3) // 4
 
-        self.yeq = np.zeros(
-            3 * self.SIZE
-        )  # Integer division (NEED TO STORE 3 COMPONENTS f(0)=fxx f(1)=fxy f(2)=fyy)
+        self.yeq = np.zeros(3 * self.SIZE)  # Integer division (NEED TO STORE 3 COMPONENTS f(0)=fxx f(1)=fxy f(2)=fyy)
         self.beta_rcr = self.Set_beta_rcr(self.Z, self.cnu)
         self.prevt = 0
         self.prevtlog = 1e-12
@@ -494,17 +472,12 @@ class TheorySCCR(QTheory):
                     jsq = j * j
                     # stressRouse+=self.Z*self.Z/2.0/j/j*(1-np.exp(-2.0*j*j*t[i]/self.Z/self.Z))/self.Z*gdot
                     stressRouse += (1 - exp(-jsq * t[i] / tmp)) / jsq
-                tt.data[i, 1] = (
-                    stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot
-                ) * Ge
+                tt.data[i, 1] = (stressTube * 4.0 / 5.0 + stressRouse * tmp / self.Z * gdot) * Ge
         else:
             # extensional flow
             Zsq = self.Z * self.Z
             for i in range(len(t)):
                 # Stress from tube theory
-                Fint = [
-                    (sigma[i][self.ind(0, j, j)] - sigma[i][self.ind(2, j, j)])
-                    for j in range(self.N + 1)
-                ]
+                Fint = [(sigma[i][self.ind(0, j, j)] - sigma[i][self.ind(2, j, j)]) for j in range(self.N + 1)]
                 stressTube = np.trapz(Fint, Sint) * 3.0 / self.Z
                 tt.data[i, 1] = stressTube * 4.0 / 5.0 * Ge

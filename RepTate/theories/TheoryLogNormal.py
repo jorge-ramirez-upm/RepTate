@@ -32,6 +32,8 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryLogNormal
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -50,16 +52,18 @@ class TheoryLogNormal(QTheory):
        - ``sigma`` :math:`\\equiv\\sigma`
     """
 
-    thname = "LogNormal"
-    description = "LogNormal distribution"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution"
+    thname: ClassVar[str] = "LogNormal"
+    description: ClassVar[str] = "LogNormal distribution"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#log-normal-distribution"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.LogNormal  # main theory function
@@ -87,7 +91,7 @@ class TheoryLogNormal(QTheory):
             min_value=0,
         )
 
-    def LogNormal(self, f=None):
+    def LogNormal(self, f: Any = None) -> None:
         """LogNormal function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -95,14 +99,14 @@ class TheoryLogNormal(QTheory):
         tt.num_rows = ft.num_rows
         W0 = np.power(10.0, self.parameters["logW0"].value)
         M0 = np.power(10.0, self.parameters["logM0"].value)
-        sigma = self.parameters["sigma"].value
+        sigma: Any = self.parameters["sigma"].value
 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
         # tt.data[:, 1] = (W0/ sigma/ np.sqrt(2 * np.pi)/ tt.data[:, 0]* np.exp(-((np.log(tt.data[:, 0]) - np.log(M0)) ** 2) / 2 / sigma ** 2))
         tt.data[:, 1] = W0 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-((np.log(tt.data[:, 0]) - (np.log(M0) + sigma**2)) ** 2) / 2 / sigma ** 2)
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> None:
         """Report the error of the current theory
 
 Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
@@ -112,7 +116,7 @@ File error is calculated as the mean square of the residual, averaged over all p
         if line == "":
             self.Qprint("""<h3>Characteristics of the fitted MWD</h3>""")
             M0 = np.power(10.0, self.parameters["logM0"].value)
-            sigma = self.parameters["sigma"].value
+            sigma: Any = self.parameters["sigma"].value
             Mn = M0 * np.exp(sigma ** 2 / 2)
             Mw = M0 * np.exp(3 * sigma ** 2 / 2)
             Mz = M0 * np.exp(5 * sigma ** 2 / 2)

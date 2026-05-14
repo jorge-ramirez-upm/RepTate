@@ -35,15 +35,18 @@
 Module for the PETS theory for the non-linear flow of entangled polymers.
 
 """
+
 import numpy as np
 from scipy.integrate import odeint
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from RepTate.theories.theory_helpers import FlowMode
 
 
@@ -64,19 +67,25 @@ class TheoryPETS(QTheory):
            - ``r_a`` : Ratio of sticker size to tube diameter
     """
 
-    thname = "PETS"
-    description = "Preaveraged model for entangled telechelic star polymers"
-    citations = ["Boudara, V.A.H, and D.J. Read, J. Rheol., 61, 339-362 (2017)"]
-    doi = ["http://dx.doi.org/10.1122/1.4974908"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation"
-    single_file = False
+    thname: ClassVar[str] = "PETS"
+    description: ClassVar[str] = "Preaveraged model for entangled telechelic star polymers"
+    citations: ClassVar[list[str]] = ["Boudara, V.A.H, and D.J. Read, J. Rheol., 61, 339-362 (2017)"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.4974908"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+    ax: Any
+    axarr: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.PETS
         self.has_modes = True
-        EPSILON = np.finfo(float).resolution
+        EPSILON: Any = np.finfo(float).resolution
         self.parameters["G"] = Parameter(
             name="G",
             value=1000.0,
@@ -207,14 +216,11 @@ class TheoryPETS(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutflow.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -223,36 +229,32 @@ class TheoryPETS(QTheory):
         tb.addWidget(self.tbutflow)
 
         # Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
-        )
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
 
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
         connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
 
-    def Qhide_theory_extras(self, show):
+    def Qhide_theory_extras(self, show: Any) -> None:
         """Uncheck the LVE button. Called when curent theory is changed"""
         if show:
             self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         else:
             self.LVEenvelopeseries.set_visible(False)
 
-    def show_linear_envelope(self, state):
+    def show_linear_envelope(self, state: Any) -> None:
         self.extra_graphic_visible(state)
         # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         # self.plot_theory_stuff()
         # self.parent_dataset.parent_application.update_plot()
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
-        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
         data_table_tmp.num_rows = 100
         data_table_tmp.data = np.zeros((100, 2))
@@ -260,14 +262,12 @@ class TheoryPETS(QTheory):
         times = np.logspace(-2, 3, 100)
         data_table_tmp.data[:, 0] = times
         data_table_tmp.data[:, 1] = 0
-        fparamaux = {}
+        fparamaux: dict[str, Any] = {}
         fparamaux["gdot"] = 1e-8
 
-        G = self.parameters["G"].value
-        tauD = self.parameters["tauD"].value
-        data_table_tmp.data[:, 1] += (
-            G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
-        )
+        G: Any = self.parameters["G"].value
+        tauD: Any = self.parameters["tauD"].value
+        data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -279,23 +279,23 @@ class TheoryPETS(QTheory):
         x, y = self.convert_view_data_to_display(x, y, view)
         self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
         pass
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Set extra_data when saving project"""
         pass
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -307,23 +307,23 @@ class TheoryPETS(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.extra_graphic_visible(False)
         # self.ax.lines.remove(self.LVEenvelopeseries)
         self.LVEenvelopeseries.remove()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: Any = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(self.linearenvelope.isChecked())
 
-    def extra_graphic_visible(self, state):
+    def extra_graphic_visible(self, state: Any) -> None:
         """Change visibility of graphic helpers"""
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
         tau = np.zeros(1)
         G = np.zeros(1)
@@ -331,7 +331,7 @@ class TheoryPETS(QTheory):
         G[0] = self.parameters["G"].value
         return tau, G, True
 
-    def sigmadot_shear(self, vec, t, p):
+    def sigmadot_shear(self, vec: Any, t: Any, p: Any) -> list[Any]:
         """PETS differential equation under *shear* flow
         with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
@@ -354,19 +354,12 @@ class TheoryPETS(QTheory):
         r_asfree = (
             1
             / tau_as
-            * (
-                (1 - la**2 / lm2)
-                / (1 - 1 / lm2 * (la - r_a / Z) ** 2)
-                * (1 - (1 - r_a / Z) / lm2)
-                / (1 - 1 / lm2)
-            )
+            * ((1 - la**2 / lm2) / (1 - 1 / lm2 * (la - r_a / Z) ** 2) * (1 - (1 - r_a / Z) / lm2) / (1 - 1 / lm2))
             ** (-1.5 * Z * lm2 * (1 - 1 / lm2))
         )
         if r_asfree > self.RD_MAX:
             r_asfree = self.RD_MAX
-        nu = 2 * (1 - f) * (1 - 1 / ldeq) / tauS * feneEq + f * r_asfree * 2 * (
-            la - ld
-        ) / (la + ld)
+        nu = 2 * (1 - f) * (1 - 1 / ldeq) / tauS * feneEq + f * r_asfree * 2 * (la - ld) / (la + ld)
         ###
         gxx = 2 * gammadot * QAxy - beta * nu * (QAxx - fenela) / la
         gyy = -beta * nu * (QAyy - fenela) / la
@@ -378,23 +371,9 @@ class TheoryPETS(QTheory):
         dQAxy = gxy + trg_lm * QAxy + r_freeas * (1 - f) / f * (QDxy - QAxy)
 
         #####
-        hxx = (
-            2 * gammadot * QDxy
-            - beta * nu * (QDxx - feneld) / ld
-            - (QDxx - feneld) / tauD
-            - 2 * (1 - 1 / ld) / tauS * feneld * QDxx
-        )
-        hyy = (
-            -beta * nu * (QDyy - feneld) / ld
-            - (QDyy - feneld) / tauD
-            - 2 * (1 - 1 / ld) / tauS * feneld * QDyy
-        )
-        hxy = (
-            gammadot * QDyy
-            - beta * nu * QDxy / ld
-            - QDxy / tauD
-            - 2 * (1 - 1 / ld) / tauS * feneld * QDxy
-        )
+        hxx = 2 * gammadot * QDxy - beta * nu * (QDxx - feneld) / ld - (QDxx - feneld) / tauD - 2 * (1 - 1 / ld) / tauS * feneld * QDxx
+        hyy = -beta * nu * (QDyy - feneld) / ld - (QDyy - feneld) / tauD - 2 * (1 - 1 / ld) / tauS * feneld * QDyy
+        hxy = gammadot * QDyy - beta * nu * QDxy / ld - QDxy / tauD - 2 * (1 - 1 / ld) / tauS * feneld * QDxy
         trh_lm = (hxx + 2 * hyy) / (3 * lm2 - 3)
 
         dQDxx = hxx + trh_lm * QDxx + r_asfree * f / (1 - f) * (QAxx - QDxx)
@@ -402,17 +381,13 @@ class TheoryPETS(QTheory):
         dQDxy = hxy + trh_lm * QDxy + r_asfree * f / (1 - f) * (QAxy - QDxy)
 
         ###
-        dldeq = (
-            gammadot * QDxy / trQD * ldeq
-            - (ldeq - 1) / tauS * feneEq
-            + f * r_asfree * (la - ldeq)
-        )
+        dldeq = gammadot * QDxy / trQD * ldeq - (ldeq - 1) / tauS * feneEq + f * r_asfree * (la - ldeq)
         ###
         df = r_freeas * (1 - f) - r_asfree * f
 
         return [df, dldeq, dQAxx, dQAyy, dQAxy, dQDxx, dQDyy, dQDxy]
 
-    def sigmadot_uext(self, vec, t, p):
+    def sigmadot_uext(self, vec: Any, t: Any, p: Any) -> list[Any]:
         """PETS differential equation under *uext* flow
         with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
@@ -436,24 +411,11 @@ class TheoryPETS(QTheory):
         r_asfree = (
             1
             / tau_as
-            * (
-                (1 - la**2 / lm2)
-                / (
-                    1
-                    - 1
-                    / lm2
-                    * (la - r_a / Z) ** 2
-                    * (1 - (1 - r_a / Z) / lm2)
-                    / (1 - 1 / lm2)
-                )
-            )
-            ** (-1.5 * Z * lm2)
+            * ((1 - la**2 / lm2) / (1 - 1 / lm2 * (la - r_a / Z) ** 2 * (1 - (1 - r_a / Z) / lm2) / (1 - 1 / lm2))) ** (-1.5 * Z * lm2)
         )
         if r_asfree > self.RD_MAX:
             r_asfree = self.RD_MAX
-        nu = 2 * (1 - f) * (1 - 1 / ldeq) / tauS * feneEq + f * r_asfree * 2 * (
-            la - ld
-        ) / (la + ld)
+        nu = 2 * (1 - f) * (1 - 1 / ldeq) / tauS * feneEq + f * r_asfree * 2 * (la - ld) / (la + ld)
         ###
         gxx = 2.0 * epsilon_dot * QAxx - beta * nu * (QAxx - fenela) / la
         gyy = -epsilon_dot * QAyy - beta * nu * (QAyy - fenela) / la
@@ -463,29 +425,15 @@ class TheoryPETS(QTheory):
         dQAyy = gyy + trg_lm * QAyy + r_freeas * (1 - f) / f * (QDyy - QAyy)
 
         #####
-        hxx = (
-            2.0 * epsilon_dot * QDxx
-            - beta * nu * (QDxx - feneld) / ld
-            - (QDxx - feneld) / tauD
-            - 2 * (1 - 1 / ld) / tauS * feneld * QDxx
-        )
-        hyy = (
-            -epsilon_dot * QDyy
-            - beta * nu * (QDyy - feneld) / ld
-            - (QDyy - feneld) / tauD
-            - 2 * (1 - 1 / ld) / tauS * feneld * QDyy
-        )
+        hxx = 2.0 * epsilon_dot * QDxx - beta * nu * (QDxx - feneld) / ld - (QDxx - feneld) / tauD - 2 * (1 - 1 / ld) / tauS * feneld * QDxx
+        hyy = -epsilon_dot * QDyy - beta * nu * (QDyy - feneld) / ld - (QDyy - feneld) / tauD - 2 * (1 - 1 / ld) / tauS * feneld * QDyy
         trh_lm = (hxx + 2 * hyy) / (3 * lm2 - 3)
 
         dQDxx = hxx + trh_lm * QDxx + r_asfree * f / (1 - f) * (QAxx - QDxx)
         dQDyy = hyy + trh_lm * QDyy + r_asfree * f / (1 - f) * (QAyy - QDyy)
 
         ###
-        dldeq = (
-            epsilon_dot * (QDxx - QDyy) / trQD * ldeq
-            - (ldeq - 1) / tauS * feneEq
-            + f * r_asfree * (la - ldeq)
-        )
+        dldeq = epsilon_dot * (QDxx - QDyy) / trQD * ldeq - (ldeq - 1) / tauS * feneEq + f * r_asfree * (la - ldeq)
         ###
         df = r_freeas * (1 - f) - r_asfree * f
 
@@ -503,7 +451,7 @@ class TheoryPETS(QTheory):
 
         return [df, dldeq, dQAxx, dQAyy, dQDxx, dQDyy]
 
-    def PETS(self, f=None):
+    def PETS(self, f: Any = None) -> None:
         """Calculates the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -528,9 +476,7 @@ class TheoryPETS(QTheory):
         lmax = self.parameters["lmax"].value
         r_a = self.parameters["r_a"].value
         Z = self.parameters["Z"].value
-        self.RD_MAX = 1 / (
-            0.01 * min(tau_free, min(tauS, min(tauS, 0.0001 / flow_rate)))
-        )
+        self.RD_MAX = 1 / (0.01 * min(tau_free, min(tauS, min(tauS, 0.0001 / flow_rate))))
         # flow geometry and finite extensibility
         phi0 = 1 / (1 + tau_free / tau_as)
 

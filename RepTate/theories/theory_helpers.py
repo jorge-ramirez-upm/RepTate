@@ -36,6 +36,8 @@ Module that contains classes that are used in several theories
 
 """
 import enum
+from typing import Any
+
 import numpy as np
 from PySide6.QtWidgets import (
     QSpinBox,
@@ -55,7 +57,7 @@ from PySide6.QtCore import Qt
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
 
 
-def _parameter_by_name(parent, *names):
+def _parameter_by_name(parent: Any, *names: str) -> Any:
     """Return the first matching theory parameter from a list of names."""
     parameters = getattr(parent, "parameters", {})
     for name in names:
@@ -65,7 +67,7 @@ def _parameter_by_name(parent, *names):
     return None
 
 
-def _parameter_label_with_unit(parent, label, *parameter_names):
+def _parameter_label_with_unit(parent: Any, label: str, *parameter_names: str) -> str:
     """Return a label with the parameter internal unit when available."""
     parameter = _parameter_by_name(parent, *parameter_names)
     if parameter is None:
@@ -76,6 +78,13 @@ def _parameter_label_with_unit(parent, label, *parameter_names):
     if unit and unit != "-":
         return "%s [%s]" % (label, unit)
     return label
+
+
+def _dialog_button_box(parent: Any) -> QDialogButtonBox:
+    ok_button: Any = getattr(QDialogButtonBox, "Ok")
+    cancel_button: Any = getattr(QDialogButtonBox, "Cancel")
+    horizontal: Any = getattr(Qt, "Horizontal")
+    return QDialogButtonBox(ok_button | cancel_button, horizontal, parent)
 
 
 r"""
@@ -169,7 +178,7 @@ class EditModesDialog(QDialog):
     Dialog to edit the amplitudes and relaxation times of a set of Maxwell modes
     """
 
-    def __init__(self, parent=None, times=0, G=0, MAX_MODES=0):
+    def __init__(self, parent: Any = None, times: Any = 0, G: Any = 0, MAX_MODES: int = 0) -> None:
         super(EditModesDialog, self).__init__(parent)
 
         self.setWindowTitle("Edit Maxwell modes")
@@ -200,9 +209,7 @@ class EditModesDialog(QDialog):
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
-        )
+        buttons = _dialog_button_box(self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -211,7 +218,7 @@ class EditModesDialog(QDialog):
         )
 
     @staticmethod
-    def _mode_column_label(parent, fallback_name, prefixes):
+    def _mode_column_label(parent: Any, fallback_name: str, prefixes: tuple[str, ...]) -> str:
         """Return a mode-table column label with units when metadata exists."""
         parameters = getattr(parent, "parameters", {})
         for prefix in prefixes:
@@ -223,7 +230,7 @@ class EditModesDialog(QDialog):
                     return "%s [%s]" % (fallback_name, display_unit)
         return fallback_name
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
         for i in range(nrow_old, value):  # create extra rows with defaut values
@@ -236,7 +243,7 @@ class EditModesVolFractionsDialog(QDialog):
     Dialog to edit the volume fractions and relaxation times for a polydisperse sample
     """
 
-    def __init__(self, parent=None, param_dic={}, MAX_MODES=0):
+    def __init__(self, parent: Any = None, param_dic: Any = {}, MAX_MODES: int = 0) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("Edit volume fractions and relaxation times")
@@ -263,9 +270,7 @@ class EditModesVolFractionsDialog(QDialog):
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
-        )
+        buttons = _dialog_button_box(self)
         buttons.accepted.connect(self.accept_)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -273,7 +278,7 @@ class EditModesVolFractionsDialog(QDialog):
             self.handle_spinboxValueChanged
         )
 
-    def accept_(self):
+    def accept_(self) -> None:
         sum = 0
         for i in range(self.table.rowCount()):
             sum += float(self.table.item(i, 0).text())
@@ -282,7 +287,7 @@ class EditModesVolFractionsDialog(QDialog):
         else:
             QMessageBox.warning(self, "Error", "phi must add up to 1")
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
         for i in range(nrow_old, value):  # create extra rows with defaut values
@@ -295,7 +300,7 @@ class GetMwdRepTate(QDialog):
     Dialog to get the MWD from RepTate
     """
 
-    def __init__(self, parent=None, th_dict={}, title="title"):
+    def __init__(self, parent: Any = None, th_dict: Any = {}, title: str = "title") -> None:
         super().__init__(parent)
 
         self.setWindowTitle(title)
@@ -327,9 +332,7 @@ class GetMwdRepTate(QDialog):
         rb.setChecked(True)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
-        )
+        buttons = _dialog_button_box(self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -340,7 +343,7 @@ class EditMWDDialog(QDialog):
     Dialog to edit the MWD
     """
 
-    def __init__(self, parent=None, m=None, phi=None, MAX_MODES=0):
+    def __init__(self, parent: Any = None, m: Any = None, phi: Any = None, MAX_MODES: int = 0) -> None:
         super().__init__(parent)
 
         self.setWindowTitle("Input Molecular weight distribution")
@@ -380,9 +383,7 @@ class EditMWDDialog(QDialog):
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
-        )
+        buttons = _dialog_button_box(self)
         buttons.accepted.connect(self.accept_)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -390,7 +391,7 @@ class EditMWDDialog(QDialog):
             self.handle_spinboxValueChanged
         )
 
-    def accept_(self):
+    def accept_(self) -> None:
         sum = 0
         for i in range(self.table.rowCount()):
             sum += float(self.table.item(i, 1).text())
@@ -399,7 +400,7 @@ class EditMWDDialog(QDialog):
         else:
             QMessageBox.warning(self, "Error", "phi must add up to 1")
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         nrow_old = self.table.rowCount()
         self.table.setRowCount(value)
         for i in range(nrow_old, value):  # create extra rows with defaut values
@@ -530,7 +531,7 @@ class Dilution:
         if n == 1:
             return [True, phi, taus, [3 * z * ts,]]
 
-        Zeff = [0] * n
+        Zeff: list[float] = [0.0] * n
         # renormalize the fraction of entangled chains
         Me /= 1 - phi_u
         taue /= (1 - phi_u) * (1 - phi_u)

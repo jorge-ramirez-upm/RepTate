@@ -34,6 +34,8 @@
 
 Debye theory for neutron scattering from ideal polymer chains
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -70,16 +72,20 @@ class TheoryDebye(QTheory):
     
     """
 
-    thname = "Debye"
-    description = "Debye theory for neutron scattering from ideal polymer chains"
-    citations = ["Debye P., J. Phys. Chem. 1947, 51, 18-32"]
-    doi = ["http://dx.doi.org/10.1021/j150451a002"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
+    thname: ClassVar[str] = "Debye"
+    description: ClassVar[str] = (
+        "Debye theory for neutron scattering from ideal polymer chains"
+    )
+    citations: ClassVar[list[str]] = ["Debye P., J. Phys. Chem. 1947, 51, 18-32"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/j150451a002"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculateDebye  # main theory function
@@ -175,15 +181,15 @@ class TheoryDebye(QTheory):
             self.handle_tbutnonideal_triggered
         )
 
-    def handle_tbutstretched_triggered(self, checked):
+    def handle_tbutstretched_triggered(self, checked: bool) -> None:
         """Check Streched"""
         self.set_param_value("stretched", checked)
 
-    def handle_tbutnonideal_triggered(self, checked):
+    def handle_tbutnonideal_triggered(self, checked: bool) -> None:
         """Handle Non-ideal"""
         self.set_param_value("non-ideal", checked)
 
-    def calculateDebye(self, f=None):
+    def calculateDebye(self, f: Any = None) -> None:
         """Debye function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -201,14 +207,14 @@ class TheoryDebye(QTheory):
             self.Qprint("Invalid Mw or Phi value")
             return
 
-        Contr = self.parameters["Contrast"].value
-        CRg = self.parameters["C_gyr"].value
-        Mmono = self.parameters["M_mono"].value
-        Bck = self.parameters["Bckgrnd"].value
-        Chi = self.parameters["chi"].value
-        Lambda = self.parameters["lambda"].value
-        stretched = self.parameters["stretched"].value
-        nonideal = self.parameters["non-ideal"].value
+        Contr: Any = self.parameters["Contrast"].value
+        CRg: Any = self.parameters["C_gyr"].value
+        Mmono: Any = self.parameters["M_mono"].value
+        Bck: Any = self.parameters["Bckgrnd"].value
+        Chi: Any = self.parameters["chi"].value
+        Lambda: Any = self.parameters["lambda"].value
+        stretched: Any = self.parameters["stretched"].value
+        nonideal: Any = self.parameters["non-ideal"].value
 
         tt.data[:, 0] = ft.data[:, 0]
 
@@ -225,7 +231,7 @@ class TheoryDebye(QTheory):
         else:
             tt.data[:, 1] = Contr * Mw / Mmono * Phi * (1.0 - Phi) * debFn + Bck
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> None:
         """Report the error of the current theory
 
 Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
@@ -235,9 +241,9 @@ File error is calculated as the mean square of the residual, averaged over all p
         if line == "":
             self.Qprint("")
             self.Qprint("%12s %8s %8s" % ("File", "Mw", "Rg"))
-            CRg = self.parameters["C_gyr"].value
-            Lambda = self.parameters["lambda"].value
-            stretched = self.parameters["stretched"].value
+            CRg: Any = self.parameters["C_gyr"].value
+            Lambda: Any = self.parameters["lambda"].value
+            stretched: Any = self.parameters["stretched"].value
             nfiles = len(self.parent_dataset.files)
             for i in range(nfiles):
                 f = self.parent_dataset.files[i]

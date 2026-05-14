@@ -35,6 +35,8 @@
 Module that defines theories related to Retardation modes, in the frequency and time domains.
 
 """
+from typing import Any, ClassVar, cast
+
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -43,6 +45,10 @@ from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
+
+
+def _logspace(start: Any, stop: Any, num: Any) -> Any:
+    return np.logspace(start, stop, num)
 
 
 class TheoryRetardationModesTime(QTheory):
@@ -65,14 +71,16 @@ class TheoryRetardationModesTime(QTheory):
 
     """
 
-    thname = "Retardation Modes"
-    description = "Fit Retardation modes to time dependent creep data"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
-    single_file = False
+    thname: ClassVar[str] = "Retardation Modes"
+    description: ClassVar[str] = "Fit Retardation modes to time dependent creep data"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.RetardationModesTime
@@ -125,7 +133,7 @@ class TheoryRetardationModesTime(QTheory):
         except (ValueError, KeyError):
             self.Qprint("Invalid stress value")
             return
-        tau = np.logspace(np.log10(tmin), np.log10(tmax), nmodes)
+        tau = _logspace(np.log10(tmin), np.log10(tmax), nmodes)
         J = (
             np.abs(
                 np.interp(
@@ -136,7 +144,8 @@ class TheoryRetardationModesTime(QTheory):
             )
             / sigma
         )
-        for i in range(self.parameters["nmodes"].value):
+        nmodes_value: Any = self.parameters["nmodes"].value
+        for i in range(nmodes_value):
             self.parameters["logJ%02d" % i] = Parameter(
                 "logJ%02d" % i,
                 np.log10(J[i]),
@@ -146,8 +155,8 @@ class TheoryRetardationModesTime(QTheory):
             )
 
         # GRAPHIC MODES
-        self.graphicmodes = None
-        self.artistmodes = None
+        self.graphicmodes: Any = None
+        self.artistmodes: Any = None
         self.setup_graphic_modes()
 
         # add widgets specific to the theory
@@ -156,7 +165,7 @@ class TheoryRetardationModesTime(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
+        self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
@@ -170,11 +179,11 @@ class TheoryRetardationModesTime(QTheory):
         )
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
 
-    def Qhide_theory_extras(self, state):
+    def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
-    def modesaction_change(self, checked):
+    def modesaction_change(self, checked: bool) -> None:
         """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
@@ -185,12 +194,12 @@ class TheoryRetardationModesTime(QTheory):
         #     self.artistmodes.disconnect()
         # self.do_calculate("")
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nmode'"""
-        nmodesold = self.parameters["nmodes"].value
-        tminold = self.parameters["logtmin"].value
-        tmaxold = self.parameters["logtmax"].value
-        tauold = np.logspace(tminold, tmaxold, nmodesold)
+        nmodesold: Any = self.parameters["nmodes"].value
+        tminold: Any = self.parameters["logtmin"].value
+        tmaxold: Any = self.parameters["logtmax"].value
+        tauold = _logspace(tminold, tmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
             Gold[i] = self.parameters["logJ%02d" % i].value
@@ -198,7 +207,7 @@ class TheoryRetardationModesTime(QTheory):
 
         nmodesnew = value
         self.set_param_value("nmodes", nmodesnew)
-        taunew = np.logspace(tminold, tmaxold, nmodesnew)
+        taunew = _logspace(tminold, tmaxold, nmodesnew)
 
         Gnew = np.interp(taunew, tauold, Gold)
 
@@ -215,10 +224,10 @@ class TheoryRetardationModesTime(QTheory):
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
-    def drag_mode(self, dx, dy):
+    def drag_mode(self, dx: Any, dy: Any) -> None:
         """Drag modes around"""
         dx, dy = self.convert_view_data_to_internal(dx, dy)
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         self.set_param_value("logtmin", dx[0])
         self.set_param_value("logtmax", dx[nmodes - 1])
         for i in range(nmodes):
@@ -226,16 +235,16 @@ class TheoryRetardationModesTime(QTheory):
         self.do_calculate("")
         self.update_parameter_table()
 
-    def update_modes(self):
+    def update_modes(self) -> None:
         """Do nothing"""
         pass
 
-    def setup_graphic_modes(self):
+    def setup_graphic_modes(self) -> None:
         """Setup graphic helpers"""
-        nmodes = self.parameters["nmodes"].value
-        tau = np.logspace(
-            self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes
-        )
+        nmodes: Any = self.parameters["nmodes"].value
+        logtmin: Any = self.parameters["logtmin"].value
+        logtmax: Any = self.parameters["logtmax"].value
+        tau = _logspace(logtmin, logtmax, nmodes)
         J = np.zeros(nmodes)
         for i in range(nmodes):
             J[i] = np.power(10, self.parameters["logJ%02d" % i].value)
@@ -257,18 +266,18 @@ class TheoryRetardationModesTime(QTheory):
         )
         self.plot_theory_stuff()
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         # self.ax.lines.remove(self.graphicmodes)
         self.graphicmodes.remove()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: bool = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
-    def graphicmodes_visible(self, state):
+    def graphicmodes_visible(self, state: bool) -> None:
         """Change visibility of modes"""
         self.view_modes = state
         self.graphicmodes.set_visible(self.view_modes)
@@ -279,18 +288,18 @@ class TheoryRetardationModesTime(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
-        tau = np.logspace(
-            self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes
-        )
+        nmodes: Any = self.parameters["nmodes"].value
+        logtmin: Any = self.parameters["logtmin"].value
+        logtmax: Any = self.parameters["logtmax"].value
+        tau = _logspace(logtmin, logtmax, nmodes)
         J = np.zeros(nmodes)
         for i in range(nmodes):
             J[i] = 1.0 / np.power(10, self.parameters["logJ%02d" % i].value)
         return tau, J, True
 
-    def RetardationModesTime(self, f=None):
+    def RetardationModesTime(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -304,12 +313,14 @@ class TheoryRetardationModesTime(QTheory):
         except (ValueError, KeyError):
             self.Qprint("Invalid stress value")
             return
-        nmodes = self.parameters["nmodes"].value
-        J0 = np.power(10, self.parameters["logJini"].value)
-        eta0 = np.power(10, self.parameters["logeta0"].value)
-        tau = np.logspace(
-            self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes
-        )
+        nmodes: Any = self.parameters["nmodes"].value
+        logjini: Any = self.parameters["logJini"].value
+        logeta0: Any = self.parameters["logeta0"].value
+        J0 = np.power(10, logjini)
+        eta0 = np.power(10, logeta0)
+        logtmin: Any = self.parameters["logtmin"].value
+        logtmax: Any = self.parameters["logtmax"].value
+        tau = _logspace(logtmin, logtmax, nmodes)
         try:
             rec = int(f.file_parameters["rec"])
         except (ValueError, KeyError):
@@ -326,18 +337,18 @@ class TheoryRetardationModesTime(QTheory):
         else:
             tt.data[:, 1] += stress * (J0 + tt.data[:, 0] / eta0)
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
         if not self.view_modes:
             return
-        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp: Any = DataTable(cast(Any, self.axarr))
         data_table_tmp.num_columns = 2
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 2))
-        tau = np.logspace(
-            self.parameters["logtmin"].value, self.parameters["logtmax"].value, nmodes
-        )
+        logtmin: Any = self.parameters["logtmin"].value
+        logtmax: Any = self.parameters["logtmax"].value
+        tau = _logspace(logtmin, logtmax, nmodes)
         data_table_tmp.data[:, 0] = tau
         for i in range(nmodes):
             if self.stop_theory_flag:

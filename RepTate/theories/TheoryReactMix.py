@@ -34,6 +34,8 @@
 """Module TheoryReactMix
 
 """
+from typing import Any, ClassVar
+
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -48,11 +50,11 @@ import RepTate.theories.react_gui_tools as rgt
 class TheoryReactMix(QTheory):
     """BASIC THEORY DOCUMENTATION IS MISSING IN PYTHON FILE"""
 
-    thname = "React Mix"
-    description = "Combine other active React theories"
-    citations = []
-    doi = []
-    html_help_file = (
+    thname: ClassVar[str] = "React Mix"
+    description: ClassVar[str] = "Combine other active React theories"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/mixture.html"
     )
     single_file = (
@@ -61,7 +63,9 @@ class TheoryReactMix(QTheory):
 
     signal_mix_dialog = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.Calc
@@ -77,45 +81,46 @@ class TheoryReactMix(QTheory):
             opt_type=OptType.const,
         )
         self.reactname = "ReactMix"
-        self.dists = []  # index of the react_dist array used in mix
-        self.weights = []  # weight of the dist
+        self.dists: list[Any] = []  # index of the react_dist array used in mix
+        self.weights: list[Any] = []  # weight of the dist
         self.n_inmix = 0  # number of theories in mix
-        self.theory_names = []  # names of theories in mix
-        self.theory_simnumber = []  # 'react_dist[].simnumber' of theories in mix
+        self.theory_names: list[Any] = []  # names of theories in mix
+        self.theory_simnumber: list[Any] = []  # 'react_dist[].simnumber' of theories in mix
         self.calcexists = False
         self.do_priority_seniority = False
         self.signal_mix_dialog.connect(rgt.launch_mix_dialog)
-        self.ratios = []  # list of ratios in dialog
-        self.include = []  # list of (0 or 1) include in dialog
+        self.ratios: list[Any] = []  # list of ratios in dialog
+        self.include: list[Any] = []  # list of (0 or 1) include in dialog
 
         rgt.initialise_tool_bar(self)
-        self.bob_settings_button.setDisabled(True)
-        self.btn_prio_senio.setDisabled(True)
+        getattr(self, "bob_settings_button").setDisabled(True)
+        getattr(self, "btn_prio_senio").setDisabled(True)
 
-    def theory_buttons_disabled(self, state):
+    def theory_buttons_disabled(self, state: bool) -> None:
         """
         Enable/Disable theory buttons, typically called at the start and stop of a calculation.
         This is relevant in multithread mode only.
         """
-        self.save_bob_configuration_button.setDisabled(state)
+        getattr(self, "save_bob_configuration_button").setDisabled(state)
 
-    def handle_save_bob_configuration(self):
+    def handle_save_bob_configuration(self) -> None:
         """Save polymer configuraions to a file"""
         rgt.handle_save_mix_configuration(self)
 
-    def handle_edit_bob_settings(self):
+    def handle_edit_bob_settings(self) -> None:
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: bool) -> None:
         """Change do_priority_seniority"""
         # rgt.handle_btn_prio_senio(self, checked)
 
 
-    def Calc(self, f=None):
+    def Calc(self, f: Any = None) -> Any:
         """ReactMix function"""
         self.calcexists = False
-        nbins = int(np.round(self.parameters["nbin"].value))
+        nbin_value: Any = self.parameters["nbin"].value
+        nbins = int(np.round(nbin_value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
 
         # init theory data table - in case of error and 'return'
@@ -204,17 +209,17 @@ class TheoryReactMix(QTheory):
         self.calcexists = True
         return rch.bab_global.multi_nummwdbins - 1
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> None:
         """This theory does not calculate the error"""
         pass
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Called when loading a project, set saved parameter values"""
         self.ratios = extra_data["ratios"]
         self.include = extra_data["include"]
         rgt.set_extra_data(self, extra_data)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Called when saving project. Save parameters in extra_data dict"""
         self.extra_data["ratios"] = self.ratios
         self.extra_data["include"] = self.include

@@ -35,6 +35,8 @@
 React module
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.FileType import TXTColumnFile
@@ -43,12 +45,12 @@ import numpy as np
 
 class ApplicationReact(QApplicationWindow):
     """Application for Monte Carlo polymerisation"""
-    appname = 'React'
-    description = 'React Application'  #used in the command-line Reptate
-    extension = 'reac'
-    html_help_file = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
+    appname: ClassVar[str] = 'React'
+    description: ClassVar[str] = 'React Application'  #used in the command-line Reptate
+    extension: ClassVar[str] = 'reac'
+    html_help_file: ClassVar[str] = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
 
-    def __init__(self, name='React', parent=None, **kwargs):
+    def __init__(self, name: str = 'React', parent: Any = None, **kwargs: Any) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryLDPEBatch import TheoryTobitaBatch
         from RepTate.theories.TheoryTobitaCSTR import TheoryTobitaCSTR
@@ -59,7 +61,7 @@ class ApplicationReact(QApplicationWindow):
 
         super().__init__(name, parent)
 
-        molar_mass_units = ("g/mol", "kg/mol", "Da", "kDa")
+        molar_mass_units: tuple[str, ...] = ("g/mol", "kg/mol", "Da", "kDa")
 
         # VIEWS
         # set the views that can be selected in the view combobox
@@ -466,19 +468,19 @@ class ApplicationReact(QApplicationWindow):
             self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
 
 
-    def change_view(self):
+    def change_view(self) -> None:
         """Redefinition to handle the x-range selection when P&S is selected"""
         do_priority_seniority = False
         try:
-            ds = self.DataSettabWidget.currentWidget()
-            th = ds.TheorytabWidget.currentWidget()
+            ds: Any = self.DataSettabWidget.currentWidget()
+            th: Any = ds.TheorytabWidget.currentWidget()
             do_priority_seniority = th.do_priority_seniority
         except Exception as e:
             pass
         super().change_view(x_vis=do_priority_seniority)
 
 
-    def view_wM(self, dt, file_parameters):
+    def view_wM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Molecular weight distribution :math:`w(M)` vs molecular weight :math:`M` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
@@ -487,7 +489,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_logwM(self, dt, file_parameters):
+    def view_logwM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the molecular weight distribution :math:`\\log(w(M))` vs molecular weight :math:`M` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
@@ -496,7 +498,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def view_gM(self, dt, file_parameters):
+    def view_gM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """:math:`g`-factor as a function of the molecular weight.
         The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
@@ -506,7 +508,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def view_loggM(self, dt, file_parameters):
+    def view_loggM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the :math:`g`-factor as a function of the molecular weight.
         The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
@@ -516,7 +518,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def view_br_1000C(self, dt, file_parameters):
+    def view_br_1000C(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Number of branching points per 1000 carbon as a function of the molecular weight
         """
         x = np.zeros((dt.num_rows, 1))
@@ -525,7 +527,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 3]
         return x, y, True
 
-    def thview_avprio_v_senio(self, dt, file_parameters):
+    def thview_avprio_v_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['avprio_v_senio']
         except:
@@ -552,7 +554,7 @@ class ApplicationReact(QApplicationWindow):
 
         return x, y, True
 
-    def thview_avsenio_v_prio(self, dt, file_parameters):
+    def thview_avsenio_v_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['avsenio_v_prio']
         except:
@@ -579,7 +581,7 @@ class ApplicationReact(QApplicationWindow):
 
         return x, y, True
 
-    def thview_proba_prio(self, dt, file_parameters):
+    def thview_proba_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['proba_prio']
             is_extra = True
@@ -597,7 +599,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_senio(self, dt, file_parameters):
+    def thview_proba_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['proba_senio']
             is_extra = True
@@ -615,7 +617,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_avarmlen_v_prio(self, dt, file_parameters):
+    def thview_avarmlen_v_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['avarmlen_v_prio']
             is_extra = True
@@ -633,7 +635,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_avarmlen_v_senio(self, dt, file_parameters):
+    def thview_avarmlen_v_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['avarmlen_v_senio']
             is_extra = True
@@ -651,7 +653,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_mass_br(self, dt, file_parameters):
+    def thview_proba_mass_br(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['proba_arm_wt']
             is_extra = True
@@ -669,7 +671,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_num_br(self, dt, file_parameters):
+    def thview_proba_num_br(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         try:
             data = dt.extra_tables['proba_br_pt']
             is_extra = True

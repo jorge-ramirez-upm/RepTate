@@ -34,6 +34,8 @@
 
 Dynamics Tube Dilution for Stars
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -42,7 +44,7 @@ import RepTate.theories.dtd_ctypes_helper as dtdh
 
 
 class TheoryDTDStarsFreq(QTheory):
-    """Fit DTD Theory for stars.
+    r"""Fit DTD Theory for stars.
     Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts
     
     * **Function**
@@ -65,16 +67,20 @@ class TheoryDTDStarsFreq(QTheory):
          - :math:`M_0`: molar mass of an elementary segment
     """
 
-    thname = "DTD Stars"
-    description = "Dynamic Tube Dilution for stars, frequency domain"
-    citations = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
-    doi = ["http://dx.doi.org/10.1021/ma961559f"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
+    thname: ClassVar[str] = "DTD Stars"
+    description: ClassVar[str] = "Dynamic Tube Dilution for stars, frequency domain"
+    citations: ClassVar[list[str]] = [
+        "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
+    ]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma961559f"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -133,7 +139,7 @@ class TheoryDTDStarsFreq(QTheory):
         self.Z = 1
         self.w = 0
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """DTDStarsFreq function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -144,6 +150,7 @@ class TheoryDTDStarsFreq(QTheory):
         self.tau_e = self.parameters["tau_e"].value
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
+        Me: Any = self.Me
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):
@@ -151,7 +158,7 @@ class TheoryDTDStarsFreq(QTheory):
             return
         # self.Z = int(np.rint(Mw / self.Me))
         omega = ft.data[:, 0]
-        params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, omega]
+        params = [self.G0, self.alpha, self.tau_e, Mw / Me, omega]
         gp, gpp, success = dtdh.calculate_dtd_freq(params, self.eps)
         if not success:
             self.Qprint("Too many steps in routine qtrap")
@@ -166,7 +173,7 @@ class TheoryDTDStarsFreq(QTheory):
 
 
 class TheoryDTDStarsTime(QTheory):
-    """Fit DTD Theory for stars
+    r"""Fit DTD Theory for stars
     
     * **Function**
         See `Milner-McLeish (1997) <http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf>`_
@@ -188,16 +195,20 @@ class TheoryDTDStarsTime(QTheory):
          - :math:`M_0`: molar mass of an elementary segment
     """
 
-    thname = "DTD Stars"
-    description = "Dynamic Tube Dilution for stars, time domain"
-    citations = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
-    doi = ["http://dx.doi.org/10.1021/ma961559f"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
+    thname: ClassVar[str] = "DTD Stars"
+    description: ClassVar[str] = "Dynamic Tube Dilution for stars, time domain"
+    citations: ClassVar[list[str]] = [
+        "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
+    ]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma961559f"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -254,7 +265,7 @@ class TheoryDTDStarsTime(QTheory):
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """DTDStarsTime function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -265,6 +276,7 @@ class TheoryDTDStarsTime(QTheory):
         self.tau_e = self.parameters["tau_e"].value
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
+        Me: Any = self.Me
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):
@@ -278,7 +290,7 @@ class TheoryDTDStarsTime(QTheory):
             gamma = 1
         # self.Z = int(np.rint(Mw / self.Me))
         times = ft.data[:, 0]
-        params = [self.G0, self.alpha, self.tau_e, Mw / self.Me, times]
+        params = [self.G0, self.alpha, self.tau_e, Mw / Me, times]
         gt, success = dtdh.calculate_dtd_time(params, self.eps)
         if not success:
             self.Qprint("Too many steps in routine qtrap")

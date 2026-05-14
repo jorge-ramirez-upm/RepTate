@@ -36,6 +36,8 @@ BobLVE file calculates the LVE of a given polymer configuration
 by Chinmay Das et al.
 """
 import os
+from typing import Any, ClassVar
+
 import numpy as np
 import RepTate
 from RepTate.gui.QTheory import QTheory
@@ -58,33 +60,35 @@ class TheoryBobLVE(QTheory):
     The original documentation of BoB can be found here: `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.3/bob2.3.pdf/download>`_.
     """
 
-    thname = "BOB"
-    description = "Branch-On-Branch rheology"
-    citations = ["Das C. et al., J. Rheol. 2006, 50, 207-234"]
-    doi = ["http://dx.doi.org/10.1122/1.2167487"]
-    html_help_file = "https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve"
+    thname: ClassVar[str] = "BOB"
+    description: ClassVar[str] = "Branch-On-Branch rheology"
+    citations: ClassVar[list[str]] = ["Das C. et al., J. Rheol. 2006, 50, 207-234"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.2167487"]
+    html_help_file: ClassVar[str] = "https://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#bob-lve"
     single_file = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
     signal_param_dialog = Signal(object)
 
-    def __init__(self, name="ThBobLVE", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "ThBobLVE", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
         self.signal_param_dialog.connect(self.launch_param_dialog)
-        self.polyconf_file_out = None  # full path of target polyconf file
+        self.polyconf_file_out: Any = None  # full path of target polyconf file
         self.bch = BobCtypesHelper(self)
         self.autocalculate = False
         self.freqint = 1.1  # BoB theory points spaced by log10(freqint)
         self.do_priority_seniority = False
         self.inp_counter = 0  # counter for the 'virtual' input file for BoB
-        self.virtual_input_file = []  # 'virtual' input file for BoB
+        self.virtual_input_file: list[Any] = []  # 'virtual' input file for BoB
 
         # add widgets specific to the theory
-        self.selected_file = None
+        self.selected_file: Any = None
         self.setup_dialog()
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
@@ -101,11 +105,11 @@ class TheoryBobLVE(QTheory):
         # self.thToolsLayout.insertWidget(0, tb)
         self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: bool) -> None:
         """Change do_priority_seniority"""
         self.do_priority_seniority = checked
 
-    def get_file_name(self):
+    def get_file_name(self) -> None:
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         # options = QFileDialog.Options()
@@ -118,7 +122,7 @@ class TheoryBobLVE(QTheory):
         self.selected_file = selected_file
         self.d.selected_file.setText(os.path.basename(selected_file))
 
-    def num_file_lines(self, fname):
+    def num_file_lines(self, fname: str) -> int:
         """Return the number of lines in the file `fname`"""
         with open(fname) as f:
             i = 0
@@ -126,9 +130,9 @@ class TheoryBobLVE(QTheory):
                 i += 1
             return i + 1
 
-    def setup_dialog(self):
+    def setup_dialog(self) -> None:
         """Load the form dialog from Ui_bob_LVE.py"""
-        self.dialog = QDialog(self)
+        self.dialog: Any = QDialog(self)
         self.dialog.ui = Ui_bob_LVE.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
@@ -142,7 +146,7 @@ class TheoryBobLVE(QTheory):
         # connect button Help
         self.d.pb_help.clicked.connect(self.handle_help_button)
 
-    def handle_pb_ok(self):
+    def handle_pb_ok(self) -> None:
         """Define the OK button role. If something is wrong, keep the dialog open"""
         if self.selected_file is None:
             QMessageBox.warning(
@@ -153,14 +157,14 @@ class TheoryBobLVE(QTheory):
         else:
             self.dialog.accept()
 
-    def handle_help_button(self):
+    def handle_help_button(self) -> None:
         """When Help button of dialog box is clicked, show BoB manual (pdf)"""
         bob_manual_pdf = "docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf" % (
             (os.sep,) * 5
         )
         QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
 
-    def create_bob_input_file(self, nlines, inpf):
+    def create_bob_input_file(self, nlines: int, inpf: str) -> None:
         """Create a file containing the input BoB parameters from the form dialog"""
         # with open(inpf, 'w') as tmp:
         #     #1 memory
@@ -209,7 +213,7 @@ class TheoryBobLVE(QTheory):
         tmp.append(0)
         self.virtual_input_file = tmp
 
-    def launch_param_dialog(self):
+    def launch_param_dialog(self) -> None:
         """Show a dialog to get the filename of the polymer configuration.
         This function is called via a Signal for multithread compatibility"""
         if not self.dialog.exec_():
@@ -242,7 +246,7 @@ class TheoryBobLVE(QTheory):
         self.argv = ["./bob", "-i", inpf, "-c", conffile]
         self.success_dialog = True
 
-    def is_ascii(self, s):
+    def is_ascii(self, s: str) -> bool:
         """Check if `s` contains non ASCII characters"""
         try:
             s.encode("ascii")
@@ -250,16 +254,16 @@ class TheoryBobLVE(QTheory):
         except UnicodeEncodeError:
             return False
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
-    def do_error(self, line=""):
+    def do_error(self, line: str = "") -> None:
         """This theory calculate the error by interpolating the theory solution"""
         self.do_error_interpolated(line="")
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -299,5 +303,5 @@ class TheoryBobLVE(QTheory):
             tt.data[:, 1] = gp[:]
             tt.data[:, 2] = gpp[:]
 
-    def do_fit(self, line=""):
+    def do_fit(self, line: str = "") -> None:
         self.Qprint("Fitting not allowed in this theory")

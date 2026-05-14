@@ -34,13 +34,15 @@
 
 WLF file for creating a new theory
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 
 
 class TheoryWLF(QTheory):
-    """Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
+    r"""Time-temperature superposition based on a Williams-Landel-Ferry (WLF) equation with two parameters.
     
     * **Function**
         .. math::
@@ -61,16 +63,18 @@ class TheoryWLF(QTheory):
        - dx12: Fraction of 1-2 (vynil) units (valid for polybutadiene).
     """
 
-    thname = "WLF"
-    description = "Williams-Landel-Ferry"
-    citations = []
-    doi = []
+    thname: ClassVar[str] = "WLF"
+    description: ClassVar[str] = "Williams-Landel-Ferry"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
     # html_help_file = ''
     single_file = (
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.WLF
@@ -141,7 +145,7 @@ class TheoryWLF(QTheory):
 
         self.get_material_parameters()
 
-    def WLF(self, f=None):
+    def WLF(self, f: Any = None) -> None:
         """WLF function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -149,13 +153,14 @@ class TheoryWLF(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        Tr = self.parameters["Tr"].value
-        B1 = self.parameters["B1"].value
-        B2 = self.parameters["B2"].value
-        alpha = np.power(10.0, self.parameters["logalpha"].value)
-        CTg = self.parameters["CTg"].value
-        iso = self.parameters["iso"].value
-        vert = self.parameters["vert"].value
+        Tr: Any = self.parameters["Tr"].value
+        B1: Any = self.parameters["B1"].value
+        B2: Any = self.parameters["B2"].value
+        logalpha: Any = self.parameters["logalpha"].value
+        alpha = np.power(10.0, logalpha)
+        CTg: Any = self.parameters["CTg"].value
+        iso: Any = self.parameters["iso"].value
+        vert: Any = self.parameters["vert"].value
 
         Mw = f.file_parameters["Mw"]
 

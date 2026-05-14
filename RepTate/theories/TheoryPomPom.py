@@ -35,6 +35,7 @@
 Module for the Pom-Pom model for the non-linear flow of entangled polymers.
 
 """
+
 import os
 import numpy as np
 from math import exp  # faster than np for scalar
@@ -45,7 +46,8 @@ from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMe
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 import RepTate
 import time
@@ -147,8 +149,7 @@ class TheoryPomPom(QTheory):
             self.parameters["ratio%02d" % i] = Parameter(
                 name="ratio%02d" % i,
                 value=2,
-                description="Ratio of orientation to stretch relaxation times of mode %02d"
-                % i,
+                description="Ratio of orientation to stretch relaxation times of mode %02d" % i,
                 type=ParameterType.real,
                 opt_type=OptType.const,
                 min_value=1,
@@ -169,24 +170,16 @@ class TheoryPomPom(QTheory):
             self.tbutflow = QToolButton()
             self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
             menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-            )
-            self.extensional_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-            )
+            self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+            self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
             if self.flow_mode == FlowMode.shear:
                 self.tbutflow.setDefaultAction(self.shear_flow_action)
             else:
                 self.tbutflow.setDefaultAction(self.extensional_flow_action)
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow
-            )
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow
-            )
+            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
             # self.read_gdot_action = tb.addAction(
             #     QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
             #     "Read gdot from file",
@@ -198,18 +191,10 @@ class TheoryPomPom(QTheory):
         self.tbutmodes = QToolButton()
         self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
-        )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
-        self.plot_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
-        )
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.get_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes")
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
+        self.plot_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes")
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -293,9 +278,7 @@ class TheoryPomPom(QTheory):
 
             f.write("\n#end")
 
-        QMessageBox.information(
-            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
-        )
+        QMessageBox.information(self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath)
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear
@@ -319,12 +302,8 @@ class TheoryPomPom(QTheory):
             self.set_param_value("nmodes", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "tauB%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "G%02d" % i, d.table.item(i, 1).text()
-                )
+                msg, success1 = self.set_param_value("tauB%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
@@ -388,11 +367,7 @@ class TheoryPomPom(QTheory):
         else:
             nustar = 2.0 / (q - 1)
             Axy = gdot * tauB * (1 - exp(-t / tauB))
-            Axx = (
-                2 * gdot * gdot * tauB * tauB * (1 - exp(-t / tauB))
-                + 1
-                - 2 * gdot * gdot * tauB * t * exp(-t / tauB)
-            )
+            Axx = 2 * gdot * gdot * tauB * tauB * (1 - exp(-t / tauB)) + 1 - 2 * gdot * gdot * tauB * t * exp(-t / tauB)
             Trace = Axx + 2
             # For very fast modes, avoid integrating
             aux = tauS / exp(nustar * (l - 1))
@@ -417,12 +392,8 @@ class TheoryPomPom(QTheory):
             dydx = 0
         else:
             nustar = 2.0 / (q - 1.0)
-            Axx = (1 - 2 * edot * tauB * exp((2 * edot * tauB - 1) * t / tauB)) / (
-                1 - 2 * edot * tauB
-            )
-            Ayy = (1 + edot * tauB * exp(-(1 + edot * tauB) * t / tauB)) / (
-                1 + edot * tauB
-            )
+            Axx = (1 - 2 * edot * tauB * exp((2 * edot * tauB - 1) * t / tauB)) / (1 - 2 * edot * tauB)
+            Ayy = (1 + edot * tauB * exp(-(1 + edot * tauB) * t / tauB)) / (1 + edot * tauB)
             Trace = Axx + 2 * Ayy
             # For very fast modes, avoid integrating
             aux = tauS / exp(nustar * (l - 1))
@@ -451,13 +422,7 @@ class TheoryPomPom(QTheory):
             dydx = 0
         else:
             nustar = 2.0 / (q - 1)
-            Axy = (
-                tauB
-                * g0
-                * w
-                * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t))
-                / (1 + w**2 * tauB**2)
-            )
+            Axy = tauB * g0 * w * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t)) / (1 + w**2 * tauB**2)
             Axx = 1 - tauB * g0**2 * w * (
                 2 * np.cos(2 * w * t) * tauB**3 * w**3
                 + 2 * np.exp(-t / tauB) * tauB**3 * w**3
@@ -545,21 +510,11 @@ class TheoryPomPom(QTheory):
                 tt.data[:, 1] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0)
 
             elif self.flow_mode == FlowMode.uext:
-                Axx_arr = (
-                    1
-                    - 2
-                    * flow_rate
-                    * tauB
-                    * np.exp((2 * flow_rate * tauB - 1) * t / tauB)
-                ) / (1 - 2 * flow_rate * tauB)
-                Ayy_arr = (
-                    1 + flow_rate * tauB * np.exp(-(1 + flow_rate * tauB) * t / tauB)
-                ) / (1 + flow_rate * tauB)
+                Axx_arr = (1 - 2 * flow_rate * tauB * np.exp((2 * flow_rate * tauB - 1) * t / tauB)) / (1 - 2 * flow_rate * tauB)
+                Ayy_arr = (1 + flow_rate * tauB * np.exp(-(1 + flow_rate * tauB) * t / tauB)) / (1 + flow_rate * tauB)
 
                 k = np.ones(len(t))
-                k[Axx_arr < 1e240] = (
-                    Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]
-                ) / (
+                k[Axx_arr < 1e240] = (Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]) / (
                     Axx_arr[Axx_arr < 1e240] + 2 * Ayy_arr[Axx_arr < 1e240]
                 )  # k=1 if Axx > 1e240
 
@@ -612,13 +567,7 @@ class TheoryPomPom(QTheory):
             # write results in table
             l = np.delete(l, [0])  # delete the t=0 value
             t = np.delete(times, [0])  # delete the t=0 value
-            Axy_arr = (
-                tauB
-                * g0
-                * w
-                * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t))
-                / (1 + w**2 * tauB**2)
-            )
+            Axy_arr = tauB * g0 * w * (tauB * w * np.sin(w * t) - np.exp(-t / tauB) + np.cos(w * t)) / (1 + w**2 * tauB**2)
             Axx_arr = 1 - tauB * g0**2 * w * (
                 2 * np.cos(2 * w * t) * tauB**3 * w**3
                 + 2 * np.exp(-t / tauB) * tauB**3 * w**3
@@ -680,8 +629,7 @@ class TheoryPomPom(QTheory):
                 self.parameters["ratio%02d" % i] = Parameter(
                     name="ratio%02d" % i,
                     value=2,
-                    description="Ratio of orientation to stretch relaxation times of mode %02d"
-                    % i,
+                    description="Ratio of orientation to stretch relaxation times of mode %02d" % i,
                     type=ParameterType.real,
                     opt_type=OptType.const,
                     min_value=1,

@@ -35,16 +35,19 @@
 Module for the Smooth Poly STRAND model of polymer FIC (uses the Rolie-Double-Poly theory for the non-linear flow of entangled polymers).
 
 """
+
 import os
 import numpy as np
 from scipy.integrate import odeint
+from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from math import sqrt
 import time
 import RepTate
@@ -70,7 +73,7 @@ from RepTate.theories.theory_helpers import (
 
 
 class TheorySmoothPolyStrand(QTheory):
-    """Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
+    r"""Smooth-polyStrand model for flow-induced crystallisation in polydisperse melts of entangled linear polymers
 
     * **Rheological model: The Rolie-Double-Poly model**
     Evolution of chain structure under flow is computed by the Rolie-Double-Poly model. Implementation and parameters are the same as in the NVLE application.
@@ -131,16 +134,20 @@ class TheorySmoothPolyStrand(QTheory):
 
     """
 
-    thname = "Smooth-polySTRAND"
-    description = "Smooth-polySTRAND model for flow-induced nucleation"
-    citations = ["D.J. Read et al., Phys. Rev. Lett. 124, 147802 (2020)"]
-    doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
-    html_help_file = (
-        "http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html"
-    )
-    single_file = False
+    thname: ClassVar[str] = "Smooth-polySTRAND"
+    description: ClassVar[str] = "Smooth-polySTRAND model for flow-induced nucleation"
+    citations: ClassVar[list[str]] = ["D.J. Read et al., Phys. Rev. Lett. 124, 147802 (2020)"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+    ax: Any
+    axarr: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.RolieDoublePoly_Crystal
@@ -155,7 +162,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["Kappa0"] = Parameter(
             name="Kappa0",
             value=0.1,
@@ -165,7 +172,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["Qs0"] = Parameter(
             name="Qs0",
             value=30,
@@ -175,7 +182,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["Ne"] = Parameter(
             name="Ne",
             value=25,
@@ -185,7 +192,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["epsilonB"] = Parameter(
             name="epsilonB",
             value=0.044,
@@ -195,7 +202,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["muS"] = Parameter(
             name="muS",
             value=0.94,
@@ -205,7 +212,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["tau0"] = Parameter(
             name="tau0",
             value=0.74e-9,
@@ -215,7 +222,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         self.parameters["rhoK"] = Parameter(
             name="rhoK",
             value=2.7e9,
@@ -245,7 +252,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="unit_density",
             internal_unit="1/μm³",
             display_unit="1/μm³",
-            )
+        )
         self.parameters["beta"] = Parameter(
             name="beta",
             value=1,
@@ -255,7 +262,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
@@ -265,7 +272,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
@@ -277,7 +284,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -296,7 +303,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -308,7 +315,7 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -320,8 +327,8 @@ class TheorySmoothPolyStrand(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
-        nmode = self.parameters["nmodes"].value
+        )
+        nmode: Any = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -334,7 +341,7 @@ class TheorySmoothPolyStrand(QTheory):
                 quantity="dimensionless",
                 internal_unit="-",
                 display_unit="-",
-                )
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -346,7 +353,7 @@ class TheorySmoothPolyStrand(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
                 value=1,
@@ -357,7 +364,7 @@ class TheorySmoothPolyStrand(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label="")
@@ -384,14 +391,11 @@ class TheorySmoothPolyStrand(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutflow.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -400,7 +404,8 @@ class TheorySmoothPolyStrand(QTheory):
         tb.addWidget(self.tbutflow)
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.get_modes_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
@@ -410,22 +415,16 @@ class TheorySmoothPolyStrand(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get Modes (MWD data)",
         )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
         # self.plot_modes_action = menu.addAction(
         #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
         #     "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
         # #Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
-        )
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
         # Finite extensibility button
@@ -463,36 +462,24 @@ class TheorySmoothPolyStrand(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes
-        )
+        connection_id = self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
         connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         # connection_id = self.plot_modes_action.triggered.connect(
         #     self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
         connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.with_fene_button.triggered.connect(
-            self.handle_with_fene_button
-        )
-        connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button
-        )
-        connection_id = self.with_noqu_button.triggered.connect(
-            self.handle_with_noqu_button
-        )
-        connection_id = self.with_single_button.triggered.connect(
-            self.handle_with_single_button
-        )
+        connection_id = self.with_fene_button.triggered.connect(self.handle_with_fene_button)
+        connection_id = self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
+        connection_id = self.with_noqu_button.triggered.connect(self.handle_with_noqu_button)
+        connection_id = self.with_single_button.triggered.connect(self.handle_with_single_button)
 
         #        connection_id = self.noqu_button.triggered.connect(
         #            self.handle_with_gcorr_button)
         connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
-    def handle_flowsolve_btn(self):
+    def handle_flowsolve_btn(self) -> None:
         """Save theory parameters in FlowSolve format"""
 
         # Get filename of RepTate project to open
@@ -534,7 +521,7 @@ class TheorySmoothPolyStrand(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n = self.parameters["nmodes"].value
+            n: Any = self.parameters["nmodes"].value
 
             td = np.zeros(n)
             for i in range(n):
@@ -552,9 +539,7 @@ class TheorySmoothPolyStrand(QTheory):
                 tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
                 lmax += " %.6g" % self.parameters["lmax"].value
             f.write("%s\n%s\n%s\n" % (taud, tauR, fraction))
-            if (
-                self.with_fene == FeneMode.with_fene
-            ):  # don't output lmax at all for infinite ex
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
             f.write("modulus %.6g\n" % self.parameters["GN0"].value)
             f.write("beta %.6gn" % self.parameters["beta"].value)
@@ -562,74 +547,56 @@ class TheorySmoothPolyStrand(QTheory):
 
             f.write("\n#end")
 
-        QMessageBox.information(
-            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
-        )
+        QMessageBox.information(self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath)
 
-    def handle_with_gcorr_button(self, checked):
+    def handle_with_gcorr_button(self, checked: Any) -> None:
         if checked:
             if len(self.Zeff) > 0:
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint(
-                    "<font color=orange><b>Modulus correction needs Z from MWD</b></font>"
-                )
+                self.Qprint("<font color=orange><b>Modulus correction needs Z from MWD</b></font>")
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def handle_with_noqu_button(self, checked):
+    def handle_with_noqu_button(self, checked: Any) -> None:
         if checked:
-
             self.with_noqu = NoquMode.with_noqu
             self.with_noqu_button.setChecked(True)
         else:
             self.with_noqu = NoquMode.none
 
-        self.Qprint(
-            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>')
 
-    def handle_with_single_button(self, checked):
+    def handle_with_single_button(self, checked: Any) -> None:
         if checked:
-
             self.with_single = SingleSpeciesMode.with_single
             self.with_single_button.setChecked(True)
         else:
             self.with_single = SingleSpeciesMode.none
 
-        self.Qprint(
-            '<font color=green><b>Single species: Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Single species: Press "Calculate" to update theory</b></font>')
 
-    def handle_with_fene_button(self, checked):
+    def handle_with_fene_button(self, checked: Any) -> None:
         if checked:
             self.with_fene = FeneMode.with_fene
             self.with_fene_button.setChecked(True)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png"))
             self.parameters["lmax"].display_flag = True
             self.parameters["lmax"].opt_type = OptType.nopt
         else:
             self.with_fene = FeneMode.none
             self.with_fene_button.setChecked(False)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-infinite.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-infinite.png"))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def Qhide_theory_extras(self, show):
+    def Qhide_theory_extras(self, show: Any) -> None:
         """Uncheck the LVE button. Called when curent theory is changed"""
         if show:
             self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
@@ -640,22 +607,22 @@ class TheorySmoothPolyStrand(QTheory):
         self.parent_dataset.actionVertical_Limits.setDisabled(show)
         self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
-    def show_linear_envelope(self, state):
+    def show_linear_envelope(self, state: Any) -> None:
         self.plot_theory_stuff()
         self.extra_graphic_visible(state)
         # self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
         # self.plot_theory_stuff()
         # self.parent_dataset.parent_application.update_plot()
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         apmng = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
@@ -668,9 +635,7 @@ class TheorySmoothPolyStrand(QTheory):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.thname == "Discretize MWD":
-                        get_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.get_mwd
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.get_mwd
 
         if get_dict:
             d = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
@@ -688,13 +653,11 @@ class TheorySmoothPolyStrand(QTheory):
                 self.set_modes_from_mwd(m, phi)
         else:
             # no theory Discretise MWD found
-            QMessageBox.warning(
-                self, "Get MW distribution", 'No "Discretize MWD" theory found'
-            )
+            QMessageBox.warning(self, "Get MW distribution", 'No "Discretize MWD" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
-    def edit_modes_window(self):
-        nmodes = self.parameters["nmodes"].value
+    def edit_modes_window(self) -> None:
+        nmodes: Any = self.parameters["nmodes"].value
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         taur = np.zeros(nmodes)
@@ -713,15 +676,9 @@ class TheorySmoothPolyStrand(QTheory):
             # self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "phi%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 1).text()
-                )
-                msg, success3 = self.set_param_value(
-                    "tauR%02d" % i, d.table.item(i, 2).text()
-                )
+                msg, success1 = self.set_param_value("phi%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("tauD%02d" % i, d.table.item(i, 1).text())
+                msg, success3 = self.set_param_value("tauR%02d" % i, d.table.item(i, 2).text())
                 success *= success1 * success2 * success3
             if not success:
                 QMessageBox.warning(
@@ -732,7 +689,7 @@ class TheorySmoothPolyStrand(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def edit_mwd_modes(self):
+    def edit_mwd_modes(self) -> None:
         d = EditMWDDialog(self, self.MWD_m, self.MWD_phi, 200)
         if d.exec_():
             nmodes = d.table.rowCount()
@@ -757,19 +714,19 @@ class TheorySmoothPolyStrand(QTheory):
     # def plot_modes_graph(self):
     #     pass
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory helpers"""
         logtmin = np.log10(self.parent_dataset.minpositivecol(0))
         logtmax = np.log10(self.parent_dataset.maxcol(0)) + 1
         ntimes = int((logtmax - logtmin) * 20)
-        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 5
         data_table_tmp.num_rows = ntimes
         data_table_tmp.data = np.zeros((ntimes, 5))
 
         times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         data_table_tmp.data[:, 1] = 0
         fparamaux = {"gdot": 1e-8}
 
@@ -782,20 +739,13 @@ class TheorySmoothPolyStrand(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["GN0"].value
+            G: Any = self.parameters["GN0"].value
             if self.with_gcorr == GcorrMode.with_gcorr:
                 G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
                 # TODO: use symetry to reduce number of loops
                 tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
-                data_table_tmp.data[:, 1] += (
-                    G
-                    * phi[i]
-                    * phi[j]
-                    * fparamaux["gdot"]
-                    * tau
-                    * (1 - np.exp(-times / tau))
-                )
+                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux["gdot"] * tau * (1 - np.exp(-times / tau))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -812,7 +762,7 @@ class TheorySmoothPolyStrand(QTheory):
                 # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
                 data_table_tmp.series[nx][i].remove()
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
         self.MWD_m = extra_data["MWD_m"]
         self.MWD_phi = extra_data["MWD_phi"]
@@ -832,7 +782,7 @@ class TheorySmoothPolyStrand(QTheory):
             self.with_gcorr == GcorrMode.with_gcorr
             self.with_gcorr_button.setChecked(True)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Set extra_data when saving project"""
         self.extra_data["MWD_m"] = self.MWD_m
         self.extra_data["MWD_phi"] = self.MWD_phi
@@ -840,11 +790,9 @@ class TheorySmoothPolyStrand(QTheory):
         self.extra_data["with_fene"] = self.with_fene == FeneMode.with_fene
         self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
         self.extra_data["with_noqu"] = self.with_noqu == NoquMode.with_noqu
-        self.extra_data["with_single"] = (
-            self.with_single == SingleSpeciesMode.with_single
-        )
+        self.extra_data["with_single"] = self.with_single == SingleSpeciesMode.with_single
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -856,35 +804,35 @@ class TheorySmoothPolyStrand(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.show_theory_extras(False)
         # self.ax.lines.remove(self.LVEenvelopeseries)
         self.LVEenvelopeseries.remove()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: Any = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         # self.extra_graphic_visible(show)
 
-    def extra_graphic_visible(self, state):
+    def extra_graphic_visible(self, state: Any) -> None:
         """Change visibility of theory helpers"""
         self.view_LVEenvelope = state
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0 = self.parameters["GN0"].value
+        GN0: Any = self.parameters["GN0"].value
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
             G[i] = GN0 * self.parameters["phi%02d" % i].value
         return tau, G, True
 
-    def set_modes_from_mwd(self, m, phi):
+    def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
@@ -901,11 +849,9 @@ class TheorySmoothPolyStrand(QTheory):
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
-    def set_modes(self, tau, G):
+    def set_modes(self, tau: Any, G: Any) -> bool:
         """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -917,15 +863,15 @@ class TheorySmoothPolyStrand(QTheory):
         self.update_parameter_table()
         return True
 
-    def fZ(self, z):
+    def fZ(self, z: Any) -> Any:
         """CLF correction function Likthman-McLeish (2002)"""
         return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
 
-    def gZ(self, z):
+    def gZ(self, z: Any) -> Any:
         """CLF correction function for modulus Likthman-McLeish (2002)"""
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
 
-    def sigmadot_shear(self, sigma, t, p):
+    def sigmadot_shear(self, sigma: Any, t: Any, p: Any) -> Any:
         """Rolie-Poly differential equation under *shear* flow
         with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
@@ -942,7 +888,7 @@ class TheorySmoothPolyStrand(QTheory):
             wfene = 0
         return rpch.compute_derivs_shear(sigma, p, t, wfene)
 
-    def sigmadot_uext(self, sigma, t, p):
+    def sigmadot_uext(self, sigma: Any, t: Any, p: Any) -> Any:
         """Rolie-Poly differential equation under *uniaxial elongational* flow
         with stretching and finite extensibility if selected"""
         if self.stop_theory_flag:
@@ -960,13 +906,13 @@ class TheorySmoothPolyStrand(QTheory):
             wfene = 0
         return rpch.compute_derivs_uext(sigma, p, t, wfene)
 
-    def calculate_fene(self, l_square, lmax):
+    def calculate_fene(self, l_square: Any, lmax: Any) -> Any:
         """calculate finite extensibility function value"""
         ilm2 = 1.0 / (lmax * lmax)  # 1/lambda_max^2
         l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
-    def computeFel(self, Fxx, Fyy, Fxy):
+    def computeFel(self, Fxx: Any, Fyy: Any, Fxy: Any) -> Any:
         """Converts RDP configurations into a free energy change (via nematic order parameter"""
         Gamma = self.parameters["Gamma"].value
         Ne = self.parameters["Ne"].value
@@ -975,7 +921,7 @@ class TheorySmoothPolyStrand(QTheory):
 
         return Gamma * tmp / Ne
 
-    def computeQuiescentBarrier(self):
+    def computeQuiescentBarrier(self) -> tuple[Any, Any, Any, Any]:
         """Calculates the GO model quiescent barrier and nucleation rate"""
         epsilonB = self.parameters["epsilonB"].value
         muS = self.parameters["muS"].value
@@ -992,9 +938,7 @@ class TheorySmoothPolyStrand(QTheory):
         NT = 0
         while landscape[NT] > landscape[NT - 1] - 0.005:
             NT += 1
-            landscape.append(
-                QuiescentSmoothStrand.wholeLandscape(NT, epsilonB, muS, Kappa0)
-            )
+            landscape.append(QuiescentSmoothStrand.wholeLandscape(NT, epsilonB, muS, Kappa0))
             if NT > 10000:
                 self.Qprint(
                     "<font color=green><b>Quiescent barrier does not have \
@@ -1007,11 +951,9 @@ class TheorySmoothPolyStrand(QTheory):
         quiescent_height = max(landscape)
         nStar = landscape.index(quiescent_height)
 
-        d2Fqstar = (
-            landscape[nStar - curvature_skip]
-            - 2 * landscape[nStar]
-            + landscape[nStar + curvature_skip]
-        ) / (curvature_skip**2 * dN**2)
+        d2Fqstar = (landscape[nStar - curvature_skip] - 2 * landscape[nStar] + landscape[nStar + curvature_skip]) / (
+            curvature_skip**2 * dN**2
+        )
 
         # Calculate initial slope
         sumDFq = 0.0
@@ -1020,39 +962,33 @@ class TheorySmoothPolyStrand(QTheory):
 
         # Compute the nucleation rate
         xqtime = (sumDFq * np.exp(quiescent_height) / (2 * nStar**0.66666666)) * (
-            1
-            + np.sqrt(-2 * np.pi / d2Fqstar)
-            * np.exp(-(alpha**2) / (2 * d2Fqstar * nStar**2) + alpha / nStar)
+            1 + np.sqrt(-2 * np.pi / d2Fqstar) * np.exp(-(alpha**2) / (2 * d2Fqstar * nStar**2) + alpha / nStar)
         )
         NqRate = rhoK / tau0 / xqtime
 
-        self.Qprint(
-            "Quiescent barrier height=%.3g k<sub>B</sub>T" % quiescent_height
-        )  # HTML syntax
+        self.Qprint("Quiescent barrier height=%.3g k<sub>B</sub>T" % quiescent_height)  # HTML syntax
 
-        self.Qprint(
-            "Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>"
-            % NqRate
-        )  # HTML syntax
+        self.Qprint("Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>" % NqRate)  # HTML syntax
 
         return landscape, NqRate, quiescent_height, nStar
 
-    def RolieDoublePoly_Crystal(self, f=None):
+    def RolieDoublePoly_Crystal(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        fel = np.zeros((tt.num_rows, self.parameters["nmodes"].value))
+        nmodes_value: Any = self.parameters["nmodes"].value
+        fel = np.zeros((tt.num_rows, nmodes_value))
         felAve = np.zeros((tt.num_rows, 1))
-        Gamma = self.parameters["Gamma"].value
-        epsilonB = self.parameters["epsilonB"].value
-        muS = self.parameters["muS"].value
-        G_C = self.parameters["G_C"].value
-        N_0 = self.parameters["N_0"].value
-        Kappa0 = self.parameters["Kappa0"].value
-        Qs0 = self.parameters["Qs0"].value
+        Gamma: Any = self.parameters["Gamma"].value
+        epsilonB: Any = self.parameters["epsilonB"].value
+        muS: Any = self.parameters["muS"].value
+        G_C: Any = self.parameters["G_C"].value
+        N_0: Any = self.parameters["N_0"].value
+        Kappa0: Any = self.parameters["Kappa0"].value
+        Qs0: Any = self.parameters["Qs0"].value
 
         tt.data[:, 0] = ft.data[:, 0]  # time
 
@@ -1062,12 +998,12 @@ class TheorySmoothPolyStrand(QTheory):
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta = self.parameters["beta"].value
-        delta = self.parameters["delta"].value
-        lmax = self.parameters["lmax"].value
+        beta: Any = self.parameters["beta"].value
+        delta: Any = self.parameters["delta"].value
+        lmax: Any = self.parameters["lmax"].value
         flow_rate = float(f.file_parameters["gdot"])
         tstop = float(f.file_parameters["tstop"])
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
 
         # flow geometry
         if self.flow_mode == FlowMode.shear:
@@ -1093,9 +1029,7 @@ class TheorySmoothPolyStrand(QTheory):
 
         if t[-1] < tstop:
             try:
-                sig = odeint(
-                    pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr
-                )
+                sig = odeint(pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             except EndComputationRequested:
                 return
         else:  # tstop must happen during computation
@@ -1117,9 +1051,7 @@ class TheorySmoothPolyStrand(QTheory):
             # solve for t > tmax
             tmax = t2[-1]
             p = [nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta, 0.0, tmax]
-            sig2 = odeint(
-                pde_stretch, sig1[-1], t2, args=(p,), atol=abserr, rtol=relerr
-            )
+            sig2 = odeint(pde_stretch, sig1[-1], t2, args=(p,), atol=abserr, rtol=relerr)
             # Merge two solutions
             sig = np.concatenate((sig1[:-1], sig2[1:]), 0)
 
@@ -1139,9 +1071,7 @@ class TheorySmoothPolyStrand(QTheory):
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
                         # trace_arr += phi_arr[j] * (sxx_t[:, I + j] + 2 * syy_t[:, I + j])
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -1176,9 +1106,7 @@ class TheorySmoothPolyStrand(QTheory):
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -1242,7 +1170,6 @@ class TheorySmoothPolyStrand(QTheory):
         for i in range(tt.num_rows):
             # See how much change there is from last time
             if i > 0:
-
                 sumdf = 0.0
                 for j in range(nspecies):
                     sumdf += (df[j] - fel[i, j]) ** 2
@@ -1266,18 +1193,14 @@ class TheorySmoothPolyStrand(QTheory):
                         "Bprevious": Bprevious,
                     }
                 # DfStarFlow = SmoothPolySTRAND.findDfStar(params)
-                DfStarFlow, nStarPrevious, NSprevious, Pprevious, Bprevious = (
-                    SmoothPolySTRAND.findDfStar_Direct(params)
-                )
+                DfStarFlow, nStarPrevious, NSprevious, Pprevious, Bprevious = SmoothPolySTRAND.findDfStar_Direct(params)
                 nucRate = NdotQ * np.exp(DfStarQ - DfStarFlow)
 
             if self.with_noqu == NoquMode.with_noqu:
                 tt.data[i, 2] = nucRate - NdotQ
                 if tt.data[i, 2] < 0:
                     if tt.data[i, 2] / (NdotQ + 1e-20) < -0.01:
-                        self.Qprint(
-                            "<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>"
-                        )
+                        self.Qprint("<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>")
                     tt.data[i, 2] = 0.0
             else:
                 tt.data[i, 2] = nucRate
@@ -1289,18 +1212,17 @@ class TheorySmoothPolyStrand(QTheory):
         tt.data[:, 3] = 1.0 - np.exp(-Cry_Evol[:, 0])  # Cry_Evol[:,0] #Phi_X
         tt.data[:, 4] = Cry_Evol[:, 3] / 8 / np.pi  # Number of nuclei
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheorySmoothPolyStrand, self).set_param_value(
-            name, value
-        )
+        message, success = super(BaseTheorySmoothPolyStrand, self).set_param_value(name, value)  # pyright: ignore[reportUndefinedVariable]
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,
                     value=0.0,
@@ -1312,7 +1234,7 @@ class TheorySmoothPolyStrand(QTheory):
                     quantity="dimensionless",
                     internal_unit="-",
                     display_unit="-",
-                    )
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -1324,7 +1246,7 @@ class TheorySmoothPolyStrand(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
+                )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
                     value=1,
@@ -1336,16 +1258,14 @@ class TheorySmoothPolyStrand(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+                )
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["phi%02d" % i]
                     del self.parameters["tauD%02d" % i]
                     del self.parameters["tauR%02d" % i]
         return "", True
 
-    def do_fit(self, line):
+    def do_fit(self, line: Any) -> None:
         """Minimisation procedure disabled in this theory"""
-        self.Qprint(
-            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
-        )
+        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")

@@ -35,6 +35,8 @@
 Module that defines theories related to Debye modes, in the frequency and time domains.
 
 """
+from typing import Any, ClassVar, cast
+
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -64,14 +66,16 @@ class TheoryDebyeModesFrequency(QTheory):
     
     """
 
-    thname = "Debye modes"
-    description = "Fit Debye modes"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#debye-modes"
-    single_file = True
+    thname: ClassVar[str] = "Debye modes"
+    description: ClassVar[str] = "Fit Debye modes"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#debye-modes"
+    single_file: ClassVar[bool] = True
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.DebyeModesFrequency
@@ -121,7 +125,8 @@ class TheoryDebyeModesFrequency(QTheory):
                 self.parent_dataset.files[0].data_table.data[:, 1],
             )
         )
-        for i in range(self.parameters["nmodes"].value):
+        nmodes_value: Any = self.parameters["nmodes"].value
+        for i in range(nmodes_value):
             self.parameters["logDe%02d" % i] = Parameter(
                 name = "logDe%02d" % i,
                 value = np.log10(eps[i]),
@@ -131,8 +136,8 @@ class TheoryDebyeModesFrequency(QTheory):
             )
 
         # GRAPHIC MODES
-        self.graphicmodes = []
-        self.artistmodes = []
+        self.graphicmodes: Any = []
+        self.artistmodes: Any = []
         self.setup_graphic_modes()
 
         # add widgets specific to the theory
@@ -141,7 +146,7 @@ class TheoryDebyeModesFrequency(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_MODES)  # min and max number of modes
         self.spinbox.setSuffix(" modes")
-        self.spinbox.setValue(self.parameters["nmodes"].value)  # initial value
+        self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
@@ -155,22 +160,22 @@ class TheoryDebyeModesFrequency(QTheory):
         )
         connection_id = self.modesaction.triggered.connect(self.modesaction_change)
 
-    def Qhide_theory_extras(self, state):
+    def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
         self.modesaction.setChecked(state)
 
-    def modesaction_change(self, checked):
+    def modesaction_change(self, checked: bool) -> None:
         """Change visibility of modes"""
         self.graphicmodes_visible(checked)
         # self.view_modes = self.modesaction.isChecked()
         # self.graphicmodes.set_visible(self.view_modes)
         # self.do_calculate("")
 
-    def handle_spinboxValueChanged(self, value):
+    def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nmode'"""
-        nmodesold = self.parameters["nmodes"].value
-        wminold = self.parameters["logwmin"].value
-        wmaxold = self.parameters["logwmax"].value
+        nmodesold: Any = self.parameters["nmodes"].value
+        wminold: Any = self.parameters["logwmin"].value
+        wmaxold: Any = self.parameters["logwmax"].value
         wold = np.logspace(wminold, wmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
@@ -197,10 +202,10 @@ class TheoryDebyeModesFrequency(QTheory):
         self.update_parameter_table()
 
 
-    def drag_mode(self, dx, dy):
+    def drag_mode(self, dx: Any, dy: Any) -> None:
         """Move around modes"""
         dx, dy = self.convert_view_data_to_internal(dx, dy)
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         if self.current_view().log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
             self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
@@ -218,15 +223,17 @@ class TheoryDebyeModesFrequency(QTheory):
         self.do_calculate("")
         self.update_parameter_table()
 
-    def update_modes(self):
+    def update_modes(self) -> None:
         """Do nothing"""
         pass
 
-    def setup_graphic_modes(self):
+    def setup_graphic_modes(self) -> None:
         """Setup graphic representation of modes"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
+        logwmin: Any = self.parameters["logwmin"].value
+        logwmax: Any = self.parameters["logwmax"].value
         w = np.logspace(
-            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+            logwmin, logwmax, nmodes
         )
         eps = np.zeros(nmodes)
         for i in range(nmodes):
@@ -249,18 +256,18 @@ class TheoryDebyeModesFrequency(QTheory):
         )
         self.plot_theory_stuff()
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
         self.graphicmodes.remove()
         # self.ax.lines.remove(self.graphicmodes)
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: bool = False) -> None:
         """Called when the active theory is changed"""
         self.Qhide_theory_extras(show)
         self.graphicmodes_visible(show)
 
-    def graphicmodes_visible(self, state):
+    def graphicmodes_visible(self, state: bool) -> None:
         """Set visibility of graphic modes"""
         self.view_modes = state
         self.graphicmodes.set_visible(self.view_modes)
@@ -271,11 +278,13 @@ class TheoryDebyeModesFrequency(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
+        logwmin: Any = self.parameters["logwmin"].value
+        logwmax: Any = self.parameters["logwmax"].value
         freq = np.logspace(
-            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+            logwmin, logwmax, nmodes
         )
         tau = 1.0 / freq
         eps = np.zeros(nmodes)
@@ -283,7 +292,7 @@ class TheoryDebyeModesFrequency(QTheory):
             eps[i] = np.power(10, self.parameters["logDe%02d" % i].value)
         return tau, eps, True
 
-    def DebyeModesFrequency(self, f=None):
+    def DebyeModesFrequency(self, f: Any = None) -> None:
         """Actual function that calculates the thoery"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -292,10 +301,12 @@ class TheoryDebyeModesFrequency(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        einf = self.parameters["einf"].value
-        nmodes = self.parameters["nmodes"].value
+        einf: Any = self.parameters["einf"].value
+        nmodes: Any = self.parameters["nmodes"].value
+        logwmin: Any = self.parameters["logwmin"].value
+        logwmax: Any = self.parameters["logwmax"].value
         freq = np.logspace(
-            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+            logwmin, logwmax, nmodes
         )
         tau = 1.0 / freq
 
@@ -309,17 +320,19 @@ class TheoryDebyeModesFrequency(QTheory):
             tt.data[:, 1] += eps * 1 / (1 + wTsq)
             tt.data[:, 2] += eps * wT / (1 + wTsq)
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Plot theory graphic modes"""
         # if not self.view_modes:
         #     return
-        data_table_tmp = DataTable(self.axarr)
+        data_table_tmp: Any = DataTable(cast(Any, self.axarr))
         data_table_tmp.num_columns = 3
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
+        logwmin: Any = self.parameters["logwmin"].value
+        logwmax: Any = self.parameters["logwmax"].value
         freq = np.logspace(
-            self.parameters["logwmin"].value, self.parameters["logwmax"].value, nmodes
+            logwmin, logwmax, nmodes
         )
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):

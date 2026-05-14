@@ -35,6 +35,8 @@
 Large Amplitude Oscillatory Shear
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -46,12 +48,12 @@ from PySide6.QtWidgets import QSpinBox
 class ApplicationLAOS(QApplicationWindow):
     """Application for Large Oscillatory Shear data"""
 
-    appname = "LAOS"
-    description = "LAOS Application"  # used in the command-line Reptate
-    extension = "laos"
+    appname: ClassVar[str] = "LAOS"
+    description: ClassVar[str] = "LAOS Application"  # used in the command-line Reptate
+    extension: ClassVar[str] = "laos"
     # html_help_file = ''
 
-    def __init__(self, name="LAOS", parent=None, **kwargs):
+    def __init__(self, name: str = "LAOS", parent: Any = None, **kwargs: Any) -> None:
         """**Constructor**"""
         # IMPORT THEORIES
         from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly
@@ -61,10 +63,10 @@ class ApplicationLAOS(QApplicationWindow):
 
         super().__init__(name, parent)
 
-        time_units = ("ns", "us", "μs", "ms", "s", "min", "h")
-        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
-        viscosity_units = ("Pa.s", "kPa.s")
-        deformation_rate_units = (
+        time_units: tuple[str, ...] = ("ns", "us", "μs", "ms", "s", "min", "h")
+        stress_units: tuple[str, ...] = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units: tuple[str, ...] = ("Pa.s", "kPa.s")
+        deformation_rate_units: tuple[str, ...] = (
             "1/s",
             "s-1",
             "1/min",
@@ -354,7 +356,7 @@ class ApplicationLAOS(QApplicationWindow):
         self.add_PPQC_widget()
         self.set_PPQC_widget_visible(False)
 
-    def add_HHSR_widget(self):
+    def add_HHSR_widget(self) -> None:
         """Add spinbox for HHSR"""
         self.sb_HHSR = QSpinBox()
         self.sb_HHSR.setRange(1, 99)
@@ -364,17 +366,17 @@ class ApplicationLAOS(QApplicationWindow):
         self.sb_HHSR.valueChanged.connect(self.change_HHSR)
         self.viewLayout.insertWidget(3, self.sb_HHSR)
 
-    def change_HHSR(self, val):
+    def change_HHSR(self, val: Any) -> None:
         """Change the value of the HHSR.
         Called when the spinbox value is changed"""
         self.HHSR = val
         self.update_all_ds_plots()
 
-    def set_HHSR_widget_visible(self, state):
+    def set_HHSR_widget_visible(self, state: Any) -> None:
         """Show/Hide the extra widget "HHSR" """
         self.sb_HHSR.setVisible(state)
 
-    def add_PPQC_widget(self):
+    def add_PPQC_widget(self) -> None:
         """Add spinbox for HHSR"""
         self.sb_PPQC = QSpinBox()
         self.sb_PPQC.setRange(20, 500)
@@ -386,17 +388,17 @@ class ApplicationLAOS(QApplicationWindow):
         self.sb_PPQC.valueChanged.connect(self.change_PPQC)
         self.viewLayout.insertWidget(3, self.sb_PPQC)
 
-    def change_PPQC(self, val):
+    def change_PPQC(self, val: Any) -> None:
         """Change the value of the PPQC.
         Called when the spinbox value is changed"""
         self.PPQC = val
         self.update_all_ds_plots()
 
-    def set_PPQC_widget_visible(self, state):
+    def set_PPQC_widget_visible(self, state: Any) -> None:
         """Show/Hide the extra widget "PPQC" """
         self.sb_PPQC.setVisible(state)
 
-    def set_view_tools(self, view_name):
+    def set_view_tools(self, view_name: str) -> None:
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in [
             "sigma(gamma) FILT",
@@ -416,7 +418,7 @@ class ApplicationLAOS(QApplicationWindow):
             except AttributeError:
                 pass
 
-    def view_sigmatgammatRAW(self, dt, file_parameters):
+    def view_sigmatgammatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress & strain vs time"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -427,7 +429,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmatgammatRAWSCALED(self, dt, file_parameters):
+    def view_sigmatgammatRAWSCALED(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress SCALED & strain vs time"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -438,7 +440,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammaRAW(self, dt, file_parameters):
+    def view_sigmagammaRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs strain RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -446,7 +448,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def view_sigmagammaFILTERED(self, dt, file_parameters):
+    def view_sigmagammaFILTERED(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs strain FILTERED data"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -459,7 +461,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = tau_recon
         return x, y, True
 
-    def view_fftspectrum(self, dt, file_parameters):
+    def view_fftspectrum(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """FFT spectrum of stress signal"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -501,7 +503,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammadot(self, dt, file_parameters):
+    def view_sigmagammadot(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs strain rate"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
         gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
@@ -522,7 +524,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = tau_recon  # tau_recon interp1d
         return x, y, True
 
-    def view_sigmagammaANLS(self, dt, file_parameters):
+    def view_sigmagammaANLS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs strain ANALYSIS"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
         gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
@@ -573,7 +575,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammadotANLS(self, dt, file_parameters):
+    def view_sigmagammadotANLS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs strain rate ANALYSIS"""
 
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
@@ -627,7 +629,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_chebelastic(self, dt, file_parameters):
+    def view_chebelastic(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Chebyshev decomposition, elastic components"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -650,7 +652,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = e_n[0 : self.HHSR]
         return x, y, True
 
-    def view_chebviscous(self, dt, file_parameters):
+    def view_chebviscous(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Chebyshev decomposition, viscous components"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -672,7 +674,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = v_n[0 : self.HHSR]
         return x, y, True
 
-    def view_sigmatRAW(self, dt, file_parameters):
+    def view_sigmatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Stress vs time RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -681,7 +683,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_gammatRAW(self, dt, file_parameters):
+    def view_gammatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Strain vs time RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -689,7 +691,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def cycletrim_MITlaos(self, gamma, tau):
+    def cycletrim_MITlaos(self, gamma: Any, tau: Any) -> Any:
         d_zero = []
 
         k = 0  # k is a counter for the number of times gamma changes sign
@@ -752,7 +754,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return istrain, istress, N, istart, istop
 
-    def FTtrig_MITlaos(self, f):
+    def FTtrig_MITlaos(self, f: Any) -> Any:
         """
         Find trigonometric Fourier Series components from FFT:
         f = A0 + SUM_n( An*cos(n*2*pi*t/T + Bn*sin(n*2*pi*t/T)
@@ -790,7 +792,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return A0, An, Bn
 
-    def chebyshev_decompose_MITlaos(self, F, N, X=None):
+    def chebyshev_decompose_MITlaos(self, F: Any, N: Any, X: Any = None) -> Any:
         """
         Find Chebyshev Polynomial components of input data vector:
 
@@ -834,7 +836,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return An
 
-    def do_FFT_and_STUFF(self, dt):
+    def do_FFT_and_STUFF(self, dt: Any) -> Any:
         time_uneven = dt.data[:, 0]  # raw time
         gamma_uneven = dt.data[:, 1]  # raw strain
         tau_uneven = dt.data[:, 2]  # raw stress
@@ -958,7 +960,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return gam_0, Bn, An, Ncycles
 
-    def reconstruct_gamma_tau(self, An, Bn, gam_0, Ncycles):
+    def reconstruct_gamma_tau(self, An: Any, Bn: Any, gam_0: Any, Ncycles: Any) -> Any:
         PPC = 4 * self.PPQC  # Points Per Cycle
 
         gam_recon = np.zeros(PPC)

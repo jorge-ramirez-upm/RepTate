@@ -1,6 +1,7 @@
 import logging
 import traceback
 from types import TracebackType
+from typing import Any, cast
 
 from RepTate import __version__
 
@@ -20,13 +21,16 @@ def my_excepthook(
 
     l.error(tb_msg)
     msg += "\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?"
+    parent: Any = None
+    yes_button: Any = getattr(QMessageBox, "Yes")
+    no_button: Any = getattr(QMessageBox, "No")
     ans = QMessageBox.critical(
-        None, "Critical Error", msg, QMessageBox.Yes | QMessageBox.No
+        parent, "Critical Error", msg, yes_button | no_button
     )
-    if ans == QMessageBox.Yes:
+    if ans == yes_button:
         body = (
             "The RepTate project issue page on Github is going to be opened on a browser.\nPlease, create a new Issue and describe with as much detail as possible\nthe actions that led to the Error (which apps, theories or tools opened, what data).\n\nYou can copy and paste the text of this dialog to help you draft the Issue.\nDo NOT include confidential information.\n%s\nRepTate v%s\nError Traceback:\n %s"
             % ("*" * 91 + "\n" * 10 + "*" * 91, __version__, tb_msg)
         )
-        QMessageBox.information(None, "Report Bug on Github", body)
-        QDesktopServices.openUrl("https://github.com/jorge-ramirez-upm/RepTate/issues")
+        QMessageBox.information(parent, "Report Bug on Github", body)
+        QDesktopServices.openUrl(cast(Any, "https://github.com/jorge-ramirez-upm/RepTate/issues"))

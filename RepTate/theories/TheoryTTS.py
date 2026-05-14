@@ -38,6 +38,8 @@ Module for the pseudo theory for Time-Temperature superposition shift of LVE dat
 import os
 import time
 import getpass
+from typing import Any, ClassVar
+
 import numpy as np
 from numpy import interp
 from scipy.optimize import minimize, curve_fit
@@ -73,14 +75,16 @@ class TheoryWLFShift(QTheory):
 
     """
 
-    thname = "WLF Shift"
-    description = "TTS shift based on the WLF equation"
-    citations = []
-    doi = []
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift"
-    single_file = False
+    thname: ClassVar[str] = "WLF Shift"
+    description: ClassVar[str] = "TTS shift based on the WLF equation"
+    citations: ClassVar[list[str]] = []
+    doi: ClassVar[list[str]] = []
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    def __init__(
+        self, name: str = "", parent_dataset: Any = None, ax: Any = None
+    ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
@@ -150,7 +154,7 @@ class TheoryWLFShift(QTheory):
         )
 
         self.get_material_parameters()
-        self.shift_factor_dic = {}
+        self.shift_factor_dic: dict[str, Any] = {}
 
         # add widgets specific to the theory
         tb = QToolBar()
@@ -185,12 +189,13 @@ class TheoryWLFShift(QTheory):
         # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
         self.dir_start = os.path.join(RepTate.root_dir, "data")
 
-    def print_activation_energy(self):
+    def print_activation_energy(self) -> None:
         # Evaluate activation ennergy from Arrhenius fit
         M_set = list(set([l[-1] for l in self.shift_factor_dic.values()]))
 
-        def f(invT, Ea):
-            return Ea / 8.314 * (invT - 1 / (273.15 + self.parameters["Tr"].value))
+        def f(invT: Any, Ea: Any) -> Any:
+            Tr: Any = self.parameters["Tr"].value
+            return Ea / 8.314 * (invT - 1 / (273.15 + Tr))
 
         Ea_list = []
         for M in M_set:
@@ -221,10 +226,10 @@ class TheoryWLFShift(QTheory):
                 table.append(["%s" % items[0], "%.3g ± %.3g" % (items[1], items[2])])
             self.Qprint(table)
 
-    def do_vertical_shift(self):
+    def do_vertical_shift(self) -> None:
         self.set_param_value("vert", self.verticalshift.isChecked())
 
-    def do_isofrictional(self):
+    def do_isofrictional(self) -> None:
         self.set_param_value("iso", self.isofrictional.isChecked())
 
     # def do_save_dialog(self):
@@ -232,7 +237,7 @@ class TheoryWLFShift(QTheory):
     #         QFileDialog.getExistingDirectory(
     #             self, "Select Directory to save Master curves"))
     #     self.do_save(folder)
-    def save_shift_factors(self):
+    def save_shift_factors(self) -> None:
         dilogue_name = "Select Folder for Saving Shift Factors"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, self.dir_start)
         if not os.path.isdir(folder):
@@ -273,7 +278,7 @@ class TheoryWLFShift(QTheory):
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         QMessageBox.information(self, "Saved Files", msg)
 
-    def TheoryWLFShift(self, f=None):
+    def TheoryWLFShift(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -281,14 +286,15 @@ class TheoryWLFShift(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        Tr = self.parameters["Tr"].value
-        B1 = self.parameters["B1"].value
-        B2 = self.parameters["B2"].value
-        alpha = np.power(10.0, self.parameters["logalpha"].value)
-        CTg = self.parameters["CTg"].value
-        dx12 = self.parameters["dx12"].value
-        iso = self.parameters["iso"].value
-        vert = self.parameters["vert"].value
+        Tr: Any = self.parameters["Tr"].value
+        B1: Any = self.parameters["B1"].value
+        B2: Any = self.parameters["B2"].value
+        logalpha: Any = self.parameters["logalpha"].value
+        alpha = np.power(10.0, logalpha)
+        CTg: Any = self.parameters["CTg"].value
+        dx12: Any = self.parameters["dx12"].value
+        iso: Any = self.parameters["iso"].value
+        vert: Any = self.parameters["vert"].value
 
         Tf = f.file_parameters["T"]
         Mw = f.file_parameters["Mw"]
@@ -310,7 +316,7 @@ class TheoryWLFShift(QTheory):
         tt.data[:, 2] = ft.data[:, 2] * bT
         self.shift_factor_dic[f.file_name_short] = [Tf, aT, bT, Mw]
 
-    def do_error(self, line):
+    def do_error(self, line: str) -> Any:
         """Override the error calculation for TTS
 
         The error is calculated as the vertical distance between theory points, in the current view,\
@@ -438,16 +444,16 @@ class TheoryWLFShift(QTheory):
             self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         if line == "":
             self.Qprint("")
-            B1 = self.parameters["B1"].value
-            B2 = self.parameters["B2"].value
-            Tr = self.parameters["Tr"].value
+            B1: Any = self.parameters["B1"].value
+            B2: Any = self.parameters["B2"].value
+            Tr: Any = self.parameters["Tr"].value
             self.Qprint("<h3>WLF Params @ Tr = %g</h3>" % Tr)
             self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + Tr)))
             self.Qprint("<b>C2</b> = %g<br>" % (B2 + Tr))
 
         return total_error
 
-    def func_fitTTS(self, *param_in):
+    def func_fitTTS(self, *param_in: Any) -> Any:
         """Override the fit function"""
         ind = 0
         k = list(self.parameters.keys())
@@ -461,7 +467,7 @@ class TheoryWLFShift(QTheory):
         error = self.do_error("none")
         return error
 
-    def do_fit(self, line):
+    def do_fit(self, line: str) -> None:
         """Minimize the error"""
         self.is_fitting = True
         start_time = time.time()

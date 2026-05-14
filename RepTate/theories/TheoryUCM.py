@@ -35,19 +35,23 @@
 Module for the Upper Convected Maxwell model
 
 """
+
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from RepTate.applications.ApplicationLAOS import ApplicationLAOS
 from RepTate.theories.theory_helpers import FlowMode, EditModesDialog
 
 
 class TheoryUCM(QTheory):
-    """Multi-mode Upper Convected Maxwell model (see Chapter 1 of :cite:`NLVE-Larson1988`):
+    r"""Multi-mode Upper Convected Maxwell model (see Chapter 1 of :cite:`NLVE-Larson1988`):
     
     .. math::
         \\boldsymbol \\sigma &= \\sum_{i=1}^n G_i \\boldsymbol A_i\\\\
@@ -84,14 +88,16 @@ class TheoryUCM(QTheory):
 
     """
 
-    thname = "UCM"
-    description = "Upper-convected Maxwell constitutive equation"
-    citations = ["Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"]
-    doi = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model"
-    single_file = False
+    thname: ClassVar[str] = "UCM"
+    description: ClassVar[str] = "Upper-convected Maxwell constitutive equation"
+    citations: ClassVar[list[str]] = ["Oldroyd J.G., Proc. Roy. Soc. 1950, 200, 523-541"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1098/rspa.1950.0035"]
+    html_help_file: ClassVar[str] = (
+        "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-upper-convected-maxwell-model"
+    )
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_UCM
@@ -105,7 +111,8 @@ class TheoryUCM(QTheory):
             display_flag=False,
         )
 
-        for i in range(self.parameters["nmodes"].value):
+        nmodes: Any = self.parameters["nmodes"].value
+        for i in range(nmodes):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
                 value=1000.0,
@@ -140,14 +147,11 @@ class TheoryUCM(QTheory):
 
         if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
             self.tbutflow = QToolButton()
-            self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+            menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+            self.tbutflow.setPopupMode(menu_button_popup)
             menu = QMenu(self)
-            self.shear_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-            )
-            self.extensional_flow_action = menu.addAction(
-                QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-            )
+            self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+            self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
             if self.flow_mode == FlowMode.shear:
                 self.tbutflow.setDefaultAction(self.shear_flow_action)
             else:
@@ -155,31 +159,20 @@ class TheoryUCM(QTheory):
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
 
-            connection_id = self.shear_flow_action.triggered.connect(
-                self.select_shear_flow
-            )
-            connection_id = self.extensional_flow_action.triggered.connect(
-                self.select_extensional_flow
-            )
+            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
 
         else:
             self.function = self.calculate_UCMLAOS
 
         self.tbutmodes = QToolButton()
-        self.tbutmodes.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutmodes.setPopupMode(menu_button_popup)
         menu = QMenu(self)
-        self.get_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes"
-        )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
-        self.plot_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes"
-        )
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.get_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Get Modes")
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
+        self.plot_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-scatter-plot.png"), "Plot Modes")
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -191,18 +184,18 @@ class TheoryUCM(QTheory):
         connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
         connection_id = self.save_modes_action.triggered.connect(self.save_modes)
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_modes_reptate(self):
+    def get_modes_reptate(self) -> None:
         self.Qcopy_modes()
 
-    def edit_modes_window(self):
+    def edit_modes_window(self) -> None:
         times, G, success = self.get_modes()
         if not success:
             self.logger.warning("Could not get modes successfully")
@@ -213,12 +206,8 @@ class TheoryUCM(QTheory):
             self.set_param_value("nmodes", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "G%02d" % i, d.table.item(i, 1).text()
-                )
+                msg, success1 = self.set_param_value("tauD%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("G%02d" % i, d.table.item(i, 1).text())
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
@@ -229,10 +218,10 @@ class TheoryUCM(QTheory):
             else:
                 self.handle_actionCalculate_Theory()
 
-    def plot_modes_graph(self):
+    def plot_modes_graph(self) -> None:
         pass
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -244,9 +233,9 @@ class TheoryUCM(QTheory):
             print("in UCM init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def get_modes(self):
+    def get_modes(self) -> tuple[Any, Any, bool]:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -254,7 +243,7 @@ class TheoryUCM(QTheory):
             G[i] = self.parameters["G%02d" % i].value
         return tau, G, True
 
-    def set_modes(self, tau, G):
+    def set_modes(self, tau: Any, G: Any) -> bool:
         """Set the values of Maxwell Modes from another theory"""
         nmodes = len(tau)
         self.set_param_value("nmodes", nmodes)
@@ -263,14 +252,14 @@ class TheoryUCM(QTheory):
             self.set_param_value("G%02d" % i, G[i])
         return True
 
-    def sigma_xy_shear(self, p, times):
+    def sigma_xy_shear(self, p: Any, times: Any) -> Any:
         """Upper Convected Maxwell model in shear.
         Returns XY component of stress tensor"""
         G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
-    def n1_uext(self, p, times):
+    def n1_uext(self, p: Any, times: Any) -> Any:
         """Upper Convected Maxwell model in uniaxial extension.
         Returns N1 = (XX -YY) component of stress tensor"""
         G, tauD, ed = p
@@ -280,7 +269,7 @@ class TheoryUCM(QTheory):
 
         return G * (sxx - syy)
 
-    def calculate_UCM(self, f=None):
+    def calculate_UCM(self, f: Any = None) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -292,12 +281,12 @@ class TheoryUCM(QTheory):
         tt.data[:, 0] = times
 
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            tauD = self.parameters["tauD%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            tauD: Any = self.parameters["tauD%02d" % i].value
 
             p = [G, tauD, flow_rate]
 
@@ -306,7 +295,7 @@ class TheoryUCM(QTheory):
             elif self.flow_mode == FlowMode.uext:
                 tt.data[:, 1] += self.n1_uext(p, times)
 
-    def calculate_UCMLAOS(self, f=None):
+    def calculate_UCMLAOS(self, f: Any = None) -> None:
         """Calculate the theory for LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -320,34 +309,27 @@ class TheoryUCM(QTheory):
         tt.data[:, 0] = times
         tt.data[:, 1] = g0 * np.sin(w * times)
 
-        nmodes = self.parameters["nmodes"].value
+        nmodes: Any = self.parameters["nmodes"].value
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["G%02d" % i].value
-            tauD = self.parameters["tauD%02d" % i].value
+            G: Any = self.parameters["G%02d" % i].value
+            tauD: Any = self.parameters["tauD%02d" % i].value
             eta = G * tauD
             tt.data[:, 2] += (
-                eta
-                * g0
-                * w
-                * (
-                    tauD * w * np.sin(w * times)
-                    - np.exp(-times / tauD)
-                    + np.cos(w * times)
-                )
-                / (1 + w**2 * tauD**2)
+                eta * g0 * w * (tauD * w * np.sin(w * times) - np.exp(-times / tauD) + np.cos(w * times)) / (1 + w**2 * tauD**2)
             )
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         if name == "nmodes":
-            oldn = self.parameters["nmodes"].value
+            oldn: Any = self.parameters["nmodes"].value
         message, success = super(TheoryUCM, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            for i in range(self.parameters["nmodes"].value):
+            nmodes: Any = self.parameters["nmodes"].value
+            for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,
                     value=1000.0,
@@ -373,8 +355,8 @@ class TheoryUCM(QTheory):
                     display_unit="s",
                 )
 
-            if oldn > self.parameters["nmodes"].value:
-                for i in range(self.parameters["nmodes"].value, oldn):
+            if oldn > nmodes:
+                for i in range(nmodes, oldn):
                     del self.parameters["G%02d" % i]
                     del self.parameters["tauD%02d" % i]
         return "", True

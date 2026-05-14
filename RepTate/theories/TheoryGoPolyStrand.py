@@ -35,6 +35,7 @@
 Module for the GO-polyStrand model of flow-induced crystallisation in polymers.
 
 """
+
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -43,7 +44,8 @@ from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from RepTate.gui.Theory_rc import *
+
+# from RepTate.gui.Theory_rc import *
 from math import sqrt
 import time
 import RepTate
@@ -140,9 +142,7 @@ class TheoryGoPolyStrand(QTheory):
     description = "GO-polySTRAND model for flow-induced nucleation"
     citations = ["D.J. Read et al., Phys. Rev. Lett. 124, 147802 (2020)"]
     doi = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
-    html_help_file = (
-        "http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html"
-    )
+    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html"
     single_file = False
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
@@ -160,7 +160,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["Ne"] = Parameter(
             name="Ne",
             value=25,
@@ -170,7 +170,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["epsilonB"] = Parameter(
             name="epsilonB",
             value=-0.117,
@@ -180,7 +180,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["muS"] = Parameter(
             name="muS",
             value=0.85,
@@ -192,7 +192,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["tau0"] = Parameter(
             name="tau0",
             value=0.38e-9,
@@ -202,7 +202,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         self.parameters["rhoK"] = Parameter(
             name="rhoK",
             value=2.7e9,
@@ -232,7 +232,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="unit_density",
             internal_unit="1/μm³",
             display_unit="1/μm³",
-            )
+        )
         self.parameters["beta"] = Parameter(
             name="beta",
             value=1,
@@ -242,7 +242,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["delta"] = Parameter(
             name="delta",
             value=-0.5,
@@ -252,7 +252,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["lmax"] = Parameter(
             name="lmax",
             value=10.0,
@@ -264,7 +264,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="dimensionless",
             internal_unit="-",
             display_unit="-",
-            )
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -283,7 +283,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -295,7 +295,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -307,7 +307,7 @@ class TheoryGoPolyStrand(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         nmode = self.parameters["nmodes"].value
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
@@ -321,7 +321,7 @@ class TheoryGoPolyStrand(QTheory):
                 quantity="dimensionless",
                 internal_unit="-",
                 display_unit="-",
-                )
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -333,7 +333,7 @@ class TheoryGoPolyStrand(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
             self.parameters["tauR%02d" % i] = Parameter(
                 name="tauR%02d" % i,
                 value=1,
@@ -344,7 +344,7 @@ class TheoryGoPolyStrand(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
 
         self.view_LVEenvelope = False
         auxseries = self.ax.plot([], [], label="")
@@ -373,12 +373,8 @@ class TheoryGoPolyStrand(QTheory):
         self.tbutflow = QToolButton()
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -397,22 +393,16 @@ class TheoryGoPolyStrand(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get Modes (MWD data)",
         )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
         # self.plot_modes_action = menu.addAction(
         #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
         #     "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
         # #Show LVE button
-        self.linearenvelope = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope"
-        )
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
         self.linearenvelope.setCheckable(True)
         self.linearenvelope.setChecked(False)
         # Finite extensibility button
@@ -450,30 +440,18 @@ class TheoryGoPolyStrand(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
 
         connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
+        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
         connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes
-        )
+        connection_id = self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
         connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
         # connection_id = self.plot_modes_action.triggered.connect(
         #     self.plot_modes_graph)
         connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
         connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.with_fene_button.triggered.connect(
-            self.handle_with_fene_button
-        )
-        connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button
-        )
-        connection_id = self.with_noqu_button.triggered.connect(
-            self.handle_with_noqu_button
-        )
-        connection_id = self.with_single_button.triggered.connect(
-            self.handle_with_single_button
-        )
+        connection_id = self.with_fene_button.triggered.connect(self.handle_with_fene_button)
+        connection_id = self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
+        connection_id = self.with_noqu_button.triggered.connect(self.handle_with_noqu_button)
+        connection_id = self.with_single_button.triggered.connect(self.handle_with_single_button)
 
         #!3        connection_id = self.noqu_button.triggered.connect(
         #!3            self.handle_with_gcorr_button)
@@ -542,9 +520,7 @@ class TheoryGoPolyStrand(QTheory):
                 tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
                 lmax += " %.6g" % self.parameters["lmax"].value
             f.write("%s\n%s\n%s\n" % (taud, tauR, fraction))
-            if (
-                self.with_fene == FeneMode.with_fene
-            ):  # don't output lmax at all for infinite ex
+            if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
             f.write("modulus %.6g\n" % self.parameters["GN0"].value)
             f.write("beta %.6gn" % self.parameters["beta"].value)
@@ -552,9 +528,7 @@ class TheoryGoPolyStrand(QTheory):
 
             f.write("\n#end")
 
-        QMessageBox.information(
-            self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath
-        )
+        QMessageBox.information(self, "Success", 'Wrote FlowSolve parameters in "%s"' % fpath)
 
     def handle_with_gcorr_button(self, checked):
         if checked:
@@ -562,16 +536,12 @@ class TheoryGoPolyStrand(QTheory):
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint(
-                    "<font color=orange><b>Modulus correction needs Z from MWD</b></font>"
-                )
+                self.Qprint("<font color=orange><b>Modulus correction needs Z from MWD</b></font>")
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
             self.with_gcorr = GcorrMode.none
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def handle_with_noqu_button(self, checked):
         if checked:
@@ -580,9 +550,7 @@ class TheoryGoPolyStrand(QTheory):
         else:
             self.with_noqu = NoquMode.none
 
-        self.Qprint(
-            '<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Ignore quiescent: Press "Calculate" to update theory</b></font>')
 
     def handle_with_single_button(self, checked):
         if checked:
@@ -591,31 +559,23 @@ class TheoryGoPolyStrand(QTheory):
         else:
             self.with_single = SingleSpeciesMode.none
 
-        self.Qprint(
-            '<font color=green><b>Single species: Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Single species: Press "Calculate" to update theory</b></font>')
 
     def handle_with_fene_button(self, checked):
         if checked:
             self.with_fene = FeneMode.with_fene
             self.with_fene_button.setChecked(True)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-facebook-f.png"))
             self.parameters["lmax"].display_flag = True
             self.parameters["lmax"].opt_type = OptType.nopt
         else:
             self.with_fene = FeneMode.none
             self.with_fene_button.setChecked(False)
-            self.with_fene_button.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-infinite.png")
-            )
+            self.with_fene_button.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-infinite.png"))
             self.parameters["lmax"].display_flag = False
             self.parameters["lmax"].opt_type = OptType.const
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def Qhide_theory_extras(self, show):
         """Uncheck the LVE button. Called when curent theory is changed"""
@@ -656,9 +616,7 @@ class TheoryGoPolyStrand(QTheory):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.thname == "Discretize MWD":
-                        get_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.get_mwd
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.get_mwd
 
         if get_dict:
             d = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
@@ -676,9 +634,7 @@ class TheoryGoPolyStrand(QTheory):
                 self.set_modes_from_mwd(m, phi)
         else:
             # no theory Discretise MWD found
-            QMessageBox.warning(
-                self, "Get MW distribution", 'No "Discretize MWD" theory found'
-            )
+            QMessageBox.warning(self, "Get MW distribution", 'No "Discretize MWD" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -701,15 +657,9 @@ class TheoryGoPolyStrand(QTheory):
             # self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "phi%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 1).text()
-                )
-                msg, success3 = self.set_param_value(
-                    "tauR%02d" % i, d.table.item(i, 2).text()
-                )
+                msg, success1 = self.set_param_value("phi%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("tauD%02d" % i, d.table.item(i, 1).text())
+                msg, success3 = self.set_param_value("tauR%02d" % i, d.table.item(i, 2).text())
                 success *= success1 * success2 * success3
             if not success:
                 QMessageBox.warning(
@@ -776,14 +726,7 @@ class TheoryGoPolyStrand(QTheory):
             for j in range(nmodes):
                 # TODO: use symetry to reduce number of loops
                 tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
-                data_table_tmp.data[:, 1] += (
-                    G
-                    * phi[i]
-                    * phi[j]
-                    * fparamaux["gdot"]
-                    * tau
-                    * (1 - np.exp(-times / tau))
-                )
+                data_table_tmp.data[:, 1] += G * phi[i] * phi[j] * fparamaux["gdot"] * tau * (1 - np.exp(-times / tau))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
         view = self.parent_dataset.parent_application.current_view
@@ -828,9 +771,7 @@ class TheoryGoPolyStrand(QTheory):
         self.extra_data["with_fene"] = self.with_fene == FeneMode.with_fene
         self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
         self.extra_data["with_noqu"] = self.with_noqu == NoquMode.with_noqu
-        self.extra_data["with_single"] = (
-            self.with_single == SingleSpeciesMode.with_single
-        )
+        self.extra_data["with_single"] = self.with_single == SingleSpeciesMode.with_single
 
     def init_flow_mode(self):
         """Find if data files are shear or extension"""
@@ -888,9 +829,7 @@ class TheoryGoPolyStrand(QTheory):
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
 
     def set_modes(self, tau, G):
         """Set the values of Maxwell Modes from another theory"""
@@ -993,11 +932,9 @@ class TheoryGoPolyStrand(QTheory):
         quiescent_height = max(landscape)
         nStar = landscape.index(quiescent_height)
 
-        d2Fqstar = (
-            landscape[nStar - curvature_skip]
-            - 2 * landscape[nStar]
-            + landscape[nStar + curvature_skip]
-        ) / (curvature_skip**2 * dN**2)
+        d2Fqstar = (landscape[nStar - curvature_skip] - 2 * landscape[nStar] + landscape[nStar + curvature_skip]) / (
+            curvature_skip**2 * dN**2
+        )
 
         # Calculate initial slope
         sumDFq = 0.0
@@ -1006,20 +943,13 @@ class TheoryGoPolyStrand(QTheory):
 
         # Compute the nucleation rate
         xqtime = (sumDFq * np.exp(quiescent_height) / (2 * nStar**0.66666666)) * (
-            1
-            + np.sqrt(-2 * np.pi / d2Fqstar)
-            * np.exp(-(alpha**2) / (2 * d2Fqstar * nStar**2) + alpha / nStar)
+            1 + np.sqrt(-2 * np.pi / d2Fqstar) * np.exp(-(alpha**2) / (2 * d2Fqstar * nStar**2) + alpha / nStar)
         )
         NqRate = rhoK / tau0 / xqtime
 
-        self.Qprint(
-            "Quiescent barrier height=%.3g k<sub>B</sub>T" % quiescent_height
-        )  # HTML syntax
+        self.Qprint("Quiescent barrier height=%.3g k<sub>B</sub>T" % quiescent_height)  # HTML syntax
 
-        self.Qprint(
-            "Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>"
-            % NqRate
-        )  # HTML syntax
+        self.Qprint("Quiescent nucleation rate=%.3g &mu;m<sup>-3</sup>s<sup>-1</sup><br>" % NqRate)  # HTML syntax
 
         return landscape, NqRate, quiescent_height
 
@@ -1076,9 +1006,7 @@ class TheoryGoPolyStrand(QTheory):
 
         if t[-1] < tstop:
             try:
-                sig = odeint(
-                    pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr
-                )
+                sig = odeint(pde_stretch, sigma0, t, args=(p,), atol=abserr, rtol=relerr)
             except EndComputationRequested:
                 return
         else:  # tstop must happen during computation
@@ -1100,9 +1028,7 @@ class TheoryGoPolyStrand(QTheory):
             # solve for t > tmax
             tmax = t2[-1]
             p = [nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta, 0.0, tmax]
-            sig2 = odeint(
-                pde_stretch, sig1[-1], t2, args=(p,), atol=abserr, rtol=relerr
-            )
+            sig2 = odeint(pde_stretch, sig1[-1], t2, args=(p,), atol=abserr, rtol=relerr)
             # Merge two solutions
             sig = np.concatenate((sig1[:-1], sig2[1:]), 0)
 
@@ -1122,9 +1048,7 @@ class TheoryGoPolyStrand(QTheory):
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
                         # trace_arr += phi_arr[j] * (sxx_t[:, I + j] + 2 * syy_t[:, I + j])
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -1159,9 +1083,7 @@ class TheoryGoPolyStrand(QTheory):
                     I = c * nmodes * i
                     trace_arr = np.zeros(nt)
                     for j in range(nmodes):
-                        trace_arr += phi_arr[j] * (
-                            sig[:, I + c * j] + 2 * sig[:, I + c * j + 1]
-                        )
+                        trace_arr += phi_arr[j] * (sig[:, I + c * j] + 2 * sig[:, I + c * j + 1])
                     lsq[:, i] = trace_arr / 3.0  # len(t) rows and n cols
 
             for i in range(nmodes):
@@ -1244,9 +1166,7 @@ class TheoryGoPolyStrand(QTheory):
                 tt.data[i, 2] = nucRate - NdotQ
                 if tt.data[i, 2] < 0:
                     if tt.data[i, 2] / (NdotQ + 1e-20) < -0.01:
-                        self.Qprint(
-                            "<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>"
-                        )
+                        self.Qprint("<font color=red><b>Warning: nucleation rate < 0 !!!</b></font>")
                     tt.data[i, 2] = 0.0
             else:
                 tt.data[i, 2] = nucRate
@@ -1263,9 +1183,7 @@ class TheoryGoPolyStrand(QTheory):
         if name == "nmodes":
             oldn = self.parameters["nmodes"].value
             # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryGoPolyStrand, self).set_param_value(
-            name, value
-        )
+        message, success = super(BaseTheoryGoPolyStrand, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
@@ -1281,7 +1199,7 @@ class TheoryGoPolyStrand(QTheory):
                     quantity="dimensionless",
                     internal_unit="-",
                     display_unit="-",
-                    )
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -1293,7 +1211,7 @@ class TheoryGoPolyStrand(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
+                )
                 self.parameters["tauR%02d" % i] = Parameter(
                     name="tauR%02d" % i,
                     value=1,
@@ -1305,7 +1223,7 @@ class TheoryGoPolyStrand(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
+                )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]
@@ -1315,6 +1233,4 @@ class TheoryGoPolyStrand(QTheory):
 
     def do_fit(self, line):
         """Minimisation procedure disabled in this theory"""
-        self.Qprint(
-            "<font color=red><b>Minimisation procedure disabled in this theory</b></font>"
-        )
+        self.Qprint("<font color=red><b>Minimisation procedure disabled in this theory</b></font>")

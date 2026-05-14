@@ -35,6 +35,7 @@
 Organise the mmultiple Matplotlib views
 
 """
+
 import sys
 import enum
 import math
@@ -101,7 +102,7 @@ class MultiView(QWidget):
     WSPACE: ClassVar[float] = 0.12
     HSPACE: ClassVar[float] = 0.25
     SAVE_DPI: ClassVar[int] = 300
-    FIG_DPI: ClassVar[Any] = plt.matplotlib.rcParams["figure.dpi"]
+    FIG_DPI: ClassVar[Any] = mpl.rcParams["figure.dpi"]
 
     def __init__(
         self,
@@ -186,9 +187,7 @@ class MultiView(QWidget):
         self.plotselecttabWidget.setDocumentMode(False)
         self.plotselecttabWidget.setTabsClosable(False)
         self.plotselecttabWidget.setObjectName("plotselecttabWidget")
-        self.plotselecttabWidget.setStyleSheet(
-            "QTabBar::tab { color:black; height: 40px; }"
-        )
+        self.plotselecttabWidget.setStyleSheet("QTabBar::tab { color:black; height: 40px; }")
 
         # Create a tab for all plots
         if self.nplots > 1:
@@ -239,9 +238,7 @@ class MultiView(QWidget):
         self.plotcontainer.addWidget(self.canvas)
         self.init_plot(0)
 
-        connection_id = self.plotselecttabWidget.currentChanged.connect(
-            self.handle_plottabChanged
-        )
+        connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)
         axes = plt.gcf().axes
         for ax_i in axes:
             for side in ["top", "right"]:
@@ -339,13 +336,9 @@ class MultiView(QWidget):
         self.parent_application.current_viewtab = index
         if index == 0:  # multiplots
             view_name = self.parent_application.multiviews[0].name
-            ind = self.parent_application.viewComboBox.findText(
-                view_name, Qt.MatchExactly
-            )
+            ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
             self.parent_application.viewComboBox.blockSignals(True)
-            self.parent_application.viewComboBox.setCurrentIndex(
-                ind
-            )  # set the view combobox according to current view
+            self.parent_application.viewComboBox.setCurrentIndex(ind)  # set the view combobox according to current view
             self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
                 # self.axarr[i].set_position(self.bbox[i])
@@ -361,9 +354,7 @@ class MultiView(QWidget):
             view_name = self.parent_application.multiviews[tab_to_maxi].name
             ind = self.parent_application.viewComboBox.findText(view_name)
             self.parent_application.viewComboBox.blockSignals(True)
-            self.parent_application.viewComboBox.setCurrentIndex(
-                ind
-            )  # set the view combobox according to current view
+            self.parent_application.viewComboBox.setCurrentIndex(ind)  # set the view combobox according to current view
             self.parent_application.viewComboBox.blockSignals(False)
             for i in range(self.nplots):
                 if i == tab_to_maxi:  # hide other plots
@@ -435,9 +426,7 @@ class MultiView(QWidget):
                 gs.append(gstmp[i, j])
         return gs
 
-    def update_plot_organization(
-        self, left: Any, bottom: Any, ws: Any, hs: Any
-    ) -> GridSpecList:
+    def update_plot_organization(self, left: Any, bottom: Any, ws: Any, hs: Any) -> GridSpecList:
         row = math.ceil(self.nplots / self.ncols)
         gstmp = gridspec.GridSpec(
             row,
