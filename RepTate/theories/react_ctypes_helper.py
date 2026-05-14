@@ -38,6 +38,7 @@ import numpy as np
 import ctypes as ct
 import sys
 import os
+from typing import Any
 
 dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
 if sys.maxsize > 2**32:
@@ -262,7 +263,7 @@ return_max_senio = react_lib.return_max_senio
 return_max_senio.restype = ct.c_int
 
 # initialise lists
-react_dist = None
+react_dist: Any = None
 
 
 def link_react_dist():

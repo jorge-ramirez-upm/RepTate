@@ -640,12 +640,13 @@ class TheoryMaxwellModesTime(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        try:
-            gamma = float(f.file_parameters["gamma"])
+        value = f.file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
 
         nmodes: Any = self.parameters["nmodes"].value
         logtmin: Any = self.parameters["logtmin"].value

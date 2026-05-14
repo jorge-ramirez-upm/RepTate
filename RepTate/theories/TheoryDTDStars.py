@@ -34,6 +34,7 @@
 
 Dynamics Tube Dilution for Stars
 """
+
 from typing import Any, ClassVar
 
 import numpy as np
@@ -46,7 +47,7 @@ import RepTate.theories.dtd_ctypes_helper as dtdh
 class TheoryDTDStarsFreq(QTheory):
     r"""Fit DTD Theory for stars.
     Theory of stress relaxation in star polymer melts with no adjustable parameters beyond those measurable in linear melts
-    
+
     * **Function**
         See `Milner-McLeish (1997) <http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf>`_
         and
@@ -54,7 +55,7 @@ class TheoryDTDStarsFreq(QTheory):
 
     * **Parameters**
        - ``G0`` :math:`\\equiv G_N^0`: Plateau modulus
-       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
+       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`:
          Entanglement equilibration time
        - ``Me`` :math:`\\equiv M_\mathrm e^\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
        - ``alpha``: Dilution exponent
@@ -69,18 +70,14 @@ class TheoryDTDStarsFreq(QTheory):
 
     thname: ClassVar[str] = "DTD Stars"
     description: ClassVar[str] = "Dynamic Tube Dilution for stars, frequency domain"
-    citations: ClassVar[list[str]] = [
-        "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
-    ]
+    citations: ClassVar[list[str]] = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma961559f"]
-    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
+    html_help_file: ClassVar[str] = (
+        "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#dynamic-dilution-equation-for-stars"
     )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -174,7 +171,7 @@ class TheoryDTDStarsFreq(QTheory):
 
 class TheoryDTDStarsTime(QTheory):
     r"""Fit DTD Theory for stars
-    
+
     * **Function**
         See `Milner-McLeish (1997) <http://www.che.psu.edu/faculty/milner/group/eprints/1997/Macromolecules1997Milner.pdf>`_
         and
@@ -182,11 +179,11 @@ class TheoryDTDStarsTime(QTheory):
 
     * **Parameters**
        - ``G0`` :math:`\\equiv G_N^0`: Plateau modulus
-       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`: 
+       - ``tau_e`` :math:`\\equiv \\tau_\\mathrm e = \\left(\\dfrac{M_\\mathrm e^\\mathrm G}{M_0}\\right)^2  \\dfrac{\\zeta b^2}{3\\pi^2k_\\mathrm B T}`:
          Entanglement equilibration time
        - ``Me`` :math:`\\equiv M_\\mathrm e^\\mathrm G = \\dfrac 4 5 \\dfrac{\\rho R T} {G_N^0}`: Entanglement molecular weight
        - ``alpha``: Dilution exponent
-       
+
        where:
          - :math:`\\rho`: polymer density
          - :math:`\\zeta`: monomeric friction coefficient
@@ -197,18 +194,12 @@ class TheoryDTDStarsTime(QTheory):
 
     thname: ClassVar[str] = "DTD Stars"
     description: ClassVar[str] = "Dynamic Tube Dilution for stars, time domain"
-    citations: ClassVar[list[str]] = [
-        "Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"
-    ]
+    citations: ClassVar[list[str]] = ["Milner S.T. and McLeish T.C.B., Macromolecules 1997, 30, 2159-2166"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma961559f"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -282,12 +273,13 @@ class TheoryDTDStarsTime(QTheory):
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
-        try:
-            gamma = float(f.file_parameters["gamma"])
+        value = f.file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         # self.Z = int(np.rint(Mw / self.Me))
         times = ft.data[:, 0]
         params = [self.G0, self.alpha, self.tau_e, Mw / Me, times]

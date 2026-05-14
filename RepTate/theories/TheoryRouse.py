@@ -34,6 +34,7 @@
 
 RouseTime file for creating a new theory
 """
+
 from typing import Any, ClassVar
 
 import numpy as np
@@ -44,18 +45,18 @@ import RepTate.theories.rouse_ctypes_helper as rh
 
 class TheoryRouseTime(QTheory):
     """Fit Rouse modes to a time dependent relaxation function
-    
+
     * **Function**
         Continuous Rouse model (valid for "large" :math:`N`):
-        
+
         .. math::
             G(t) = G_0 \\dfrac 1 N \\sum_{p=1}^N \\exp\\left(\\dfrac{-2p^2t}{N^2\\tau_0}\\right)
-    
+
     * **Parameters**
         - :math:`G_0 = ck_\\mathrm  B T`: "modulus"
         - :math:`\\tau_0`: relaxation time of an elementary segment
         - :math:`M_0`: molar mass of an elementary segment
-        
+
         where
             - :math:`c`: number of segments per unit volume
             - :math:`k_\\mathrm  B`: Boltzmann constant
@@ -69,13 +70,9 @@ class TheoryRouseTime(QTheory):
     citations: ClassVar[list[str]] = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1063/1.1699180"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -90,7 +87,7 @@ class TheoryRouseTime(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
@@ -101,7 +98,7 @@ class TheoryRouseTime(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
@@ -112,7 +109,7 @@ class TheoryRouseTime(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
 
     def calculate(self, f: Any = None) -> None:
         """RouseTime function"""
@@ -133,12 +130,14 @@ class TheoryRouseTime(QTheory):
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
-        try:
-            gamma = float(f.file_parameters["gamma"])
+
+        value = f.file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
 
         t = ft.data[:, 0]
         params = [G0, tau0, Mw / M0, t]
@@ -180,13 +179,9 @@ class TheoryRouseFrequency(QTheory):
     citations: ClassVar[list[str]] = ["Rouse P.E. Jr, J. Chem. Phys. 1953, 21, 1272"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1063/1.1699180"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -201,7 +196,7 @@ class TheoryRouseFrequency(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["tau0"] = Parameter(
             "tau0",
             1e-3,
@@ -212,7 +207,7 @@ class TheoryRouseFrequency(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         self.parameters["M0"] = Parameter(
             "M0",
             0.2,
@@ -223,7 +218,7 @@ class TheoryRouseFrequency(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
 
     def calculate(self, f: Any = None) -> None:
         """RouseFrequency function"""
@@ -248,4 +243,3 @@ class TheoryRouseFrequency(QTheory):
         tt.data[:, 0] = omega
         tt.data[:, 1] = gp
         tt.data[:, 2] = gpp
-

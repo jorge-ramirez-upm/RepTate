@@ -35,6 +35,7 @@
 Module for handling data from start up of shear and extensional flow experiments.
 
 """
+
 from typing import Any, ClassVar
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
@@ -232,15 +233,15 @@ class ApplicationNLVE(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            name = "Start-up of shear flow",
-            extension = "shear",
-            description = "Shear flow files",
-            col_names = ["t", "sigma_xy", "N1", "gdot"],
-            basic_file_parameters = ["gdot", "T"],
-            col_units = ["s", "Pa", "Pa", "s-1"],
+            name="Start-up of shear flow",
+            extension="shear",
+            description="Shear flow files",
+            col_names=["t", "sigma_xy", "N1", "gdot"],
+            basic_file_parameters=["gdot", "T"],
+            col_units=["s", "Pa", "Pa", "s-1"],
             file_parameter_specs=[
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
-                FileParameterSpec("gdot", "deformation_rate","1/s", "1/s")
+                FileParameterSpec("gdot", "deformation_rate", "1/s", "1/s"),
             ],
         )
         self.filetypes[ftype.extension] = ftype
@@ -276,9 +277,9 @@ class ApplicationNLVE(QApplicationWindow):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
@@ -288,9 +289,9 @@ class ApplicationNLVE(QApplicationWindow):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = dt.data[:, 1] / flow_rate
         return x, y, True
@@ -315,9 +316,9 @@ class ApplicationNLVE(QApplicationWindow):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  # compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
@@ -327,9 +328,9 @@ class ApplicationNLVE(QApplicationWindow):
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = dt.data[:, 0] * flow_rate  # compute strain
         y[:, 0] = dt.data[:, 1]

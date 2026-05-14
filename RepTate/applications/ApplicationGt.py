@@ -35,6 +35,7 @@
 Module for the analysis of stress relaxation data from simulations and experiments.
 
 """
+
 from typing import Any, ClassVar, cast
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
@@ -223,16 +224,16 @@ class ApplicationGt(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            name = "G(t) files",
-            extension = "gt",
-            description = "Relaxation modulus",
-            col_names = ["t", "Gt"],
-            basic_file_parameters = ["Mw", "gamma"],
-            col_units = ["s", "Pa"],
+            name="G(t) files",
+            extension="gt",
+            description="Relaxation modulus",
+            col_names=["t", "Gt"],
+            basic_file_parameters=["Mw", "gamma"],
+            col_units=["s", "Pa"],
             file_parameter_specs=[
                 FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("gamma", "dimensionless", "-", "-"),
-            ]
+            ],
         )
         self.filetypes[ftype.extension] = ftype
 
@@ -240,9 +241,7 @@ class ApplicationGt(QApplicationWindow):
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
         self.theories[TheoryRouseTime.thname] = TheoryRouseTime
         self.theories[TheoryDTDStarsTime.thname] = TheoryDTDStarsTime
-        self.theories[
-            TheoryShanbhagMaxwellModesTime.thname
-        ] = TheoryShanbhagMaxwellModesTime
+        self.theories[TheoryShanbhagMaxwellModesTime.thname] = TheoryShanbhagMaxwellModesTime
 
         self.add_common_theories()
 
@@ -275,9 +274,7 @@ class ApplicationGt(QApplicationWindow):
         hlayout.addStretch()
         # xmin
         self.xmin_view = QLineEdit("-inf")
-        self.xmin_view.setToolTip(
-            "Discard data points below this value before i-Rheo transformation"
-        )
+        self.xmin_view.setToolTip("Discard data points below this value before i-Rheo transformation")
         self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
         self.xmin_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
@@ -288,9 +285,7 @@ class ApplicationGt(QApplicationWindow):
         hlayout.addSpacing(5)
         # xmax
         self.xmax_view = QLineEdit("inf")
-        self.xmax_view.setToolTip(
-            "Discard data points above this value before i-Rheo transformation"
-        )
+        self.xmax_view.setToolTip("Discard data points above this value before i-Rheo transformation")
         self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
         self.xmax_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
@@ -377,12 +372,13 @@ class ApplicationGt(QApplicationWindow):
         """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
-            gamma = float(file_parameters["gamma"])
+        value = file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1] / gamma
         return x, y, True
@@ -391,12 +387,13 @@ class ApplicationGt(QApplicationWindow):
         """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
-            gamma = float(file_parameters["gamma"])
+        value = file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
@@ -409,12 +406,13 @@ class ApplicationGt(QApplicationWindow):
             QMessageBox.warning(self, "Error", error_msg)
             return
         n = len(data_x)
-        try:
-            gamma = float(file_parameters["gamma"])
+        value = file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
@@ -438,12 +436,13 @@ class ApplicationGt(QApplicationWindow):
         yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
-        try:
-            gamma = float(file_parameters["gamma"])
+        value = file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
@@ -491,25 +490,14 @@ class ApplicationGt(QApplicationWindow):
         x[:, 0] = wp[:]
         x[:, 1] = wp[:]
 
-        coeff = (data_y[ind1 + 1 :] - data_y[ind1:-1]) / (
-            data_x[ind1 + 1 :] - data_x[ind1:-1]
-        )
+        coeff = (data_y[ind1 + 1 :] - data_y[ind1:-1]) / (data_x[ind1 + 1 :] - data_x[ind1:-1])
         for i, w in enumerate(wp):
             y[i, 0] = (
-                g0
-                + sin(w * t1) * (g1 - g0) / w / t1
-                + np.dot(
-                    coeff, -np.sin(w * data_x[ind1:-1]) + np.sin(w * data_x[ind1 + 1 :])
-                )
-                / w
+                g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * data_x[ind1:-1]) + np.sin(w * data_x[ind1 + 1 :])) / w
             )
 
             y[i, 1] = (
-                -(1 - cos(w * t1)) * (g1 - g0) / w / t1
-                - np.dot(
-                    coeff, np.cos(w * data_x[ind1:-1]) - np.cos(w * data_x[ind1 + 1 :])
-                )
-                / w
+                -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * data_x[ind1:-1]) - np.cos(w * data_x[ind1 + 1 :])) / w
             )
 
         return x, y, True
@@ -525,19 +513,18 @@ class ApplicationGt(QApplicationWindow):
         yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
-        try:
-            gamma = float(file_parameters["gamma"])
+        value = file_parameters.get("gamma")
+        if value is None:
+            gamma = 1
+        else:
+            gamma = float(value)
             if gamma == 0:
                 gamma = 1
-        except:
-            gamma = 1
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
 
-        f = interpolate.interp1d(
-            data_x, data_y, kind="cubic", assume_sorted=True, fill_value=cast(Any, "extrapolate")
-        )
+        f = interpolate.interp1d(data_x, data_y, kind="cubic", assume_sorted=True, fill_value=cast(Any, "extrapolate"))
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
         t1 = data_x[ind1]
@@ -557,16 +544,9 @@ class ApplicationGt(QApplicationWindow):
 
         coeff = (ydata[1:] - ydata[:-1]) / (xdata[1:] - xdata[:-1])
         for i, w in enumerate(wp):
-            y[i, 0] = (
-                g0
-                + sin(w * t1) * (g1 - g0) / w / t1
-                + np.dot(coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
-            )
+            y[i, 0] = g0 + sin(w * t1) * (g1 - g0) / w / t1 + np.dot(coeff, -np.sin(w * xdata[:-1]) + np.sin(w * xdata[1:])) / w
 
-            y[i, 1] = (
-                -(1 - cos(w * t1)) * (g1 - g0) / w / t1
-                - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
-            )
+            y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
         return x, y, True
 
     def get_xy_data_in_xrange(self, dt: Any) -> Any:
@@ -575,9 +555,7 @@ class ApplicationGt(QApplicationWindow):
         success *= self.set_xmax()
         if success:
             # get indices of data in xrange
-            filtered = np.logical_and(
-                dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view
-            )
+            filtered = np.logical_and(dt.data[:, 0] >= self.tmin_view, dt.data[:, 0] <= self.tmax_view)
             non_zeros = np.count_nonzero(filtered)
             if non_zeros < 1:
                 # too few data between tmin and tmax

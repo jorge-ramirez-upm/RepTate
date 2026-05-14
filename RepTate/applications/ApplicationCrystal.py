@@ -35,6 +35,7 @@
 Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
 
 """
+
 from typing import Any, ClassVar
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
@@ -50,9 +51,7 @@ class ApplicationCrystal(QApplicationWindow):
     appname: ClassVar[str] = "Crystal"
     description: ClassVar[str] = "Flow induced Crystallisation"
     extension: ClassVar[str] = "shearxs uextxs shear uext"
-    html_help_file: ClassVar[str] = (
-        "http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html"
-    )
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html"
 
     def __init__(self, name: str = "Crystal", parent: Any = None) -> None:
         """**Constructor**"""
@@ -378,13 +377,13 @@ class ApplicationCrystal(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            name = "Start-up of shear flow with crystallisation",
-            extension = "shearxs",
-            description = "Shear crystallisation files",
-            col_names = ["t", "sigma_xy", "Ndot", "phi_X", "N"],
-            basic_file_parameters = ["gdot", "T", "tstop"],
-            #col_units = ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
-            col_units = ["s", "Pa.s", "1/s/m³", "-", "1/m³"],
+            name="Start-up of shear flow with crystallisation",
+            extension="shearxs",
+            description="Shear crystallisation files",
+            col_names=["t", "sigma_xy", "Ndot", "phi_X", "N"],
+            basic_file_parameters=["gdot", "T", "tstop"],
+            # col_units = ["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            col_units=["s", "Pa.s", "1/s/m³", "-", "1/m³"],
             file_parameter_specs=[
                 FileParameterSpec("gdot", "deformation_rate", "1/s", "1/s"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
@@ -393,13 +392,13 @@ class ApplicationCrystal(QApplicationWindow):
         )
         self.filetypes[ftype.extension] = ftype
         ftype = TXTColumnFile(
-            name = "Elongation flow with crystallisation",
-            extension = "uextxs",
-            description = "Elongation crystallisation files",
-            col_names = ["t", "N1", "Ndot", "phi_X", "N"],
-            basic_file_parameters = ["gdot", "T", "tstop"],
-            #col_units=["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
-            col_units = ["s", "Pa.s", "1/s/m³", "-", "1/m³"],
+            name="Elongation flow with crystallisation",
+            extension="uextxs",
+            description="Elongation crystallisation files",
+            col_names=["t", "N1", "Ndot", "phi_X", "N"],
+            basic_file_parameters=["gdot", "T", "tstop"],
+            # col_units=["s", r"Pa$\cdot$s", r"s$^{-1}$m$^{-3}$", "-", r"m$^{-3}$"],
+            col_units=["s", "Pa.s", "1/s/m³", "-", "1/m³"],
             file_parameter_specs=[
                 FileParameterSpec("gdot", "deformation_rate", "1/s", "1/s"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
@@ -420,9 +419,9 @@ class ApplicationCrystal(QApplicationWindow):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
@@ -432,9 +431,9 @@ class ApplicationCrystal(QApplicationWindow):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = dt.data[:, 0]
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         y[:, 0] = dt.data[:, 1] / flow_rate
         return x, y, True
@@ -483,9 +482,9 @@ class ApplicationCrystal(QApplicationWindow):
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = np.log10(dt.data[:, 0] * flow_rate)  # compute strain
         y[:, 0] = np.log10(dt.data[:, 1])
@@ -495,9 +494,9 @@ class ApplicationCrystal(QApplicationWindow):
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        try:
+        if "gdot" in file_parameters:
             flow_rate = float(file_parameters["gdot"])
-        except:
+        else:
             flow_rate = float(file_parameters["edot"])
         x[:, 0] = dt.data[:, 0] * flow_rate  # compute strain
         y[:, 0] = dt.data[:, 1]
