@@ -32,6 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 import sys
 import os
+from typing import Any
 import numpy as np
 import ctypes as ct
 import RepTate
@@ -62,6 +63,11 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PySide6.QtCore import QSize, Qt
 import psutil
+
+QDialogButtonBox_any: Any = QDialogButtonBox
+QSizePolicy_any: Any = QSizePolicy
+QFrame_any: Any = QFrame
+Qt_any: Any = Qt
 
 if sys.platform == "darwin" or sys.platform == "linux":
     CHARCODE = "utf-8"
@@ -203,7 +209,7 @@ def handle_btn_prio_senio(parent_theory, checked):
             app.viewComboBox.setItemData(
                 app.viewComboBox.count() - 1,
                 app.views[view_name].description,
-                Qt.ToolTipRole,
+                Qt_any.ToolTipRole,
             )
         app.multiplots.reorg_fig(app.nplots)
     elif (not checked) and (app.viewComboBox.count() == len(app.views)):
@@ -244,7 +250,7 @@ def show_theory_extras(parent_theory, show):
                 app.viewComboBox.setItemData(
                     app.viewComboBox.count() - 1,
                     app.views[view_name].description,
-                    Qt.ToolTipRole,
+                    Qt_any.ToolTipRole,
                 )
         app.multiplots.reorg_fig(app.nplots)
     elif hide and parent_theory.do_priority_seniority and parent_theory.active:
@@ -421,17 +427,19 @@ def handle_increase_records(parent_theory, name):
 class ParameterReactMix(QDialog):
     """Create form to input the Mix parameters"""
 
-    def __init__(self, parent_theory):
+    scroll: Any
+
+    def __init__(self, parent_theory: Any) -> None:
         super().__init__(parent_theory)
         self.parent_theory = parent_theory
         self.opened_react_theories = []
         self.list_all_open_react_theories()
         self.make_lines()
         self.createFormGroupBox(self.opened_react_theories)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Apply | QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox_any(QDialogButtonBox_any.Apply | QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         buttonBox.accepted.connect(self.accept_)
         buttonBox.rejected.connect(self.reject)
-        apply_button = buttonBox.button(QDialogButtonBox.Apply)
+        apply_button = buttonBox.button(QDialogButtonBox_any.Apply)
         apply_button.clicked.connect(self.handle_apply)
 
         # insert widgets
@@ -580,9 +588,9 @@ class ParameterReactMix(QDialog):
 
         # Scroll Area Properties
         self.scroll = QScrollArea()
-        self.scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setSizePolicy(QSizePolicy_any.Expanding, QSizePolicy_any.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(inner)
 
@@ -609,12 +617,14 @@ class ParameterReactMix(QDialog):
 class EditMixSaveParamDialog(QDialog):
     """Create the form used to set distribution parameters of mix when saving"""
 
-    def __init__(self, parent_theory):
+    scroll: Any
+
+    def __init__(self, parent_theory: Any) -> None:
         super().__init__(parent_theory)
         self.parent_theory = parent_theory
         self.createFormGroupBox(parent_theory)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         buttonBox.accepted.connect(self.accept_)
         buttonBox.rejected.connect(self.reject)
 
@@ -650,8 +660,8 @@ class EditMixSaveParamDialog(QDialog):
         qmessage.setWordWrap(True)
         vlayout.addWidget(qmessage)
         hline = QFrame()
-        hline.setFrameShape(QFrame.HLine)
-        hline.setFrameShadow(QFrame.Sunken)
+        hline.setFrameShape(QFrame_any.HLine)
+        hline.setFrameShadow(QFrame_any.Sunken)
         vlayout.addWidget(hline)
         layout.addLayout(vlayout, 0, 0, 1, -1)  # span all the columns
 
@@ -688,8 +698,8 @@ class EditMixSaveParamDialog(QDialog):
         # Scroll Area Properties
         self.scroll = QScrollArea()
         # self.scroll.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setVerticalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(inner)
 
@@ -700,13 +710,15 @@ class EditMixSaveParamDialog(QDialog):
 class ParameterMultiMetCSTR(QDialog):
     """Create form to input the MultiMetCSTR parameters"""
 
-    def __init__(self, parent_theory):
+    scroll: Any
+
+    def __init__(self, parent_theory: Any) -> None:
         super().__init__(parent_theory)
         self.parent_theory = parent_theory
         self.NUMCAT_MAX = parent_theory.NUMCAT_MAX  # maximum number of catalysts
         self.make_lines(parent_theory.pvalues)
         self.createFormGroupBox(parent_theory.numcat)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         buttonBox.accepted.connect(self.accept_)
         buttonBox.rejected.connect(self.reject)
 
@@ -826,9 +838,9 @@ class ParameterMultiMetCSTR(QDialog):
 
         # Scroll Area Properties
         self.scroll = QScrollArea()
-        self.scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setSizePolicy(QSizePolicy_any.Expanding, QSizePolicy_any.Expanding)
+        self.scroll.setVerticalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
+        self.scroll.setHorizontalScrollBarPolicy(Qt_any.ScrollBarAsNeeded)
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(inner)
 
@@ -843,7 +855,7 @@ class EditBobSettingsDialog(QDialog):
         super().__init__(parent_theory)
         self.createFormGroupBox(numbobbins, bobmax, bobmin, bobbinmax)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -900,7 +912,7 @@ class IncreaseRecordsDialog(QDialog):
     def __init__(self, parent_theory, current_max, name, size_of):
         super().__init__()
         self.createExclusiveGroup(current_max, name, size_of)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 

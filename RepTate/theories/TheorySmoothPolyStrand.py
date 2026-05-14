@@ -776,7 +776,7 @@ class TheorySmoothPolyStrand(QTheory):
 
         # G button
         if extra_data["with_gcorr"]:
-            self.with_gcorr == GcorrMode.with_gcorr
+            self.with_gcorr == GcorrMode.with_gcorr  # pyright: ignore[reportUnusedExpression]
             self.with_gcorr_button.setChecked(True)
 
     def get_extra_data(self) -> None:
@@ -833,7 +833,7 @@ class TheorySmoothPolyStrand(QTheory):
         """Set modes from MWD"""
         Me = self.parameters["Me"].value
         taue = self.parameters["tau_e"].value
-        res = Dilution(m, phi, taue, Me, self).res
+        res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
             return

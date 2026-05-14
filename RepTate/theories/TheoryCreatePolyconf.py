@@ -36,6 +36,7 @@ CreatePolyconf file for creating a polymer configuration file using BoB version 
 by Chinmay Das et al.
 """
 import os
+from typing import Any, ClassVar
 import numpy as np
 import enum
 import RepTate
@@ -61,6 +62,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QDesktopServices, QIcon
 from PySide6.QtCore import QUrl, Signal, QSize, Qt  # , QVariant
+
+Qt_any: Any = Qt
 
 
 class DistributionType(enum.Enum):
@@ -247,18 +250,21 @@ class TheoryCreatePolyconf(QTheory):
        - ``PDI`` : Polydispersity index (PDI :math:`=M_w/M_n`)
     """
 
-    thname = "BOB Architecture"
-    description = "Create and Save Polymer Configuration with BOB"
-    citations = ["Das C. et al, J. Rheol. 2006, 50, 207-234"]
-    doi = ["http://dx.doi.org/10.1122/1.2167487"]
-    html_help_file = "https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html"
-    single_file = (
+    thname: ClassVar[str] = "BOB Architecture"
+    description: ClassVar[str] = "Create and Save Polymer Configuration with BOB"
+    citations: ClassVar[list[str]] = ["Das C. et al, J. Rheol. 2006, 50, 207-234"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.2167487"]
+    html_help_file: ClassVar[str] = "https://reptate.readthedocs.io/manual/Applications/React/Theory/BoB_polyconf.html"
+    single_file: ClassVar[bool] = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
     signal_param_dialog = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.reactname = "CreatePolyconf"
@@ -273,21 +279,21 @@ class TheoryCreatePolyconf(QTheory):
             opt_type=OptType.const,
             min_value=1,
         )
-        self.polyconf_file_out = None  # full path of target polyconf file
+        self.polyconf_file_out: Any = None  # full path of target polyconf file
         self.autocalculate = False
         self.bch = BobCtypesHelper(self)
         self.do_priority_seniority = False
         self.inp_counter = 0  # counter for the 'virtual' input file for BoB
-        self.virtual_input_file = []  # 'virtual' input file for BoB
+        self.virtual_input_file: Any = []  # 'virtual' input file for BoB
         self.proto_counter = 0  # counter for the 'virtual' proto file for BoB
-        self.virtual_proto_file = []  # 'virtual' proto file for BoB
-        self.from_file_filename = []  # file names of the "from file" type
+        self.virtual_proto_file: Any = []  # 'virtual' proto file for BoB
+        self.from_file_filename: Any = []  # file names of the "from file" type
         self.from_file_filename_counter = 0  # counter
-        self.protoname = []  # list of proto/polycode names
+        self.protoname: Any = []  # list of proto/polycode names
 
         self.ncomponent = 1
-        self.trash_indices = []
-        self.dict_component = OrderedDict()
+        self.trash_indices: Any = []
+        self.dict_component: Any = OrderedDict()
         self.setup_dialog()
         self.flag_prototype = 0
 
@@ -303,14 +309,14 @@ class TheoryCreatePolyconf(QTheory):
 
         self.btn_prio_senio.triggered.connect(self.handle_btn_prio_senio)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: Any) -> None:
         """Change do_priority_seniority"""
         self.do_priority_seniority = checked
 
-    def setup_dialog(self):
+    def setup_dialog(self) -> None:
         """Create the dialog to setup the polymer configuration"""
         # create form
-        self.dialog = QDialog(self)
+        self.dialog: Any = QDialog(self)
         self.dialog.ui = Ui_bob_gen_poly.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
@@ -336,7 +342,7 @@ class TheoryCreatePolyconf(QTheory):
         for e in ArchitectureType:
             # self.d.cb_type.addItem(e.value["name"], QVariant(e.name))
             self.d.cb_type.addItem(e.value["name"], e.name)
-            self.d.cb_type.setItemData(i, e.value["descr"], Qt.ToolTipRole)
+            self.d.cb_type.setItemData(i, e.value["descr"], Qt_any.ToolTipRole)
             i += 1
         # pre-fill the prototype text box
         self.d.proto_text.append(
@@ -355,12 +361,12 @@ FunH
 """
         )
 
-    def handle_pb_ok(self):
+    def handle_pb_ok(self) -> None:
         """Define the OK button role. If something is wrong, keep the dialog open"""
         if self.handle_apply_button():
             self.dialog.accept()
 
-    def handle_apply_button(self):
+    def handle_apply_button(self) -> bool:
         """When Apply button of dialog box is clicked,
         fill the "Result" widget with the data expected by BoB"""
         if self.polyconf_file_out is None:
@@ -472,7 +478,7 @@ FunH
         self.virtual_input_file = vinp
         return True
 
-    def poly_param_text(self, pol_dict, attr):
+    def poly_param_text(self, pol_dict: Any, attr: Any) -> Any:
         """Return a string containing the value of the parameter ``attr``
         or a  new line if ``attr`` is an empty string
         """
@@ -488,7 +494,7 @@ FunH
             text = "%s " % val
         return text
 
-    def sum_ratios(self):
+    def sum_ratios(self) -> Any:
         """Return the (float) sum of the ratio of all polymer components
         or 1 if there are none"""
         s = 0.0
@@ -501,14 +507,14 @@ FunH
             s = 1.0
         return s
 
-    def handle_help_button(self):
+    def handle_help_button(self) -> None:
         """When Help button of dialog box is clicked, show BoB manual (pdf)"""
         bob_manual_pdf = "docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf" % (
             (os.sep,) * 5
         )
         QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
 
-    def handle_architecture_type_changed(self, current_name):
+    def handle_architecture_type_changed(self, current_name: Any) -> None:
         """Activate/Desactivate the 'ngeneration' widgets
         specific to the Cayley types.
         Called when the combobox 'Architecture' is changed"""
@@ -516,7 +522,7 @@ FunH
         self.d.ngeneration_label.setDisabled(not is_cayley)
         self.d.sb_ngeneration.setDisabled(not is_cayley)
 
-    def handle_add_component(self):
+    def handle_add_component(self) -> None:
         """Add a tab with new polymer component in the dialog box"""
         pol_type = self.d.cb_type.currentData()  # enum type name
         # re-use numbering of closed tabs (if any)
@@ -538,13 +544,13 @@ FunH
         else:
             self.handle_close_polymer_tab(index)
 
-    def create_new_tab(self, pol_id, pol_type):
+    def create_new_tab(self, pol_id: Any, pol_type: Any) -> tuple[Any, bool]:
         """Return a new widget containing a form with all the parameters
         specific to the polymer type ``pol_type``
         """
         widget = QWidget(self)
         layout = QFormLayout()
-        pol_dict = OrderedDict(
+        pol_dict: Any = OrderedDict(
             [
                 ("type", pol_type),
             ]
@@ -580,7 +586,7 @@ FunH
         else:
             return widget, False
 
-    def set_extra_lines(self, pol_type, layout, pol_dict):
+    def set_extra_lines(self, pol_type: Any, layout: Any, pol_dict: Any) -> bool:
         """Add extra parameter lines related to the polymer architecture ``pol_type``
         to the form layout
         """
@@ -710,7 +716,7 @@ FunH
                     continue
         return True  # success
 
-    def get_file_path(self):
+    def get_file_path(self) -> Any:
         """Select a polyconf file for BoB to read"""
         # file browser window
         # options = QFileDialog.Options()
@@ -728,7 +734,7 @@ FunH
         default_val,
         layout,
         pol_dict,
-        validator=QDoubleValidator(),
+        validator: Any = QDoubleValidator(),
         tip="",
         editable=True,
     ):
@@ -745,7 +751,7 @@ FunH
         layout.addRow(label, e)
         pol_dict[name] = e
 
-    def add_cb_distribution(self, name, layout, pol_dict, tip=""):
+    def add_cb_distribution(self, name: Any, layout: Any, pol_dict: Any, tip: str = "") -> None:
         """Add a new line to the form layout containing a QLabel widget
         for the parameter name and a QComboBox to change the parameter value"""
         cb = QComboBox()
@@ -758,7 +764,7 @@ FunH
         layout.addRow(label, cb)
         pol_dict[name] = cb
 
-    def handle_close_polymer_tab(self, index):
+    def handle_close_polymer_tab(self, index: Any) -> None:
         """Close a tab and delete dictionary entry
         Called when the close-tab button is clicked"""
         name = self.d.polymer_tab.tabText(index)
@@ -772,7 +778,7 @@ FunH
                 self.d.proto_text.setDisabled(True)
                 self.d.proto_label.setDisabled(True)
 
-    def launch_param_dialog(self):
+    def launch_param_dialog(self) -> None:
         """Show the dialog to set-up number of the polymer components in the mix
         and all the relevant parameters for each component.
         This function is called via a Signal for multithread compatibility"""
@@ -790,7 +796,7 @@ FunH
 
             if self.flag_prototype > 0:
                 # path to 'poly.proto'
-                temp_proto = os.path.join(temp_dir, "poly.proto")
+                temp_proto = os.path.join(temp_dir, "poly.proto")  # pyright: ignore[reportUndefinedVariable]
                 self.dump_text_to_file(temp_proto, self.d.proto_text)
                 tmp = self.d.proto_text.toPlainText().split()
                 self.protoname = []
@@ -806,7 +812,7 @@ FunH
                     return
 
             # ask where to save the polymer config file
-            out_file = self.polyconf_file_out
+            out_file: Any = self.polyconf_file_out
             tmp1, tmp2 = os.path.splitext(out_file)
             if tmp2 == "":
                 self.Qprint(
@@ -834,7 +840,7 @@ FunH
                     return
         self.success_dialog = False
 
-    def dump_text_to_file(self, temp_file, text_widget):
+    def dump_text_to_file(self, temp_file: Any, text_widget: Any) -> None:
         """NOT USED ANYMORE. Use virtual files only.
         Dump the content of the "result" tab of the dialog box
         into a file ``temp_file``"""
@@ -842,7 +848,7 @@ FunH
         # with open(temp_file, 'w') as tmp:
         #     tmp.write(str(text_widget.toPlainText()))
 
-    def get_file_name(self):
+    def get_file_name(self) -> None:
         """Launch a dialog for selecting a file where to save the
         result of the polymer configuration created by BoB.
         Return a string with a filename"""
@@ -858,7 +864,7 @@ FunH
         self.polyconf_file_out = out_file[0]
         self.d.selected_file.setText(os.path.basename(out_file[0]))
 
-    def is_ascii(self, s):
+    def is_ascii(self, s: Any) -> bool:
         """Check if `s` contains non ASCII characters"""
         try:
             s.encode("ascii")
@@ -866,16 +872,16 @@ FunH
         except UnicodeEncodeError:
             return False
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
-    def do_error(self, line=""):
+    def do_error(self, line: Any = "") -> None:
         """This theory does not calculate the error"""
         pass
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

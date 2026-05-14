@@ -32,6 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 """LP2R linear viscoelastic theory backed by the pybind11 solver."""
 
+from typing import Any, ClassVar
 import numpy as np
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
@@ -56,12 +57,16 @@ from PySide6.QtWidgets import (
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.core.units import convert_array_to_internal, parse_column_label
 from RepTate.gui.QTheory import QTheory
-from RepTate.theories import _lp2r
+from RepTate.theories import _lp2r  # pyright: ignore[reportAttributeAccessIssue]
 from RepTate.theories.theory_helpers import EditMWDDialog, GetMwdRepTate
 from RepTate.tools.ToolMaterialsDatabase import (
     check_chemistry,
     get_single_parameter,
 )
+
+QAbstractItemView_any: Any = QAbstractItemView
+QDialogButtonBox_any: Any = QDialogButtonBox
+QToolButton_any: Any = QToolButton
 
 
 class LP2RAdvancedControlsDialog(QDialog):
@@ -82,7 +87,7 @@ class LP2RAdvancedControlsDialog(QDialog):
             form.addRow(name, edit)
         layout.addLayout(form)
 
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
@@ -115,7 +120,7 @@ class LP2RLognormalComponentDialog(QDialog):
         form.addRow("PDI", self.pdi_edit)
         layout.addLayout(form)
 
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
@@ -142,8 +147,8 @@ class LP2RComponentsDialog(QDialog):
 
         layout = QVBoxLayout()
         self.table = QTableWidget()
-        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setSelectionBehavior(QAbstractItemView_any.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView_any.SingleSelection)
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(
             ["Type", "Weight", "Label", "Source", "Summary"]
@@ -166,7 +171,7 @@ class LP2RComponentsDialog(QDialog):
             buttons.addWidget(button)
         layout.addLayout(buttons)
 
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
@@ -289,12 +294,12 @@ class TheoryLP2RLVE(QTheory):
     the numerical relaxation and spectra calculation.
     """
 
-    thname = "LP2R LVE"
-    description = "Linear rheology of polydisperse linear polymers"
-    citations = ["Das, C. and Read, D. J., J. Rheol. 2023, 67, 693–721."]
-    doi = ["https://doi.org/10.1122/8.0000605"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
-    single_file = True
+    thname: ClassVar[str] = "LP2R LVE"
+    description: ClassVar[str] = "Linear rheology of polydisperse linear polymers"
+    citations: ClassVar[list[str]] = ["Das, C. and Read, D. J., J. Rheol. 2023, 67, 693–721."]
+    doi: ClassVar[list[str]] = ["https://doi.org/10.1122/8.0000605"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
+    single_file: ClassVar[bool] = True
     DEFAULT_MW = 100.0
     DEFAULT_PDI = 1.03
     DEFAULT_NPOLY = 50
@@ -315,7 +320,11 @@ class TheoryLP2RLVE(QTheory):
         "time_ratio",
     ]
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """Constructor."""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -627,7 +636,7 @@ class TheoryLP2RLVE(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutcomponents = QToolButton()
-        self.tbutcomponents.setPopupMode(QToolButton.MenuButtonPopup)
+        self.tbutcomponents.setPopupMode(QToolButton_any.MenuButtonPopup)
         menu = QMenu(self)
         self.edit_components_action = menu.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"),
@@ -759,11 +768,14 @@ class TheoryLP2RLVE(QTheory):
 
     def default_lognormal_component(self):
         """Return a default lognormal component from the visible Mw/PDI/n values."""
+        npoly: Any = self.parameters["n"].value
+        mw: Any = self.parameters["Mw"].value
+        pdi: Any = self.parameters["PDI"].value
         return self.make_lognormal_component(
             weight=1.0,
-            npoly=self.parameters["n"].value,
-            mw=self.parameters["Mw"].value,
-            pdi=self.parameters["PDI"].value,
+            npoly=npoly,
+            mw=mw,
+            pdi=pdi,
             label="Lognormal",
             source="parameters",
         )
@@ -1226,8 +1238,10 @@ class TheoryLP2RLVE(QTheory):
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
-        material.m_kuhn = self.parameters["MK"].value * 1000.0
-        material.m_e = self.parameters["Me"].value * 1000.0
+        m_kuhn: Any = self.parameters["MK"].value
+        m_e: Any = self.parameters["Me"].value
+        material.m_kuhn = m_kuhn * 1000.0
+        material.m_e = m_e * 1000.0
         material.g0 = self.parameters["G0"].value
         material.tau_e = self.parameters["tau_e"].value
         material.g_glass = self.parameters["G_glass"].value
@@ -1293,7 +1307,7 @@ class TheoryLP2RLVE(QTheory):
         """Calculate error by interpolating the generated LP2R spectrum."""
         self.do_error_interpolated(line="")
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Calculate LP2R G' and G'' over the active LVE frequency range."""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -1308,7 +1322,7 @@ class TheoryLP2RLVE(QTheory):
 
         freq_min = float(np.min(omega_data))
         freq_max = float(np.max(omega_data))
-        freq_ratio = self.parameters["freq_ratio"].value
+        freq_ratio: Any = self.parameters["freq_ratio"].value
         if freq_ratio <= 1.0:
             self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
             self._clear_table(tt)
