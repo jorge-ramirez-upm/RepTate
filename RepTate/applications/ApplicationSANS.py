@@ -35,6 +35,8 @@
 Module for the analysis of data from SANS experiments
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -45,18 +47,18 @@ import numpy as np
 class ApplicationSANS(QApplicationWindow):
     """Application to Analyze Data from SANS experiments"""
 
-    appname = "SANS"
-    description = "Small Angle Neutron Scattering Experiments"
-    extension = "sans"
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html"
+    appname: ClassVar[str] = "SANS"
+    description: ClassVar[str] = "Small Angle Neutron Scattering Experiments"
+    extension: ClassVar[str] = "sans"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html"
 
-    def __init__(self, name="SANS", parent=None):
+    def __init__(self, name: str = "SANS", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDebye import TheoryDebye
 
         super().__init__(name, parent)
 
-        inverse_distance_units = (
+        inverse_distance_units: tuple[str, ...] = (
             "1/A",
             "1/Å",
             "Å⁻¹",
@@ -172,7 +174,7 @@ class ApplicationSANS(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogSANS(self, dt, file_parameters):
+    def viewLogSANS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -180,7 +182,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
         return x, y, True
 
-    def viewSANS(self, dt, file_parameters):
+    def viewSANS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Scattered intensity :math:`I(q)` vs scattering vector :math:`q` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -188,7 +190,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewKratky(self, dt, file_parameters):
+    def viewKratky(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -196,7 +198,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = dt.data[:, 0] * dt.data[:, 0] * dt.data[:, 1]
         return x, y, True
 
-    def viewZimm(self, dt, file_parameters):
+    def viewZimm(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Zimm plot: :math:`I(q)^{-1}` vs :math:`q^2`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

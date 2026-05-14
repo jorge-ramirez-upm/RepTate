@@ -35,6 +35,8 @@
 Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation.
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -45,26 +47,26 @@ import numpy as np
 class ApplicationCrystal(QApplicationWindow):
     """Module for handling data from start up of shear and extensional flow experiments with flow induced crystallisation."""
 
-    appname = "Crystal"
-    description = "Flow induced Crystallisation"
-    extension = "shearxs uextxs shear uext"
-    html_help_file = (
+    appname: ClassVar[str] = "Crystal"
+    description: ClassVar[str] = "Flow induced Crystallisation"
+    extension: ClassVar[str] = "shearxs uextxs shear uext"
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html"
     )
 
-    def __init__(self, name="Crystal", parent=None):
+    def __init__(self, name: str = "Crystal", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryGoPolyStrand import TheoryGoPolyStrand
         from RepTate.theories.TheorySmoothPolyStrand import TheorySmoothPolyStrand
 
         super().__init__(name, parent)
 
-        time_units = ("ns", "μs", "ms", "s", "min", "h")
-        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
-        viscosity_units = ("Pa.s", "kPa.s")
-        deformation_rate_units = ("1/s", "s-1", "s^-1", "s⁻¹", "1/min", "1/h")
-        nucleation_rate_units = ("1/s/m3", "1/s/cm3", "1/s/mm3", "1/s/um3", "1/s/nm3")
-        unit_density_units = ("1/m3", "1/cm3", "1/mm3", "1/um3", "1/nm3")
+        time_units: tuple[str, ...] = ("ns", "μs", "ms", "s", "min", "h")
+        stress_units: tuple[str, ...] = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units: tuple[str, ...] = ("Pa.s", "kPa.s")
+        deformation_rate_units: tuple[str, ...] = ("1/s", "s-1", "s^-1", "s⁻¹", "1/min", "1/h")
+        nucleation_rate_units: tuple[str, ...] = ("1/s/m3", "1/s/cm3", "1/s/mm3", "1/s/um3", "1/s/nm3")
+        unit_density_units: tuple[str, ...] = ("1/m3", "1/cm3", "1/mm3", "1/um3", "1/nm3")
 
         # VIEWS
         self.views["log(eta(t))"] = View(
@@ -413,7 +415,7 @@ class ApplicationCrystal(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogeta(self, dt, file_parameters):
+    def viewLogeta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -425,7 +427,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
 
-    def vieweta(self, dt, file_parameters):
+    def vieweta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -437,7 +439,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / flow_rate
         return x, y, True
 
-    def viewNdot(self, dt, file_parameters):
+    def viewNdot(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Nucleation rate as a function of time on log axis :math:`\\dot{N}(t)` vs time :math:`t` (x-axis on log scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -445,7 +447,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewNt(self, dt, file_parameters):
+    def viewNt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Nucleation density as a function of time on log axis :math:`N(t)` vs time :math:`t` (x-axis on log scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -453,7 +455,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 4]
         return x, y, True
 
-    def viewphiX(self, dt, file_parameters):
+    def viewphiX(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Crystal fraction as a function of time on log axis :math:`\\phi_X(t)` vs time :math:`t` (x-axis on log scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -461,7 +463,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 3]
         return x, y, True
 
-    def viewLogSigmaTime(self, dt, file_parameters):
+    def viewLogSigmaTime(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -469,7 +471,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSigmaTime(self, dt, file_parameters):
+    def viewSigmaTime(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -477,7 +479,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogSigmaGamma(self, dt, file_parameters):
+    def viewLogSigmaGamma(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -489,7 +491,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSigmaGamma(self, dt, file_parameters):
+    def viewSigmaGamma(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -501,7 +503,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_flowcurve(self, dt, file_parameters):
+    def view_flowcurve(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """:math:`\\sigma(t_{\\to\\infty})` vs flow rate"""
 
         try:
@@ -514,7 +516,7 @@ class ApplicationCrystal(QApplicationWindow):
         y[0, 0] = dt.data[-1, 1]
         return x, y, True
 
-    def view_steadyNuc(self, dt, file_parameters):
+    def view_steadyNuc(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """:math:`\\dot{N}(t_{\\to\\infty})` vs flow rate"""
 
         try:

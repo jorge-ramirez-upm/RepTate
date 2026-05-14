@@ -35,6 +35,8 @@
 Module for the analysis of stress relaxation data from simulations and experiments.
 
 """
+from typing import Any, ClassVar, cast
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -58,12 +60,12 @@ from math import log10, sin, cos
 class ApplicationGt(QApplicationWindow):
     """Application to Analyze Stress Relaxation Data"""
 
-    appname = "Gt"
-    description = "Relaxation modulus"
-    extension = "gt"
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html"
+    appname: ClassVar[str] = "Gt"
+    description: ClassVar[str] = "Relaxation modulus"
+    extension: ClassVar[str] = "gt"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html"
 
-    def __init__(self, name="Gt", parent=None):
+    def __init__(self, name: str = "Gt", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesTime
         from RepTate.theories.TheoryRouse import TheoryRouseTime
@@ -74,9 +76,9 @@ class ApplicationGt(QApplicationWindow):
 
         super().__init__(name, parent)
 
-        time_units = ("ns", "μs", "ms", "s", "min", "h")
-        frequency_units = ("rad/s", "Hz")
-        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
+        time_units: tuple[str, ...] = ("ns", "μs", "ms", "s", "min", "h")
+        frequency_units: tuple[str, ...] = ("rad/s", "Hz")
+        stress_units: tuple[str, ...] = ("Pa", "kPa", "MPa", "bar", "atm")
 
         # time range for view conversion to frequency domain
         self.tmin_view = -np.inf
@@ -254,7 +256,7 @@ class ApplicationGt(QApplicationWindow):
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
 
-    def add_oversampling_widget(self):
+    def add_oversampling_widget(self) -> None:
         """Add spinbox for the oversampling ratio"""
         self.sb_oversampling = QSpinBox()
         self.sb_oversampling.setToolTip("Value of the oversampling ratio")
@@ -264,10 +266,11 @@ class ApplicationGt(QApplicationWindow):
 
         self.viewLayout.insertWidget(2, self.sb_oversampling)
 
-    def add_xrange_widget_view(self):
+    def add_xrange_widget_view(self) -> None:
         """Add widgets below the view combobox to select the
         x-range applied to view transformation"""
         hlayout = QHBoxLayout()
+        maximum_size_policy: Any = getattr(QSizePolicy, "Maximum")
 
         hlayout.addStretch()
         # xmin
@@ -277,7 +280,7 @@ class ApplicationGt(QApplicationWindow):
         )
         self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
-        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmin_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
         self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
         hlayout.addWidget(self.xmin_label)
         hlayout.addWidget(self.xmin_view)
@@ -290,7 +293,7 @@ class ApplicationGt(QApplicationWindow):
         )
         self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
-        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmax_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
         self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
         hlayout.addWidget(self.xmax_label)
         hlayout.addWidget(self.xmax_view)
@@ -302,7 +305,7 @@ class ApplicationGt(QApplicationWindow):
         self.hlayout_view = hlayout
         self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
 
-    def set_xmin(self):
+    def set_xmin(self) -> bool:
         """Update the value of t_min. Return success status"""
         text = self.xmin_view.text()
         if text in ["-np.inf", "-inf"]:
@@ -320,7 +323,7 @@ class ApplicationGt(QApplicationWindow):
                 return False
         return True
 
-    def set_xmax(self):
+    def set_xmax(self) -> bool:
         """Update the value of t_max. Return success status"""
         text = self.xmax_view.text()
         if text in ["np.inf", "inf"]:
@@ -338,16 +341,16 @@ class ApplicationGt(QApplicationWindow):
                 return False
         return True
 
-    def change_oversampling(self, val):
+    def change_oversampling(self, val: Any) -> None:
         """Change the value of the oversampling ratio.
         Called when the spinbox value is changed"""
         self.OVER = val
 
-    def set_oversampling_widget_visible(self, state):
+    def set_oversampling_widget_visible(self, state: Any) -> None:
         """Show/Hide the extra widget "sampling ratio" """
         self.sb_oversampling.setVisible(state)
 
-    def set_xrange_widgets_view_visible(self, state):
+    def set_xrange_widgets_view_visible(self, state: Any) -> None:
         """Show/Hide the extra widgets for xrange selection"""
         self.pb.setVisible(state)
         self.xmin_label.setVisible(state)
@@ -355,7 +358,7 @@ class ApplicationGt(QApplicationWindow):
         self.xmin_view.setVisible(state)
         self.xmax_view.setVisible(state)
 
-    def set_view_tools(self, view_name):
+    def set_view_tools(self, view_name: str) -> None:
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
             self.set_xrange_widgets_view_visible(True)
@@ -370,7 +373,7 @@ class ApplicationGt(QApplicationWindow):
             except AttributeError:
                 pass
 
-    def viewGt(self, dt, file_parameters):
+    def viewGt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -384,7 +387,7 @@ class ApplicationGt(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / gamma
         return x, y, True
 
-    def viewLogGt(self, dt, file_parameters):
+    def viewLogGt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -398,7 +401,7 @@ class ApplicationGt(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
 
-    def viewSchwarzl_Gt(self, dt, file_parameters):
+    def viewSchwarzl_Gt(self, dt: Any, file_parameters: Any) -> Any:
         """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus
         :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`"""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
@@ -424,7 +427,7 @@ class ApplicationGt(QApplicationWindow):
         y[:, 1] = Gpp[:]
         return x, y, True
 
-    def viewiRheo(self, dt, file_parameters):
+    def viewiRheo(self, dt: Any, file_parameters: Any) -> Any:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -451,7 +454,7 @@ class ApplicationGt(QApplicationWindow):
                 data_y,
                 kind="zero",
                 assume_sorted=True,
-                fill_value="extrapolate",
+                fill_value=cast(Any, "extrapolate"),
             )
         elif len(data_x) < 3:
             f = interpolate.interp1d(
@@ -459,7 +462,7 @@ class ApplicationGt(QApplicationWindow):
                 data_y,
                 kind="linear",
                 assume_sorted=True,
-                fill_value="extrapolate",
+                fill_value=cast(Any, "extrapolate"),
             )
         elif len(data_x) < 4:
             f = interpolate.interp1d(
@@ -467,7 +470,7 @@ class ApplicationGt(QApplicationWindow):
                 data_y,
                 kind="quadratic",
                 assume_sorted=True,
-                fill_value="extrapolate",
+                fill_value=cast(Any, "extrapolate"),
             )
         else:
             f = interpolate.interp1d(
@@ -475,7 +478,7 @@ class ApplicationGt(QApplicationWindow):
                 data_y,
                 kind="cubic",
                 assume_sorted=True,
-                fill_value="extrapolate",
+                fill_value=cast(Any, "extrapolate"),
             )
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
@@ -511,7 +514,7 @@ class ApplicationGt(QApplicationWindow):
 
         return x, y, True
 
-    def viewiRheoOver(self, dt, file_parameters):
+    def viewiRheoOver(self, dt: Any, file_parameters: Any) -> Any:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -533,7 +536,7 @@ class ApplicationGt(QApplicationWindow):
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            data_x, data_y, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+            data_x, data_y, kind="cubic", assume_sorted=True, fill_value=cast(Any, "extrapolate")
         )
         g0 = f(0)
         ind1 = np.argmax(data_x > 0)
@@ -566,7 +569,7 @@ class ApplicationGt(QApplicationWindow):
             )
         return x, y, True
 
-    def get_xy_data_in_xrange(self, dt):
+    def get_xy_data_in_xrange(self, dt: Any) -> Any:
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
         success = self.set_xmin()
         success *= self.set_xmax()

@@ -35,6 +35,8 @@
 Module for the analysis of data from Creep experiments
 
 """
+from typing import Any, ClassVar, cast
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -57,24 +59,24 @@ from math import log10
 class ApplicationCreep(QApplicationWindow):
     """Application to Analyze Data from Creep experiments"""
 
-    appname = "Creep"
-    description = "Creep Experiments"
-    extension = "creep"
-    html_help_file = (
+    appname: ClassVar[str] = "Creep"
+    description: ClassVar[str] = "Creep Experiments"
+    extension: ClassVar[str] = "creep"
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
     )
 
-    def __init__(self, name="Creep", parent=None):
+    def __init__(self, name: str = "Creep", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryRetardationModes import TheoryRetardationModesTime
 
         super().__init__(name, parent)
 
-        time_units = ("ns", "μs", "ms", "s", "min", "h")
-        stress_units = ("Pa", "kPa", "MPa", "bar", "atm")
-        viscosity_units = ("Pa.s", "kPa.s")
-        compliance_units = ("1/Pa", "1/kPa", "1/MPa", "1/bar", "1/atm")
-        frequency_units = ("rad/s", "Hz")
+        time_units: tuple[str, ...] = ("ns", "μs", "ms", "s", "min", "h")
+        stress_units: tuple[str, ...] = ("Pa", "kPa", "MPa", "bar", "atm")
+        viscosity_units: tuple[str, ...] = ("Pa.s", "kPa.s")
+        compliance_units: tuple[str, ...] = ("1/Pa", "1/kPa", "1/MPa", "1/bar", "1/atm")
+        frequency_units: tuple[str, ...] = ("rad/s", "Hz")
 
         # time range for view conversion to frequency domain
         self.eta = 10000
@@ -265,7 +267,7 @@ class ApplicationCreep(QApplicationWindow):
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
 
-    def add_oversampling_widget(self):
+    def add_oversampling_widget(self) -> None:
         """Add spinbox for the oversampling ratio"""
         self.sb_oversampling = QSpinBox()
         self.sb_oversampling.setToolTip("Value of the oversampling ratio")
@@ -275,10 +277,11 @@ class ApplicationCreep(QApplicationWindow):
 
         self.viewLayout.insertWidget(2, self.sb_oversampling)
 
-    def add_xrange_widget_view(self):
+    def add_xrange_widget_view(self) -> None:
         """Add widgets below the view combobox to select the
         x-range applied to view transformation"""
         hlayout = QHBoxLayout()
+        maximum_size_policy: Any = getattr(QSizePolicy, "Maximum")
 
         hlayout.addStretch()
         # eta
@@ -286,7 +289,7 @@ class ApplicationCreep(QApplicationWindow):
         self.eta_view.setToolTip("Value of steady state viscosity")
         self.eta_view.editingFinished.connect(self.set_eta)
         self.eta_view.setMaximumWidth(35)
-        self.eta_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.eta_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
         self.eta_label = QLabel("<b>log(eta)</b>")
         hlayout.addWidget(self.eta_label)
         hlayout.addWidget(self.eta_view)
@@ -299,7 +302,7 @@ class ApplicationCreep(QApplicationWindow):
         )
         self.xmin_view.editingFinished.connect(self.set_xmin)
         self.xmin_view.setMaximumWidth(35)
-        self.xmin_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmin_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
         self.xmin_label = QLabel("<b>log(t<sub>min</sub>)</b>")
         hlayout.addWidget(self.xmin_label)
         hlayout.addWidget(self.xmin_view)
@@ -312,7 +315,7 @@ class ApplicationCreep(QApplicationWindow):
         )
         self.xmax_view.editingFinished.connect(self.set_xmax)
         self.xmax_view.setMaximumWidth(35)
-        self.xmax_view.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.xmax_view.setSizePolicy(maximum_size_policy, maximum_size_policy)
         self.xmax_label = QLabel(" <b>log(t<sub>max</sub>)</b>")
         hlayout.addWidget(self.xmax_label)
         hlayout.addWidget(self.xmax_view)
@@ -324,7 +327,7 @@ class ApplicationCreep(QApplicationWindow):
         self.hlayout_view = hlayout
         self.ViewDataTheoryLayout.insertLayout(1, self.hlayout_view)
 
-    def set_eta(self):
+    def set_eta(self) -> Any:
         """Update the value of eta. Return success status"""
         text = self.eta_view.text()
         if text in ["-np.inf", "-inf"]:
@@ -338,7 +341,7 @@ class ApplicationCreep(QApplicationWindow):
                 self.eta_view.setStyleSheet("QLineEdit { background: red;}")
                 return False
 
-    def set_xmin(self):
+    def set_xmin(self) -> bool:
         """Update the value of t_min. Return success status"""
         text = self.xmin_view.text()
         if text in ["np.inf", "inf"]:
@@ -356,7 +359,7 @@ class ApplicationCreep(QApplicationWindow):
                 return False
         return True
 
-    def set_xmax(self):
+    def set_xmax(self) -> bool:
         """Update the value of t_max. Return success status"""
         text = self.xmax_view.text()
         if text in ["np.inf", "inf"]:
@@ -374,16 +377,16 @@ class ApplicationCreep(QApplicationWindow):
                 return False
         return True
 
-    def change_oversampling(self, val):
+    def change_oversampling(self, val: Any) -> None:
         """Change the value of the oversampling ratio.
         Called when the spinbox value is changed"""
         self.OVER = val
 
-    def set_oversampling_widget_visible(self, state):
+    def set_oversampling_widget_visible(self, state: Any) -> None:
         """Show/Hide the extra widget "sampling ratio" """
         self.sb_oversampling.setVisible(state)
 
-    def set_xrange_widgets_view_visible(self, state):
+    def set_xrange_widgets_view_visible(self, state: Any) -> None:
         """Show/Hide the extra widgets for xrange selection"""
         self.pb.setVisible(state)
         self.xmin_label.setVisible(state)
@@ -393,7 +396,7 @@ class ApplicationCreep(QApplicationWindow):
         self.xmin_view.setVisible(state)
         self.xmax_view.setVisible(state)
 
-    def set_view_tools(self, view_name):
+    def set_view_tools(self, view_name: str) -> None:
         """Show/Hide extra view widgets depending on the current view"""
         if view_name in ["i-Rheo G',G''", "Schwarzl G',G''"]:
             self.set_xrange_widgets_view_visible(True)
@@ -408,7 +411,7 @@ class ApplicationCreep(QApplicationWindow):
             except AttributeError:
                 pass
 
-    def viewLogStraint(self, dt, file_parameters):
+    def viewLogStraint(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -416,7 +419,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
         return x, y, True
 
-    def viewStraint(self, dt, file_parameters):
+    def viewStraint(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -424,7 +427,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogJt(self, dt, file_parameters):
+    def viewLogJt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -433,7 +436,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]) / sigma)
         return x, y, True
 
-    def viewJt(self, dt, file_parameters):
+    def viewJt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -442,7 +445,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / sigma
         return x, y, True
 
-    def viewt_Jt(self, dt, file_parameters):
+    def viewt_Jt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -451,7 +454,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 0] / dt.data[:, 1] * sigma
         return x, y, True
 
-    def viewiRheo(self, dt, file_parameters):
+    def viewiRheo(self, dt: Any, file_parameters: Any) -> Any:
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -467,7 +470,7 @@ class ApplicationCreep(QApplicationWindow):
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            t, j, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+            t, j, kind="cubic", assume_sorted=True, fill_value=cast(Any, "extrapolate")
         )
         j0 = f([0])[0]
         ind1 = np.argmax(t > 0)
@@ -496,7 +499,7 @@ class ApplicationCreep(QApplicationWindow):
 
         return x, y, True
 
-    def viewiRheoOver(self, dt, file_parameters):
+    def viewiRheoOver(self, dt: Any, file_parameters: Any) -> Any:
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -512,7 +515,7 @@ class ApplicationCreep(QApplicationWindow):
         y = np.zeros((n, 2))
 
         f = interpolate.interp1d(
-            t, j, kind="cubic", assume_sorted=True, fill_value="extrapolate"
+            t, j, kind="cubic", assume_sorted=True, fill_value=cast(Any, "extrapolate")
         )
         j0 = f([0])[0]
         ind1 = np.argmax(t > 0)
@@ -550,7 +553,7 @@ class ApplicationCreep(QApplicationWindow):
 
         return x, y, True
 
-    def get_xy_data_in_xrange(self, dt):
+    def get_xy_data_in_xrange(self, dt: Any) -> Any:
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
         success = self.set_xmin()
         success *= self.set_xmax()

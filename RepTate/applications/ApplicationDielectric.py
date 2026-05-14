@@ -35,6 +35,8 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.File import FileParameterSpec
@@ -45,14 +47,14 @@ import numpy as np
 class ApplicationDielectric(QApplicationWindow):
     """Application to Analyze Dielectric Spectroscopy Data"""
 
-    appname = "Dielectric"
-    description = "Dielectric Spectroscopy"
-    extension = "dls"
-    html_help_file = (
+    appname: ClassVar[str] = "Dielectric"
+    description: ClassVar[str] = "Dielectric Spectroscopy"
+    extension: ClassVar[str] = "dls"
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html"
     )
 
-    def __init__(self, name="Dielectric", parent=None):
+    def __init__(self, name: str = "Dielectric", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDebyeModes import TheoryDebyeModesFrequency
         from RepTate.theories.TheoryHavriliakNegamiModes import (
@@ -228,7 +230,7 @@ class ApplicationDielectric(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogE1E2(self, dt, file_parameters):
+    def viewLogE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -238,7 +240,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewSemiLogE1E2(self, dt, file_parameters):
+    def viewSemiLogE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -248,7 +250,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-    def viewE1E2(self, dt, file_parameters):
+    def viewE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -258,7 +260,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-    def viewLogE1(self, dt, file_parameters):
+    def viewLogE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -266,7 +268,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSemiLogE1(self, dt, file_parameters):
+    def viewSemiLogE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -274,7 +276,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewE1(self, dt, file_parameters):
+    def viewE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Relative permittivity :math:`\\epsilon'(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -282,7 +284,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogE2(self, dt, file_parameters):
+    def viewLogE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -290,7 +292,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewSemiLogE2(self, dt, file_parameters):
+    def viewSemiLogE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -298,7 +300,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewE2(self, dt, file_parameters):
+    def viewE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Dielectric Loss :math:`\\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -306,7 +308,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewColeCole(self, dt, file_parameters):
+    def viewColeCole(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Cole-Cole plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs relative permittivity :math:`\\epsilon'(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

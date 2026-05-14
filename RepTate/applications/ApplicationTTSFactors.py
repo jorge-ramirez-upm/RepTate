@@ -35,6 +35,8 @@
 Module for handling time-temperature superposition factors and fit theories.
 
 """
+from typing import Any, ClassVar
+
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
@@ -45,14 +47,14 @@ import numpy as np
 class ApplicationTTSFactors(QApplicationWindow):
     """Application handling time-temperature superposition factors and fit theories"""
 
-    appname = "TTSF"
-    description = "TTS shift factors"
-    extension = "ttsf"
-    html_help_file = (
+    appname: ClassVar[str] = "TTSF"
+    description: ClassVar[str] = "TTS shift factors"
+    extension: ClassVar[str] = "ttsf"
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html"
     )
 
-    def __init__(self, name="TTSF", parent=None):
+    def __init__(self, name: str = "TTSF", parent: Any = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryWLF import TheoryWLF
         from RepTate.theories.TheoryArrhenius import TheoryArrhenius
@@ -60,8 +62,8 @@ class ApplicationTTSFactors(QApplicationWindow):
         # from TheoryArrhenius import TheoryArrhenius
         super().__init__(name, parent)
 
-        temperature_units = ("K", "ºC", "°C")
-        inverse_temperature_units = ("1/K", "K^-1", "K⁻¹")
+        temperature_units: tuple[str, ...] = ("K", "ºC", "°C")
+        inverse_temperature_units: tuple[str, ...] = ("1/K", "K^-1", "K⁻¹")
 
         # VIEWS
         self.views["log(aT)"] = View(
@@ -204,7 +206,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogaT(self, dt, file_parameters):
+    def viewLogaT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -212,7 +214,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewaT(self, dt, file_parameters):
+    def viewaT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -220,7 +222,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogbT(self, dt, file_parameters):
+    def viewLogbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -228,7 +230,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewbT(self, dt, file_parameters):
+    def viewbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -236,7 +238,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewLogaTbT(self, dt, file_parameters):
+    def viewLogaTbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -246,7 +248,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewLogaT_invT(self, dt, file_parameters):
+    def viewLogaT_invT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
