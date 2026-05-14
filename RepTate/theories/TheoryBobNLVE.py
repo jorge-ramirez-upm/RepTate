@@ -37,6 +37,7 @@ by Chinmay Das et al.
 """
 
 import os
+from typing import Any, ClassVar
 import numpy as np
 import RepTate
 from RepTate.gui.QTheory import QTheory
@@ -61,37 +62,40 @@ class TheoryBobNLVE(QTheory):
     `<https://sourceforge.net/projects/bob-rheology/files/bob-rheology/bob2.5/bob2p5.pdf/download>`_.
     """
 
-    thname = "BOB"
-    description = "Branch-On-Branch rheology"
-    citations = ["Das C. et al., J. Rheol. 2006, 50, 207-234"]
-    doi = ["http://dx.doi.org/10.1122/1.2167487"]
-    html_help_file = "https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve"
-    single_file = False  # False if the theory can be applied to multiple files simultaneously
+    thname: ClassVar[str] = "BOB"
+    description: ClassVar[str] = "Branch-On-Branch rheology"
+    citations: ClassVar[list[str]] = ["Das C. et al., J. Rheol. 2006, 50, 207-234"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.2167487"]
+    html_help_file: ClassVar[str] = "https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve"
+    single_file: ClassVar[bool] = False  # False if the theory can be applied to multiple files simultaneously
 
     signal_param_dialog = Signal(object)
 
-    def __init__(self, name="ThBobLVE", parent_dataset=None, axarr=None):
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "ThBobLVE", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
         self.has_modes = False  # True if the theory has modes
         self.signal_param_dialog.connect(self.launch_param_dialog)
-        self.polyconf_file_out = None  # full path of target polyconf file
+        self.polyconf_file_out: Any = None  # full path of target polyconf file
         self.bch = BobCtypesHelper(self)
         self.autocalculate = False
         self.freqint = 1.1  # BoB theory points spaced by log10(freqint)
         self.do_priority_seniority = False
         self.init_flow_mode()
         self.success_dialog = False
-        self.argv = None
+        self.argv: Any = None
         self.inp_counter = 0  # counter for the 'virtual' input file for BoB
-        self.virtual_input_file = []  # 'virtual' input file for BoB
+        self.virtual_input_file: Any = []  # 'virtual' input file for BoB
 
         # temp_dir = os.path.join('theories', 'temp')
         # #create temp folder if does not exist
         # if not os.path.exists(temp_dir):
         #     os.makedirs(temp_dir)
-        self.selected_file = None
+        self.selected_file: Any = None
         self.setup_dialog()
 
         # add widgets specific to the theory
@@ -99,7 +103,8 @@ class TheoryBobNLVE(QTheory):
         tb.setIconSize(QSize(24, 24))
 
         self.tbutflow = QToolButton()
-        self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutflow.setPopupMode(menu_button_popup)
         menu = QMenu(self)
         self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
         self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
@@ -122,15 +127,15 @@ class TheoryBobNLVE(QTheory):
         self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
         self.bob_settings_button.triggered.connect(self.launch_param_dialog)
 
-    def select_shear_flow(self):
+    def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear
         self.tbutflow.setDefaultAction(self.shear_flow_action)
 
-    def select_extensional_flow(self):
+    def select_extensional_flow(self) -> None:
         self.flow_mode = FlowMode.uext
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
-    def get_file_name(self):
+    def get_file_name(self) -> None:
         """Open a dialog to choose a file containing the polymer configuration for BoB"""
         # file browser window
         # options = QFileDialog.Options()
@@ -146,7 +151,7 @@ class TheoryBobNLVE(QTheory):
         self.selected_file = selected_file
         self.d.selected_file.setText(os.path.basename(selected_file))
 
-    def num_file_lines(self, fname):
+    def num_file_lines(self, fname: Any) -> int:
         """Return the number of lines in the file `fname`"""
         with open(fname) as f:
             i = 0
@@ -154,9 +159,9 @@ class TheoryBobNLVE(QTheory):
                 i += 1
             return i + 1
 
-    def setup_dialog(self):
+    def setup_dialog(self) -> None:
         """Load the form dialog from Ui_bob_LVE.py"""
-        self.dialog = QDialog(self)
+        self.dialog: Any = QDialog(self)
         self.dialog.ui = Ui_bob_LVE.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         self.d = self.dialog.ui
@@ -170,7 +175,7 @@ class TheoryBobNLVE(QTheory):
         # connect button Help
         self.d.pb_help.clicked.connect(self.handle_help_button)
 
-    def handle_pb_ok(self):
+    def handle_pb_ok(self) -> None:
         """Define the OK button role. If something is wrong, keep the dialog open"""
         if self.selected_file is None:
             QMessageBox.warning(
@@ -181,12 +186,12 @@ class TheoryBobNLVE(QTheory):
         else:
             self.dialog.accept()
 
-    def handle_help_button(self):
+    def handle_help_button(self) -> None:
         """When Help button of dialog box is clicked, show BoB manual (pdf)"""
         bob_manual_pdf = "docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf" % ((os.sep,) * 5)
         QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
 
-    def create_bob_input_file(self, nlines, inpf):
+    def create_bob_input_file(self, nlines: Any, inpf: Any) -> None:
         """Create a file containing the input BoB parameters from the form dialog"""
         # with open(inpf, 'w') as tmp:
         #     #1 memory
@@ -235,13 +240,13 @@ class TheoryBobNLVE(QTheory):
         tmp.append(0)
         self.virtual_input_file = tmp + tmp  # twice, for the two NLVE passes in bob
 
-    def launch_param_dialog(self):
+    def launch_param_dialog(self) -> None:
         """Show a dialog to get the filename of the polymer configuration.
         This function is called via a Signal for multithread compatibility"""
         if not self.dialog.exec_():
             self.success_dialog = False
             return
-        conffile = self.selected_file
+        conffile: Any = self.selected_file
         if not self.is_ascii(conffile):
             # ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
             # copy2(conffile, ok_path)
@@ -260,7 +265,7 @@ class TheoryBobNLVE(QTheory):
         self.argv = ["./bob", "-i", inpf, "-c", conffile]
         self.success_dialog = True
 
-    def is_ascii(self, s):
+    def is_ascii(self, s: Any) -> bool:
         """Check if `s` contains non ASCII characters"""
         try:
             s.encode("ascii")
@@ -268,7 +273,7 @@ class TheoryBobNLVE(QTheory):
         except UnicodeEncodeError:
             return False
 
-    def init_flow_mode(self):
+    def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
             f = self.theory_files()[0]
@@ -280,16 +285,16 @@ class TheoryBobNLVE(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
         self.bch.set_flag_stop_bob(ctypes.c_bool(True))
 
-    def do_error(self, line=""):
+    def do_error(self, line: Any = "") -> None:
         """This theory does not calculate the error"""
         pass
 
-    def calculate(self, f=None):
+    def calculate(self, f: Any = None) -> None:
         """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -335,5 +340,5 @@ class TheoryBobNLVE(QTheory):
             tt.data[:, 1] = stress_arr[:]
             # tt.data[:, 2] =
 
-    def do_fit(self, line=""):
+    def do_fit(self, line: Any = "") -> None:
         self.Qprint("Fitting not allowed in this theory")

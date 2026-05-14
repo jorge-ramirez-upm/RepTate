@@ -38,6 +38,7 @@ polymers.
 """
 
 import os
+from typing import Any, ClassVar
 import numpy as np
 from numpy import interp
 from RepTate.gui.QTheory import QTheory
@@ -49,7 +50,7 @@ from PySide6.QtCore import QSize
 
 
 class _NoFitOnDrag(object):
-    def handle_actionMinimize_Error(self):
+    def handle_actionMinimize_Error(self) -> None:
         pass
 
 
@@ -63,14 +64,18 @@ class TheoryLikhtmanMcLeish2002(QTheory):
        - ``c_nu`` : Constraint release parameter.
     """
 
-    thname = "Likhtman-McLeish"
-    description = "Likhtman-McLeish theory for linear entangled polymers"
-    citations = ["Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"]
-    doi = ["http://dx.doi.org/10.1021/ma0200219"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory"
-    single_file = False
+    thname: ClassVar[str] = "Likhtman-McLeish"
+    description: ClassVar[str] = "Likhtman-McLeish theory for linear entangled polymers"
+    citations: ClassVar[list[str]] = ["Likhtman A.E. and McLeish T.C.B., Macromolecules 2002, 35, 6332-6343"]
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma0200219"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory"
+    single_file: ClassVar[bool] = False
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+    parent_dataset: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.LikhtmanMcLeish2002
@@ -256,7 +261,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         )
         self.plot_theory_stuff()
 
-    def linkMeGeaction_change(self, checked):
+    def linkMeGeaction_change(self, checked: Any) -> None:
         self.set_param_value("linkMeGe", checked)
         if checked:
             self.txtrho.setReadOnly(False)
@@ -272,7 +277,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         if self.autocalculate:
             self.handle_actionCalculate_Theory()
 
-    def handle_txtrho_edited(self, new_text):
+    def handle_txtrho_edited(self, new_text: Any) -> None:
         try:
             val = float(new_text)
         except ValueError:
@@ -287,53 +292,53 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             if self.autocalculate:
                 self.handle_actionCalculate_Theory()
 
-    def update_rho0_toolbar(self):
+    def update_rho0_toolbar(self) -> None:
         """Update rho0 toolbar widgets from the parameter display metadata."""
         rho0 = self.parameters["rho0"]
         self.lblrho.setText("<P><b>%s</b></P></br>" % rho0.display_label())
         self.txtrho.setText("%.4g" % rho0.display_value())
-        validator = self.txtrho.validator()
+        validator: Any = self.txtrho.validator()
         if validator is not None:
             validator.setBottom(rho0.display_value(0))
             validator.setTop(rho0.display_value(10))
 
-    def handle_parameter_metadata_changed(self):
+    def handle_parameter_metadata_changed(self) -> None:
         """Refresh auxiliary widgets after the theory parameter dialog changes units."""
         self.update_rho0_toolbar()
         self.plot_theory_stuff()
 
-    def _axis_supports(self, axis_spec, quantity):
+    def _axis_supports(self, axis_spec: Any, quantity: str) -> bool:
         return axis_spec.quantity == quantity
 
-    def _parameter_value_to_plot_axis(self, value, axis_spec):
+    def _parameter_value_to_plot_axis(self, value: Any, axis_spec: Any) -> Any:
         if axis_spec.transform == "log10":
             if value <= 0.0:
                 return None
             value = np.log10(value)
         return axis_spec.convert_from_internal(value).item()
 
-    def _plot_axis_to_parameter_value(self, value, axis_spec):
+    def _plot_axis_to_parameter_value(self, value: Any, axis_spec: Any) -> Any:
         value = axis_spec.convert_to_internal(value).item()
         if axis_spec.transform == "log10":
             value = np.power(10.0, value)
         return value
 
-    def _ge_plot_y(self):
+    def _ge_plot_y(self) -> Any:
         view = self.current_view()
         if not self._axis_supports(view.y_axis, "stress"):
             return None
         return self._parameter_value_to_plot_axis(self.parameters["Ge"].value, view.y_axis)
 
-    def _taue_plot_x(self):
+    def _taue_plot_x(self) -> Any:
         view = self.current_view()
         if view.x_axis.quantity not in ("angular_frequency", "frequency"):
             return None
-        taue = self.parameters["tau_e"].value
+        taue: Any = self.parameters["tau_e"].value
         if taue <= 0.0:
             return None
         return self._parameter_value_to_plot_axis(1.0 / taue, view.x_axis)
 
-    def plot_theory_stuff(self):
+    def plot_theory_stuff(self) -> None:
         """Update the graphical parameter helpers for the current view."""
         ge_y = self._ge_plot_y()
         helpers_visible = self.ge_taue_helper_action.isChecked()
@@ -352,11 +357,11 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.taue_helper_line.set_visible(taue_visible and self.active)
         self.taue_helper_label.set_visible(taue_visible and self.active)
 
-    def ge_taue_helper_visible(self, checked):
+    def ge_taue_helper_visible(self, checked: Any) -> None:
         self.plot_theory_stuff()
         self.parent_dataset.parent_application.update_plot()
 
-    def drag_ge_helper(self, dx, dy):
+    def drag_ge_helper(self, dx: Any, dy: Any) -> None:
         view = self.current_view()
         if not self._axis_supports(view.y_axis, "stress"):
             return
@@ -369,7 +374,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.update_parameter_table()
         self.plot_theory_stuff()
 
-    def drag_taue_helper(self, dx, dy):
+    def drag_taue_helper(self, dx: Any, dy: Any) -> None:
         view = self.current_view()
         if view.x_axis.quantity not in ("angular_frequency", "frequency"):
             return
@@ -382,7 +387,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.update_parameter_table()
         self.plot_theory_stuff()
 
-    def show_theory_extras(self, show=False):
+    def show_theory_extras(self, show: Any = False) -> None:
         self.plot_theory_stuff()
         if not show:
             self.ge_helper_line.set_visible(False)
@@ -391,7 +396,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             self.taue_helper_label.set_visible(False)
         self.parent_dataset.parent_application.update_plot()
 
-    def destructor(self):
+    def destructor(self) -> None:
         self.ge_helper_drag.disconnect()
         self.taue_helper_drag.disconnect()
         self.ge_helper_label.remove()
@@ -399,14 +404,14 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.ge_helper_line.remove()
         self.taue_helper_line.remove()
 
-    def set_extra_data(self, _):
+    def set_extra_data(self, _: Any) -> None:
         """Restore the check state of button and text value"""
         self.update_rho0_toolbar()
-        checked = self.parameters["linkMeGe"].value
+        checked: Any = self.parameters["linkMeGe"].value
         self.linkMeGeaction.setChecked(checked)
         self.linkMeGeaction_change(checked)
 
-    def LikhtmanMcLeish2002(self, f=None):
+    def LikhtmanMcLeish2002(self, f: Any = None) -> None:
         """Get the theory results from precalculated data"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -415,12 +420,12 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        taue = self.parameters["tau_e"].value
-        Ge = self.parameters["Ge"].value
-        Me = self.parameters["Me"].value
-        cnu = self.parameters["c_nu"].value
-        rho0 = self.parameters["rho0"].value
-        linkMeGe = self.parameters["linkMeGe"].value
+        taue: Any = self.parameters["tau_e"].value
+        Ge: Any = self.parameters["Ge"].value
+        Me: Any = self.parameters["Me"].value
+        cnu: Any = self.parameters["c_nu"].value
+        rho0: Any = self.parameters["rho0"].value
+        linkMeGe: Any = self.parameters["linkMeGe"].value
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
         if linkMeGe:
@@ -457,7 +462,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 1])
         tt.data[:, 2] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 2])
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> None:
         """Report the error of the current theory
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
@@ -465,8 +470,8 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
         """
         super().do_error(line)
-        taue = self.parameters["tau_e"].value
-        Me = self.parameters["Me"].value
+        taue: Any = self.parameters["tau_e"].value
+        Me: Any = self.parameters["Me"].value
         tab_data = [
             ["%-18s" % "File", "%-18s" % "Z", "%-18s" % "tauR", "%-18s" % "tauD"],
         ]

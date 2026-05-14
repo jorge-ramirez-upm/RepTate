@@ -34,6 +34,8 @@
 """Module TheoryMultiMetCSTR
 
 """
+from typing import Any, ClassVar
+
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -49,12 +51,12 @@ import RepTate.theories.react_gui_tools as rgt
 class TheoryMultiMetCSTR(QTheory):
     """THEORY DOCUMENTATION IS MISSING"""
 
-    thname = "Multi-Met CSTR"
-    description = "Multiple Metallocene CSTR Reaction Theory"
+    thname: ClassVar[str] = "Multi-Met CSTR"
+    description: ClassVar[str] = "Multiple Metallocene CSTR Reaction Theory"
     citations = ["Read D.J. and Soares J.B.P., Macromolecules 2003, 36, 10037–10051"]
-    doi = ["http://dx.doi.org/10.1021/ma030354l"]
-    html_help_file = "http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html"
-    single_file = (
+    doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma030354l"]
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/React/Theory/MetalloceneCSTR.html"
+    single_file: ClassVar[bool] = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
@@ -63,7 +65,11 @@ class TheoryMultiMetCSTR(QTheory):
     signal_request_arm = Signal(object)
     signal_mulmet_dialog = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+    extra_data: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.reactname = "MultiMetCSTR %d" % (rch.MMCSTR_global.mulmetCSTRnumber)
@@ -127,29 +133,29 @@ class TheoryMultiMetCSTR(QTheory):
 
         rgt.initialise_tool_bar(self)
 
-    def theory_buttons_disabled(self, state):
+    def theory_buttons_disabled(self, state: Any) -> None:
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-    def handle_save_bob_configuration(self):
+    def handle_save_bob_configuration(self) -> None:
         """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
 
-    def handle_edit_bob_settings(self):
+    def handle_edit_bob_settings(self) -> None:
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: Any) -> None:
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
 
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         rch.set_flag_stop_all(ct.c_bool(True))
         super().request_stop_computations()
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """Called when loading a project, set saved parameter values"""
         self.numcat = extra_data["numcat"]
         self.time_const = extra_data["time_const"]
@@ -157,7 +163,7 @@ class TheoryMultiMetCSTR(QTheory):
         self.pvalues = extra_data["pvalues"]
         rgt.set_extra_data(self, extra_data)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """Called when saving project. Save parameters in extra_data dict"""
         self.extra_data["numcat"] = self.numcat
         self.extra_data["time_const"] = self.time_const
@@ -165,7 +171,7 @@ class TheoryMultiMetCSTR(QTheory):
         self.extra_data["pvalues"] = self.pvalues
         rgt.get_extra_data(self)
 
-    def init_param_values(self):
+    def init_param_values(self) -> None:
         """Initialise parameters with default values"""
         self.numcat = 2
         self.time_const = 300.0
@@ -185,14 +191,14 @@ class TheoryMultiMetCSTR(QTheory):
         self.pvalues[1][2] = "1.5"
         self.pvalues[1][3] = "0.3"
 
-    def Calc(self, f=None):
+    def Calc(self, f: Any = None) -> Any:
         """MultiMetCSTR function that returns the square of y"""
 
         # get parameters
-        numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].display_value()
-        Me = self.parameters["Me"].value
-        nbins = int(np.round(self.parameters["nbin"].value))
+        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        monmass: Any = self.parameters["mon_mass"].display_value()
+        Me: Any = self.parameters["Me"].value
+        nbins: Any = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 
@@ -382,10 +388,10 @@ class TheoryMultiMetCSTR(QTheory):
         # self.Qprint('%d arm records left in memory' % rch.pb_global.arms_left)
         return calc
 
-    def show_theory_extras(self, checked):
+    def show_theory_extras(self, checked: Any) -> None:
         rgt.show_theory_extras(self, checked)
 
-    def destructor(self):
+    def destructor(self) -> None:
         """Return arms to pool"""
         rch.return_dist(ct.c_int(self.ndist))
 

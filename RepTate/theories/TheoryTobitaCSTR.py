@@ -34,6 +34,8 @@
 """Module TheoryTobitaCSTR
 
 """
+from typing import Any, ClassVar
+
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -55,17 +57,17 @@ reactions. The algorithm is based upon a set of processes occuring in the
 reactor during free-radical polymerisation.
 """
 
-    thname = "Tobita CSTR"
-    description = "Tobita LDPE CSTR reaction theory"
-    citations = ["Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403"]
-    doi = [
+    thname: ClassVar[str] = "Tobita CSTR"
+    description: ClassVar[str] = "Tobita LDPE CSTR reaction theory"
+    citations: ClassVar[list[str]] = ["Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403"]
+    doi: ClassVar[list[str]] = [
         "http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"
     ]
     # html_help_file = 'docs%sbuild%shtml%smanual%sTheories%sReact%stobitaCSTR.html' % ((os.sep, )*6)
-    html_help_file = (
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaCSTR.html"
     )
-    single_file = (
+    single_file: ClassVar[bool] = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
@@ -73,7 +75,10 @@ reactor during free-radical polymerisation.
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.reactname = "LDPE CSTR %d" % (rch.tCSTR_global.tobCSTRnumber)
@@ -169,52 +174,52 @@ reactor during free-radical polymerisation.
 
         rgt.initialise_tool_bar(self)
 
-    def theory_buttons_disabled(self, state):
+    def theory_buttons_disabled(self, state: Any) -> None:
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-    def handle_save_bob_configuration(self):
+    def handle_save_bob_configuration(self) -> None:
         """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
 
-    def handle_edit_bob_settings(self):
+    def handle_edit_bob_settings(self) -> None:
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: Any) -> None:
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """set extra data"""
         rgt.set_extra_data(self, extra_data)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """set extra data"""
         rgt.get_extra_data(self)
 
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         rch.set_flag_stop_all(ct.c_bool(True))
         super().request_stop_computations()
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> None:
         """This theory does not calculate the error"""
         pass
 
-    def Calc(self, f=None):
+    def Calc(self, f: Any = None) -> Any:
         """Calculate the theory"""
 
         # get parameters
-        tau = self.parameters["tau"].value
-        beta = self.parameters["beta"].value
-        lambda_ = self.parameters["lambda"].value
-        sigma = self.parameters["sigma"].value
-        numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].display_value()
-        Me = self.parameters["Me"].value
-        nbins = int(np.round(self.parameters["nbin"].value))
+        tau: Any = self.parameters["tau"].value
+        beta: Any = self.parameters["beta"].value
+        lambda_: Any = self.parameters["lambda"].value
+        sigma: Any = self.parameters["sigma"].value
+        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        monmass: Any = self.parameters["mon_mass"].display_value()
+        Me: Any = self.parameters["Me"].value
+        nbins: Any = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 
@@ -375,7 +380,7 @@ reactor during free-radical polymerisation.
         # rch.print_arch_stats(ct.c_int(ndist))
         return calc
 
-    def show_theory_extras(self, checked):
+    def show_theory_extras(self, checked: Any) -> None:
         rgt.show_theory_extras(self, checked)
 
     def destructor(self):

@@ -35,6 +35,8 @@
 
 TobitaBatch file for creating a new theory
 """
+from typing import Any, ClassVar
+
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -58,16 +60,16 @@ class TheoryTobitaBatch(QTheory):
     tubular reactor is to mix several batch reactions with different conversions.
     """
 
-    thname = "Tobita Batch"
-    description = "The LDPE batch reaction theory"
-    citations = ["Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403"]
-    doi = [
+    thname: ClassVar[str] = "Tobita Batch"
+    description: ClassVar[str] = "The LDPE batch reaction theory"
+    citations: ClassVar[list[str]] = ["Tobita H., J. Pol. Sci. Part B 2001, 39, 391-403"]
+    doi: ClassVar[list[str]] = [
         "http://dx.doi.org/10.1002/1099-0488(20010115)39:4<391::AID-POLB1011>3.0.CO;2-3"
     ]
-    html_help_file = (
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/tobitaLDPE.html"
     )
-    single_file = (
+    single_file: ClassVar[bool] = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
 
@@ -75,7 +77,10 @@ class TheoryTobitaBatch(QTheory):
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, axarr=None):
+    parameters: Any
+    tables: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
 
@@ -182,51 +187,51 @@ class TheoryTobitaBatch(QTheory):
 
         rgt.initialise_tool_bar(self)
 
-    def theory_buttons_disabled(self, state):
+    def theory_buttons_disabled(self, state: Any) -> None:
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-    def handle_save_bob_configuration(self):
+    def handle_save_bob_configuration(self) -> None:
         """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
 
-    def handle_edit_bob_settings(self):
+    def handle_edit_bob_settings(self) -> None:
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: Any) -> None:
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """set extra data"""
         rgt.set_extra_data(self, extra_data)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """set extra data"""
         rgt.get_extra_data(self)
 
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         rch.set_flag_stop_all(ct.c_bool(True))
         super().request_stop_computations()
 
-    def Calc(self, f=None):
+    def Calc(self, f: Any = None) -> Any:
         # var
         # i,nbins,numtomake,m:integer
         # fin_conv, tau, beta, Cb, Cs, monmass, Me:double
 
         # get parameters
-        tau = self.parameters["tau"].value
-        beta = self.parameters["beta"].value
-        Cb = self.parameters["Cb"].value
-        Cs = self.parameters["Cs"].value
-        fin_conv = self.parameters["fin_conv"].value
-        numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].display_value()
-        Me = self.parameters["Me"].value
-        nbins = int(np.round(self.parameters["nbin"].value))
+        tau: Any = self.parameters["tau"].value
+        beta: Any = self.parameters["beta"].value
+        Cb: Any = self.parameters["Cb"].value
+        Cs: Any = self.parameters["Cs"].value
+        fin_conv: Any = self.parameters["fin_conv"].value
+        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        monmass: Any = self.parameters["mon_mass"].display_value()
+        Me: Any = self.parameters["Me"].value
+        nbins: Any = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

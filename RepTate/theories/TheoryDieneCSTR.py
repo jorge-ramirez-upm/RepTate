@@ -34,6 +34,8 @@
 """Module TheoryDieneCSTR
 
 """
+from typing import Any, ClassVar
+
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -49,21 +51,24 @@ import RepTate.theories.react_gui_tools as rgt
 class TheoryDieneCSTR(QTheory):
     """DieneCSTR reaction theory"""
 
-    thname = "Diene CSTR"
-    description = "The Diene CSTR reaction theory"
-    citations = ["Das C. et al., Macromol. Theory Simul., 26, 1700006 (2017)"]
-    doi = ["https://doi.org/10.1002/mats.201700006"]
-    html_help_file = (
+    thname: ClassVar[str] = "Diene CSTR"
+    description: ClassVar[str] = "The Diene CSTR reaction theory"
+    citations: ClassVar[list[str]] = ["Das C. et al., Macromol. Theory Simul., 26, 1700006 (2017)"]
+    doi: ClassVar[list[str]] = ["https://doi.org/10.1002/mats.201700006"]
+    html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/React/Theory/dieneCSTR.html"
     )
-    single_file = (
+    single_file: ClassVar[bool] = (
         True  # False if the theory can be applied to multiple files simultaneously
     )
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
 
-    def __init__(self, name="", parent_dataset=None, ax=None):
+    parameters: Any
+    tables: Any
+
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.reactname = "Diene CSTR %d" % (rch.dCSTR_global.dieneCSTRnumber)
@@ -212,58 +217,58 @@ class TheoryDieneCSTR(QTheory):
 
         rgt.initialise_tool_bar(self)
 
-    def theory_buttons_disabled(self, state):
+    def theory_buttons_disabled(self, state: Any) -> None:
         """Disable/Enable some theory buttons before/after calculation start."""
         rgt.theory_buttons_disabled(self, state)
 
-    def handle_save_bob_configuration(self):
+    def handle_save_bob_configuration(self) -> None:
         """Save polymer configuraions to a file"""
         rgt.handle_save_bob_configuration(self)
 
-    def handle_edit_bob_settings(self):
+    def handle_edit_bob_settings(self) -> None:
         """Open the BoB binnig settings dialog"""
         rgt.handle_edit_bob_settings(self)
 
-    def handle_btn_prio_senio(self, checked):
+    def handle_btn_prio_senio(self, checked: Any) -> None:
         """Change do_priority_seniority"""
         rgt.handle_btn_prio_senio(self, checked)
 
-    def set_extra_data(self, extra_data):
+    def set_extra_data(self, extra_data: Any) -> None:
         """set extra data"""
         rgt.set_extra_data(self, extra_data)
 
-    def get_extra_data(self):
+    def get_extra_data(self) -> None:
         """set extra data"""
         rgt.get_extra_data(self)
 
 
-    def request_stop_computations(self):
+    def request_stop_computations(self) -> None:
         """Called when user wants to terminate the current computation"""
         rch.set_flag_stop_all(ct.c_bool(True))
         super().request_stop_computations()
 
-    def do_error(self, line):
+    def do_error(self, line: Any) -> None:
         """This theory does not calculate the error"""
         pass
 
-    def Calc(self, f=None):
+    def Calc(self, f: Any = None) -> Any:
         """Calculate the theory"""
 
         # get parameters
-        col_time = self.parameters["col_time"].value
-        tau = self.parameters["tau"].value
-        kpM = self.parameters["kpM"].value
-        kDLCB = self.parameters["kDLCB"].value
-        kpLCB = self.parameters["kpLCB"].value
-        kpD = self.parameters["kpD"].value
-        keq = self.parameters["k="].value
-        ks = self.parameters["ks"].value
-        D0 = self.parameters["D0"].value
-        C0 = self.parameters["C0"].value
-        numtomake = np.round(self.parameters["num_to_make"].value)
-        monmass = self.parameters["mon_mass"].display_value()
-        Me = self.parameters["Me"].value
-        nbins = int(np.round(self.parameters["nbin"].value))
+        col_time: Any = self.parameters["col_time"].value
+        tau: Any = self.parameters["tau"].value
+        kpM: Any = self.parameters["kpM"].value
+        kDLCB: Any = self.parameters["kDLCB"].value
+        kpLCB: Any = self.parameters["kpLCB"].value
+        kpD: Any = self.parameters["kpD"].value
+        keq: Any = self.parameters["k="].value
+        ks: Any = self.parameters["ks"].value
+        D0: Any = self.parameters["D0"].value
+        C0: Any = self.parameters["C0"].value
+        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        monmass: Any = self.parameters["mon_mass"].display_value()
+        Me: Any = self.parameters["Me"].value
+        nbins: Any = int(np.round(self.parameters["nbin"].value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

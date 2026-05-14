@@ -303,7 +303,7 @@ class TheorySCCR(QTheory):
         return beta_rcr
 
     def ind(self, k: Any, i: Any, j: Any) -> Any:
-        """
+        r"""
         Convert k,i,j (3D array) indices to ind (1D array), considering the symmetry of the problem
          \  1 /  (j=i diagonal)
           \  /
