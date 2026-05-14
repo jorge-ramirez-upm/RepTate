@@ -438,23 +438,21 @@ class TheoryGoPolyStrand(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        # connection_id = self.plot_modes_action.triggered.connect(
-        #     self.plot_modes_graph)
-        connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.with_fene_button.triggered.connect(self.handle_with_fene_button)
-        connection_id = self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
-        connection_id = self.with_noqu_button.triggered.connect(self.handle_with_noqu_button)
-        connection_id = self.with_single_button.triggered.connect(self.handle_with_single_button)
+        self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
+        self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        # self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        self.linearenvelope.triggered.connect(self.show_linear_envelope)
+        self.save_modes_action.triggered.connect(self.save_modes)
+        self.with_fene_button.triggered.connect(self.handle_with_fene_button)
+        self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
+        self.with_noqu_button.triggered.connect(self.handle_with_noqu_button)
+        self.with_single_button.triggered.connect(self.handle_with_single_button)
 
-        #!3        connection_id = self.noqu_button.triggered.connect(
-        #!3            self.handle_with_gcorr_button)
-        connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
+        # self.noqu_button.triggered.connect(self.handle_with_gcorr_button)
+        self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
     def handle_flowsolve_btn(self):
         """Save theory parameters in FlowSolve format"""

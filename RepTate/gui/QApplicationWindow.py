@@ -178,7 +178,7 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
         for i in range(4):
             self.parameterTreeWidget.setColumnWidth(i, 60)
 
-        connection_id = self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+        self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
 
     def handle_itemDoubleClicked(self, item, column):
         if column > 0 and column < 4:
@@ -289,10 +289,10 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         self.framealphaannotationSpinBox.setValue(annotation.get_alpha())
         self.fontfamilyComboBox.setCurrentText(annotation.get_fontfamily()[0])
 
-        connection_id = self.pickFontColor.clicked.connect(self.handle_pickFontColor)
-        connection_id = self.pushApply.clicked.connect(self.apply_changes)
-        connection_id = self.pushOK.clicked.connect(self.apply_changes)
-        connection_id = self.pushDelete.clicked.connect(self.delete)
+        self.pickFontColor.clicked.connect(self.handle_pickFontColor)
+        self.pushApply.clicked.connect(self.apply_changes)
+        self.pushOK.clicked.connect(self.apply_changes)
+        self.pushDelete.clicked.connect(self.delete)
 
         self.color = None
 
@@ -480,11 +480,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         }
         self.ax_opts = self.ax_opt_defaults.copy()
 
-        connection_id = self.figure.canvas.mpl_connect("resize_event", self.resizeplot)
-        connection_id = self.figure.canvas.mpl_connect("scroll_event", self.zoom_wheel)
-        connection_id = self.figure.canvas.mpl_connect("button_press_event", self.on_press)
-        connection_id = self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion)
-        connection_id = self.figure.canvas.mpl_connect("button_release_event", self.onrelease)
+        self.figure.canvas.mpl_connect("resize_event", self.resizeplot)
+        self.figure.canvas.mpl_connect("scroll_event", self.zoom_wheel)
+        self.figure.canvas.mpl_connect("button_press_event", self.on_press)
+        self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion)
+        self.figure.canvas.mpl_connect("button_release_event", self.onrelease)
 
         # Variables used during matplotlib interaction
         self.artists_clicked = []
@@ -682,48 +682,48 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
         # EVENT HANDLING
         # Matplotlib events
-        connection_id = self.figure.canvas.mpl_connect("pick_event", self.onpick)
+        self.figure.canvas.mpl_connect("pick_event", self.onpick)
 
-        connection_id = self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
-        connection_id = self.actionInspect_Data.triggered.connect(self.showDataInspector)
-        connection_id = self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
-        connection_id = self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
-        connection_id = self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
-        connection_id = self.actionAdd_File_With_Function.triggered.connect(self.addFileFunction)
-        connection_id = self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
-        connection_id = self.action_import_from_pasted.triggered.connect(self.handle_action_import_from_pasted)
-        connection_id = self.actionSaveDataSet.triggered.connect(self.handle_action_save_current_dataset)
-        connection_id = self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
-        connection_id = self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
+        self.actionShowFigureTools.triggered.connect(self.viewMPLToolbar)
+        self.actionInspect_Data.triggered.connect(self.showDataInspector)
+        self.actionNew_Empty_Dataset.triggered.connect(self.handle_createNew_Empty_Dataset)
+        self.actionNew_Dataset_From_File.triggered.connect(self.openDataset)
+        self.actionAddDummyFiles.triggered.connect(self.addDummyFiles)
+        self.actionAdd_File_With_Function.triggered.connect(self.addFileFunction)
+        self.action_import_from_excel.triggered.connect(self.handle_action_import_from_excel)
+        self.action_import_from_pasted.triggered.connect(self.handle_action_import_from_pasted)
+        self.actionSaveDataSet.triggered.connect(self.handle_action_save_current_dataset)
+        self.actionReload_Data.triggered.connect(self.handle_actionReload_Data)
+        self.actionAutoscale.triggered.connect(self.handle_actionAutoscale)
 
-        connection_id = self.actionNew_Tool.triggered.connect(self.handle_actionNewTool)
-        connection_id = self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
-        connection_id = self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
+        self.actionNew_Tool.triggered.connect(self.handle_actionNewTool)
+        self.TooltabWidget.tabCloseRequested.connect(self.handle_toolTabCloseRequested)
+        self.qtabbar.tabMoved.connect(self.handle_toolTabMoved)
 
-        connection_id = self.viewComboBox.currentIndexChanged.connect(self.handle_change_view)
-        connection_id = self.actionSave_View.triggered.connect(self.save_view)
-        connection_id = self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
+        self.viewComboBox.currentIndexChanged.connect(self.handle_change_view)
+        self.actionSave_View.triggered.connect(self.save_view)
+        self.sp_nviews.valueChanged.connect(self.sp_nviews_valueChanged)
         self.sp_nviews.setVisible(False)  # JR: Hide the spinbox for now (not working properly)
 
-        connection_id = self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
-        connection_id = self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
-        connection_id = self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
-        connection_id = self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
-        connection_id = self.actionView_All_SetTheories.triggered.connect(self.handle_actionView_All_SetTheories)
-        connection_id = self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
-        connection_id = self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
-        connection_id = self.actionViewShiftFactors.triggered.connect(self.handle_actionViewShiftTriggered)
-        connection_id = self.actionSaveShiftFactors.triggered.connect(self.handle_actionSaveShiftTriggered)
-        connection_id = self.actionResetShiftFactors.triggered.connect(self.handle_actionResetShiftTriggered)
-        connection_id = self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
+        self.DataSettabWidget.tabCloseRequested.connect(self.close_data_tab_handler)
+        self.DataSettabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
+        self.DataSettabWidget.currentChanged.connect(self.handle_currentChanged)
+        self.actionView_All_Sets.toggled.connect(self.handle_actionView_All_Sets)
+        self.actionView_All_SetTheories.triggered.connect(self.handle_actionView_All_SetTheories)
+        self.actionShiftVertically.triggered.connect(self.handle_actionShiftTriggered)
+        self.actionShiftHorizontally.triggered.connect(self.handle_actionShiftTriggered)
+        self.actionViewShiftFactors.triggered.connect(self.handle_actionViewShiftTriggered)
+        self.actionSaveShiftFactors.triggered.connect(self.handle_actionSaveShiftTriggered)
+        self.actionResetShiftFactors.triggered.connect(self.handle_actionResetShiftTriggered)
+        self.DataInspectordockWidget.visibilityChanged.connect(self.handle_inspectorVisibilityChanged)
 
-        connection_id = self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
+        self.actionMarkerSettings.triggered.connect(self.handle_actionMarkerSettings)
 
-        connection_id = self.actionCopy.triggered.connect(self.inspector_table.copy)
-        connection_id = self.actionPaste.triggered.connect(self.inspector_table.paste)
+        self.actionCopy.triggered.connect(self.inspector_table.copy)
+        self.actionPaste.triggered.connect(self.inspector_table.paste)
 
         # Annotation stuff
-        # connection_id = self.actionTrack_data.triggered.connect(self.handle_annotation)
+        # self.actionTrack_data.triggered.connect(self.handle_annotation)
         self.graphicnotes = []
         self.artistnotes = []
         # plt.connect('motion_notify_event', self.mpl_motion_event)
@@ -781,22 +781,22 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # self.populate_markers()
         self.fparam_backup = []  # temporary storage of the file parameters
         self.dialog.ui.spinBox.setSingleStep(3)  # increment in the marker size dialog
-        connection_id = self.dialog.ui.pickColor1.clicked.connect(self.handle_pickColor1)
-        connection_id = self.dialog.ui.pickColor2.clicked.connect(self.handle_pickColor2)
-        connection_id = self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
-        connection_id = self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
-        connection_id = self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
-        connection_id = self.dialog.ui.pickFontColor.clicked.connect(self.handle_pickFontColor)
-        connection_id = self.dialog.ui.pickFontColor_ax.clicked.connect(self.handle_pickFontColor_ax)
-        connection_id = self.dialog.ui.pickFontColor_label.clicked.connect(self.handle_pickFontColor_label)
-        connection_id = self.dialog.ui.reset_all_pb.clicked.connect(self.handle_reset_all_pb)
-        connection_id = self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
-        connection_id = self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
-        connection_id = self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
+        self.dialog.ui.pickColor1.clicked.connect(self.handle_pickColor1)
+        self.dialog.ui.pickColor2.clicked.connect(self.handle_pickColor2)
+        self.dialog.ui.pickThColor.clicked.connect(self.handle_pickThColor)
+        self.dialog.ui.pickFaceColor.clicked.connect(self.handle_pickFaceColor)
+        self.dialog.ui.pickEdgeColor.clicked.connect(self.handle_pickEdgeColor)
+        self.dialog.ui.pickFontColor.clicked.connect(self.handle_pickFontColor)
+        self.dialog.ui.pickFontColor_ax.clicked.connect(self.handle_pickFontColor_ax)
+        self.dialog.ui.pickFontColor_label.clicked.connect(self.handle_pickFontColor_label)
+        self.dialog.ui.reset_all_pb.clicked.connect(self.handle_reset_all_pb)
+        self.dialog.ui.rbEmpty.clicked.connect(self.populate_cbSymbolType)
+        self.dialog.ui.rbFilled.clicked.connect(self.populate_cbSymbolType)
+        self.dialog.ui.pushApply.clicked.connect(self.handle_apply_button_pressed)
 
         self.dataset_actions_disabled(True)
         self.sp_nviews.setMaximum(self.nplot_max)
-        # connection_id = self.checkBoxColor.toggled.connect(self)
+        # self.checkBoxColor.toggled.connect(self)
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         # xaxis = self.ax.get_xticklabels()
         # print (xaxis)
@@ -2762,7 +2762,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self._annotation_done = False
             # TODO: JR removed the "Add Annotation" option. See if we can bring it back, if many people request it.
             # add_annotation = main_menu.addAction(self.actionAdd_Annotation)
-            # connection_id = self.actionAdd_Annotation.triggered.connect(
+            # self.actionAdd_Annotation.triggered.connect(
             #     self.add_annotation
             # )
         refresh_chart_action = main_menu.addAction("Reset view(s)")

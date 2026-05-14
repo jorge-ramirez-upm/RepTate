@@ -77,9 +77,7 @@ class TheoryGiesekus(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-giesekus-model"
     single_file: ClassVar[bool] = False
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_giesekus
@@ -160,8 +158,8 @@ class TheoryGiesekus(QTheory):
                 self.tbutflow.setDefaultAction(self.extensional_flow_action)
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+            self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
 
             self.read_gdot_action = tb.addAction(
                 QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
@@ -194,11 +192,11 @@ class TheoryGiesekus(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        self.save_modes_action.triggered.connect(self.save_modes)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value: int) -> None:
         nmodes: Any = self.parameters["nmodes"].value

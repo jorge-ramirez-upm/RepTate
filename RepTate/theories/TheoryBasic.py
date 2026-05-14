@@ -132,7 +132,7 @@ class TheoryPolynomial(QTheory):
         self.spinbox.setValue(self.parameters["n"].value)  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value: Any) -> None:
         """Handle a change of the parameter 'nmode'"""
@@ -452,8 +452,8 @@ class TheoryAlgebraicExpression(QTheory):
         tb.addWidget(self.expressionCB)
 
         self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
-        connection_id = self.expressionCB.currentIndexChanged.connect(self.handle_expressionChanged)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.expressionCB.currentIndexChanged.connect(self.handle_expressionChanged)
 
     def handle_spinboxValueChanged(self, value: Any) -> None:
         """Handle a change of the parameter 'n'"""

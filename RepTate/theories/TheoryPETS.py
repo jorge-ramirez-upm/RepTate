@@ -234,9 +234,9 @@ class TheoryPETS(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
-        connection_id = self.linearenvelope.triggered.connect(self.show_linear_envelope)
+        self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        self.linearenvelope.triggered.connect(self.show_linear_envelope)
 
     def Qhide_theory_extras(self, show: Any) -> None:
         """Uncheck the LVE button. Called when curent theory is changed"""

@@ -244,12 +244,12 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         self.plateauaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-        connection_id = self.plateauaction.triggered.connect(self.plateauaction_change)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.save_spectrum_action.triggered.connect(self.save_spectrum)
-        connection_id = self.cont_pred_action.triggered.connect(self.select_cont_pred)
-        connection_id = self.disc_pred_action.triggered.connect(self.select_disc_pred)
+        self.modesaction.triggered.connect(self.modesaction_change)
+        self.plateauaction.triggered.connect(self.plateauaction_change)
+        self.save_modes_action.triggered.connect(self.save_modes)
+        self.save_spectrum_action.triggered.connect(self.save_spectrum)
+        self.cont_pred_action.triggered.connect(self.select_cont_pred)
+        self.disc_pred_action.triggered.connect(self.select_disc_pred)
 
     def select_cont_pred(self):
         self.prediction_mode = PredictionMode.cont
@@ -1611,12 +1611,12 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         self.plateauaction.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-        connection_id = self.plateauaction.triggered.connect(self.plateauaction_change)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.save_spectrum_action.triggered.connect(self.save_spectrum)
-        connection_id = self.cont_pred_action.triggered.connect(self.select_cont_pred)
-        connection_id = self.disc_pred_action.triggered.connect(self.select_disc_pred)
+        self.modesaction.triggered.connect(self.modesaction_change)
+        self.plateauaction.triggered.connect(self.plateauaction_change)
+        self.save_modes_action.triggered.connect(self.save_modes)
+        self.save_spectrum_action.triggered.connect(self.save_spectrum)
+        self.cont_pred_action.triggered.connect(self.select_cont_pred)
+        self.disc_pred_action.triggered.connect(self.select_disc_pred)
 
     def select_cont_pred(self):
         self.prediction_mode = PredictionMode.cont

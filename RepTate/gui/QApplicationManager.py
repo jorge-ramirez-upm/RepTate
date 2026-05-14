@@ -299,7 +299,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
         self.actionAbout.triggered.connect(self.show_about)
 
-        connection_id = self.ApplicationtabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
+        self.ApplicationtabWidget.tabBarDoubleClicked.connect(self.handle_doubleClickTab)
         # help buttons
         self.actionShow_reptate_help.triggered.connect(self.handle_show_reptate_help)
         self.actionShow_app_help.triggered.connect(self.handle_show_app_help)
@@ -313,8 +313,8 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.actionCite_RepTate.triggered.connect(self.handle_cite_RepTate)
         self.actionCheckRepTateVersion.triggered.connect(self.handle_check_RepTate_version)
 
-        connection_id = self.LoggerdockWidget.visibilityChanged.connect(self.handle_loggerVisibilityChanged)
-        connection_id = self.actionShow_Logger.triggered.connect(self.showLogger)
+        self.LoggerdockWidget.visibilityChanged.connect(self.handle_loggerVisibilityChanged)
+        self.actionShow_Logger.triggered.connect(self.showLogger)
 
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
@@ -361,13 +361,13 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logTextBox.setLevel(loglevel)
         self.LoggerdochorizontalLayout.addWidget(self.logTextBox.widget)
 
-        connection_id = self.actionLogNotSet.triggered.connect(self.logNotSet)
-        connection_id = self.actionLogDebug.triggered.connect(self.logDebug)
-        connection_id = self.actionLogInfo.triggered.connect(self.logInfo)
-        connection_id = self.actionLogWarning.triggered.connect(self.logWarning)
-        connection_id = self.actionLogError.triggered.connect(self.logError)
-        connection_id = self.actionLogCritical.triggered.connect(self.logCritical)
-        connection_id = self.actionCopyLogText.triggered.connect(self.copyLogText)
+        self.actionLogNotSet.triggered.connect(self.logNotSet)
+        self.actionLogDebug.triggered.connect(self.logDebug)
+        self.actionLogInfo.triggered.connect(self.logInfo)
+        self.actionLogWarning.triggered.connect(self.logWarning)
+        self.actionLogError.triggered.connect(self.logError)
+        self.actionLogCritical.triggered.connect(self.logCritical)
+        self.actionCopyLogText.triggered.connect(self.copyLogText)
 
         # self.add_save_load_buttons()
         self.REPTATE_PROJ_JSON = "reptate_project.json"  # json filename inside zip

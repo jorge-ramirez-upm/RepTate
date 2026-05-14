@@ -34,6 +34,7 @@
 
 MaterialsDatabase Viewer
 """
+
 import sys
 import os
 import numpy as np
@@ -58,7 +59,7 @@ from PySide6.QtCore import QSize, QStandardPaths
 from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
 from pathlib import Path
 from . import polymer_data
-#import RepTate.tools.polymer_data as polymer_data
+# import RepTate.tools.polymer_data as polymer_data
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -83,9 +84,7 @@ polymer_data.canonicalize_database(materials_database)
 home_path = str(Path.home())
 file_user_database_old = os.path.join(home_path, "user_database.npy")
 if os.path.exists(file_user_database_old):
-    materials_user_database_old = np.load(
-        file_user_database_old, allow_pickle=True
-    ).item()
+    materials_user_database_old = np.load(file_user_database_old, allow_pickle=True).item()
 else:
     materials_user_database_old = {}
 polymer_data.canonicalize_database(materials_user_database_old)
@@ -124,9 +123,7 @@ class EditMaterialParametersDialog(QDialog):
 
     def createFormGroupBox(self, material, parameterdata):
         """Create a form to set the new values of the material parameters"""
-        self.formGroupBox = QGroupBox(
-            'Parameters of material "%s"' % material.data["name"]
-        )
+        self.formGroupBox = QGroupBox('Parameters of material "%s"' % material.data["name"])
         layout = QFormLayout()
 
         parameters = material.data
@@ -184,9 +181,7 @@ def get_all_parameters(chem, theory, fparam, dbindex):
         if p in materials_db[dbindex][chem].data.keys():
             value, success = get_single_parameter(chem, p, fparam, dbindex)
             if success:
-                value = polymer_data.convert_database_value_to_parameter(
-                    p, value, theory.parameters[p]
-                )
+                value = polymer_data.convert_database_value_to_parameter(p, value, theory.parameters[p])
                 theory.set_param_value(p, value)
 
 
@@ -312,9 +307,7 @@ class ToolMaterialsDatabase(QTool):
             name="logalpha",
             description="Log_10 of the thermal expansion coefficient at 0 °C",
         )
-        self.parameters["CTg"] = Parameter(
-            name="CTg", description="Molecular weight dependence of Tg"
-        )
+        self.parameters["CTg"] = Parameter(name="CTg", description="Molecular weight dependence of Tg")
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             description="Entanglement time",
@@ -336,9 +329,7 @@ class ToolMaterialsDatabase(QTool):
             internal_unit="kg/mol",
             display_unit="kg/mol",
         )
-        self.parameters["c_nu"] = Parameter(
-            name="c_nu", description="Constraint release parameter"
-        )
+        self.parameters["c_nu"] = Parameter(name="c_nu", description="Constraint release parameter")
         self.parameters["rho0"] = Parameter(
             name="rho0",
             description="Density of the polymer melt at 0 °C",
@@ -346,9 +337,7 @@ class ToolMaterialsDatabase(QTool):
             internal_unit="kg/m3",
             display_unit="g/cm3",
         )
-        self.parameters["chem"] = Parameter(
-            name="chem", description="Repeating unit", type=ParameterType.string
-        )
+        self.parameters["chem"] = Parameter(name="chem", description="Repeating unit", type=ParameterType.string)
         self.parameters["Te"] = Parameter(
             name="Te",
             description="Temperature at which the tube parameters have been determined (°C)",
@@ -370,9 +359,7 @@ class ToolMaterialsDatabase(QTool):
             internal_unit="kg/mol",
             display_unit="Da",
         )
-        self.parameters["C_inf"] = Parameter(
-            name="C_inf", description="Characteristic ratio"
-        )
+        self.parameters["C_inf"] = Parameter(name="C_inf", description="Characteristic ratio")
 
         # Search for the chemistry in the first file of the first dataset (OR CURRENT DATASET?)
         self.init_chem = None
@@ -408,9 +395,7 @@ class ToolMaterialsDatabase(QTool):
             item.setForeground(QColor("red"))
             self.model.appendRow(item)
         self.tb.addWidget(self.cbmaterial)
-        connection_id = self.cbmaterial.currentIndexChanged.connect(
-            self.change_material
-        )
+        self.cbmaterial.currentIndexChanged.connect(self.change_material)
 
         self.actionCalculate = QAction(
             QIcon(":/Icon8/Images/new_icons/icons8-ok.png"),
@@ -418,9 +403,7 @@ class ToolMaterialsDatabase(QTool):
             self,
         )
         self.tb.addAction(self.actionCalculate)
-        self.actionNew = QAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-add-file.png"), "New Material", self
-        )
+        self.actionNew = QAction(QIcon(":/Icon8/Images/new_icons/icons8-add-file.png"), "New Material", self)
         self.tb.addAction(self.actionNew)
         self.actionEdit = QAction(
             QIcon(":/Icon8/Images/new_icons/icons8-edit-property.png"),
@@ -446,12 +429,12 @@ class ToolMaterialsDatabase(QTool):
             self,
         )
         self.tb.addAction(self.actionSave)
-        connection_id = self.actionCalculate.triggered.connect(self.calculate_stuff)
-        connection_id = self.actionNew.triggered.connect(self.new_material)
-        connection_id = self.actionEdit.triggered.connect(self.edit_material)
-        connection_id = self.actionCopy.triggered.connect(self.copy_material)
-        connection_id = self.actionDelete.triggered.connect(self.delete_material)
-        connection_id = self.actionSave.triggered.connect(self.save_usermaterials)
+        self.actionCalculate.triggered.connect(self.calculate_stuff)
+        self.actionNew.triggered.connect(self.new_material)
+        self.actionEdit.triggered.connect(self.edit_material)
+        self.actionCopy.triggered.connect(self.copy_material)
+        self.actionDelete.triggered.connect(self.delete_material)
+        self.actionSave.triggered.connect(self.save_usermaterials)
 
         self.labelPolymer = QLabel("None")
         self.labelPolymer.setFont(QFont("Times", weight=QFont.Bold))
@@ -490,9 +473,9 @@ class ToolMaterialsDatabase(QTool):
             "Shift all Files in the current Application",
         )
         self.verticalLayout.insertWidget(2, self.tbMwT)
-        connection_id = self.isofrictional.triggered.connect(self.handle_vert_and_iso)
-        connection_id = self.verticalshift.triggered.connect(self.handle_vert_and_iso)
-        connection_id = self.shiftdata.triggered.connect(self.handle_shift_data)
+        self.isofrictional.triggered.connect(self.handle_vert_and_iso)
+        self.verticalshift.triggered.connect(self.handle_vert_and_iso)
+        self.shiftdata.triggered.connect(self.handle_shift_data)
 
         init_chem_index = self.cbmaterial.findText(self.init_chem)
         if init_chem_index > -1:
@@ -553,10 +536,7 @@ class ToolMaterialsDatabase(QTool):
 
             aT = np.power(
                 10.0,
-                -B1
-                * (Tf - Trcorrected)
-                / (B2corrected + Trcorrected)
-                / (B2corrected + Tf),
+                -B1 * (Tf - Trcorrected) / (B2corrected + Trcorrected) / (B2corrected + Tf),
             )
             if vert:
                 bT = (1 + alpha * Tf) * (Tr + 273.15) / (1 + alpha * Tr) / (Tf + 273.15)
@@ -598,14 +578,10 @@ class ToolMaterialsDatabase(QTool):
             dbindex = 1
         else:
             dbindex = 0
-        self.labelPolymer.setText(
-            materials_db[dbindex][selected_material_name].data["long"]
-        )
+        self.labelPolymer.setText(materials_db[dbindex][selected_material_name].data["long"])
         for k in materials_db[dbindex][selected_material_name].data.keys():
             if k in self.parameters:
-                self.set_param_value(
-                    k, materials_db[dbindex][selected_material_name].data[k]
-                )
+                self.set_param_value(k, materials_db[dbindex][selected_material_name].data[k])
         self.update_parameter_table()
         self.do_plot()
 
@@ -613,15 +589,11 @@ class ToolMaterialsDatabase(QTool):
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
         ok = False
         while not ok:
-            name, ok = QInputDialog.getText(
-                self, "New name", "Enter the short name of the new material:"
-            )
+            name, ok = QInputDialog.getText(self, "New name", "Enter the short name of the new material:")
             if not ok:
                 return
             if name in materials_user_database:
-                QMessageBox.warning(
-                    self, "New name", "Error: The name already exists in your database"
-                )
+                QMessageBox.warning(self, "New name", "Error: The name already exists in your database")
                 ok = False
 
         # Create new material with empty  parameters and open the edit dialog
@@ -702,15 +674,11 @@ class ToolMaterialsDatabase(QTool):
         name = ""
         ok = False
         while not ok:
-            name, ok = QInputDialog.getText(
-                self, "New name", "Enter the name of the new parameter:"
-            )
+            name, ok = QInputDialog.getText(self, "New name", "Enter the name of the new parameter:")
             if not ok:
                 return
             if name in materials_user_database:
-                QMessageBox.warning(
-                    self, "New name", "Error: The name already exists in your database"
-                )
+                QMessageBox.warning(self, "New name", "Error: The name already exists in your database")
                 ok = False
         # Create new user material with same parameters as source material and new NAME
         # newpar=
@@ -872,9 +840,7 @@ class ToolMaterialsDatabase(QTool):
             else:
                 Trcorrected = T
 
-            aT = np.power(
-                10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te)
-            )
+            aT = np.power(10.0, -B1 * (Te - Trcorrected) / (B2 + Trcorrected) / (B2 + Te))
             if vert:
                 bT = (1 + alpha * Te) * (T + 273.15) / (1 + alpha * T) / (Te + 273.15)
             else:
@@ -897,12 +863,7 @@ class ToolMaterialsDatabase(QTool):
             CC3 = -1.55
             Z = Mw / Me
             tR = tau_e * Z * Z
-            tD = (
-                3
-                * tau_e
-                * Z**3
-                * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
-            )
+            tD = 3 * tau_e * Z**3 * (1 - 2 * CC1 / np.sqrt(Z) + CC2 / Z + CC3 / Z**1.5)
             self.Qprint("<b>Z</b> = %g" % Z)
             self.Qprint("<b>tau_R</b> = %g" % tR)
             self.Qprint("<b>tau_D</b> = %g<br>" % tD)

@@ -34,6 +34,7 @@
 
 Debye theory for neutron scattering from ideal polymer chains
 """
+
 from typing import Any, ClassVar
 
 import numpy as np
@@ -45,47 +46,41 @@ from PySide6.QtGui import QIcon
 
 
 class TheoryDebye(QTheory):
-    """Fit a Debye function to the small angle neutron scattering data of ideal polymer chains. 
-    
+    """Fit a Debye function to the small angle neutron scattering data of ideal polymer chains.
+
     * **Function**
         .. math::
             I(q) = \\frac {(b_H-b_D)^2}{V} N \\phi(1-\\phi) g_D(R_g,q) + \\mathrm{Bckgrnd}
-        
+
         where:
           - :math:`N=M_w/M_\\mathrm{mono}` is the degree of polymerization of the chain (:math:`M_w` is a parameter of the experimental data)
           - :math:`\\phi` is the volume fraction of deuterated chains (read from the file)
           - :math:`g_D(R_g,q)` is the Debye function, given by
-          
+
           .. math::
               g_D(R_g,q) = \\frac{2}{(q^2R_g^2)^2}\\left( q^2R_g^2 + exp(-q^2R_g^2) -1 \\right)
-    
+
     * **Parameters**
-       - Contrast: This sets the magnitude of the scattering and is equal to :math:`(b_H-b_D)^2/V` where :math:`b_{H/D}` is the scattering cross-section of the hydrogenous/deuterated monomer and :math:`V` is the monomer volume. 
+       - Contrast: This sets the magnitude of the scattering and is equal to :math:`(b_H-b_D)^2/V` where :math:`b_{H/D}` is the scattering cross-section of the hydrogenous/deuterated monomer and :math:`V` is the monomer volume.
        - :math:`C_{gyr}`: This sets the scale of the radius of gyration of the chain. For a given molecular weight, the radius of gyration is :math:`R_g^2=C_{gyr}M_w`. For many polymers, this value is available in the literature, but small adjustments may still be necessary to optimize the agreement with the experimental data.
        - :math:`M_\\mathrm{mono}`: The molecular weight of a single monomer (should be known from the chain chemistry).
        - Bckgrnd: This sets the level of the background scattering. It can, in principle, be computed from known incoherent scattering cross sections but, in practice, there are often many other unknown contributions and therefore fitting is necessary.
        - :math:`\\lambda`: It applies a simple strain measure by shifting the radius of gyration by a constant factor for all :math:`q` values, :math:`R_g\\to \\lambda R_g` (the **Stretched** button must be checked). This can be used to compare the microscopic deformation with the effect of a fully affine bulk deformation or to fit to the low :math:`q` data to produce an effective radius of gyration under flow. Compression perpendicular to the flow direction can be modelled by setting :math:`\\lambda<1`.
        - :math:`\\chi`: Parameter to model the effect of a weak interaction between the hydrogenous and the deuterated monomers on the scattering, modelled within the random phase approximation [3] (the **Non-Ideal Mix** button must be checked). The scattered intensity is calculated according to the function below, in which :math:`\\chi` is independent of :math:`M_w` and :math:`\\phi` but is expected to change with temperature. Typically, the effect of :math:`\\chi` is small, but this depends upon the temperature, degree of polymerization and deuterated fraction. For deuterated/hydrogenated polystyrene :math:`\\chi\\approx 1.7\\cdot 10^{-4}` at 160 degrees C, and it is expected to be smaller with increasing temperature.
-         
+
          .. math::
-             I(q) = \\frac {(b_H-b_D)^2}{V} \\left( \\frac{1}{N \\phi(1-\\phi) g_D(R_g,q)}-2\\chi \\right)^{-1} + \\mathrm{Bckgrnd}     
-    
+             I(q) = \\frac {(b_H-b_D)^2}{V} \\left( \\frac{1}{N \\phi(1-\\phi) g_D(R_g,q)}-2\\chi \\right)^{-1} + \\mathrm{Bckgrnd}
+
     """
 
     thname: ClassVar[str] = "Debye"
-    description: ClassVar[str] = (
-        "Debye theory for neutron scattering from ideal polymer chains"
-    )
+    description: ClassVar[str] = "Debye theory for neutron scattering from ideal polymer chains"
     citations: ClassVar[list[str]] = ["Debye P., J. Phys. Chem. 1947, 51, 18-32"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/j150451a002"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculateDebye  # main theory function
@@ -161,25 +156,17 @@ class TheoryDebye(QTheory):
         # add widgets specific to the theory here:
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        self.tbutstretched = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-socks.png"), "Stretched"
-        )
+        self.tbutstretched = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-socks.png"), "Stretched")
         self.tbutstretched.setCheckable(True)
         self.tbutstretched.setChecked(False)
-        self.tbutnonideal = tb.addAction(
-            QIcon(":/Images/Images/new_icons/icons8-broom.png"), "Non-Ideal Mix"
-        )
+        self.tbutnonideal = tb.addAction(QIcon(":/Images/Images/new_icons/icons8-broom.png"), "Non-Ideal Mix")
         self.tbutnonideal.setCheckable(True)
         self.tbutnonideal.setChecked(False)
         self.thToolsLayout.insertWidget(0, tb)
 
         # connections signal and slots
-        connection_id = self.tbutstretched.triggered.connect(
-            self.handle_tbutstretched_triggered
-        )
-        connection_id = self.tbutnonideal.triggered.connect(
-            self.handle_tbutnonideal_triggered
-        )
+        self.tbutstretched.triggered.connect(self.handle_tbutstretched_triggered)
+        self.tbutnonideal.triggered.connect(self.handle_tbutnonideal_triggered)
 
     def handle_tbutstretched_triggered(self, checked: bool) -> None:
         """Check Streched"""
@@ -224,19 +211,16 @@ class TheoryDebye(QTheory):
         RgQsq = Rg * Rg * ft.data[:, 0] * ft.data[:, 0]
         debFn = 2.0 / RgQsq / RgQsq * (RgQsq + np.exp(-RgQsq) - 1.0)
         if nonideal:
-            tt.data[:, 1] = (
-                Contr * 1 / (1 / (Mw / Mmono * Phi * (1.0 - Phi) * debFn) - 2 * Chi)
-                + Bck
-            )
+            tt.data[:, 1] = Contr * 1 / (1 / (Mw / Mmono * Phi * (1.0 - Phi) * debFn) - 2 * Chi) + Bck
         else:
             tt.data[:, 1] = Contr * Mw / Mmono * Phi * (1.0 - Phi) * debFn + Bck
 
     def do_error(self, line: str) -> None:
         """Report the error of the current theory
 
-Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
+        Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
+        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files."""
         super().do_error(line)
         if line == "":
             self.Qprint("")
@@ -250,13 +234,6 @@ File error is calculated as the mean square of the residual, averaged over all p
                 if f.active:
                     Mw = float(f.file_parameters["Mw"])
                     if stretched:
-                        self.Qprint(
-                            "%12s %8.4g %8.4g"
-                            % (f.file_name_short, Mw, Lambda * np.sqrt(CRg * Mw))
-                        )
+                        self.Qprint("%12s %8.4g %8.4g" % (f.file_name_short, Mw, Lambda * np.sqrt(CRg * Mw)))
                     else:
-                        self.Qprint(
-                            "%12s %8.4g %8.4g"
-                            % (f.file_name_short, Mw, np.sqrt(CRg * Mw))
-                        )
-
+                        self.Qprint("%12s %8.4g %8.4g" % (f.file_name_short, Mw, np.sqrt(CRg * Mw)))

@@ -35,6 +35,7 @@
 Module that defines theories related to Havriliak-Negami modes, in the frequency and time domains.
 
 """
+
 from typing import Any, ClassVar, cast
 
 import numpy as np
@@ -52,12 +53,12 @@ def _logspace(start: Any, stop: Any, num: Any) -> Any:
 
 
 class TheoryHavriliakNegamiModesFrequency(QTheory):
-    """Fit a generalized Havriliak-Negami model to a frequency dependent relaxation function. 
-    
+    """Fit a generalized Havriliak-Negami model to a frequency dependent relaxation function.
+
     * **Function**
         .. math::
             \\epsilon^* (\\omega) = \\epsilon_\\infty + \\frac{\\Delta\\epsilon}{\\left[ 1 + \\left( i\\omega\\tau\\right)^\\alpha\\right]^\\gamma}
-    
+
     * **Parameters**
        - einf = :math:`\\epsilon_{\\infty}`: Unrelaxed permitivity
        - :math:`n_{modes}`: number of Havriliak-Negami modes equally distributed in logarithmic scale between :math:`\\omega_{min}` and :math:`\\omega_{max}`.
@@ -66,21 +67,17 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
        - logDei = :math:`\\log(\\Delta\\epsilon_{i})`, where :math:`\\Delta\\epsilon_{i}=\\epsilon_{s,i}-\\epsilon_\\infty`: decimal logarithm of the relaxation strength of Debye mode :math:`i`, where :math:`\\epsilon_{s,i}` is the static permitivity of mode :math:`i`.
        - :math:`\\alpha`: Asymmetry parameter
        - :math:`\\gamma`: Broadness parameter
-    
+
     """
 
     thname: ClassVar[str] = "Havriliak-Negami modes"
     description: ClassVar[str] = "Fit Havriliak-Negami modes"
-    citations: ClassVar[list[str]] = [
-        "Havriliak S. and Negami S., Polymer 1967, 8, 161-210"
-    ]
+    citations: ClassVar[list[str]] = ["Havriliak S. and Negami S., Polymer 1967, 8, 161-210"]
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1016/0032-3861(67)90021-3"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#havriliak-negami-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.HavriliakNegamiModesFrequency
@@ -92,41 +89,41 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
         self.parameters["einf"] = Parameter(
-            name = "einf",
-            value = 0.0,
-            description = "Unrelaxed permittivity",
-            type = ParameterType.real,
+            name="einf",
+            value=0.0,
+            description="Unrelaxed permittivity",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["alpha"] = Parameter(
-            name = "alpha",
-            value = 1.0,
-            description = "Asymmetry parameter",
-            type = ParameterType.real,
+            name="alpha",
+            value=1.0,
+            description="Asymmetry parameter",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["gamma"] = Parameter(
-            name = "gamma",
-            value = 1.0,
-            description = "Broadness parameter",
-            type = ParameterType.real,
+            name="gamma",
+            value=1.0,
+            description="Broadness parameter",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["logwmin"] = Parameter(
-            name = "logwmin",
-            value = np.log10(wmin),
-            description = "log10(wmin) of frequency range minimum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmin",
+            value=np.log10(wmin),
+            description="log10(wmin) of frequency range minimum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logwmax"] = Parameter(
-            name = "logwmax",
-            value = np.log10(wmax),
-            description = "log10(wmax) of frequency range maximum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmax",
+            value=np.log10(wmax),
+            description="log10(wmax) of frequency range maximum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -169,17 +166,13 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -221,7 +214,6 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
-
 
     def drag_mode(self, dx: Any, dy: Any) -> None:
         """Drag graphical modes"""
@@ -278,7 +270,7 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
     def destructor(self) -> None:
         """Called when the theory tab is closed"""
         self.graphicmodes_visible(False)
-        #self.ax.lines.remove(self.graphicmodes)
+        # self.ax.lines.remove(self.graphicmodes)
         self.graphicmodes.remove()
 
     def show_theory_extras(self, show: bool = False) -> None:
@@ -333,9 +325,7 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
             if self.stop_theory_flag:
                 break
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
-            sol += eps / np.power(
-                1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma
-            )
+            sol += eps / np.power(1.0 + np.power(1j * tt.data[:, 0] * tau[i], alpha), gamma)
 
         tt.data[:, 1] = np.real(sol)
         tt.data[:, 2] = -np.imag(sol)
@@ -356,9 +346,7 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
-                10, self.parameters["logDe%02d" % i].value
-            )
+            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(10, self.parameters["logDe%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
@@ -371,6 +359,3 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
             for nx in range(len(self.axarr)):
                 # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
                 data_table_tmp.series[nx][i].remove()
-
-
-

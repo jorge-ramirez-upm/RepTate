@@ -36,6 +36,7 @@ Module that defines the Likhtman-McLeish theory for melts of linear monodisperse
 polymers.
 
 """
+
 import os
 import numpy as np
 from numpy import interp
@@ -170,9 +171,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             "Show Ge and tau_e helpers",
         )
         self.ge_taue_helper_action.setCheckable(True)
-        self.linkMeGeaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge"
-        )
+        self.linkMeGeaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/linkGeMe.png"), "Link Me-Ge")
         self.linkMeGeaction.setCheckable(True)
         self.linkMeGeaction.setChecked(False)
         self.lblrho = QLabel(self)
@@ -186,13 +185,9 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         tb.addWidget(self.txtrho)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.linkMeGeaction.triggered.connect(
-            self.linkMeGeaction_change
-        )
-        connection_id = self.txtrho.textEdited.connect(self.handle_txtrho_edited)
-        connection_id = self.ge_taue_helper_action.triggered.connect(
-            self.ge_taue_helper_visible
-        )
+        self.linkMeGeaction.triggered.connect(self.linkMeGeaction_change)
+        self.txtrho.textEdited.connect(self.handle_txtrho_edited)
+        self.ge_taue_helper_action.triggered.connect(self.ge_taue_helper_visible)
 
         self._drag_no_fit = _NoFitOnDrag()
         self.ge_helper_line = self.ax.axhline(
@@ -281,9 +276,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         try:
             val = float(new_text)
         except ValueError:
-            QMessageBox.warning(
-                self, "Error", 'Could not convert "%s" to float' % new_text
-            )
+            QMessageBox.warning(self, "Error", 'Could not convert "%s" to float' % new_text)
             self.txtrho.setText("%.4g" % self.parameters["rho0"].display_value())
         else:
             message, success = self.set_param_value_from_display("rho0", val)
@@ -329,9 +322,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         view = self.current_view()
         if not self._axis_supports(view.y_axis, "stress"):
             return None
-        return self._parameter_value_to_plot_axis(
-            self.parameters["Ge"].value, view.y_axis
-        )
+        return self._parameter_value_to_plot_axis(self.parameters["Ge"].value, view.y_axis)
 
     def _taue_plot_x(self):
         view = self.current_view()
@@ -433,9 +424,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
         if linkMeGe:
-            Ge = (
-                1000.0 * rho0 * T * 8.314 / Me
-            )  # *5/4 (Pity... With this factor it works much better)
+            Ge = 1000.0 * rho0 * T * 8.314 / Me  # *5/4 (Pity... With this factor it works much better)
 
         indcnu = (np.where(self.cnuarray == cnu))[0][0]
         indcnu1 = 1 + indcnu * 2
@@ -462,12 +451,8 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         table = np.zeros((len(vec), 3))
         table[:, 0] = vec
         w1 = (Z - self.Zarray[indZ0]) / (self.Zarray[indZ1] - self.Zarray[indZ0])
-        table[:, 1] = (1.0 - w1) * interp(
-            vec, table0[:, 0], table0[:, indcnu1]
-        ) + w1 * interp(vec, table1[:, 0], table1[:, indcnu1])
-        table[:, 2] = (1.0 - w1) * interp(
-            vec, table0[:, 0], table0[:, indcnu2]
-        ) + w1 * interp(vec, table1[:, 0], table1[:, indcnu2])
+        table[:, 1] = (1.0 - w1) * interp(vec, table0[:, 0], table0[:, indcnu1]) + w1 * interp(vec, table1[:, 0], table1[:, indcnu1])
+        table[:, 2] = (1.0 - w1) * interp(vec, table0[:, 0], table0[:, indcnu2]) + w1 * interp(vec, table1[:, 0], table1[:, indcnu2])
 
         tt.data[:, 1] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 1])
         tt.data[:, 2] = interp(tt.data[:, 0], table[:, 0] / taue, Ge * table[:, 2])
@@ -492,12 +477,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
             Z = float(f.file_parameters["Mw"]) / Me
             tauR = taue * Z**2
             if Z != 0:
-                tauD = (
-                    3
-                    * taue
-                    * Z**3
-                    * (1.0 - 2 * C1 / np.sqrt(Z) + C2 / Z + C3 / np.power(Z, 1.5))
-                )
+                tauD = 3 * taue * Z**3 * (1.0 - 2 * C1 / np.sqrt(Z) + C2 / Z + C3 / np.power(Z, 1.5))
             else:
                 tauD = 0
             tab_data.append(

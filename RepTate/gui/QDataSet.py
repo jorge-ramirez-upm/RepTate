@@ -35,6 +35,7 @@
 Module that defines the GUI counterpart of Dataset.
 
 """
+
 import sys
 import os
 import glob
@@ -414,9 +415,7 @@ class EditFileParametersDialog(QDialog):
         self.formGroupBox.setLayout(layout)
 
     def createFormGroupBoxTheory(self, file):
-        self.formGroupBoxTheory = QGroupBox(
-            'Extend theory xrange of "%s"' % file.file_name_short
-        )
+        self.formGroupBoxTheory = QGroupBox('Extend theory xrange of "%s"' % file.file_name_short)
         layout = QFormLayout()
         self.with_extra_x = QCheckBox(self)
         self.with_extra_x.setChecked(file.with_extra_x)
@@ -530,9 +529,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.selected_file = None
 
         # LOGGING STUFF
-        self.logger = logging.getLogger(
-            self.parent_application.logger.name + "." + self.name
-        )
+        self.logger = logging.getLogger(self.parent_application.logger.name + "." + self.name)
         self.logger.debug("New DataSet")
         np.seterrcall(self.write)
 
@@ -542,9 +539,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.DataSettreeWidget.setIndentation(0)
         self.DataSettreeWidget.setHeaderItem(QTreeWidgetItem([""]))
         # self.DataSettreeWidget.setSelectionMode(1)  # QAbstractItemView::SingleSelection
-        self.DataSettreeWidget.setSelectionMode(
-            QAbstractItemView.SelectionMode.SingleSelection
-        )  # QAbstractItemView::SingleSelection
+        self.DataSettreeWidget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)  # QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
         hd.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -629,64 +624,28 @@ class QDataSet(QWidget, Ui_DataSet):
         # desactive buttons when no theory tab
         self.theory_actions_disabled(True)
 
-        connection_id = self.actionNew_Theory.triggered.connect(
-            self.handle_actionNew_Theory
-        )
-        connection_id = self.DataSettreeWidget.itemChanged.connect(
-            self.handle_itemChanged
-        )
-        # connection_id = self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
-        connection_id = self.DataSettreeWidget.itemDoubleClicked.connect(
-            self.handle_itemDoubleClicked
-        )
-        connection_id = self.DataSettreeWidget.header().sortIndicatorChanged.connect(
-            self.handle_sortIndicatorChanged
-        )
-        connection_id = self.DataSettreeWidget.header().customContextMenuRequested.connect(
-            self.handle_header_context_menu
-        )
-        connection_id = self.DataSettreeWidget.itemSelectionChanged.connect(
-            self.handle_itemSelectionChanged
-        )
-        # connection_id = self.DataSettreeWidget.currentItemChanged.connect(self.handle_currentItemChanged)
+        self.actionNew_Theory.triggered.connect(self.handle_actionNew_Theory)
+        self.DataSettreeWidget.itemChanged.connect(self.handle_itemChanged)
+        # self.DataSettreeWidget.itemClicked.connect(self.handle_itemClicked)
+        self.DataSettreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
+        self.DataSettreeWidget.header().sortIndicatorChanged.connect(self.handle_sortIndicatorChanged)
+        self.DataSettreeWidget.header().customContextMenuRequested.connect(self.handle_header_context_menu)
+        self.DataSettreeWidget.itemSelectionChanged.connect(self.handle_itemSelectionChanged)
+        # self.DataSettreeWidget.currentItemChanged.connect(self.handle_currentItemChanged)
 
-        connection_id = self.TheorytabWidget.tabCloseRequested.connect(
-            self.handle_thTabCloseRequested
-        )
-        connection_id = self.TheorytabWidget.tabBarDoubleClicked.connect(
-            self.handle_thTabBarDoubleClicked
-        )
-        connection_id = self.TheorytabWidget.currentChanged.connect(
-            self.handle_thCurrentChanged
-        )
-        connection_id = self.actionMinimize_Error.triggered.connect(
-            self.handle_actionMinimize_Error
-        )
-        connection_id = self.actionCalculate_Theory.triggered.connect(
-            self.handle_actionCalculate_Theory
-        )
-        connection_id = self.action_save_theory_data.triggered.connect(
-            self.handle_action_save_theory_data
-        )
-        connection_id = self.actionCopy_Parameters.triggered.connect(
-            self.copy_parameters
-        )
-        connection_id = self.actionPaste_Parameters.triggered.connect(
-            self.paste_parameters
-        )
+        self.TheorytabWidget.tabCloseRequested.connect(self.handle_thTabCloseRequested)
+        self.TheorytabWidget.tabBarDoubleClicked.connect(self.handle_thTabBarDoubleClicked)
+        self.TheorytabWidget.currentChanged.connect(self.handle_thCurrentChanged)
+        self.actionMinimize_Error.triggered.connect(self.handle_actionMinimize_Error)
+        self.actionCalculate_Theory.triggered.connect(self.handle_actionCalculate_Theory)
+        self.action_save_theory_data.triggered.connect(self.handle_action_save_theory_data)
+        self.actionCopy_Parameters.triggered.connect(self.copy_parameters)
+        self.actionPaste_Parameters.triggered.connect(self.paste_parameters)
 
-        connection_id = self.actionVertical_Limits.triggered.connect(
-            self.toggle_vertical_limits
-        )
-        connection_id = self.actionHorizontal_Limits.triggered.connect(
-            self.toggle_horizontal_limits
-        )
-        connection_id = self.actionFitting_Options.triggered.connect(
-            self.handle_fitting_options
-        )
-        connection_id = self.actionError_Calc_Options.triggered.connect(
-            self.handle_error_calculation_options
-        )
+        self.actionVertical_Limits.triggered.connect(self.toggle_vertical_limits)
+        self.actionHorizontal_Limits.triggered.connect(self.toggle_horizontal_limits)
+        self.actionFitting_Options.triggered.connect(self.handle_fitting_options)
+        self.actionError_Calc_Options.triggered.connect(self.handle_error_calculation_options)
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
@@ -742,9 +701,7 @@ class QDataSet(QWidget, Ui_DataSet):
                 continue
             if not units_are_compatible(display_unit, spec.internal_unit):
                 continue
-            file.file_parameter_specs[pname] = FileParameterSpec(
-                spec.name, spec.quantity, spec.internal_unit, display_unit
-            )
+            file.file_parameter_specs[pname] = FileParameterSpec(spec.name, spec.quantity, spec.internal_unit, display_unit)
 
     def refresh_parameter_column_headers(self):
         """Refresh dataset header labels from the current parameter specs."""
@@ -761,9 +718,7 @@ class QDataSet(QWidget, Ui_DataSet):
             return
         self.DataSettreeWidget.blockSignals(True)
         for file in self.files:
-            items = self.DataSettreeWidget.findItems(
-                file.file_name_short, Qt.MatchExactly, 0
-            )
+            items = self.DataSettreeWidget.findItems(file.file_name_short, Qt.MatchExactly, 0)
             if not items:
                 continue
             item = items[0]
@@ -799,11 +754,7 @@ class QDataSet(QWidget, Ui_DataSet):
         spec = self._get_file_parameter_spec(pname)
         if spec is None:
             return
-        units = [
-            unit
-            for unit in available_units(spec.quantity)
-            if units_are_compatible(unit.symbol, spec.internal_unit)
-        ]
+        units = [unit for unit in available_units(spec.quantity) if units_are_compatible(unit.symbol, spec.internal_unit)]
         if not units:
             return
         menu = QMenu(self)
@@ -811,11 +762,7 @@ class QDataSet(QWidget, Ui_DataSet):
             action = menu.addAction(unit.label)
             action.setCheckable(True)
             action.setChecked(unit.symbol == spec.display_unit)
-            action.triggered.connect(
-                lambda checked=False, p=pname, u=unit.symbol: self.set_dataset_file_parameter_display_unit(
-                    p, u
-                )
-            )
+            action.triggered.connect(lambda checked=False, p=pname, u=unit.symbol: self.set_dataset_file_parameter_display_unit(p, u))
         menu.exec_(self.DataSettreeWidget.header().mapToGlobal(pos))
 
     def do_show_all(self, line):
@@ -901,9 +848,7 @@ class QDataSet(QWidget, Ui_DataSet):
             dt = file.data_table
 
             marker = next(markerlst)  # if file.marker is None else file.marker
-            marker_name = next(
-                marker_name_lst
-            )  # if file.marker is None else file.marker
+            marker_name = next(marker_name_lst)  # if file.marker is None else file.marker
             color = next(palette)  # if file.color is None else file.color
             face = color if filled else "none"
             if self.th_line_mode == ThLineMode.as_data.value:
@@ -912,9 +857,7 @@ class QDataSet(QWidget, Ui_DataSet):
                 th_color = self.th_color
             if file.active:
                 # save file name with associated marker shape, fill and color
-                self.table_icon_list.append(
-                    (file.file_name_short, marker_name, face, color)
-                )
+                self.table_icon_list.append((file.file_name_short, marker_name, face, color))
 
             for nx in range(self.nplots):
                 view = self.parent_application.multiviews[nx]
@@ -963,12 +906,8 @@ class QDataSet(QWidget, Ui_DataSet):
                         else:
                             y[:, i] += file.yshift[i]
 
-                fillstylesempty = itertools.cycle(
-                    ("none", "full", "left", "right", "bottom", "top")
-                )
-                fillstylesfilled = itertools.cycle(
-                    ("full", "none", "right", "left", "top", "bottom")
-                )
+                fillstylesempty = itertools.cycle(("none", "full", "left", "right", "bottom", "top"))
+                fillstylesfilled = itertools.cycle(("full", "none", "right", "left", "top", "bottom"))
                 for i in range(dt.MAX_NUM_SERIES):
                     if i < view.n and file.active:
                         dt.series[nx][i].set_data(x[:, i], y[:, i])
@@ -1006,15 +945,9 @@ class QDataSet(QWidget, Ui_DataSet):
                             label = ""
                             for pmt in file.file_type.basic_file_parameters:
                                 try:
-                                    label += (
-                                        pmt + "=" + str(file.file_parameters[pmt]) + " "
-                                    )
-                                except (
-                                    KeyError
-                                ) as e:  # if parameter missing from data file
-                                    self.logger.warning(
-                                        "Parameter %s not found in data file" % e
-                                    )
+                                    label += pmt + "=" + str(file.file_parameters[pmt]) + " "
+                                except KeyError as e:  # if parameter missing from data file
+                                    self.logger.warning("Parameter %s not found in data file" % e)
                             dt.series[nx][i].set_label(label)
                         else:
                             dt.series[nx][i].set_label("")
@@ -1058,9 +991,7 @@ class QDataSet(QWidget, Ui_DataSet):
                                 tt.series[nx][i].set_marker("")
 
                                 # JR - Cycle over theory linestyles
-                                th_linestyle = ThLineMode.linestyles.value[
-                                    next(th_linestyleJR)
-                                ]
+                                th_linestyle = ThLineMode.linestyles.value[next(th_linestyleJR)]
 
                                 # if i == 1:  # 2nd theory line with different style
                                 #     if self.th_linestyle == "solid":
@@ -1153,12 +1084,7 @@ class QDataSet(QWidget, Ui_DataSet):
         fparam: dict containing file parameter names and values
         """
         if fname == "":
-            filename = (
-                "dummy_"
-                + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams])
-                + "."
-                + file_type.extension
-            )
+            filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
         else:
             str = ""
             for pname in fparams:
@@ -1198,18 +1124,14 @@ class QDataSet(QWidget, Ui_DataSet):
                 dt.data[:, 3] = z2val[:]
         unique = True
         for file in self.files:
-            if (
-                f.file_name_short == file.file_name_short
-            ):  # check if file already exists in current ds
+            if f.file_name_short == file.file_name_short:  # check if file already exists in current ds
                 unique = False
         if unique:
             self.files.append(f)
             self.current_file = f
             for th_name in self.theories:
                 # add a theory table
-                self.theories[th_name].tables[f.file_name_short] = DataTable(
-                    self.parent_application.axarr, "TH_" + f.file_name_short
-                )
+                self.theories[th_name].tables[f.file_name_short] = DataTable(self.parent_application.axarr, "TH_" + f.file_name_short)
                 self.theories[th_name].function(f)
             return f, True
         else:
@@ -1235,9 +1157,7 @@ class QDataSet(QWidget, Ui_DataSet):
                 df = ft.read_file(f, self, self.parent_application.axarr)
                 unique = True
                 for file in self.files:
-                    if (
-                        df.file_name_short == file.file_name_short
-                    ):  # check if file already exists in current ds
+                    if df.file_name_short == file.file_name_short:  # check if file already exists in current ds
                         unique = False
                 if unique:
                     self.apply_file_parameter_display_unit_overrides(df)
@@ -1263,9 +1183,7 @@ class QDataSet(QWidget, Ui_DataSet):
             path = file.file_full_path
             ft = file.file_type
             if not os.path.isfile(path):
-                self.logger.warning(
-                    "Could not open file %s: %s" % (file.file_name_short, path)
-                )
+                self.logger.warning("Could not open file %s: %s" % (file.file_name_short, path))
                 continue
             df = ft.read_file(path, self, None)
             self.apply_file_parameter_display_unit_overrides(df)
@@ -1300,9 +1218,7 @@ class QDataSet(QWidget, Ui_DataSet):
         """Delete a theory from the current dataset"""
         if name in self.theories.keys():
             self.theories[name].destructor()
-            for tt in self.theories[
-                name
-            ].tables.values():  # remove matplotlib artist from ax
+            for tt in self.theories[name].tables.values():  # remove matplotlib artist from ax
                 for i in range(tt.MAX_NUM_SERIES):
                     for nx in range(self.nplots):
                         tt.series[nx][i].remove()
@@ -1319,16 +1235,11 @@ class QDataSet(QWidget, Ui_DataSet):
         for f in self.files:
             table = f.data_table
             if line == "":
-                ofilename = (
-                    os.path.splitext(f.file_full_path)[0]
-                    + os.path.splitext(f.file_full_path)[1]
-                )
+                ofilename = os.path.splitext(f.file_full_path)[0] + os.path.splitext(f.file_full_path)[1]
             else:
                 ofilename = os.path.join(
                     line,
-                    f.file_name_short
-                    + extra_txt
-                    + os.path.splitext(f.file_full_path)[1],
+                    f.file_name_short + extra_txt + os.path.splitext(f.file_full_path)[1],
                 )
             # print("ofilename", ofilename)
             # print('File: ' + f.file_name_short)
@@ -1338,13 +1249,7 @@ class QDataSet(QWidget, Ui_DataSet):
             for i in k:
                 fout.write(i + "=" + str(f.file_parameters[i]) + ";")
             fout.write("\n")
-            fout.write(
-                "# Date: "
-                + time.strftime("%Y-%m-%d %H:%M:%S")
-                + " - User: "
-                + getpass.getuser()
-                + "\n"
-            )
+            fout.write("# Date: " + time.strftime("%Y-%m-%d %H:%M:%S") + " - User: " + getpass.getuser() + "\n")
             k = f.file_type.col_names
             for i in k:
                 fout.write(i + "\t")
@@ -1366,16 +1271,12 @@ class QDataSet(QWidget, Ui_DataSet):
         thtypes = list(self.parent_application.theories.keys())
         if line in thtypes:
             if self.current_file is None:
-                print("Current dataset is empty\n" "%s was not created" % line)
+                print("Current dataset is empty\n%s was not created" % line)
                 return
             self.num_theories += 1
-            th_id = "".join(
-                c for c in line if c.isupper()
-            )  # get the upper case letters of th_name
+            th_id = "".join(c for c in line if c.isupper())  # get the upper case letters of th_name
             th_id = "%s%d" % (th_id, self.num_theories)  # append number
-            th = self.parent_application.theories[line](
-                th_id, self, self.parent_application.axarr
-            )
+            th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
             if th.autocalculate:
@@ -1392,19 +1293,15 @@ class QDataSet(QWidget, Ui_DataSet):
         thtypes = list(self.parent_application.theories.keys())
         if line in thtypes:
             if self.current_file is None:
-                print("Current dataset is empty\n" "%s was not created" % line)
+                print("Current dataset is empty\n%s was not created" % line)
                 return
             self.num_theories += 1
             # th_id = "%s%02d"%(line,self.num_theories)
             # th_id = ''.join(c for c in line if c.isupper()) #get the upper case letters of th_name
             # th_id = "%s%02d" % (line, self.num_theories)
-            th_id = "".join(
-                c for c in line if c.isupper()
-            )  # get the upper case letters of th_name
+            th_id = "".join(c for c in line if c.isupper())  # get the upper case letters of th_name
             th_id = "%s%d" % (th_id, self.num_theories)  # append number
-            th = self.parent_application.theories[line](
-                th_id, self, self.parent_application.axarr
-            )
+            th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
             if calculate and th.autocalculate:
@@ -1465,9 +1362,7 @@ class QDataSet(QWidget, Ui_DataSet):
             if isdir(folder):
                 dialog = QInputDialog(self)
                 dialog.setWindowTitle("Add label to filename(s)?")
-                dialog.setLabelText(
-                    "Add the following text to each saved theory filename(s):"
-                )
+                dialog.setLabelText("Add the following text to each saved theory filename(s):")
                 dialog.setTextValue("")
                 dialog.setCancelButtonText("None")
                 if dialog.exec():
@@ -1480,14 +1375,10 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)"""
-        self.DataSettreeWidget.blockSignals(
-            True
-        )  # avoid triggering 'itemChanged' signal that causes a call to do_plot()
+        self.DataSettreeWidget.blockSignals(True)  # avoid triggering 'itemChanged' signal that causes a call to do_plot()
 
         for fname, marker_name, face, color in table_icon_list:
-            item = self.DataSettreeWidget.findItems(
-                fname, Qt.MatchCaseSensitive, column=0
-            )  # returns list of items matching file name
+            item = self.DataSettreeWidget.findItems(fname, Qt.MatchCaseSensitive, column=0)  # returns list of items matching file name
             if item:
                 # paint icon
                 folder = ":/Markers/Images/Matplotlib_markers/"
@@ -1542,9 +1433,7 @@ class QDataSet(QWidget, Ui_DataSet):
     def set_no_limits(self, th_name):
         """Turn the x and yrange selectors off"""
         if th_name in self.theories:
-            self.theories[self.current_theory].set_xy_limits_visible(
-                False, False
-            )  # hide xrange and yrange
+            self.theories[self.current_theory].set_xy_limits_visible(False, False)  # hide xrange and yrange
 
     def toggle_vertical_limits(self, checked):
         """Show/Hide the xrange selector for fit"""
@@ -1567,16 +1456,12 @@ class QDataSet(QWidget, Ui_DataSet):
             return
         th = self.theories[self.current_theory]
         th.fittingoptionsdialog.ui.tabWidget.setCurrentIndex(th.mintype.value)
-        success = (
-            th.fittingoptionsdialog.exec_()
-        )  # this blocks the rest of the app as opposed to .show()
+        success = th.fittingoptionsdialog.exec_()  # this blocks the rest of the app as opposed to .show()
 
         if not success:
             return
 
-        th.mintype = MinimizationMethod(
-            th.fittingoptionsdialog.ui.tabWidget.currentIndex()
-        )
+        th.mintype = MinimizationMethod(th.fittingoptionsdialog.ui.tabWidget.currentIndex())
         if th.mintype == MinimizationMethod.ls:
             th.LSmethod = th.fittingoptionsdialog.ui.LSmethodcomboBox.currentText()
             if th.fittingoptionsdialog.ui.LSftolcheckBox.isChecked():
@@ -1594,31 +1479,21 @@ class QDataSet(QWidget, Ui_DataSet):
             th.LSloss = th.fittingoptionsdialog.ui.LSlosscomboBox.currentText()
             th.LSf_scale = float(th.fittingoptionsdialog.ui.LSf_scalelineEdit.text())
             if th.fittingoptionsdialog.ui.LSmax_nfevcheckBox.isChecked():
-                th.LSmax_nfev = int(
-                    th.fittingoptionsdialog.ui.LSmax_nfevlineEdit.text()
-                )
+                th.LSmax_nfev = int(th.fittingoptionsdialog.ui.LSmax_nfevlineEdit.text())
             else:
                 th.LSmax_nfev = None
             if th.fittingoptionsdialog.ui.LStr_solvercheckBox.isChecked():
-                th.LStr_solver = (
-                    th.fittingoptionsdialog.ui.LStr_solvercomboBox.currentText()
-                )
+                th.LStr_solver = th.fittingoptionsdialog.ui.LStr_solvercomboBox.currentText()
             else:
                 th.LStr_solver = None
 
         elif th.mintype == MinimizationMethod.basinhopping:
             th.basinniter = int(th.fittingoptionsdialog.ui.basinniterlineEdit.text())
             th.basinT = float(th.fittingoptionsdialog.ui.basinTlineEdit.text())
-            th.basinstepsize = float(
-                th.fittingoptionsdialog.ui.basinstepsizelineEdit.text()
-            )
-            th.basininterval = int(
-                th.fittingoptionsdialog.ui.basinintervallineEdit.text()
-            )
+            th.basinstepsize = float(th.fittingoptionsdialog.ui.basinstepsizelineEdit.text())
+            th.basininterval = int(th.fittingoptionsdialog.ui.basinintervallineEdit.text())
             if th.fittingoptionsdialog.ui.basinniter_successcheckBox.isChecked():
-                th.basinniter_success = int(
-                    th.fittingoptionsdialog.ui.basinniter_successlineEdit.text()
-                )
+                th.basinniter_success = int(th.fittingoptionsdialog.ui.basinniter_successlineEdit.text())
             else:
                 th.basinniter_success = None
             if th.fittingoptionsdialog.ui.basinseedcheckBox.isChecked():
@@ -1627,90 +1502,50 @@ class QDataSet(QWidget, Ui_DataSet):
                 th.basinseed = None
 
         elif th.mintype == MinimizationMethod.dualannealing:
-            th.annealmaxiter = int(
-                th.fittingoptionsdialog.ui.annealmaxiterlineEdit.text()
-            )
-            th.annealinitial_temp = float(
-                th.fittingoptionsdialog.ui.annealinitial_templineEdit.text()
-            )
-            th.annealrestart_temp_ratio = float(
-                th.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.text()
-            )
-            th.annealvisit = float(
-                th.fittingoptionsdialog.ui.annealvisitlineEdit.text()
-            )
-            th.annealaccept = float(
-                th.fittingoptionsdialog.ui.annealacceptlineEdit.text()
-            )
-            th.annealmaxfun = int(
-                th.fittingoptionsdialog.ui.annealmaxfunlineEdit.text()
-            )
+            th.annealmaxiter = int(th.fittingoptionsdialog.ui.annealmaxiterlineEdit.text())
+            th.annealinitial_temp = float(th.fittingoptionsdialog.ui.annealinitial_templineEdit.text())
+            th.annealrestart_temp_ratio = float(th.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.text())
+            th.annealvisit = float(th.fittingoptionsdialog.ui.annealvisitlineEdit.text())
+            th.annealaccept = float(th.fittingoptionsdialog.ui.annealacceptlineEdit.text())
+            th.annealmaxfun = int(th.fittingoptionsdialog.ui.annealmaxfunlineEdit.text())
             if th.fittingoptionsdialog.ui.annealseedcheckBox.isChecked():
-                th.annealseed = int(
-                    th.fittingoptionsdialog.ui.annealseedlineEdit.text()
-                )
+                th.annealseed = int(th.fittingoptionsdialog.ui.annealseedlineEdit.text())
             else:
                 th.annealseed = None
-            th.annealno_local_search = (
-                th.fittingoptionsdialog.ui.annealno_local_searchcheckBox.isChecked()
-            )
+            th.annealno_local_search = th.fittingoptionsdialog.ui.annealno_local_searchcheckBox.isChecked()
 
         elif th.mintype == MinimizationMethod.diffevol:
-            th.diffevolstrategy = (
-                th.fittingoptionsdialog.ui.diffevolstrategycomboBox.currentText()
-            )
-            th.diffevolmaxiter = int(
-                th.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.text()
-            )
-            th.diffevolpopsize = int(
-                th.fittingoptionsdialog.ui.diffevolpopsizelineEdit.text()
-            )
-            th.diffevoltol = float(
-                th.fittingoptionsdialog.ui.diffevoltollineEdit.text()
-            )
+            th.diffevolstrategy = th.fittingoptionsdialog.ui.diffevolstrategycomboBox.currentText()
+            th.diffevolmaxiter = int(th.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.text())
+            th.diffevolpopsize = int(th.fittingoptionsdialog.ui.diffevolpopsizelineEdit.text())
+            th.diffevoltol = float(th.fittingoptionsdialog.ui.diffevoltollineEdit.text())
             th.diffevolmutation = (
                 float(th.fittingoptionsdialog.ui.diffevolmutationAlineEdit.text()),
                 float(th.fittingoptionsdialog.ui.diffevolmutationBlineEdit.text()),
             )
-            th.diffevolrecombination = float(
-                th.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.text()
-            )
+            th.diffevolrecombination = float(th.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.text())
             if th.fittingoptionsdialog.ui.diffevolseedcheckBox.isChecked():
-                th.diffevolseed = int(
-                    th.fittingoptionsdialog.ui.diffevolseedlineEdit.text()
-                )
+                th.diffevolseed = int(th.fittingoptionsdialog.ui.diffevolseedlineEdit.text())
             else:
                 th.diffevolseed = None
-            th.diffevolpolish = (
-                th.fittingoptionsdialog.ui.diffevolpolishcheckBox.isChecked()
-            )
-            th.diffevolinit = (
-                th.fittingoptionsdialog.ui.diffevolinitcomboBox.currentText()
-            )
-            th.diffevolatol = float(
-                th.fittingoptionsdialog.ui.diffevolatollineEdit.text()
-            )
+            th.diffevolpolish = th.fittingoptionsdialog.ui.diffevolpolishcheckBox.isChecked()
+            th.diffevolinit = th.fittingoptionsdialog.ui.diffevolinitcomboBox.currentText()
+            th.diffevolatol = float(th.fittingoptionsdialog.ui.diffevolatollineEdit.text())
 
         elif th.mintype == MinimizationMethod.SHGO:
             th.SHGOn = int(th.fittingoptionsdialog.ui.SHGOnlineEdit.text())
             th.SHGOiters = int(th.fittingoptionsdialog.ui.SHGOiterslineEdit.text())
             if th.fittingoptionsdialog.ui.SHGOmaxfevcheckBox.isChecked():
-                th.SHGOmaxfev = int(
-                    th.fittingoptionsdialog.ui.SHGOmaxfevlineEdit.text()
-                )
+                th.SHGOmaxfev = int(th.fittingoptionsdialog.ui.SHGOmaxfevlineEdit.text())
             else:
                 th.SHGOmaxfev = None
             if th.fittingoptionsdialog.ui.SHGOf_mincheckBox.isChecked():
-                th.SHGOf_min = float(
-                    th.fittingoptionsdialog.ui.SHGOf_minlineEdit.text()
-                )
+                th.SHGOf_min = float(th.fittingoptionsdialog.ui.SHGOf_minlineEdit.text())
             else:
                 th.SHGOf_min = None
             th.SHGOf_tol = float(th.fittingoptionsdialog.ui.SHGOf_tollineEdit.text())
             if th.fittingoptionsdialog.ui.SHGOmaxitercheckBox.isChecked():
-                th.SHGOmaxiter = int(
-                    th.fittingoptionsdialog.ui.SHGOmaxiterlineEdit.text()
-                )
+                th.SHGOmaxiter = int(th.fittingoptionsdialog.ui.SHGOmaxiterlineEdit.text())
             else:
                 th.SHGOmaxiter = None
             if th.fittingoptionsdialog.ui.SHGOmaxevcheckBox.isChecked():
@@ -1718,29 +1553,17 @@ class QDataSet(QWidget, Ui_DataSet):
             else:
                 th.SHGOmaxev = None
             if th.fittingoptionsdialog.ui.SHGOmaxtimecheckBox.isChecked():
-                th.SHGOmaxtime = float(
-                    th.fittingoptionsdialog.ui.SHGOmaxtimelineEdit.text()
-                )
+                th.SHGOmaxtime = float(th.fittingoptionsdialog.ui.SHGOmaxtimelineEdit.text())
             else:
                 th.SHGOmaxtime = None
             if th.fittingoptionsdialog.ui.SHGOminhgrdcheckBox.isChecked():
-                th.SHGOminhgrd = int(
-                    th.fittingoptionsdialog.ui.SHGOminhgrdlineEdit.text()
-                )
+                th.SHGOminhgrd = int(th.fittingoptionsdialog.ui.SHGOminhgrdlineEdit.text())
             else:
                 th.SHGOminhgrd = None
-            th.SHGOminimize_every_iter = (
-                th.fittingoptionsdialog.ui.SHGOminimize_every_itercheckBox.isChecked()
-            )
-            th.SHGOlocal_iter = (
-                th.fittingoptionsdialog.ui.SHGOlocal_itercheckBox.isChecked()
-            )
-            th.SHGOinfty_constraints = (
-                th.fittingoptionsdialog.ui.SHGOinfty_constraintscheckBox.isChecked()
-            )
-            th.SHGOsampling_method = (
-                th.fittingoptionsdialog.ui.SHGOsampling_methodcomboBox.currentText()
-            )
+            th.SHGOminimize_every_iter = th.fittingoptionsdialog.ui.SHGOminimize_every_itercheckBox.isChecked()
+            th.SHGOlocal_iter = th.fittingoptionsdialog.ui.SHGOlocal_itercheckBox.isChecked()
+            th.SHGOinfty_constraints = th.fittingoptionsdialog.ui.SHGOinfty_constraintscheckBox.isChecked()
+            th.SHGOsampling_method = th.fittingoptionsdialog.ui.SHGOsampling_methodcomboBox.currentText()
 
         elif th.mintype == MinimizationMethod.bruteforce:
             th.BruteNs = int(th.fittingoptionsdialog.ui.BruteNslineEdit.text())
@@ -1758,9 +1581,7 @@ class QDataSet(QWidget, Ui_DataSet):
         if not self.current_theory:
             return
         th = self.theories[self.current_theory]
-        success = (
-            th.errorcalculationdialog.exec_()
-        )  # this blocks the rest of the app as opposed to .show()
+        success = th.errorcalculationdialog.exec_()  # this blocks the rest of the app as opposed to .show()
 
         if not success:
             return
@@ -1791,9 +1612,7 @@ class QDataSet(QWidget, Ui_DataSet):
             if th.thread_calc_busy:  # request stop if in do_calculate
                 th.request_stop_computations()
                 return
-            elif (
-                th.is_fitting or th.thread_fit_busy
-            ):  # do nothing if already busy in do_fit
+            elif th.is_fitting or th.thread_fit_busy:  # do nothing if already busy in do_fit
                 th.Qprint("Busy minimising theory...")
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files)) > 1:
@@ -1814,9 +1633,7 @@ class QDataSet(QWidget, Ui_DataSet):
             if th.is_fitting or th.thread_fit_busy:  # request stop if in do_fit
                 th.request_stop_computations()
                 return
-            elif (
-                th.calculate_is_busy or th.thread_calc_busy
-            ):  # do nothing if already busy in do_calculate
+            elif th.calculate_is_busy or th.thread_calc_busy:  # do nothing if already busy in do_calculate
                 th.Qprint("Busy calculating theory...")
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files)) > 1:
@@ -1833,27 +1650,19 @@ class QDataSet(QWidget, Ui_DataSet):
     def icon_calculate_is_stop(self, ans):
         """Change the "calculate" button to "stop" button"""
         if ans:
-            self.actionCalculate_Theory.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png")
-            )
+            self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
             self.actionCalculate_Theory.setToolTip("Stop current calculations")
         else:
-            self.actionCalculate_Theory.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-abacus.png")
-            )
+            self.actionCalculate_Theory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-abacus.png"))
             self.actionCalculate_Theory.setToolTip("Calculate Theory (Alt+C)")
 
     def icon_fit_is_stop(self, ans):
         """Change the "fit" button to "stop" button"""
         if ans:
-            self.actionMinimize_Error.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png")
-            )
+            self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
             self.actionCalculate_Theory.setToolTip("Stop current calculations")
         else:
-            self.actionMinimize_Error.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png")
-            )
+            self.actionMinimize_Error.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-minimum-value.png"))
             self.actionCalculate_Theory.setToolTip("Calculate Theory (Alt+C)")
 
     def handle_thCurrentChanged(self, index):
@@ -1944,15 +1753,11 @@ class QDataSet(QWidget, Ui_DataSet):
                     if i < view.n and file.active:
                         dt.series[nx][i].set_marker(".")
                         # dt.series[nx][i].set_linestyle(":")
-                        dt.series[nx][i].set_markerfacecolor(
-                            dt.series[nx][i].get_markeredgecolor()
-                        )
+                        dt.series[nx][i].set_markerfacecolor(dt.series[nx][i].get_markeredgecolor())
                         dt.series[nx][i].set_markeredgecolor("peachpuff")
                         dt.series[nx][i].set_markersize(self.marker_size + 3)
                         dt.series[nx][i].set_markeredgewidth(2)
-                        dt.series[nx][i].set_zorder(
-                            self.parent_application.zorder
-                        )  # put series on top
+                        dt.series[nx][i].set_zorder(self.parent_application.zorder)  # put series on top
                         if th:
                             if th.active:
                                 tt.series[nx][i].set_color("k")
@@ -1965,9 +1770,7 @@ class QDataSet(QWidget, Ui_DataSet):
                                         pe.Normal(),
                                     ]
                                 )
-                                tt.series[nx][i].set_zorder(
-                                    self.parent_application.zorder
-                                )
+                                tt.series[nx][i].set_zorder(self.parent_application.zorder)
 
             self.parent_application.zorder += 1
         self.parent_application.update_plot()
@@ -2010,9 +1813,7 @@ class QDataSet(QWidget, Ui_DataSet):
     def handle_itemChanged(self, item, column):
         """Detect when an item has been selected in the dataset"""
         if column == 0:
-            self.change_file_visibility(
-                item.text(0), item.checkState(column) == Qt.Checked
-            )
+            self.change_file_visibility(item.text(0), item.checkState(column) == Qt.Checked)
 
     def handle_sortIndicatorChanged(self, column, order):
         """Sort files according to the selected parameter (column) and replot"""
@@ -2081,9 +1882,7 @@ class QDataSet(QWidget, Ui_DataSet):
                             file.file_parameters[p] = d.param_dict[p].text()
                         else:
                             try:
-                                file.file_parameters[p] = file.file_parameter_value_from_display(
-                                    p, float(d.param_dict[p].text())
-                                )
+                                file.file_parameters[p] = file.file_parameter_value_from_display(p, float(d.param_dict[p].text()))
                             except Exception as e:
                                 print(e)
                         for i, pname in enumerate(file.file_type.basic_file_parameters):
@@ -2113,9 +1912,7 @@ class QDataSet(QWidget, Ui_DataSet):
                     except ValueError:
                         pass
                     file.theory_logspace = d.th_logspace.isChecked()
-                    file.with_extra_x = d.with_extra_x.isChecked() and (
-                        file.theory_xmin != "None" or file.theory_xmax != "None"
-                    )
+                    file.with_extra_x = d.with_extra_x.isChecked() and (file.theory_xmin != "None" or file.theory_xmax != "None")
 
     def handle_actionNew_Theory(self):
         """Create new theory and do fit"""
@@ -2142,9 +1939,7 @@ class QDataSet(QWidget, Ui_DataSet):
         # add new theory tab
         if th_tab_id == "":
             th_tab_id = newth.name
-            th_tab_id = "".join(
-                c for c in th_tab_id if c.isupper()
-            )  # get the upper case letters of th_name
+            th_tab_id = "".join(c for c in th_tab_id if c.isupper())  # get the upper case letters of th_name
             th_tab_id = "%s%d" % (th_tab_id, self.num_theories)  # append number
 
         # hide all theory curves
@@ -2153,9 +1948,7 @@ class QDataSet(QWidget, Ui_DataSet):
             th_to_hide = self.TheorytabWidget.widget(i)
             th_to_hide.do_hide()
         # add theory tab
-        self.TheorytabWidget.blockSignals(
-            True
-        )  # avoid trigger handle_thCurrentChanged()
+        self.TheorytabWidget.blockSignals(True)  # avoid trigger handle_thCurrentChanged()
         index = self.TheorytabWidget.addTab(newth, th_tab_id)
         self.TheorytabWidget.setCurrentIndex(index)  # set new theory tab as curent tab
         self.TheorytabWidget.setTabToolTip(index, th_name)  # set new-tab tool tip

@@ -35,6 +35,7 @@
 Module that contains classes that are used in several theories
 
 """
+
 import enum
 from typing import Any
 
@@ -72,9 +73,7 @@ def _parameter_label_with_unit(parent: Any, label: str, *parameter_names: str) -
     parameter = _parameter_by_name(parent, *parameter_names)
     if parameter is None:
         return label
-    unit = getattr(parameter, "internal_unit", "") or getattr(
-        parameter, "display_unit", ""
-    )
+    unit = getattr(parameter, "internal_unit", "") or getattr(parameter, "display_unit", "")
     if unit and unit != "-":
         return "%s [%s]" % (label, unit)
     return label
@@ -100,7 +99,7 @@ Diverse Enumerations to set calculation modes
 
 class FlowMode(enum.Enum):
     """Defines the flow geometry used
-    
+
     Parameters can be:
         - shear: Shear flow
         - uext: Uniaxial extension flow
@@ -112,7 +111,7 @@ class FlowMode(enum.Enum):
 
 class FeneMode(enum.Enum):
     """Defines the finite extensibility function
-    
+
     Parameters can be:
         - none: No finite extensibility
         - with_fene: With finite extensibility
@@ -213,9 +212,7 @@ class EditModesDialog(QDialog):
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     @staticmethod
     def _mode_column_label(parent: Any, fallback_name: str, prefixes: tuple[str, ...]) -> str:
@@ -264,9 +261,7 @@ class EditModesVolFractionsDialog(QDialog):
         self.table.setHorizontalHeaderLabels(pnames)
         for i in range(nmodes):
             for j in range(self.nparam):
-                self.table.setItem(
-                    i, j, QTableWidgetItem("%g" % param_dic[pnames[j]][i])
-                )
+                self.table.setItem(i, j, QTableWidgetItem("%g" % param_dic[pnames[j]][i]))
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
@@ -274,9 +269,7 @@ class EditModesVolFractionsDialog(QDialog):
         buttons.accepted.connect(self.accept_)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def accept_(self) -> None:
         sum = 0
@@ -373,9 +366,7 @@ class EditMWDDialog(QDialog):
         self.table = SpreadsheetWidget()  # allows copy/paste
         self.table.setRowCount(nmodes)
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(
-            [_parameter_label_with_unit(parent, "M", "Me", "M_e"), "phi"]
-        )
+        self.table.setHorizontalHeaderLabels([_parameter_label_with_unit(parent, "M", "Me", "M_e"), "phi"])
         for i in range(nmodes):
             self.table.setItem(i, 0, QTableWidgetItem("%g" % m[i]))
             self.table.setItem(i, 1, QTableWidgetItem("%g" % phi[i]))
@@ -387,9 +378,7 @@ class EditMWDDialog(QDialog):
         buttons.accepted.connect(self.accept_)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def accept_(self) -> None:
         sum = 0
@@ -529,7 +518,14 @@ class Dilution:
             self.parent_theory.Qprint("All chains as solvent")
             return [False]
         if n == 1:
-            return [True, phi, taus, [3 * z * ts,]]
+            return [
+                True,
+                phi,
+                taus,
+                [
+                    3 * z * ts,
+                ],
+            ]
 
         Zeff: list[float] = [0.0] * n
         # renormalize the fraction of entangled chains

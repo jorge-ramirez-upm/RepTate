@@ -35,6 +35,7 @@
 Module that defines the GUI counterpart of the class Theory.
 
 """
+
 import sys
 import os
 import enum
@@ -260,9 +261,7 @@ class EditThParametersDialog(QDialog):
             elif attr_name == "display_unit" and p.quantity and p.internal_unit:
                 try:
                     compatible_units = [
-                        unit.symbol
-                        for unit in available_units(p.quantity)
-                        if units_are_compatible(unit.symbol, p.internal_unit)
+                        unit.symbol for unit in available_units(p.quantity) if units_are_compatible(unit.symbol, p.internal_unit)
                     ]
                 except ValueError:
                     compatible_units = []
@@ -331,9 +330,7 @@ class GetModesDialog(QDialog):
         rb.setChecked(True)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self
-        )
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -355,9 +352,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     print_signal = Signal(str)
 
-    def __init__(
-        self, name: str = "QTheory", parent_dataset: Any = None, axarr: Any = None
-    ) -> None:
+    def __init__(self, name: str = "QTheory", parent_dataset: Any = None, axarr: Any = None) -> None:
         """
         **Constructor**
 
@@ -389,9 +384,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.parent_dataset: Any = parent_dataset
         self.axarr: Any = axarr
         self.ax: Any = axarr[0]  # theory calculation only on this plot
-        self.parameters: TheoryParameters = (
-            OrderedDict()
-        )  # keep the dictionary key in order for the parameter table
+        self.parameters: TheoryParameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.tables: TheoryTables = {}
         self.function: TheoryFunction | None = None
         self.active: bool = True  # defines if the theory is plotted
@@ -410,9 +403,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.has_modes = False
 
         # LOGGING STUFF
-        self.logger = logging.getLogger(
-            self.parent_dataset.logger.name + "." + self.name
-        )
+        self.logger = logging.getLogger(self.parent_dataset.logger.name + "." + self.name)
         self.logger.debug("New " + self.thname + " Theory")
         # np.seterr(all="call")
         np.seterrcall(self.write)
@@ -422,41 +413,21 @@ class QTheory(QWidget, Ui_TheoryTab):
         # XRANGE for FIT
         self.xmin = -np.inf
         self.xmax = np.inf
-        self.xrange = ax.axvspan(
-            self.xmin, self.xmax, facecolor="yellow", alpha=0.3, visible=False
-        )
-        self.xminline = ax.axvline(
-            self.xmin, color="black", linestyle="--", marker="o", visible=False
-        )
-        self.xmaxline = ax.axvline(
-            self.xmax, color="black", linestyle="--", marker="o", visible=False
-        )
-        self.xminlinedrag = DraggableVLine(
-            self.xminline, DragType.horizontal, self.change_xmin, self
-        )
-        self.xmaxlinedrag = DraggableVLine(
-            self.xmaxline, DragType.horizontal, self.change_xmax, self
-        )
+        self.xrange = ax.axvspan(self.xmin, self.xmax, facecolor="yellow", alpha=0.3, visible=False)
+        self.xminline = ax.axvline(self.xmin, color="black", linestyle="--", marker="o", visible=False)
+        self.xmaxline = ax.axvline(self.xmax, color="black", linestyle="--", marker="o", visible=False)
+        self.xminlinedrag = DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin, self)
+        self.xmaxlinedrag = DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax, self)
         self.is_xrange_visible = False
 
         # YRANGE for FIT
         self.ymin = -np.inf
         self.ymax = np.inf
-        self.yrange = ax.axhspan(
-            self.ymin, self.ymax, facecolor="pink", alpha=0.3, visible=False
-        )
-        self.yminline = ax.axhline(
-            self.ymin, color="black", linestyle="--", marker="o", visible=False
-        )
-        self.ymaxline = ax.axhline(
-            self.ymax, color="black", linestyle="--", marker="o", visible=False
-        )
-        self.yminlinedrag = DraggableHLine(
-            self.yminline, DragType.vertical, self.change_ymin, self
-        )
-        self.ymaxlinedrag = DraggableHLine(
-            self.ymaxline, DragType.vertical, self.change_ymax, self
-        )
+        self.yrange = ax.axhspan(self.ymin, self.ymax, facecolor="pink", alpha=0.3, visible=False)
+        self.yminline = ax.axhline(self.ymin, color="black", linestyle="--", marker="o", visible=False)
+        self.ymaxline = ax.axhline(self.ymax, color="black", linestyle="--", marker="o", visible=False)
+        self.yminlinedrag = DraggableHLine(self.yminline, DragType.vertical, self.change_ymin, self)
+        self.ymaxlinedrag = DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax, self)
         self.is_yrange_visible = False
 
         self.setup_default_minimization_options()
@@ -474,18 +445,14 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         self.do_cite("")
 
-        self.print_signal.connect(
-            self.print_qtextbox
-        )  # Asynchronous print when using multithread
+        self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
         # flag for requesting end of computations
         self.stop_theory_flag = False
 
         # build the therory widget
         self.thParamTable.setIndentation(0)
         self.thParamTable.setColumnCount(3)
-        self.thParamTable.setHeaderItem(
-            QTreeWidgetItem(["Parameter", "Value", "Error"])
-        )
+        self.thParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value", "Error"]))
         # self.thParamTable.header().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
         self.thParamTable.setAlternatingRowColors(True)
@@ -509,31 +476,21 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         # Setup Error Calculation Options
         self.errorcalculationdialog = QDialog()
-        self.errorcalculationdialog.ui = (
-            RepTate.gui.Ui_errorcalculationoptions.Ui_Dialog()
-        )
+        self.errorcalculationdialog.ui = RepTate.gui.Ui_errorcalculationoptions.Ui_Dialog()
         self.errorcalculationdialog.ui.setupUi(self.errorcalculationdialog)
         self.populate_default_error_calculation_options()
 
-        connection_id = self.thParamTable.itemDoubleClicked.connect(
-            self.onTreeWidgetItemDoubleClicked
-        )
-        connection_id = self.thParamTable.itemChanged.connect(
-            self.handle_parameterItemChanged
-        )
+        self.thParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
+        self.thParamTable.itemChanged.connect(self.handle_parameterItemChanged)
 
     def current_view(self) -> Any:
         return self.parent_dataset.parent_application.current_view
 
-    def convert_view_data_to_display(
-        self, x: Any, y: Any, view: Any = None
-    ) -> tuple[Any, Any]:
+    def convert_view_data_to_display(self, x: Any, y: Any, view: Any = None) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_display(x, y)
 
-    def convert_view_data_to_internal(
-        self, x: Any, y: Any, view: Any = None
-    ) -> tuple[Any, Any]:
+    def convert_view_data_to_internal(self, x: Any, y: Any, view: Any = None) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_internal(x, y)
 
@@ -659,10 +616,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.do_plot(line)
             self.do_error(line)
         if timing:
-            self.Qprint(
-                """<i>---Calculated in %.3g seconds---</i><br>"""
-                % (time.time() - self.start_time_cal)
-            )
+            self.Qprint("""<i>---Calculated in %.3g seconds---</i><br>""" % (time.time() - self.start_time_cal))
             self.do_cite("")
         self.calculate_is_busy = False
 
@@ -679,17 +633,13 @@ class QTheory(QWidget, Ui_TheoryTab):
         else:
             if thmin < xmin:
                 if 0 < thmin and fcopy.theory_logspace:
-                    xextra_min = np.logspace(
-                        np.log10(thmin), np.log10(xmin), fcopy.th_num_pts
-                    )[:-1]
+                    xextra_min = np.logspace(np.log10(thmin), np.log10(xmin), fcopy.th_num_pts)[:-1]
                 else:
                     xextra_min = np.linspace(thmin, xmin, fcopy.th_num_pts)[:-1]
                 fcopy.nextramin = len(xextra_min)
                 data_min = np.zeros((len(xextra_min), ncol))
                 data_min[:, 0] = xextra_min
-                fcopy.data_table.data = np.concatenate(
-                    (data_min, fcopy.data_table.data)
-                )
+                fcopy.data_table.data = np.concatenate((data_min, fcopy.data_table.data))
 
         try:
             thmax = float(fcopy.theory_xmax)
@@ -698,17 +648,13 @@ class QTheory(QWidget, Ui_TheoryTab):
         else:
             if thmax > xmax:
                 if 0 < thmax and fcopy.theory_logspace:
-                    xextra_max = np.logspace(
-                        np.log10(xmax), np.log10(thmax), fcopy.th_num_pts
-                    )[1:]
+                    xextra_max = np.logspace(np.log10(xmax), np.log10(thmax), fcopy.th_num_pts)[1:]
                 else:
                     xextra_max = np.linspace(xmax, thmax, fcopy.th_num_pts)[1:]
                 fcopy.nextramax = len(xextra_max)
                 data_max = np.zeros((len(xextra_max), ncol))
                 data_max[:, 0] = xextra_max
-                fcopy.data_table.data = np.concatenate(
-                    (fcopy.data_table.data, data_max)
-                )
+                fcopy.data_table.data = np.concatenate((fcopy.data_table.data, data_max))
         fcopy.data_table.num_rows = fcopy.data_table.data.shape[0]
 
     def get_non_extended_th_table(self, f: File) -> DataTable:
@@ -716,9 +662,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         if f.with_extra_x:
             tmp_dt = DataTable(axarr=[])
             nrow = self.tables[f.file_name_short].num_rows
-            tmp_dt.data = self.tables[f.file_name_short].data[
-                f.nextramin : nrow - f.nextramax, :
-            ]
+            tmp_dt.data = self.tables[f.file_name_short].data[f.nextramin : nrow - f.nextramax, :]
             tmp_dt.num_rows = tmp_dt.data.shape[0]
             tmp_dt.num_columns = tmp_dt.data.shape[1]
             return tmp_dt
@@ -731,12 +675,8 @@ class QTheory(QWidget, Ui_TheoryTab):
             selected_file = self.parent_dataset.selected_file
             if selected_file:
                 if selected_file.active:
-                    f_list.append(
-                        self.parent_dataset.selected_file
-                    )  # use the selected/highlighted file if active
-        if (
-            not f_list
-        ):  # there is no selected file or it is inactive or single_file=False
+                    f_list.append(self.parent_dataset.selected_file)  # use the selected/highlighted file if active
+        if not f_list:  # there is no selected file or it is inactive or single_file=False
             for f in self.parent_dataset.files:
                 if f.active:
                     f_list.append(f)
@@ -794,9 +734,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             total_error += f_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
-            tab_data.append(
-                ["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt]
-            )
+            tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
         # table+='''</table><br>'''
         # self.Qprint(table)
         self.Qprint(tab_data)
@@ -808,15 +746,10 @@ class QTheory(QWidget, Ui_TheoryTab):
                 free_p += 1
 
         if npoints != 0 and total_error > 0:
-            self.Qprint(
-                "<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints)
-            )
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
-            self.Qprint(
-                "<b>Bayesian IC</b>: %12.5g<br>"
-                % (npoints * log(total_error / npoints) + free_p * log(npoints))
-            )
+            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
         else:
             self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
 
@@ -840,9 +773,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             # HERE WE INTERPOLATE
             yth2 = np.zeros_like(yexp)
             for i in range(view.n):
-                funcinterp = interp1d(
-                    xth[:, i], yth[:, i], kind="linear"
-                )  # Linear interpolation
+                funcinterp = interp1d(xth[:, i], yth[:, i], kind="linear")  # Linear interpolation
                 yth2[:, i] = funcinterp(xexp[:, i])
 
             if self.xrange.get_visible():
@@ -854,12 +785,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             else:
                 conditiony = np.ones_like(yexp, dtype=bool)
             conditionnaninf = (
-                (~np.isnan(xexp))
-                * (~np.isnan(yexp))
-                * (~np.isnan(yth2))
-                * (~np.isinf(xexp))
-                * (~np.isinf(yexp))
-                * (~np.isinf(yth2))
+                (~np.isnan(xexp)) * (~np.isnan(yexp)) * (~np.isnan(yth2)) * (~np.isinf(xexp)) * (~np.isinf(yexp)) * (~np.isinf(yth2))
             )
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth2 = np.extract(conditionx * conditiony * conditionnaninf, yth2)
@@ -872,9 +798,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             total_error += f_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
-            tab_data.append(
-                ["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt]
-            )
+            tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
         # table+='''</table><br>'''
         # self.Qprint(table)
         self.Qprint(tab_data)
@@ -886,15 +810,10 @@ class QTheory(QWidget, Ui_TheoryTab):
                 free_p += 1
 
         if npoints != 0 and total_error > 0:
-            self.Qprint(
-                "<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints)
-            )
+            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
-            self.Qprint(
-                "<b>Bayesian IC</b>: %12.5g<br>"
-                % (npoints * log(total_error / npoints) + free_p * log(npoints))
-            )
+            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
         else:
             self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
 
@@ -935,9 +854,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         """
         # NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT
         if self.normalizebydata:
-            residuals = (
-                self.fittingy - self.func_fit(self.fittingx, *x)
-            ) / self.fittingy
+            residuals = (self.fittingy - self.func_fit(self.fittingx, *x)) / self.fittingy
         else:
             residuals = self.fittingy - self.func_fit(self.fittingx, *x)
         fres = sum(residuals**2)
@@ -985,14 +902,9 @@ class QTheory(QWidget, Ui_TheoryTab):
                         )
                     else:
                         conditionnaninf = (
-                            (~np.isnan(xexp)[:, 0])
-                            * (~np.isnan(yexp)[:, 0])
-                            * (~np.isinf(xexp)[:, 0])
-                            * (~np.isinf(yexp)[:, 0])
+                            (~np.isnan(xexp)[:, 0]) * (~np.isnan(yexp)[:, 0]) * (~np.isinf(xexp)[:, 0]) * (~np.isinf(yexp)[:, 0])
                         )
-                    ycond = np.extract(
-                        conditionx * conditiony * conditionnaninf, yth[:, i]
-                    )
+                    ycond = np.extract(conditionx * conditiony * conditionnaninf, yth[:, i])
                     y = np.append(y, ycond)
         self.nfev += 1
         return y
@@ -1003,9 +915,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         if not self.tables:
             self.is_fitting = False
             return
-        if len(self.parent_dataset.inactive_files) == len(
-            self.parent_dataset.files
-        ):  # all files hidden
+        if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files):  # all files hidden
             self.is_fitting = False
             return
         th_files = self.theory_files()
@@ -1060,26 +970,17 @@ class QTheory(QWidget, Ui_TheoryTab):
                         )
                     else:
                         conditionnaninf = (
-                            (~np.isnan(xexp)[:, 0])
-                            * (~np.isnan(yexp)[:, 0])
-                            * (~np.isinf(xexp)[:, 0])
-                            * (~np.isinf(yexp)[:, 0])
+                            (~np.isnan(xexp)[:, 0]) * (~np.isnan(yexp)[:, 0]) * (~np.isinf(xexp)[:, 0]) * (~np.isinf(yexp)[:, 0])
                         )
-                    xcond = np.extract(
-                        conditionx * conditiony * conditionnaninf, xexp[:, i]
-                    )
-                    ycond = np.extract(
-                        conditionx * conditiony * conditionnaninf, yexp[:, i]
-                    )
+                    xcond = np.extract(conditionx * conditiony * conditionnaninf, xexp[:, i])
+                    ycond = np.extract(conditionx * conditiony * conditionnaninf, yexp[:, i])
 
                     x = np.append(x, xcond)
                     y = np.append(y, ycond)
 
         # 2. Create the array of theory parameters that will be changed during the fitting (checked parameters)
         #    It also creates the arrays with the upper and lower bounds for parameters
-        initial_guess = (
-            []
-        )  # Take the initial guess for the fit from the current value of the parameter
+        initial_guess = []  # Take the initial guess for the fit from the current value of the parameter
         self.param_min = []  # list of min values for fitting parameters
         self.param_max = []  # list of max values for fitting parameters
         self.integrality = []  # list of integrality constraints for fitting parameters
@@ -1330,9 +1231,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.Qprint("<b>Brute Force Global Optimization<b>")
             try:
                 param_bounds = list(zip(self.param_min, self.param_max))
-                ret = brute(
-                    self.func_fit_and_error, ranges=param_bounds, Ns=self.BruteNs
-                )
+                ret = brute(self.func_fit_and_error, ranges=param_bounds, Ns=self.BruteNs)
                 initial_guess1 = ret
                 pars, pcov = curve_fit(
                     self.func_fit,
@@ -1402,16 +1301,12 @@ class QTheory(QWidget, Ui_TheoryTab):
                 if par.type == ParameterType.string:
                     table.append(["%-18s" % par_label, "%18s" % par.value])
                 else:
-                    table.append(
-                        ["%-18s" % par_label, "%-18.4g" % par.display_value()]
-                    )
+                    table.append(["%-18s" % par_label, "%-18.4g" % par.display_value()])
         # table+='''</table><br>'''
         self.Qprint(table)
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        self.Qprint(
-            """<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time)
-        )
+        self.Qprint("""<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time))
         self.do_cite("")
 
     def plot_theory_stuff(self):
@@ -1426,18 +1321,11 @@ class QTheory(QWidget, Ui_TheoryTab):
             fparam = f.file_parameters
             ttable = self.tables[f.file_name_short]
             if line == "":
-                ofilename = (
-                    os.path.splitext(f.file_full_path)[0]
-                    + "_TH"
-                    + os.path.splitext(f.file_full_path)[1]
-                )
+                ofilename = os.path.splitext(f.file_full_path)[0] + "_TH" + os.path.splitext(f.file_full_path)[1]
             else:
                 ofilename = os.path.join(
                     line,
-                    f.file_name_short
-                    + "_TH"
-                    + extra_txt
-                    + os.path.splitext(f.file_full_path)[1],
+                    f.file_name_short + "_TH" + extra_txt + os.path.splitext(f.file_full_path)[1],
                 )
             # print("ofilename", ofilename)
             # print('File: ' + f.file_name_short)
@@ -1454,13 +1342,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             for i in k:
                 fout.write(i + "=" + str(self.parameters[i].value) + "; ")
             fout.write("\n")
-            fout.write(
-                "# Date: "
-                + time.strftime("%Y-%m-%d %H:%M:%S")
-                + " - User: "
-                + getpass.getuser()
-                + "\n"
-            )
+            fout.write("# Date: " + time.strftime("%Y-%m-%d %H:%M:%S") + " - User: " + getpass.getuser() + "\n")
             k = f.file_type.col_names
             for i in k:
                 fout.write(i + "\t")
@@ -1665,10 +1547,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Print citation information"""
         if len(self.citations) > 0:
             for i in range(len(self.citations)):
-                self.Qprint(
-                    """<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>"""
-                    % (self.doi[i], self.citations[i])
-                )
+                self.Qprint("""<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>""" % (self.doi[i], self.citations[i]))
 
     def do_plot(self, line):
         """Call the plot from the parent Dataset"""
@@ -1717,9 +1596,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     p.value = val
                     return "", True
                 else:
-                    message = "Values allowed: " + ", ".join(
-                        [str(s) for s in p.discrete_values]
-                    )
+                    message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
@@ -1732,9 +1609,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     p.value = val
                     return "", True
                 else:
-                    message = "Values allowed: " + ", ".join(
-                        [str(s) for s in p.discrete_values]
-                    )
+                    message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
@@ -1862,9 +1737,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Print message in the GUI log text box"""
         self.thTextBox.moveCursor(QTextCursor.End)
         self.thTextBox.insertHtml(msg)
-        self.thTextBox.verticalScrollBar().setValue(
-            self.thTextBox.verticalScrollBar().maximum()
-        )
+        self.thTextBox.verticalScrollBar().setValue(self.thTextBox.verticalScrollBar().maximum())
         self.thTextBox.moveCursor(QTextCursor.End)
 
     def get_material_parameters(self):
@@ -1891,18 +1764,12 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.fittingoptionsdialog.ui.LSgtollineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.LSf_scalelineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setValidator(ivalidator)
-        self.fittingoptionsdialog.ui.LSmethodcomboBox.setCurrentIndex(
-            self.fittingoptionsdialog.ui.LSmethodcomboBox.findText(self.LSmethod)
-        )
-        self.fittingoptionsdialog.ui.LSjaccomboBox.setCurrentIndex(
-            self.fittingoptionsdialog.ui.LSjaccomboBox.findText(self.LSjac)
-        )
+        self.fittingoptionsdialog.ui.LSmethodcomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSmethodcomboBox.findText(self.LSmethod))
+        self.fittingoptionsdialog.ui.LSjaccomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSjaccomboBox.findText(self.LSjac))
         self.fittingoptionsdialog.ui.LSftollineEdit.setText("%g" % self.LSftol)
         self.fittingoptionsdialog.ui.LSxtollineEdit.setText("%g" % self.LSxtol)
         self.fittingoptionsdialog.ui.LSgtollineEdit.setText("%g" % self.LSgtol)
-        self.fittingoptionsdialog.ui.LSlosscomboBox.setCurrentIndex(
-            self.fittingoptionsdialog.ui.LSlosscomboBox.findText(self.LSloss)
-        )
+        self.fittingoptionsdialog.ui.LSlosscomboBox.setCurrentIndex(self.fittingoptionsdialog.ui.LSlosscomboBox.findText(self.LSloss))
         self.fittingoptionsdialog.ui.LSf_scalelineEdit.setText("%g" % self.LSf_scale)
         self.fittingoptionsdialog.ui.LSmax_nfevlineEdit.setText("100")
         # BASIN HOPPING
@@ -1914,42 +1781,24 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.fittingoptionsdialog.ui.basinseedlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.basinniterlineEdit.setText("%d" % self.basinniter)
         self.fittingoptionsdialog.ui.basinTlineEdit.setText("%g" % self.basinT)
-        self.fittingoptionsdialog.ui.basinstepsizelineEdit.setText(
-            "%g" % self.basinstepsize
-        )
-        self.fittingoptionsdialog.ui.basinintervallineEdit.setText(
-            "%d" % self.basininterval
-        )
+        self.fittingoptionsdialog.ui.basinstepsizelineEdit.setText("%g" % self.basinstepsize)
+        self.fittingoptionsdialog.ui.basinintervallineEdit.setText("%d" % self.basininterval)
         self.fittingoptionsdialog.ui.basinniter_successlineEdit.setText("30")
         self.fittingoptionsdialog.ui.basinseedlineEdit.setText("4398495")
         # DUAL ANNEALING
         self.fittingoptionsdialog.ui.annealmaxiterlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.annealinitial_templineEdit.setValidator(dvalidator)
-        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setValidator(
-            dvalidator
-        )
+        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.annealvisitlineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.annealacceptlineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.annealmaxfunlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.annealseedlineEdit.setValidator(ivalidator)
-        self.fittingoptionsdialog.ui.annealmaxiterlineEdit.setText(
-            "%d" % self.annealmaxiter
-        )
-        self.fittingoptionsdialog.ui.annealinitial_templineEdit.setText(
-            "%g" % self.annealinitial_temp
-        )
-        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setText(
-            "%g" % self.annealrestart_temp_ratio
-        )
-        self.fittingoptionsdialog.ui.annealvisitlineEdit.setText(
-            "%g" % self.annealvisit
-        )
-        self.fittingoptionsdialog.ui.annealacceptlineEdit.setText(
-            "%g" % self.annealaccept
-        )
-        self.fittingoptionsdialog.ui.annealmaxfunlineEdit.setText(
-            "%d" % self.annealmaxfun
-        )
+        self.fittingoptionsdialog.ui.annealmaxiterlineEdit.setText("%d" % self.annealmaxiter)
+        self.fittingoptionsdialog.ui.annealinitial_templineEdit.setText("%g" % self.annealinitial_temp)
+        self.fittingoptionsdialog.ui.annealrestart_temp_ratiolineEdit.setText("%g" % self.annealrestart_temp_ratio)
+        self.fittingoptionsdialog.ui.annealvisitlineEdit.setText("%g" % self.annealvisit)
+        self.fittingoptionsdialog.ui.annealacceptlineEdit.setText("%g" % self.annealaccept)
+        self.fittingoptionsdialog.ui.annealmaxfunlineEdit.setText("%d" % self.annealmaxfun)
         self.fittingoptionsdialog.ui.annealseedlineEdit.setText("4389439")
         # DIFFERENTIAL EVOLUTION
         self.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.setValidator(ivalidator)
@@ -1957,43 +1806,23 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.fittingoptionsdialog.ui.diffevoltollineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.diffevolmutationAlineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.diffevolmutationBlineEdit.setValidator(dvalidator)
-        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setValidator(
-            dvalidator
-        )
+        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.diffevolseedlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.diffevolatollineEdit.setValidator(dvalidator)
         self.fittingoptionsdialog.ui.diffevolstrategycomboBox.setCurrentIndex(
-            self.fittingoptionsdialog.ui.diffevolstrategycomboBox.findText(
-                self.diffevolstrategy
-            )
+            self.fittingoptionsdialog.ui.diffevolstrategycomboBox.findText(self.diffevolstrategy)
         )
-        self.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.setText(
-            "%d" % self.diffevolmaxiter
-        )
-        self.fittingoptionsdialog.ui.diffevolpopsizelineEdit.setText(
-            "%d" % self.diffevolpopsize
-        )
-        self.fittingoptionsdialog.ui.diffevoltollineEdit.setText(
-            "%g" % self.diffevoltol
-        )
-        self.fittingoptionsdialog.ui.diffevolmutationAlineEdit.setText(
-            "%g" % self.diffevolmutation[0]
-        )
-        self.fittingoptionsdialog.ui.diffevolmutationBlineEdit.setText(
-            "%g" % self.diffevolmutation[1]
-        )
-        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setText(
-            "%g" % self.diffevolrecombination
-        )
+        self.fittingoptionsdialog.ui.diffevolmaxiterlineEdit.setText("%d" % self.diffevolmaxiter)
+        self.fittingoptionsdialog.ui.diffevolpopsizelineEdit.setText("%d" % self.diffevolpopsize)
+        self.fittingoptionsdialog.ui.diffevoltollineEdit.setText("%g" % self.diffevoltol)
+        self.fittingoptionsdialog.ui.diffevolmutationAlineEdit.setText("%g" % self.diffevolmutation[0])
+        self.fittingoptionsdialog.ui.diffevolmutationBlineEdit.setText("%g" % self.diffevolmutation[1])
+        self.fittingoptionsdialog.ui.diffevolrecombinationlineEdit.setText("%g" % self.diffevolrecombination)
         self.fittingoptionsdialog.ui.diffevolseedlineEdit.setText("4389439")
         self.fittingoptionsdialog.ui.diffevolinitcomboBox.setCurrentIndex(
-            self.fittingoptionsdialog.ui.diffevolinitcomboBox.findText(
-                self.diffevolinit
-            )
+            self.fittingoptionsdialog.ui.diffevolinitcomboBox.findText(self.diffevolinit)
         )
-        self.fittingoptionsdialog.ui.diffevolatollineEdit.setText(
-            "%g" % self.diffevolatol
-        )
+        self.fittingoptionsdialog.ui.diffevolatollineEdit.setText("%g" % self.diffevolatol)
         # SHGO
         self.fittingoptionsdialog.ui.SHGOnlineEdit.setValidator(ivalidator)
         self.fittingoptionsdialog.ui.SHGOiterslineEdit.setValidator(ivalidator)
@@ -2019,20 +1848,14 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.errorcalculationdialog.ui.RawDataradioButton.setChecked(True)
         elif self.errormethod == ErrorCalculationMethod.AllViews:
             self.errorcalculationdialog.ui.AllViewsradioButton.setChecked(True)
-        self.errorcalculationdialog.ui.NormalizecheckBox.setChecked(
-            self.normalizebydata
-        )
+        self.errorcalculationdialog.ui.NormalizecheckBox.setChecked(self.normalizebydata)
 
     def thtextbox_context_menu(self):
         """Custom contextual menu for the theory textbox"""
         menu = self.thTextBox.createStandardContextMenu()
         menu.addSeparator()
-        menu.addAction(
-            "Increase Font Size", lambda: self.change_thtextbox_fontsize(1.25)
-        )
-        menu.addAction(
-            "Deacrease Font Size", lambda: self.change_thtextbox_fontsize(0.8)
-        )
+        menu.addAction("Increase Font Size", lambda: self.change_thtextbox_fontsize(1.25))
+        menu.addAction("Deacrease Font Size", lambda: self.change_thtextbox_fontsize(0.8))
         menu.addAction("Clear Text", self.thTextBox.clear)
         menu.exec_(QCursor.pos())
 
@@ -2063,9 +1886,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             return
         self.thread_calc_busy = True
         # disable buttons
-        self.parent_dataset.actionNew_Theory.setDisabled(
-            True
-        )  # only needed for theories using shared libraries
+        self.parent_dataset.actionNew_Theory.setDisabled(True)  # only needed for theories using shared libraries
         self.theory_buttons_disabled(True)
 
         if CmdBase.calcmode == CalcMode.multithread:
@@ -2112,9 +1933,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             return
         self.thread_fit_busy = True
         # disable buttons
-        self.parent_dataset.actionNew_Theory.setDisabled(
-            True
-        )  # only needed for theories using shared libraries
+        self.parent_dataset.actionNew_Theory.setDisabled(True)  # only needed for theories using shared libraries
         self.theory_buttons_disabled(True)
 
         if CmdBase.calcmode == CalcMode.multithread:
@@ -2180,9 +1999,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     p_label = p.display_label()
                     if p.opt_type == OptType.const:
                         if p.type == ParameterType.string:
-                            item = QTreeWidgetItem(
-                                self.thParamTable, [p_label, p.value, "N/A"]
-                            )
+                            item = QTreeWidgetItem(self.thParamTable, [p_label, p.value, "N/A"])
                         else:
                             item = QTreeWidgetItem(
                                 self.thParamTable,
@@ -2197,9 +2014,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                         except:
                             err = "-"
                         if p.type == ParameterType.string:
-                            item = QTreeWidgetItem(
-                                self.thParamTable, [p_label, p.value, "N/A"]
-                            )
+                            item = QTreeWidgetItem(self.thParamTable, [p_label, p.value, "N/A"])
                         else:
                             item = QTreeWidgetItem(
                                 self.thParamTable,
@@ -2236,9 +2051,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                             val = attr_dict[attr_name].currentText()
                             setattr(p, attr_name, OptType[val])
                         elif attr_name == "display_flag":
-                            val = ast.literal_eval(
-                                attr_dict[attr_name].currentText()
-                            )  # bool
+                            val = ast.literal_eval(attr_dict[attr_name].currentText())  # bool
                             setattr(p, attr_name, val)
                         elif attr_name == "display_unit":
                             if isinstance(attr_dict[attr_name], QComboBox):
@@ -2325,9 +2138,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                 self.update_parameter_table()
                 self.parent_dataset.handle_actionCalculate_Theory()
         else:
-            QMessageBox.information(
-                self, "Import Modes", "Found no opened theory to import modes from"
-            )
+            QMessageBox.information(self, "Import Modes", "Found no opened theory to import modes from")
 
     def save_modes(self):
         """Save Maxwell modes to a text file"""

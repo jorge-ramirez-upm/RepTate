@@ -35,6 +35,7 @@
 BobLVE file calculates the LVE of a given polymer configuration
 by Chinmay Das et al.
 """
+
 import os
 import numpy as np
 import RepTate
@@ -65,9 +66,7 @@ class TheoryBobNLVE(QTheory):
     citations = ["Das C. et al., J. Rheol. 2006, 50, 207-234"]
     doi = ["http://dx.doi.org/10.1122/1.2167487"]
     html_help_file = "https://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#bob-nlve"
-    single_file = (
-        False  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = False  # False if the theory can be applied to multiple files simultaneously
 
     signal_param_dialog = Signal(object)
 
@@ -102,12 +101,8 @@ class TheoryBobNLVE(QTheory):
         self.tbutflow = QToolButton()
         self.tbutflow.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu(self)
-        self.shear_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow"
-        )
-        self.extensional_flow_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow"
-        )
+        self.shear_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-shear.png"), "Shear Flow")
+        self.extensional_flow_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icon-uext.png"), "Extensional Flow")
         if self.flow_mode == FlowMode.shear:
             self.tbutflow.setDefaultAction(self.shear_flow_action)
         else:
@@ -123,13 +118,9 @@ class TheoryBobNLVE(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(
-            self.select_extensional_flow
-        )
-        connection_id = self.bob_settings_button.triggered.connect(
-            self.launch_param_dialog
-        )
+        self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        self.bob_settings_button.triggered.connect(self.launch_param_dialog)
 
     def select_shear_flow(self):
         self.flow_mode = FlowMode.shear
@@ -147,7 +138,10 @@ class TheoryBobNLVE(QTheory):
         dilogue_name = "Select a Polymer Configuration File"
         ext_filter = "Data Files (*.dat)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, dir_start, ext_filter  # , options=options
+            self,
+            dilogue_name,
+            dir_start,
+            ext_filter,  # , options=options
         )
         self.selected_file = selected_file
         self.d.selected_file.setText(os.path.basename(selected_file))
@@ -189,9 +183,7 @@ class TheoryBobNLVE(QTheory):
 
     def handle_help_button(self):
         """When Help button of dialog box is clicked, show BoB manual (pdf)"""
-        bob_manual_pdf = "docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf" % (
-            (os.sep,) * 5
-        )
+        bob_manual_pdf = "docs%ssource%smanual%sApplications%sReact%sbob2.3.pdf" % ((os.sep,) * 5)
         QDesktopServices.openUrl(QUrl.fromLocalFile(bob_manual_pdf))
 
     def create_bob_input_file(self, nlines, inpf):
@@ -254,18 +246,10 @@ class TheoryBobNLVE(QTheory):
             # ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
             # copy2(conffile, ok_path)
             # conffile = ok_path
-            self.Qprint(
-                '<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>'
-                % conffile
-            )
-            print(
-                '"%s" contains non-ascii characters. BoB might not like it...'
-                % conffile
-            )
+            self.Qprint('<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>' % conffile)
+            print('"%s" contains non-ascii characters. BoB might not like it...' % conffile)
         if conffile == "" or os.path.splitext(conffile)[1] == "":
-            self.Qprint(
-                "<font color=red><b>Set the output filepath to write the polyconf file</b></font>"
-            )
+            self.Qprint("<font color=red><b>Set the output filepath to write the polyconf file</b></font>")
             return
         nlines = self.num_file_lines(conffile)
         # inpf = os.path.join('theories', 'temp', 'temp_inpf.dat')
@@ -337,9 +321,7 @@ class TheoryBobNLVE(QTheory):
         is_shear = self.flow_mode == FlowMode.shear
         self.Qprint("<hr><h3>rate %.3g s<sup>-1</sup></h3>" % flowrate)
         try:
-            time_arr, stress_arr = self.bch.return_bob_nlve(
-                self.argv, flowrate, tmin, tmax, is_shear
-            )
+            time_arr, stress_arr = self.bch.return_bob_nlve(self.argv, flowrate, tmin, tmax, is_shear)
         except BobError:
             self.Qprint("Operation cancelled")
             return

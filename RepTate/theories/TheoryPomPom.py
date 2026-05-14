@@ -177,8 +177,8 @@ class TheoryPomPom(QTheory):
                 self.tbutflow.setDefaultAction(self.extensional_flow_action)
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
-            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+            self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
             # self.read_gdot_action = tb.addAction(
             #     QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
             #     "Read gdot from file",
@@ -207,11 +207,11 @@ class TheoryPomPom(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
-        connection_id = self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        self.save_modes_action.triggered.connect(self.save_modes)
+        self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
     def handle_flowsolve_btn(self):
         """Save theory parameters in FlowSolve format"""

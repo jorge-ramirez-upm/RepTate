@@ -158,8 +158,8 @@ class TheoryUCM(QTheory):
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
 
-            connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-            connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+            self.shear_flow_action.triggered.connect(self.select_shear_flow)
+            self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
 
         else:
             self.function = self.calculate_UCMLAOS
@@ -178,10 +178,10 @@ class TheoryUCM(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.plot_modes_action.triggered.connect(self.plot_modes_graph)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        self.plot_modes_action.triggered.connect(self.plot_modes_graph)
+        self.save_modes_action.triggered.connect(self.save_modes)
 
     def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear

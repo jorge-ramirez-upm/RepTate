@@ -35,6 +35,7 @@
 Module that defines theories related to Debye modes, in the frequency and time domains.
 
 """
+
 from typing import Any, ClassVar, cast
 
 import numpy as np
@@ -73,9 +74,7 @@ class TheoryDebyeModesFrequency(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#debye-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.DebyeModesFrequency
@@ -87,25 +86,25 @@ class TheoryDebyeModesFrequency(QTheory):
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
         self.parameters["einf"] = Parameter(
-            name = "einf",
-            value = 0.0,
-            description = "Unrelaxed permittivity",
-            type = ParameterType.real,
+            name="einf",
+            value=0.0,
+            description="Unrelaxed permittivity",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["logwmin"] = Parameter(
-            name = "logwmin",
-            value = np.log10(wmin),
-            description = "log10(wmin) of frequency range minimum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmin",
+            value=np.log10(wmin),
+            description="log10(wmin) of frequency range minimum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logwmax"] = Parameter(
-            name = "logwmax",
-            value = np.log10(wmax),
-            description = "log10(wmax) of frequency range maximum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmax",
+            value=np.log10(wmax),
+            description="log10(wmax) of frequency range maximum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -128,10 +127,10 @@ class TheoryDebyeModesFrequency(QTheory):
         nmodes_value: Any = self.parameters["nmodes"].value
         for i in range(nmodes_value):
             self.parameters["logDe%02d" % i] = Parameter(
-                name = "logDe%02d" % i,
-                value = np.log10(eps[i]),
-                description = "Log of Mode %d amplitude" % i,
-                type = ParameterType.real,
+                name="logDe%02d" % i,
+                value=np.log10(eps[i]),
+                description="Log of Mode %d amplitude" % i,
+                type=ParameterType.real,
                 opt_type=OptType.opt,
             )
 
@@ -148,17 +147,13 @@ class TheoryDebyeModesFrequency(QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -201,7 +196,6 @@ class TheoryDebyeModesFrequency(QTheory):
             self.parent_dataset.handle_actionCalculate_Theory()
         self.update_parameter_table()
 
-
     def drag_mode(self, dx: Any, dy: Any) -> None:
         """Move around modes"""
         dx, dy = self.convert_view_data_to_internal(dx, dy)
@@ -232,9 +226,7 @@ class TheoryDebyeModesFrequency(QTheory):
         nmodes: Any = self.parameters["nmodes"].value
         logwmin: Any = self.parameters["logwmin"].value
         logwmax: Any = self.parameters["logwmax"].value
-        w = np.logspace(
-            logwmin, logwmax, nmodes
-        )
+        w = np.logspace(logwmin, logwmax, nmodes)
         eps = np.zeros(nmodes)
         for i in range(nmodes):
             eps[i] = np.power(10, self.parameters["logDe%02d" % i].value)
@@ -283,9 +275,7 @@ class TheoryDebyeModesFrequency(QTheory):
         nmodes: Any = self.parameters["nmodes"].value
         logwmin: Any = self.parameters["logwmin"].value
         logwmax: Any = self.parameters["logwmax"].value
-        freq = np.logspace(
-            logwmin, logwmax, nmodes
-        )
+        freq = np.logspace(logwmin, logwmax, nmodes)
         tau = 1.0 / freq
         eps = np.zeros(nmodes)
         for i in range(nmodes):
@@ -305,9 +295,7 @@ class TheoryDebyeModesFrequency(QTheory):
         nmodes: Any = self.parameters["nmodes"].value
         logwmin: Any = self.parameters["logwmin"].value
         logwmax: Any = self.parameters["logwmax"].value
-        freq = np.logspace(
-            logwmin, logwmax, nmodes
-        )
+        freq = np.logspace(logwmin, logwmax, nmodes)
         tau = 1.0 / freq
 
         tt.data[:, 1] += einf
@@ -315,7 +303,7 @@ class TheoryDebyeModesFrequency(QTheory):
             if self.stop_theory_flag:
                 break
             wT = tt.data[:, 0] * tau[i]
-            wTsq = wT ** 2
+            wTsq = wT**2
             eps = np.power(10, self.parameters["logDe%02d" % i].value)
             tt.data[:, 1] += eps * 1 / (1 + wTsq)
             tt.data[:, 2] += eps * wT / (1 + wTsq)
@@ -331,16 +319,12 @@ class TheoryDebyeModesFrequency(QTheory):
         data_table_tmp.data = np.zeros((nmodes, 3))
         logwmin: Any = self.parameters["logwmin"].value
         logwmax: Any = self.parameters["logwmax"].value
-        freq = np.logspace(
-            logwmin, logwmax, nmodes
-        )
+        freq = np.logspace(logwmin, logwmax, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
-                10, self.parameters["logDe%02d" % i].value
-            )
+            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(10, self.parameters["logDe%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)
@@ -353,4 +337,3 @@ class TheoryDebyeModesFrequency(QTheory):
             for nx in range(len(self.axarr)):
                 # self.axarr[nx].lines.remove(data_table_tmp.series[nx][i])
                 data_table_tmp.series[nx][i].remove()
-

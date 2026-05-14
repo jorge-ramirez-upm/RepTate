@@ -47,7 +47,7 @@ else:
     lib_path = os.path.join(dir_path, "schwarzl_lib_%s_i686.so" % (sys.platform))
 try:
     schwarzl_lib = CDLL(lib_path)
-except:
+except OSError:
     print("OS %s not recognized in Schwarzl CH module" % (sys.platform))
 
 schwarzl_gt = schwarzl_lib.schwarzl_gt

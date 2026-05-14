@@ -35,6 +35,7 @@
 Module for the pseudo theory for Time-Temperature superposition shift of LVE data.
 
 """
+
 import os
 import time
 import getpass
@@ -79,12 +80,12 @@ class TheoryWLFShift(QTheory):
     description: ClassVar[str] = "TTS shift based on the WLF equation"
     citations: ClassVar[list[str]] = []
     doi: ClassVar[list[str]] = []
-    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift"
+    html_help_file: ClassVar[str] = (
+        "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#williams-landel-ferry-tts-shift"
+    )
     single_file: ClassVar[bool] = False
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift
@@ -182,11 +183,11 @@ class TheoryWLFShift(QTheory):
         # self.savemaster = tb.addAction(self.style().standardIcon(
         #     getattr(QStyle, 'SP_DialogSaveButton')), 'Save Master Curve')
         self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
-        connection_id = self.isofrictional.triggered.connect(self.do_isofrictional)
-        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
-        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
-        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
+        self.verticalshift.triggered.connect(self.do_vertical_shift)
+        self.isofrictional.triggered.connect(self.do_isofrictional)
+        self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        self.arrhe_tb.triggered.connect(self.print_activation_energy)
+        # self.savemaster.triggered.connect(self.do_save_dialog)
         self.dir_start = os.path.join(RepTate.root_dir, "data")
 
     def print_activation_energy(self) -> None:
@@ -214,10 +215,7 @@ class TheoryWLFShift(QTheory):
             tval = distributions.t.ppf(1.0 - alpha / 2.0, dof)
             Ea_list.append((M, popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3))
         if len(M_set) == 1:
-            self.Qprint(
-                "<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>"
-                % (popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3)
-            )
+            self.Qprint("<h3>Arrhenius Ea = %.3g ± %.3g kJ/mol</h3>" % (popt[0] / 1e3, np.sqrt(np.diag(pcov))[0] * tval / 1e3))
         else:
             table = [
                 ["Mw", "Ea (kJ/mol)"],
@@ -252,18 +250,14 @@ class TheoryWLFShift(QTheory):
         for Mw in Mw_list:
             flag_first = True
             list_out = []
-            with open(
-                os.path.join(folder, "shift_factors_Mw%s.ttsf" % Mw), "w"
-            ) as fout:
+            with open(os.path.join(folder, "shift_factors_Mw%s.ttsf" % Mw), "w") as fout:
                 for f in self.parent_dataset.files:
                     if f.active and f.file_parameters["Mw"] == Mw:
                         if flag_first:
                             # write file header
                             for pname in f.file_parameters:
                                 if pname != "T":
-                                    fout.write(
-                                        "%s=%s;" % (pname, f.file_parameters[pname])
-                                    )
+                                    fout.write("%s=%s;" % (pname, f.file_parameters[pname]))
                             fout.write("\n")
                             fout.write("%-12s %-12s %-12s\n" % ("T", "aT", "bT"))
                             fout.write("%-12s %-12s %-12s\n" % ("[°C]", "[-]", "[-]"))
@@ -354,9 +348,7 @@ class TheoryWLFShift(QTheory):
                 phi2i = Filei.file_parameters["phi2"]
             else:
                 phi2i = 0
-            xthi, ythi, success = view.view_proc(
-                self.tables[Filei.file_name_short], Filei.file_parameters
-            )
+            xthi, ythi, success = view.view_proc(self.tables[Filei.file_name_short], Filei.file_parameters)
             # We need to sort arrays
             for k in range(view.n):
                 x = xthi[:, k]
@@ -380,9 +372,7 @@ class TheoryWLFShift(QTheory):
                 if Mw[i] != Mw[j]:
                     continue
                 for k in range(view.n):
-                    condition = (xth[j][:, k] > xmin[i, k]) * (
-                        xth[j][:, k] < xmax[i, k]
-                    )
+                    condition = (xth[j][:, k] > xmin[i, k]) * (xth[j][:, k] < xmax[i, k])
                     x = np.extract(condition, xth[j][:, k])
                     y = np.extract(condition, yth[j][:, k])
                     yinterp = interp(x, xth[i][:, k], yth[i][:, k])
@@ -516,9 +506,7 @@ class TheoryWLFShift(QTheory):
         self.Qprint(table)
         self.is_fitting = False
         self.do_calculate(line, timing=False)
-        self.Qprint(
-            """<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time)
-        )
+        self.Qprint("""<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time))
 
     # def do_print(self, line):
     #     """Print the theory table associated with the given file name"""
@@ -623,13 +611,7 @@ class TheoryWLFShift(QTheory):
                 fout.write(i + "=" + str(self.parameters[i].value) + ";")
             fout.write("\n")
             fout.write("# Master curve predicted with WLF Theory\n")
-            fout.write(
-                "# Date: "
-                + time.strftime("%Y-%m-%d %H:%M:%S")
-                + " - User: "
-                + getpass.getuser()
-                + "\n"
-            )
+            fout.write("# Date: " + time.strftime("%Y-%m-%d %H:%M:%S") + " - User: " + getpass.getuser() + "\n")
             k = Filei.file_type.col_names
             for i in k:
                 fout.write(i + "\t")

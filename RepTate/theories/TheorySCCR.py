@@ -199,10 +199,10 @@ class TheorySCCR(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.shear_flow_action.triggered.connect(self.select_shear_flow)
-        connection_id = self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
-        connection_id = self.recommendedN.triggered.connect(self.handle_recommendedN)
+        self.shear_flow_action.triggered.connect(self.select_shear_flow)
+        self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.recommendedN.triggered.connect(self.handle_recommendedN)
 
     def select_shear_flow(self) -> None:
         self.flow_mode = FlowMode.shear

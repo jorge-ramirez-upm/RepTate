@@ -35,6 +35,7 @@
 Module that defines theories related to Havriliak-Negami modes, in the frequency and time domains.
 
 """
+
 from typing import Any, ClassVar, cast
 
 import numpy as np
@@ -83,12 +84,12 @@ class TheoryKWWModesFrequency(QTheory):
         "http://dx.doi.org/10.1002/andp.18541670203",
         "http://dx.doi.org/10.1039/TF9706600080",
     ]
-    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes"
+    html_help_file: ClassVar[str] = (
+        "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#kolhrauch-williams-watts-kww-modes"
+    )
     single_file: ClassVar[bool] = True
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.KWWModesFrequency
@@ -100,34 +101,34 @@ class TheoryKWWModesFrequency(QTheory):
         nmodes = int(np.round(np.log10(wmax / wmin)))
 
         self.parameters["einf"] = Parameter(
-            name = "einf",
-            value = 0.0,
-            description = "Unrelaxed permittivity",
-            type = ParameterType.real,
+            name="einf",
+            value=0.0,
+            description="Unrelaxed permittivity",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0,
         )
         self.parameters["beta"] = Parameter(
-            name = "beta",
-            value = 0.5,
-            description = "Stretched exponential parameter",
-            type = ParameterType.real,
+            name="beta",
+            value=0.5,
+            description="Stretched exponential parameter",
+            type=ParameterType.real,
             opt_type=OptType.opt,
             min_value=0.1,
             max_value=2.0,
         )
         self.parameters["logwmin"] = Parameter(
-            name = "logwmin",
-            value = np.log10(wmin),
-            description = "log10(wmin) of frequency range minimum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmin",
+            value=np.log10(wmin),
+            description="log10(wmin) of frequency range minimum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logwmax"] = Parameter(
-            name = "logwmax",
-            value = np.log10(wmax),
-            description = "log10(wmax) of frequency range maximum expressed in rad/s",
-            type = ParameterType.real,
+            name="logwmax",
+            value=np.log10(wmax),
+            description="log10(wmax) of frequency range maximum expressed in rad/s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -150,10 +151,10 @@ class TheoryKWWModesFrequency(QTheory):
         nmodes_value: Any = self.parameters["nmodes"].value
         for i in range(nmodes_value):
             self.parameters["logDe%02d" % i] = Parameter(
-                name = "logDe%02d" % i,
-                value = np.log10(eps[i]),
-                description = "Log of Mode %d amplitude" % i,
-                type = ParameterType.real,
+                name="logDe%02d" % i,
+                value=np.log10(eps[i]),
+                description="Log of Mode %d amplitude" % i,
+                type=ParameterType.real,
                 opt_type=OptType.opt,
             )
 
@@ -170,17 +171,13 @@ class TheoryKWWModesFrequency(QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -351,9 +348,7 @@ class TheoryKWWModesFrequency(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(
-                10, self.parameters["logDe%02d" % i].value
-            )
+            data_table_tmp.data[i, 1] = data_table_tmp.data[i, 2] = np.power(10, self.parameters["logDe%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)

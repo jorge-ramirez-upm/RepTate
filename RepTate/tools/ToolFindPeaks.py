@@ -34,6 +34,7 @@
 
 FindPeaks file for creating a new Tool
 """
+
 import numpy as np
 from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
@@ -90,25 +91,21 @@ class ToolFindPeaks(QTool):
         self.minpeaks = self.tb.addAction("Minimum peaks")
         self.minpeaks.setCheckable(True)
         self.handle_minpeaks_button(checked=False)
-        connection_id = self.minpeaks.triggered.connect(self.handle_minpeaks_button)
+        self.minpeaks.triggered.connect(self.handle_minpeaks_button)
         self.parabola = self.tb.addAction("Fit Parabola")
         self.parabola.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-bell-curve.png"))
         self.parabola.setCheckable(True)
         self.parabola.setChecked(False)
-        connection_id = self.parabola.triggered.connect(self.handle_parabola_button)
+        self.parabola.triggered.connect(self.handle_parabola_button)
         self.parent_application.update_all_ds_plots()
 
         # add widgets specific to the Tool here:
 
     def handle_minpeaks_button(self, checked):
         if checked:
-            self.minpeaks.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-peak-minimum.png")
-            )
+            self.minpeaks.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-peak-minimum.png"))
         else:
-            self.minpeaks.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-peak-maximum.png")
-            )
+            self.minpeaks.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-peak-maximum.png"))
         self.minpeaks.setChecked(checked)
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
@@ -151,11 +148,7 @@ class ToolFindPeaks(QTool):
             (zeros,) = np.where(dy == 0)
             dy[zeros] = zerosl[zeros]
             (zeros,) = np.where(dy == 0)
-        peaks = np.where(
-            (np.hstack([dy, 0.0]) < 0.0)
-            & (np.hstack([0.0, dy]) > 0.0)
-            & (y > thresholdnow)
-        )[0]
+        peaks = np.where((np.hstack([dy, 0.0]) < 0.0) & (np.hstack([0.0, dy]) > 0.0) & (y > thresholdnow))[0]
         if peaks.size > 1 and minimum_distance > 1:
             highest = peaks[np.argsort(y[peaks])][::-1]
             rem = np.ones(y.size, dtype=bool)
@@ -163,9 +156,7 @@ class ToolFindPeaks(QTool):
 
             for peak in highest:
                 if not rem[peak]:
-                    sl = slice(
-                        max(0, peak - minimum_distance), peak + minimum_distance + 1
-                    )
+                    sl = slice(max(0, peak - minimum_distance), peak + minimum_distance + 1)
                     rem[sl] = True
                     rem[peak] = False
             peaks = np.arange(y.size)[~rem]
@@ -192,11 +183,7 @@ class ToolFindPeaks(QTool):
                 y_data = y[d - minimum_distance // 2 : d + minimum_distance // 2 + 1]
                 tau = x[d]  # approximation of tau (peak position in x)
                 c = y[d]  # approximation of peak amplitude
-                a = (
-                    np.sign(c)
-                    * (-1)
-                    * (np.sqrt(abs(c)) / (x_data[-1] - x_data[0])) ** 2
-                )
+                a = np.sign(c) * (-1) * (np.sqrt(abs(c)) / (x_data[-1] - x_data[0])) ** 2
                 p0 = (a, tau, c)
                 popt, pcov = curve_fit(func, x_data, y_data, p0, maxfev=5000)
                 xp[i], yp[i] = popt[1:3]

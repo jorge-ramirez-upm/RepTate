@@ -35,6 +35,7 @@
 Module that defines theories related to Retardation modes, in the frequency and time domains.
 
 """
+
 from typing import Any, ClassVar, cast
 
 import numpy as np
@@ -78,9 +79,7 @@ class TheoryRetardationModesTime(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
     single_file: ClassVar[bool] = False
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.RetardationModesTime
@@ -92,31 +91,31 @@ class TheoryRetardationModesTime(QTheory):
         nmodes = int(np.round(np.log10(tmax / tmin)))
 
         self.parameters["logJini"] = Parameter(
-            name = "logJini",
-            value = -4.0,
-            description = "Log of Instantaneous Compliance expressed in 1/Pa",
-            type = ParameterType.real,
+            name="logJini",
+            value=-4.0,
+            description="Log of Instantaneous Compliance expressed in 1/Pa",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logeta0"] = Parameter(
-            name = "logeta0",
-            value = 0.0,
-            description = "Log of Terminal Viscosity expressed in Pa.s",
-            type = ParameterType.real,
+            name="logeta0",
+            value=0.0,
+            description="Log of Terminal Viscosity expressed in Pa.s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logtmin"] = Parameter(
-            name = "logtmin",
-            value = np.log10(tmin),
-            description = "log10(tmin) of time range minimum expressed in s",
-            type = ParameterType.real,
+            name="logtmin",
+            value=np.log10(tmin),
+            description="log10(tmin) of time range minimum expressed in s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["logtmax"] = Parameter(
-            name = "logtmax",
-            value = np.log10(tmax),
-            description = "log10(tmax) of time range maximum expressed in s",
-            type = ParameterType.real,
+            name="logtmax",
+            value=np.log10(tmax),
+            description="log10(tmax) of time range maximum expressed in s",
+            type=ParameterType.real,
             opt_type=OptType.opt,
         )
         self.parameters["nmodes"] = Parameter(
@@ -167,17 +166,13 @@ class TheoryRetardationModesTime(QTheory):
         self.spinbox.setSuffix(" modes")
         self.spinbox.setValue(nmodes_value)  # initial value
         tb.addWidget(self.spinbox)
-        self.modesaction = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -353,9 +348,7 @@ class TheoryRetardationModesTime(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            data_table_tmp.data[i, 1] = np.power(
-                10, self.parameters["logJ%02d" % i].value
-            )
+            data_table_tmp.data[i, 1] = np.power(10, self.parameters["logJ%02d" % i].value)
         view = self.parent_dataset.parent_application.current_view
         try:
             x, y, success = view.view_proc(data_table_tmp, None)

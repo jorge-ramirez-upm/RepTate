@@ -127,12 +127,12 @@ class TheoryTTSShiftAutomatic(QTheory):
         )
 
         self.thToolsLayout.insertWidget(0, tb)
-        connection_id = self.verticalshift.triggered.connect(self.do_vertical_shift)
-        # connection_id = self.savemaster.triggered.connect(self.do_save_dialog)
-        connection_id = self.cbTemp.currentIndexChanged.connect(self.change_temperature)
-        connection_id = self.refreshT.triggered.connect(self.refresh_temperatures)
-        connection_id = self.saveShiftFactors.triggered.connect(self.save_shift_factors)
-        connection_id = self.arrhe_tb.triggered.connect(self.print_activation_energy)
+        self.verticalshift.triggered.connect(self.do_vertical_shift)
+        # self.savemaster.triggered.connect(self.do_save_dialog)
+        self.cbTemp.currentIndexChanged.connect(self.change_temperature)
+        self.refreshT.triggered.connect(self.refresh_temperatures)
+        self.saveShiftFactors.triggered.connect(self.save_shift_factors)
+        self.arrhe_tb.triggered.connect(self.print_activation_energy)
 
         self.dir_start = os.path.join(RepTate.root_dir, "data")
 

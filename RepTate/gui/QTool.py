@@ -35,6 +35,7 @@
 Module that defines the GUI counterpart of the class Tool.
 
 """
+
 import sys
 import ast
 import numpy as np
@@ -176,9 +177,7 @@ class EditToolParametersDialog(QDialog):
     def _display_unit_widget(self, parameter, current_unit):
         try:
             compatible_units = [
-                unit.symbol
-                for unit in available_units(parameter.quantity)
-                if units_are_compatible(unit.symbol, parameter.internal_unit)
+                unit.symbol for unit in available_units(parameter.quantity) if units_are_compatible(unit.symbol, parameter.internal_unit)
             ]
         except ValueError:
             compatible_units = []
@@ -218,16 +217,12 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.name = name
         self.parent_application = parent_app
-        self.parameters = (
-            OrderedDict()
-        )  # keep the dictionary key in order for the parameter table
+        self.parameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.active = True  # defines if the Tool is plotted
         self.applytotheory = True  # Do we also apply the tool to the theory?
 
         # LOGGING STUFF
-        self.logger = logging.getLogger(
-            self.parent_application.logger.name + "." + self.name
-        )
+        self.logger = logging.getLogger(self.parent_application.logger.name + "." + self.name)
         self.logger.debug("New " + self.toolname + " Tool")
         # np.seterr(all="call")
         # np.seterr(all="ignore")
@@ -235,9 +230,7 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.do_cite("")
 
-        self.print_signal.connect(
-            self.print_qtextbox
-        )  # Asynchronous print when using multithread
+        self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
 
         self.tb = QToolBar()
         self.tb.setIconSize(QSize(24, 24))
@@ -259,23 +252,13 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.toolTextBox.setReadOnly(True)
         self.toolTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.toolTextBox.customContextMenuRequested.connect(
-            self.toolTextBox_context_menu
-        )
+        self.toolTextBox.customContextMenuRequested.connect(self.toolTextBox_context_menu)
 
-        connection_id = self.actionActive.triggered.connect(
-            self.handle_actionActivepressed
-        )
-        connection_id = self.actionApplyToTheory.triggered.connect(
-            self.handle_actionApplyToTheorypressed
-        )
+        self.actionActive.triggered.connect(self.handle_actionActivepressed)
+        self.actionApplyToTheory.triggered.connect(self.handle_actionApplyToTheorypressed)
 
-        connection_id = self.toolParamTable.itemDoubleClicked.connect(
-            self.onTreeWidgetItemDoubleClicked
-        )
-        connection_id = self.toolParamTable.itemChanged.connect(
-            self.handle_parameterItemChanged
-        )
+        self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
+        self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
         self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
 
     def write(self, type, flag):
@@ -333,10 +316,7 @@ class QTool(QWidget, Ui_ToolTab):
         """Print citation information"""
         if len(self.citations) > 1:
             for i in range(len(self.citations)):
-                self.Qprint(
-                    """<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>"""
-                    % (self.doi[i], self.citations[i])
-                )
+                self.Qprint("""<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>""" % (self.doi[i], self.citations[i]))
 
     def do_plot(self, line=""):
         """Update plot"""
@@ -385,9 +365,7 @@ class QTool(QWidget, Ui_ToolTab):
                     p.value = val
                     return "", True
                 else:
-                    message = "Values allowed: " + ", ".join(
-                        [str(s) for s in p.discrete_values]
-                    )
+                    message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
@@ -400,9 +378,7 @@ class QTool(QWidget, Ui_ToolTab):
                     p.value = val
                     return "", True
                 else:
-                    message = "Values allowed: " + ", ".join(
-                        [str(s) for s in p.discrete_values]
-                    )
+                    message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
                     return message, False
 
@@ -473,21 +449,15 @@ class QTool(QWidget, Ui_ToolTab):
         """Print message in the GUI log text box"""
         self.toolTextBox.moveCursor(QTextCursor.End)
         self.toolTextBox.insertHtml(msg)
-        self.toolTextBox.verticalScrollBar().setValue(
-            self.toolTextBox.verticalScrollBar().maximum()
-        )
+        self.toolTextBox.verticalScrollBar().setValue(self.toolTextBox.verticalScrollBar().maximum())
         self.toolTextBox.moveCursor(QTextCursor.End)
 
     def toolTextBox_context_menu(self):
         """Custom contextual menu for the theory textbox"""
         menu = self.toolTextBox.createStandardContextMenu()
         menu.addSeparator()
-        menu.addAction(
-            "Increase Font Size", lambda: self.change_toolTextBox_fontsize(1.25)
-        )
-        menu.addAction(
-            "Deacrease Font Size", lambda: self.change_toolTextBox_fontsize(0.8)
-        )
+        menu.addAction("Increase Font Size", lambda: self.change_toolTextBox_fontsize(1.25))
+        menu.addAction("Deacrease Font Size", lambda: self.change_toolTextBox_fontsize(0.8))
         menu.addAction("Clear Text", self.toolTextBox.clear)
         menu.exec_(QCursor.pos())
 
@@ -516,9 +486,7 @@ class QTool(QWidget, Ui_ToolTab):
                 p = self.parameters[param]
                 if p.display_flag:  # only allowed param enter the table
                     if p.type == ParameterType.string:
-                        item = QTreeWidgetItem(
-                            self.toolParamTable, [p.display_label(), p.value]
-                        )
+                        item = QTreeWidgetItem(self.toolParamTable, [p.display_label(), p.value])
                     else:
                         item = QTreeWidgetItem(
                             self.toolParamTable,
@@ -557,13 +525,9 @@ class QTool(QWidget, Ui_ToolTab):
 
     def handle_actionActivepressed(self, checked):
         if checked:
-            self.actionActive.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-toggle-on.png")
-            )
+            self.actionActive.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-toggle-on.png"))
         else:
-            self.actionActive.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-toggle-off.png")
-            )
+            self.actionActive.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-toggle-off.png"))
         self.actionActive.setChecked(checked)
         self.active = checked
         self.parent_application.update_all_ds_plots()
@@ -574,13 +538,9 @@ class QTool(QWidget, Ui_ToolTab):
 
     def handle_actionApplyToTheorypressed(self, checked):
         if checked:
-            self.actionApplyToTheory.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-einstein-yes.png")
-            )
+            self.actionApplyToTheory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-einstein-yes.png"))
         else:
-            self.actionApplyToTheory.setIcon(
-                QIcon(":/Icon8/Images/new_icons/icons8-einstein-no.png")
-            )
+            self.actionApplyToTheory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-einstein-no.png"))
         self.actionApplyToTheory.setChecked(checked)
         self.applytotheory = checked
         self.parent_application.update_all_ds_plots()

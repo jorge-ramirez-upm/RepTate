@@ -35,6 +35,7 @@
 Module that defines the theory to discretize a molecular weight distribution.
 
 """
+
 import os
 from typing import Any, ClassVar
 
@@ -57,9 +58,7 @@ class TheoryDiscrMWD(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
     single_file: ClassVar[bool] = True
 
-    def __init__(
-        self, name: str = "", parent_dataset: Any = None, ax: Any = None
-    ) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.discretise_mwd
@@ -140,30 +139,22 @@ class TheoryDiscrMWD(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
         self.spinbox = QSpinBox()
-        self.spinbox.setRange(
-            self.NBIN_MIN, self.NBIN_MAX
-        )  # min and max number of modes
+        self.spinbox.setRange(self.NBIN_MIN, self.NBIN_MAX)  # min and max number of modes
         self.spinbox.setSuffix(" bins")
         nbin_value: Any = self.parameters["nbin"].value
         self.spinbox.setValue(nbin_value)  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
         # view bins button
-        self.view_bins_button = tb.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes"
-        )
+        self.view_bins_button = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
         self.view_bins_button.setCheckable(True)
         self.view_bins_button.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
         self.thToolsLayout.insertWidget(0, tb)
 
         # connections signal and slots
-        connection_id = self.view_bins_button.triggered.connect(
-            self.handle_view_bins_button_triggered
-        )
-        connection_id = self.spinbox.valueChanged.connect(
-            self.handle_spinboxValueChanged
-        )
+        self.view_bins_button.triggered.connect(self.handle_view_bins_button_triggered)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
         # disable useless buttons for this theory
         self.parent_dataset.actionMinimize_Error.setDisabled(True)
@@ -206,15 +197,11 @@ class TheoryDiscrMWD(QTheory):
         fout.write("%-10s %12s\n" % ("M", "phi(M)"))
         nbin_out = len(self.extra_data["saved_th"][:, 0])
         for i in range(nbin_out):
-            fout.write(
-                "%-10.3e %12.6e\n"
-                % (self.extra_data["saved_th"][i, 0], self.extra_data["saved_th"][i, 1])
-            )
+            fout.write("%-10.3e %12.6e\n" % (self.extra_data["saved_th"][i, 0], self.extra_data["saved_th"][i, 1]))
 
         # print information
         msg = 'Saved %d bins to "%s"' % (nbin_out, file_out)
         QMessageBox.information(self, "Saved discretized MWD", msg)
-
 
     def set_equally_spaced_bins(self) -> None:
         """Find the first active file in the dataset and setup the bins"""
@@ -268,9 +255,7 @@ class TheoryDiscrMWD(QTheory):
                 )
             if self.autocalculate:
                 self.do_calculate("")
-        elif (name == "logmmin") or (
-            name == "logmmax"
-        ):  # make bins equally spaced again
+        elif (name == "logmmin") or (name == "logmmax"):  # make bins equally spaced again
             nbin: Any = self.parameters["nbin"].value
             mmin: Any = self.parameters["logmmin"].value
             mmax: Any = self.parameters["logmmax"].value
@@ -319,9 +304,7 @@ class TheoryDiscrMWD(QTheory):
         self.extra_data["bin_height"] = np.zeros(nbin)
         self.extra_data["bin_edges"] = np.zeros(nbin + 1)
         for i in range(nbin + 1):
-            self.extra_data["bin_edges"][i] = np.power(
-                10, self.parameters["logM%02d" % i].value
-            )
+            self.extra_data["bin_edges"][i] = np.power(10, self.parameters["logM%02d" % i].value)
 
     def set_extra_data(self, extra_data: Any) -> None:
         """Define the extra_data dict and set the bin number
@@ -394,7 +377,7 @@ class TheoryDiscrMWD(QTheory):
             w = f[i, 1]
             # M = np.power(10, (np.log10(f[i + 1, 0]) + np.log10(f[i, 0])) / 2 )
             Mw += w * M
-            tempM3 += w * M ** 3  # w*M^3
+            tempM3 += w * M**3  # w*M^3
             tempM2 += w * M * M  # w*M^2
             tempMn += w / M  # w/M
 
@@ -474,9 +457,7 @@ class TheoryDiscrMWD(QTheory):
         out_mbins = np.zeros(nbin)  # output M bins
         for i in range(nbin):
             x = []  # list of M containing bin edges and data point in between
-            y = (
-                []
-            )  # list of weight containg interpolated values at bin edges and data points
+            y = []  # list of weight containg interpolated values at bin edges and data points
             w_interp = np.interp(
                 [edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1], left=0, right=0
             )  # interpolate out of range values to zero
@@ -501,9 +482,7 @@ class TheoryDiscrMWD(QTheory):
         for i in range(nbin):
             x = []
             y = []
-            w_interp = np.interp(
-                [edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1], left=0, right=0
-            )
+            w_interp = np.interp([edge_bins[i], edge_bins[i + 1]], ft[:, 0], ft[:, 1], left=0, right=0)
             x.append(edge_bins[i])
             y.append(w_interp[0])
             for j in range(n):
@@ -512,9 +491,7 @@ class TheoryDiscrMWD(QTheory):
                     y.append(ft[j, 1])
             x.append(edge_bins[i + 1])
             y.append(w_interp[1])
-            w_out[i] = np.trapz(y, x=np.log10(x)) / (
-                np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i])
-            )
+            w_out[i] = np.trapz(y, x=np.log10(x)) / (np.log10(edge_bins[i + 1]) - np.log10(edge_bins[i]))
 
         # copy weights and M into theory table
         tt = self.tables[f.file_name_short]
@@ -532,9 +509,7 @@ class TheoryDiscrMWD(QTheory):
         saved_th = np.zeros((nbin_out, 2))
         saved_th[:, 0] = out_mbins[arg_nonzero]
         for i, arg in enumerate(arg_nonzero):
-            saved_th[i, 1] = (
-                np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])
-            ) * w_out[arg]
+            saved_th[i, 1] = (np.log10(edge_bins[arg + 1]) - np.log10(edge_bins[arg])) * w_out[arg]
         saved_th[:, 1] /= np.sum(saved_th[:, 1])
         self.calculate_moments(saved_th, "discretized")
         self.extra_data["saved_th"] = saved_th

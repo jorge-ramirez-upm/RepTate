@@ -160,9 +160,9 @@ class TheoryMaxwellModesFrequency(QTheory):
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
+        self.save_modes_action.triggered.connect(self.save_modes)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""
@@ -482,9 +482,9 @@ class TheoryMaxwellModesTime(QTheory):
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
-        connection_id = self.modesaction.triggered.connect(self.modesaction_change)
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+        self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
+        self.modesaction.triggered.connect(self.modesaction_change)
+        self.save_modes_action.triggered.connect(self.save_modes)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when curent theory is changed"""

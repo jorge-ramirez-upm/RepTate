@@ -68,6 +68,7 @@ if sys.platform == "darwin" or sys.platform == "linux":
 else:
     CHARCODE = "latin-1"
 
+
 def launch_mix_dialog(parent_theory):
     """Launch a dialog box to select the React-Mix theory parameters"""
     dialog = ParameterReactMix(parent_theory)
@@ -106,9 +107,7 @@ def request_more_arm(parent_theory):
     success_increase_memory = None
     new_max, success_increase_memory = handle_increase_records(parent_theory, "arm")
     if not success_increase_memory:
-        message = (
-            "<b>Ran out of storage for arm records.</b> Options to avoid this are:<br>"
-        )
+        message = "<b>Ran out of storage for arm records.</b> Options to avoid this are:<br>"
         message += "(1) Reduce number of polymers requested<br>"
         message += "(2) Adjust BoB parameters so that fewer polymers are saved<br>"
         message += "(3) Close some other theories<br>"
@@ -130,9 +129,7 @@ def request_more_dist(parent_theory):
         parent_theory.Qprint("Number of dist. was increased to %.4g" % new_max)
         parent_theory.handle_actionCalculate_Theory()
     else:
-        parent_theory.Qprint(
-            '<b>Too many theories open for internal storage.<b> Please close a theory or increase records"'
-        )
+        parent_theory.Qprint('<b>Too many theories open for internal storage.<b> Please close a theory or increase records"')
 
 
 def set_extra_data(parent_theory, extra_data):
@@ -145,9 +142,7 @@ def set_extra_data(parent_theory, extra_data):
 
 def get_extra_data(parent_theory):
     try:
-        parent_theory.extra_data["prio_senio_checked"] = int(
-            parent_theory.do_priority_seniority
-        )
+        parent_theory.extra_data["prio_senio_checked"] = int(parent_theory.do_priority_seniority)
     except Exception as e:
         print("get_extra_data", e)
 
@@ -186,12 +181,8 @@ def initialise_tool_bar(parent_theory):
     parent_theory.old_views = []
 
     # signals
-    connection_id = parent_theory.bob_settings_button.triggered.connect(
-        parent_theory.handle_edit_bob_settings
-    )
-    connection_id = parent_theory.save_bob_configuration_button.triggered.connect(
-        parent_theory.handle_save_bob_configuration
-    )
+    parent_theory.bob_settings_button.triggered.connect(parent_theory.handle_edit_bob_settings)
+    parent_theory.save_bob_configuration_button.triggered.connect(parent_theory.handle_save_bob_configuration)
     parent_theory.btn_prio_senio.triggered.connect(parent_theory.handle_btn_prio_senio)
 
 
@@ -205,7 +196,9 @@ def handle_btn_prio_senio(parent_theory, checked):
         app.multiviews[app.nplots - 1] = app.views[app.extra_view_names[0]]
         for view_name in app.extra_view_names:
             app.viewComboBox.addItems(
-                [app.views[view_name].name,]
+                [
+                    app.views[view_name].name,
+                ]
             )
             app.viewComboBox.setItemData(
                 app.viewComboBox.count() - 1,
@@ -244,7 +237,9 @@ def show_theory_extras(parent_theory, show):
         if app.viewComboBox.count() < len(app.views):
             for view_name in app.extra_view_names:
                 app.viewComboBox.addItems(
-                    [app.views[view_name].name,]
+                    [
+                        app.views[view_name].name,
+                    ]
                 )
                 app.viewComboBox.setItemData(
                     app.viewComboBox.count() - 1,
@@ -298,13 +293,9 @@ def handle_save_mix_configuration(parent_theory):
     dist_state_check = False
     for i in range(parent_theory.n_inmix):
         dist = parent_theory.dists[i]
-        dist_state_check = dist_state_check or (
-            parent_theory.theory_simnumber[i] != rch.react_dist[dist].contents.simnumber
-        )
+        dist_state_check = dist_state_check or (parent_theory.theory_simnumber[i] != rch.react_dist[dist].contents.simnumber)
     if dist_state_check:
-        message = (
-            "Simulations have changed since last calculation. Redo calculation first"
-        )
+        message = "Simulations have changed since last calculation. Redo calculation first"
         msgbox = QMessageBox()
         msgbox.setWindowTitle("Error")
         msgbox.setText(message)
@@ -316,8 +307,7 @@ def handle_save_mix_configuration(parent_theory):
         return
     dir_start = os.path.join(RepTate.root_dir, "data", "React", "multipolyconf.dat")
     dilogue_name = "Save"
-    out_file = QFileDialog.getSaveFileName(
-        parent_theory, dilogue_name, dir_start)
+    out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start)
     if out_file[0] == "":
         parent_theory.Qprint("Invalid filename")
         return
@@ -329,9 +319,7 @@ def handle_save_mix_configuration(parent_theory):
     for i in range(parent_theory.n_inmix):
         c_weights[i] = ct.c_double(float(parent_theory.weights[i]))
         c_dists[i] = ct.c_int(int(parent_theory.dists[i]))
-    n_out = rch.multipolyconfwrite(
-        ct.c_char_p(b_out_file), c_weights, c_dists, ct.c_int(parent_theory.n_inmix)
-    )
+    n_out = rch.multipolyconfwrite(ct.c_char_p(b_out_file), c_weights, c_dists, ct.c_int(parent_theory.n_inmix))
 
     message = "<hr>Saved %d polymers in %s" % (n_out, out_file[0])
     parent_theory.Qprint(message)
@@ -345,14 +333,11 @@ def handle_save_bob_configuration(parent_theory):
     if parent_theory.simexists:
         ndist = parent_theory.ndist
         rch.react_dist[ndist].contents.M_e = parent_theory.parameters["Me"].value
-        rch.react_dist[ndist].contents.monmass = parent_theory.parameters[
-            "mon_mass"
-        ].display_value()
+        rch.react_dist[ndist].contents.monmass = parent_theory.parameters["mon_mass"].display_value()
 
         dir_start = os.path.join(RepTate.root_dir, "data", "React", "polyconf.dat")
         dilogue_name = "Save"
-        out_file = QFileDialog.getSaveFileName(
-            parent_theory, dilogue_name, dir_start)
+        out_file = QFileDialog.getSaveFileName(parent_theory, dilogue_name, dir_start)
         if out_file[0] == "":
             return
         # output polymers
@@ -397,8 +382,8 @@ def handle_edit_bob_settings(parent_theory):
 
 def handle_increase_records(parent_theory, name):
     """Launch a dialog asking if the user what to allocate more memory for arms, polymers, or distribution.
-        'name' should be "arm", "polymer", or "dist".
-        Return the new max value or zero if max value not changed
+    'name' should be "arm", "polymer", or "dist".
+    Return the new max value or zero if max value not changed
     """
     if name == "arm":
         current_max = rch.pb_global_const.maxarm
@@ -414,9 +399,7 @@ def handle_increase_records(parent_theory, name):
         size_of = 60097e-6  # size of a 'dist' structure (MB) in C
     else:
         return 0, False
-    d = IncreaseRecordsDialog(
-        parent_theory, current_max, name, size_of
-    )  # create the dialog
+    d = IncreaseRecordsDialog(parent_theory, current_max, name, size_of)  # create the dialog
     if d.exec_():
         if d.r1.isChecked():
             new_max = int(np.ceil(current_max * 1.5))
@@ -424,14 +407,9 @@ def handle_increase_records(parent_theory, name):
             new_max = int(current_max * 2)
         if d.r3.isChecked():
             new_max = int(current_max * 5)
-        success = f(
-            ct.c_int(new_max)
-        )  # call C routine to allocate more memory (using 'realloc')
+        success = f(ct.c_int(new_max))  # call C routine to allocate more memory (using 'realloc')
         if not success:
-            parent_theory.Qprint(
-                "Allocation of new memory failed. %d %s records in memory"
-                % (current_max, name)
-            )
+            parent_theory.Qprint("Allocation of new memory failed. %d %s records in memory" % (current_max, name))
         return new_max, success
     else:
         return 0, False
@@ -450,9 +428,7 @@ class ParameterReactMix(QDialog):
         self.list_all_open_react_theories()
         self.make_lines()
         self.createFormGroupBox(self.opened_react_theories)
-        buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Apply | QDialogButtonBox.Ok | QDialogButtonBox.Cancel
-        )
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Apply | QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept_)
         buttonBox.rejected.connect(self.reject)
         apply_button = buttonBox.button(QDialogButtonBox.Apply)
@@ -468,7 +444,7 @@ class ParameterReactMix(QDialog):
     def accept_(self):
         """
         Triggered when 'OK' button is pushed. Call 'get_lines()'
-        
+
         """
         self.compute_weights()
         self.get_lines()
@@ -502,7 +478,7 @@ class ParameterReactMix(QDialog):
         """
         Update the values of 'is checked?' and 'weight' columns.
         Triggered when 'Apply' button is pushed.
-        
+
         """
         self.compute_weights()
 
@@ -531,12 +507,8 @@ class ParameterReactMix(QDialog):
             label = QLabel("%s/%s/%s" % (app_tab_name, ds_tab_name, th_tab_name))
             label.setWordWrap(True)
             line.append(label)
-            line.append(
-                QLabel("%.4g" % rch.react_dist[ndist].contents.npoly)
-            )  # no. generated
-            line.append(
-                QLabel("%.4g" % rch.react_dist[ndist].contents.nsaved)
-            )  # no. saved
+            line.append(QLabel("%.4g" % rch.react_dist[ndist].contents.npoly))  # no. generated
+            line.append(QLabel("%.4g" % rch.react_dist[ndist].contents.nsaved))  # no. saved
             checkbox = QCheckBox()
             try:
                 checkbox.setChecked(bool(self.parent_theory.include[i]))
@@ -565,16 +537,10 @@ class ParameterReactMix(QDialog):
                 ndist = self.opened_react_theories[i].ndist
                 self.parent_theory.dists.append(ndist)  # get ndist
                 self.parent_theory.weights.append(self.lines[i][5].text())  # get weight
-                self.parent_theory.theory_names.append(
-                    self.lines[i][0].text()
-                )  # get theory name
+                self.parent_theory.theory_names.append(self.lines[i][0].text())  # get theory name
                 simnumber = rch.react_dist[ndist].contents.simnumber
-                self.parent_theory.theory_simnumber.append(
-                    simnumber
-                )  # get theory simulation number
-        self.parent_theory.n_inmix = len(
-            self.parent_theory.weights
-        )  # get number of included theories in mix
+                self.parent_theory.theory_simnumber.append(simnumber)  # get theory simulation number
+        self.parent_theory.n_inmix = len(self.parent_theory.weights)  # get number of included theories in mix
 
     def createFormGroupBox(self, theory_list):
         """Create a form to set the new values of mix parameters"""
@@ -623,9 +589,7 @@ class ParameterReactMix(QDialog):
     def list_all_open_react_theories(self):
         """List all opened React theories in RepTate, excluding the Mix theories"""
         self.opened_react_theories = []
-        current_manager = (
-            self.parent_theory.parent_dataset.parent_application.parent_manager
-        )
+        current_manager = self.parent_theory.parent_dataset.parent_application.parent_manager
 
         for app in current_manager.applications.values():
             # list all opened apps
@@ -634,8 +598,7 @@ class ParameterReactMix(QDialog):
                 for ds in app.datasets.values():  # loop over datasets
                     for th in ds.theories.values():  # loop over theories
                         if (
-                            th.reactname not in ["ReactMix", "CreatePolyconf"]
-                            and th.simexists
+                            th.reactname not in ["ReactMix", "CreatePolyconf"] and th.simexists
                         ):  # exclude React Mix and CreatePolyconf theories
                             self.opened_react_theories.append(th)
 
@@ -666,9 +629,7 @@ class EditMixSaveParamDialog(QDialog):
         self.accept()
 
     def get_lines(self):
-        for i, dist in enumerate(
-            self.parent_theory.dists
-        ):  # loop over the distributions in mix
+        for i, dist in enumerate(self.parent_theory.dists):  # loop over the distributions in mix
             monmass = float(self.lines[i][1].text())
             Me = float(self.lines[i][2].text())
             rch.set_react_dist_monmass(ct.c_int(dist), ct.c_double(monmass))
@@ -697,17 +658,13 @@ class EditMixSaveParamDialog(QDialog):
         layout.addWidget(QLabel("<b>App/Theory</b>"), 1, 1)
         layout.addWidget(QLabel("<b>Monomer Mass</b>"), 1, 2)
         label = QLabel("<b>M<sub>e</sub></b>")
-        label.setMinimumWidth(
-            100
-        )  # prevent too small size of the QLineEdit when resizing
+        label.setMinimumWidth(100)  # prevent too small size of the QLineEdit when resizing
         layout.addWidget(label, 1, 3)
 
         self.lines = []
         dvalidator = QDoubleValidator()  # prevent letters etc.
         dvalidator.setBottom(0)  # minimum allowed value
-        for i, dist in enumerate(
-            parent_theory.dists
-        ):  # loop over the distributions in mix
+        for i, dist in enumerate(parent_theory.dists):  # loop over the distributions in mix
             layout.addWidget(QLabel("<b>%d</b>" % (i + 1)), i + 2, 0)
             line = []
 
@@ -796,7 +753,7 @@ class ParameterMultiMetCSTR(QDialog):
     def accept_(self):
         """
         Triggered when 'OK' button is pushed. Call 'get_lines()'
-        
+
         """
         self.get_lines()
         self.accept()
@@ -905,9 +862,7 @@ class EditBobSettingsDialog(QDialog):
         val_double.setBottom(1)  # set smalled double allowed in the form
         val_int = QIntValidator()
         val_int.setBottom(0)  # set smalled int allowed in the form
-        val_int.setTop(
-            rch.pb_global_const.maxbobbins
-        )  # set largest int allowed in the form
+        val_int.setTop(rch.pb_global_const.maxbobbins)  # set largest int allowed in the form
 
         self.e1 = QLineEdit()
         self.e1.setValidator(val_int)
@@ -939,7 +894,7 @@ class EditBobSettingsDialog(QDialog):
 
 class IncreaseRecordsDialog(QDialog):
     """
-    Dialog containing radio buttons to choose a new memory size for the records of "name" 
+    Dialog containing radio buttons to choose a new memory size for the records of "name"
     """
 
     def __init__(self, parent_theory, current_max, name, size_of):
@@ -964,40 +919,29 @@ class IncreaseRecordsDialog(QDialog):
             char = "<"
         else:
             char = ""
-        self.r1 = QRadioButton(
-            "%.4g (1.5x) requests %s%dMB of RAM"
-            % (np.ceil(1.5 * current_max), char, size)
-        )
+        self.r1 = QRadioButton("%.4g (1.5x) requests %s%dMB of RAM" % (np.ceil(1.5 * current_max), char, size))
         size = int(size_of * current_max)
         if size < 1:
             size = 1
             char = "<"
         else:
             char = ""
-        self.r2 = QRadioButton(
-            "%.4g (2x) requests %s%dMB of RAM" % (2 * current_max, char, size)
-        )
+        self.r2 = QRadioButton("%.4g (2x) requests %s%dMB of RAM" % (2 * current_max, char, size))
         size = int(size_of * 4 * current_max)
         if size < 1:
             size = 1
             char = "<"
         else:
             char = ""
-        self.r3 = QRadioButton(
-            "%.4g (5x) requests %s%dMB of RAM" % (5 * current_max, char, size)
-        )
+        self.r3 = QRadioButton("%.4g (5x) requests %s%dMB of RAM" % (5 * current_max, char, size))
         self.r1.setChecked(True)
 
         layout = QVBoxLayout()
-        layout.addWidget(
-            QLabel("<b>Current number of %s records: %.4g</b>" % (name, current_max))
-        )
+        layout.addWidget(QLabel("<b>Current number of %s records: %.4g</b>" % (name, current_max)))
         layout.addWidget(QLabel("Increase to:"))
         layout.addWidget(self.r1)
         layout.addWidget(self.r2)
         layout.addWidget(self.r3)
-        layout.addWidget(
-            QLabel("(%dMB of RAM available)" % (psutil.virtual_memory()[1] / 2.0 ** 20))
-        )  # size of free RAM avaliable
+        layout.addWidget(QLabel("(%dMB of RAM available)" % (psutil.virtual_memory()[1] / 2.0**20)))  # size of free RAM avaliable
         layout.addWidget(QLabel("Or press Cancel."))
         self.formGroupBox.setLayout(layout)

@@ -34,6 +34,7 @@
 
 Template file for creating a new theory
 """
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTheory import QTheory
@@ -77,9 +78,7 @@ class TheoryRDPLVE(QTheory):
     description = "Linear ViscoElastic predictions of the Rolie-Double-Poly model"
     citations = []
     html_help_file = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
-    single_file = (
-        True  # False if the theory can be applied to multiple files simultaneously
-    )
+    single_file = True  # False if the theory can be applied to multiple files simultaneously
 
     def __init__(self, name="", parent_dataset=None, axarr=None):
         """**Constructor**"""
@@ -96,7 +95,7 @@ class TheoryRDPLVE(QTheory):
             quantity="stress",
             internal_unit="Pa",
             display_unit="Pa",
-            )
+        )
         self.parameters["Me"] = Parameter(
             name="Me",
             value=1e4,
@@ -108,7 +107,7 @@ class TheoryRDPLVE(QTheory):
             quantity="molar_mass",
             internal_unit="kg/mol",
             display_unit="kg/mol",
-            )
+        )
         self.parameters["tau_e"] = Parameter(
             name="tau_e",
             value=0.01,
@@ -120,7 +119,7 @@ class TheoryRDPLVE(QTheory):
             quantity="time",
             internal_unit="s",
             display_unit="s",
-            )
+        )
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=2,
@@ -144,7 +143,7 @@ class TheoryRDPLVE(QTheory):
                 quantity="dimensionless",
                 internal_unit="-",
                 display_unit="-",
-                )
+            )
             self.parameters["tauD%02d" % i] = Parameter(
                 name="tauD%02d" % i,
                 value=100.0,
@@ -156,7 +155,7 @@ class TheoryRDPLVE(QTheory):
                 quantity="time",
                 internal_unit="s",
                 display_unit="s",
-                )
+            )
         self.with_gcorr = GcorrMode.none
         self.MWD_m = [100, 1000]
         self.MWD_phi = [0.5, 0.5]
@@ -178,15 +177,11 @@ class TheoryRDPLVE(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get Modes (MWD data)",
         )
-        self.edit_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes"
-        )
+        self.edit_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"), "Edit Modes")
         # self.plot_modes_action = menu.addAction(
         #     QIcon(':/Icon8/Images/new_icons/icons8-scatter-plot.png'),
         #     "Plot Modes")
-        self.save_modes_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes"
-        )
+        self.save_modes_action = menu.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.tbutmodes.setDefaultAction(self.get_modes_action)
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
@@ -199,15 +194,11 @@ class TheoryRDPLVE(QTheory):
 
         self.thToolsLayout.insertWidget(0, tb)
 
-        connection_id = self.get_modes_action.triggered.connect(self.get_modes_reptate)
-        connection_id = self.get_modes_data_action.triggered.connect(
-            self.edit_mwd_modes
-        )
-        connection_id = self.edit_modes_action.triggered.connect(self.edit_modes_window)
-        connection_id = self.with_gcorr_button.triggered.connect(
-            self.handle_with_gcorr_button
-        )
-        connection_id = self.save_modes_action.triggered.connect(self.save_modes)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
+        self.get_modes_data_action.triggered.connect(self.edit_mwd_modes)
+        self.edit_modes_action.triggered.connect(self.edit_modes_window)
+        self.with_gcorr_button.triggered.connect(self.handle_with_gcorr_button)
+        self.save_modes_action.triggered.connect(self.save_modes)
 
     def handle_with_gcorr_button(self, checked):
         if checked:
@@ -215,9 +206,7 @@ class TheoryRDPLVE(QTheory):
                 # if Zeff contains something
                 self.with_gcorr = GcorrMode.with_gcorr
             else:
-                self.Qprint(
-                    "<font color=orange><b>Modulus correction needs Z from MWD</b></font>"
-                )
+                self.Qprint("<font color=orange><b>Modulus correction needs Z from MWD</b></font>")
                 self.with_gcorr_button.setChecked(False)
                 return
         else:
@@ -244,9 +233,7 @@ class TheoryRDPLVE(QTheory):
                     th_index = ds.TheorytabWidget.indexOf(th)
                     th_tab_name = ds.TheorytabWidget.tabText(th_index)
                     if th.thname == "Discretize MWD":
-                        get_dict[
-                            "%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)
-                        ] = th.get_mwd
+                        get_dict["%s.%s.%s" % (app_tab_name, ds_tab_name, th_tab_name)] = th.get_mwd
 
         if get_dict:
             d = GetMwdRepTate(self, get_dict, "Select Discretized MWD")
@@ -264,9 +251,7 @@ class TheoryRDPLVE(QTheory):
                 self.set_modes_from_mwd(m, phi)
         else:
             # no theory Discretise MWD found
-            QMessageBox.warning(
-                self, "Get MW distribution", 'No "Discretize MWD" theory found'
-            )
+            QMessageBox.warning(self, "Get MW distribution", 'No "Discretize MWD" theory found')
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self):
@@ -286,12 +271,8 @@ class TheoryRDPLVE(QTheory):
             # self.set_param_value("nstretch", nmodes)
             success = True
             for i in range(nmodes):
-                msg, success1 = self.set_param_value(
-                    "phi%02d" % i, d.table.item(i, 0).text()
-                )
-                msg, success2 = self.set_param_value(
-                    "tauD%02d" % i, d.table.item(i, 1).text()
-                )
+                msg, success1 = self.set_param_value("phi%02d" % i, d.table.item(i, 0).text())
+                msg, success2 = self.set_param_value("tauD%02d" % i, d.table.item(i, 1).text())
                 success *= success1 * success2
             if not success:
                 QMessageBox.warning(
@@ -323,7 +304,6 @@ class TheoryRDPLVE(QTheory):
             self.MWD_m = np.copy(m)
             self.MWD_phi = np.copy(phi)
             self.set_modes_from_mwd(m, phi)
-
 
     def set_extra_data(self, extra_data):
         """Set extra data when loading project"""
@@ -378,9 +358,7 @@ class TheoryRDPLVE(QTheory):
             self.set_param_value("tauD%02d" % i, taud[i])
         self.Qprint("Got %d modes from MWD" % nmodes)
         self.update_parameter_table()
-        self.Qprint(
-            '<font color=green><b>Press "Calculate" to update theory</b></font>'
-        )
+        self.Qprint('<font color=green><b>Press "Calculate" to update theory</b></font>')
         self.parent_dataset.handle_actionCalculate_Theory()
 
     def set_param_value(self, name, value):
@@ -403,7 +381,7 @@ class TheoryRDPLVE(QTheory):
                     quantity="dimensionless",
                     internal_unit="-",
                     display_unit="-",
-                    )
+                )
                 self.parameters["tauD%02d" % i] = Parameter(
                     name="tauD%02d" % i,
                     value=100.0,
@@ -415,7 +393,7 @@ class TheoryRDPLVE(QTheory):
                     quantity="time",
                     internal_unit="s",
                     display_unit="s",
-                    )
+                )
             if oldn > self.parameters["nmodes"].value:
                 for i in range(self.parameters["nmodes"].value, oldn):
                     del self.parameters["phi%02d" % i]
@@ -448,8 +426,6 @@ class TheoryRDPLVE(QTheory):
             for j in range(nmodes):
                 tau = 1.0 / (1.0 / taud[i] + 1.0 / taud[j])
                 wT = tt.data[:, 0] * tau
-                wTsq = wT ** 2
+                wTsq = wT**2
                 tt.data[:, 1] += G * phi[i] * phi[j] * wTsq / (1 + wTsq)
                 tt.data[:, 2] += G * phi[i] * phi[j] * wT / (1 + wTsq)
-
-

@@ -238,7 +238,7 @@ class MultiView(QWidget):
         self.plotcontainer.addWidget(self.canvas)
         self.init_plot(0)
 
-        connection_id = self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)
+        self.plotselecttabWidget.currentChanged.connect(self.handle_plottabChanged)
         axes = plt.gcf().axes
         for ax_i in axes:
             for side in ["top", "right"]:
