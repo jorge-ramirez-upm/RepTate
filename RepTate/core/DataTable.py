@@ -38,10 +38,11 @@ Module for the actual object that contains the data, both for experiments and th
 from typing import Any, TypeAlias
 
 import numpy as np
-from numpy.typing import NDArray
+
+from RepTate.core.typing import AnyArray
 
 
-NumericArray: TypeAlias = NDArray[Any]
+NumericArray: TypeAlias = AnyArray
 SeriesGrid: TypeAlias = list[list[Any]]
 ColumnSpecs: TypeAlias = list[Any]
 ExtraTables: TypeAlias = dict[str, Any]

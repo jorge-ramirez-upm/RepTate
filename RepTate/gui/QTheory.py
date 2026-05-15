@@ -42,7 +42,6 @@ import enum
 import time
 import getpass
 import ast
-from collections.abc import Callable
 from typing import Any, TypeAlias, cast
 
 import numpy as np
@@ -83,6 +82,7 @@ from PySide6.QtCore import Qt, QObject, QThread, QTimer, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.File import File
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
+from RepTate.core.typing import TheoryFunction
 from RepTate.core.units import available_units, units_are_compatible
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
@@ -107,7 +107,6 @@ import RepTate.gui.Ui_errorcalculationoptions
 
 TheoryParameters: TypeAlias = OrderedDict[str, Parameter]
 TheoryTables: TypeAlias = dict[str, DataTable]
-TheoryFunction: TypeAlias = Callable[..., Any]
 BasinhoppingAny: Any = basinhopping
 DualAnnealingAny: Any = dual_annealing
 DifferentialEvolutionAny: Any = differential_evolution

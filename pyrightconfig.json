@@ -29,6 +29,7 @@
     "RepTate/core/FileType.py",
     "RepTate/core/MultiView.py",
     "RepTate/core/Parameter.py",
+    "RepTate/core/typing.py",
     "RepTate/core/units.py",
     "RepTate/core/View.py",
     "RepTate/core/__init__.py",

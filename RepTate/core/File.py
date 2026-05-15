@@ -39,11 +39,8 @@ import os
 from dataclasses import dataclass
 from typing import Any, TypeAlias
 from RepTate.core.DataTable import DataTable
+from RepTate.core.typing import FileParameters, FileParameterValue
 from RepTate.core.units import convert_value, get_unit
-
-
-FileParameterValue: TypeAlias = Any
-FileParameters: TypeAlias = dict[str, FileParameterValue]
 
 
 @dataclass(frozen=True)
