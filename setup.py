@@ -1,10 +1,12 @@
 import os
+from importlib import import_module
 from pathlib import Path
+from typing import Any
 
 from setuptools import Extension, setup
 
 try:
-    import pybind11
+    pybind11: Any = import_module("pybind11")
 except ImportError as exc:
     raise SystemExit(
         "pybind11 is required to build RepTate.theories._lp2r. "

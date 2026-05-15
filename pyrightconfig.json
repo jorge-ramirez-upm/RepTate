@@ -126,7 +126,21 @@
     "RepTate/tools/standard_pyQt5_icons.py",
     "RepTate/tools/readlinlin.py",
     "scripts/build_ui.py",
-    "scripts/traverse.py"
+    "scripts/traverse.py",
+    "tests/test_imports.py",
+    "tests/test_app_starts.py",
+    "tests/test_apps_theories.py",
+    "tests/test_units.py",
+    "tests/test_parameters.py",
+    "tests/test_file_parameter_units.py",
+    "tests/test_filetype_units.py",
+    "tests/test_axis_labels.py",
+    "tests/test_theory_parameter_units.py",
+    "tests/test_unit_parsing.py",
+    "tests/test_materials_database_units.py",
+    "tests/test_lp2r_pybind.py",
+    "setup.py",
+    "docs/source/conf.py"
   ],
   "exclude": [
     "**/__pycache__",

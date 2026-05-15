@@ -1,7 +1,14 @@
 import numpy as np
+from typing import Any
 
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+
+
+def read_required_file(ftype: TXTColumnFile, path: str) -> Any:
+    file = ftype.read_file(path, parent_dataset=None, axarr=None)
+    assert file is not None
+    return file
 
 
 def test_txt_column_file_attaches_column_specs_and_converts_known_units(tmp_path):
@@ -20,7 +27,7 @@ def test_txt_column_file_attaches_column_specs_and_converts_known_units(tmp_path
         col_units=["min", "kPa", "g/mol"],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.data_table.column_names == ["time", "stress", "molar_mass"]
     assert file.data_table.column_units == ["min", "kPa", "g/mol"]
@@ -57,7 +64,7 @@ def test_txt_column_file_uses_app_units_when_header_has_no_units(tmp_path):
         col_units=["min", "kPa"],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.data_table.column_names == ["time", "stress"]
     assert file.data_table.column_units == ["min", "kPa"]
@@ -82,7 +89,7 @@ def test_txt_column_file_uses_units_declared_in_header(tmp_path):
         col_units=["min", "kPa"],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.data_table.column_names == ["time", "stress"]
     assert file.data_table.column_units == ["h", "MPa"]
@@ -110,7 +117,7 @@ def test_txt_column_file_converts_mwd_molar_mass_to_kg_per_mol(tmp_path):
         col_units=["g/mol", "-"],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.data_table.column_units == ["kg/mol", "-"]
     assert [spec.internal_unit for spec in file.data_table.column_specs] == [
@@ -145,7 +152,7 @@ def test_txt_column_file_converts_hz_to_rad_per_s_when_app_expects_angular_frequ
         col_units=["rad/s", "Pa", "Pa"],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.data_table.column_units == ["Hz", "Pa", "Pa"]
     assert [spec.internal_unit for spec in file.data_table.column_specs] == [
@@ -184,7 +191,7 @@ def test_txt_column_file_converts_file_parameters_with_specs(tmp_path):
         ],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.file_parameters["stress"] == 101325.0
     assert file.file_parameter_value_to_display("stress") == 1.0
@@ -211,7 +218,7 @@ def test_txt_column_file_keeps_legacy_temperature_file_parameter_in_celsius(tmp_
         ],
     )
 
-    file = ftype.read_file(str(data_file), parent_dataset=None, axarr=None)
+    file = read_required_file(ftype, str(data_file))
 
     assert file.file_parameters["T"] == 25.0
     assert file.file_parameter_value_to_display("T") == 25.0

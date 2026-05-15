@@ -32,6 +32,8 @@
 # --------------------------------------------------------------------------------------------------------
 
 import os
+from typing import Any
+
 import numpy as np
 import numpy.testing as npt
 import pytest
@@ -49,8 +51,14 @@ app = QApplication()
 ex = QApplicationManager()
 
 
+def new_app(app_name: str) -> Any:
+    thisApp = ex.handle_new_app(app_name)
+    assert thisApp is not None
+    return thisApp
+
+
 def test_LVE_Likhtman_McLeish():
-    thisApp = ex.handle_new_app("LVE")
+    thisApp = new_app("LVE")
     pi_dir = "data%sPI_LINEAR%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -75,7 +83,7 @@ def test_LVE_Likhtman_McLeish():
 
 
 def test_LVE_Maxwell_Modes():
-    thisApp = ex.handle_new_app("LVE")
+    thisApp = new_app("LVE")
     pi_dir = "data%sPI_LINEAR%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -113,7 +121,7 @@ def test_LVE_Maxwell_Modes():
 
 
 def test_LVE_DTD_Stars():
-    thisApp = ex.handle_new_app("LVE")
+    thisApp = new_app("LVE")
     pi_dir = "data%sPI_STAR%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -137,7 +145,7 @@ def test_LVE_DTD_Stars():
 
 
 def test_LVE_ReSpect():
-    thisApp = ex.handle_new_app("LVE")
+    thisApp = new_app("LVE")
     pi_dir = "data%sReSpect%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -209,7 +217,7 @@ def test_LVE_ReSpect():
 
 
 def test_MWD_Discretize_MWD():
-    thisApp = ex.handle_new_app("MWD")
+    thisApp = new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -254,7 +262,7 @@ def test_MWD_Discretize_MWD():
 
 
 def test_MWD_GEX():
-    thisApp = ex.handle_new_app("MWD")
+    thisApp = new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -276,7 +284,7 @@ def test_MWD_GEX():
 
 
 def test_MWD_LogNormal():
-    thisApp = ex.handle_new_app("MWD")
+    thisApp = new_app("MWD")
     pi_dir = "data%sMWD%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -296,7 +304,7 @@ def test_MWD_LogNormal():
 
 
 def test_TTS_WLF():
-    thisApp = ex.handle_new_app("TTS")
+    thisApp = new_app("TTS")
     pi_dir = "data%sPI_LINEAR%sosc%s" % ((os.sep,) * 3)
     thisSet = thisApp.new_tables_from_files(
         [
@@ -393,7 +401,7 @@ def test_TTS_WLF():
 
 
 def test_SANS_Debye():
-    thisApp = ex.handle_new_app("SANS")
+    thisApp = new_app("SANS")
     pi_dir = "data%sPS_SANS%s" % ((os.sep,) * 2)
     thisSet = thisApp.new_tables_from_files(
         [

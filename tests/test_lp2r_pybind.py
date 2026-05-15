@@ -1,6 +1,8 @@
 import math
+from importlib import import_module
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
@@ -42,8 +44,12 @@ LP2R_ORIGINAL_DISCRETE_REFERENCE = [
 ]
 
 
+def _lp2r_module() -> Any:
+    return import_module("RepTate.theories._lp2r")
+
+
 def _material():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     material = _lp2r.Material()
     material.m_kuhn = 500.0
@@ -83,9 +89,9 @@ def _meaningful_lp2r_input_lines(path):
 
 
 def _run_lp2r_lve_input(input_path):
-    from RepTate.theories import _lp2r
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 
+    _lp2r = _lp2r_module()
     lines = _meaningful_lp2r_input_lines(input_path)
     freq_min, freq_max, freq_ratio = map(float, lines[0].split()[:3])
     m_kuhn, m_e, g0, tau_e = map(float, lines[1].split()[:4])
@@ -135,7 +141,7 @@ def _run_lp2r_lve_input(input_path):
 
 
 def test_lp2r_import_and_lognormal_smoke():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     solver = _lp2r.Solver(_material(), _lp2r.Controls())
     solver.add_lognormal_component(weight=1.0, n=8, mw=100000.0, pdi=1.05)
@@ -153,7 +159,7 @@ def test_lp2r_import_and_lognormal_smoke():
 
 
 def test_lp2r_discrete_component_and_cancel():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     controls = _lp2r.Controls()
     controls.time_ratio = 1.05
@@ -167,7 +173,7 @@ def test_lp2r_discrete_component_and_cancel():
 
 
 def test_lp2r_progress_advances_and_cancel_stops_relaxation():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     solver = _lp2r.Solver(_material(), _lp2r.Controls())
     solver.add_lognormal_component(weight=1.0, n=8, mw=100000.0, pdi=1.05)
@@ -189,7 +195,7 @@ def test_lp2r_progress_advances_and_cancel_stops_relaxation():
 
 
 def test_lp2r_lognormal_matches_original_reference():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     solver = _lp2r.Solver(_material(), _lp2r.Controls())
     solver.add_lognormal_component(weight=1.0, n=8, mw=100000.0, pdi=1.05)
@@ -200,7 +206,7 @@ def test_lp2r_lognormal_matches_original_reference():
 
 
 def test_lp2r_discrete_matches_original_reference():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     solver = _lp2r.Solver(_material(), _lp2r.Controls())
     solver.add_discrete_component([50000.0, 120000.0], [0.4, 0.6])
@@ -257,8 +263,8 @@ def test_lp2r_mwd_dialog_shows_input_units():
     from RepTate.core.Parameter import OptType, Parameter, ParameterType
     from RepTate.theories.theory_helpers import EditMWDDialog
 
-    QApplication.instance() or QApplication([])
-    parent = QWidget()
+    _qt_app = QApplication.instance() or QApplication([])
+    parent: Any = QWidget()
     parent.parameters = {
         "Me": Parameter(
             name="Me",
@@ -384,6 +390,8 @@ def test_lp2r_lve_extra_data_roundtrip_and_legacy_migration():
     legacy = TheoryLP2RLVE.migrate_old_lp2r_state(
         {"MWD_m": [50.0, 120.0], "MWD_phi": [2.0, 3.0]}
     )
+    assert restored is not None
+    assert legacy is not None
 
     assert restored == components
     assert legacy[0]["kind"] == "mwd"
@@ -530,8 +538,9 @@ def test_lp2r_lve_application_registration():
     from RepTate.gui.QApplicationManager import QApplicationManager
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 
-    QApplication.instance() or QApplication([])
+    _qt_app = QApplication.instance() or QApplication([])
     app = QApplicationManager().handle_new_app("LVE")
+    assert app is not None
 
     assert app.theories[TheoryLP2RLVE.thname] is TheoryLP2RLVE
 
@@ -582,7 +591,7 @@ def test_lp2r_gpc_mwd_reference_matches_expected_output():
 
 
 def test_lp2r_kww_midrange_failure_reports_as_exception_not_abort():
-    from RepTate.theories import _lp2r
+    _lp2r = _lp2r_module()
 
     material = _material()
     material.tau_glass = 1.0e-6
