@@ -34,6 +34,8 @@
 
 Gradient file for creating a new Tool
 """
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.gui.QTool import QTool
 
@@ -42,12 +44,14 @@ class ToolGradient(QTool):
     """Calculate the derivative of y with respect to x, where y is the ordinate and x is the abcissa in the current view. The gradient function from numpy is used, where the derivative is computed using second order accurate central differences in the interior points and first order accurate one-sides (forward or backwards) differences at the boundaries.
     """
 
-    toolname = "Gradient"
-    description = "Take derivative of current data/view"
-    citations = []
+    toolname: ClassVar[str] = "Gradient"
+    description: ClassVar[str] = "Take derivative of current data/view"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Gradient.html'
 
-    def __init__(self, name="", parent_app=None):
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         # self.function = self.gradient  # main Tool function
@@ -63,7 +67,9 @@ class ToolGradient(QTool):
         # add widgets specific to the Tool here:
 
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         try:
             y2 = np.gradient(y, x)
             return x, y2

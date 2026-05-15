@@ -35,10 +35,13 @@
 Module that defines the GUI Splashscreen that is loaded during the startup of RepTate.
 
 """
+from typing import Any
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QSplashScreen, QApplication, QLabel
 from PySide6.QtGui import QPixmap, QFont, QColor
 import RepTate
+
 try:
     import RepTate.gui.About_rc
 except ImportError:
@@ -48,11 +51,14 @@ except ImportError:
     l.fatal("Error importing RepTate.gui.About_rc. Please, run ""python scripts/build_ui.py"" or contact the developers.")
     sys.exit(1)
 
+QFontAny: Any = QFont
+QtAny: Any = Qt
+
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """**Constructor**"""
         QSplashScreen.__init__(self, QPixmap(":/Images/Images/logo_with_uni_logo.png"))
         lblVersion = QLabel(self)
@@ -75,25 +81,25 @@ class SplashScreen(QSplashScreen):
         )
         font = self.font()
         font.setPixelSize(11)
-        font.setWeight(QFont.Bold)
+        font.setWeight(QFontAny.Bold)
         self.setFont(font)
         lblVersion.adjustSize()
         # lblVersion.setStyleSheet("QLabel { color : white; }")
         # lblVersion.move(425 - lblVersion.width(), 195)
         # QApplication.flush()
 
-    def showMessage(self, msg):
+    def showMessage(self, msg: str) -> None:
         """Procedure to update message in splash"""
-        align = Qt.Alignment(Qt.AlignBottom | Qt.AlignRight | Qt.AlignAbsolute)
+        align = QtAny.Alignment(QtAny.AlignBottom | QtAny.AlignRight | QtAny.AlignAbsolute)
         # color = QtGui.QColor(QtCore.Qt.White)
         color = QColor(0, 0, 0)
         QSplashScreen.showMessage(self, msg, align, color)
         QApplication.processEvents()
 
-    def clearMessage(self):
+    def clearMessage(self) -> None:
         """Clear message in Splash"""
         QSplashScreen.clearMessage(self)
         QApplication.processEvents()
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: Any) -> None:
         self.hide()

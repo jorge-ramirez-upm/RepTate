@@ -34,6 +34,8 @@
 
 Tool to check the power law of some data
 """
+from typing import Any, ClassVar
+
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTool import QTool
 
@@ -43,12 +45,15 @@ class ToolPowerLaw(QTool):
 raised to n.
     """
 
-    toolname = "PowerLaw"
-    description = "Check the power law of the data"
-    citations = []
+    toolname: ClassVar[str] = "PowerLaw"
+    description: ClassVar[str] = "Check the power law of the data"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    parameters: Any
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["n"] = Parameter(
@@ -65,12 +70,14 @@ raised to n.
         # add widgets specific to the Tool here:
 
 
-    def destructor(self):
+    def destructor(self) -> None:
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Returns y divided by x^n, according to the view"""
         n = self.parameters["n"].value
         return x, y / x ** n

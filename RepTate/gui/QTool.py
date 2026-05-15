@@ -38,6 +38,7 @@ Module that defines the GUI counterpart of the class Tool.
 
 import sys
 import ast
+from typing import Any, ClassVar
 import numpy as np
 
 from os.path import dirname, join, abspath
@@ -68,20 +69,30 @@ from collections import OrderedDict
 import logging
 from html.parser import HTMLParser
 
+QAbstractItemViewAny: Any = QAbstractItemView
+QDialogButtonBoxAny: Any = QDialogButtonBox
+QFrameAny: Any = QFrame
+QHeaderViewAny: Any = QHeaderView
+QTextCursorAny: Any = QTextCursor
+QTreeWidgetAny: Any = QTreeWidget
+QtAny: Any = Qt
+
 
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
 
-    def __init__(self):
+    fed: list[str]
+
+    def __init__(self) -> None:
         self.reset()
         self.strict = False
         self.convert_charrefs = True
         self.fed = []
 
-    def handle_data(self, d):
+    def handle_data(self, d: str) -> None:
         self.fed.append(d)
 
-    def get_data(self):
+    def get_data(self) -> str:
         return "".join(self.fed)
 
 
@@ -89,7 +100,7 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = dirname(abspath(__file__))
 sys.path.append(PATH)
@@ -99,7 +110,11 @@ from RepTate.gui.Ui_ToolTab import Ui_ToolTab
 class EditToolParametersDialog(QDialog):
     """Create the form used to modify a tool's parameter properties."""
 
-    def __init__(self, parent, p_name):
+    all_pattr: Any
+    parent_tool: Any
+    tabs: Any
+
+    def __init__(self, parent: Any, p_name: str) -> None:
         super().__init__(parent)
         self.parent_tool = parent
         self.tabs = QTabWidget()
@@ -112,7 +127,7 @@ class EditToolParametersDialog(QDialog):
                 index = self.tabs.indexOf(tab)
         self.tabs.setCurrentIndex(index)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBoxAny(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -122,7 +137,7 @@ class EditToolParametersDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Tool Parameters")
 
-    def create_param_tab(self, p_name):
+    def create_param_tab(self, p_name: str) -> Any:
         """Create a form to edit one tool parameter's properties."""
         tab = QWidget()
         layout = QFormLayout()
@@ -174,7 +189,7 @@ class EditToolParametersDialog(QDialog):
         self.all_pattr[p_name] = attr_dict
         return tab
 
-    def _display_unit_widget(self, parameter, current_unit):
+    def _display_unit_widget(self, parameter: Any, current_unit: Any) -> Any:
         try:
             compatible_units = [
                 unit.symbol for unit in available_units(parameter.quantity) if units_are_compatible(unit.symbol, parameter.internal_unit)
@@ -197,17 +212,27 @@ class EditToolParametersDialog(QDialog):
 class QTool(QWidget, Ui_ToolTab):
     """Abstract class to describe a tool"""
 
-    toolname = ""
+    toolname: ClassVar[str] = ""
     """ toolname {str} -- Tool name """
-    description = ""
+    description: ClassVar[str] = ""
     """ description {str} -- Description of Tool """
-    citations = []
+    citations: ClassVar[list[str]] = []
     """ citations {list of str} -- Articles that should be cited """
-    doi = []
+    doi: ClassVar[list[str]] = []
 
     print_signal = Signal(str)
 
-    def __init__(self, name="QTool", parent_app=None):
+    actionActive: Any
+    actionApplyToTheory: Any
+    logger: Any
+    parameters: Any
+    parent_application: Any
+    tb: Any
+    toolParamTable: Any
+    toolTextBox: Any
+    verticalLayout: Any
+
+    def __init__(self, name: str = "QTool", parent_app: Any = None) -> None:
         """**Constructor**"""
         QWidget.__init__(self)
         Ui_ToolTab.__init__(self)
@@ -244,14 +269,14 @@ class QTool(QWidget, Ui_ToolTab):
         self.toolParamTable.setIndentation(0)
         self.toolParamTable.setColumnCount(2)
         self.toolParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
-        self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        self.toolParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         self.toolParamTable.setAlternatingRowColors(True)
-        self.toolParamTable.setFrameShape(QFrame.NoFrame)
-        self.toolParamTable.setFrameShadow(QFrame.Plain)
-        self.toolParamTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.toolParamTable.setFrameShape(QFrameAny.NoFrame)
+        self.toolParamTable.setFrameShadow(QFrameAny.Plain)
+        self.toolParamTable.setEditTriggers(QAbstractItemViewAny.NoEditTriggers)
 
         self.toolTextBox.setReadOnly(True)
-        self.toolTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.toolTextBox.setContextMenuPolicy(QtAny.CustomContextMenu)
         self.toolTextBox.customContextMenuRequested.connect(self.toolTextBox_context_menu)
 
         self.actionActive.triggered.connect(self.handle_actionActivepressed)
@@ -259,39 +284,41 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
-        self.toolParamTable.setEditTriggers(QTreeWidget.EditKeyPressed)
+        self.toolParamTable.setEditTriggers(QTreeWidgetAny.EditKeyPressed)
 
-    def write(self, type, flag):
+    def write(self, type: Any, flag: Any) -> None:
         """Write numpy error logs to the logger"""
         self.logger.info("numpy: %s (flag %s)" % (type, flag))
 
-    def destructor(self):
+    def destructor(self) -> None:
         """If the Tool needs to erase some memory in a special way, any
         child theory must rewrite this funcion"""
         pass
 
-    def precmd(self, line):
+    def precmd(self, line: str) -> str:
         """Calculations before the Tool is calculated
 
         This function could be erased
         This method is called after the line has been input but before
         it has been interpreted. If you want to modifdy the input line
         before execution (for example, variable substitution) do it here."""
-        super(Tool, self).precmd(line)
+        super(Tool, self).precmd(line)  # pyright: ignore[reportUndefinedVariable]
         return line
 
-    def update_parameter_table(self):
+    def update_parameter_table(self) -> None:  # pyright: ignore[reportRedeclaration]
         """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
         pass
 
-    def plot_tool_stuff(self):
+    def plot_tool_stuff(self) -> None:
         """Special function to plot tool graphical objects"""
         pass
 
-    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate_all(
+        self, n: Any, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Calculate the tool for all views"""
         newxy = []
-        lenx = 1e9
+        lenx: Any = 1e9
         for i in range(n):
             self.Qprint("<b>Series %d</b>" % (i + 1))
             xcopy = x[:, i]
@@ -299,30 +326,33 @@ class QTool(QWidget, Ui_ToolTab):
             xcopy, ycopy = self.calculate(xcopy, ycopy, ax, color, file_parameters)
             newxy.append([xcopy, ycopy])
             lenx = min(lenx, len(xcopy))
-        x = np.resize(x, (lenx, n))
-        y = np.resize(y, (lenx, n))
+        np_resize_any: Any = np.resize
+        x = np_resize_any(x, (lenx, n))
+        y = np_resize_any(y, (lenx, n))
         for i in range(n):
-            x[:, i] = np.resize(newxy[i][0], lenx)
-            y[:, i] = np.resize(newxy[i][1], lenx)
+            x[:, i] = np_resize_any(newxy[i][0], lenx)
+            y[:, i] = np_resize_any(newxy[i][1], lenx)
         return x, y
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         return x, y
 
-    def clean_graphic_stuff(self):
+    def clean_graphic_stuff(self) -> None:
         pass
 
-    def do_cite(self, line):
+    def do_cite(self, line: str) -> None:
         """Print citation information"""
         if len(self.citations) > 1:
             for i in range(len(self.citations)):
                 self.Qprint("""<b><font color=red>CITE</font>:</b> <a href="%s">%s</a><p>""" % (self.doi[i], self.citations[i]))
 
-    def do_plot(self, line=""):
+    def do_plot(self, line: str = "") -> None:
         """Update plot"""
         self.parent_application.update_all_ds_plots()
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a parameter of the tool"""
         p = self.parameters[name]
         try:
@@ -399,7 +429,7 @@ class QTool(QWidget, Ui_ToolTab):
             print("In set_param_value:", e)
             return "", False
 
-    def set_param_value_from_display(self, name, value):
+    def set_param_value_from_display(self, name: str, value: Any) -> tuple[str, bool]:
         """Set a tool parameter from the value currently displayed in the GUI."""
         p = self.parameters[name]
         if not (p.internal_unit and p.display_unit):
@@ -410,13 +440,13 @@ class QTool(QWidget, Ui_ToolTab):
             return "Value must be a float", False
         return self.set_param_value(name, internal_value)
 
-    def Qprint(self, msg, end="<br>"):
+    def Qprint(self, msg: Any, end: str = "<br>") -> None:
         """Print a message on the Tool info area"""
         if isinstance(msg, list):
             msg = self.table_as_html(msg)
         self.print_signal.emit(msg + end)
 
-    def table_as_html(self, tab):
+    def table_as_html(self, tab: Any) -> str:
         header = tab[0]
         rows = tab[1:]
         nrows = len(rows)
@@ -433,26 +463,26 @@ class QTool(QWidget, Ui_ToolTab):
         table += """</table><br>"""
         return table
 
-    def table_as_ascii(self, tab):
+    def table_as_ascii(self, tab: Any) -> str:
         text = ""
         for row in tab:
             text += " ".join(row)
             text += "\n"
         return text
 
-    def strip_tags(self, html_text):
+    def strip_tags(self, html_text: str) -> str:
         s = MLStripper()
         s.feed(html_text)
         return s.get_data()
 
-    def print_qtextbox(self, msg):
+    def print_qtextbox(self, msg: str) -> None:
         """Print message in the GUI log text box"""
-        self.toolTextBox.moveCursor(QTextCursor.End)
+        self.toolTextBox.moveCursor(QTextCursorAny.End)
         self.toolTextBox.insertHtml(msg)
         self.toolTextBox.verticalScrollBar().setValue(self.toolTextBox.verticalScrollBar().maximum())
-        self.toolTextBox.moveCursor(QTextCursor.End)
+        self.toolTextBox.moveCursor(QTextCursorAny.End)
 
-    def toolTextBox_context_menu(self):
+    def toolTextBox_context_menu(self) -> None:
         """Custom contextual menu for the theory textbox"""
         menu = self.toolTextBox.createStandardContextMenu()
         menu.addSeparator()
@@ -461,7 +491,7 @@ class QTool(QWidget, Ui_ToolTab):
         menu.addAction("Clear Text", self.toolTextBox.clear)
         menu.exec_(QCursor.pos())
 
-    def change_toolTextBox_fontsize(self, factor):
+    def change_toolTextBox_fontsize(self, factor: float) -> None:
         """Change the toolTextBox font size by a factor `factor`"""
         font = self.toolTextBox.currentFont()
         if factor < 1:
@@ -471,10 +501,10 @@ class QTool(QWidget, Ui_ToolTab):
         font.setPointSize(font_size)
         self.toolTextBox.document().setDefaultFont(font)
 
-    def editItem(self, item, column):
+    def editItem(self, item: Any, column: Any) -> None:
         print(column)
 
-    def update_parameter_table(self):
+    def update_parameter_table(self) -> None:
         """Update the Tool parameter table"""
         previous_block_state = self.toolParamTable.blockSignals(True)
         try:
@@ -492,21 +522,21 @@ class QTool(QWidget, Ui_ToolTab):
                             self.toolParamTable,
                             [p.display_label(), "%0.4g" % p.display_value()],
                         )
-                    item.setData(0, Qt.UserRole, p.name)
+                    item.setData(0, QtAny.UserRole, p.name)
                     item.setToolTip(0, p.description)
 
-                    item.setFlags(item.flags() | Qt.ItemIsEditable)
-            self.toolParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+                    item.setFlags(item.flags() | QtAny.ItemIsEditable)
+            self.toolParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         finally:
             self.toolParamTable.blockSignals(previous_block_state)
 
-    def handle_parameterItemChanged(self, item, column):
+    def handle_parameterItemChanged(self, item: Any, column: int) -> None:
         """Modify parameter values when changed in the Tool table"""
-        param_changed = item.data(0, Qt.UserRole) or item.text(0)
+        param_changed = item.data(0, QtAny.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
-            if item.checkState(0) == Qt.Checked:
+            if item.checkState(0) == QtAny.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
-            elif item.checkState(0) == Qt.Unchecked:
+            elif item.checkState(0) == QtAny.Unchecked:
                 self.parameters[param_changed].opt_type = OptType.nopt
             return
         # else, assign the entered value
@@ -523,7 +553,7 @@ class QTool(QWidget, Ui_ToolTab):
             item.setText(1, str(self.parameters[param_changed].display_value()))
         self.parent_application.update_all_ds_plots()
 
-    def handle_actionActivepressed(self, checked):
+    def handle_actionActivepressed(self, checked: bool) -> None:
         if checked:
             self.actionActive.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-toggle-on.png"))
         else:
@@ -536,7 +566,7 @@ class QTool(QWidget, Ui_ToolTab):
     #     self.active = self.actionActive.isChecked()
     #     self.parent_application.update_all_ds_plots()
 
-    def handle_actionApplyToTheorypressed(self, checked):
+    def handle_actionApplyToTheorypressed(self, checked: bool) -> None:
         if checked:
             self.actionApplyToTheory.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-einstein-yes.png"))
         else:
@@ -545,17 +575,17 @@ class QTool(QWidget, Ui_ToolTab):
         self.applytotheory = checked
         self.parent_application.update_all_ds_plots()
 
-    def onTreeWidgetItemDoubleClicked(self, item, column):
+    def onTreeWidgetItemDoubleClicked(self, item: Any, column: int) -> None:
         """Start editing text when a table cell is double clicked"""
         if column == 0:
-            p_name = item.data(0, Qt.UserRole) or item.text(0)
+            p_name = item.data(0, QtAny.UserRole) or item.text(0)
             dialog = EditToolParametersDialog(self, p_name)
             if dialog.exec_():
                 self.apply_tool_parameter_properties(dialog)
         elif column == 1:
             self.toolParamTable.editItem(item, column)
 
-    def apply_tool_parameter_properties(self, dialog):
+    def apply_tool_parameter_properties(self, dialog: Any) -> None:
         """Apply edited tool parameter properties from the properties dialog."""
         for pname in self.parameters:
             p = self.parameters[pname]

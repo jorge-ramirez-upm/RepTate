@@ -33,6 +33,8 @@
 """Module for importing data form Excel spreadsheets"""
 import sys
 import os
+from typing import Any, ClassVar
+
 import numpy as np
 from PySide6.QtCore import Qt, QItemSelectionModel
 from PySide6.QtWidgets import (
@@ -52,14 +54,18 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
 from RepTate.gui.Ui_import_excel_dialog import Ui_Dialog as Ui_ImportExcelMainWindow
 
+QAbstractItemViewAny: Any = QAbstractItemView
+QItemSelectionModelAny: Any = QItemSelectionModel
+QtAny: Any = Qt
+
 
 class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
-    list_AZ = [
+    list_AZ: ClassVar[list[str]] = [
         "A",
         "B",
         "C",
@@ -139,17 +145,33 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         "BY",
         "BZ",
     ]
-    MAX_ROW = 100
-    MAX_COL = len(list_AZ)
+    MAX_ROW: ClassVar[int] = 100
+    MAX_COL: ClassVar[int] = len(list_AZ)
 
-    def __init__(self, parent=None, ftype=None):
+    cbInterpolate: Any
+    col1: Any
+    col1_cb: Any
+    col2: Any
+    col2_cb: Any
+    col3: Any
+    col3_cb: Any
+    file_param_txt: Any
+    paste_box: Any
+    qtabs: Any
+    qtables: Any
+    select_file_tb: Any
+    selected_file_label: Any
+    skip_sb: Any
+    wb: Any
+
+    def __init__(self, parent: Any = None, ftype: Any = None) -> None:
         super().__init__()
         self.setupUi(self)
         # self.show()
         self.filepath = ""
         self.dir_start = os.path.join(RepTate.root_dir, "data")
         self.is_xlsx = True
-        self.wb = None
+        self.wb: Any = None
         self.sheet = None
         self.max_row = 0
         self.nskip = 0
@@ -168,7 +190,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.populate_file_param(self.file_param)
         self.update_cols_cb()
 
-    def handle_col1_cb_activated(self):
+    def handle_col1_cb_activated(self) -> None:
         if self.wb == None:
             return
         sheet = self.qtabs.tabText(self.qtabs.currentIndex())
@@ -177,7 +199,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.qtables[sheet] = [table, selected_idx]
         self.update_data_preview_table()
 
-    def handle_col2_cb_activated(self):
+    def handle_col2_cb_activated(self) -> None:
         if self.wb == None:
             return
         sheet = self.qtabs.tabText(self.qtabs.currentIndex())
@@ -186,7 +208,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.qtables[sheet] = [table, selected_idx]
         self.update_data_preview_table()
 
-    def handle_col3_cb_activated(self):
+    def handle_col3_cb_activated(self) -> None:
         if self.wb == None:
             return
         sheet = self.qtabs.tabText(self.qtabs.currentIndex())
@@ -195,7 +217,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.qtables[sheet] = [table, selected_idx]
         self.update_data_preview_table()
 
-    def update_cols_cb(self):
+    def update_cols_cb(self) -> None:
         self.col1_cb.clear()
         self.col2_cb.clear()
         self.col1.setText(
@@ -218,7 +240,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             self.col3.hide()
             self.col3_cb.hide()
 
-    def handle_tab_changed(self, idx):
+    def handle_tab_changed(self, idx: int) -> None:
         table, selected_idx = self.qtables[self.qtabs.tabText(idx)]
         ncols = table.columnCount()
         self.col1_cb.clear()
@@ -233,19 +255,19 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             self.col3_cb.setCurrentIndex(selected_idx[2])
         self.update_data_preview_table()
 
-    def handle_nskip_changed(self):
+    def handle_nskip_changed(self) -> None:
         if self.wb == None:
             return
         self.nskip = self.skip_sb.value()
         self.update_data_preview_table()
 
-    def col2num(self, col):
+    def col2num(self, col: str) -> int:
         num = 0
         for c in col:
             num = num * 26 + (ord(c) - ord("A")) + 1
         return num
 
-    def update_data_preview_table(self):
+    def update_data_preview_table(self) -> None:
         idx = self.qtabs.currentIndex()
         sname = self.qtabs.tabText(idx)
         col1 = self.col2num(self.col1_cb.currentText()) - 1
@@ -266,12 +288,12 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             indexes += [table.model().index(k, col3) for k in range(self.nskip, nrows)]
             header_labels[col3] = self.col_names[2]
         table.setHorizontalHeaderLabels(header_labels)
-        flag = QItemSelectionModel.Select
+        flag = QItemSelectionModelAny.Select
         table.selectionModel().clearSelection()
         [table.selectionModel().select(i, flag) for i in indexes]
         table.setFocus()
 
-    def get_data(self):
+    def get_data(self) -> dict[str, Any]:
         x = []
         y = []
         z = []
@@ -309,7 +331,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             else:
                 cellx = sheet.cell(k, col1)
             if hasattr(cellx, "value"):
-                valx = cellx.value
+                valx: Any = cellx.value
             else:
                 valx = ""
             try:
@@ -324,7 +346,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             else:
                 celly = sheet.cell(k, col2)
             if hasattr(celly, "value"):
-                valy = celly.value
+                valy: Any = celly.value
             else:
                 valy = ""
             try:
@@ -340,7 +362,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
                 else:
                     cellz = sheet.cell(k, col3)
                 if hasattr(cellz, "value"):
-                    valz = cellz.value
+                    valz: Any = cellz.value
                 else:
                     valz = ""
                 try:
@@ -392,14 +414,14 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             res_dic["col3"] = self.col3_cb.currentText()
         return res_dic
 
-    def populate_file_param(self, params):
+    def populate_file_param(self, params: Any) -> None:
         self.file_param_txt.clear()
         txt = ""
         for p in params:
             txt += "%s=0;" % p
         self.file_param_txt.setText(txt)
 
-    def handle_get_file(self):
+    def handle_get_file(self) -> None:
         # file browser window
         # options = QFileDialog.Options()
         dilogue_name = "Select Excel Data File"
@@ -409,7 +431,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         )
         self.handle_read_new_file(selected_file)
 
-    def handle_read_new_file(self, path):
+    def handle_read_new_file(self, path: str) -> None:
         if not os.path.isfile(path):
             return
         self.dir_start = os.path.dirname(path)
@@ -446,7 +468,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             max_row = min(max_row, self.MAX_ROW)
             max_col = min(max_col, self.MAX_COL)
             qsheet = QTableWidget(max_row, max_col, self)
-            qsheet.setSelectionMode(QAbstractItemView.NoSelection)
+            qsheet.setSelectionMode(QAbstractItemViewAny.NoSelection)
             for i in range(max_row):
                 for j in range(max_col):
                     if self.is_xlsx:
@@ -458,7 +480,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
                     else:
                         val = ""
                     item = QTableWidgetItem("%s" % val)
-                    item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                    item.setFlags(QtAny.ItemIsSelectable | QtAny.ItemIsEnabled)
                     qsheet.setItem(i, j, item)
             self.qtabs.addTab(qsheet, sname)
             selected_cols = [0, 1, 2]
@@ -468,7 +490,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.qtabs.setCurrentIndex(0)
         self.handle_tab_changed(0)
 
-    def clear_tabs(self):
+    def clear_tabs(self) -> None:
         for _ in range(self.qtabs.count()):
             w = self.qtabs.widget(0)
             self.qtabs.removeTab(0)
@@ -479,13 +501,13 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.skip_sb.blockSignals(False)
         self.nskip = 0
 
-    def dragEnterEvent(self, e):
+    def dragEnterEvent(self, e: Any) -> None:
         if e.mimeData().hasFormat("text/uri-list"):
             e.accept()
         else:
             e.ignore()
 
-    def dropEvent(self, e):
+    def dropEvent(self, e: Any) -> None:
         path = e.mimeData().urls()[0].toLocalFile()
         if (
             os.path.splitext(path)[-1] == ".xls"
@@ -499,5 +521,5 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    GUI = Window()
+    GUI = Window()  # pyright: ignore[reportUndefinedVariable]
     sys.exit(app.exec())

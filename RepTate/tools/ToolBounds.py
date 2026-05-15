@@ -35,6 +35,8 @@
 Remove data ouside Bounds
 """
 
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
@@ -43,12 +45,15 @@ from RepTate.gui.QTool import QTool
 class ToolBounds(QTool):
     """Remove points in the current view ïf :math:`x \\notin [x_{min}, x_{max}]` or :math:`y \\notin [y_{min}, y_{max}]`"""
 
-    toolname = "Bounds"
-    description = "Bounds Tool"
-    citations = []
+    toolname: ClassVar[str] = "Bounds"
+    description: ClassVar[str] = "Bounds Tool"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    parameters: Any
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["xmin"] = Parameter(
@@ -81,7 +86,7 @@ class ToolBounds(QTool):
 
     # add widgets specific to the Tool here:
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         p = self.parameters[name]
         old_value = p.value
         try:
@@ -117,7 +122,9 @@ class ToolBounds(QTool):
 
         return message, success
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Bounds function limits the data shown in the view"""
         xmin = self.parameters["xmin"].value
         xmax = self.parameters["xmax"].value

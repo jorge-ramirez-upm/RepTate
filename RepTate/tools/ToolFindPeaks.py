@@ -35,6 +35,8 @@
 FindPeaks file for creating a new Tool
 """
 
+from typing import Any, ClassVar
+
 import numpy as np
 from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
@@ -48,12 +50,20 @@ class ToolFindPeaks(QTool):
     The algorithm used to find the peaks can be very inaccurate and slow if the data is noisy and has many local peaks. It is recommended to smooth the data first before finding the peaks.
     """
 
-    toolname = "Find Peaks"
-    description = "Find Peaks in current data/view"
-    citations = []
+    toolname: ClassVar[str] = "Find Peaks"
+    description: ClassVar[str] = "Find Peaks in current data/view"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
 
-    def __init__(self, name="", parent_app=None):
+    axarray: Any
+    minpeaks: Any
+    parabola: Any
+    parameters: Any
+    parent_application: Any
+    seriesarray: Any
+    tb: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         # self.function = self.findpeaks  # main Tool function
@@ -101,7 +111,7 @@ class ToolFindPeaks(QTool):
 
         # add widgets specific to the Tool here:
 
-    def handle_minpeaks_button(self, checked):
+    def handle_minpeaks_button(self, checked: bool) -> None:
         if checked:
             self.minpeaks.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-peak-minimum.png"))
         else:
@@ -110,23 +120,25 @@ class ToolFindPeaks(QTool):
         self.set_param_value("minpeaks", checked)
         self.parent_application.update_all_ds_plots()
 
-    def handle_parabola_button(self, checked):
+    def handle_parabola_button(self, checked: bool) -> None:
         self.parabola.setChecked(checked)
         self.set_param_value("parabola", checked)
         self.parent_application.update_all_ds_plots()
 
-    def clean_graphic_stuff(self):
+    def clean_graphic_stuff(self) -> None:
         for s, a in zip(self.seriesarray, self.axarray):
             # a.lines.remove(s)
             s.remove()
         self.seriesarray.clear()
         self.axarray.clear()
 
-    def destructor(self):
+    def destructor(self) -> None:
         """This is called when the Tool tab is closed"""
         self.clean_graphic_stuff()
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
         minpeaks = self.parameters["minpeaks"].value

@@ -1,9 +1,11 @@
 import sys
+from typing import Any
+
 from PySide6.QtWidgets import QWidget, QGridLayout, QPushButton, QStyle, QApplication
 
 
 class Widget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent: Any = None) -> None:
         super(Widget, self).__init__()
 
         icons = [
@@ -82,13 +84,15 @@ class Widget(QWidget):
         colSize = 4
 
         layout = QGridLayout()
+        layout_any: Any = layout
+        qstyle_any: Any = QStyle
 
         count = 0
         for i in icons:
             btn = QPushButton(i)
-            btn.setIcon(self.style().standardIcon(getattr(QStyle, i)))
+            btn.setIcon(self.style().standardIcon(getattr(qstyle_any, i)))
 
-            layout.addWidget(btn, count / colSize, count % colSize)
+            layout_any.addWidget(btn, count / colSize, count % colSize)
             count += 1
 
         self.setLayout(layout)

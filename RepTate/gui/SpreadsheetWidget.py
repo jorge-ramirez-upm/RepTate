@@ -35,10 +35,15 @@
 Module that defines a QTableWidget that allows copy/paste of data.
 
 """
+from typing import Any
+
 import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import QTableWidget, QApplication
+
+QKeySequenceAny: Any = QKeySequence
+QtAny: Any = Qt
 
 
 class SpreadsheetWidget(QTableWidget):
@@ -48,24 +53,27 @@ class SpreadsheetWidget(QTableWidget):
     in a tab-separated format and (ii) to paste the content of the clipboard into the QTableWidget
     """
 
-    def __init__(self, parent=None):
+    delete_disabled: Any
+    file_repr: Any
+
+    def __init__(self, parent: Any = None) -> None:
         """**Constructor**"""
         super().__init__(parent)
         delete_disabled = True  # disable the possibility to delete rows
         file_repr = None  # store the file object represented in the table
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: Any) -> None:
         """Catch key"""
-        if event.matches(QKeySequence.Copy):
+        if event.matches(QKeySequenceAny.Copy):
             self.copy()
-        elif event.matches(QKeySequence.Paste):
+        elif event.matches(QKeySequenceAny.Paste):
             self.paste()
-        elif event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
+        elif event.key() == QtAny.Key_Backspace or event.key() == QtAny.Key_Delete:
             self.delete()
         else:
             QTableWidget.keyPressEvent(self, event)
 
-    def delete(self):
+    def delete(self) -> None:
         if self.delete_disabled:
             pass
         else:
@@ -84,7 +92,7 @@ class SpreadsheetWidget(QTableWidget):
                 self.file_repr.parent_dataset.populate_inspector()
                 self.file_repr.parent_dataset.do_plot()  # TODO: we only need to update one data series, not the whole ds
 
-    def copy(self):
+    def copy(self) -> None:
         """Copy the selected data of the dataInspector into the clipboard"""
         sel = (
             self.selectedIndexes()
@@ -104,7 +112,7 @@ class SpreadsheetWidget(QTableWidget):
             text = text.rstrip("\t")
             QApplication.clipboard().setText(text)
 
-    def paste(self):
+    def paste(self) -> None:
         """Paste data"""
         text = QApplication.clipboard().text()
         if text == "":

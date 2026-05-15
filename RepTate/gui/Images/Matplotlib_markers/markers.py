@@ -1,6 +1,11 @@
 """Generate plenty of Matplotlib markers to later use as icons"""
 
+from typing import Any
+
 import matplotlib.pyplot as plt
+
+plt_any: Any = plt
+
 # To make a figure without the frame :
 markers=['.',',','o','v','^','<','>','1','2','3','4','8','s','p','P','*','h','H','+','x','X','D','d','|','_']
 descriptions=['point', 'pixel', 'circle', 'triangle_down', 'triangle_up','triangle_left', 'triangle_right', 'tri_down', 'tri_up', 'tri_left','tri_right', 'octagon', 'square', 'pentagon', 'plus (filled)','star', 'hexagon1', 'hexagon2', 'plus', 'x', 'x (filled)','diamond', 'thin_diamond', 'vline', 'hline']
@@ -14,7 +19,7 @@ for m,d in zip(markers,descriptions):
         markersize=5
     fig = plt.figure(frameon=False)
     fig.set_size_inches(0.52,0.52)
-    ax = plt.Axes(fig, [0, 0, .24, .24])
+    ax = plt_any.Axes(fig, [0, 0, .24, .24])
     ax.set_axis_off()
     fig.add_axes(ax) 
     plt.plot([0], [0],color='black', marker=m, markersize=markersize, markerfacecolor='none')

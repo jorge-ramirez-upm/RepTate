@@ -36,6 +36,7 @@ Evaluate algebraic expressions in the current view
 """
 
 import traceback
+from typing import Any, ClassVar
 from numpy import (
     sin,
     cos,
@@ -75,12 +76,17 @@ from RepTate.gui.QTool import QTool
 class ToolEvaluate(QTool):
     """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser."""
 
-    toolname = "Eval Exp"
-    description = "Evaluate Expression Tool"
-    citations = []
+    toolname: ClassVar[str] = "Eval Exp"
+    description: ClassVar[str] = "Evaluate Expression Tool"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    logger: Any
+    parameters: Any
+    parent_application: Any
+    safe_dict: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["x"] = Parameter(
@@ -137,7 +143,9 @@ class ToolEvaluate(QTool):
 
         # add widgets specific to the Tool here:
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Evaluate function that returns the square of the y, according to the view"""
         xexpr = self.parameters["x"].value
         yexpr = self.parameters["y"].value

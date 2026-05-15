@@ -35,6 +35,8 @@
 Interpolate/Extrapolate data
 """
 import traceback
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.gui.QTool import QTool
@@ -44,12 +46,15 @@ from scipy.interpolate import interp1d
 class ToolInterpolateExtrapolate(QTool):
     """Interpolates data"""
 
-    toolname = "Interpolate/Extrapolate"
-    description = "Interpolate/Extrapolate from view"
-    citations = []
+    toolname: ClassVar[str] = "Interpolate/Extrapolate"
+    description: ClassVar[str] = "Interpolate/Extrapolate from view"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    parameters: Any
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["x"] = Parameter(
@@ -66,7 +71,9 @@ class ToolInterpolateExtrapolate(QTool):
         # add widgets specific to the Tool here:
 
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """InterpolateExtrapolate function that returns the square of the y, according to the view"""
         xval = self.parameters["x"].value
         xunique, indunique = np.unique(x, return_index=True)
@@ -77,7 +84,8 @@ class ToolInterpolateExtrapolate(QTool):
             table = [
                 ["%-10s" % "x", "%-10s" % "y"],
             ]
-            ff = interp1d(
+            interp1d_any: Any = interp1d
+            ff = interp1d_any(
                 xunique,
                 yunique,
                 bounds_error=False,

@@ -35,6 +35,8 @@
 Smooth data by applying a Savitzky-Golay filter
 """
 import traceback
+from typing import Any, ClassVar
+
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
 from scipy.signal import savgol_filter
@@ -44,12 +46,15 @@ class ToolSmooth(QTool):
     """Smooths the current view data by applying a Savitzky-Golay filter. The smoothing procedure is controlled by means of two parameters: the **window** length (a positive, odd integer), which represents the number of convolution coefficients of the filter, and the **order** of the polynomial used to fit the samples (must be smaller than the window length).
     """
 
-    toolname = "Smooth"
-    description = "Smooth Tool"
-    citations = []
+    toolname: ClassVar[str] = "Smooth"
+    description: ClassVar[str] = "Smooth Tool"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    parameters: Any
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["window"] = Parameter(
@@ -70,7 +75,7 @@ class ToolSmooth(QTool):
 
     # add widgets specific to the Tool here:
 
-    def set_param_value(self, name, value):
+    def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         p = self.parameters[name]
         old_value = p.value
         try:
@@ -97,7 +102,9 @@ class ToolSmooth(QTool):
         return message, success
 
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Smooth the x, y data"""
         window = self.parameters["window"].value
         order = self.parameters["order"].value

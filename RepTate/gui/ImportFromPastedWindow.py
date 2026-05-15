@@ -34,6 +34,8 @@
 import sys
 import os
 import io
+from typing import Any
+
 import numpy as np
 from PySide6.QtWidgets import QApplication, QDialog
 import RepTate
@@ -42,7 +44,7 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
 from RepTate.gui.Ui_import_from_pasted_dialog import (
@@ -51,7 +53,11 @@ from RepTate.gui.Ui_import_from_pasted_dialog import (
 
 
 class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
-    def __init__(self, parent=None, ftype=None):
+    file_name_label: Any
+    label_columns: Any
+    paste_box: Any
+
+    def __init__(self, parent: Any = None, ftype: Any = None) -> None:
         super().__init__()
         self.setupUi(self)
         self.col_names = ftype.col_names
@@ -74,10 +80,10 @@ class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
         )
         self.label_columns.setText(txt)
 
-    def set_fname_dialog(self, fname):
+    def set_fname_dialog(self, fname: str) -> None:
         self.file_name_label.setText(fname)
 
-    def get_data(self):
+    def get_data(self) -> dict[str, Any]:
         pasted_txt = self.paste_box.toPlainText()
         flag_nan = False
         is_first_line = True

@@ -34,6 +34,8 @@
 
 Template file for creating a new Tool
 """
+from typing import Any, ClassVar
+
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.gui.QTool import QTool
 
@@ -42,12 +44,14 @@ class ToolTemplate(QTool):
     """TEMPLATE FOR NEW TOOLS. HERE IS WHERE THE BASIC INFORMATION OF THE TOOL SHOULD APPEAR.
     """
 
-    toolname = "TemplateTool"
-    description = "Template Tool"
-    citations = []
+    toolname: ClassVar[str] = "TemplateTool"
+    description: ClassVar[str] = "Template Tool"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    def __init__(self, name="", parent_app=None):
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         # self.parameters['param1'] = Parameter(
@@ -63,12 +67,14 @@ class ToolTemplate(QTool):
         # add widgets specific to the Tool here:
 
 
-    def destructor(self):
+    def destructor(self) -> None:
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Template function that returns the square of the y, according to the view
         """
         return x, y * y

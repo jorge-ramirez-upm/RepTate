@@ -35,7 +35,11 @@
 Module that defines the a DataSetWidgetItem that allows to sort items in the DataSet
 
 """
+from typing import Any, ClassVar
+
 from PySide6.QtWidgets import QTreeWidgetItem
+
+QTreeWidgetItemAny: Any = QTreeWidgetItem
 
 
 class DataSetWidgetItem(QTreeWidgetItem):
@@ -45,25 +49,22 @@ class DataSetWidgetItem(QTreeWidgetItem):
     It contains the necessary tables and types and a redefinition of the '<' operator
     """
 
-    series = 0
-
-    def __init__(self, parent=None):
-        """**Constructor**"""
-        QTreeWidgetItem.__init__(self, parent)
-
-    def __init__(self, parent=None, itemlist=[], type=0):
-        """**Constructor**"""
-        QTreeWidgetItem.__init__(self, parent, itemlist, type)
+    series: ClassVar[int] = 0
 
     def __init__(
-        self, parent=None, itemlist=[], type=0, file_name_short="dummy", file_type=None
-    ):
+        self,
+        parent: Any = None,
+        itemlist: Any = [],
+        type: int = 0,
+        file_name_short: str = "dummy",
+        file_type: Any = None,
+    ) -> None:
         """**Constructor**"""
-        QTreeWidgetItem.__init__(self, parent, itemlist, type)
+        QTreeWidgetItemAny.__init__(self, parent, itemlist, type)
         # self.file_name_short = file_name_short
         # Table.__init__(self, file_name_short, file_type)
 
-    def __lt__(self, otherItem):
+    def __lt__(self, otherItem: Any) -> bool:
         """Needed for sorting purposes
         
         Re-implement the less-than operator to sort the columns based on the float

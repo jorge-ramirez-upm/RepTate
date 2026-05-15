@@ -35,6 +35,8 @@
 Integral file for creating a new Tool
 """
 import traceback
+from typing import Any, ClassVar
+
 import numpy as np
 from RepTate.gui.QTool import QTool
 from scipy.integrate import odeint
@@ -46,12 +48,14 @@ class ToolIntegral(QTool):
     If a different integration interval is needed, the Bounds tool can be used before the Integral tool.
     """
 
-    toolname = "Integral"
-    description = "Integral of current data/view"
-    citations = []
+    toolname: ClassVar[str] = "Integral"
+    description: ClassVar[str] = "Integral of current data/view"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
 
-    def __init__(self, name="", parent_app=None):
+    parent_application: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
 
@@ -66,13 +70,16 @@ class ToolIntegral(QTool):
         self.parent_application.update_all_ds_plots()
 
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Integral function that returns the square of the y, according to the view"""
         xunique, indunique = np.unique(x, return_index=True)
         num_rows = len(xunique)
         yunique = y[indunique]
         try:
-            ff = interp1d(
+            interp1d_any: Any = interp1d
+            ff = interp1d_any(
                 xunique,
                 yunique,
                 bounds_error=False,

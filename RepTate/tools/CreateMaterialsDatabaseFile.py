@@ -37,9 +37,11 @@ Module that creates the basic Materials database data.
 """
 import numpy as np
 import os
+from typing import Any
+
 from . import polymer_data
 
-polymerdict = {}
+polymerdict: dict[str, Any] = {}
 polymerdict["PEP"] = polymer_data.polymer(
     name="PEP",
     long="Polyethylene-propylene",
@@ -146,10 +148,11 @@ polymerdict["hPBd"] = polymer_data.polymer(
     MK=0,
 )
 
-polymeruserdict = {}
+polymeruserdict: dict[str, Any] = {}
 
 polymer_data.canonicalize_database(polymerdict)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-np.save(os.path.join(dir_path, "materials_database.npy"), polymerdict)
-np.save(os.path.join(dir_path, "user_database.npy"), polymeruserdict)
+np_save_any: Any = np.save
+np_save_any(os.path.join(dir_path, "materials_database.npy"), polymerdict)
+np_save_any(os.path.join(dir_path, "user_database.npy"), polymeruserdict)

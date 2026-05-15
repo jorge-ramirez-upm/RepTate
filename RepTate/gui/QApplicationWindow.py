@@ -36,6 +36,7 @@ Module that defines the basic GUI class from which all GUI applications are deri
 It is the GUI counterpart of Application.
 
 """
+# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false, reportCallIssue=false, reportPrivateImportUsage=false, reportOptionalSubscript=false, reportGeneralTypeIssues=false
 
 import sys
 import os

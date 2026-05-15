@@ -36,6 +36,7 @@ Module that defines the About window.
 
 """
 import sys
+from typing import Any
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import QDialog
 
@@ -43,7 +44,7 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_AboutDialog import Ui_Dialog as Ui_AboutRepTateWindow
@@ -52,7 +53,9 @@ from RepTate.gui.Ui_AboutDialog import Ui_Dialog as Ui_AboutRepTateWindow
 class AboutWindow(QDialog, Ui_AboutRepTateWindow):
     """About window in the GUI"""
 
-    def __init__(self, parent, version, text):
+    label: Any
+
+    def __init__(self, parent: Any, version: str, text: str) -> None:
         """**Constructor**"""
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)

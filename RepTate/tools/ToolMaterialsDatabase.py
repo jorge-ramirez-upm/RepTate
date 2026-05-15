@@ -37,6 +37,8 @@ MaterialsDatabase Viewer
 
 import sys
 import os
+from typing import Any, ClassVar
+
 import numpy as np
 from pathlib import Path
 from RepTate.core.Parameter import Parameter, ParameterType
@@ -65,7 +67,7 @@ if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
     # extends the sys module by a flag frozen=True and sets the app
     # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
+    PATH = getattr(sys, "_MEIPASS")
 else:
     PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -90,7 +92,12 @@ else:
 polymer_data.canonicalize_database(materials_user_database_old)
 
 # search user material database in the (new) location "AppData"
-AppData_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+QDialogButtonBoxAny: Any = QDialogButtonBox
+QFontAny: Any = QFont
+QMessageBoxAny: Any = QMessageBox
+QStandardPathsAny: Any = QStandardPaths
+
+AppData_path = QStandardPathsAny.writableLocation(QStandardPathsAny.AppDataLocation)
 file_user_database = os.path.join(AppData_path, "user_database.npy")
 if os.path.exists(file_user_database):
     materials_user_database = np.load(file_user_database, allow_pickle=True).item()
@@ -105,13 +112,19 @@ materials_db = [materials_user_database, materials_database]
 class EditMaterialParametersDialog(QDialog):
     """Create the form that is used to edit/modify the material parameters"""
 
-    def __init__(self, parent, material, parameterdata):
+    formGroupBox: Any
+    material: Any
+    p_new: Any
+    param_dict: Any
+    parent_dataset: Any
+
+    def __init__(self, parent: Any, material: Any, parameterdata: Any) -> None:
         super().__init__(parent)
         self.parent_dataset = parent
         self.material = material
         self.createFormGroupBox(material, parameterdata)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBoxAny(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -121,7 +134,7 @@ class EditMaterialParametersDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Edit Material Parameters")
 
-    def createFormGroupBox(self, material, parameterdata):
+    def createFormGroupBox(self, material: Any, parameterdata: Any) -> None:
         """Create a form to set the new values of the material parameters"""
         self.formGroupBox = QGroupBox('Parameters of material "%s"' % material.data["name"])
         layout = QFormLayout()
@@ -150,7 +163,7 @@ class EditMaterialParametersDialog(QDialog):
         self.formGroupBox.setLayout(layout)
 
 
-def check_chemistry(chem):
+def check_chemistry(chem: str) -> int:
     """Check if the file contains chemistry. If so, check if the chemistry appears in the user or general materials database.
 
     :param chem: Chemistry
@@ -166,7 +179,7 @@ def check_chemistry(chem):
         return -1
 
 
-def get_all_parameters(chem, theory, fparam, dbindex):
+def get_all_parameters(chem: str, theory: Any, fparam: Any, dbindex: int) -> None:
     """Gets all possible parameters from the corresponding materials database.
     The function check_chemistry must be involed before this one, to get chem and dbindex.
         Arguments:
@@ -185,7 +198,7 @@ def get_all_parameters(chem, theory, fparam, dbindex):
                 theory.set_param_value(p, value)
 
 
-def get_single_parameter(chem, param, fparam, dbindex):
+def get_single_parameter(chem: str, param: str, fparam: Any, dbindex: int) -> tuple[Any, bool]:
     """Returns the parameter 'param' of the chemistry 'chem' using the database
     given by dbindex (0 user, 1 general) and taking into account the parameters
     of fparam (for example, T and Mw).
@@ -250,12 +263,27 @@ class ToolMaterialsDatabase(QTool):
     parameters introduced by the user and is stored in the user HOME folder.
     """
 
-    toolname = "Materials Database"
-    description = "Materials Database Explorer"
-    citations = []
+    toolname: ClassVar[str] = "Materials Database"
+    description: ClassVar[str] = "Materials Database Explorer"
+    citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
 
-    def __init__(self, name="", parent_app=None):
+    actionActive: Any
+    actionApplyToTheory: Any
+    cbmaterial: Any
+    editMw: Any
+    editT: Any
+    isofrictional: Any
+    labelPolymer: Any
+    model: Any
+    parameters: Any
+    parent_application: Any
+    shiftdata: Any
+    tb: Any
+    verticalLayout: Any
+    verticalshift: Any
+
+    def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
 
         super().__init__(name, parent_app)
@@ -437,20 +465,20 @@ class ToolMaterialsDatabase(QTool):
         self.actionSave.triggered.connect(self.save_usermaterials)
 
         self.labelPolymer = QLabel("None")
-        self.labelPolymer.setFont(QFont("Times", weight=QFont.Bold))
+        self.labelPolymer.setFont(QFontAny("Times", weight=QFontAny.Bold))
         self.verticalLayout.insertWidget(1, self.labelPolymer)
 
         self.tbMwT = QToolBar()
         self.tbMwT.setIconSize(QSize(24, 24))
         lbl1 = QLabel("Mw (kDa)")
-        lbl1.setFont(QFont("Times", weight=QFont.Bold))
+        lbl1.setFont(QFontAny("Times", weight=QFontAny.Bold))
         self.tbMwT.addWidget(lbl1)
         self.editMw = QLineEdit("1")
         self.editMw.setStyleSheet("QLineEdit { background: rgb(255, 255, 205);}")
         self.editMw.setFixedWidth(40)
         self.tbMwT.addWidget(self.editMw)
         lbl2 = QLabel("T (°C)")
-        lbl2.setFont(QFont("Times", weight=QFont.Bold))
+        lbl2.setFont(QFontAny("Times", weight=QFontAny.Bold))
         self.tbMwT.addWidget(lbl2)
         self.editT = QLineEdit("0")
         self.editT.setStyleSheet("QLineEdit { background: rgb(255, 255, 205);}")
@@ -482,22 +510,22 @@ class ToolMaterialsDatabase(QTool):
             self.cbmaterial.setCurrentIndex(init_chem_index)
         self.change_material()
 
-    def handle_vert_and_iso(self):
+    def handle_vert_and_iso(self) -> None:
         self.do_plot()
 
-    def handle_shift_data(self):
+    def handle_shift_data(self) -> None:
         Tr = float(self.editT.text())
         chem = self.cbmaterial.currentText()
         msg = "Selected T=%g\nSelected material=%s\n" % (Tr, chem)
         msg += "Do you want to shift all Tables in the current Dataset "
         msg += "to the chosen temperature using the WLF parameters for the chosen material?"
-        ans = QMessageBox.question(
+        ans = QMessageBoxAny.question(
             self,
             "Shift all data",
             msg,
-            buttons=(QMessageBox.Yes | QMessageBox.No),
+            buttons=(QMessageBoxAny.Yes | QMessageBoxAny.No),
         )
-        if ans != QMessageBox.Yes:
+        if ans != QMessageBoxAny.Yes:
             return
 
         # Calculate shift factors
@@ -572,7 +600,7 @@ class ToolMaterialsDatabase(QTool):
 
         self.do_plot()
 
-    def change_material(self):
+    def change_material(self) -> None:
         selected_material_name = self.cbmaterial.currentText()
         if self.cbmaterial.currentIndex() < self.num_materials_base:
             dbindex = 1
@@ -585,7 +613,7 @@ class ToolMaterialsDatabase(QTool):
         self.update_parameter_table()
         self.do_plot()
 
-    def new_material(self):
+    def new_material(self) -> None:
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
         ok = False
         while not ok:
@@ -633,7 +661,7 @@ class ToolMaterialsDatabase(QTool):
         - dbindex {int} -- Index of the database to use (0 user, 1 general)
     """
 
-    def edit_material(self):
+    def edit_material(self) -> None:
         selected_material_name = self.cbmaterial.currentText()
         if self.cbmaterial.currentIndex() < self.num_materials_base:
             QMessageBox.warning(
@@ -662,14 +690,15 @@ class ToolMaterialsDatabase(QTool):
             polymer_data.canonicalize_material(material)
             self.change_material()
 
-    def save_usermaterials(self):
-        AppData_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+    def save_usermaterials(self) -> None:
+        AppData_path = QStandardPathsAny.writableLocation(QStandardPathsAny.AppDataLocation)
         file_user_database = os.path.join(AppData_path, "user_database.npy")
-        np.save(file_user_database, materials_user_database)
+        np_save_any: Any = np.save
+        np_save_any(file_user_database, materials_user_database)
         msg = "Saved user database in '%s'" % file_user_database
         QMessageBox.information(self, "Saved", msg)
 
-    def copy_material(self):
+    def copy_material(self) -> None:
         # Dialog to ask for short name. Repeat until the name is not in the user's database or CANCEL
         name = ""
         ok = False
@@ -721,7 +750,7 @@ class ToolMaterialsDatabase(QTool):
         item.setForeground(QColor("red"))
         self.model.appendRow(item)
 
-    def delete_material(self):
+    def delete_material(self) -> None:
         # Check that the material is in the user database
         selected_material_name = self.cbmaterial.currentText()
         if self.cbmaterial.currentIndex() < self.num_materials_base:
@@ -732,18 +761,18 @@ class ToolMaterialsDatabase(QTool):
             )
             return
         # Dialog to ask for confimarion
-        ans = QMessageBox.question(
+        ans = QMessageBoxAny.question(
             self,
             "Delete material parameters",
             "Do you want to delete the material %s?" % selected_material_name,
-            buttons=(QMessageBox.Yes | QMessageBox.No),
+            buttons=(QMessageBoxAny.Yes | QMessageBoxAny.No),
         )
         # Delete from ComboBox and User Material dictionary
-        if ans == QMessageBox.Yes:
+        if ans == QMessageBoxAny.Yes:
             self.cbmaterial.removeItem(self.cbmaterial.currentIndex())
             materials_user_database.pop(selected_material_name)
 
-    def calculate_stuff(self, line="", file_parameters=[]):
+    def calculate_stuff(self, line: str = "", file_parameters: Any = []) -> None:
         if "Mw" in file_parameters:
             Mw = float(file_parameters["Mw"])
         else:
@@ -805,12 +834,14 @@ class ToolMaterialsDatabase(QTool):
         tab_data.append(["<b>tau_D</b>", "%g" % tD])
         self.Qprint(tab_data)
 
-    def calculate(self, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate(
+        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Calculate some results related to the selected material or the file material"""
         self.calculate_stuff("", file_parameters)
         return x, y
 
-    def do_calculate_stuff(self, line=""):
+    def do_calculate_stuff(self, line: str = "") -> None:
         """Given the values of Mw (in kDa) and T (in °C), as well as a flag for isofrictional state and vertical shift, it returns some calculations for the current chemistry.
         Example:
             calculate_stuff 35.4 240 1 1
@@ -871,10 +902,12 @@ class ToolMaterialsDatabase(QTool):
             print("Wrong number of parameters.")
             print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
-    def calculate_all(self, n, x, y, ax=None, color=None, file_parameters=[]):
+    def calculate_all(
+        self, n: Any, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+    ) -> tuple[Any, Any]:
         """Calculate the tool for all views - In MatDB, only first view is needed"""
         newxy = []
-        lenx = 1e9
+        lenx: Any = 1e9
         for i in range(n):
             self.Qprint("<b>Series %d</b>" % (i + 1))
             xcopy = x[:, i]

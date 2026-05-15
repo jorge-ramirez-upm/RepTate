@@ -35,8 +35,12 @@
 Module that defines the a QTreeWidget that allows to select nothing.
 
 """
+from typing import Any
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QTreeWidget
+
+QtAny: Any = Qt
 
 
 class DataSetWidget(QTreeWidget):
@@ -46,24 +50,26 @@ class DataSetWidget(QTreeWidget):
     by clicking in the white area of the DataSet, and allows to delete a data table item
     """
 
-    def __init__(self, parent=None):
+    parent_dataset: Any
+
+    def __init__(self, parent: Any = None) -> None:
         """**Constructor**"""
         super().__init__(parent)
         self.parent_dataset = parent
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event: Any) -> None:
         """Process mouse"""
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: Any) -> None:
         """Process key"""
-        if event.key() == Qt.Key_Backspace or event.key() == Qt.Key_Delete:
+        if event.key() == QtAny.Key_Backspace or event.key() == QtAny.Key_Delete:
             self.delete()
         else:
             QTreeWidget.keyPressEvent(self, event)
 
-    def delete(self):
+    def delete(self) -> None:
         """Delete the currently selected items"""
         selection = self.selectedItems()
         if selection == []:

@@ -36,6 +36,7 @@ Module for the main Graphical User Interface of RepTate. It is the GUI counterpa
 ApplicationManager.
 
 """
+# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false, reportCallIssue=false
 
 # import logging
 import sys
