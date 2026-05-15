@@ -108,6 +108,15 @@ import RepTate.gui.Ui_errorcalculationoptions
 TheoryParameters: TypeAlias = OrderedDict[str, Parameter]
 TheoryTables: TypeAlias = dict[str, DataTable]
 TheoryFunction: TypeAlias = Callable[..., Any]
+BasinhoppingAny: Any = basinhopping
+DualAnnealingAny: Any = dual_annealing
+DifferentialEvolutionAny: Any = differential_evolution
+QAbstractItemViewAny: Any = QAbstractItemView
+QDialogButtonBoxAny: Any = QDialogButtonBox
+QFrameAny: Any = QFrame
+QHeaderViewAny: Any = QHeaderView
+QTextCursorAny: Any = QTextCursor
+QtAny: Any = Qt
 
 
 # IMPORT FROM THEORY
@@ -210,7 +219,7 @@ class EditThParametersDialog(QDialog):
                 index = self.tabs.indexOf(tab)
         self.tabs.setCurrentIndex(index)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -330,7 +339,7 @@ class GetModesDialog(QDialog):
         rb.setChecked(True)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+        buttons = QDialogButtonBox(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel, QtAny.Horizontal, self)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -343,6 +352,8 @@ class QTheory(QWidget, Ui_TheoryTab):
     """ thname {str} -- Theory name """
     description = ""
     """ description {str} -- Description of theory """
+    single_file: bool = False
+    """ single_file {bool} -- Whether the theory applies to one active file at a time """
     citations = []
     """ citations {list of str} -- Articles that should be cited """
     doi = []
@@ -454,28 +465,28 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.thParamTable.setColumnCount(3)
         self.thParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value", "Error"]))
         # self.thParamTable.header().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+        self.thParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         self.thParamTable.setAlternatingRowColors(True)
-        self.thParamTable.setFrameShape(QFrame.NoFrame)
-        self.thParamTable.setFrameShadow(QFrame.Plain)
-        self.thParamTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.thParamTable.setFrameShape(QFrameAny.NoFrame)
+        self.thParamTable.setFrameShadow(QFrameAny.Plain)
+        self.thParamTable.setEditTriggers(QAbstractItemViewAny.NoEditTriggers)
 
         self.thTextBox.setReadOnly(True)
         self.thTextBox.setOpenExternalLinks(True)
-        self.thTextBox.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.thTextBox.setContextMenuPolicy(QtAny.CustomContextMenu)
         self.thTextBox.customContextMenuRequested.connect(self.thtextbox_context_menu)
 
         self.thread_calc_busy = False
         self.thread_fit_busy = False
 
         # Setup Theory Parameters Dialog
-        self.fittingoptionsdialog = QDialog()
+        self.fittingoptionsdialog: Any = QDialog()
         self.fittingoptionsdialog.ui = Ui_Dialog()
         self.fittingoptionsdialog.ui.setupUi(self.fittingoptionsdialog)
         self.populate_default_minimization_options()
 
         # Setup Error Calculation Options
-        self.errorcalculationdialog = QDialog()
+        self.errorcalculationdialog: Any = QDialog()
         self.errorcalculationdialog.ui = RepTate.gui.Ui_errorcalculationoptions.Ui_Dialog()
         self.errorcalculationdialog.ui.setupUi(self.errorcalculationdialog)
         self.populate_default_error_calculation_options()
@@ -1088,7 +1099,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.Qprint("<b>Global optimisation</b>")
             minimizer_kwargs = {"method": "BFGS"}
             try:
-                ret = basinhopping(
+                ret = BasinhoppingAny(
                     self.func_fit_and_error,
                     initial_guess,
                     niter=self.basinniter,
@@ -1121,7 +1132,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.Qprint("<b>Global optimisation</b>")
             try:
                 param_bounds = list(zip(self.param_min, self.param_max))
-                ret = dual_annealing(
+                ret = DualAnnealingAny(
                     self.func_fit_and_error,
                     bounds=param_bounds,
                     maxiter=self.annealmaxiter,
@@ -1155,7 +1166,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.Qprint("<b>Global optimisation</b>")
             try:
                 param_bounds = list(zip(self.param_min, self.param_max))
-                ret = differential_evolution(
+                ret = DifferentialEvolutionAny(
                     self.func_fit_and_error,
                     bounds=param_bounds,
                     strategy=self.diffevolstrategy,
@@ -1735,10 +1746,10 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def print_qtextbox(self, msg):
         """Print message in the GUI log text box"""
-        self.thTextBox.moveCursor(QTextCursor.End)
+        self.thTextBox.moveCursor(QTextCursorAny.End)
         self.thTextBox.insertHtml(msg)
         self.thTextBox.verticalScrollBar().setValue(self.thTextBox.verticalScrollBar().maximum())
-        self.thTextBox.moveCursor(QTextCursor.End)
+        self.thTextBox.moveCursor(QTextCursorAny.End)
 
     def get_material_parameters(self):
         """Get theory parameters from materials database"""
@@ -1999,36 +2010,36 @@ class QTheory(QWidget, Ui_TheoryTab):
                     p_label = p.display_label()
                     if p.opt_type == OptType.const:
                         if p.type == ParameterType.string:
-                            item = QTreeWidgetItem(self.thParamTable, [p_label, p.value, "N/A"])
+                            item = QTreeWidgetItem(self.thParamTable, [p_label, cast(str, p.value), "N/A"])
                         else:
                             item = QTreeWidgetItem(
                                 self.thParamTable,
                                 [p_label, "%0.3g" % p.display_value(), "N/A"],
                             )
-                        item.setData(0, Qt.UserRole, p.name)
-                        item.setCheckState(0, Qt.PartiallyChecked)
-                        item.setFlags(item.flags() & ~Qt.ItemIsUserCheckable)
+                        item.setData(0, QtAny.UserRole, p.name)
+                        item.setCheckState(0, QtAny.PartiallyChecked)
+                        item.setFlags(item.flags() & ~QtAny.ItemIsUserCheckable)
                     else:
                         try:
                             err = "%0.3g" % p.display_value(p.error)
                         except:
                             err = "-"
                         if p.type == ParameterType.string:
-                            item = QTreeWidgetItem(self.thParamTable, [p_label, p.value, "N/A"])
+                            item = QTreeWidgetItem(self.thParamTable, [p_label, cast(str, p.value), "N/A"])
                         else:
                             item = QTreeWidgetItem(
                                 self.thParamTable,
                                 [p_label, "%0.3g" % p.display_value(), err],
                             )
-                        item.setData(0, Qt.UserRole, p.name)
+                        item.setData(0, QtAny.UserRole, p.name)
                         if p.opt_type == OptType.opt:
-                            item.setCheckState(0, Qt.Checked)
+                            item.setCheckState(0, QtAny.Checked)
                         elif p.opt_type == OptType.nopt:
-                            item.setCheckState(0, Qt.Unchecked)
+                            item.setCheckState(0, QtAny.Unchecked)
 
-                    item.setFlags(item.flags() | Qt.ItemIsEditable)
+                    item.setFlags(item.flags() | QtAny.ItemIsEditable)
                     item.setToolTip(0, p.description)
-            self.thParamTable.header().resizeSections(QHeaderView.ResizeToContents)
+            self.thParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         finally:
             self.thParamTable.blockSignals(previous_block_state)
 
@@ -2037,7 +2048,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         Or edit all parameters fittingoptionsdialog if parameter name is double clicked
         """
         if column == 0:
-            p_name = item.data(0, Qt.UserRole) or item.text(0)
+            p_name = item.data(0, QtAny.UserRole) or item.text(0)
             d = EditThParametersDialog(self, p_name)
             if d.exec_():
                 for pname in self.parameters:
@@ -2083,11 +2094,11 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def handle_parameterItemChanged(self, item, column):
         """Modify parameter values when changed in the theory table"""
-        param_changed = item.data(0, Qt.UserRole) or item.text(0)
+        param_changed = item.data(0, QtAny.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
-            if item.checkState(0) == Qt.Checked:
+            if item.checkState(0) == QtAny.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
-            elif item.checkState(0) == Qt.Unchecked:
+            elif item.checkState(0) == QtAny.Unchecked:
                 self.parameters[param_changed].opt_type = OptType.nopt
             return
         # else, assign the entered value

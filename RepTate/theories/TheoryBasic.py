@@ -129,7 +129,7 @@ class TheoryPolynomial(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
         self.spinbox.setPrefix("degree ")
-        self.spinbox.setValue(self.parameters["n"].value)  # initial value
+        self.spinbox.setValue(int(self.parameters["n"].value))  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
@@ -232,7 +232,9 @@ class TheoryPowerLaw(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
         for j in range(1, tt.num_columns):
-            tt.data[:, j] = self.parameters["a"].value * tt.data[:, 0] ** self.parameters["b"].value
+            a: Any = self.parameters["a"].value
+            b: Any = self.parameters["b"].value
+            tt.data[:, j] = a * tt.data[:, 0] ** b
 
 
 r"""
@@ -440,7 +442,7 @@ class TheoryAlgebraicExpression(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
         self.spinbox.setToolTip("Number of parameters")
-        self.spinbox.setValue(self.parameters["n"].value)  # initial value
+        self.spinbox.setValue(int(self.parameters["n"].value))  # initial value
         tb.addWidget(self.spinbox)
         self.expressionCB = QComboBox()
         self.expressionCB.setToolTip("Algebraic expression")

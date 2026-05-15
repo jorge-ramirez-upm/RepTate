@@ -39,6 +39,7 @@ Organise the mmultiple Matplotlib views
 import sys
 import enum
 import math
+from importlib import import_module
 from typing import Any, ClassVar, TypeAlias
 
 from RepTate.core.CmdBase import CmdBase
@@ -52,11 +53,13 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 # from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.backends.backend_qtagg import FigureCanvas
+FigureCanvas: Any = import_module("matplotlib.backends.backend_qtagg").FigureCanvas
 import matplotlib.gridspec as gridspec
 
 GridSpecList: TypeAlias = list[Any]
 HiddenTabList: TypeAlias = list[list[Any]]
+QTabWidgetAny: Any = QTabWidget
+QtAny: Any = Qt
 
 
 class PlotOrganizationType(enum.Enum):
@@ -181,7 +184,7 @@ class MultiView(QWidget):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.plotselecttabWidget = QTabWidget(self)
         self.plotselecttabWidget.setMaximumSize(QSize(22, 1000))
-        self.plotselecttabWidget.setTabPosition(QTabWidget.West)
+        self.plotselecttabWidget.setTabPosition(QTabWidgetAny.West)
         self.plotselecttabWidget.setTabShape(QTabWidget.TabShape.Triangular)
         self.plotselecttabWidget.setUsesScrollButtons(False)
         self.plotselecttabWidget.setDocumentMode(False)
@@ -233,7 +236,7 @@ class MultiView(QWidget):
 
         # self.canvas = FigureCanvasQTAgg(self.figure)
         self.canvas = FigureCanvas(self.figure)
-        self.canvas.setFocusPolicy(Qt.ClickFocus)
+        self.canvas.setFocusPolicy(QtAny.ClickFocus)
         self.canvas.setFocus()
         self.plotcontainer.addWidget(self.canvas)
         self.init_plot(0)
@@ -336,7 +339,7 @@ class MultiView(QWidget):
         self.parent_application.current_viewtab = index
         if index == 0:  # multiplots
             view_name = self.parent_application.multiviews[0].name
-            ind = self.parent_application.viewComboBox.findText(view_name, Qt.MatchExactly)
+            ind = self.parent_application.viewComboBox.findText(view_name, QtAny.MatchExactly)
             self.parent_application.viewComboBox.blockSignals(True)
             self.parent_application.viewComboBox.setCurrentIndex(ind)  # set the view combobox according to current view
             self.parent_application.viewComboBox.blockSignals(False)
@@ -377,31 +380,31 @@ class MultiView(QWidget):
         plt.draw()
         self.parent_application.set_view_tools(view_name)
 
-    # def organizeHorizontal(self, nplots):
-    #     gs = gridspec.GridSpec(
-    #         1,
-    #         self.nplots,
-    #         left=self.LEFT,
-    #         right=self.RIGHT,
-    #         bottom=self.BOTTOM,
-    #         top=self.TOP,
-    #         wspace=self.WSPACE,
-    #         hspace=self.HSPACE,
-    #     )
-    #     return gs
+    def organizeHorizontal(self, nplots: int) -> Any:
+        gs = gridspec.GridSpec(
+            1,
+            nplots,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
+        return gs
 
-    # def organizeVertical(self, nplots):
-    #     gs = gridspec.GridSpec(
-    #         self.nplots,
-    #         1,
-    #         left=self.LEFT,
-    #         right=self.RIGHT,
-    #         bottom=self.BOTTOM,
-    #         top=self.TOP,
-    #         wspace=self.WSPACE,
-    #         hspace=self.HSPACE,
-    #     )
-    #     return gs
+    def organizeVertical(self, nplots: int) -> Any:
+        gs = gridspec.GridSpec(
+            nplots,
+            1,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
+        return gs
 
     def organizeOptimalRow(self, nplots: int, ncols: int) -> GridSpecList:
         row = math.ceil(nplots / ncols)
@@ -449,28 +452,28 @@ class MultiView(QWidget):
                 gs.append(gstmp[i, j])
         return gs
 
-    # def organizeOptimalColumn(self, nplots, ncols):
-    #     row = math.ceil(nplots / ncols)
-    #     gstmp = gridspec.GridSpec(
-    #         row,
-    #         ncols,
-    #         left=self.LEFT,
-    #         right=self.RIGHT,
-    #         bottom=self.BOTTOM,
-    #         top=self.TOP,
-    #         wspace=self.WSPACE,
-    #         hspace=self.HSPACE,
-    #     )
-    #     gs = []
-    #     # First column might be different
-    #     gs.append(gstmp[0 : row * ncols - nplots + 1, 0])
-    #     for j in range(row * ncols - nplots + 1, row):
-    #         gs.append(gstmp[j, 0])
-    #     for i in range(1, ncols):
-    #         for j in range(row):
-    #             gs.append(gstmp[j, i])
+    def organizeOptimalColumn(self, nplots: int, ncols: int) -> GridSpecList:
+        row = math.ceil(nplots / ncols)
+        gstmp = gridspec.GridSpec(
+            row,
+            ncols,
+            left=self.LEFT,
+            right=self.RIGHT,
+            bottom=self.BOTTOM,
+            top=self.TOP,
+            wspace=self.WSPACE,
+            hspace=self.HSPACE,
+        )
+        gs: GridSpecList = []
+        # First column might be different
+        gs.append(gstmp[0 : row * ncols - nplots + 1, 0])
+        for j in range(row * ncols - nplots + 1, row):
+            gs.append(gstmp[j, 0])
+        for i in range(1, ncols):
+            for j in range(row):
+                gs.append(gstmp[j, i])
 
-    #     return gs
+        return gs
 
     def organizeplots(
         self,
