@@ -368,17 +368,23 @@ class ApplicationGt(QApplicationWindow):
             except AttributeError:
                 pass
 
+    def _gamma_from_file_parameters(self, file_parameters: Any) -> float:
+        """Return strain normalization from file parameters, defaulting to one."""
+        if file_parameters is None:
+            return 1.0
+        value = file_parameters.get("gamma")
+        if value is None:
+            return 1.0
+        gamma = float(value)
+        if gamma == 0:
+            return 1.0
+        return gamma
+
     def viewGt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
         """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        value = file_parameters.get("gamma")
-        if value is None:
-            gamma = 1
-        else:
-            gamma = float(value)
-            if gamma == 0:
-                gamma = 1
+        gamma = self._gamma_from_file_parameters(file_parameters)
         x[:, 0] = dt.data[:, 0]
         y[:, 0] = dt.data[:, 1] / gamma
         return x, y, True
@@ -387,13 +393,7 @@ class ApplicationGt(QApplicationWindow):
         """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
-        value = file_parameters.get("gamma")
-        if value is None:
-            gamma = 1
-        else:
-            gamma = float(value)
-            if gamma == 0:
-                gamma = 1
+        gamma = self._gamma_from_file_parameters(file_parameters)
         x[:, 0] = np.log10(dt.data[:, 0])
         y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
@@ -406,13 +406,7 @@ class ApplicationGt(QApplicationWindow):
             QMessageBox.warning(self, "Error", error_msg)
             return
         n = len(data_x)
-        value = file_parameters.get("gamma")
-        if value is None:
-            gamma = 1
-        else:
-            gamma = float(value)
-            if gamma == 0:
-                gamma = 1
+        gamma = self._gamma_from_file_parameters(file_parameters)
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
@@ -436,13 +430,7 @@ class ApplicationGt(QApplicationWindow):
         yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
-        value = file_parameters.get("gamma")
-        if value is None:
-            gamma = 1
-        else:
-            gamma = float(value)
-            if gamma == 0:
-                gamma = 1
+        gamma = self._gamma_from_file_parameters(file_parameters)
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
@@ -513,13 +501,7 @@ class ApplicationGt(QApplicationWindow):
         yunique = data_y[indunique]
         data_x = xunique
         data_y = yunique
-        value = file_parameters.get("gamma")
-        if value is None:
-            gamma = 1
-        else:
-            gamma = float(value)
-            if gamma == 0:
-                gamma = 1
+        gamma = self._gamma_from_file_parameters(file_parameters)
         data_y /= gamma
         x = np.zeros((n, 2))
         y = np.zeros((n, 2))
