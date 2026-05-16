@@ -77,9 +77,6 @@ class TheoryTobitaBatch(QTheory):
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
 
-    parameters: Any
-    tables: Any
-
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
@@ -223,15 +220,15 @@ class TheoryTobitaBatch(QTheory):
         # fin_conv, tau, beta, Cb, Cs, monmass, Me:double
 
         # get parameters
-        tau: Any = self.parameters["tau"].value
-        beta: Any = self.parameters["beta"].value
-        Cb: Any = self.parameters["Cb"].value
-        Cs: Any = self.parameters["Cs"].value
-        fin_conv: Any = self.parameters["fin_conv"].value
-        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        tau = float(self.parameters["tau"].value)
+        beta = float(self.parameters["beta"].value)
+        Cb = float(self.parameters["Cb"].value)
+        Cs = float(self.parameters["Cs"].value)
+        fin_conv = float(self.parameters["fin_conv"].value)
+        numtomake = int(round(float(self.parameters["num_to_make"].value)))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me: Any = self.parameters["Me"].value
-        nbins: Any = int(np.round(self.parameters["nbin"].value))
+        Me = float(self.parameters["Me"].value)
+        nbins = int(round(float(self.parameters["nbin"].value)))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

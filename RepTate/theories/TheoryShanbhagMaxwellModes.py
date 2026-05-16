@@ -43,6 +43,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -94,11 +95,6 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.3933/ApplRheol-23-24628"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes"
     single_file: ClassVar[bool] = True
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-    axarr: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
@@ -197,7 +193,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         # GRAPHIC MODES
         self.graphicmodes = []
         self.spectrum = []
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         self.scont = np.zeros(ns)
         self.Hcont = np.zeros(ns)
         self.sdisc = np.zeros(ns)
@@ -662,9 +658,10 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         #
         rhoF = interp1d_any(lam, rho, bounds_error=False, fill_value=(rho[0], rho[-1]))
 
-        if rhoF(lamC) <= self.parameters["rho_cutoff"].value:
+        rho_cutoff = float(self.parameters["rho_cutoff"].value)
+        if rhoF(lamC) <= rho_cutoff:
             try:
-                eridx = (np.abs(rhoF(lami) - self.parameters["rho_cutoff"].value)).argmin()
+                eridx = (np.abs(rhoF(lami) - rho_cutoff)).argmin()
                 if lami[eridx] > lamC:
                     lamC = lami[eridx]
             except:
@@ -690,13 +687,13 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
                     also gives an error estimate
         """
 
-        plateau = self.parameters["plateau"].value
+        plateau = bool(self.parameters["plateau"].value)
         if plateau:
             G0 = argv[0]
 
-        lamDensity: Any = self.parameters["lamDensity"].value
-        lam_max: Any = self.parameters["lam_max"].value
-        lam_min: Any = self.parameters["lam_min"].value
+        lamDensity = int(self.parameters["lamDensity"].value)
+        lam_max = float(self.parameters["lam_max"].value)
+        lam_min = float(self.parameters["lam_min"].value)
         npoints = int(lamDensity * (np.log10(lam_max) - np.log10(lam_min)))
         hlam = (lam_max / lam_min) ** (1.0 / (npoints - 1.0))
         lam = lam_min * hlam ** np.arange(npoints)
@@ -765,7 +762,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         #
         # Dialling in the Smoothness Factor
         #
-        SmFacLam = self.parameters["SmFacLam"].value
+        SmFacLam = int(self.parameters["SmFacLam"].value)
         if SmFacLam > 0:
             lamM = np.exp(np.log(lamM) + SmFacLam * (max(np.log(lam)) - np.log(lamM)))
         elif SmFacLam < 0:
@@ -1055,7 +1052,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         return residual
 
-    def ShanBhagMaxwellModesFrequency(self, f: Any = None) -> None:
+    def ShanBhagMaxwellModesFrequency(self, f: FileLike) -> None:
         """Function that calculates the spectrum"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -1091,20 +1088,21 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = w
 
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         wmin = w[0]
         wmax = w[n - 1]
         smin: Any
         smax: Any
 
         # determine frequency window
-        if self.parameters["FreqEnd"].value == 1:
+        FreqEnd = int(self.parameters["FreqEnd"].value)
+        if FreqEnd == 1:
             smin = np.exp(-np.pi / 2) / wmax
             smax = np.exp(np.pi / 2) / wmin
-        elif self.parameters["FreqEnd"].value == 2:
+        elif FreqEnd == 2:
             smin = 1.0 / wmax
             smax = 1.0 / wmin
-        elif self.parameters["FreqEnd"].value == 3:
+        elif FreqEnd == 3:
             smin = np.exp(+np.pi / 2) / wmax
             smax = np.exp(-np.pi / 2) / wmin
 
@@ -1115,7 +1113,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         self.Qprint("Initial Set up...", end="")
         tic = time.time()
-        plateau = self.parameters["plateau"].value
+        plateau = bool(self.parameters["plateau"].value)
         if plateau:
             Hgs, G0 = self.InitializeH(Gexp, s, kernMat, np.min(Gexp))
         else:
@@ -1127,13 +1125,12 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         # Find Optimum Lambda with 'lcurve'
         self.Qprint("Building the L-curve ...", end="")
-        if self.parameters["lamC"].value == 0:
+        lamC = float(self.parameters["lamC"].value)
+        if lamC == 0:
             if plateau:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat, G0)
             else:
                 lamC, lam, rho, eta, logP, Hlam = self.lcurve(Gexp, Hgs, kernMat)
-        else:
-            lamC = self.parameters["lamC"].value
 
         te = time.time() - tic
         self.Qprint("({0:.1f} s)".format(te))
@@ -1152,7 +1149,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         self.Qprint("done ({0:.1f} s)".format(te))
 
         # Save inferred H(s) and Gw
-        if self.parameters["lamC"].value != 0:
+        if float(self.parameters["lamC"].value) != 0:
             if plateau:
                 self.K = self.kernel_prestore(H, kernMat, G0)
                 # np.savetxt('output/H.dat', np.c_[s, H], fmt='%e', header='G0 = {0:0.3e}'.format(G0))
@@ -1196,7 +1193,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         self.Qprint("<b>DISCRETE SPECTRUM</b>")
 
         # range of N scanned
-        MaxNumModes = self.parameters["MaxNumModes"].value
+        MaxNumModes = int(self.parameters["MaxNumModes"].value)
         if MaxNumModes == 0:
             Nmax = min(np.floor(3.0 * np.log10(max(w) / min(w))), n / 4)
             # maximum N
@@ -1210,7 +1207,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         npts = len(Nv)
 
         # range of wtBaseDist scanned
-        deltaBaseWeightDist = self.parameters["deltaBaseWeightDist"].value
+        deltaBaseWeightDist = float(self.parameters["deltaBaseWeightDist"].value)
         wtBase = deltaBaseWeightDist * np.arange(1, int(1.0 / deltaBaseWeightDist))
         AICbst = np.zeros(len(wtBase))
         Nbst = np.zeros(len(wtBase))  # nominal number of modes
@@ -1265,7 +1262,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         else:
             g = g[indx]
 
-        minTauSpacing = self.parameters["minTauSpacing"].value
+        minTauSpacing = float(self.parameters["minTauSpacing"].value)
         while min(tauSpacing) < minTauSpacing and itry < 3:
             self.Qprint("Tau Spacing < minTauSpacing")
 
@@ -1379,7 +1376,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         view = self.parent_dataset.parent_application.current_view
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         data_table_tmp.num_rows = ns
         data_table_tmp.data = np.zeros((ns, 3))
         data_table_tmp.data[:, 0] = np.reciprocal(self.scont)
@@ -1438,11 +1435,6 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1002/mats.201900005"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes"
     single_file: ClassVar[bool] = True
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-    axarr: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
@@ -1538,7 +1530,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # GRAPHIC MODES
         self.graphicmodes = []
         self.spectrum = []
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         self.scont = np.zeros(ns)
         self.Hcont = np.zeros(ns)
         self.sdisc = np.zeros(ns)
@@ -1878,7 +1870,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         #
         rhoF = interp1d_any(lam, rho)
 
-        rho_cutoff = self.parameters["rho_cutoff"].value
+        rho_cutoff = float(self.parameters["rho_cutoff"].value)
         if rhoF(lamC) <= rho_cutoff:
             try:
                 eridx = (np.abs(rhoF(lami) - rho_cutoff)).argmin()
@@ -1907,13 +1899,13 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
                     also gives an error estimate
 
         """
-        plateau = self.parameters["plateau"].value
+        plateau = bool(self.parameters["plateau"].value)
         if plateau:
             G0 = argv[0]
 
-        lamDensity: Any = self.parameters["lamDensity"].value
-        lam_max: Any = self.parameters["lam_max"].value
-        lam_min: Any = self.parameters["lam_min"].value
+        lamDensity = int(self.parameters["lamDensity"].value)
+        lam_max = float(self.parameters["lam_max"].value)
+        lam_min = float(self.parameters["lam_min"].value)
         npoints = int(lamDensity * (np.log10(lam_max) - np.log10(lam_min)))
         hlam = (lam_max / lam_min) ** (1.0 / (npoints - 1.0))
         lam = lam_min * hlam ** np.arange(npoints)
@@ -1982,7 +1974,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         #
         # Dialling in the Smoothness Factor
         #
-        SmFacLam = self.parameters["SmFacLam"].value
+        SmFacLam = int(self.parameters["SmFacLam"].value)
         if SmFacLam > 0:
             lamM = np.exp(np.log(lamM) + SmFacLam * (max(np.log(lam)) - np.log(lamM)))
         elif SmFacLam < 0:
@@ -2373,7 +2365,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         return residual
 
-    def MaxwellModesTime(self, f: Any = None) -> None:
+    def MaxwellModesTime(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -2392,26 +2384,27 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         # Sanitize the input: remove repeated values and space data homogeneously
         t, indices = np.unique(t, return_index=True)
         Gexp = Gexp[indices]
-        f = interp1d_any(t, Gexp, fill_value="extrapolate")
+        fint = interp1d_any(t, Gexp, fill_value="extrapolate")
         t = np.logspace(np.log10(np.min(t)), np.log10(np.max(t)), max(len(t), 100))
-        Gexp = f(t)
+        Gexp = fint(t)
         self.tfit = np.copy(t)
 
         n = len(t)
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         tmin = t[0]
         tmax = t[n - 1]
         smin: Any
         smax: Any
 
         # determine frequency window
-        if self.parameters["FreqEnd"].value == 1:
+        FreqEnd = int(self.parameters["FreqEnd"].value)
+        if FreqEnd == 1:
             smin = np.exp(-np.pi / 2) * tmin
             smax = np.exp(np.pi / 2) * tmax
-        elif self.parameters["FreqEnd"].value == 2:
+        elif FreqEnd == 2:
             smin = tmin
             smax = tmax
-        elif self.parameters["FreqEnd"].value == 3:
+        elif FreqEnd == 3:
             smin = np.exp(+np.pi / 2) * tmin
             smax = np.exp(-np.pi / 2) * tmax
 
@@ -2420,7 +2413,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         kernMat = self.getKernMat(s, t)
         tic = time.time()
-        plateau = self.parameters["plateau"].value
+        plateau = bool(self.parameters["plateau"].value)
 
         self.Qprint("Initial Set up...", end="")
         if plateau:
@@ -2433,7 +2426,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         tic = time.time()
 
         # Find Optimum Lambda with 'lcurve'
-        lamC = self.parameters["lamC"].value
+        lamC = float(self.parameters["lamC"].value)
         self.Qprint("Building the L-curve ...", end="")
         if lamC == 0:
             if plateau:
@@ -2481,7 +2474,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         self.Qprint("<b>DISCRETE SPECTRUM</b>")
 
         # range of N scanned
-        MaxNumModes = self.parameters["MaxNumModes"].value
+        MaxNumModes = int(self.parameters["MaxNumModes"].value)
 
         if MaxNumModes == 0:
             Nmax = min(np.floor(3.0 * np.log10(max(t) / min(t))), n / 4)
@@ -2496,7 +2489,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         npts = len(Nv)
 
         # range of wtBaseDist scanned
-        deltaBaseWeightDist = self.parameters["deltaBaseWeightDist"].value
+        deltaBaseWeightDist = float(self.parameters["deltaBaseWeightDist"].value)
         wtBase = deltaBaseWeightDist * np.arange(1, int(1.0 / deltaBaseWeightDist))
         AICbst = np.zeros(len(wtBase))
         Nbst = np.zeros(len(wtBase))  # nominal number of modes
@@ -2555,7 +2548,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         else:
             g = g[indx]
 
-        minTauSpacing = self.parameters["minTauSpacing"].value
+        minTauSpacing = float(self.parameters["minTauSpacing"].value)
         while min(tauSpacing) < minTauSpacing and itry < 3:
             self.Qprint("Tau Spacing < minTauSpacing")
 
@@ -2679,7 +2672,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         view = self.parent_dataset.parent_application.current_view
         data_table_tmp = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
-        ns: Any = self.parameters["ns"].value
+        ns = int(self.parameters["ns"].value)
         data_table_tmp.num_rows = ns
         data_table_tmp.data = np.zeros((ns, 2))
         data_table_tmp.data[:, 0] = self.scont

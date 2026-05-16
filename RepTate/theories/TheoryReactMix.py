@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtCore import Signal
 
@@ -116,7 +117,7 @@ class TheoryReactMix(QTheory):
         # rgt.handle_btn_prio_senio(self, checked)
 
 
-    def Calc(self, f: Any = None) -> Any:
+    def Calc(self, f: FileLike) -> Any:
         """ReactMix function"""
         self.calcexists = False
         nbin_value: Any = self.parameters["nbin"].value

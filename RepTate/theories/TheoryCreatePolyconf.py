@@ -261,9 +261,6 @@ class TheoryCreatePolyconf(QTheory):
 
     signal_param_dialog = Signal(object)
 
-    parameters: Any
-    tables: Any
-
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)

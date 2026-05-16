@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 from math import sqrt
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 
 from PySide6.QtWidgets import QToolBar
@@ -168,7 +169,7 @@ class TheoryCarreauYasuda(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-    def function_CarreauYasuda(self, f: Any = None) -> None:
+    def function_CarreauYasuda(self, f: FileLike) -> None:
         """Carreau-Yasuda equation for the complex viscosity"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

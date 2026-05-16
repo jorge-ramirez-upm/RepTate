@@ -40,6 +40,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu
@@ -72,12 +73,6 @@ class TheoryPETS(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.4974908"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#PETS-equation"
     single_file: ClassVar[bool] = False
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-    ax: Any
-    axarr: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -450,7 +445,7 @@ class TheoryPETS(QTheory):
 
         return [df, dldeq, dQAxx, dQAyy, dQDxx, dQDyy]
 
-    def PETS(self, f: Any = None) -> None:
+    def PETS(self, f: FileLike) -> None:
         """Calculates the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -466,15 +461,15 @@ class TheoryPETS(QTheory):
         t = np.concatenate([[0], t])
 
         flow_rate = float(f.file_parameters["gdot"])
-        delta = self.parameters["delta"].value
-        beta = self.parameters["beta"].value
-        tau_free = self.parameters["tau_free"].value
-        tau_as = self.parameters["tau_as"].value
-        tauS = self.parameters["tauS"].value
-        tauD = self.parameters["tauD"].value
-        lmax = self.parameters["lmax"].value
-        r_a = self.parameters["r_a"].value
-        Z = self.parameters["Z"].value
+        delta = float(self.parameters["delta"].value)
+        beta = float(self.parameters["beta"].value)
+        tau_free = float(self.parameters["tau_free"].value)
+        tau_as = float(self.parameters["tau_as"].value)
+        tauS = float(self.parameters["tauS"].value)
+        tauD = float(self.parameters["tauD"].value)
+        lmax = float(self.parameters["lmax"].value)
+        r_a = float(self.parameters["r_a"].value)
+        Z = float(self.parameters["Z"].value)
         self.RD_MAX = 1 / (0.01 * min(tau_free, min(tauS, min(tauS, 0.0001 / flow_rate))))
         # flow geometry and finite extensibility
         phi0 = 1 / (1 + tau_free / tau_as)
@@ -503,10 +498,10 @@ class TheoryPETS(QTheory):
         except EndComputationRequested:
             pass
 
-        G = self.parameters["G"].value
+        G = float(self.parameters["G"].value)
         if self.flow_mode == FlowMode.shear:
             # res_vec = [f, ldeq, QAxx, QAyy, QAxy, QDxx, QDyy, QDxy]
-            f = np.delete(res_vec[:, 0], [0])
+            attached_fraction = np.delete(res_vec[:, 0], [0])
             # QAxx = np.delete(res_vec[:, 2], [0])
             # QAyy = np.delete(res_vec[:, 3], [0])
             QAxy = np.delete(res_vec[:, 4], [0])
@@ -514,14 +509,17 @@ class TheoryPETS(QTheory):
             # QDyy = np.delete(res_vec[:, 6], [0])
             QDxy = np.delete(res_vec[:, 7], [0])
             #  build stress array
-            tt.data[:, 1] = G * (f * QAxy + (1 - f) * QDxy)
+            tt.data[:, 1] = G * (attached_fraction * QAxy + (1 - attached_fraction) * QDxy)
 
         elif self.flow_mode == FlowMode.uext:
             # res_vec = [f, ldeq, QAxx, QAyy, QDxx, QDyy]
-            f = np.delete(res_vec[:, 0], [0])
+            attached_fraction = np.delete(res_vec[:, 0], [0])
             QAxx = np.delete(res_vec[:, 2], [0])
             QAyy = np.delete(res_vec[:, 3], [0])
             QDxx = np.delete(res_vec[:, 4], [0])
             QDyy = np.delete(res_vec[:, 5], [0])
             #  build stress array
-            tt.data[:, 1] = G * (f * (QAxx - QAyy) + (1 - f) * (QDxx - QDyy))
+            tt.data[:, 1] = G * (
+                attached_fraction * (QAxx - QAyy)
+                + (1 - attached_fraction) * (QDxx - QDyy)
+            )

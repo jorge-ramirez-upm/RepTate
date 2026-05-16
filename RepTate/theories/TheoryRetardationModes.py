@@ -41,6 +41,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -294,7 +295,7 @@ class TheoryRetardationModesTime(QTheory):
             J[i] = 1.0 / np.power(10, self.parameters["logJ%02d" % i].value)
         return tau, J, True
 
-    def RetardationModesTime(self, f: Any = None) -> None:
+    def RetardationModesTime(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

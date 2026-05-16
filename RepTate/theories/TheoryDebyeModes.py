@@ -41,6 +41,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -282,7 +283,7 @@ class TheoryDebyeModesFrequency(QTheory):
             eps[i] = np.power(10, self.parameters["logDe%02d" % i].value)
         return tau, eps, True
 
-    def DebyeModesFrequency(self, f: Any = None) -> None:
+    def DebyeModesFrequency(self, f: FileLike) -> None:
         """Actual function that calculates the thoery"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

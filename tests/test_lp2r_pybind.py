@@ -420,7 +420,7 @@ def test_lp2r_lve_build_solver_uses_mixed_components(monkeypatch):
     def parameter(value):
         return SimpleNamespace(value=value)
 
-    theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+    theory: Any = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
     theory.parameters = {
         "MK": parameter(0.5),
         "Me": parameter(5.0),
@@ -474,7 +474,7 @@ def test_lp2r_lve_default_component_tracks_visible_parameters():
     def parameter(value):
         return SimpleNamespace(value=value)
 
-    theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+    theory: Any = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
     theory.parameters = {
         "n": parameter(12),
         "Mw": parameter(250.0),
@@ -504,7 +504,7 @@ def test_lp2r_lve_default_component_file_moments_use_defaults_and_derivations():
         return SimpleNamespace(value=value)
 
     def theory_with_file_params(file_parameters):
-        theory = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
+        theory: Any = TheoryLP2RLVE.__new__(TheoryLP2RLVE)
         theory.parameters = {
             "n": parameter(0),
             "Mw": parameter(0.0),

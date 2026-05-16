@@ -36,6 +36,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 
 
@@ -85,7 +86,7 @@ class TheoryArrhenius(QTheory):
             opt_type=OptType.opt,
         )
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """Arrhenius function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

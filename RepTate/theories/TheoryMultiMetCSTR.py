@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QApplication
@@ -65,8 +66,6 @@ class TheoryMultiMetCSTR(QTheory):
     signal_request_arm = Signal(object)
     signal_mulmet_dialog = Signal(object)
 
-    parameters: Any
-    tables: Any
     extra_data: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
@@ -191,14 +190,14 @@ class TheoryMultiMetCSTR(QTheory):
         self.pvalues[1][2] = "1.5"
         self.pvalues[1][3] = "0.3"
 
-    def Calc(self, f: Any = None) -> Any:
+    def Calc(self, f: FileLike) -> Any:
         """MultiMetCSTR function that returns the square of y"""
 
         # get parameters
-        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        numtomake = int(round(float(self.parameters["num_to_make"].value)))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me: Any = self.parameters["Me"].value
-        nbins: Any = int(np.round(self.parameters["nbin"].value))
+        Me = float(self.parameters["Me"].value)
+        nbins = int(round(float(self.parameters["nbin"].value)))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

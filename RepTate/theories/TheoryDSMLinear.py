@@ -59,10 +59,6 @@ class TheoryDSMLinear(QTheory):
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)

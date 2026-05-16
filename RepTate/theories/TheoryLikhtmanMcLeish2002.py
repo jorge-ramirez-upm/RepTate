@@ -43,6 +43,7 @@ import numpy as np
 from numpy import interp
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.core.DraggableArtists import DragType, DraggableHLine, DraggableVLine
 from PySide6.QtWidgets import QToolBar, QLabel, QLineEdit, QMessageBox
 from PySide6.QtGui import QIcon, QDoubleValidator
@@ -70,10 +71,6 @@ class TheoryLikhtmanMcLeish2002(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1021/ma0200219"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#likhtman-mcleish-theory"
     single_file: ClassVar[bool] = False
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
@@ -411,7 +408,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         self.linkMeGeaction.setChecked(checked)
         self.linkMeGeaction_change(checked)
 
-    def LikhtmanMcLeish2002(self, f: Any = None) -> None:
+    def LikhtmanMcLeish2002(self, f: FileLike) -> None:
         """Get the theory results from precalculated data"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

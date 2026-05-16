@@ -41,6 +41,7 @@ from numpy.typing import NDArray
 
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 
 
@@ -93,7 +94,7 @@ If the theory does not provide modes, simply delete this function."""
 If not, you can safely delete it."""
         pass
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """THIS IS THE FUNCTION THAT CALCULATES THE THEORY"""
         ft: DataTable = f.data_table
         tt: DataTable = self.tables[f.file_name_short]

@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Signal
@@ -74,9 +75,6 @@ reactor during free-radical polymerisation.
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
-
-    parameters: Any
-    tables: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
@@ -208,18 +206,18 @@ reactor during free-radical polymerisation.
         """This theory does not calculate the error"""
         pass
 
-    def Calc(self, f: Any = None) -> Any:
+    def Calc(self, f: FileLike) -> Any:
         """Calculate the theory"""
 
         # get parameters
-        tau: Any = self.parameters["tau"].value
-        beta: Any = self.parameters["beta"].value
-        lambda_: Any = self.parameters["lambda"].value
-        sigma: Any = self.parameters["sigma"].value
-        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        tau = float(self.parameters["tau"].value)
+        beta = float(self.parameters["beta"].value)
+        lambda_ = float(self.parameters["lambda"].value)
+        sigma = float(self.parameters["sigma"].value)
+        numtomake = int(round(float(self.parameters["num_to_make"].value)))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me: Any = self.parameters["Me"].value
-        nbins: Any = int(np.round(self.parameters["nbin"].value))
+        Me = float(self.parameters["Me"].value)
+        nbins = int(round(float(self.parameters["nbin"].value)))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

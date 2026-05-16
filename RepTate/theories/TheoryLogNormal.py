@@ -36,6 +36,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 
 
@@ -91,7 +92,7 @@ class TheoryLogNormal(QTheory):
             min_value=0,
         )
 
-    def LogNormal(self, f: Any = None) -> None:
+    def LogNormal(self, f: FileLike) -> None:
         """LogNormal function"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

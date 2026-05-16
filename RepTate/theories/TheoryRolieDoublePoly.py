@@ -107,12 +107,6 @@ class TheoryRolieDoublePoly(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#rolie-double-poly-equations"
     single_file: ClassVar[bool] = False
 
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-    ax: Any
-    axarr: Any
-
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)

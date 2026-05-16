@@ -43,6 +43,7 @@ from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMethod
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -90,10 +91,6 @@ class TheoryPomPom(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1122/1.550933"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
     single_file: ClassVar[bool] = False
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -450,7 +447,7 @@ class TheoryPomPom(QTheory):
                 dydx = l * gdot * Axy / Trace - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
 
-    def calculate_PomPom(self, f: Any = None) -> None:
+    def calculate_PomPom(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -480,14 +477,14 @@ class TheoryPomPom(QTheory):
 
         # create parameters list
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = int(self.parameters["nmodes"].value)
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            q: Any = np.round(self.parameters["q%02d" % i].value)
-            tauB: Any = self.parameters["tauB%02d" % i].value
-            ratio: Any = self.parameters["ratio%02d" % i].value
+            G = float(self.parameters["G%02d" % i].value)
+            q = int(round(float(self.parameters["q%02d" % i].value)))
+            tauB = float(self.parameters["tauB%02d" % i].value)
+            ratio = float(self.parameters["ratio%02d" % i].value)
             tauS = tauB / ratio
             p = [q, tauB, tauS, flow_rate]
 
@@ -528,7 +525,7 @@ class TheoryPomPom(QTheory):
 
                 tt.data[:, 1] += 3 * G * l * l * k
 
-    def calculate_PomPomLAOS(self, f: Any = None) -> None:
+    def calculate_PomPomLAOS(self, f: FileLike) -> None:
         """Calculate the theory in LAOS"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -546,17 +543,17 @@ class TheoryPomPom(QTheory):
         # create parameters list
         g0 = float(f.file_parameters["gamma"])
         w = float(f.file_parameters["omega"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = int(self.parameters["nmodes"].value)
         times = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * times)
         times = np.concatenate([[0], times])
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            q: Any = self.parameters["q%02d" % i].value
-            tauB: Any = self.parameters["tauB%02d" % i].value
-            ratio: Any = self.parameters["ratio%02d" % i].value
+            G = float(self.parameters["G%02d" % i].value)
+            q = float(self.parameters["q%02d" % i].value)
+            tauB = float(self.parameters["tauB%02d" % i].value)
+            ratio = float(self.parameters["ratio%02d" % i].value)
             tauS = tauB / ratio
             p = [q, tauB, tauS, g0, w]
 

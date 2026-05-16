@@ -40,6 +40,7 @@ import os
 from typing import Any, ClassVar
 import numpy as np
 import RepTate
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 import time
 
@@ -70,9 +71,6 @@ class TheoryBobNLVE(QTheory):
     single_file: ClassVar[bool] = False  # False if the theory can be applied to multiple files simultaneously
 
     signal_param_dialog = Signal(object)
-
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "ThBobLVE", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -294,7 +292,7 @@ class TheoryBobNLVE(QTheory):
         """This theory does not calculate the error"""
         pass
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

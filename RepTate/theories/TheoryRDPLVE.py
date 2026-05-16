@@ -38,6 +38,7 @@ Template file for creating a new theory
 import numpy as np
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -80,10 +81,6 @@ class TheoryRDPLVE(QTheory):
     citations: ClassVar[list[str]] = []
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rolie-double-poly-lve"
     single_file: ClassVar[bool] = True  # False if the theory can be applied to multiple files simultaneously
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -407,7 +404,7 @@ class TheoryRDPLVE(QTheory):
                     del self.parameters["tauD%02d" % i]
         return "", True
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

@@ -40,6 +40,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 import RepTate
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from RepTate.gui import Ui_bob_LVE
 import time
@@ -263,7 +264,7 @@ class TheoryBobLVE(QTheory):
         """This theory calculate the error by interpolating the theory solution"""
         self.do_error_interpolated(line="")
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """Create polymer configuration file and calculate distribution characteristics"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

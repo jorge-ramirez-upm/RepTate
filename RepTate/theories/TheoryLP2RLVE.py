@@ -55,6 +55,7 @@ from PySide6.QtWidgets import (
 )
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
+from RepTate.core.typing import FileLike
 from RepTate.core.units import convert_array_to_internal, parse_column_label
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r  # pyright: ignore[reportAttributeAccessIssue]
@@ -319,10 +320,6 @@ class TheoryLP2RLVE(QTheory):
         "start_time",
         "time_ratio",
     ]
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """Constructor."""
@@ -768,9 +765,9 @@ class TheoryLP2RLVE(QTheory):
 
     def default_lognormal_component(self):
         """Return a default lognormal component from the visible Mw/PDI/n values."""
-        npoly: Any = self.parameters["n"].value
-        mw: Any = self.parameters["Mw"].value
-        pdi: Any = self.parameters["PDI"].value
+        npoly = int(self.parameters["n"].value)
+        mw = float(self.parameters["Mw"].value)
+        pdi = float(self.parameters["PDI"].value)
         return self.make_lognormal_component(
             weight=1.0,
             npoly=npoly,
@@ -1238,8 +1235,8 @@ class TheoryLP2RLVE(QTheory):
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
-        m_kuhn: Any = self.parameters["MK"].value
-        m_e: Any = self.parameters["Me"].value
+        m_kuhn = float(self.parameters["MK"].value)
+        m_e = float(self.parameters["Me"].value)
         material.m_kuhn = m_kuhn * 1000.0
         material.m_e = m_e * 1000.0
         material.g0 = self.parameters["G0"].value
@@ -1307,7 +1304,7 @@ class TheoryLP2RLVE(QTheory):
         """Calculate error by interpolating the generated LP2R spectrum."""
         self.do_error_interpolated(line="")
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """Calculate LP2R G' and G'' over the active LVE frequency range."""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -1322,7 +1319,7 @@ class TheoryLP2RLVE(QTheory):
 
         freq_min = float(np.min(omega_data))
         freq_max = float(np.max(omega_data))
-        freq_ratio: Any = self.parameters["freq_ratio"].value
+        freq_ratio = float(self.parameters["freq_ratio"].value)
         if freq_ratio <= 1.0:
             self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
             self._clear_table(tt)

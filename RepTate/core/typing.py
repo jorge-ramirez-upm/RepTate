@@ -24,6 +24,7 @@ class FileLike(Protocol):
     file_name_short: str
     data_table: DataTable
     file_parameters: FileParameters
+    file_type: Any
     active: bool
     with_extra_x: bool
 

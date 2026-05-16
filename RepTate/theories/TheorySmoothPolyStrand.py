@@ -41,6 +41,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
@@ -139,12 +140,6 @@ class TheorySmoothPolyStrand(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1103/PhysRevLett.124.147802"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Crystal/Theory/theory.html"
     single_file: ClassVar[bool] = False
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-    ax: Any
-    axarr: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -911,8 +906,8 @@ class TheorySmoothPolyStrand(QTheory):
 
     def computeFel(self, Fxx: Any, Fyy: Any, Fxy: Any) -> Any:
         """Converts RDP configurations into a free energy change (via nematic order parameter"""
-        Gamma = self.parameters["Gamma"].value
-        Ne = self.parameters["Ne"].value
+        Gamma = float(self.parameters["Gamma"].value)
+        Ne = float(self.parameters["Ne"].value)
 
         tmp = Fxx / 2 + Fyy / 2 + np.sqrt(((Fxx - Fyy) / 2.0) ** 2 + Fxy**2) - 1
 
@@ -920,11 +915,11 @@ class TheorySmoothPolyStrand(QTheory):
 
     def computeQuiescentBarrier(self) -> tuple[Any, Any, Any, Any]:
         """Calculates the GO model quiescent barrier and nucleation rate"""
-        epsilonB = self.parameters["epsilonB"].value
-        muS = self.parameters["muS"].value
-        rhoK = self.parameters["rhoK"].value
-        tau0 = self.parameters["tau0"].value
-        Kappa0 = self.parameters["Kappa0"].value
+        epsilonB = float(self.parameters["epsilonB"].value)
+        muS = float(self.parameters["muS"].value)
+        rhoK = float(self.parameters["rhoK"].value)
+        tau0 = float(self.parameters["tau0"].value)
+        Kappa0 = float(self.parameters["Kappa0"].value)
         dN = 1
         curvature_skip = 5
         alpha = 0.8
@@ -969,23 +964,23 @@ class TheorySmoothPolyStrand(QTheory):
 
         return landscape, NqRate, quiescent_height, nStar
 
-    def RolieDoublePoly_Crystal(self, f: Any = None) -> None:
+    def RolieDoublePoly_Crystal(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = int(self.parameters["nmodes"].value)
         fel = np.zeros((tt.num_rows, nmodes_value))
         felAve = np.zeros((tt.num_rows, 1))
-        Gamma: Any = self.parameters["Gamma"].value
-        epsilonB: Any = self.parameters["epsilonB"].value
-        muS: Any = self.parameters["muS"].value
-        G_C: Any = self.parameters["G_C"].value
-        N_0: Any = self.parameters["N_0"].value
-        Kappa0: Any = self.parameters["Kappa0"].value
-        Qs0: Any = self.parameters["Qs0"].value
+        Gamma = float(self.parameters["Gamma"].value)
+        epsilonB = float(self.parameters["epsilonB"].value)
+        muS = float(self.parameters["muS"].value)
+        G_C = float(self.parameters["G_C"].value)
+        N_0 = float(self.parameters["N_0"].value)
+        Kappa0 = float(self.parameters["Kappa0"].value)
+        Qs0 = float(self.parameters["Qs0"].value)
 
         tt.data[:, 0] = ft.data[:, 0]  # time
 
@@ -995,12 +990,12 @@ class TheorySmoothPolyStrand(QTheory):
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta: Any = self.parameters["beta"].value
-        delta: Any = self.parameters["delta"].value
-        lmax: Any = self.parameters["lmax"].value
+        beta = float(self.parameters["beta"].value)
+        delta = float(self.parameters["delta"].value)
+        lmax = float(self.parameters["lmax"].value)
         flow_rate = float(f.file_parameters["gdot"])
         tstop = float(f.file_parameters["tstop"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = int(self.parameters["nmodes"].value)
 
         # flow geometry
         if self.flow_mode == FlowMode.shear:
@@ -1016,9 +1011,9 @@ class TheorySmoothPolyStrand(QTheory):
         taus_arr = []
         phi_arr = []
         for i in range(nmodes):
-            taud_arr.append(self.parameters["tauD%02d" % i].value)
-            taus_arr.append(self.parameters["tauR%02d" % i].value)
-            phi_arr.append(self.parameters["phi%02d" % i].value)
+            taud_arr.append(float(self.parameters["tauD%02d" % i].value))
+            taus_arr.append(float(self.parameters["tauR%02d" % i].value))
+            phi_arr.append(float(self.parameters["phi%02d" % i].value))
         tmax = t[-1]
         p = [nmodes, lmax, phi_arr, taud_arr, taus_arr, beta, delta, flow_rate, tmax]
         self.count = 0.2

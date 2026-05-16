@@ -38,6 +38,7 @@ from typing import Any, ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from scipy import interpolate
 
@@ -145,7 +146,7 @@ class TheoryStickyReptation(QTheory):
                 err = dgx / gx[n]
         return gx
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike) -> None:
         """STICKY-REPTATION MODEL FOR LINEAR VISCOELASTICITY
 
         * **PARAMETERS:**
@@ -248,10 +249,10 @@ class TheoryStickyReptation(QTheory):
 
         # ---------------------------------------------
         # GET DYNAMIC MODULI G(w) from G(t)
-        f = cast(Any, interpolate.interp1d)(
+        gt_interp = cast(Any, interpolate.interp1d)(
             t, G, kind="cubic", assume_sorted=True, fill_value="extrapolate"
         )
-        g0 = f(0)
+        g0 = gt_interp(0)
         ind1 = np.argmax(t > 0)
         t1 = t[ind1]
         g1 = G[ind1]

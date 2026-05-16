@@ -40,6 +40,7 @@ import os
 from typing import Any, ClassVar
 
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 import numpy as np
 from PySide6.QtCore import QSize
@@ -424,7 +425,7 @@ class TheoryDiscrMWD(QTheory):
             )
             self.Qprint(table)
 
-    def discretise_mwd(self, f: Any = None) -> None:
+    def discretise_mwd(self, f: FileLike) -> None:
         """Discretize a molecular weight distribution"""
         self.extra_data["current_fname"] = f.file_name_short
         # sort M, w with M increasing in ft

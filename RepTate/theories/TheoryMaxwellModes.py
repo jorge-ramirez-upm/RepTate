@@ -41,6 +41,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -318,7 +319,7 @@ class TheoryMaxwellModesFrequency(QTheory):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
         return tau, G, True
 
-    def MaxwellModesFrequency(self, f: Any = None) -> None:
+    def MaxwellModesFrequency(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -631,7 +632,7 @@ class TheoryMaxwellModesTime(QTheory):
             G[i] = np.power(10, self.parameters["logG%02d" % i].value)
         return tau, G, True
 
-    def MaxwellModesTime(self, f: Any = None) -> None:
+    def MaxwellModesTime(self, f: FileLike) -> None:
         """Calculate the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]

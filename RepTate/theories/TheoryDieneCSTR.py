@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Signal
@@ -64,9 +65,6 @@ class TheoryDieneCSTR(QTheory):
     signal_request_dist = Signal(object)
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
-
-    parameters: Any
-    tables: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
@@ -251,24 +249,24 @@ class TheoryDieneCSTR(QTheory):
         """This theory does not calculate the error"""
         pass
 
-    def Calc(self, f: Any = None) -> Any:
+    def Calc(self, f: FileLike) -> Any:
         """Calculate the theory"""
 
         # get parameters
-        col_time: Any = self.parameters["col_time"].value
-        tau: Any = self.parameters["tau"].value
-        kpM: Any = self.parameters["kpM"].value
-        kDLCB: Any = self.parameters["kDLCB"].value
-        kpLCB: Any = self.parameters["kpLCB"].value
-        kpD: Any = self.parameters["kpD"].value
-        keq: Any = self.parameters["k="].value
-        ks: Any = self.parameters["ks"].value
-        D0: Any = self.parameters["D0"].value
-        C0: Any = self.parameters["C0"].value
-        numtomake: Any = np.round(self.parameters["num_to_make"].value)
+        col_time = float(self.parameters["col_time"].value)
+        tau = float(self.parameters["tau"].value)
+        kpM = float(self.parameters["kpM"].value)
+        kDLCB = float(self.parameters["kDLCB"].value)
+        kpLCB = float(self.parameters["kpLCB"].value)
+        kpD = float(self.parameters["kpD"].value)
+        keq = float(self.parameters["k="].value)
+        ks = float(self.parameters["ks"].value)
+        D0 = float(self.parameters["D0"].value)
+        C0 = float(self.parameters["C0"].value)
+        numtomake = int(round(float(self.parameters["num_to_make"].value)))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me: Any = self.parameters["Me"].value
-        nbins: Any = int(np.round(self.parameters["nbin"].value))
+        Me = float(self.parameters["Me"].value)
+        nbins = int(round(float(self.parameters["nbin"].value)))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

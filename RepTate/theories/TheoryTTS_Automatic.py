@@ -67,10 +67,6 @@ class TheoryTTSShiftAutomatic(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
     single_file: ClassVar[bool] = False
 
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
-
     def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
@@ -151,7 +147,7 @@ class TheoryTTSShiftAutomatic(QTheory):
             return
 
         def f(invT, Ea):
-            return Ea / 8.314 * (invT - 1 / (273.15 + self.parameters["T"].value))
+            return Ea / 8.314 * (invT - 1 / (273.15 + float(self.parameters["T"].value)))
 
         Ea_list = []
         for case in self.aT_vs_T:
@@ -482,7 +478,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature
-        Tdesired = self.parameters["T"].value
+        Tdesired = float(self.parameters["T"].value)
         # print (self.Tdict)
         self.aT_vs_T = {}
         for case in self.Tdict.keys():

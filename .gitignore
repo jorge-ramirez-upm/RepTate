@@ -323,3 +323,5 @@ RepTate/gui/Ui_fittingoptions.py
 RepTate/gui/Ui_import_excel_dialog.py
 RepTate/gui/Ui_import_from_pasted_dialog.py
 RepTate/gui/Ui_markerSettings.py
+
+AGENTS.md

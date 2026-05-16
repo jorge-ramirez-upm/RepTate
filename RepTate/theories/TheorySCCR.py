@@ -40,6 +40,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QInputDialog
 from PySide6.QtCore import QSize
@@ -72,10 +73,6 @@ class TheorySCCR(QTheory):
     single_file: ClassVar[bool] = False
 
     signal_get_MW: ClassVar[Any] = Signal(object)
-
-    parameters: Any
-    tables: Any
-    parent_dataset: Any
 
     def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
         """**Constructor**"""
@@ -186,7 +183,7 @@ class TheorySCCR(QTheory):
         self.spinbox.setPrefix("N=")
         self.spinbox.setSuffix("*Z")
         self.spinbox.setToolTip("Precision of SCCR Calculation")
-        n_value: Any = self.parameters["N"].value
+        n_value = int(self.parameters["N"].value)
         self.spinbox.setValue(n_value)
         self.spinbox.setSingleStep(2)
         tb.addWidget(self.spinbox)
@@ -221,8 +218,8 @@ class TheorySCCR(QTheory):
 
     def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
-        n_value: Any = self.parameters["N"].value
-        recommended_n: Any = self.parameters["recommendedN"].value
+        n_value = int(self.parameters["N"].value)
+        recommended_n = bool(self.parameters["recommendedN"].value)
         self.spinbox.setValue(n_value)
         self.recommendedN.setChecked(recommended_n)
         self.handle_recommendedN(recommended_n)
@@ -360,7 +357,7 @@ class TheorySCCR(QTheory):
         sch.sccr_dy(y_arr, dy_arr, c_double(t))
         return dy_arr[:]
 
-    def SCCR(self, f: Any = None) -> None:
+    def SCCR(self, f: FileLike) -> None:
         """Calculates the theory"""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
@@ -369,11 +366,11 @@ class TheorySCCR(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        self.taue = self.parameters["tau_e"].value
-        Ge: Any = self.parameters["Ge"].value
-        Me: Any = self.parameters["Me"].value
-        self.cnu = self.parameters["c_nu"].value
-        self.Rs = self.parameters["Rs"].value
+        self.taue = float(self.parameters["tau_e"].value)
+        Ge = float(self.parameters["Ge"].value)
+        Me = float(self.parameters["Me"].value)
+        self.cnu = float(self.parameters["c_nu"].value)
+        self.Rs = float(self.parameters["Rs"].value)
         try:
             Mw = float(f.file_parameters["Mw"])
         except KeyError:
@@ -395,11 +392,11 @@ class TheorySCCR(QTheory):
         if self.Z < 1:
             # self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
             self.Z = 1
-        if self.parameters["recommendedN"].value:
+        if bool(self.parameters["recommendedN"].value):
             self.N = self.Get_Recommended_N(self.cnu, self.Z)
             self.Qprint("recommend N=%d" % self.N)
         else:
-            self.N = self.Z * self.parameters["N"].value
+            self.N = self.Z * int(self.parameters["N"].value)
 
         # Setup stuff
         if self.N % 2 == 0:
