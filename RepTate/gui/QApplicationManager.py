@@ -60,6 +60,7 @@ import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 
 from RepTate.core.File import File
+from RepTate.core.typing import DataSetLike
 
 # from RepTate.gui.QAboutReptate import AboutWindow
 from RepTate.applications.ApplicationTTS import ApplicationTTS
@@ -962,7 +963,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return self.ApplicationtabWidget.widget(ind), ind
 
-    def restore_files(self, ds, files):
+    def restore_files(self, ds: DataSetLike, files):
         """Open data files"""
         for file_dic in files.values():
             fname = file_dic["fname"]

@@ -39,7 +39,7 @@ import os
 from dataclasses import dataclass
 from typing import Any, TypeAlias
 from RepTate.core.DataTable import DataTable
-from RepTate.core.typing import FileParameters, FileParameterValue
+from RepTate.core.typing import AxesArray, FileParameters, FileParameterValue
 from RepTate.core.units import convert_value, get_unit
 
 
@@ -128,7 +128,7 @@ class File(object):
         file_name: str = "",
         file_type: Any = None,
         parent_dataset: Any = None,
-        axarr: Any = None,
+        axarr: AxesArray | None = None,
     ) -> None:
         """**Constructor**"""
         self.file_full_path: str = os.path.abspath(file_name)
@@ -136,7 +136,7 @@ class File(object):
         self.file_name_short: str = os.path.splitext(tmpname)[0]
         self.file_type: Any = file_type
         self.parent_dataset: Any = parent_dataset
-        self.axarr: Any = axarr
+        self.axarr: AxesArray | None = axarr
 
         #plot attributes
         self.marker: Any = None

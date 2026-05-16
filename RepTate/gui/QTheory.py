@@ -82,7 +82,7 @@ from PySide6.QtCore import Qt, QObject, QThread, QTimer, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.File import File
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
-from RepTate.core.typing import TheoryFunction
+from RepTate.core.typing import AxesArray, AxesLike, DataSetLike, TheoryFunction, ViewLike
 from RepTate.core.units import available_units, units_are_compatible
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DraggableVLine, DraggableHLine, DragType
@@ -391,9 +391,9 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.setupUi(self)
 
         self.name: str = name
-        self.parent_dataset: Any = parent_dataset
-        self.axarr: Any = axarr
-        self.ax: Any = axarr[0]  # theory calculation only on this plot
+        self.parent_dataset: DataSetLike = parent_dataset
+        self.axarr: AxesArray = axarr
+        self.ax: AxesLike = axarr[0]  # theory calculation only on this plot
         self.parameters: TheoryParameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.tables: TheoryTables = {}
         self.function: TheoryFunction | None = None
@@ -493,14 +493,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.thParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         self.thParamTable.itemChanged.connect(self.handle_parameterItemChanged)
 
-    def current_view(self) -> Any:
+    def current_view(self) -> ViewLike:
         return self.parent_dataset.parent_application.current_view
 
-    def convert_view_data_to_display(self, x: Any, y: Any, view: Any = None) -> tuple[Any, Any]:
+    def convert_view_data_to_display(self, x: Any, y: Any, view: ViewLike | None = None) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_display(x, y)
 
-    def convert_view_data_to_internal(self, x: Any, y: Any, view: Any = None) -> tuple[Any, Any]:
+    def convert_view_data_to_internal(self, x: Any, y: Any, view: ViewLike | None = None) -> tuple[Any, Any]:
         view = view or self.current_view()
         return view.convert_xy_to_internal(x, y)
 
@@ -685,7 +685,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             selected_file = self.parent_dataset.selected_file
             if selected_file:
                 if selected_file.active:
-                    f_list.append(self.parent_dataset.selected_file)  # use the selected/highlighted file if active
+                    f_list.append(selected_file)  # use the selected/highlighted file if active
         if not f_list:  # there is no selected file or it is inactive or single_file=False
             for f in self.parent_dataset.files:
                 if f.active:

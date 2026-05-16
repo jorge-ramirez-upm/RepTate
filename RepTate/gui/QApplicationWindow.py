@@ -124,6 +124,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
+from RepTate.core.typing import AxesArray
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
@@ -1695,7 +1696,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow, nplots, ncols, self)
         self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
         self.figure = self.multiplots.figure
-        self.axarr = self.multiplots.axarr  #
+        self.axarr: AxesArray = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
 
     def set_view_tools(self, view_name):

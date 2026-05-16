@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtCore import QSize
@@ -81,7 +81,7 @@ class TheoryDebye(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/SANS/Theory/theory.html#debye-function"
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculateDebye  # main theory function

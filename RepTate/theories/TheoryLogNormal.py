@@ -36,7 +36,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 
 
@@ -63,7 +63,7 @@ class TheoryLogNormal(QTheory):
     )
 
     def __init__(
-        self, name: str = "", parent_dataset: Any = None, axarr: Any = None
+        self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None
     ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)

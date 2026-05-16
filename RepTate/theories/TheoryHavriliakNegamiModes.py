@@ -36,12 +36,12 @@ Module that defines theories related to Havriliak-Negami modes, in the frequency
 
 """
 
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -78,7 +78,7 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#havriliak-negami-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.HavriliakNegamiModesFrequency
@@ -335,7 +335,7 @@ class TheoryHavriliakNegamiModesFrequency(QTheory):
         """Plot graphical helpers"""
         # if not self.view_modes:
         #     return
-        data_table_tmp: Any = DataTable(cast(Any, self.axarr))
+        data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
         nmodes: Any = self.parameters["nmodes"].value
         data_table_tmp.num_rows = nmodes

@@ -40,7 +40,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 import RepTate
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from RepTate.gui import Ui_bob_LVE
 import time
@@ -73,7 +73,7 @@ class TheoryBobLVE(QTheory):
     signal_param_dialog = Signal(object)
 
     def __init__(
-        self, name: str = "ThBobLVE", parent_dataset: Any = None, axarr: Any = None
+        self, name: str = "ThBobLVE", parent_dataset: Any = None, axarr: AxesArray | None = None
     ) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)

@@ -81,6 +81,7 @@ from PySide6.QtWidgets import (
 import RepTate
 from RepTate.core.File import File, FileParameterSpec
 from RepTate.core.DataTable import DataTable
+from RepTate.core.typing import ApplicationLike
 from RepTate.core.units import available_units, units_are_compatible
 from RepTate.gui.QTheory import MinimizationMethod, ErrorCalculationMethod
 from RepTate.gui.DataSetWidget import DataSetWidget
@@ -501,7 +502,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.setupUi(self)
 
         self.name = name
-        self.parent_application = parent
+        self.parent_application: ApplicationLike = parent
         self.nplots = self.parent_application.nplots
         self.files = []
         self.current_file = None

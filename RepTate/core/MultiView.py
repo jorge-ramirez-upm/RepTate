@@ -43,6 +43,7 @@ from importlib import import_module
 from typing import Any, ClassVar, TypeAlias
 
 from RepTate.core.CmdBase import CmdBase
+from RepTate.core.typing import AxesArray
 
 # from UI_Multimatplotlib import Ui_Form
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
@@ -130,7 +131,7 @@ class MultiView(QWidget):
         self.figure: Any
         self.gs: Any
         self.gsmax: Any
-        self.axarr: list[Any]
+        self.axarr: AxesArray
         self.canvas: Any
         self.hidden_tab: HiddenTabList
         self.bbox: list[Any]

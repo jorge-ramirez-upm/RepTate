@@ -39,7 +39,7 @@ from typing import Any, TypeAlias
 
 import numpy as np
 
-from RepTate.core.typing import AnyArray
+from RepTate.core.typing import AnyArray, AxesArray
 
 
 NumericArray: TypeAlias = AnyArray
@@ -52,7 +52,7 @@ class DataTable(object):
     MAX_NUM_SERIES=3
     PICKRADIUS = 10
 
-    def __init__(self, axarr: Any = None, _name: str = '') -> None:
+    def __init__(self, axarr: AxesArray | None = None, _name: str = '') -> None:
         """**Constructor**"""
         self.num_columns: int = 0
         self.num_rows: int = 0
@@ -63,7 +63,7 @@ class DataTable(object):
         self.series: SeriesGrid = []
         self.extra_tables: ExtraTables = {}
         
-        if axarr != None:
+        if axarr is not None:
             for nx in range(len(axarr)): #create series for each plot
                 series_nx = []
                 for i in range(DataTable.MAX_NUM_SERIES): 
