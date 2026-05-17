@@ -60,7 +60,6 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QSize, QStandardPaths
 from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleValidator
-from pathlib import Path
 from . import polymer_data
 # import RepTate.tools.polymer_data as polymer_data
 
@@ -835,9 +834,7 @@ class ToolMaterialsDatabase(QTool):
         tab_data.append(["<b>tau_D</b>", "%g" % tD])
         self.Qprint(tab_data)
 
-    def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+    def calculate(self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []) -> tuple[Any, Any]:
         """Calculate some results related to the selected material or the file material"""
         self.calculate_stuff("", file_parameters)
         return x, y

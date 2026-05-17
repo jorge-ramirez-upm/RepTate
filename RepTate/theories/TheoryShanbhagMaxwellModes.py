@@ -798,7 +798,8 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         g, error, condKp = self.nnLLS(w, tau, Gexp, isPlateau)
 
         # first remove runaway modes outside window with potentially large weight
-        izero = np.where(np.logical_or(max(w) * min(tau) < 0.02, min(w) * max(tau) > 50.0))
+        outside_window = np.logical_or(max(w) * min(tau) < 0.02, min(w) * max(tau) > 50.0)
+        izero = np.atleast_1d(outside_window).nonzero()
         tau = np.delete(tau, izero)
         g = np.delete(g, izero)
 

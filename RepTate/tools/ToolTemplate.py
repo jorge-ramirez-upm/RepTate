@@ -34,16 +34,16 @@
 
 Template file for creating a new Tool
 """
+
 from typing import Any, ClassVar
 
-from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 
 
 class ToolTemplate(QTool):
-    """TEMPLATE FOR NEW TOOLS. HERE IS WHERE THE BASIC INFORMATION OF THE TOOL SHOULD APPEAR.
-    """
+    """TEMPLATE FOR NEW TOOLS. HERE IS WHERE THE BASIC INFORMATION OF THE TOOL SHOULD APPEAR."""
 
     toolname: ClassVar[str] = "TemplateTool"
     description: ClassVar[str] = "Template Tool"
@@ -55,27 +55,20 @@ class ToolTemplate(QTool):
     def __init__(self, name: str = "", parent_app: Any = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
-        # self.parameters['param1'] = Parameter(
-        # name='param1',
-        # value=1,
-        # description='parameter 1',
-        # type=ParameterType.real,
-        # opt_type=OptType.const)
+        self.parameters["param1"] = Parameter(
+            name="param1", value=1, description="parameter 1", type=ParameterType.real, opt_type=OptType.const
+        )
 
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
 
         # add widgets specific to the Tool here:
 
-
     def destructor(self) -> None:
         """If the tool needs to clear up memory in a very special way, fill up the contents of this function.
-If not, you can safely delete it."""
+        If not, you can safely delete it."""
         pass
 
-    def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
-        """Template function that returns the square of the y, according to the view
-        """
+    def calculate(self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []) -> tuple[Any, Any]:
+        """Template function that returns the square of the y, according to the view"""
         return x, y * y
