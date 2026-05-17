@@ -41,7 +41,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, FileLike, FloatArray
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -51,7 +51,7 @@ from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
 from RepTate.theories.kww_ctypes_helper import kwwc, kwws
 
 
-def _logspace(start: Any, stop: Any, num: Any) -> Any:
+def _logspace(start: float, stop: float, num: int) -> FloatArray:
     return np.logspace(start, stop, num)
 
 

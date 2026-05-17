@@ -167,14 +167,14 @@ class TheoryDSMLinear(QTheory):
             self.tau_K = self.tau_c / (0.265 * self.beta ** (8.0 / 3.0))
             self.N_K = Mw / MK
 
-    def _parameter_mass_in_da(self, name: Any) -> Any:
+    def _parameter_mass_in_da(self, name: str) -> Any:
         """Return a molar-mass parameter in Da for the legacy DSM formulas."""
         parameter = self.parameters[name]
         if parameter.internal_unit:
             return float(convert_value(parameter.value, parameter.internal_unit, "Da"))
         return parameter.value
 
-    def _set_parameter_mass_from_da(self, name: Any, value_da: Any) -> Any:
+    def _set_parameter_mass_from_da(self, name: str, value_da: float) -> tuple[str, bool]:
         """Store a molar-mass value given in Da in the parameter internal unit."""
         parameter = self.parameters[name]
         if parameter.internal_unit:
@@ -183,7 +183,7 @@ class TheoryDSMLinear(QTheory):
             value = value_da
         return self.set_param_value(name, value)
 
-    def tandelta(self, omega: Any, data: Any) -> Any:
+    def tandelta(self, omega: float, data: Any) -> float:
         """Calculate the interpolated tan(delta)"""
 
         wGp = data[:, 0]
@@ -193,7 +193,7 @@ class TheoryDSMLinear(QTheory):
 
         return np.interp(omega, wGdp, Gdp) / np.interp(omega, wGp, Gp) - 1
 
-    def solveNc(self, x: Any, Gx: Any, Mw: Any, rho: Any, R: Any, T: Any) -> Any:
+    def solveNc(self, x: float, Gx: float, Mw: float, rho: float, R: float, T: float) -> float:
         """Function to solve for Nc from frequency crossover data (linear chains only)"""
 
         GxGN0 = [9.191488, 2336.3116, 14232.0515, 33.81303697, 13102.47993, 1068.7744]
@@ -216,7 +216,7 @@ class TheoryDSMLinear(QTheory):
         )
         return sol, np.interp(sol, data[:, 0], data[:, 1])
 
-    def find_crossover_limits(self, data: Any) -> Any:
+    def find_crossover_limits(self, data: Any) -> list[Any]:
         """Find the lower and upper limits of the crossover frequency"""
 
         omega = data[:, 0]
@@ -275,7 +275,7 @@ class TheoryDSMLinear(QTheory):
 
         return [alpha, tau, alphaR, tauR, GR]
 
-    def supp_prod(self, tau: Any, alpha: Any, i: Any) -> Any:
+    def supp_prod(self, tau: Any, alpha: Any, i: int) -> float:
         """Returns the product operator used in the G* calculation"""
         result = 1
         for j in range(1, i + 1):

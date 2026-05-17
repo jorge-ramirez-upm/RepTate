@@ -307,26 +307,26 @@ class TheoryLikhtmanMcLeish2002(QTheory):
     def _axis_supports(self, axis_spec: Any, quantity: str) -> bool:
         return axis_spec.quantity == quantity
 
-    def _parameter_value_to_plot_axis(self, value: Any, axis_spec: Any) -> Any:
+    def _parameter_value_to_plot_axis(self, value: Any, axis_spec: Any) -> float | None:
         if axis_spec.transform == "log10":
             if value <= 0.0:
                 return None
             value = np.log10(value)
         return axis_spec.convert_from_internal(value).item()
 
-    def _plot_axis_to_parameter_value(self, value: Any, axis_spec: Any) -> Any:
+    def _plot_axis_to_parameter_value(self, value: Any, axis_spec: Any) -> float:
         value = axis_spec.convert_to_internal(value).item()
         if axis_spec.transform == "log10":
             value = np.power(10.0, value)
         return value
 
-    def _ge_plot_y(self) -> Any:
+    def _ge_plot_y(self) -> float | None:
         view = self.current_view()
         if not self._axis_supports(view.y_axis, "stress"):
             return None
         return self._parameter_value_to_plot_axis(self.parameters["Ge"].value, view.y_axis)
 
-    def _taue_plot_x(self) -> Any:
+    def _taue_plot_x(self) -> float | None:
         view = self.current_view()
         if view.x_axis.quantity not in ("angular_frequency", "frequency"):
             return None

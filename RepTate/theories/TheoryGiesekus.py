@@ -41,7 +41,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AnyArray, AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
 from PySide6.QtCore import QSize
@@ -276,7 +276,7 @@ class TheoryGiesekus(QTheory):
             self.set_param_value("G%02d" % i, G[i])
         return True
 
-    def n1_uext(self, p: Any, times: Any) -> Any:
+    def n1_uext(self, p: Any, times: Any) -> AnyArray:
         """Upper Convected Maxwell model in uniaxial extension.
         Returns N1 = (XX -YY) component of stress tensor"""
         _, G, tauD, ed = p
@@ -286,14 +286,14 @@ class TheoryGiesekus(QTheory):
 
         return G * (sxx - syy)
 
-    def sigma_xy_shear(self, p: Any, times: Any) -> Any:
+    def sigma_xy_shear(self, p: Any, times: Any) -> AnyArray:
         """Upper Convected Maxwell model in shear.
         Returns XY component of stress tensor"""
         _, G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
-    def sigma_xy_shearLAOS(self, p: Any, times: Any) -> Any:
+    def sigma_xy_shearLAOS(self, p: Any, times: Any) -> AnyArray:
         """Giesekus model in LAOS"""
         _, G, tauD, g0, w = p
         eta = G * tauD

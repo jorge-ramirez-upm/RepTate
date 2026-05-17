@@ -40,7 +40,7 @@ from typing import Any, ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AnyArray, AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -252,14 +252,14 @@ class TheoryUCM(QTheory):
             self.set_param_value("G%02d" % i, G[i])
         return True
 
-    def sigma_xy_shear(self, p: Any, times: Any) -> Any:
+    def sigma_xy_shear(self, p: Any, times: Any) -> AnyArray:
         """Upper Convected Maxwell model in shear.
         Returns XY component of stress tensor"""
         G, tauD, gd = p
 
         return G * gd * tauD * (1 - np.exp(-times / tauD))
 
-    def n1_uext(self, p: Any, times: Any) -> Any:
+    def n1_uext(self, p: Any, times: Any) -> AnyArray:
         """Upper Convected Maxwell model in uniaxial extension.
         Returns N1 = (XX -YY) component of stress tensor"""
         G, tauD, ed = p
