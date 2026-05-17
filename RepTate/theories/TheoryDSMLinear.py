@@ -34,7 +34,7 @@
 import numpy as np
 from typing import Any, ClassVar, cast
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.core.units import convert_value
 from RepTate.gui.QTheory import QTheory
 from scipy import special, optimize
@@ -60,7 +60,7 @@ class TheoryDSMLinear(QTheory):
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -143,10 +143,10 @@ class TheoryDSMLinear(QTheory):
 
         ft = self.parent_dataset.files[0].data_table
         Mw = (
-            float(parent_dataset.files[0].file_parameters["Mw"]) * 1000.0
+            float(self.parent_dataset.files[0].file_parameters["Mw"]) * 1000.0
         )  # units of Da
         T = (
-            float(parent_dataset.files[0].file_parameters["T"]) + 273.15
+            float(self.parent_dataset.files[0].file_parameters["T"]) + 273.15
         )  # In units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
         rho0: Any = self.parameters["rho0"].value

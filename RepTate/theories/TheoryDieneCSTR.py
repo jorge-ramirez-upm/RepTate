@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 import numpy as np
 import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Signal
@@ -66,7 +66,7 @@ class TheoryDieneCSTR(QTheory):
     signal_request_polymer = Signal(object)
     signal_request_arm = Signal(object)
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.reactname = "Diene CSTR %d" % (rch.dCSTR_global.dieneCSTRnumber)

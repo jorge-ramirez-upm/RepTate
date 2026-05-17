@@ -72,7 +72,7 @@ import re
 from typing import Any, cast
 
 from RepTate.core.DataTable import DataTable
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
@@ -105,7 +105,7 @@ class TheoryPolynomial(QTheory):
     html_help_file: str = "http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#polynomial"
     single_file: bool = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**
 
         Keyword Arguments:
@@ -212,7 +212,7 @@ class TheoryPowerLaw(QTheory):
     html_help_file: str = "http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#power-law"
     single_file: bool = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.powerlaw
@@ -268,7 +268,7 @@ class TheoryExponential(QTheory):
     html_help_file: str = "http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#exponential"
     single_file: bool = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.exponential
@@ -316,7 +316,7 @@ class TheoryTwoExponentials(QTheory):
     html_help_file: str = "http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#double-exponential"
     single_file: bool = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.two_exponentials
@@ -385,7 +385,7 @@ class TheoryAlgebraicExpression(QTheory):
     html_help_file: str = "http://reptate.readthedocs.io/manual/All_Theories/basic_theories.html#algebraic-expression"
     single_file: bool = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.MAX_DEGREE: int = 10
