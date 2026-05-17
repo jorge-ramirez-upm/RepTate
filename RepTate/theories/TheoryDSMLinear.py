@@ -34,6 +34,7 @@
 import numpy as np
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import AxesArray
 from RepTate.core.units import convert_value
 from RepTate.gui.QTheory import QTheory
 from scipy import special, optimize
@@ -59,7 +60,7 @@ class TheoryDSMLinear(QTheory):
         False  # False if the theory can be applied to multiple files simultaneously
     )
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function

@@ -40,7 +40,7 @@ import os
 from typing import Any, ClassVar
 
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 import numpy as np
 from PySide6.QtCore import QSize
@@ -59,7 +59,7 @@ class TheoryDiscrMWD(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/MWD/Theory/theory.html#mwd-discretization"
     single_file: ClassVar[bool] = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.discretise_mwd

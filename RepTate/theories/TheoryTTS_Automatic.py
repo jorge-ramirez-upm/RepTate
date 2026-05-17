@@ -46,6 +46,7 @@ from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import AxesArray
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QFileDialog, QComboBox, QMessageBox
 from PySide6.QtCore import QSize
@@ -67,7 +68,7 @@ class TheoryTTSShiftAutomatic(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/TTS/Theory/theory.html#automatic-tts-shift"
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryTTSShiftAutomatic

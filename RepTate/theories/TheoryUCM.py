@@ -40,6 +40,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import AxesArray
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -96,7 +97,7 @@ class TheoryUCM(QTheory):
     )
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_UCM

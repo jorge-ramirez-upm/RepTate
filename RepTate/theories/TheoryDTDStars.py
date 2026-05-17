@@ -39,6 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
+from RepTate.core.typing import AxesArray
 from RepTate.gui.QTheory import QTheory
 
 import RepTate.theories.dtd_ctypes_helper as dtdh
@@ -77,7 +78,7 @@ class TheoryDTDStarsFreq(QTheory):
     )
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
@@ -199,7 +200,7 @@ class TheoryDTDStarsTime(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#dtd-stars-time"
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate

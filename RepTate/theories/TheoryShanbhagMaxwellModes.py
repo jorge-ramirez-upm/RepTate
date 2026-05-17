@@ -43,7 +43,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import FileLike
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -96,7 +96,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#shanbhag-maxwell-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.ShanBhagMaxwellModesFrequency
@@ -1436,7 +1436,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#shanbhag-maxwell-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: Any = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.MaxwellModesTime
