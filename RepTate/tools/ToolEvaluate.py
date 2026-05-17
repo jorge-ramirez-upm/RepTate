@@ -70,6 +70,7 @@ from numpy import (
 )
 import re
 from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 
 
@@ -144,7 +145,7 @@ class ToolEvaluate(QTool):
         # add widgets specific to the Tool here:
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Evaluate function that returns the square of the y, according to the view"""
         xexpr = self.parameters["x"].value

@@ -37,6 +37,7 @@ Gradient file for creating a new Tool
 from typing import Any, ClassVar
 
 import numpy as np
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 
 
@@ -68,7 +69,7 @@ class ToolGradient(QTool):
 
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         try:
             y2 = np.gradient(y, x)

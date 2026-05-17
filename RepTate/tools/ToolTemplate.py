@@ -37,6 +37,7 @@ Template file for creating a new Tool
 from typing import Any, ClassVar
 
 from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 
 
@@ -73,7 +74,7 @@ If not, you can safely delete it."""
         pass
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Template function that returns the square of the y, according to the view
         """

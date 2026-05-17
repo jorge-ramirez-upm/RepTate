@@ -38,6 +38,7 @@ import traceback
 from typing import Any, ClassVar
 
 import numpy as np
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 from scipy.integrate import odeint
 from scipy.interpolate import interp1d
@@ -71,7 +72,7 @@ class ToolIntegral(QTool):
 
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Integral function that returns the square of the y, according to the view"""
         xunique, indunique = np.unique(x, return_index=True)

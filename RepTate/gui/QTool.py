@@ -62,6 +62,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
+from RepTate.core.typing import AxesLike
 from RepTate.core.units import available_units, units_are_compatible
 from math import ceil, floor
 from collections import OrderedDict
@@ -314,7 +315,7 @@ class QTool(QWidget, Ui_ToolTab):
         pass
 
     def calculate_all(
-        self, n: Any, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, n: Any, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Calculate the tool for all views"""
         newxy = []
@@ -335,7 +336,7 @@ class QTool(QWidget, Ui_ToolTab):
         return x, y
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         return x, y
 

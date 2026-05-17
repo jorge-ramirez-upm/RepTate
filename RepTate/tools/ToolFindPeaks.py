@@ -35,11 +35,12 @@
 FindPeaks file for creating a new Tool
 """
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 from PySide6.QtGui import QIcon
 
@@ -137,7 +138,7 @@ class ToolFindPeaks(QTool):
         self.clean_graphic_stuff()
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
@@ -211,7 +212,8 @@ class ToolFindPeaks(QTool):
         # table+='''</table><br>'''
         if len(peaks) > 0:
             self.Qprint(table)
-        s = ax.plot(xp, yp)[0]
+        axes = cast(AxesLike, ax)
+        s = axes.plot(xp, yp)[0]
         s.set_marker("D")
         s.set_linestyle("")
         s.set_markerfacecolor(color)
@@ -220,5 +222,5 @@ class ToolFindPeaks(QTool):
         s.set_markersize(12)
         s.set_alpha(0.5)
         self.seriesarray.append(s)
-        self.axarray.append(ax)
+        self.axarray.append(axes)
         return x, y

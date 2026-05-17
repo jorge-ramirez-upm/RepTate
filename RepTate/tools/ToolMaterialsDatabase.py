@@ -42,6 +42,7 @@ from typing import Any, ClassVar
 import numpy as np
 from pathlib import Path
 from RepTate.core.Parameter import Parameter, ParameterType
+from RepTate.core.typing import AxesLike
 from RepTate.gui.QTool import QTool
 from PySide6.QtWidgets import (
     QComboBox,
@@ -835,7 +836,7 @@ class ToolMaterialsDatabase(QTool):
         self.Qprint(tab_data)
 
     def calculate(
-        self, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Calculate some results related to the selected material or the file material"""
         self.calculate_stuff("", file_parameters)
@@ -903,7 +904,7 @@ class ToolMaterialsDatabase(QTool):
             print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
     def calculate_all(
-        self, n: Any, x: Any, y: Any, ax: Any = None, color: Any = None, file_parameters: Any = []
+        self, n: Any, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
     ) -> tuple[Any, Any]:
         """Calculate the tool for all views - In MatDB, only first view is needed"""
         newxy = []
