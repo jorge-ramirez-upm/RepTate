@@ -41,7 +41,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike, FloatArray, ModesResult
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike, FloatArray, ModesResult
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -80,7 +80,7 @@ class TheoryRetardationModesTime(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html#retardation-modes"
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.RetardationModesTime

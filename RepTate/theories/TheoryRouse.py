@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 import RepTate.theories.rouse_ctypes_helper as rh
 
@@ -73,7 +73,7 @@ class TheoryRouseTime(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html#rouse-time"
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate  # main theory function
@@ -182,7 +182,7 @@ class TheoryRouseFrequency(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html#rouse-frequency"
     single_file = False  # False if the theory can be applied to multiple files simultaneously
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate

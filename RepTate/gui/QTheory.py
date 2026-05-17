@@ -362,7 +362,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     print_signal = Signal(str)
 
-    def __init__(self, name: str = "QTheory", parent_dataset: Any = None, axarr: Any = None) -> None:
+    def __init__(self, name: str = "QTheory", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """
         **Constructor**
 
@@ -391,9 +391,9 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.setupUi(self)
 
         self.name: str = name
-        self.parent_dataset: DataSetLike = parent_dataset
-        self.axarr: AxesArray = axarr
-        self.ax: AxesLike = axarr[0]  # theory calculation only on this plot
+        self.parent_dataset: DataSetLike = cast(DataSetLike, parent_dataset)
+        self.axarr: AxesArray = cast(AxesArray, axarr)
+        self.ax: AxesLike = self.axarr[0]  # theory calculation only on this plot
         self.parameters: TheoryParameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.tables: TheoryTables = {}
         self.function: TheoryFunction | None = None
@@ -444,8 +444,8 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.setup_default_error_calculation_options()
 
         # Pre-create as many tables as files in the dataset
-        for f in parent_dataset.files:
-            self.tables[f.file_name_short] = DataTable(axarr, "TH-" + f.file_name_short)
+        for f in self.parent_dataset.files:
+            self.tables[f.file_name_short] = DataTable(self.axarr, "TH-" + f.file_name_short)
             # initiallize theory table: important for 'single_file' theories
             ft = f.data_table
             tt = self.tables[f.file_name_short]

@@ -41,7 +41,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike, ModesResult
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -75,7 +75,7 @@ class TheoryDebyeModesFrequency(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html#debye-modes"
     single_file: ClassVar[bool] = True
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.DebyeModesFrequency
