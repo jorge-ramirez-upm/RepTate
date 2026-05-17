@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 FloatArray: TypeAlias = npt.NDArray[np.float64]
 AnyArray: TypeAlias = npt.NDArray[Any]
+ModesResult: TypeAlias = tuple[FloatArray, FloatArray, bool]
 FileParameterValue: TypeAlias = Any
 FileParameters: TypeAlias = dict[str, FileParameterValue]
 AxesArray: TypeAlias = list["AxesLike"]

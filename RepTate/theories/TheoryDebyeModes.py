@@ -41,7 +41,7 @@ from typing import Any, ClassVar
 import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QSpinBox
 from PySide6.QtCore import QSize
@@ -271,7 +271,7 @@ class TheoryDebyeModesFrequency(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
         nmodes: Any = self.parameters["nmodes"].value
         logwmin: Any = self.parameters["logwmin"].value
