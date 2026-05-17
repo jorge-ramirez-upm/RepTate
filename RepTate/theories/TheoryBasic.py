@@ -69,10 +69,10 @@ from numpy import (
 )
 import numpy as np
 import re
-from typing import Any
+from typing import Any, cast
 
 from RepTate.core.DataTable import DataTable
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
@@ -166,14 +166,15 @@ class TheoryPolynomial(QTheory):
         self.update_parameter_table()
         return message, success
 
-    def polynomial(self, f: Any = None) -> None:
+    def polynomial(self, f: FileLike | None = None) -> None:
         """Actual polynomial function.
 
         .. math::
             y(x) = \\sum_{i=0}^n A_i x^i
         """
-        ft: DataTable = f.data_table
-        tt: DataTable = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft: DataTable = file.data_table
+        tt: DataTable = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -219,15 +220,16 @@ class TheoryPowerLaw(QTheory):
         self.parameters["b"] = Parameter("b", 1.0, "Exponent", ParameterType.real, opt_type=OptType.opt)
         self.Qprint("%s: a*x^b" % self.thname)
 
-    def powerlaw(self, f: Any = None) -> None:
+    def powerlaw(self, f: FileLike | None = None) -> None:
         """Actual function
 
         * **Function**
             .. math::
                 y(x) = a x^b
         """
-        ft: DataTable = f.data_table
-        tt: DataTable = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft: DataTable = file.data_table
+        tt: DataTable = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -274,10 +276,11 @@ class TheoryExponential(QTheory):
         self.parameters["T"] = Parameter("T", 1.0, "Exponential time constant", ParameterType.real, opt_type=OptType.opt)
         self.Qprint("%s: a*exp(-x/T)" % self.thname)
 
-    def exponential(self, f: Any = None) -> None:
+    def exponential(self, f: FileLike | None = None) -> None:
         """**Function** :math:`y(x) = a \\exp(-x/T)`"""
-        ft: DataTable = f.data_table
-        tt: DataTable = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft: DataTable = file.data_table
+        tt: DataTable = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -323,15 +326,16 @@ class TheoryTwoExponentials(QTheory):
         self.parameters["T2"] = Parameter("T2", 10.0, "Exponential time constant 2", ParameterType.real, opt_type=OptType.opt)
         self.Qprint("%s: a1*exp(-x/T1) + a2*exp(-x/T2)" % self.thname)
 
-    def two_exponentials(self, f: Any = None) -> None:
+    def two_exponentials(self, f: FileLike | None = None) -> None:
         """Actual function
 
         * **Function**
             .. math::
                 y(x) = a_1 \\exp(x/T_1) + a_2 \\exp(-x/T_2)
         """
-        ft: DataTable = f.data_table
-        tt: DataTable = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft: DataTable = file.data_table
+        tt: DataTable = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -491,15 +495,16 @@ class TheoryAlgebraicExpression(QTheory):
         self.update_parameter_table()
         return message, success
 
-    def algebraicexpression(self, f: Any = None) -> None:
+    def algebraicexpression(self, f: FileLike | None = None) -> None:
         """Actual function.
 
         * **Function**
             .. math::
                 y(x) = f({A_i}, x)
         """
-        ft: DataTable = f.data_table
-        tt: DataTable = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft: DataTable = file.data_table
+        tt: DataTable = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -521,8 +526,8 @@ class TheoryAlgebraicExpression(QTheory):
             # Find FILE PARAMETERS IN THE EXPRESSION
             fparams = re.findall(r"\[(.*?)\]", expression)
             for fp in fparams:
-                if fp in f.file_parameters:
-                    self.safe_dict[fp] = float(f.file_parameters[fp])
+                if fp in file.file_parameters:
+                    self.safe_dict[fp] = float(file.file_parameters[fp])
                 else:
                     self.logger.warning("File parameter not found. Review your theory")
                     self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your theory")

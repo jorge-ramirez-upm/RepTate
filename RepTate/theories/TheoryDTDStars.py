@@ -35,11 +35,11 @@
 Dynamics Tube Dilution for Stars
 """
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 
 import RepTate.theories.dtd_ctypes_helper as dtdh
@@ -137,10 +137,11 @@ class TheoryDTDStarsFreq(QTheory):
         self.Z = 1
         self.w = 0
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike | None = None) -> None:
         """DTDStarsFreq function"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -150,7 +151,7 @@ class TheoryDTDStarsFreq(QTheory):
         self.alpha = self.parameters["alpha"].value
         Me: Any = self.Me
         try:
-            Mw = float(f.file_parameters["Mw"])
+            Mw = float(file.file_parameters["Mw"])
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
@@ -257,10 +258,11 @@ class TheoryDTDStarsTime(QTheory):
         self.Me = self.parameters["Me"].value
         self.alpha = self.parameters["alpha"].value
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike | None = None) -> None:
         """DTDStarsTime function"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -270,11 +272,11 @@ class TheoryDTDStarsTime(QTheory):
         self.alpha = self.parameters["alpha"].value
         Me: Any = self.Me
         try:
-            Mw = float(f.file_parameters["Mw"])
+            Mw = float(file.file_parameters["Mw"])
         except (ValueError, KeyError):
             self.Qprint("Invalid Mw value")
             return
-        value = f.file_parameters.get("gamma")
+        value = file.file_parameters.get("gamma")
         if value is None:
             gamma = 1
         else:

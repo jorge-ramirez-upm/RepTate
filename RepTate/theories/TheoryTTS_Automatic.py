@@ -38,7 +38,7 @@ Module for the pseudo theory for Time-Temperature superposition shift of LVE dat
 import os
 import time
 import getpass
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 import numpy as np
 from os.path import join, isdir
 from numpy import interp
@@ -46,7 +46,7 @@ from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QFileDialog, QComboBox, QMessageBox
 from PySide6.QtCore import QSize
@@ -252,19 +252,20 @@ class TheoryTTSShiftAutomatic(QTheory):
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         QMessageBox.information(self, "Saved Files", msg)
 
-    def TheoryTTSShiftAutomatic(self, f: Any = None) -> None:
+    def TheoryTTSShiftAutomatic(self, f: FileLike | None = None) -> None:
         """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
         try:
-            H, V = self.shiftParameters[f.file_name_short]
+            H, V = self.shiftParameters[file.file_name_short]
         except KeyError:
             # table did not exixt when the TH was opened
-            H, V = self.shiftParameters[f.file_name_short] = (0, 0)
+            H, V = self.shiftParameters[file.file_name_short] = (0, 0)
 
         tt.data[:, 0] = ft.data[:, 0] * np.power(10.0, H)
         tt.data[:, 1] = ft.data[:, 1] * np.power(10.0, V)

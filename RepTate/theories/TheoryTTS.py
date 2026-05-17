@@ -39,14 +39,14 @@ Module for the pseudo theory for Time-Temperature superposition shift of LVE dat
 import os
 import time
 import getpass
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from numpy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QFileDialog, QMessageBox
 from PySide6.QtCore import QSize
@@ -273,10 +273,11 @@ class TheoryWLFShift(QTheory):
         msg = 'Saved %d shift parameter file(s) in "%s"' % (nsaved, folder)
         QMessageBox.information(self, "Saved Files", msg)
 
-    def TheoryWLFShift(self, f: Any = None) -> None:
+    def TheoryWLFShift(self, f: FileLike | None = None) -> None:
         """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -291,8 +292,8 @@ class TheoryWLFShift(QTheory):
         iso: Any = self.parameters["iso"].value
         vert: Any = self.parameters["vert"].value
 
-        Tf = f.file_parameters["T"]
-        Mw = f.file_parameters["Mw"]
+        Tf = file.file_parameters["T"]
+        Mw = file.file_parameters["Mw"]
 
         # Trying a new expression for the shift
         if iso:
@@ -309,7 +310,7 @@ class TheoryWLFShift(QTheory):
             bT = 1
         tt.data[:, 1] = ft.data[:, 1] * bT
         tt.data[:, 2] = ft.data[:, 2] * bT
-        self.shift_factor_dic[f.file_name_short] = [Tf, aT, bT, Mw]
+        self.shift_factor_dic[file.file_name_short] = [Tf, aT, bT, Mw]
 
     def do_error(self, line: str) -> Any:
         """Override the error calculation for TTS

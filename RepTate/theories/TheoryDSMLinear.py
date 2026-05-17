@@ -32,9 +32,9 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryDSMLinear"""
 import numpy as np
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.core.units import convert_value
 from RepTate.gui.QTheory import QTheory
 from scipy import special, optimize
@@ -382,7 +382,7 @@ class TheoryDSMLinear(QTheory):
             tab_data.append(["%-18s" % f.file_name_short, "%18.4g" % NK, "%18.4g" % Nc])
         self.Qprint(tab_data)
 
-    def calculate(self, f: Any = None) -> None:
+    def calculate(self, f: FileLike | None = None) -> None:
         """
         CLUSTERED FIXED SLIP-LINK (CFSM) + ROUSE MODEL FOR LINEAR VISCOELASTICITY
 
@@ -397,8 +397,9 @@ class TheoryDSMLinear(QTheory):
 
         # ---------------------------------------------
         # FUNCTION INPUT
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -406,8 +407,8 @@ class TheoryDSMLinear(QTheory):
 
         MK = self._parameter_mass_in_da("MK")
         rho0: Any = self.parameters["rho0"].value
-        Mw = float(f.file_parameters["Mw"]) * 1000.0  # units of Da
-        T = float(f.file_parameters["T"]) + 273.15  # units of K
+        Mw = float(file.file_parameters["Mw"]) * 1000.0  # units of Da
+        T = float(file.file_parameters["T"]) + 273.15  # units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
 
         Mc = self._parameter_mass_in_da("Mc")
