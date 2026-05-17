@@ -46,7 +46,7 @@ from numpy import interp
 from scipy.optimize import minimize, curve_fit
 from scipy.stats import distributions
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QFileDialog, QMessageBox
 from PySide6.QtCore import QSize
@@ -86,7 +86,7 @@ class TheoryWLFShift(QTheory):
     )
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, ax: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
         self.function = self.TheoryWLFShift

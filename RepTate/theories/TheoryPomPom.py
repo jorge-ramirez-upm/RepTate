@@ -43,7 +43,7 @@ from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMethod
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -92,7 +92,7 @@ class TheoryPomPom(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/Theory/theory.html#multi-mode-pom-pom-model"
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_PomPom
@@ -168,7 +168,7 @@ class TheoryPomPom(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
+        if not isinstance(self.parent_dataset.parent_application, ApplicationLAOS):
             self.tbutflow = QToolButton()
             menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
             self.tbutflow.setPopupMode(menu_button_popup)

@@ -40,7 +40,7 @@ from typing import Any, ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AnyArray, AxesArray, FileLike
+from RepTate.core.typing import AnyArray, AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -97,7 +97,7 @@ class TheoryUCM(QTheory):
     )
     single_file: ClassVar[bool] = False
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate_UCM
@@ -145,7 +145,7 @@ class TheoryUCM(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        if not isinstance(parent_dataset.parent_application, ApplicationLAOS):
+        if not isinstance(self.parent_dataset.parent_application, ApplicationLAOS):
             self.tbutflow = QToolButton()
             menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
             self.tbutflow.setPopupMode(menu_button_popup)
