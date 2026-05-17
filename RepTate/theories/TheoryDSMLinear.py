@@ -208,7 +208,7 @@ class TheoryDSMLinear(QTheory):
 
         return func * G0 - Gx / 1000  # Gx has units of Pa
 
-    def Gslfx(self, crossover_limits: Any, data: Any) -> tuple[Any, Any]:
+    def Gslfx(self, crossover_limits: list[float], data: Any) -> tuple[float, float]:
         """Function to find crossover frequency from limits"""
 
         sol: Any = optimize.brentq(
@@ -216,7 +216,7 @@ class TheoryDSMLinear(QTheory):
         )
         return sol, np.interp(sol, data[:, 0], data[:, 1])
 
-    def find_crossover_limits(self, data: Any) -> list[Any]:
+    def find_crossover_limits(self, data: Any) -> list[float]:
         """Find the lower and upper limits of the crossover frequency"""
 
         omega = data[:, 0]

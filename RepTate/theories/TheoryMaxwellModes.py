@@ -304,7 +304,7 @@ class TheoryMaxwellModesFrequency(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> tuple[FloatArray, FloatArray, bool]:
         """Get the values of Maxwell Modes from this theory"""
         nmodes: Any = self.parameters["nmodes"].value
         logwmin: Any = self.parameters["logwmin"].value
@@ -618,7 +618,7 @@ class TheoryMaxwellModesTime(QTheory):
         # self.do_calculate("")
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> tuple[FloatArray, FloatArray, bool]:
         """Get the values of Maxwell Modes from this theory"""
         nmodes: Any = self.parameters["nmodes"].value
         logtmin: Any = self.parameters["logtmin"].value
