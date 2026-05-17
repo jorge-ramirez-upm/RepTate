@@ -41,7 +41,7 @@ import numpy as np
 import enum
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, DataSetLike
 from RepTate.gui.QTheory import QTheory
 from collections import OrderedDict
 import time
@@ -262,7 +262,7 @@ class TheoryCreatePolyconf(QTheory):
 
     signal_param_dialog = Signal(object)
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, axarr)
         self.reactname = "CreatePolyconf"

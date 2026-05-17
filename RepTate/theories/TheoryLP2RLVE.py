@@ -55,7 +55,7 @@ from PySide6.QtWidgets import (
 )
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
-from RepTate.core.typing import AxesArray, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.core.units import convert_array_to_internal, parse_column_label
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r  # pyright: ignore[reportAttributeAccessIssue]
@@ -321,7 +321,7 @@ class TheoryLP2RLVE(QTheory):
         "time_ratio",
     ]
 
-    def __init__(self, name: str = "", parent_dataset: Any = None, axarr: AxesArray | None = None) -> None:
+    def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """Constructor."""
         super().__init__(name, parent_dataset, axarr)
         self.function = self.calculate
