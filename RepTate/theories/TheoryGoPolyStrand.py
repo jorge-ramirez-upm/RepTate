@@ -37,11 +37,11 @@ Module for the GO-polyStrand model of flow-induced crystallisation in polymers.
 """
 
 import os
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
@@ -954,10 +954,11 @@ class TheoryGoPolyStrand(QTheory):
 
         return landscape, NqRate, quiescent_height
 
-    def RolieDoublePoly_Crystal(self, f: Any = None) -> None:
+    def RolieDoublePoly_Crystal(self, f: FileLike | None = None) -> None:
         """Theory RDP for Crystal module"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -980,8 +981,8 @@ class TheoryGoPolyStrand(QTheory):
         beta: Any = self.parameters["beta"].value
         delta: Any = self.parameters["delta"].value
         lmax: Any = self.parameters["lmax"].value
-        flow_rate = float(f.file_parameters["gdot"])
-        tstop = float(f.file_parameters["tstop"])
+        flow_rate = float(file.file_parameters["gdot"])
+        tstop = float(file.file_parameters["tstop"])
         nmodes: Any = self.parameters["nmodes"].value
 
         # flow geometry

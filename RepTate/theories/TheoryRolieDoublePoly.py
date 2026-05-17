@@ -39,9 +39,9 @@ Module for the Rolie-Double-Poly theory for the non-linear flow of entangled pol
 import os
 import numpy as np
 from scipy.integrate import odeint
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
@@ -727,10 +727,11 @@ class TheoryRolieDoublePoly(QTheory):
         l2_lm2 = l_square * ilm2  # (lambda/lambda_max)^2
         return (3.0 - l2_lm2) / (1.0 - l2_lm2) * (1.0 - ilm2) / (3.0 - ilm2)
 
-    def RolieDoublePoly(self, f: Any = None) -> None:
+    def RolieDoublePoly(self, f: FileLike | None = None) -> None:
         """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -745,7 +746,7 @@ class TheoryRolieDoublePoly(QTheory):
         beta: Any = self.parameters["beta"].value
         delta: Any = self.parameters["delta"].value
         lmax: Any = self.parameters["lmax"].value
-        flow_rate = float(f.file_parameters["gdot"])
+        flow_rate = float(file.file_parameters["gdot"])
         nmodes: Any = self.parameters["nmodes"].value
 
         # flow geometry

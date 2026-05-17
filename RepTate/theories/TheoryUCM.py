@@ -36,11 +36,11 @@ Module for the Upper Convected Maxwell model
 
 """
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -269,10 +269,11 @@ class TheoryUCM(QTheory):
 
         return G * (sxx - syy)
 
-    def calculate_UCM(self, f: Any = None) -> None:
+    def calculate_UCM(self, f: FileLike | None = None) -> None:
         """Calculate the theory"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -280,7 +281,7 @@ class TheoryUCM(QTheory):
 
         tt.data[:, 0] = times
 
-        flow_rate = float(f.file_parameters["gdot"])
+        flow_rate = float(file.file_parameters["gdot"])
         nmodes: Any = self.parameters["nmodes"].value
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -295,17 +296,18 @@ class TheoryUCM(QTheory):
             elif self.flow_mode == FlowMode.uext:
                 tt.data[:, 1] += self.n1_uext(p, times)
 
-    def calculate_UCMLAOS(self, f: Any = None) -> None:
+    def calculate_UCMLAOS(self, f: FileLike | None = None) -> None:
         """Calculate the theory for LAOS"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         times = ft.data[:, 0]
 
-        g0 = float(f.file_parameters["gamma"])
-        w = float(f.file_parameters["omega"])
+        g0 = float(file.file_parameters["gamma"])
+        w = float(file.file_parameters["omega"])
         tt.data[:, 0] = times
         tt.data[:, 1] = g0 * np.sin(w * times)
 

@@ -36,12 +36,12 @@ Module for the Giesekus model for the non-linear flow of entangled polymers.
 
 """
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QSpinBox, QMessageBox
 from PySide6.QtCore import QSize
@@ -361,10 +361,11 @@ class TheoryGiesekus(QTheory):
 
         return [dsxx, dsyy, dsxy]
 
-    def calculate_giesekus(self, f: Any = None) -> None:
+    def calculate_giesekus(self, f: FileLike | None = None) -> None:
         """Calculate Giesekus"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -385,13 +386,13 @@ class TheoryGiesekus(QTheory):
         relerr = 1.0e-6
         self.t = ft.data[:, 0]
         self.t = np.concatenate([[0], self.t])
-        if f.file_type.extension == "shear":
+        if file.file_type.extension == "shear":
             self.gfile = ft.data[:, 3]
-        elif f.file_type.extension == "uext":
+        elif file.file_type.extension == "uext":
             self.gfile = ft.data[:, 2]
         self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        flow_rate = float(f.file_parameters["gdot"])
+        flow_rate = float(file.file_parameters["gdot"])
         nmodes: Any = self.parameters["nmodes"].value
         nstretch: Any = self.parameters["nstretch"].value
         for i in range(nmodes):
@@ -421,10 +422,11 @@ class TheoryGiesekus(QTheory):
                 elif self.flow_mode == FlowMode.uext:
                     tt.data[:, 1] += self.n1_uext(p, ft.data[:, 0])
 
-    def calculate_giesekusLAOS(self, f: Any = None) -> None:
+    def calculate_giesekusLAOS(self, f: FileLike | None = None) -> None:
         """Calculate Giesekus for LAOS"""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
+        file = cast(FileLike, f)
+        ft = file.data_table
+        tt = self.tables[file.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
@@ -436,8 +438,8 @@ class TheoryGiesekus(QTheory):
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
-        g0 = float(f.file_parameters["gamma"])
-        w = float(f.file_parameters["omega"])
+        g0 = float(file.file_parameters["gamma"])
+        w = float(file.file_parameters["omega"])
         nmodes: Any = self.parameters["nmodes"].value
         nstretch: Any = self.parameters["nstretch"].value
         t = ft.data[:, 0]

@@ -337,11 +337,11 @@ class TheoryRDPLVE(QTheory):
             G[i] = GN0 * self.parameters["phi%02d" % i].value
         return tau, G, True
 
-    def fZ(self, z: Any) -> Any:
+    def fZ(self, z: float) -> float:
         """CLF correction function Likthman-McLeish (2002)"""
         return 1 - 2 * 1.69 / sqrt(z) + 4.17 / z - 1.55 / (z * sqrt(z))
 
-    def gZ(self, z: Any) -> Any:
+    def gZ(self, z: float) -> float:
         """CLF correction function for modulus Likthman-McLeish (2002)"""
         return 1 - 1.69 / sqrt(z) + 2.0 / z - 1.24 / (z * sqrt(z))
 
