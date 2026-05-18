@@ -35,7 +35,7 @@
 Dynamics Tube Dilution for Stars
 """
 
-from typing import Any, ClassVar, cast
+from typing import ClassVar, cast
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -130,10 +130,10 @@ class TheoryDTDStarsFreq(QTheory):
 
         self.get_material_parameters()
 
-        self.G0 = self.parameters["G0"].value
-        self.tau_e = self.parameters["tau_e"].value
-        self.Me = self.parameters["Me"].value
-        self.alpha = self.parameters["alpha"].value
+        self.G0 = self.parameter_float("G0")
+        self.tau_e = self.parameter_float("tau_e")
+        self.Me = self.parameter_float("Me")
+        self.alpha = self.parameter_float("alpha")
         self.Z = 1
         self.w = 0
 
@@ -145,11 +145,11 @@ class TheoryDTDStarsFreq(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        self.G0 = self.parameters["G0"].value
-        self.tau_e = self.parameters["tau_e"].value
-        self.Me = self.parameters["Me"].value
-        self.alpha = self.parameters["alpha"].value
-        Me: Any = self.Me
+        self.G0 = self.parameter_float("G0")
+        self.tau_e = self.parameter_float("tau_e")
+        self.Me = self.parameter_float("Me")
+        self.alpha = self.parameter_float("alpha")
+        Me = self.Me
         try:
             Mw = float(file.file_parameters["Mw"])
         except (ValueError, KeyError):
@@ -253,10 +253,10 @@ class TheoryDTDStarsTime(QTheory):
 
         self.get_material_parameters()
 
-        self.G0 = self.parameters["G0"].value
-        self.tau_e = self.parameters["tau_e"].value
-        self.Me = self.parameters["Me"].value
-        self.alpha = self.parameters["alpha"].value
+        self.G0 = self.parameter_float("G0")
+        self.tau_e = self.parameter_float("tau_e")
+        self.Me = self.parameter_float("Me")
+        self.alpha = self.parameter_float("alpha")
 
     def calculate(self, f: FileLike | None = None) -> None:
         """DTDStarsTime function"""
@@ -266,11 +266,11 @@ class TheoryDTDStarsTime(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        self.G0 = self.parameters["G0"].value
-        self.tau_e = self.parameters["tau_e"].value
-        self.Me = self.parameters["Me"].value
-        self.alpha = self.parameters["alpha"].value
-        Me: Any = self.Me
+        self.G0 = self.parameter_float("G0")
+        self.tau_e = self.parameter_float("tau_e")
+        self.Me = self.parameter_float("Me")
+        self.alpha = self.parameter_float("alpha")
+        Me = self.Me
         try:
             Mw = float(file.file_parameters["Mw"])
         except (ValueError, KeyError):

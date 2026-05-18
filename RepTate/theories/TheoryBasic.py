@@ -119,7 +119,7 @@ class TheoryPolynomial(QTheory):
         self.parameters["n"] = Parameter(
             name="n", value=1, description="Degree of Polynomial", type=ParameterType.integer, opt_type=OptType.const, display_flag=False
         )
-        n: Any = self.parameters["n"].value
+        n = self.parameter_int("n")
         for i in range(n + 1):
             self.parameters["A%d" % i] = Parameter("A%d" % i, 1.0, "Coefficient order %d" % i, ParameterType.real, opt_type=OptType.opt)
         self.Qprint("%s: A0 + A1*x + A2*x^2 + ..." % self.thname)
@@ -130,7 +130,7 @@ class TheoryPolynomial(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
         self.spinbox.setPrefix("degree ")
-        self.spinbox.setValue(int(self.parameters["n"].value))  # initial value
+        self.spinbox.setValue(self.parameter_int("n"))  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
@@ -142,7 +142,7 @@ class TheoryPolynomial(QTheory):
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change a parameter value, in particular *n*"""
         if name == "n":
-            nold: Any = self.parameters["n"].value
+            nold = self.parameter_int("n")
             Aold = np.zeros(nold + 1)
             for i in range(nold + 1):
                 Aold[i] = self.parameters["A%d" % i].value
@@ -179,7 +179,7 @@ class TheoryPolynomial(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        n: Any = self.parameters["n"].value
+        n = self.parameter_int("n")
         for i in range(n + 1):
             a = self.parameters["A%d" % i].value
             for j in range(1, tt.num_columns):
@@ -235,8 +235,8 @@ class TheoryPowerLaw(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
         for j in range(1, tt.num_columns):
-            a: Any = self.parameters["a"].value
-            b: Any = self.parameters["b"].value
+            a = self.parameter_float("a")
+            b = self.parameter_float("b")
             tt.data[:, j] = a * tt.data[:, 0] ** b
 
 
@@ -285,8 +285,10 @@ class TheoryExponential(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
+        a = self.parameter_float("a")
+        T = self.parameter_float("T")
         for j in range(1, tt.num_columns):
-            tt.data[:, j] = self.parameters["a"].value * np.exp(-tt.data[:, 0] / self.parameters["T"].value)
+            tt.data[:, j] = a * np.exp(-tt.data[:, 0] / T)
 
 
 r"""
@@ -340,10 +342,10 @@ class TheoryTwoExponentials(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        a1: Any = self.parameters["a1"].value
-        a2: Any = self.parameters["a2"].value
-        T1: Any = self.parameters["T1"].value
-        T2: Any = self.parameters["T2"].value
+        a1 = self.parameter_float("a1")
+        a2 = self.parameter_float("a2")
+        T1 = self.parameter_float("T1")
+        T2 = self.parameter_float("T2")
         for j in range(1, tt.num_columns):
             tt.data[:, j] = a1 * np.exp(-tt.data[:, 0] / T1) + a2 * np.exp(-tt.data[:, 0] / T2)
 
@@ -401,7 +403,7 @@ class TheoryAlgebraicExpression(QTheory):
             opt_type=OptType.const,
             display_flag=False,
         )
-        n: Any = self.parameters["n"].value
+        n = self.parameter_int("n")
         for i in range(n):
             self.parameters["A%d" % i] = Parameter("A%d" % i, 1.0, "Parameter %d" % i, ParameterType.real, opt_type=OptType.opt)
 
@@ -447,7 +449,7 @@ class TheoryAlgebraicExpression(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
         self.spinbox.setToolTip("Number of parameters")
-        self.spinbox.setValue(int(self.parameters["n"].value))  # initial value
+        self.spinbox.setValue(self.parameter_int("n"))  # initial value
         tb.addWidget(self.spinbox)
         self.expressionCB = QComboBox()
         self.expressionCB.setToolTip("Algebraic expression")
@@ -473,7 +475,7 @@ class TheoryAlgebraicExpression(QTheory):
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change a parameter value, in particular *n*"""
         if name == "n":
-            nold: Any = self.parameters["n"].value
+            nold = self.parameter_int("n")
             Aold = np.zeros(nold)
             for i in range(nold):
                 Aold[i] = self.parameters["A%d" % i].value
@@ -518,7 +520,7 @@ class TheoryAlgebraicExpression(QTheory):
             paramindex = int(p.split("A")[1])
             if paramindex > maxparamindex:
                 maxparamindex = paramindex
-        n: Any = self.parameters["n"].value
+        n = self.parameter_int("n")
         if (maxparamindex != n - 1) or (nparams != n):
             self.logger.warning("Wrong expression or number of parameters. Review your theory")
             self.Qprint("<b><font color=red>Wrong expression or number of parameters</font></b>. Review your theory")

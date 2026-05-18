@@ -174,8 +174,8 @@ class MinimizationMethod(enum.Enum):
     def __str__(self):
         stt = ""
         N = len(self.types.value)
-        # for i, k in enumerate(self.types.value):
-        #     stt += Fore.RED + k + Fore.RESET + ": " + self.descriptions.value[i] + "\n"
+        for i, k in enumerate(self.types.value):
+            stt += k + ": " + self.descriptions.value[i] + "\n"
         return stt
 
 

@@ -34,7 +34,7 @@
 
 GEX file for creating a new theory
 """
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from math import gamma
@@ -110,10 +110,10 @@ class TheoryGEX(QTheory):
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
-        W0 = np.power(10.0, self.parameters["logW0"].value)
-        M0 = np.power(10.0, self.parameters["logM0"].value)
-        a: Any = self.parameters["a"].value
-        b: Any = self.parameters["b"].value
+        W0 = np.power(10.0, self.parameter_float("logW0"))
+        M0 = np.power(10.0, self.parameter_float("logM0"))
+        a = self.parameter_float("a")
+        b = self.parameter_float("b")
 
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
@@ -135,9 +135,9 @@ File error is calculated as the mean square of the residual, averaged over all p
         super().do_error(line)
         if line == "":
             self.Qprint("""<h3>Characteristics of the fitted MWD</h3>""")
-            M0 = np.power(10.0, self.parameters["logM0"].value)
-            a: Any = self.parameters["a"].value
-            b: Any = self.parameters["b"].value
+            M0 = np.power(10.0, self.parameter_float("logM0"))
+            a = self.parameter_float("a")
+            b = self.parameter_float("b")
             Mn = M0 * gamma((a + 1) / b) / gamma(a / b)
             Mw = M0 * gamma((a + 2) / b) / gamma((a + 1) / b)
             Mz = M0 * gamma((a + 3) / b) / gamma((a + 2) / b)

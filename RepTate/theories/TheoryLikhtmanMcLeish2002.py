@@ -324,13 +324,13 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         view = self.current_view()
         if not self._axis_supports(view.y_axis, "stress"):
             return None
-        return self._parameter_value_to_plot_axis(self.parameters["Ge"].value, view.y_axis)
+        return self._parameter_value_to_plot_axis(self.parameter_float("Ge"), view.y_axis)
 
     def _taue_plot_x(self) -> float | None:
         view = self.current_view()
         if view.x_axis.quantity not in ("angular_frequency", "frequency"):
             return None
-        taue: Any = self.parameters["tau_e"].value
+        taue = self.parameter_float("tau_e")
         if taue <= 0.0:
             return None
         return self._parameter_value_to_plot_axis(1.0 / taue, view.x_axis)
@@ -404,7 +404,7 @@ class TheoryLikhtmanMcLeish2002(QTheory):
     def set_extra_data(self, _: Any) -> None:
         """Restore the check state of button and text value"""
         self.update_rho0_toolbar()
-        checked: Any = self.parameters["linkMeGe"].value
+        checked = self.parameter_bool("linkMeGe")
         self.linkMeGeaction.setChecked(checked)
         self.linkMeGeaction_change(checked)
 
@@ -417,12 +417,12 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        taue: Any = self.parameters["tau_e"].value
-        Ge: Any = self.parameters["Ge"].value
-        Me: Any = self.parameters["Me"].value
-        cnu: Any = self.parameters["c_nu"].value
-        rho0: Any = self.parameters["rho0"].value
-        linkMeGe: Any = self.parameters["linkMeGe"].value
+        taue = self.parameter_float("tau_e")
+        Ge = self.parameter_float("Ge")
+        Me = self.parameter_float("Me")
+        cnu = self.parameter_float("c_nu")
+        rho0 = self.parameter_float("rho0")
+        linkMeGe = self.parameter_bool("linkMeGe")
         Mw = float(f.file_parameters["Mw"])
         T = float(f.file_parameters["T"]) + 273.15
         if linkMeGe:
@@ -467,8 +467,8 @@ class TheoryLikhtmanMcLeish2002(QTheory):
         File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
         """
         super().do_error(line)
-        taue: Any = self.parameters["tau_e"].value
-        Me: Any = self.parameters["Me"].value
+        taue = self.parameter_float("tau_e")
+        Me = self.parameter_float("Me")
         tab_data = [
             ["%-18s" % "File", "%-18s" % "Z", "%-18s" % "tauR", "%-18s" % "tauD"],
         ]

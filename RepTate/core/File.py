@@ -173,8 +173,7 @@ class File(object):
 
     def __str__(self) -> Any:
         """Return a string"""
-        # return Fore.YELLOW + 'File: ' + Fore.RESET  + '%s\n'%self.file_name_short + Fore.CYAN  + 'Path: ' + Fore.RESET + '%s\n'%self.file_full_path + Fore.RED + 'Parameters: ' + Fore.RESET + '%s'%self.file_parameters
-        pass
+        return 'File: ' + '%s\n'%self.file_name_short + 'Path: ' + '%s\n'%self.file_full_path + 'Parameters: ' + '%s'%self.file_parameters
 
     def mincol(self, col: int) -> Any:
         """Minimum value in data_table column col"""

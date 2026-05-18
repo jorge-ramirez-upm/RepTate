@@ -81,7 +81,7 @@ class DataTable(object):
         .. todo:: Refine this. It doesn't work
 
         """
-        return self.data
+        return self.data.__str__()
         
     def mincol(self, col: int) -> Any:
         """Minimum value in table column col
