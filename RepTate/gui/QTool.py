@@ -62,7 +62,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.core.units import available_units, units_are_compatible
 from math import ceil, floor
 from collections import OrderedDict
@@ -315,8 +315,14 @@ class QTool(QWidget, Ui_ToolTab):
         pass
 
     def calculate_all(
-        self, n: Any, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        n: int,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Calculate the tool for all views"""
         newxy = []
         lenx: Any = 1e9
@@ -336,8 +342,13 @@ class QTool(QWidget, Ui_ToolTab):
         return x, y
 
     def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         return x, y
 
     def clean_graphic_stuff(self) -> None:

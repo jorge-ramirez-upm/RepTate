@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 
 
@@ -124,8 +124,13 @@ class ToolBounds(QTool):
         return message, success
 
     def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Bounds function limits the data shown in the view"""
         xmin = self.parameters["xmin"].value
         xmax = self.parameters["xmax"].value

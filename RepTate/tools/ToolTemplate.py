@@ -38,7 +38,7 @@ Template file for creating a new Tool
 from typing import Any, ClassVar
 
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 
 
@@ -69,6 +69,13 @@ class ToolTemplate(QTool):
         If not, you can safely delete it."""
         pass
 
-    def calculate(self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []) -> tuple[Any, Any]:
+    def calculate(
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Template function that returns the square of the y, according to the view"""
         return x, y * y

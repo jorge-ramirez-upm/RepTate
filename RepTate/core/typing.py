@@ -18,6 +18,7 @@ FloatArray: TypeAlias = npt.NDArray[np.float64]
 AnyArray: TypeAlias = npt.NDArray[Any]
 ModesResult: TypeAlias = tuple[FloatArray, FloatArray, bool]
 ViewResult: TypeAlias = tuple[AnyArray, AnyArray, bool]
+ToolResult: TypeAlias = tuple[AnyArray, AnyArray]
 FileParameterValue: TypeAlias = Any
 FileParameters: TypeAlias = dict[str, FileParameterValue]
 FileParameterSpecs: TypeAlias = dict[str, "FileParameterSpec"]

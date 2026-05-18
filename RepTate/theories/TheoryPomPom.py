@@ -43,7 +43,7 @@ from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMethod
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
@@ -333,7 +333,7 @@ class TheoryPomPom(QTheory):
             print("in RP init:", e)
             self.flow_mode = FlowMode.shear  # default mode: shear
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
         nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)

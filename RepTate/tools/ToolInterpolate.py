@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 from scipy.interpolate import interp1d
 
@@ -73,8 +73,13 @@ class ToolInterpolateExtrapolate(QTool):
 
 
     def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """InterpolateExtrapolate function that returns the square of the y, according to the view"""
         xval = self.parameters["x"].value
         xunique, indunique = np.unique(x, return_index=True)

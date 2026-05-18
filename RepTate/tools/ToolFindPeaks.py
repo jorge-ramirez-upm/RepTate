@@ -40,7 +40,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 from PySide6.QtGui import QIcon
 
@@ -138,8 +138,13 @@ class ToolFindPeaks(QTool):
         self.clean_graphic_stuff()
 
     def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         threshold = self.parameters["threshold"].value
         minimum_distance = self.parameters["minimum_distance"].value
         minpeaks = self.parameters["minpeaks"].value

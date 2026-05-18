@@ -38,7 +38,7 @@ Template file for creating a new theory
 import numpy as np
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -326,7 +326,7 @@ class TheoryRDPLVE(QTheory):
         self.extra_data["Zeff"] = self.Zeff
         self.extra_data["with_gcorr"] = self.with_gcorr == GcorrMode.with_gcorr
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
         nmodes: Any = self.parameters["nmodes"].value
         tau = np.zeros(nmodes)

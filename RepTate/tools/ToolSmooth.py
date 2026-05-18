@@ -38,7 +38,7 @@ import traceback
 from typing import Any, ClassVar
 
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 from scipy.signal import savgol_filter
 
@@ -104,8 +104,13 @@ class ToolSmooth(QTool):
 
 
     def calculate(
-        self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Smooth the x, y data"""
         window = self.parameters["window"].value
         order = self.parameters["order"].value

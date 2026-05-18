@@ -40,7 +40,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu
@@ -317,7 +317,7 @@ class TheoryPETS(QTheory):
         self.LVEenvelopeseries.set_visible(state)
         self.parent_dataset.parent_application.update_plot()
 
-    def get_modes(self) -> tuple[Any, Any, bool]:
+    def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
         tau = np.zeros(1)
         G = np.zeros(1)

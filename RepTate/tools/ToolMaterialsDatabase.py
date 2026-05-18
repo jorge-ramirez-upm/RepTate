@@ -42,7 +42,7 @@ from typing import Any, ClassVar
 import numpy as np
 from pathlib import Path
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import ApplicationLike, AxesLike
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 from PySide6.QtWidgets import (
     QComboBox,
@@ -772,7 +772,8 @@ class ToolMaterialsDatabase(QTool):
             self.cbmaterial.removeItem(self.cbmaterial.currentIndex())
             materials_user_database.pop(selected_material_name)
 
-    def calculate_stuff(self, line: str = "", file_parameters: Any = []) -> None:
+    def calculate_stuff(self, line: str = "", file_parameters: FileParameters | None = None) -> None:
+        file_parameters = file_parameters or {}
         if "Mw" in file_parameters:
             Mw = float(file_parameters["Mw"])
         else:
@@ -834,7 +835,14 @@ class ToolMaterialsDatabase(QTool):
         tab_data.append(["<b>tau_D</b>", "%g" % tD])
         self.Qprint(tab_data)
 
-    def calculate(self, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []) -> tuple[Any, Any]:
+    def calculate(
+        self,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Calculate some results related to the selected material or the file material"""
         self.calculate_stuff("", file_parameters)
         return x, y
@@ -901,8 +909,14 @@ class ToolMaterialsDatabase(QTool):
             print("   Usage: calculate_stuff Mw T isofrictional verticalshift")
 
     def calculate_all(
-        self, n: Any, x: Any, y: Any, ax: AxesLike | None = None, color: Any = None, file_parameters: Any = []
-    ) -> tuple[Any, Any]:
+        self,
+        n: int,
+        x: AnyArray,
+        y: AnyArray,
+        ax: AxesLike | None = None,
+        color: Any = None,
+        file_parameters: FileParameters | None = None,
+    ) -> ToolResult:
         """Calculate the tool for all views - In MatDB, only first view is needed"""
         newxy = []
         lenx: Any = 1e9
