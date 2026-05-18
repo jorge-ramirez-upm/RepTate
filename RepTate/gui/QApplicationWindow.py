@@ -44,7 +44,7 @@ import io
 import math
 import re
 import traceback
-from typing import cast
+from typing import Any, cast
 from numpy import (
     sin,
     cos,
@@ -125,7 +125,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
-from RepTate.core.typing import ApplicationManagerLike, AxesArray
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileTypeLike
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
@@ -412,14 +412,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.name = name
         self.parent_manager: ApplicationManagerLike = cast(ApplicationManagerLike, parent)
         self.views = OrderedDict()
-        self.filetypes = OrderedDict()  # keep filetypes in order
+        self.filetypes: OrderedDict[str, FileTypeLike] = OrderedDict()  # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order
         self.availabletools = OrderedDict()  # keep tools combobox in order
         self.extratools = OrderedDict()  # keep tools combobox in order
-        self.datasets = {}
+        self.datasets: dict[str, DataSetLike] = {}
         self.tools = []
         self.num_tools = 0
-        self.current_view = 0
+        self.current_view: Any = 0
         self.num_datasets = 0
         self.legend_visible = False
         self.multiviews = []  # default view order in multiplot views

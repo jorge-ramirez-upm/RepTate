@@ -60,7 +60,7 @@ import RepTate
 from RepTate.core.CmdBase import CmdBase, CalcMode
 
 from RepTate.core.File import File
-from RepTate.core.typing import DataSetLike
+from RepTate.core.typing import ApplicationLike, DataSetLike
 
 # from RepTate.gui.QAboutReptate import AboutWindow
 from RepTate.applications.ApplicationTTS import ApplicationTTS
@@ -156,7 +156,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         # SETUP APPLICATIONS
         self.application_counter = 0
-        self.applications = OrderedDict()
+        self.applications: OrderedDict[str, ApplicationLike] = OrderedDict()
         self.available_applications = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any, Protocol, TypeAlias, TYPE_CHECKING
+from collections.abc import Callable, Mapping
+from typing import Any, ClassVar, Protocol, TypeAlias, TYPE_CHECKING
 
 import numpy as np
 import numpy.typing as npt
@@ -144,15 +144,18 @@ class AxisLike(Protocol):
 class ApplicationLike(Protocol):
     """Minimal application contract accessed through datasets, tools, and plots."""
 
-    appname: str
+    appname: ClassVar[str]
     logger: Any
     axarr: AxesArray
-    current_view: ViewLike
+    current_view: Any
     multiviews: list[ViewLike]
-    filetypes: dict[str, FileTypeLike]
+    filetypes: Mapping[str, FileTypeLike]
+    theories: Mapping[str, Any]
+    availabletools: Mapping[str, Any]
+    extratools: Mapping[str, Any]
     tools: Any
     parent_manager: "ApplicationManagerLike"
-    datasets: dict[str, "DataSetLike"]
+    datasets: Mapping[str, "DataSetLike"]
     DataSettabWidget: Any
     sp_nviews: Any
     current_viewtab: int
@@ -168,12 +171,18 @@ class ApplicationLike(Protocol):
 
     def set_view_tools(self, view_name: str) -> None: ...
 
+    def new_tables_from_files(self, paths_to_open: Any) -> Any: ...
+
+    def new_tool(self, tool_name: str, tool_tab_id: str = "") -> Any: ...
+
+    def showDataInspector(self, checked: bool) -> Any: ...
+
 
 class ApplicationManagerLike(Protocol):
     """Minimal application manager contract used by applications and theories."""
 
     logger: Any
-    applications: dict[str, ApplicationLike]
+    applications: Mapping[str, ApplicationLike]
     ApplicationtabWidget: Any
 
     def list_theories_Maxwell(self, th_exclude: Any = None) -> tuple[dict[str, Any], dict[str, Any]]: ...
@@ -209,3 +218,11 @@ class DataSetLike(Protocol):
     def do_plot(self, line: str) -> None: ...
 
     def end_of_computation(self, name: str) -> None: ...
+
+    def new_theory(
+        self,
+        th_name: str,
+        th_tab_id: str = "",
+        calculate: bool = True,
+        show: bool = True,
+    ) -> Any: ...

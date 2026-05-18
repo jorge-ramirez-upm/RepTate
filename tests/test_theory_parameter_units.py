@@ -14,10 +14,12 @@ CANONICAL_UNITS = {
 }
 
 
-def _literal_keyword(call, name):
+def _literal_keyword(call: ast.Call, name: str) -> str | None:
     for keyword in call.keywords:
         if keyword.arg == name and isinstance(keyword.value, ast.Constant):
-            return keyword.value.value
+            value = keyword.value.value
+            if isinstance(value, str):
+                return value
     return None
 
 
