@@ -18,6 +18,9 @@ from RepTate.gui.QTool import QTool
 from RepTate.runtime import configure_numpy_errors
 from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesFrequency
 from RepTate.theories.TheoryUCM import TheoryUCM
+from RepTate.tools.ToolBounds import ToolBounds
+from RepTate.tools.ToolGradient import ToolGradient
+from RepTate.tools.ToolPowerLaw import ToolPowerLaw
 
 
 def _parameter_owner(cls: type[Any]) -> Any:
@@ -49,6 +52,52 @@ def test_qtool_parameter_helpers_return_plain_scalar_values() -> None:
     assert tool.parameter_int("integer") == 3
     assert tool.parameter_bool("boolean") is True
     assert tool.parameter_str("string") == "42"
+
+
+def test_power_law_tool_calculation_uses_float_parameter() -> None:
+    tool = ToolPowerLaw.__new__(ToolPowerLaw)
+    tool.parameters = OrderedDict(
+        [
+            ("n", Parameter("n", "2", "power law exponent", ParameterType.real)),
+        ]
+    )
+    x = np.array([1.0, 2.0, 4.0])
+    y = np.array([2.0, 8.0, 32.0])
+
+    xout, yout = tool.calculate(x, y)
+
+    npt.assert_array_equal(xout, x)
+    npt.assert_allclose(yout, np.array([2.0, 2.0, 2.0]))
+
+
+def test_bounds_tool_calculation_uses_scalar_parameters() -> None:
+    tool = ToolBounds.__new__(ToolBounds)
+    tool.parameters = OrderedDict(
+        [
+            ("xmin", Parameter("xmin", 0.0, "minimum x", ParameterType.real)),
+            ("xmax", Parameter("xmax", 3.0, "maximum x", ParameterType.real)),
+            ("ymin", Parameter("ymin", 0.0, "minimum y", ParameterType.real)),
+            ("ymax", Parameter("ymax", 10.0, "maximum y", ParameterType.real)),
+        ]
+    )
+    x = np.array([-1.0, 0.5, 2.0, 4.0])
+    y = np.array([5.0, -1.0, 9.0, 3.0])
+
+    xout, yout = tool.calculate(x, y)
+
+    npt.assert_allclose(xout, np.array([2.0]))
+    npt.assert_allclose(yout, np.array([9.0]))
+
+
+def test_gradient_tool_calculates_derivative_without_parameters() -> None:
+    tool = ToolGradient.__new__(ToolGradient)
+    x = np.array([0.0, 1.0, 2.0, 3.0])
+    y = x**2
+
+    xout, yout = tool.calculate(x, y)
+
+    npt.assert_array_equal(xout, x)
+    npt.assert_allclose(yout, np.gradient(y, x))
 
 
 def test_dataset_theory_creation_and_maxwell_mode_listing() -> None:
