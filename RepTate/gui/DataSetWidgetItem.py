@@ -38,6 +38,7 @@ Module that defines the a DataSetWidgetItem that allows to sort items in the Dat
 from typing import Any, ClassVar
 
 from PySide6.QtWidgets import QTreeWidgetItem
+from RepTate.core.typing import FileTypeLike
 
 QTreeWidgetItemAny: Any = QTreeWidgetItem
 
@@ -57,7 +58,7 @@ class DataSetWidgetItem(QTreeWidgetItem):
         itemlist: Any = [],
         type: int = 0,
         file_name_short: str = "dummy",
-        file_type: Any = None,
+        file_type: FileTypeLike | None = None,
     ) -> None:
         """**Constructor**"""
         QTreeWidgetItemAny.__init__(self, parent, itemlist, type)

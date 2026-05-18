@@ -116,7 +116,7 @@ class EditMaterialParametersDialog(QDialog):
     material: Any
     p_new: Any
     param_dict: Any
-    parent_dataset: Any
+    parent_dataset: object | None
 
     def __init__(self, parent: Any, material: Any, parameterdata: Any) -> None:
         super().__init__(parent)

@@ -43,7 +43,7 @@ import numpy as np
 # import logging
 from openpyxl import load_workbook
 from RepTate.core.File import File, FileParameterSpec
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import AxesArray, DataSetLike
 from RepTate.core.units import (
     convert_array_to_internal,
     make_column_specs,
@@ -228,7 +228,7 @@ class TXTColumnFile(object):
         return col_index, col_labels, col_units
 
     def read_file(
-        self, filename: str, parent_dataset: Any, axarr: AxesArray | None
+        self, filename: str, parent_dataset: DataSetLike | None, axarr: AxesArray | None
     ) -> File | None:
         """Gets all the data from the file"""
         if not os.path.isfile(filename):
@@ -321,7 +321,7 @@ class ExcelFile(object):
         # self.logger = logging.getLogger('ReptateLogger')
 
     def read_file(
-        self, filename: str, parent_dataset: Any, axarr: AxesArray | None
+        self, filename: str, parent_dataset: DataSetLike | None, axarr: AxesArray | None
     ) -> File | None:
         """Read Excel File"""
         if not os.path.isfile(filename):

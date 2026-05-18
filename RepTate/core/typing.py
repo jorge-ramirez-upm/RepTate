@@ -11,6 +11,7 @@ import numpy.typing as npt
 if TYPE_CHECKING:
     from RepTate.core.DataTable import DataTable
     from RepTate.core.File import File
+    from RepTate.core.File import FileParameterSpec
 
 
 FloatArray: TypeAlias = npt.NDArray[np.float64]
@@ -18,6 +19,7 @@ AnyArray: TypeAlias = npt.NDArray[Any]
 ModesResult: TypeAlias = tuple[FloatArray, FloatArray, bool]
 FileParameterValue: TypeAlias = Any
 FileParameters: TypeAlias = dict[str, FileParameterValue]
+FileParameterSpecs: TypeAlias = dict[str, "FileParameterSpec"]
 AxesArray: TypeAlias = list["AxesLike"]
 
 
@@ -77,6 +79,18 @@ class AxesLike(Protocol):
     def legend(self, *args: Any, **kwargs: Any) -> Any: ...
 
 
+class FileTypeLike(Protocol):
+    """Minimal file type contract shared by loaded files and applications."""
+
+    name: str
+    extension: str
+    description: str
+    col_names: list[str]
+    basic_file_parameters: list[str]
+    col_units: list[str]
+    file_parameter_specs: FileParameterSpecs
+
+
 class FileLike(Protocol):
     """Minimal file contract used by theory calculation functions."""
 
@@ -84,7 +98,7 @@ class FileLike(Protocol):
     file_full_path: str
     data_table: DataTable
     file_parameters: FileParameters
-    file_type: Any
+    file_type: FileTypeLike
     active: bool
     with_extra_x: bool
     nextramin: int
@@ -133,13 +147,15 @@ class ApplicationLike(Protocol):
     axarr: AxesArray
     current_view: ViewLike
     multiviews: list[ViewLike]
-    filetypes: dict[str, Any]
+    filetypes: dict[str, FileTypeLike]
     tools: Any
     parent_manager: Any
 
     def update_plot(self) -> None: ...
 
     def update_Qplot(self) -> None: ...
+
+    def dataset_actions_disabled(self, state: bool) -> None: ...
 
 
 class DataSetLike(Protocol):
@@ -150,6 +166,7 @@ class DataSetLike(Protocol):
     current_file: File | None
     inactive_files: list[str]
     selected_file: File | None
+    theories: dict[str, Any]
     parent_application: ApplicationLike
     nplots: int
     width: Any

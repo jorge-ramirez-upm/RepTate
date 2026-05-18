@@ -37,9 +37,15 @@ Module that defines a basic File, with headers, columns and data.
 """
 import os
 from dataclasses import dataclass
-from typing import Any, TypeAlias
+from typing import Any, TypeAlias, cast
 from RepTate.core.DataTable import DataTable
-from RepTate.core.typing import AxesArray, FileParameters, FileParameterValue
+from RepTate.core.typing import (
+    AxesArray,
+    DataSetLike,
+    FileParameters,
+    FileParameterValue,
+    FileTypeLike,
+)
 from RepTate.core.units import convert_value, get_unit
 
 
@@ -126,16 +132,16 @@ class File(object):
     def __init__(
         self,
         file_name: str = "",
-        file_type: Any = None,
-        parent_dataset: Any = None,
+        file_type: FileTypeLike | None = None,
+        parent_dataset: DataSetLike | None = None,
         axarr: AxesArray | None = None,
     ) -> None:
         """**Constructor**"""
         self.file_full_path: str = os.path.abspath(file_name)
         tmpname = os.path.basename(self.file_full_path)
         self.file_name_short: str = os.path.splitext(tmpname)[0]
-        self.file_type: Any = file_type
-        self.parent_dataset: Any = parent_dataset
+        self.file_type: FileTypeLike = cast(FileTypeLike, file_type)
+        self.parent_dataset: DataSetLike | None = parent_dataset
         self.axarr: AxesArray | None = axarr
 
         #plot attributes
@@ -153,9 +159,7 @@ class File(object):
         self.file_parameters: FileParameters = {}
         self.file_parameter_specs: FileParameterSpecs = {}
         if file_type is not None:
-            self.file_parameter_specs.update(
-                getattr(file_type, "file_parameter_specs", {})
-            )
+            self.file_parameter_specs.update(file_type.file_parameter_specs)
         self.active: bool = True
         self.data_table: DataTable = DataTable(axarr, self.file_name_short)
         # extra theory xrange

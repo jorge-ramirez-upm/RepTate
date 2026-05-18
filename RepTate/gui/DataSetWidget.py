@@ -39,6 +39,7 @@ from typing import Any
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QTreeWidget
+from RepTate.core.typing import DataSetLike
 
 QtAny: Any = Qt
 
@@ -50,7 +51,7 @@ class DataSetWidget(QTreeWidget):
     by clicking in the white area of the DataSet, and allows to delete a data table item
     """
 
-    parent_dataset: Any
+    parent_dataset: DataSetLike
 
     def __init__(self, parent: Any = None) -> None:
         """**Constructor**"""
