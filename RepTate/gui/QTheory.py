@@ -576,16 +576,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         child theory must rewrite this funcion"""
         pass
 
-    def precmd(self, line):
-        """Calculations before the theory is calculated
-
-        This function could be erased
-        This method is called after the line has been input but before
-        it has been interpreted. If you want to modifdy the input line
-        before execution (for example, variable substitution) do it here."""
-        super(Theory, self).precmd(line)  # pyright: ignore[reportUndefinedVariable]
-        return line
-
     def update_parameter_table(self):  # pyright: ignore[reportRedeclaration]
         """
         Added so that Maxwell modes works in CL
