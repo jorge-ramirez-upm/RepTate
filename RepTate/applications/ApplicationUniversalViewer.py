@@ -36,11 +36,12 @@ Definition of a new Application for viewing generic txt data
 
 """
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationLike, ApplicationManagerLike
 
 from numpy import (
     sin,
@@ -88,9 +89,9 @@ class ViewParseExpression(object):
         col_names: list[str] = [],
         xexpr: list[str] = [],
         yexpr: list[str] = [],
-        parent: Any = None,
+        parent: ApplicationLike | None = None,
     ) -> None:
-        self.parent: Any = parent
+        self.parent: ApplicationLike = cast(ApplicationLike, parent)
         self.name: str = name
         self.n: int = n
         self.col_names: list[str] = col_names
@@ -216,7 +217,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
     def __init__(
         self,
         name: str = "Universal Viewer",
-        parent: Any = None,
+        parent: ApplicationManagerLike | None = None,
         inifile: Any = None,
         nplot_max: int = 1,
     ) -> None:

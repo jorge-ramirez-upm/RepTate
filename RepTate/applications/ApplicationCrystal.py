@@ -42,6 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -53,7 +54,7 @@ class ApplicationCrystal(QApplicationWindow):
     extension: ClassVar[str] = "shearxs uextxs shear uext"
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Crystal/Crystal.html"
 
-    def __init__(self, name: str = "Crystal", parent: Any = None) -> None:
+    def __init__(self, name: str = "Crystal", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryGoPolyStrand import TheoryGoPolyStrand
         from RepTate.theories.TheorySmoothPolyStrand import TheorySmoothPolyStrand

@@ -41,6 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -54,7 +55,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         "http://reptate.readthedocs.io/manual/Applications/TTSFactors/TTSFactors.html"
     )
 
-    def __init__(self, name: str = "TTSF", parent: Any = None) -> None:
+    def __init__(self, name: str = "TTSF", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryWLF import TheoryWLF
         from RepTate.theories.TheoryArrhenius import TheoryArrhenius

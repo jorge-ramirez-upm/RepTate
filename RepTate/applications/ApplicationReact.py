@@ -40,6 +40,7 @@ from typing import Any, ClassVar
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -50,7 +51,7 @@ class ApplicationReact(QApplicationWindow):
     extension: ClassVar[str] = 'reac'
     html_help_file: ClassVar[str] = 'http://reptate.readthedocs.io/manual/Applications/React/React.html'
 
-    def __init__(self, name: str = 'React', parent: Any = None, **kwargs: Any) -> None:
+    def __init__(self, name: str = 'React', parent: ApplicationManagerLike | None = None, **kwargs: Any) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryLDPEBatch import TheoryTobitaBatch
         from RepTate.theories.TheoryTobitaCSTR import TheoryTobitaCSTR

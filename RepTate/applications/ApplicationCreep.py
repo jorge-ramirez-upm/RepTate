@@ -41,6 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 from scipy import interpolate
 
@@ -66,7 +67,7 @@ class ApplicationCreep(QApplicationWindow):
         "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
     )
 
-    def __init__(self, name: str = "Creep", parent: Any = None) -> None:
+    def __init__(self, name: str = "Creep", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryRetardationModes import TheoryRetardationModesTime
 

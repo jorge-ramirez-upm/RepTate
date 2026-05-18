@@ -40,6 +40,7 @@ from typing import Any, ClassVar
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -53,7 +54,7 @@ class ApplicationTemplate(QApplicationWindow):
     )
     # html_help_file = ''
 
-    def __init__(self, name: str = "Template", parent: Any = None) -> None:
+    def __init__(self, name: str = "Template", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
 
         # IMPORT THEORIES

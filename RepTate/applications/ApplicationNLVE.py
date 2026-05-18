@@ -42,6 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -53,7 +54,7 @@ class ApplicationNLVE(QApplicationWindow):
     extension: ClassVar[str] = "shear uext"
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/NLVE/NLVE.html"
 
-    def __init__(self, name: str = "NLVE", parent: Any = None) -> None:
+    def __init__(self, name: str = "NLVE", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly
         from RepTate.theories.TheoryUCM import TheoryUCM

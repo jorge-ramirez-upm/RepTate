@@ -41,6 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 from PySide6.QtWidgets import QSpinBox
 
@@ -53,7 +54,7 @@ class ApplicationLAOS(QApplicationWindow):
     extension: ClassVar[str] = "laos"
     # html_help_file = ''
 
-    def __init__(self, name: str = "LAOS", parent: Any = None, **kwargs: Any) -> None:
+    def __init__(self, name: str = "LAOS", parent: ApplicationManagerLike | None = None, **kwargs: Any) -> None:
         """**Constructor**"""
         # IMPORT THEORIES
         from RepTate.theories.TheoryRoliePoly import TheoryRoliePoly

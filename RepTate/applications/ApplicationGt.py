@@ -42,6 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 from scipy import interpolate
 
@@ -66,7 +67,7 @@ class ApplicationGt(QApplicationWindow):
     extension: ClassVar[str] = "gt"
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Gt.html"
 
-    def __init__(self, name: str = "Gt", parent: Any = None) -> None:
+    def __init__(self, name: str = "Gt", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesTime
         from RepTate.theories.TheoryRouse import TheoryRouseTime

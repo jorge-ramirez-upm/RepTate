@@ -41,6 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -54,7 +55,7 @@ class ApplicationDielectric(QApplicationWindow):
         "http://reptate.readthedocs.io/manual/Applications/Dielectric/Dielectric.html"
     )
 
-    def __init__(self, name: str = "Dielectric", parent: Any = None) -> None:
+    def __init__(self, name: str = "Dielectric", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDebyeModes import TheoryDebyeModesFrequency
         from RepTate.theories.TheoryHavriliakNegamiModes import (

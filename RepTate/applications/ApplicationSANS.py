@@ -41,6 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
+from RepTate.core.typing import ApplicationManagerLike
 import numpy as np
 
 
@@ -52,7 +53,7 @@ class ApplicationSANS(QApplicationWindow):
     extension: ClassVar[str] = "sans"
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/SANS/SANS.html"
 
-    def __init__(self, name: str = "SANS", parent: Any = None) -> None:
+    def __init__(self, name: str = "SANS", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDebye import TheoryDebye
 
