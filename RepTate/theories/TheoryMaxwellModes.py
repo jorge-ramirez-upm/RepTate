@@ -524,8 +524,8 @@ class TheoryMaxwellModesTime(QTheory):
             nmodesnew: Any = value
             message, success = super().set_param_value("nmodes", nmodesnew)
             if nmodesnew > 1 and nmodesold == 1:
-                if tminold > tmaxold:  # pyright: ignore[reportUnboundVariable, reportOperatorIssue]
-                    tminold, tmaxold = tmaxold, tminold  # pyright: ignore[reportUnboundVariable]
+                if tminold > tmaxold:
+                    tminold, tmaxold = tmaxold, tminold
                 self.parameters["logtmin"].opt_type = OptType.opt
             if nmodesnew > 1:
                 taunew = _logspace(tminold, tmaxold, nmodesnew)

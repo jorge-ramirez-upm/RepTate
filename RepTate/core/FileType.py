@@ -232,7 +232,7 @@ class TXTColumnFile(object):
     ) -> File | None:
         """Gets all the data from the file"""
         if not os.path.isfile(filename):
-            print('File "%s" does not exists' % filename)  # pyright: ignore[reportUnboundVariable]
+            print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
         f = open(filename, "r", encoding="latin-1")
@@ -325,7 +325,7 @@ class ExcelFile(object):
     ) -> File | None:
         """Read Excel File"""
         if not os.path.isfile(filename):
-            print('File "%s" does not exists' % filename)  # pyright: ignore[reportUndefinedVariable]
+            print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
         wb = load_workbook(filename)

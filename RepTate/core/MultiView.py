@@ -493,5 +493,5 @@ class MultiView(QWidget):
             return self.organizeOptimalColumn(nplots, ncols)
         elif organizationtype == PlotOrganizationType.Specified:
             pass
-        elif organizationtype == PlotOrganizationType.DefaultOrganization:  # pyright: ignore[reportAttributeAccessIssue]
+        elif organizationtype == PlotOrganizationType.DefaultOrganization:
             pass
