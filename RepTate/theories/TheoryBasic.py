@@ -38,40 +38,10 @@ Module that defines the basic theories that should be available for all Applicat
 
 import ast
 from types import CodeType
-from numpy import (
-    sin,
-    cos,
-    tan,
-    arccos,
-    arcsin,
-    arctan,
-    arctan2,
-    deg2rad,
-    rad2deg,
-    sinh,
-    cosh,
-    tanh,
-    arcsinh,
-    arccosh,
-    arctanh,
-    around,
-    rint,
-    floor,
-    ceil,
-    trunc,
-    exp,
-    log,
-    log10,
-    fabs,
-    mod,
-    e,
-    pi,
-    power,
-    sqrt,
-)
-import numpy as np
 import re
 from typing import Any, cast
+
+import numpy as np
 
 from RepTate.core.DataTable import DataTable
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
@@ -81,7 +51,7 @@ from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
 from PySide6.QtCore import QSize
 
 
-_ALGEBRAIC_SAFE_NAMES = [
+_ALGEBRAIC_SAFE_NUMPY_NAMES  = [
     "sin",
     "cos",
     "tan",
@@ -98,7 +68,7 @@ _ALGEBRAIC_SAFE_NAMES = [
     "arccosh",
     "arctanh",
     "around",
-    "round_",
+    "round",
     "rint",
     "floor",
     "ceil",
@@ -113,13 +83,28 @@ _ALGEBRAIC_SAFE_NAMES = [
     "power",
     "sqrt",
 ]
-_ALGEBRAIC_SAFE_DICT: dict[str, Any] = {name: globals().get(name, None) for name in _ALGEBRAIC_SAFE_NAMES}
+_ALGEBRAIC_SAFE_DICT: dict[str, Any] = {
+    name: getattr(np, name) for name in _ALGEBRAIC_SAFE_NUMPY_NAMES
+}
+
+
+_ALGEBRAIC_SAFE_DICT.update(
+    {
+        "pi": np.pi,
+        "e": np.e,
+        "abs": np.abs,
+    }
+)
+
 _ALGEBRAIC_FILE_PARAM_RE = re.compile(r"\[(.*?)\]")
 _ALGEBRAIC_ALLOWED_BINOPS = (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow, ast.Mod)
 _ALGEBRAIC_ALLOWED_UNARYOPS = (ast.UAdd, ast.USub)
+_ALGEBRAIC_ALLOWED_CONSTANT_TYPES = (int, float)
 
-
-def _compile_algebraic_expression(expression: str, allowed_names: set[str]) -> tuple[CodeType, dict[str, str]]:
+def _compile_algebraic_expression(
+    expression: str,
+    allowed_names: set[str],
+) -> tuple[CodeType, dict[str, str]]:
     """Compile a validated algebraic expression.
 
     File parameters written as ``[name]`` are replaced by generated internal
@@ -128,7 +113,7 @@ def _compile_algebraic_expression(expression: str, allowed_names: set[str]) -> t
     file_parameter_names: dict[str, str] = {}
 
     def replace_file_parameter(match: re.Match[str]) -> str:
-        symbol = "FP%d" % len(file_parameter_names)
+        symbol = f"FP{len(file_parameter_names)}"
         file_parameter_names[symbol] = match.group(1)
         return symbol
 
@@ -137,34 +122,44 @@ def _compile_algebraic_expression(expression: str, allowed_names: set[str]) -> t
     valid_names = allowed_names | set(file_parameter_names)
 
     for node in ast.walk(tree):
-        if isinstance(node, ast.Expression | ast.Load):
+        if isinstance(node, (ast.Expression, ast.Load)):
             continue
+
         if isinstance(node, ast.BinOp):
             if not isinstance(node.op, _ALGEBRAIC_ALLOWED_BINOPS):
                 raise ValueError("Unsupported algebraic operator")
             continue
+
         if isinstance(node, ast.UnaryOp):
             if not isinstance(node.op, _ALGEBRAIC_ALLOWED_UNARYOPS):
                 raise ValueError("Unsupported algebraic unary operator")
             continue
+
         if isinstance(node, _ALGEBRAIC_ALLOWED_BINOPS + _ALGEBRAIC_ALLOWED_UNARYOPS):
             continue
+
         if isinstance(node, ast.Call):
             if not isinstance(node.func, ast.Name):
                 raise ValueError("Only direct function calls are allowed")
+
             if node.func.id not in _ALGEBRAIC_SAFE_DICT:
-                raise ValueError("Unknown function '%s'" % node.func.id)
+                raise ValueError(f"Unknown function '{node.func.id}'")
+
             if node.keywords:
                 raise ValueError("Function keyword arguments are not allowed")
+
             continue
+
         if isinstance(node, ast.Name):
             if node.id not in valid_names:
-                raise ValueError("Unknown name '%s'" % node.id)
+                raise ValueError(f"Unknown name '{node.id}'")
             continue
+
         if isinstance(node, ast.Constant):
-            if not isinstance(node.value, int | float):
+            if not isinstance(node.value, _ALGEBRAIC_ALLOWED_CONSTANT_TYPES):
                 raise ValueError("Only numeric constants are allowed")
             continue
+
         raise ValueError("Unsupported algebraic expression syntax")
 
     return compile(tree, "<algebraic expression>", "eval"), file_parameter_names
@@ -604,13 +599,7 @@ class TheoryAlgebraicExpression(QTheory):
                 y = eval(code, {"__builtins__": {}}, safe_dict)
                 for j in range(1, tt.num_columns):
                     tt.data[:, j] = y
-            except (SyntaxError, ValueError) as e:
-                self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
-                self.logger.exception("Error in Algebraic Expression")
-            except NameError as e:
-                self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
-                self.logger.exception("Error in Algebraic Expression")
-            except TypeError as e:
+            except (SyntaxError, ValueError, NameError, TypeError, FloatingPointError) as e:
                 self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
                 self.logger.exception("Error in Algebraic Expression")
             except Exception as e:
