@@ -455,7 +455,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 0] / dt.data[:, 1] * sigma
         return x, y, True
 
-    def viewiRheo(self, dt: Any, file_parameters: Any) -> Any:
+    def viewiRheo(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -500,7 +500,7 @@ class ApplicationCreep(QApplicationWindow):
 
         return x, y, True
 
-    def viewiRheoOver(self, dt: Any, file_parameters: Any) -> Any:
+    def viewiRheoOver(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """i-Rheo Fourier transformation of the compliance :math:`J(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -554,7 +554,7 @@ class ApplicationCreep(QApplicationWindow):
 
         return x, y, True
 
-    def get_xy_data_in_xrange(self, dt: Any) -> Any:
+    def get_xy_data_in_xrange(self, dt: DataTableLike) -> Any:
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
         success = self.set_xmin()
         success *= self.set_xmax()

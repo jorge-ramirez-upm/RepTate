@@ -399,13 +399,13 @@ class ApplicationGt(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1] / gamma)
         return x, y, True
 
-    def viewSchwarzl_Gt(self, dt: Any, file_parameters: Any) -> Any:
+    def viewSchwarzl_Gt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Schwarzl transformation: numerical calculation of the storage modulus :math:`G'(\\omega)` and loss modulus
         :math:`G''(\\omega)` from the relaxation modulus :math:`G(t)`"""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
             QMessageBox.warning(self, "Error", error_msg)
-            return
+            return np.zeros((dt.num_rows, 2)), np.zeros((dt.num_rows, 2)), False
         n = len(data_x)
         gamma = self._gamma_from_file_parameters(file_parameters)
         data_y /= gamma
@@ -420,7 +420,7 @@ class ApplicationGt(QApplicationWindow):
         y[:, 1] = Gpp[:]
         return x, y, True
 
-    def viewiRheo(self, dt: Any, file_parameters: Any) -> Any:
+    def viewiRheo(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (no oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -491,7 +491,7 @@ class ApplicationGt(QApplicationWindow):
 
         return x, y, True
 
-    def viewiRheoOver(self, dt: Any, file_parameters: Any) -> Any:
+    def viewiRheoOver(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """i-Rheo Fourier transformation of the relaxation modulus :math:`G(t)` to obtain the storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (with user selected oversamplig)."""
         error_msg, data_x, data_y = self.get_xy_data_in_xrange(dt)
         if error_msg is not None:
@@ -532,7 +532,7 @@ class ApplicationGt(QApplicationWindow):
             y[i, 1] = -(1 - cos(w * t1)) * (g1 - g0) / w / t1 - np.dot(coeff, np.cos(w * xdata[:-1]) - np.cos(w * xdata[1:])) / w
         return x, y, True
 
-    def get_xy_data_in_xrange(self, dt: Any) -> Any:
+    def get_xy_data_in_xrange(self, dt: DataTableLike) -> Any:
         """Return the x and y data that with t in [self.tmin_view, self.tmax_view]"""
         success = self.set_xmin()
         success *= self.set_xmax()

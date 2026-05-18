@@ -837,7 +837,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return An
 
-    def do_FFT_and_STUFF(self, dt: Any) -> Any:
+    def do_FFT_and_STUFF(self, dt: DataTableLike) -> Any:
         time_uneven = dt.data[:, 0]  # raw time
         gamma_uneven = dt.data[:, 1]  # raw strain
         tau_uneven = dt.data[:, 2]  # raw stress
