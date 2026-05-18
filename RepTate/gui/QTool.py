@@ -62,7 +62,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
-from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
+from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ParameterDict, ToolResult
 from RepTate.core.units import available_units, units_are_compatible
 from math import ceil, floor
 from collections import OrderedDict
@@ -226,7 +226,7 @@ class QTool(QWidget, Ui_ToolTab):
     actionActive: Any
     actionApplyToTheory: Any
     logger: Any
-    parameters: Any
+    parameters: ParameterDict
     parent_application: ApplicationLike
     tb: Any
     toolParamTable: Any
@@ -243,7 +243,7 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.name = name
         self.parent_application = cast(ApplicationLike, parent_app)
-        self.parameters = OrderedDict()  # keep the dictionary key in order for the parameter table
+        self.parameters: ParameterDict = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.active = True  # defines if the Tool is plotted
         self.applytotheory = True  # Do we also apply the tool to the theory?
 
@@ -363,6 +363,22 @@ class QTool(QWidget, Ui_ToolTab):
     def do_plot(self, line: str = "") -> None:
         """Update plot"""
         self.parent_application.update_all_ds_plots()
+
+    def parameter_float(self, name: str) -> float:
+        """Return a tool parameter value as a float."""
+        return float(self.parameters[name].value)
+
+    def parameter_int(self, name: str) -> int:
+        """Return a tool parameter value as an int."""
+        return int(self.parameters[name].value)
+
+    def parameter_bool(self, name: str) -> bool:
+        """Return a tool parameter value as a bool."""
+        return bool(self.parameters[name].value)
+
+    def parameter_str(self, name: str) -> str:
+        """Return a tool parameter value as a string."""
+        return str(self.parameters[name].value)
 
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a parameter of the tool"""

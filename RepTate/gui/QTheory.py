@@ -87,6 +87,7 @@ from RepTate.core.typing import (
     AxesArray,
     AxesLike,
     DataSetLike,
+    ParameterDict,
     TheoryFunction,
     ViewLike,
 )
@@ -112,7 +113,6 @@ from RepTate.gui.Ui_fittingoptions import Ui_Dialog
 import RepTate.gui.Ui_errorcalculationoptions
 
 
-TheoryParameters: TypeAlias = OrderedDict[str, Parameter]
 TheoryTables: TypeAlias = dict[str, DataTable]
 BasinhoppingAny: Any = basinhopping
 DualAnnealingAny: Any = dual_annealing
@@ -401,7 +401,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.parent_dataset: DataSetLike = cast(DataSetLike, parent_dataset)
         self.axarr: AxesArray = cast(AxesArray, axarr)
         self.ax: AxesLike = self.axarr[0]  # theory calculation only on this plot
-        self.parameters: TheoryParameters = OrderedDict()  # keep the dictionary key in order for the parameter table
+        self.parameters: ParameterDict = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.tables: TheoryTables = {}
         self.function: TheoryFunction | None = None
         self.active: bool = True  # defines if the theory is plotted

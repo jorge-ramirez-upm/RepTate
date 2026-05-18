@@ -51,9 +51,6 @@ class ToolBounds(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    parameters: Any
-    parent_application: ApplicationLike
-
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
@@ -97,25 +94,25 @@ class ToolBounds(QTool):
         message, success = super().set_param_value(name, value)
         if success:
             if name == "xmax":
-                xmin = self.parameters["xmin"].value
+                xmin = self.parameter_float("xmin")
                 if new_value <= xmin:
                     p.value = old_value
                     message = "xmax must be > xmin"
                     success = False
             elif name == "xmin":
-                xmax = self.parameters["xmax"].value
+                xmax = self.parameter_float("xmax")
                 if new_value >= xmax:
                     p.value = old_value
                     message = "xmin must be < xmax"
                     success = False
             elif name == "ymax":
-                ymin = self.parameters["ymin"].value
+                ymin = self.parameter_float("ymin")
                 if new_value <= ymin:
                     p.value = old_value
                     message = "ymax must be > ymin"
                     success = False
             elif name == "ymin":
-                ymax = self.parameters["ymax"].value
+                ymax = self.parameter_float("ymax")
                 if new_value >= ymax:
                     p.value = old_value
                     message = "ymin must be < ymax"
@@ -132,10 +129,10 @@ class ToolBounds(QTool):
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
         """Bounds function limits the data shown in the view"""
-        xmin = self.parameters["xmin"].value
-        xmax = self.parameters["xmax"].value
-        ymin = self.parameters["ymin"].value
-        ymax = self.parameters["ymax"].value
+        xmin = self.parameter_float("xmin")
+        xmax = self.parameter_float("xmax")
+        ymin = self.parameter_float("ymin")
+        ymax = self.parameter_float("ymax")
         conditionx = (x > xmin) * (x < xmax)
         conditiony = (y > ymin) * (y < ymax)
         x2 = np.extract(conditionx * conditiony, x)

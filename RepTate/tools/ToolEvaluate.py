@@ -82,9 +82,6 @@ class ToolEvaluate(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    logger: Any
-    parameters: Any
-    parent_application: ApplicationLike
     safe_dict: Any
 
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
@@ -154,8 +151,8 @@ class ToolEvaluate(QTool):
     ) -> ToolResult:
         """Evaluate function that returns the square of the y, according to the view"""
         file_parameters = file_parameters or {}
-        xexpr = self.parameters["x"].value
-        yexpr = self.parameters["y"].value
+        xexpr = self.parameter_str("x")
+        yexpr = self.parameter_str("y")
         self.safe_dict["x"] = x
         self.safe_dict["y"] = y
 

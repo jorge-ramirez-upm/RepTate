@@ -52,9 +52,6 @@ class ToolInterpolateExtrapolate(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    parameters: Any
-    parent_application: ApplicationLike
-
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
@@ -81,7 +78,7 @@ class ToolInterpolateExtrapolate(QTool):
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
         """InterpolateExtrapolate function that returns the square of the y, according to the view"""
-        xval = self.parameters["x"].value
+        xval = self.parameter_float("x")
         xunique, indunique = np.unique(x, return_index=True)
         yunique = y[indunique]
         try:

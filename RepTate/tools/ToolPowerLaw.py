@@ -51,9 +51,6 @@ raised to n.
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    parameters: Any
-    parent_application: ApplicationLike
-
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
@@ -85,6 +82,6 @@ If not, you can safely delete it."""
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
         """Returns y divided by x^n, according to the view"""
-        n = self.parameters["n"].value
+        n = self.parameter_float("n")
         return x, y / x ** n
 

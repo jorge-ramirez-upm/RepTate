@@ -276,8 +276,6 @@ class ToolMaterialsDatabase(QTool):
     isofrictional: Any
     labelPolymer: Any
     model: Any
-    parameters: Any
-    parent_application: ApplicationLike
     shiftdata: Any
     tb: Any
     verticalLayout: Any
@@ -530,11 +528,11 @@ class ToolMaterialsDatabase(QTool):
 
         # Calculate shift factors
 
-        B1 = self.parameters["B1"].value
-        B2 = self.parameters["B2"].value
-        logalpha = self.parameters["logalpha"].value
+        B1 = self.parameter_float("B1")
+        B2 = self.parameter_float("B2")
+        logalpha = self.parameter_float("logalpha")
         alpha = np.power(10.0, logalpha)
-        CTg = self.parameters["CTg"].value
+        CTg = self.parameter_float("CTg")
         iso = self.isofrictional.isChecked()
         vert = self.verticalshift.isChecked()
 
@@ -784,17 +782,17 @@ class ToolMaterialsDatabase(QTool):
             T = float(file_parameters["T"])
         else:
             T = float(self.editT.text())
-        B1 = self.parameters["B1"].value
-        B2 = self.parameters["B2"].value
-        logalpha = self.parameters["logalpha"].value
+        B1 = self.parameter_float("B1")
+        B2 = self.parameter_float("B2")
+        logalpha = self.parameter_float("logalpha")
         alpha = np.power(10.0, logalpha)
-        CTg = self.parameters["CTg"].value
-        tau_e = self.parameters["tau_e"].value
-        Ge = self.parameters["Ge"].value
-        Me = self.parameters["Me"].value
-        c_nu = self.parameters["c_nu"].value
-        rho0 = self.parameters["rho0"].value
-        Te = self.parameters["Te"].value
+        CTg = self.parameter_float("CTg")
+        tau_e = self.parameter_float("tau_e")
+        Ge = self.parameter_float("Ge")
+        Me = self.parameter_float("Me")
+        c_nu = self.parameter_float("c_nu")
+        rho0 = self.parameter_float("rho0")
+        Te = self.parameter_float("Te")
         iso = self.isofrictional.isChecked()
         vert = self.verticalshift.isChecked()
 
@@ -813,7 +811,7 @@ class ToolMaterialsDatabase(QTool):
         tab_data = [
             ["<b>Material &</b>", "<b>Temperature</b>"],
         ]
-        tab_data.append(["<b>Chemistry</b>", self.parameters["long"].value])
+        tab_data.append(["<b>Chemistry</b>", self.parameter_str("long")])
         tab_data.append(["<b>Mw</b>", "%g" % Mw])
         tab_data.append(["<b>T</b>", "%g" % T])
         tab_data.append(["<b>WLF Shift</b>", "<b>Factors</b>"])
@@ -859,17 +857,17 @@ class ToolMaterialsDatabase(QTool):
             T = float(items[1])
             iso = bool(items[2])
             vert = bool(items[3])
-            B1 = self.parameters["B1"].value
-            B2 = self.parameters["B2"].value
-            logalpha = self.parameters["logalpha"].value
+            B1 = self.parameter_float("B1")
+            B2 = self.parameter_float("B2")
+            logalpha = self.parameter_float("logalpha")
             alpha = np.power(10.0, logalpha)
-            CTg = self.parameters["CTg"].value
-            tau_e = self.parameters["tau_e"].value
-            Ge = self.parameters["Ge"].value
-            Me = self.parameters["Me"].value
-            c_nu = self.parameters["c_nu"].value
-            rho0 = self.parameters["rho0"].value
-            Te = self.parameters["Te"].value
+            CTg = self.parameter_float("CTg")
+            tau_e = self.parameter_float("tau_e")
+            Ge = self.parameter_float("Ge")
+            Me = self.parameter_float("Me")
+            c_nu = self.parameter_float("c_nu")
+            rho0 = self.parameter_float("rho0")
+            Te = self.parameter_float("Te")
 
             if iso:
                 B2 += CTg / Mw  # - 68.7 * dx12

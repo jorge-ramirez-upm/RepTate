@@ -52,9 +52,6 @@ class ToolSmooth(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
-    parameters: Any
-    parent_application: ApplicationLike
-
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
@@ -86,7 +83,7 @@ class ToolSmooth(QTool):
         message, success = super().set_param_value(name, value)
         if success:
             if name == "window":
-                order = self.parameters["order"].value
+                order = self.parameter_int("order")
                 if new_value <= order or new_value < 0 or new_value % 2 == 0:
                     p.value = old_value
                     message = (
@@ -94,7 +91,7 @@ class ToolSmooth(QTool):
                     )
                     success = False
             elif name == "order":
-                window = self.parameters["window"].value
+                window = self.parameter_int("window")
                 if new_value >= window or new_value < 0:
                     p.value = old_value
                     message = "order must be >=0 and smaller than window"
@@ -112,8 +109,8 @@ class ToolSmooth(QTool):
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
         """Smooth the x, y data"""
-        window = self.parameters["window"].value
-        order = self.parameters["order"].value
+        window = self.parameter_int("window")
+        order = self.parameter_int("order")
         if window % 2 == 0:
             self.Qprint("Invalid window (must be an odd number)")
             return x, y

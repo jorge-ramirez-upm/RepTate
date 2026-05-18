@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from collections.abc import Callable, Mapping
 from typing import Any, ClassVar, Protocol, TypeAlias, TYPE_CHECKING
 
@@ -12,6 +13,7 @@ if TYPE_CHECKING:
     from RepTate.core.DataTable import DataTable
     from RepTate.core.File import File
     from RepTate.core.File import FileParameterSpec
+    from RepTate.core.Parameter import Parameter
 
 
 FloatArray: TypeAlias = npt.NDArray[np.float64]
@@ -23,6 +25,7 @@ FileParameterValue: TypeAlias = Any
 FileParameters: TypeAlias = dict[str, FileParameterValue]
 FileParameterSpecs: TypeAlias = dict[str, "FileParameterSpec"]
 AxesArray: TypeAlias = list["AxesLike"]
+ParameterDict: TypeAlias = OrderedDict[str, "Parameter"]
 
 
 class DataTableLike(Protocol):

@@ -54,8 +54,6 @@ class ToolIntegral(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/Integral.html'
 
-    parent_application: ApplicationLike
-
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)

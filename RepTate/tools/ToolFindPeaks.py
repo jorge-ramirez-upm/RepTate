@@ -59,8 +59,6 @@ class ToolFindPeaks(QTool):
     axarray: Any
     minpeaks: Any
     parabola: Any
-    parameters: Any
-    parent_application: ApplicationLike
     seriesarray: Any
     tb: Any
 
@@ -145,10 +143,10 @@ class ToolFindPeaks(QTool):
         color: Any = None,
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
-        threshold = self.parameters["threshold"].value
-        minimum_distance = self.parameters["minimum_distance"].value
-        minpeaks = self.parameters["minpeaks"].value
-        parabola = self.parameters["parabola"].value
+        threshold = self.parameter_float("threshold")
+        minimum_distance = self.parameter_int("minimum_distance")
+        minpeaks = self.parameter_bool("minpeaks")
+        parabola = self.parameter_bool("parabola")
         if minpeaks:
             y = -y
         thresholdnow = threshold * (np.max(y) - np.min(y)) + np.min(y)
