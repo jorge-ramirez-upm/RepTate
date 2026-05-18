@@ -39,7 +39,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesLike
+from RepTate.core.typing import ApplicationLike, AxesLike
 from RepTate.gui.QTool import QTool
 from scipy.interpolate import interp1d
 
@@ -53,9 +53,9 @@ class ToolInterpolateExtrapolate(QTool):
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
 
     parameters: Any
-    parent_application: Any
+    parent_application: ApplicationLike
 
-    def __init__(self, name: str = "", parent_app: Any = None) -> None:
+    def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["x"] = Parameter(

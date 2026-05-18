@@ -40,7 +40,7 @@ from typing import Any, ClassVar, cast
 import numpy as np
 from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import AxesLike
+from RepTate.core.typing import ApplicationLike, AxesLike
 from RepTate.gui.QTool import QTool
 from PySide6.QtGui import QIcon
 
@@ -60,11 +60,11 @@ class ToolFindPeaks(QTool):
     minpeaks: Any
     parabola: Any
     parameters: Any
-    parent_application: Any
+    parent_application: ApplicationLike
     seriesarray: Any
     tb: Any
 
-    def __init__(self, name: str = "", parent_app: Any = None) -> None:
+    def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         # self.function = self.findpeaks  # main Tool function

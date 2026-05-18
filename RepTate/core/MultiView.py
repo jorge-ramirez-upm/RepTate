@@ -40,10 +40,10 @@ import sys
 import enum
 import math
 from importlib import import_module
-from typing import Any, ClassVar, TypeAlias
+from typing import Any, ClassVar, TypeAlias, cast
 
 from RepTate.core.CmdBase import CmdBase
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import ApplicationLike, AxesArray
 
 # from UI_Multimatplotlib import Ui_Form
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QTabWidget, QWidget
@@ -113,14 +113,14 @@ class MultiView(QWidget):
         pot: PlotOrganizationType = PlotOrganizationType.Vertical,
         nplots: int = 1,
         ncols: int = 1,
-        parent: Any = None,
+        parent: ApplicationLike | None = None,
     ) -> None:
         """**Constructor**"""
         # QDialog.__init__(self)
         # super().__init__(self)
         # QWidget.__init__()
         super().__init__()
-        self.parent_application: Any = parent
+        self.parent_application: ApplicationLike = cast(ApplicationLike, parent)
         self.pot: PlotOrganizationType = pot
         self.nplots: int = nplots
         self.ncols: int = ncols

@@ -38,7 +38,7 @@ Module that defines the GUI counterpart of the class Tool.
 
 import sys
 import ast
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 import numpy as np
 
 from os.path import dirname, join, abspath
@@ -62,7 +62,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
-from RepTate.core.typing import AxesLike
+from RepTate.core.typing import ApplicationLike, AxesLike
 from RepTate.core.units import available_units, units_are_compatible
 from math import ceil, floor
 from collections import OrderedDict
@@ -227,13 +227,13 @@ class QTool(QWidget, Ui_ToolTab):
     actionApplyToTheory: Any
     logger: Any
     parameters: Any
-    parent_application: Any
+    parent_application: ApplicationLike
     tb: Any
     toolParamTable: Any
     toolTextBox: Any
     verticalLayout: Any
 
-    def __init__(self, name: str = "QTool", parent_app: Any = None) -> None:
+    def __init__(self, name: str = "QTool", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         QWidget.__init__(self)
         Ui_ToolTab.__init__(self)
@@ -242,7 +242,7 @@ class QTool(QWidget, Ui_ToolTab):
         self.setupUi(self)
 
         self.name = name
-        self.parent_application = parent_app
+        self.parent_application = cast(ApplicationLike, parent_app)
         self.parameters = OrderedDict()  # keep the dictionary key in order for the parameter table
         self.active = True  # defines if the Tool is plotted
         self.applytotheory = True  # Do we also apply the tool to the theory?

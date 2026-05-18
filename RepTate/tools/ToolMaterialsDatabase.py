@@ -42,7 +42,7 @@ from typing import Any, ClassVar
 import numpy as np
 from pathlib import Path
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import AxesLike
+from RepTate.core.typing import ApplicationLike, AxesLike
 from RepTate.gui.QTool import QTool
 from PySide6.QtWidgets import (
     QComboBox,
@@ -277,13 +277,13 @@ class ToolMaterialsDatabase(QTool):
     labelPolymer: Any
     model: Any
     parameters: Any
-    parent_application: Any
+    parent_application: ApplicationLike
     shiftdata: Any
     tb: Any
     verticalLayout: Any
     verticalshift: Any
 
-    def __init__(self, name: str = "", parent_app: Any = None) -> None:
+    def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
 
         super().__init__(name, parent_app)
@@ -391,7 +391,7 @@ class ToolMaterialsDatabase(QTool):
 
         # Search for the chemistry in the first file of the first dataset (OR CURRENT DATASET?)
         self.init_chem = None
-        if len(parent_app.datasets) > 0:
+        if parent_app is not None and len(parent_app.datasets) > 0:
             ds = parent_app.datasets[list(parent_app.datasets)[0]]
             if len(ds.files) > 0:
                 f = ds.files[0]

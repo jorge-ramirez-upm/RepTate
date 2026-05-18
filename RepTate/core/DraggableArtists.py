@@ -38,7 +38,9 @@ Module for the definition of interactive graphical objects that the user can mov
 # draggable matplotlib artists with the animation blit techniques; see
 import numpy as np
 import enum
-from typing import Any, ClassVar, TypeAlias
+from typing import Any, ClassVar, TypeAlias, cast
+
+from RepTate.core.typing import ApplicationLike
 
 Callback: TypeAlias = Any
 ConnectionId: TypeAlias = int
@@ -324,12 +326,12 @@ class DraggableModesSeries(DraggableArtist):
         self,
         artist: Any,
         mode: DragType = DragType.none,
-        parent_application: Any = None,
+        parent_application: ApplicationLike | None = None,
         function: Callback = None,
     ) -> None:
         """**Constructor**"""
         super(DraggableModesSeries, self).__init__(artist, mode, function)
-        self.parent_application: Any = parent_application
+        self.parent_application: ApplicationLike = cast(ApplicationLike, parent_application)
         self.update_logx_logy()
     
     def update_logx_logy(self) -> None:

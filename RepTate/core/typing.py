@@ -142,20 +142,30 @@ class AxisLike(Protocol):
 
 
 class ApplicationLike(Protocol):
-    """Minimal application contract accessed through a dataset."""
+    """Minimal application contract accessed through datasets, tools, and plots."""
 
+    logger: Any
     axarr: AxesArray
     current_view: ViewLike
     multiviews: list[ViewLike]
     filetypes: dict[str, FileTypeLike]
     tools: Any
     parent_manager: Any
+    datasets: dict[str, "DataSetLike"]
+    DataSettabWidget: Any
+    sp_nviews: Any
+    current_viewtab: int
+    viewComboBox: Any
 
     def update_plot(self) -> None: ...
 
     def update_Qplot(self) -> None: ...
 
+    def update_all_ds_plots(self) -> None: ...
+
     def dataset_actions_disabled(self, state: bool) -> None: ...
+
+    def set_view_tools(self, view_name: str) -> None: ...
 
 
 class DataSetLike(Protocol):

@@ -70,7 +70,7 @@ from numpy import (
 )
 import re
 from RepTate.core.Parameter import Parameter, ParameterType
-from RepTate.core.typing import AxesLike
+from RepTate.core.typing import ApplicationLike, AxesLike
 from RepTate.gui.QTool import QTool
 
 
@@ -84,10 +84,10 @@ class ToolEvaluate(QTool):
 
     logger: Any
     parameters: Any
-    parent_application: Any
+    parent_application: ApplicationLike
     safe_dict: Any
 
-    def __init__(self, name: str = "", parent_app: Any = None) -> None:
+    def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_app)
         self.parameters["x"] = Parameter(
