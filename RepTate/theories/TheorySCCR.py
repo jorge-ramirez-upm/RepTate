@@ -183,7 +183,7 @@ class TheorySCCR(QTheory):
         self.spinbox.setPrefix("N=")
         self.spinbox.setSuffix("*Z")
         self.spinbox.setToolTip("Precision of SCCR Calculation")
-        n_value = int(self.parameters["N"].value)
+        n_value = self.parameter_int("N")
         self.spinbox.setValue(n_value)
         self.spinbox.setSingleStep(2)
         tb.addWidget(self.spinbox)
@@ -218,8 +218,8 @@ class TheorySCCR(QTheory):
 
     def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
-        n_value = int(self.parameters["N"].value)
-        recommended_n = bool(self.parameters["recommendedN"].value)
+        n_value = self.parameter_int("N")
+        recommended_n = self.parameter_bool("recommendedN")
         self.spinbox.setValue(n_value)
         self.recommendedN.setChecked(recommended_n)
         self.handle_recommendedN(recommended_n)
@@ -366,11 +366,11 @@ class TheorySCCR(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        self.taue = float(self.parameters["tau_e"].value)
-        Ge = float(self.parameters["Ge"].value)
-        Me = float(self.parameters["Me"].value)
-        self.cnu = float(self.parameters["c_nu"].value)
-        self.Rs = float(self.parameters["Rs"].value)
+        self.taue = self.parameter_float("tau_e")
+        Ge = self.parameter_float("Ge")
+        Me = self.parameter_float("Me")
+        self.cnu = self.parameter_float("c_nu")
+        self.Rs = self.parameter_float("Rs")
         try:
             Mw = float(f.file_parameters["Mw"])
         except KeyError:
@@ -392,11 +392,11 @@ class TheorySCCR(QTheory):
         if self.Z < 1:
             # self.Qprint("WARNING: Mw of %s is too small"%(f.file_name_short))
             self.Z = 1
-        if bool(self.parameters["recommendedN"].value):
+        if self.parameter_bool("recommendedN"):
             self.N = self.Get_Recommended_N(self.cnu, self.Z)
             self.Qprint("recommend N=%d" % self.N)
         else:
-            self.N = self.Z * int(self.parameters["N"].value)
+            self.N = self.Z * self.parameter_int("N")
 
         # Setup stuff
         if self.N % 2 == 0:

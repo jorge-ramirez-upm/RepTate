@@ -120,7 +120,7 @@ class TheoryReactMix(QTheory):
     def Calc(self, f: FileLike) -> Any:
         """ReactMix function"""
         self.calcexists = False
-        nbin_value: Any = self.parameters["nbin"].value
+        nbin_value = self.parameter_float("nbin")
         nbins = int(np.round(nbin_value))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
 

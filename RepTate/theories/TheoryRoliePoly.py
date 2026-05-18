@@ -128,7 +128,7 @@ class TheoryRoliePoly(QTheory):
             display_flag=False,
         )
 
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         for i in range(nmodes_value):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -234,7 +234,7 @@ class TheoryRoliePoly(QTheory):
         self.with_fene_button.setCheckable(True)
         # SpinBox "nmodes"
         self.spinbox = QSpinBox()
-        nmodes_value = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         self.spinbox.setRange(0, nmodes_value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
@@ -300,8 +300,8 @@ class TheoryRoliePoly(QTheory):
             # f.write('# or multip (for pompom) or polydisperse (for polydisperse Rolie-Poly)\n')
 
             f.write("\n#param constitutive\n")
-            n: Any = self.parameters["nmodes"].value
-            nR: Any = self.parameters["nstretch"].value
+            n = self.parameter_int("nmodes")
+            nR = self.parameter_int("nstretch")
 
             # sort taud ascending order
             td = np.zeros(n)
@@ -318,12 +318,12 @@ class TheoryRoliePoly(QTheory):
                 taud += " %.6g" % self.parameters["tauD%02d" % arg].value
                 if n - i <= nR:
                     tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
-                    lmax += " %.6g" % self.parameters["lmax"].value
+                    lmax += " %.6g" % self.parameter_float("lmax")
             f.write("%s\n%s\n%s\n" % (modulus, taud, tauR))
             if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
-            f.write("beta %.6g\n" % self.parameters["beta"].value)
-            f.write("delta %.6g\n" % self.parameters["delta"].value)
+            f.write("beta %.6g\n" % self.parameter_float("beta"))
+            f.write("delta %.6g\n" % self.parameter_float("delta"))
             f.write("firstStretch %d\n" % (1 + n - nR))  # +1 as flowsolve uses 1-n index not 0-n-1
 
             f.write("\n#end")
@@ -347,7 +347,7 @@ class TheoryRoliePoly(QTheory):
         self.parent_dataset.handle_actionCalculate_Theory()
 
     def handle_spinboxValueChanged(self, value: Any) -> None:
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         self.set_param_value("nstretch", min(nmodes, value))
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
@@ -375,7 +375,7 @@ class TheoryRoliePoly(QTheory):
 
             times = np.logspace(-2, 3, 100)
             data_table_tmp.data[:, 0] = times
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             data_table_tmp.data[:, 1] = 0
             fparamaux: dict[str, Any] = {}
             fparamaux["gdot"] = 1e-8
@@ -434,7 +434,7 @@ class TheoryRoliePoly(QTheory):
     def set_extra_data(self, extra_data: Any) -> None:
         """Set extra data when loading project"""
         self.handle_with_fene_button(extra_data["with_fene"])
-        nstretch_value: Any = self.parameters["nstretch"].value
+        nstretch_value = self.parameter_int("nstretch")
         self.spinbox.setValue(nstretch_value)
 
     def get_extra_data(self) -> None:
@@ -471,7 +471,7 @@ class TheoryRoliePoly(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -660,12 +660,12 @@ class TheoryRoliePoly(QTheory):
         self.t = np.concatenate([[0], self.t])
         self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta: Any = self.parameters["beta"].value
-        delta: Any = self.parameters["delta"].value
-        lmax: Any = self.parameters["lmax"].value
+        beta = self.parameter_float("beta")
+        delta = self.parameter_float("delta")
+        lmax = self.parameter_float("lmax")
         flow_rate = float(file.file_parameters["gdot"])
-        nmodes: Any = self.parameters["nmodes"].value
-        nstretch: Any = self.parameters["nstretch"].value
+        nmodes = self.parameter_int("nmodes")
+        nstretch = self.parameter_int("nstretch")
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
@@ -723,13 +723,13 @@ class TheoryRoliePoly(QTheory):
         # ODE solver parameters
         abserr = 1.0e-8
         relerr = 1.0e-6
-        beta: Any = self.parameters["beta"].value
-        delta: Any = self.parameters["delta"].value
-        lmax: Any = self.parameters["lmax"].value
+        beta = self.parameter_float("beta")
+        delta = self.parameter_float("delta")
+        lmax = self.parameter_float("lmax")
         g0 = float(file.file_parameters["gamma"])
         w = float(file.file_parameters["omega"])
-        nmodes: Any = self.parameters["nmodes"].value
-        nstretch: Any = self.parameters["nstretch"].value
+        nmodes = self.parameter_int("nmodes")
+        nstretch = self.parameter_int("nstretch")
         t = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * t)
         t = np.concatenate([[0], t])
@@ -772,13 +772,13 @@ class TheoryRoliePoly(QTheory):
     def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
             self.spinbox.setMaximum(int(value))
         message, success = super(TheoryRoliePoly, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,

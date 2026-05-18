@@ -221,15 +221,15 @@ class TheoryTobitaBatch(QTheory):
         # fin_conv, tau, beta, Cb, Cs, monmass, Me:double
 
         # get parameters
-        tau = float(self.parameters["tau"].value)
-        beta = float(self.parameters["beta"].value)
-        Cb = float(self.parameters["Cb"].value)
-        Cs = float(self.parameters["Cs"].value)
-        fin_conv = float(self.parameters["fin_conv"].value)
-        numtomake = int(round(float(self.parameters["num_to_make"].value)))
+        tau = self.parameter_float("tau")
+        beta = self.parameter_float("beta")
+        Cb = self.parameter_float("Cb")
+        Cs = self.parameter_float("Cs")
+        fin_conv = self.parameter_float("fin_conv")
+        numtomake = int(round(self.parameter_float("num_to_make")))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me = float(self.parameters["Me"].value)
-        nbins = int(round(float(self.parameters["nbin"].value)))
+        Me = self.parameter_float("Me")
+        nbins = int(round(self.parameter_float("nbin")))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

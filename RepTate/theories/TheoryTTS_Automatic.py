@@ -148,7 +148,7 @@ class TheoryTTSShiftAutomatic(QTheory):
             return
 
         def f(invT, Ea):
-            return Ea / 8.314 * (invT - 1 / (273.15 + float(self.parameters["T"].value)))
+            return Ea / 8.314 * (invT - 1 / (273.15 + self.parameter_float("T")))
 
         Ea_list = []
         for case in self.aT_vs_T:
@@ -438,7 +438,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         """fit one Mw and phi"""
         H = param_in[0][0]
         V = 0
-        if self.parameters["vert"].value:
+        if self.parameter_bool("vert"):
             V = param_in[0][1]
         tt = np.array(self.current_table, copy=True)
         tt[:, 0] = tt[:, 0] * np.power(10.0, H)
@@ -480,7 +480,7 @@ class TheoryTTSShiftAutomatic(QTheory):
         self.Mwset, self.Mw, self.Tdict = self.get_cases()
         # Case by case, T by T, we optimize the overlap of all files with the
         # corresponding cases at the selected temperature
-        Tdesired = float(self.parameters["T"].value)
+        Tdesired = self.parameter_float("T")
         # print (self.Tdict)
         self.aT_vs_T = {}
         for case in self.Tdict.keys():
@@ -548,7 +548,7 @@ class TheoryTTSShiftAutomatic(QTheory):
 
                         # minimize shift factors so the overlap is maximum
                         initial_guess = [xshift]
-                        if self.parameters["vert"].value:
+                        if self.parameter_bool("vert"):
                             initial_guess.append(0)
 
                     self.current_table = tt
@@ -560,7 +560,7 @@ class TheoryTTSShiftAutomatic(QTheory):
                         self.Qprint("Solution not found: %s" % res["message"])
                         return
                     XSHIFT = res.x[0]
-                    if self.parameters["vert"].value:
+                    if self.parameter_bool("vert"):
                         YSHIFT = res.x[1]
                     else:
                         YSHIFT = 0.0
@@ -637,7 +637,7 @@ class TheoryTTSShiftAutomatic(QTheory):
                     data = np.reshape(data, (-1, ttable.num_columns + 1))
                     fparam.update(Filei.file_parameters)
             data = data[data[:, 0].argsort()]
-            fparam["T"] = self.parameters["T"].value
+            fparam["T"] = self.parameter_float("T")
 
             try:
                 chem_name = "%s_" % fparam["chem"]

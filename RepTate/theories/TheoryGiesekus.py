@@ -100,7 +100,7 @@ class TheoryGiesekus(QTheory):
             display_flag=False,
         )
 
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -184,7 +184,7 @@ class TheoryGiesekus(QTheory):
 
         # SpinBox "n-stretch modes"
         self.spinbox = QSpinBox()
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         self.spinbox.setRange(0, nmodes_value)  # min and max number of modes
         self.spinbox.setSuffix(" stretch")
         self.spinbox.setToolTip("Number of stretching modes")
@@ -200,7 +200,7 @@ class TheoryGiesekus(QTheory):
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value: int) -> None:
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         self.set_param_value("nstretch", min(nmodes, value))
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
@@ -257,7 +257,7 @@ class TheoryGiesekus(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -393,8 +393,8 @@ class TheoryGiesekus(QTheory):
         self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
         flow_rate = float(file.file_parameters["gdot"])
-        nmodes: Any = self.parameters["nmodes"].value
-        nstretch: Any = self.parameters["nstretch"].value
+        nmodes = self.parameter_int("nmodes")
+        nstretch = self.parameter_int("nstretch")
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
@@ -440,8 +440,8 @@ class TheoryGiesekus(QTheory):
         relerr = 1.0e-6
         g0 = float(file.file_parameters["gamma"])
         w = float(file.file_parameters["omega"])
-        nmodes: Any = self.parameters["nmodes"].value
-        nstretch: Any = self.parameters["nstretch"].value
+        nmodes = self.parameter_int("nmodes")
+        nstretch = self.parameter_int("nstretch")
         t = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * t)
         t = np.concatenate([[0], t])
@@ -466,13 +466,13 @@ class TheoryGiesekus(QTheory):
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set value of a theory parameter"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
             self.spinbox.setMaximum(int(value))
         message, success = super(TheoryGiesekus, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,

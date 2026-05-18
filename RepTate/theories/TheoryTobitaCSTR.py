@@ -210,14 +210,14 @@ reactor during free-radical polymerisation.
         """Calculate the theory"""
 
         # get parameters
-        tau = float(self.parameters["tau"].value)
-        beta = float(self.parameters["beta"].value)
-        lambda_ = float(self.parameters["lambda"].value)
-        sigma = float(self.parameters["sigma"].value)
-        numtomake = int(round(float(self.parameters["num_to_make"].value)))
+        tau = self.parameter_float("tau")
+        beta = self.parameter_float("beta")
+        lambda_ = self.parameter_float("lambda")
+        sigma = self.parameter_float("sigma")
+        numtomake = int(round(self.parameter_float("num_to_make")))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me = float(self.parameters["Me"].value)
-        nbins = int(round(float(self.parameters["nbin"].value)))
+        Me = self.parameter_float("Me")
+        nbins = int(round(self.parameter_float("nbin")))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

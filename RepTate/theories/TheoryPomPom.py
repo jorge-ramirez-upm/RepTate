@@ -110,7 +110,7 @@ class TheoryPomPom(QTheory):
         # self.BruteNs = 5
         self.mintype = MinimizationMethod.diffevol
 
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         for i in range(nmodes_value):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -260,7 +260,7 @@ class TheoryPomPom(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n: Any = self.parameters["nmodes"].value
+            n = self.parameter_int("nmodes")
             td = np.zeros(n)
             for i in range(n):
                 td[i] = self.parameters["tauB%02d" % i].value
@@ -335,7 +335,7 @@ class TheoryPomPom(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -477,7 +477,7 @@ class TheoryPomPom(QTheory):
 
         # create parameters list
         flow_rate = float(f.file_parameters["gdot"])
-        nmodes = int(self.parameters["nmodes"].value)
+        nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
@@ -543,7 +543,7 @@ class TheoryPomPom(QTheory):
         # create parameters list
         g0 = float(f.file_parameters["gamma"])
         w = float(f.file_parameters["omega"])
-        nmodes = int(self.parameters["nmodes"].value)
+        nmodes = self.parameter_int("nmodes")
         times = ft.data[:, 0]
         tt.data[:, 1] = g0 * np.sin(w * times)
         times = np.concatenate([[0], times])
@@ -590,12 +590,12 @@ class TheoryPomPom(QTheory):
     def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
         message, success = super(TheoryPomPom, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,

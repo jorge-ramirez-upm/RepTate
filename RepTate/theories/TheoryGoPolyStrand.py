@@ -310,7 +310,7 @@ class TheoryGoPolyStrand(QTheory):
             internal_unit="s",
             display_unit="s",
         )
-        nmode: Any = self.parameters["nmodes"].value
+        nmode = self.parameter_int("nmodes")
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -503,7 +503,7 @@ class TheoryGoPolyStrand(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n: Any = self.parameters["nmodes"].value
+            n = self.parameter_int("nmodes")
 
             td = np.zeros(n)
             for i in range(n):
@@ -519,13 +519,13 @@ class TheoryGoPolyStrand(QTheory):
                 fraction += " %.6g" % self.parameters["phi%02d" % arg].value
                 taud += " %.6g" % self.parameters["tauD%02d" % arg].value
                 tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
-                lmax += " %.6g" % self.parameters["lmax"].value
+                lmax += " %.6g" % self.parameter_float("lmax")
             f.write("%s\n%s\n%s\n" % (taud, tauR, fraction))
             if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
-            f.write("modulus %.6g\n" % self.parameters["GN0"].value)
-            f.write("beta %.6gn" % self.parameters["beta"].value)
-            f.write("delta %.6g\n" % self.parameters["delta"].value)
+            f.write("modulus %.6g\n" % self.parameter_float("GN0"))
+            f.write("beta %.6gn" % self.parameter_float("beta"))
+            f.write("delta %.6g\n" % self.parameter_float("delta"))
 
             f.write("\n#end")
 
@@ -639,7 +639,7 @@ class TheoryGoPolyStrand(QTheory):
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self) -> None:
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         taur = np.zeros(nmodes)
@@ -708,7 +708,7 @@ class TheoryGoPolyStrand(QTheory):
 
         times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         data_table_tmp.data[:, 1] = 0
         fparamaux = {"gdot": 1e-8}
 
@@ -721,7 +721,7 @@ class TheoryGoPolyStrand(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G = self.parameters["GN0"].value
+            G = self.parameter_float("GN0")
             if self.with_gcorr == GcorrMode.with_gcorr:
                 G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
@@ -804,19 +804,19 @@ class TheoryGoPolyStrand(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0: Any = self.parameters["GN0"].value
+        GN0 = self.parameter_float("GN0")
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * self.parameters["phi%02d" % i].value
+            G[i] = GN0 * float(self.parameters["phi%02d" % i].value)
         return tau, G, True
 
     def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set Modes from MWD"""
-        Me: Any = self.parameters["Me"].value
-        taue: Any = self.parameters["tau_e"].value
+        Me = self.parameter_float("Me")
+        taue = self.parameter_float("tau_e")
         res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
@@ -895,8 +895,8 @@ class TheoryGoPolyStrand(QTheory):
 
     def computeFel(self, Fxx: Any, Fyy: Any, Fxy: Any) -> Any:
         """Converts RDP configurations into a free energy change (via nematic order parameter"""
-        Gamma: Any = self.parameters["Gamma"].value
-        Ne: Any = self.parameters["Ne"].value
+        Gamma = self.parameter_float("Gamma")
+        Ne = self.parameter_float("Ne")
 
         tmp = Fxx / 2 + Fyy / 2 + np.sqrt(((Fxx - Fyy) / 2.0) ** 2 + Fxy**2) - 1
 
@@ -904,10 +904,10 @@ class TheoryGoPolyStrand(QTheory):
 
     def computeQuiescentBarrier(self) -> Any:
         """Calculates the GO model quiescent barrier and nucleation rate"""
-        epsilonB: Any = self.parameters["epsilonB"].value
-        muS: Any = self.parameters["muS"].value
-        rhoK: Any = self.parameters["rhoK"].value
-        tau0: Any = self.parameters["tau0"].value
+        epsilonB = self.parameter_float("epsilonB")
+        muS = self.parameter_float("muS")
+        rhoK = self.parameter_float("rhoK")
+        tau0 = self.parameter_float("tau0")
         dN = 1
         curvature_skip = 5
         alpha = 0.8
@@ -962,14 +962,14 @@ class TheoryGoPolyStrand(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         fel = np.zeros((tt.num_rows, nmodes_value))
         felAve = np.zeros((tt.num_rows, 1))
-        Gamma: Any = self.parameters["Gamma"].value
-        epsilonB: Any = self.parameters["epsilonB"].value
-        muS: Any = self.parameters["muS"].value
-        G_C: Any = self.parameters["G_C"].value
-        N_0: Any = self.parameters["N_0"].value
+        Gamma = self.parameter_float("Gamma")
+        epsilonB = self.parameter_float("epsilonB")
+        muS = self.parameter_float("muS")
+        G_C = self.parameter_float("G_C")
+        N_0 = self.parameter_float("N_0")
         tt.data[:, 0] = ft.data[:, 0]  # time
 
         # ODE solver parameters
@@ -978,12 +978,12 @@ class TheoryGoPolyStrand(QTheory):
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta: Any = self.parameters["beta"].value
-        delta: Any = self.parameters["delta"].value
-        lmax: Any = self.parameters["lmax"].value
+        beta = self.parameter_float("beta")
+        delta = self.parameter_float("delta")
+        lmax = self.parameter_float("lmax")
         flow_rate = float(file.file_parameters["gdot"])
         tstop = float(file.file_parameters["tstop"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
 
         # flow geometry
         if self.flow_mode == FlowMode.shear:
@@ -1067,7 +1067,7 @@ class TheoryGoPolyStrand(QTheory):
                 if self.with_gcorr == GcorrMode.with_gcorr:
                     sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
-            tt.data[:, 1] *= self.parameters["GN0"].value
+            tt.data[:, 1] *= self.parameter_float("GN0")
 
         if self.flow_mode == FlowMode.uext:
             # every 2 component we find xx, yy, starting at 0, or 1; and remove t=0
@@ -1103,7 +1103,7 @@ class TheoryGoPolyStrand(QTheory):
                     sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
 
-            tt.data[:, 1] *= self.parameters["GN0"].value
+            tt.data[:, 1] *= self.parameter_float("GN0")
 
         # Extract the configuration of each mode
         for time in range(nt):
@@ -1184,13 +1184,13 @@ class TheoryGoPolyStrand(QTheory):
     def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
             # self.spinbox.setMaximum(int(value))
         message, success = super(BaseTheoryGoPolyStrand, self).set_param_value(name, value)  # pyright: ignore[reportUndefinedVariable]
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes_value: Any = self.parameters["nmodes"].value
+            nmodes_value = self.parameter_int("nmodes")
             for i in range(nmodes_value):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,

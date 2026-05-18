@@ -194,10 +194,10 @@ class TheoryMultiMetCSTR(QTheory):
         """MultiMetCSTR function that returns the square of y"""
 
         # get parameters
-        numtomake = int(round(float(self.parameters["num_to_make"].value)))
+        numtomake = int(round(self.parameter_float("num_to_make")))
         monmass: Any = self.parameters["mon_mass"].display_value()
-        Me = float(self.parameters["Me"].value)
-        nbins = int(round(float(self.parameters["nbin"].value)))
+        Me = self.parameter_float("Me")
+        nbins = int(round(self.parameter_float("nbin")))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
         rch.set_flag_stop_all(ct.c_bool(False))
 

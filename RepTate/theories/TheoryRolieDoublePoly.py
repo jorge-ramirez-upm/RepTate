@@ -189,7 +189,7 @@ class TheoryRolieDoublePoly(QTheory):
             internal_unit="s",
             display_unit="s",
         )
-        nmode: Any = self.parameters["nmodes"].value
+        nmode = self.parameter_int("nmodes")
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -362,7 +362,7 @@ class TheoryRolieDoublePoly(QTheory):
 
             f.write("\n#param constitutive\n")
 
-            n: Any = self.parameters["nmodes"].value
+            n = self.parameter_int("nmodes")
 
             td = np.zeros(n)
             for i in range(n):
@@ -378,13 +378,13 @@ class TheoryRolieDoublePoly(QTheory):
                 fraction += " %.6g" % self.parameters["phi%02d" % arg].value
                 taud += " %.6g" % self.parameters["tauD%02d" % arg].value
                 tauR += " %.6g" % self.parameters["tauR%02d" % arg].value
-                lmax += " %.6g" % self.parameters["lmax"].value
+                lmax += " %.6g" % self.parameter_float("lmax")
             f.write("%s\n%s\n%s\n" % (taud, tauR, fraction))
             if self.with_fene == FeneMode.with_fene:  # don't output lmax at all for infinite ex
                 f.write("%s\n" % lmax)
-            f.write("modulus %.6g\n" % self.parameters["GN0"].value)
-            f.write("beta %.6gn" % self.parameters["beta"].value)
-            f.write("delta %.6g\n" % self.parameters["delta"].value)
+            f.write("modulus %.6g\n" % self.parameter_float("GN0"))
+            f.write("beta %.6gn" % self.parameter_float("beta"))
+            f.write("delta %.6g\n" % self.parameter_float("delta"))
 
             f.write("\n#end")
 
@@ -480,7 +480,7 @@ class TheoryRolieDoublePoly(QTheory):
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self) -> None:
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         taur = np.zeros(nmodes)
@@ -549,7 +549,7 @@ class TheoryRolieDoublePoly(QTheory):
 
         times = np.logspace(logtmin, logtmax, ntimes)
         data_table_tmp.data[:, 0] = times
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         data_table_tmp.data[:, 1] = 0
         fparamaux = {"gdot": 1e-8}
 
@@ -562,7 +562,7 @@ class TheoryRolieDoublePoly(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["GN0"].value
+            G = self.parameter_float("GN0")
             if self.with_gcorr == GcorrMode.with_gcorr:
                 G = G * self.gZ(self.Zeff[i])
             for j in range(nmodes):
@@ -638,19 +638,19 @@ class TheoryRolieDoublePoly(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0: Any = self.parameters["GN0"].value
+        GN0 = self.parameter_float("GN0")
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * self.parameters["phi%02d" % i].value
+            G[i] = GN0 * float(self.parameters["phi%02d" % i].value)
         return tau, G, True
 
     def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set modes from MWD"""
-        Me = self.parameters["Me"].value
-        taue = self.parameters["tau_e"].value
+        Me = self.parameter_float("Me")
+        taue = self.parameter_float("tau_e")
         res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
@@ -743,11 +743,11 @@ class TheoryRolieDoublePoly(QTheory):
         t = ft.data[:, 0]
         t = np.concatenate([[0], t])
         # sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
-        beta: Any = self.parameters["beta"].value
-        delta: Any = self.parameters["delta"].value
-        lmax: Any = self.parameters["lmax"].value
+        beta = self.parameter_float("beta")
+        delta = self.parameter_float("delta")
+        lmax = self.parameter_float("lmax")
         flow_rate = float(file.file_parameters["gdot"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
 
         # flow geometry
         if self.flow_mode == FlowMode.shear:
@@ -806,7 +806,7 @@ class TheoryRolieDoublePoly(QTheory):
                 if self.with_gcorr == GcorrMode.with_gcorr:
                     sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
-            tt.data[:, 1] *= self.parameters["GN0"].value
+            tt.data[:, 1] *= self.parameter_float("GN0")
 
         if self.flow_mode == FlowMode.uext:
             # every 2 component we find xx, yy, starting at 0, or 1; and remove t=0
@@ -842,18 +842,18 @@ class TheoryRolieDoublePoly(QTheory):
                     sig_i *= self.gZ(self.Zeff[i])
                 tt.data[:, 1] += phi_arr[i] * sig_i
 
-            tt.data[:, 1] *= self.parameters["GN0"].value
+            tt.data[:, 1] *= self.parameter_float("GN0")
 
     def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of theory parameters"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
             # self.spinbox.setMaximum(int(value))
         message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,

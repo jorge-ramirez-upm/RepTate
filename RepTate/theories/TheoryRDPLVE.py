@@ -131,7 +131,7 @@ class TheoryRDPLVE(QTheory):
             display_flag=False,
             min_value=1,
         )
-        nmode: Any = self.parameters["nmodes"].value
+        nmode = self.parameter_int("nmodes")
         for i in range(nmode):
             self.parameters["phi%02d" % i] = Parameter(
                 name="phi%02d" % i,
@@ -258,7 +258,7 @@ class TheoryRDPLVE(QTheory):
         # self.parent_dataset.handle_actionCalculate_Theory()
 
     def edit_modes_window(self) -> None:
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         for i in range(nmodes):
@@ -328,13 +328,13 @@ class TheoryRDPLVE(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
-        GN0: Any = self.parameters["GN0"].value
+        GN0 = self.parameter_float("GN0")
         for i in range(nmodes):
             tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * self.parameters["phi%02d" % i].value
+            G[i] = GN0 * float(self.parameters["phi%02d" % i].value)
         return tau, G, True
 
     def fZ(self, z: float) -> float:
@@ -347,8 +347,8 @@ class TheoryRDPLVE(QTheory):
 
     def set_modes_from_mwd(self, m: Any, phi: Any) -> None:
         """Set modes from MWD"""
-        Me = self.parameters["Me"].value
-        taue = self.parameters["tau_e"].value
+        Me = self.parameter_float("Me")
+        taue = self.parameter_float("tau_e")
         res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
             self.Qprint("Could not set modes from MDW")
@@ -367,12 +367,12 @@ class TheoryRDPLVE(QTheory):
     def set_param_value(self, name: Any, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
         message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["phi%02d" % i] = Parameter(
                     name="phi%02d" % i,
@@ -413,7 +413,7 @@ class TheoryRDPLVE(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         taud = []
         phi = []
         for i in range(nmodes):
@@ -423,7 +423,7 @@ class TheoryRDPLVE(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["GN0"].value
+            G = self.parameter_float("GN0")
             if self.with_gcorr == GcorrMode.with_gcorr:
                 # G = G * sqrt(self.fZ(self.Zeff[i]))
                 G = G * self.gZ(self.Zeff[i])

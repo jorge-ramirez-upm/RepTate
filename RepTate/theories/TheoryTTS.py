@@ -196,7 +196,7 @@ class TheoryWLFShift(QTheory):
         M_set = list(set([l[-1] for l in self.shift_factor_dic.values()]))
 
         def f(invT: Any, Ea: Any) -> Any:
-            Tr: Any = self.parameters["Tr"].value
+            Tr = self.parameter_float("Tr")
             return Ea / 8.314 * (invT - 1 / (273.15 + Tr))
 
         Ea_list = []
@@ -282,15 +282,15 @@ class TheoryWLFShift(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        Tr: Any = self.parameters["Tr"].value
-        B1: Any = self.parameters["B1"].value
-        B2: Any = self.parameters["B2"].value
-        logalpha: Any = self.parameters["logalpha"].value
+        Tr = self.parameter_float("Tr")
+        B1 = self.parameter_float("B1")
+        B2 = self.parameter_float("B2")
+        logalpha = self.parameter_float("logalpha")
         alpha = np.power(10.0, logalpha)
-        CTg: Any = self.parameters["CTg"].value
-        dx12: Any = self.parameters["dx12"].value
-        iso: Any = self.parameters["iso"].value
-        vert: Any = self.parameters["vert"].value
+        CTg = self.parameter_float("CTg")
+        dx12 = self.parameter_float("dx12")
+        iso = self.parameter_bool("iso")
+        vert = self.parameter_bool("vert")
 
         Tf = file.file_parameters["T"]
         Mw = file.file_parameters["Mw"]
@@ -436,9 +436,9 @@ class TheoryWLFShift(QTheory):
             self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         if line == "":
             self.Qprint("")
-            B1: Any = self.parameters["B1"].value
-            B2: Any = self.parameters["B2"].value
-            Tr: Any = self.parameters["Tr"].value
+            B1 = self.parameter_float("B1")
+            B2 = self.parameter_float("B2")
+            Tr = self.parameter_float("Tr")
             self.Qprint("<h3>WLF Params @ Tr = %g</h3>" % Tr)
             self.Qprint("<b>C1</b> = %g" % (B1 / (B2 + Tr)))
             self.Qprint("<b>C2</b> = %g<br>" % (B2 + Tr))
@@ -562,7 +562,7 @@ class TheoryWLFShift(QTheory):
                     data = np.reshape(data, (-1, ttable.num_columns + 1))
                     fparam.update(Filei.file_parameters)
             data = data[data[:, 0].argsort()]
-            fparam["T"] = self.parameters["Tr"].value
+            fparam["T"] = self.parameter_float("Tr")
 
             try:
                 chem_name = "%s_" % fparam["chem"]

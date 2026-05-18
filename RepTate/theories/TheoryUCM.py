@@ -111,7 +111,7 @@ class TheoryUCM(QTheory):
             display_flag=False,
         )
 
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             self.parameters["G%02d" % i] = Parameter(
                 name="G%02d" % i,
@@ -235,7 +235,7 @@ class TheoryUCM(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
@@ -282,7 +282,7 @@ class TheoryUCM(QTheory):
         tt.data[:, 0] = times
 
         flow_rate = float(file.file_parameters["gdot"])
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
@@ -311,7 +311,7 @@ class TheoryUCM(QTheory):
         tt.data[:, 0] = times
         tt.data[:, 1] = g0 * np.sin(w * times)
 
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
@@ -325,12 +325,12 @@ class TheoryUCM(QTheory):
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         if name == "nmodes":
-            oldn: Any = self.parameters["nmodes"].value
+            oldn = self.parameter_int("nmodes")
         message, success = super(TheoryUCM, self).set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
-            nmodes: Any = self.parameters["nmodes"].value
+            nmodes = self.parameter_int("nmodes")
             for i in range(nmodes):
                 self.parameters["G%02d" % i] = Parameter(
                     name="G%02d" % i,
