@@ -41,8 +41,10 @@ import argparse
 import traceback
 import logging
 from collections.abc import Sequence
+from typing import cast
 
 from RepTate.core.CmdBase import CmdBase, CalcMode
+from RepTate.core.typing import ApplicationLike, ApplicationManagerLike
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 from RepTate.applications.ApplicationCreep import ApplicationCreep
@@ -93,8 +95,8 @@ def start_MatDB(argv: Sequence[str]) -> None:
     app.setApplicationName("RepTate")
 
     tmpex = QApplicationManager(loglevel=loglevel)
-    tmpapp = ApplicationCreep("tmpapp", tmpex)
-    ex = ToolMaterialsDatabase("MatDB", tmpapp)
+    tmpapp = ApplicationCreep("tmpapp", cast(ApplicationManagerLike, tmpex))
+    ex = ToolMaterialsDatabase("MatDB", cast(ApplicationLike, tmpapp))
     ex.setWindowIcon(QIcon("RepTate/gui/Images/DataTable3D.ico"))
     ex.setWindowTitle("RepTate Material" "s Database")
     ex.resize(300, 900)

@@ -260,7 +260,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
                     col_names=ftype.col_names,
                     xexpr=xexpr,
                     yexpr=yexpr,
-                    parent=self,
+                    parent=cast(ApplicationLike, self),
                 )
                 log_x = self.config.getboolean("view%d" % nv, "logx", fallback=False)
                 log_y = self.config.getboolean("view%d" % nv, "logy", fallback=False)

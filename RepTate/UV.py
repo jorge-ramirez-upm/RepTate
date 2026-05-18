@@ -52,6 +52,7 @@ from RepTate.core.DataTable import DataTable
 
 DataTable.MAX_NUM_SERIES = 10  # pyright: ignore[reportAttributeAccessIssue]
 from RepTate.core.CmdBase import CmdBase, CalcMode
+from RepTate.core.typing import ApplicationManagerLike
 from RepTate.gui.QApplicationManager import QApplicationManager
 from RepTate.applications.ApplicationUniversalViewer import ApplicationUniversalViewer
 
@@ -178,7 +179,7 @@ def start_UV(argv: Sequence[str]) -> None:
 
     ex = ApplicationUniversalViewer(
         "UniversalViewer",
-        tmpex,
+        cast(ApplicationManagerLike, tmpex),
         inifile=cast(str, inifilepath) + os.sep + inifile,
         nplot_max=nplot_max,
     )
