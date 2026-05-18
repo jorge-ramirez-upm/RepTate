@@ -175,7 +175,7 @@ class TheoryDebyeModesFrequency(QTheory):
         wold = np.logspace(wminold, wmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
-            Gold[i] = self.parameters["logDe%02d" % i].value
+            Gold[i] = self.parameter_float("logDe%02d" % i)
             del self.parameters["logDe%02d" % i]
 
         nmodesnew = value

@@ -765,9 +765,9 @@ class TheoryLP2RLVE(QTheory):
 
     def default_lognormal_component(self):
         """Return a default lognormal component from the visible Mw/PDI/n values."""
-        npoly = int(self.parameters["n"].value)
-        mw = float(self.parameters["Mw"].value)
-        pdi = float(self.parameters["PDI"].value)
+        npoly = self.parameter_int("n")
+        mw = self.parameter_float("Mw")
+        pdi = self.parameter_float("PDI")
         return self.make_lognormal_component(
             weight=1.0,
             npoly=npoly,
@@ -1235,31 +1235,31 @@ class TheoryLP2RLVE(QTheory):
     def _build_solver(self):
         """Create and configure a solver instance from the current parameters."""
         material = _lp2r.Material()
-        m_kuhn = float(self.parameters["MK"].value)
-        m_e = float(self.parameters["Me"].value)
+        m_kuhn = self.parameter_float("MK")
+        m_e = self.parameter_float("Me")
         material.m_kuhn = m_kuhn * 1000.0
         material.m_e = m_e * 1000.0
-        material.g0 = self.parameters["G0"].value
-        material.tau_e = self.parameters["tau_e"].value
-        material.g_glass = self.parameters["G_glass"].value
-        material.tau_glass = self.parameters["tau_glass"].value
-        material.beta_glass = self.parameters["beta_glass"].value
+        material.g0 = self.parameter_float("G0")
+        material.tau_e = self.parameter_float("tau_e")
+        material.g_glass = self.parameter_float("G_glass")
+        material.tau_glass = self.parameter_float("tau_glass")
+        material.beta_glass = self.parameter_float("beta_glass")
 
         controls = _lp2r.Controls()
-        controls.alpha = self.parameters["alpha"].value
-        controls.t_cr_start = self.parameters["t_cr_start"].value
-        controls.delta_cr = self.parameters["delta_cr"].value
-        controls.b_zeta = self.parameters["b_zeta"].value
-        controls.a_eq = self.parameters["a_eq"].value
-        controls.b_eq = self.parameters["b_eq"].value
-        controls.ret_pref = self.parameters["ret_pref"].value
-        controls.ret_pref_0 = self.parameters["ret_pref_0"].value
-        controls.ret_switch_exponent = self.parameters["ret_switch_exponent"].value
-        controls.rept_switch_factor = self.parameters["rept_switch_factor"].value
-        controls.rouse_switch_factor = self.parameters["rouse_switch_factor"].value
-        controls.disentanglement_switch = self.parameters["disentanglement_switch"].value
-        controls.start_time = self.parameters["start_time"].value
-        controls.time_ratio = self.parameters["time_ratio"].value
+        controls.alpha = self.parameter_float("alpha")
+        controls.t_cr_start = self.parameter_float("t_cr_start")
+        controls.delta_cr = self.parameter_float("delta_cr")
+        controls.b_zeta = self.parameter_float("b_zeta")
+        controls.a_eq = self.parameter_float("a_eq")
+        controls.b_eq = self.parameter_float("b_eq")
+        controls.ret_pref = self.parameter_float("ret_pref")
+        controls.ret_pref_0 = self.parameter_float("ret_pref_0")
+        controls.ret_switch_exponent = self.parameter_float("ret_switch_exponent")
+        controls.rept_switch_factor = self.parameter_float("rept_switch_factor")
+        controls.rouse_switch_factor = self.parameter_float("rouse_switch_factor")
+        controls.disentanglement_switch = self.parameter_float("disentanglement_switch")
+        controls.start_time = self.parameter_float("start_time")
+        controls.time_ratio = self.parameter_float("time_ratio")
 
         solver = _lp2r.Solver(material, controls)
         components = self.validate_lp2r_components(self.current_lp2r_components())
@@ -1319,7 +1319,7 @@ class TheoryLP2RLVE(QTheory):
 
         freq_min = float(np.min(omega_data))
         freq_max = float(np.max(omega_data))
-        freq_ratio = float(self.parameters["freq_ratio"].value)
+        freq_ratio = self.parameter_float("freq_ratio")
         if freq_ratio <= 1.0:
             self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
             self._clear_table(tt)

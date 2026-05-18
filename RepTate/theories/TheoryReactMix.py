@@ -173,7 +173,7 @@ class TheoryReactMix(QTheory):
                 np.power(10, rch.return_binsandbob_multi_lgmid(c_i)) * 1.0e-3
             )
             tt.data[i - 1, 1] = rch.return_binsandbob_multi_wt(c_i)
-            tt.data[i - 1, 2] = rch.return_binsandbob_multi_avg(c_i) * 1.0e-3
+            tt.data[i - 1, 2] = rch.return_binsandbob_multi_avg(c_i)
             tt.data[i - 1, 3] = rch.return_binsandbob_multi_avbr(c_i)
 
         totpoly = 0

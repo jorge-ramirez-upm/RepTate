@@ -192,7 +192,7 @@ class TheoryMaxwellModesFrequency(QTheory):
             wold = _logspace(wminold, wmaxold, nmodesold)
             Gold = np.zeros(nmodesold)
             for i in range(nmodesold):
-                Gold[i] = self.parameters["logG%02d" % i].value
+                Gold[i] = self.parameter_float("logG%02d" % i)
                 del self.parameters["logG%02d" % i]
 
             nmodesnew = int(value)

@@ -215,7 +215,7 @@ reactor during free-radical polymerisation.
         lambda_ = self.parameter_float("lambda")
         sigma = self.parameter_float("sigma")
         numtomake = int(round(self.parameter_float("num_to_make")))
-        monmass: Any = self.parameters["mon_mass"].display_value()
+        monmass = self.parameter_float("mon_mass")*1000 # Internally stored as kg/mol. Theory expects g/mol
         Me = self.parameter_float("Me")
         nbins = int(round(self.parameter_float("nbin")))
         rch.set_do_prio_senio(ct.c_bool(self.do_priority_seniority))
@@ -365,7 +365,7 @@ reactor during free-radical polymerisation.
                     np.power(10, rch.react_dist[ndist].contents.lgmid[i]) * 1.0e-3
                 )
                 tt.data[i - 1, 1] = rch.react_dist[ndist].contents.wt[i]
-                tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i] * 1.0e-3
+                tt.data[i - 1, 2] = rch.react_dist[ndist].contents.avg[i]
                 tt.data[i - 1, 3] = rch.react_dist[ndist].contents.avbr[i]
             rch.end_print(self, ndist, self.do_priority_seniority)
             rch.prio_and_senio(self, f, ndist, self.do_priority_seniority)

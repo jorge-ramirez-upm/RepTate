@@ -145,7 +145,7 @@ class TheoryPolynomial(QTheory):
             nold = self.parameter_int("n")
             Aold = np.zeros(nold + 1)
             for i in range(nold + 1):
-                Aold[i] = self.parameters["A%d" % i].value
+                Aold[i] = self.parameter_float("A%d" % i)
                 del self.parameters["A%d" % i]
 
             nnew: Any = value
@@ -181,7 +181,7 @@ class TheoryPolynomial(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
         n = self.parameter_int("n")
         for i in range(n + 1):
-            a = self.parameters["A%d" % i].value
+            a = self.parameter_float("A%d" % i)
             for j in range(1, tt.num_columns):
                 tt.data[:, j] += a * tt.data[:, 0] ** i
 
@@ -478,7 +478,7 @@ class TheoryAlgebraicExpression(QTheory):
             nold = self.parameter_int("n")
             Aold = np.zeros(nold)
             for i in range(nold):
-                Aold[i] = self.parameters["A%d" % i].value
+                Aold[i] = self.parameter_float("A%d" % i)
                 del self.parameters["A%d" % i]
 
             nnew: Any = value
@@ -512,7 +512,7 @@ class TheoryAlgebraicExpression(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        expression: Any = self.parameters["expression"].value
+        expression = self.parameter_str("expression")
         params = set(re.findall(r"A\d{1,2}", expression))
         nparams = len(params)
         maxparamindex = -1
@@ -538,7 +538,7 @@ class TheoryAlgebraicExpression(QTheory):
 
             self.safe_dict["x"] = tt.data[:, 0]
             for i in range(n):
-                self.safe_dict["A%d" % i] = self.parameters["A%d" % i].value
+                self.safe_dict["A%d" % i] = self.parameter_float("A%d" % i)
 
             try:
                 y = eval(expression, {"__builtins__": None}, self.safe_dict)
