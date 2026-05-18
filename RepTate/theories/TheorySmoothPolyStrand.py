@@ -41,7 +41,7 @@ import numpy as np
 from scipy.integrate import odeint
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from RepTate.core.DataTable import DataTable
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
@@ -615,7 +615,7 @@ class TheorySmoothPolyStrand(QTheory):
         self.tbutflow.setDefaultAction(self.extensional_flow_action)
 
     def get_modes_reptate(self) -> None:
-        apmng = self.parent_dataset.parent_application.parent_manager
+        apmng: ApplicationManagerLike = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
             app_index = apmng.ApplicationtabWidget.indexOf(app)

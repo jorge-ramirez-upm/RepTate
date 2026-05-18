@@ -144,13 +144,14 @@ class AxisLike(Protocol):
 class ApplicationLike(Protocol):
     """Minimal application contract accessed through datasets, tools, and plots."""
 
+    appname: str
     logger: Any
     axarr: AxesArray
     current_view: ViewLike
     multiviews: list[ViewLike]
     filetypes: dict[str, FileTypeLike]
     tools: Any
-    parent_manager: Any
+    parent_manager: "ApplicationManagerLike"
     datasets: dict[str, "DataSetLike"]
     DataSettabWidget: Any
     sp_nviews: Any
@@ -168,6 +169,16 @@ class ApplicationLike(Protocol):
     def set_view_tools(self, view_name: str) -> None: ...
 
 
+class ApplicationManagerLike(Protocol):
+    """Minimal application manager contract used by applications and theories."""
+
+    logger: Any
+    applications: dict[str, ApplicationLike]
+    ApplicationtabWidget: Any
+
+    def list_theories_Maxwell(self, th_exclude: Any = None) -> tuple[dict[str, Any], dict[str, Any]]: ...
+
+
 class DataSetLike(Protocol):
     """Minimal dataset contract used by QTheory and theory implementations."""
 
@@ -177,6 +188,7 @@ class DataSetLike(Protocol):
     inactive_files: list[str]
     selected_file: File | None
     theories: dict[str, Any]
+    TheorytabWidget: Any
     parent_application: ApplicationLike
     nplots: int
     width: Any

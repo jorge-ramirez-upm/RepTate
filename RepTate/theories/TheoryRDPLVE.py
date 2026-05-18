@@ -38,7 +38,7 @@ Template file for creating a new theory
 import numpy as np
 from typing import Any, ClassVar
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
@@ -224,7 +224,7 @@ class TheoryRDPLVE(QTheory):
         self.parent_dataset.actionHorizontal_Limits.setDisabled(show)
 
     def get_modes_reptate(self) -> None:
-        apmng = self.parent_dataset.parent_application.parent_manager
+        apmng: ApplicationManagerLike = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
             app_index = apmng.ApplicationtabWidget.indexOf(app)

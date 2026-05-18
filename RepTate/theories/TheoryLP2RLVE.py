@@ -55,7 +55,7 @@ from PySide6.QtWidgets import (
 )
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike
 from RepTate.core.units import convert_array_to_internal, parse_column_label
 from RepTate.gui.QTheory import QTheory
 from RepTate.theories import _lp2r  # pyright: ignore[reportAttributeAccessIssue]
@@ -1111,7 +1111,7 @@ class TheoryLP2RLVE(QTheory):
 
     def _collect_mwd_getters(self):
         """Collect available Discretize MWD theory outputs from RepTate apps."""
-        apmng = self.parent_dataset.parent_application.parent_manager
+        apmng: ApplicationManagerLike = self.parent_dataset.parent_application.parent_manager
         get_dict = {}
         for app in apmng.applications.values():
             app_index = apmng.ApplicationtabWidget.indexOf(app)

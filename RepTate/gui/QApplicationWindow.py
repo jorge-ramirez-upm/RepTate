@@ -44,6 +44,7 @@ import io
 import math
 import re
 import traceback
+from typing import cast
 from numpy import (
     sin,
     cos,
@@ -124,7 +125,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
-from RepTate.core.typing import AxesArray
+from RepTate.core.typing import ApplicationManagerLike, AxesArray
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
@@ -393,7 +394,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     """
 
-    def __init__(self, name="Application Template", parent=None, nplot_max=4, ncols=2, **kwargs):
+    def __init__(
+        self,
+        name="Application Template",
+        parent: ApplicationManagerLike | None = None,
+        nplot_max=4,
+        ncols=2,
+        **kwargs,
+    ):
         """**Constructor**"""
 
         # super().__init__(name, parent, **kwargs)
@@ -402,7 +410,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.setupUi(self)
 
         self.name = name
-        self.parent_manager = parent
+        self.parent_manager: ApplicationManagerLike = cast(ApplicationManagerLike, parent)
         self.views = OrderedDict()
         self.filetypes = OrderedDict()  # keep filetypes in order
         self.theories = OrderedDict()  # keep theory combobox in order

@@ -62,6 +62,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QIcon
 from PySide6.QtCore import QSize, Qt
+from RepTate.core.typing import ApplicationManagerLike
 import psutil
 
 QDialogButtonBox_any: Any = QDialogButtonBox
@@ -500,7 +501,7 @@ class ParameterReactMix(QDialog):
             ndist = th.ndist
             ds = th.parent_dataset
             app = ds.parent_application
-            manager = app.parent_manager
+            manager: ApplicationManagerLike = app.parent_manager
 
             # find application tab-name
             app_index = manager.ApplicationtabWidget.indexOf(app)
@@ -597,7 +598,7 @@ class ParameterReactMix(QDialog):
     def list_all_open_react_theories(self):
         """List all opened React theories in RepTate, excluding the Mix theories"""
         self.opened_react_theories = []
-        current_manager = self.parent_theory.parent_dataset.parent_application.parent_manager
+        current_manager: ApplicationManagerLike = self.parent_theory.parent_dataset.parent_application.parent_manager
 
         for app in current_manager.applications.values():
             # list all opened apps
