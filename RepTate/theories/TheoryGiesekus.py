@@ -261,8 +261,8 @@ class TheoryGiesekus(QTheory):
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = self.parameters["G%02d" % i].value
+            tau[i] = self.parameter_float("tauD%02d" % i)
+            G[i] = self.parameter_float("G%02d" % i)
         return tau, G, True
 
     def set_modes(self, tau: Any, G: Any) -> bool:
@@ -398,9 +398,9 @@ class TheoryGiesekus(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            tauD: Any = self.parameters["tauD%02d" % i].value
-            alpha: Any = self.parameters["alpha%02d" % i].value
+            G = self.parameter_float("G%02d" % i)
+            tauD = self.parameter_float("tauD%02d" % i)
+            alpha = self.parameter_float("alpha%02d" % i)
             p = [alpha, G, tauD, flow_rate]
             if i < nstretch:
                 try:
@@ -448,9 +448,9 @@ class TheoryGiesekus(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            tauD: Any = self.parameters["tauD%02d" % i].value
-            alpha: Any = self.parameters["alpha%02d" % i].value
+            G = self.parameter_float("G%02d" % i)
+            tauD = self.parameter_float("tauD%02d" % i)
+            alpha = self.parameter_float("alpha%02d" % i)
             p = [alpha, G, tauD, g0, w]
             if i < nstretch:
                 try:

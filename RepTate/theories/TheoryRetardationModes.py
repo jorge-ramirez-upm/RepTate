@@ -198,7 +198,7 @@ class TheoryRetardationModesTime(QTheory):
         tauold = _logspace(tminold, tmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
-            Gold[i] = self.parameters["logJ%02d" % i].value
+            Gold[i] = self.parameter_float("logJ%02d" % i)
             del self.parameters["logJ%02d" % i]
 
         nmodesnew = value

@@ -366,7 +366,7 @@ class TheoryRolieDoublePoly(QTheory):
 
             td = np.zeros(n)
             for i in range(n):
-                td[i] = self.parameters["tauD%02d" % i].value
+                td[i] = self.parameter_float("tauD%02d" % i)
             # sort taud ascending order
             args = np.argsort(td)
 
@@ -485,9 +485,9 @@ class TheoryRolieDoublePoly(QTheory):
         taud = np.zeros(nmodes)
         taur = np.zeros(nmodes)
         for i in range(nmodes):
-            phi[i] = self.parameters["phi%02d" % i].value
-            taud[i] = self.parameters["tauD%02d" % i].value
-            taur[i] = self.parameters["tauR%02d" % i].value
+            phi[i] = self.parameter_float("phi%02d" % i)
+            taud[i] = self.parameter_float("tauD%02d" % i)
+            taur[i] = self.parameter_float("tauR%02d" % i)
         param_dic = OrderedDict()
         param_dic["phi"] = phi
         param_dic["tauD"] = taud
@@ -643,8 +643,8 @@ class TheoryRolieDoublePoly(QTheory):
         G = np.zeros(nmodes)
         GN0 = self.parameter_float("GN0")
         for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * float(self.parameters["phi%02d" % i].value)
+            tau[i] = self.parameter_float("tauD%02d" % i)
+            G[i] = GN0 * self.parameter_float("phi%02d" % i)
         return tau, G, True
 
     def set_modes_from_mwd(self, m: Any, phi: Any) -> None:

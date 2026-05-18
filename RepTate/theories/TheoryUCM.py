@@ -239,8 +239,8 @@ class TheoryUCM(QTheory):
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = self.parameters["G%02d" % i].value
+            tau[i] = self.parameter_float("tauD%02d" % i)
+            G[i] = self.parameter_float("G%02d" % i)
         return tau, G, True
 
     def set_modes(self, tau: Any, G: Any) -> bool:
@@ -286,8 +286,8 @@ class TheoryUCM(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            tauD: Any = self.parameters["tauD%02d" % i].value
+            G = self.parameter_float("G%02d" % i)
+            tauD = self.parameter_float("tauD%02d" % i)
 
             p = [G, tauD, flow_rate]
 
@@ -315,8 +315,8 @@ class TheoryUCM(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            G: Any = self.parameters["G%02d" % i].value
-            tauD: Any = self.parameters["tauD%02d" % i].value
+            G = self.parameter_float("G%02d" % i)
+            tauD = self.parameter_float("tauD%02d" % i)
             eta = G * tauD
             tt.data[:, 2] += (
                 eta * g0 * w * (tauD * w * np.sin(w * times) - np.exp(-times / tauD) + np.cos(w * times)) / (1 + w**2 * tauD**2)

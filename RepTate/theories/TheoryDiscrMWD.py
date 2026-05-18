@@ -521,7 +521,7 @@ class TheoryDiscrMWD(QTheory):
         x = np.zeros(nbin + 1)
         y = np.zeros(nbin + 1)
         for i in range(nbin + 1):
-            x[i] = self.parameters["logM%02d" % i].value
+            x[i] = self.parameter_float("logM%02d" % i)
         view = self.current_view()
         x = self._internal_mass_to_plot(np.power(10, x))
         self.graphic_bins.set_data(x, y)

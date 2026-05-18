@@ -262,8 +262,8 @@ class TheoryRDPLVE(QTheory):
         phi = np.zeros(nmodes)
         taud = np.zeros(nmodes)
         for i in range(nmodes):
-            phi[i] = self.parameters["phi%02d" % i].value
-            taud[i] = self.parameters["tauD%02d" % i].value
+            phi[i] = self.parameter_float("phi%02d" % i)
+            taud[i] = self.parameter_float("tauD%02d" % i)
         param_dic = OrderedDict()
         param_dic["phi"] = phi
         param_dic["tauD"] = taud
@@ -333,8 +333,8 @@ class TheoryRDPLVE(QTheory):
         G = np.zeros(nmodes)
         GN0 = self.parameter_float("GN0")
         for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = GN0 * float(self.parameters["phi%02d" % i].value)
+            tau[i] = self.parameter_float("tauD%02d" % i)
+            G[i] = GN0 * self.parameter_float("phi%02d" % i)
         return tau, G, True
 
     def fZ(self, z: float) -> float:

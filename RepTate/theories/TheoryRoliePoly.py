@@ -306,7 +306,7 @@ class TheoryRoliePoly(QTheory):
             # sort taud ascending order
             td = np.zeros(n)
             for i in range(n):
-                td[i] = self.parameters["tauD%02d" % i].value
+                td[i] = self.parameter_float("tauD%02d" % i)
             args = np.argsort(td)
 
             modulus = "modulus"
@@ -382,8 +382,8 @@ class TheoryRoliePoly(QTheory):
             for i in range(nmodes):
                 if self.stop_theory_flag:
                     break
-                G: Any = self.parameters["G%02d" % i].value
-                tauD: Any = self.parameters["tauD%02d" % i].value
+                G = self.parameter_float("G%02d" % i)
+                tauD = self.parameter_float("tauD%02d" % i)
                 data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
             if self.flow_mode == FlowMode.uext:
                 data_table_tmp.data[:, 1] *= 3.0
@@ -475,8 +475,8 @@ class TheoryRoliePoly(QTheory):
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
-            tau[i] = self.parameters["tauD%02d" % i].value
-            G[i] = self.parameters["G%02d" % i].value
+            tau[i] = self.parameter_float("tauD%02d" % i)
+            G[i] = self.parameter_float("G%02d" % i)
         return tau, G, True
 
     def set_modes(self, tau: Any, G: Any) -> bool:
@@ -669,8 +669,8 @@ class TheoryRoliePoly(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            tauD = self.parameters["tauD%02d" % i].value
-            tauR = self.parameters["tauR%02d" % i].value
+            tauD = self.parameter_float("tauD%02d" % i)
+            tauR = self.parameter_float("tauR%02d" % i)
             p = [lmax, tauD, tauR, beta, delta, flow_rate]
             if i < nstretch:
                 try:
@@ -736,8 +736,8 @@ class TheoryRoliePoly(QTheory):
         for i in range(nmodes):
             if self.stop_theory_flag:
                 break
-            tauD = self.parameters["tauD%02d" % i].value
-            tauR = self.parameters["tauR%02d" % i].value
+            tauD = self.parameter_float("tauD%02d" % i)
+            tauR = self.parameter_float("tauR%02d" % i)
             p = [lmax, tauD, tauR, beta, delta, g0, w]
             if i < nstretch:
                 try:

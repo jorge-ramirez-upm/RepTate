@@ -263,7 +263,7 @@ class TheoryPomPom(QTheory):
             n = self.parameter_int("nmodes")
             td = np.zeros(n)
             for i in range(n):
-                td[i] = self.parameters["tauB%02d" % i].value
+                td[i] = self.parameter_float("tauB%02d" % i)
             # sort taud ascending order
             args = np.argsort(td)
 
@@ -339,8 +339,8 @@ class TheoryPomPom(QTheory):
         tau = np.zeros(nmodes)
         G = np.zeros(nmodes)
         for i in range(nmodes):
-            tau[i] = self.parameters["tauB%02d" % i].value
-            G[i] = self.parameters["G%02d" % i].value
+            tau[i] = self.parameter_float("tauB%02d" % i)
+            G[i] = self.parameter_float("G%02d" % i)
         return tau, G, True
 
     def set_modes(self, tau: Any, G: Any) -> bool:
