@@ -35,7 +35,7 @@
 Module that defines the GUI counterpart of Dataset.
 
 """
-# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false, reportCallIssue=false
+# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false
 
 import sys
 import os

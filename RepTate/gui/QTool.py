@@ -296,16 +296,6 @@ class QTool(QWidget, Ui_ToolTab):
         child theory must rewrite this funcion"""
         pass
 
-    def precmd(self, line: str) -> str:
-        """Calculations before the Tool is calculated
-
-        This function could be erased
-        This method is called after the line has been input but before
-        it has been interpreted. If you want to modifdy the input line
-        before execution (for example, variable substitution) do it here."""
-        super(Tool, self).precmd(line)  # pyright: ignore[reportUndefinedVariable]
-        return line
-
     def update_parameter_table(self) -> None:  # pyright: ignore[reportRedeclaration]
         """Added so that Maxwell modes works in CL. CHECK IF THIS CAN BE REMOVED"""
         pass
