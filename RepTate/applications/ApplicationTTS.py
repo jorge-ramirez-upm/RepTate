@@ -42,7 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -474,7 +474,7 @@ class ApplicationTTS(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogG1G2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogG1G2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -484,7 +484,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewG1G2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewG1G2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Storage modulus :math:`G'(\\omega)` and loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -494,7 +494,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-    def viewEtaStar(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewEtaStar(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -502,7 +502,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0]
         return x, y, True
 
-    def viewLogEtaStar(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogEtaStar(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the complex viscosity :math:`\\eta^*(\\omega) = \\sqrt{G'^2 + G''^2}/\\omega` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -512,7 +512,7 @@ class ApplicationTTS(QApplicationWindow):
         )
         return x, y, True
 
-    def viewDelta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewDelta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Loss or phase angle :math:`\\delta(\\omega)=\\arctan(G''/G')\\cdot 180/\\pi` (in degrees, in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -520,7 +520,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
 
-    def viewTanDelta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewTanDelta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Tangent of the phase angle :math:`\\tan(\\delta(\\omega))=G''/G'` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -528,7 +528,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = dt.data[:, 2] / dt.data[:, 1]
         return x, y, True
 
-    def viewLogTanDelta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogTanDelta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -536,7 +536,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
-    def viewLogGstar(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogGstar(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -544,7 +544,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.log10(np.sqrt(np.square(dt.data[:, 1]) + np.square(dt.data[:, 2])))
         return x, y, True
 
-    def viewLogtandeltaGstar(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogtandeltaGstar(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the tangent of the loss angle :math:`\\tan(\\delta(\\omega))=G''/G'` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -552,7 +552,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2] / dt.data[:, 1])
         return x, y, True
 
-    def viewdeltatanGstar(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewdeltatanGstar(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Loss angle :math:`\\delta(\\omega)=\\arctan(G''/G')` vs logarithm of the modulus of the complex viscosity :math:`|G^*(\\omega)|=\\sqrt{G'^2+G''^2}`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -560,7 +560,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.arctan2(dt.data[:, 2], dt.data[:, 1]) * 180 / np.pi
         return x, y, True
 
-    def viewJ1J2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewJ1J2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Storage compliance :math:`J'(\\omega)=G'/(G'^2+G''^2)` and loss compliance :math:`J''(\\omega)=G''/(G'^2+G''^2)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -570,7 +570,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 1] = dt.data[:, 2] / (np.square(dt.data[:, 1]) + np.square(dt.data[:, 2]))
         return x, y, True
 
-    def viewColeCole(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewColeCole(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Cole-Cole plot: out of phase viscosity :math:`\\eta''(\\omega)=G'(\\omega)/\\omega` vs dynamic viscosity :math:`\\eta'(\\omega)=G''(\\omega)/\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -578,7 +578,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / dt.data[:, 0]
         return x, y, True
 
-    def viewLogG1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogG1(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -586,7 +586,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewG1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewG1(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Storage modulus :math:`G'(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -594,7 +594,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogG2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogG2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -602,7 +602,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewG2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewG2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Loss modulus :math:`G''(\\omega)` (in logarithmic scale) vs :math:`\\omega` (in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -610,7 +610,7 @@ class ApplicationTTS(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewLogG1G2tandelta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogG1G2tandelta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))`, loss modulus :math:`\\log(G''(\\omega))` and tangent of the loss angle :math:`\\log(\\tan(\\delta(\\omega)))=\\log(G''/G')` vs :math:`\\log(\\omega)`"""
         x = np.zeros((dt.num_rows, 3))
         y = np.zeros((dt.num_rows, 3))

@@ -40,7 +40,7 @@ from typing import Any, ClassVar
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -111,7 +111,7 @@ class ApplicationTemplate(QApplicationWindow):
 
         # add the GUI-specific objects here:
 
-    def viewyx(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewyx(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Function that defines how the view is shown. In this example, just the 1st and 2nd columns are shown.
 
         The view must handle objects of type DataTable and can make use of the file parameters

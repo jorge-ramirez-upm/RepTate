@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -207,7 +207,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogaT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogaT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -215,7 +215,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewaT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewaT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -223,7 +223,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogbT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -231,7 +231,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewbT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Vertical shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -239,7 +239,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewLogaTbT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogaTbT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the vertical shift factor"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -249,7 +249,7 @@ class ApplicationTTSFactors(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewLogaT_invT(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogaT_invT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the horizontal shift factor"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

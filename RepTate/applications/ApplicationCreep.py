@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 from scipy import interpolate
 
@@ -412,7 +412,7 @@ class ApplicationCreep(QApplicationWindow):
             except AttributeError:
                 pass
 
-    def viewLogStraint(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogStraint(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the applied strain :math:`\\gamma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -420,7 +420,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
         return x, y, True
 
-    def viewStraint(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewStraint(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Applied strain :math:`\\gamma(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -428,7 +428,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogJt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogJt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -437,7 +437,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]) / sigma)
         return x, y, True
 
-    def viewJt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewJt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Compliance :math:`J(t)=\\gamma(t)/\\sigma_0` (where :math:`\\sigma_0` is the applied stress in the creep experiment) vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -446,7 +446,7 @@ class ApplicationCreep(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / sigma
         return x, y, True
 
-    def viewt_Jt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewt_Jt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Time divided by compliance :math:`t/J(t)` vs time :math:`t` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

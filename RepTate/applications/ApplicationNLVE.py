@@ -42,7 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -273,7 +273,7 @@ class ApplicationNLVE(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogeta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogeta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -285,7 +285,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1] / flow_rate)
         return x, y, True
 
-    def vieweta(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def vieweta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs time :math:`t` (both axes in logarithmic scale by default)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -297,7 +297,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / flow_rate
         return x, y, True
 
-    def viewLogSigmaTime(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogSigmaTime(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -305,7 +305,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSigmaTime(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSigmaTime(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -313,7 +313,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogSigmaGamma(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogSigmaGamma(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs logarithm of the strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -325,7 +325,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSigmaGamma(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSigmaGamma(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Transient shear or extensional stress (depending on the experiment) :math:`\\sigma(t)` vs strain :math:`\\gamma`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -337,7 +337,7 @@ class ApplicationNLVE(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_flowcurve(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_flowcurve(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`\\sigma(t_{\\to\\infty})` vs flow rate"""
 
         try:

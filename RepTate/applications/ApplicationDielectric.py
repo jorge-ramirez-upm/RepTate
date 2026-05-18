@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -231,7 +231,7 @@ class ApplicationDielectric(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogE1E2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -241,7 +241,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewSemiLogE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSemiLogE1E2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Semilog plot: Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -251,7 +251,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-    def viewE1E2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewE1E2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -261,7 +261,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 1] = dt.data[:, 2]
         return x, y, True
 
-    def viewLogE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogE1(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Log or the relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -269,7 +269,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def viewSemiLogE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSemiLogE1(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Semilog plot: Relative permittivity :math:`\\epsilon'(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -277,7 +277,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewE1(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewE1(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Relative permittivity :math:`\\epsilon'(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -285,7 +285,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewLogE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogE2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Log or the Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -293,7 +293,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def viewSemiLogE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSemiLogE2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Semilog plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -301,7 +301,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewE2(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewE2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Dielectric Loss :math:`\\epsilon''(\\omega)` vs frequency :math:`\\omega`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -309,7 +309,7 @@ class ApplicationDielectric(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def viewColeCole(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewColeCole(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Cole-Cole plot: Dielectric Loss :math:`\\epsilon''(\\omega)` vs relative permittivity :math:`\\epsilon'(\\omega)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

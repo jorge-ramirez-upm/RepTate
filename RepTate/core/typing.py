@@ -17,10 +17,20 @@ if TYPE_CHECKING:
 FloatArray: TypeAlias = npt.NDArray[np.float64]
 AnyArray: TypeAlias = npt.NDArray[Any]
 ModesResult: TypeAlias = tuple[FloatArray, FloatArray, bool]
+ViewResult: TypeAlias = tuple[AnyArray, AnyArray, bool]
 FileParameterValue: TypeAlias = Any
 FileParameters: TypeAlias = dict[str, FileParameterValue]
 FileParameterSpecs: TypeAlias = dict[str, "FileParameterSpec"]
 AxesArray: TypeAlias = list["AxesLike"]
+
+
+class DataTableLike(Protocol):
+    """Minimal data table contract used by application view callbacks."""
+
+    num_rows: int
+    num_columns: int
+    data: AnyArray
+    extra_tables: dict[str, Any]
 
 
 class AxesLike(Protocol):
@@ -120,9 +130,9 @@ class ViewLike(Protocol):
 
     def view_proc(
         self,
-        dt: DataTable,
-        file_parameters: FileParameters | None,
-    ) -> tuple[Any, Any, bool]: ...
+        dt: DataTableLike,
+        file_parameters: FileParameters,
+    ) -> ViewResult: ...
 
     def convert_xy_to_display(self, x: Any, y: Any) -> tuple[Any, Any]: ...
 

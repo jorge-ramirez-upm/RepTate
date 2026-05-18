@@ -44,11 +44,12 @@ from typing import Any, TypeAlias
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
+from RepTate.core.typing import DataTableLike, FileParameters, ViewResult
 from RepTate.core.units import available_units, convert_array_to_internal, get_unit
 
 
 NumericArray: TypeAlias = NDArray[Any]
-ViewCallback: TypeAlias = Callable[..., Any]
+ViewCallback: TypeAlias = Callable[[DataTableLike, FileParameters], ViewResult]
 
 
 class ViewMode(enum.Enum):

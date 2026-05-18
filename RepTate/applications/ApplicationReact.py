@@ -40,7 +40,7 @@ from typing import Any, ClassVar
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -481,7 +481,7 @@ class ApplicationReact(QApplicationWindow):
         super().change_view(x_vis=do_priority_seniority)
 
 
-    def view_wM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_wM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Molecular weight distribution :math:`w(M)` vs molecular weight :math:`M` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
@@ -490,7 +490,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_logwM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_logwM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the molecular weight distribution :math:`\\log(w(M))` vs molecular weight :math:`M` (in logarithmic scale)
         """
         x = np.zeros((dt.num_rows, 1))
@@ -499,7 +499,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 1])
         return x, y, True
 
-    def view_gM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_gM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`g`-factor as a function of the molecular weight.
         The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
@@ -509,7 +509,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def view_loggM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_loggM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the :math:`g`-factor as a function of the molecular weight.
         The :math:`g`-factor is defined as :math:`g = \\dfrac{\\langle R^2_g \\rangle_\\text{branched}}{\\langle R^2_g \\rangle_\\text{linear}}`
         """
@@ -519,7 +519,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = np.log10(dt.data[:, 2])
         return x, y, True
 
-    def view_br_1000C(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_br_1000C(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Number of branching points per 1000 carbon as a function of the molecular weight
         """
         x = np.zeros((dt.num_rows, 1))
@@ -528,7 +528,7 @@ class ApplicationReact(QApplicationWindow):
         y[:, 0] = dt.data[:, 3]
         return x, y, True
 
-    def thview_avprio_v_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_avprio_v_senio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['avprio_v_senio']
         except:
@@ -555,7 +555,7 @@ class ApplicationReact(QApplicationWindow):
 
         return x, y, True
 
-    def thview_avsenio_v_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_avsenio_v_prio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['avsenio_v_prio']
         except:
@@ -582,7 +582,7 @@ class ApplicationReact(QApplicationWindow):
 
         return x, y, True
 
-    def thview_proba_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_proba_prio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['proba_prio']
             is_extra = True
@@ -600,7 +600,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_proba_senio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['proba_senio']
             is_extra = True
@@ -618,7 +618,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_avarmlen_v_prio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_avarmlen_v_prio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['avarmlen_v_prio']
             is_extra = True
@@ -636,7 +636,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_avarmlen_v_senio(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_avarmlen_v_senio(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['avarmlen_v_senio']
             is_extra = True
@@ -654,7 +654,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_mass_br(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_proba_mass_br(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['proba_arm_wt']
             is_extra = True
@@ -672,7 +672,7 @@ class ApplicationReact(QApplicationWindow):
             y[:] = np.nan
         return x, y, True
 
-    def thview_proba_num_br(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def thview_proba_num_br(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         try:
             data = dt.extra_tables['proba_br_pt']
             is_extra = True

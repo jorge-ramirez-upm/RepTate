@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 from PySide6.QtWidgets import QSpinBox
 
@@ -419,7 +419,7 @@ class ApplicationLAOS(QApplicationWindow):
             except AttributeError:
                 pass
 
-    def view_sigmatgammatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmatgammatRAW(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress & strain vs time"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -430,7 +430,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmatgammatRAWSCALED(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmatgammatRAWSCALED(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress SCALED & strain vs time"""
         x = np.zeros((dt.num_rows, 2))
         y = np.zeros((dt.num_rows, 2))
@@ -441,7 +441,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammaRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmagammaRAW(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs strain RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -449,7 +449,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = dt.data[:, 2]
         return x, y, True
 
-    def view_sigmagammaFILTERED(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmagammaFILTERED(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs strain FILTERED data"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -462,7 +462,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = tau_recon
         return x, y, True
 
-    def view_fftspectrum(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_fftspectrum(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """FFT spectrum of stress signal"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -504,7 +504,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammadot(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmagammadot(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs strain rate"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
         gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
@@ -525,7 +525,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = tau_recon  # tau_recon interp1d
         return x, y, True
 
-    def view_sigmagammaANLS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmagammaANLS(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs strain ANALYSIS"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
         gam_recon, tau_recon = self.reconstruct_gamma_tau(An, Bn, gam_0, Ncycles)
@@ -576,7 +576,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_sigmagammadotANLS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmagammadotANLS(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs strain rate ANALYSIS"""
 
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
@@ -630,7 +630,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_chebelastic(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_chebelastic(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Chebyshev decomposition, elastic components"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -653,7 +653,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = e_n[0 : self.HHSR]
         return x, y, True
 
-    def view_chebviscous(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_chebviscous(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Chebyshev decomposition, viscous components"""
         gam_0, Bn, An, Ncycles = self.do_FFT_and_STUFF(dt)
 
@@ -675,7 +675,7 @@ class ApplicationLAOS(QApplicationWindow):
         y[:, 0] = v_n[0 : self.HHSR]
         return x, y, True
 
-    def view_sigmatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_sigmatRAW(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Stress vs time RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -684,7 +684,7 @@ class ApplicationLAOS(QApplicationWindow):
 
         return x, y, True
 
-    def view_gammatRAW(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_gammatRAW(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Strain vs time RAW data"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

@@ -41,7 +41,7 @@ from typing import Any, ClassVar, cast
 from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationLike, ApplicationManagerLike
+from RepTate.core.typing import ApplicationLike, ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 
 from numpy import (
     sin,
@@ -134,7 +134,7 @@ class ViewParseExpression(object):
         for k in safe_list:
             self.safe_dict[k] = globals().get(k, None)
 
-    def view(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Actual function that processes the expression, extracts variables, file parameters and columns, and produces the view"""
         x = np.zeros((dt.num_rows, self.n))
         y = np.zeros((dt.num_rows, self.n))
@@ -296,7 +296,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewyx(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewyx(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Example View function"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

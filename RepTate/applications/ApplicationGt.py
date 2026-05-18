@@ -42,7 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 from scipy import interpolate
 
@@ -381,7 +381,7 @@ class ApplicationGt(QApplicationWindow):
             return 1.0
         return gamma
 
-    def viewGt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewGt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Relaxation modulus :math:`G(t)` vs time :math:`t` (both in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -390,7 +390,7 @@ class ApplicationGt(QApplicationWindow):
         y[:, 0] = dt.data[:, 1] / gamma
         return x, y, True
 
-    def viewLogGt(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogGt(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the relaxation modulus :math:`G(t)` vs logarithm of time :math:`t`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

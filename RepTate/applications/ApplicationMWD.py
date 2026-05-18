@@ -42,7 +42,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -163,7 +163,7 @@ class ApplicationMWD(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def view_WM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_WM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`W(M)` vs :math:`M`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -171,7 +171,7 @@ class ApplicationMWD(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def view_logWM(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def view_logWM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`\\log(W(M))` vs :math:`\\log(M)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))

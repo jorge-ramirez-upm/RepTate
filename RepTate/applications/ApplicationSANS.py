@@ -41,7 +41,7 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import AxisSpec, View
 from RepTate.core.File import FileParameterSpec
 from RepTate.core.FileType import TXTColumnFile
-from RepTate.core.typing import ApplicationManagerLike
+from RepTate.core.typing import ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
 import numpy as np
 
 
@@ -175,7 +175,7 @@ class ApplicationSANS(QApplicationWindow):
         # set the current view
         self.set_views()
 
-    def viewLogSANS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewLogSANS(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -183,7 +183,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = np.log10(np.abs(dt.data[:, 1]))
         return x, y, True
 
-    def viewSANS(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewSANS(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Scattered intensity :math:`I(q)` vs scattering vector :math:`q` (both axes in logarithmic scale)"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -191,7 +191,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = dt.data[:, 1]
         return x, y, True
 
-    def viewKratky(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewKratky(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Kratky plot: :math:`q^2\\cdot I(q)` vs :math:`q`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
@@ -199,7 +199,7 @@ class ApplicationSANS(QApplicationWindow):
         y[:, 0] = dt.data[:, 0] * dt.data[:, 0] * dt.data[:, 1]
         return x, y, True
 
-    def viewZimm(self, dt: Any, file_parameters: Any) -> tuple[Any, Any, bool]:
+    def viewZimm(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Zimm plot: :math:`I(q)^{-1}` vs :math:`q^2`"""
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
