@@ -179,11 +179,11 @@ class TheoryStickyReptation(QTheory):
         tt = self.tables[f.file_name_short]
         w = ft.data[:, 0]  # angular frequency [rad/s]
 
-        Ge: Any = self.parameters["Ge"].value
-        tau_s: Any = self.parameters["tau_s"].value
-        Zs: Any = self.parameters["Zs"].value
-        Ze: Any = self.parameters["Ze"].value
-        alpha: Any = self.parameters["alpha"].value
+        Ge = self.parameter_float("Ge")
+        tau_s = self.parameter_float("tau_s")
+        Zs = self.parameter_float("Zs")
+        Ze = self.parameter_float("Ze")
+        alpha = self.parameter_float("alpha")
         # END FUNCTION INPUT
         # ---------------------------------------------
 

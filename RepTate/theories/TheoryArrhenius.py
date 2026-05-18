@@ -32,7 +32,7 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryArrhenius
 """
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -94,8 +94,8 @@ class TheoryArrhenius(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
-        Ea: Any = self.parameters["Ea"].value
-        Tref: Any = self.parameters["Tref"].value
+        Ea = self.parameter_float("Ea")
+        Tref = self.parameter_float("Tref")
         tt.data[:, 1] = np.exp(
             Ea
             / 8.314

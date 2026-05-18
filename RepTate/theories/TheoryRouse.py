@@ -35,7 +35,7 @@
 RouseTime file for creating a new theory
 """
 
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -123,9 +123,9 @@ class TheoryRouseTime(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        G0: Any = self.parameters["G0"].value
-        tau0: Any = self.parameters["tau0"].value
-        M0: Any = self.parameters["M0"].value
+        G0 = self.parameter_float("G0")
+        tau0 = self.parameter_float("tau0")
+        M0 = self.parameter_float("M0")
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):
@@ -228,9 +228,9 @@ class TheoryRouseFrequency(QTheory):
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        G0: Any = self.parameters["G0"].value
-        tau0: Any = self.parameters["tau0"].value
-        M0: Any = self.parameters["M0"].value
+        G0 = self.parameter_float("G0")
+        tau0 = self.parameter_float("tau0")
+        M0 = self.parameter_float("M0")
         try:
             Mw = float(f.file_parameters["Mw"])
         except (ValueError, KeyError):

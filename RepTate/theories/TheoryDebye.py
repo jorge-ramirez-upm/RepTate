@@ -35,7 +35,7 @@
 Debye theory for neutron scattering from ideal polymer chains
 """
 
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -195,14 +195,14 @@ class TheoryDebye(QTheory):
             self.Qprint("Invalid Mw or Phi value")
             return
 
-        Contr: Any = self.parameters["Contrast"].value
-        CRg: Any = self.parameters["C_gyr"].value
-        Mmono: Any = self.parameters["M_mono"].value
-        Bck: Any = self.parameters["Bckgrnd"].value
-        Chi: Any = self.parameters["chi"].value
-        Lambda: Any = self.parameters["lambda"].value
-        stretched: Any = self.parameters["stretched"].value
-        nonideal: Any = self.parameters["non-ideal"].value
+        Contr = self.parameter_float("Contrast")
+        CRg = self.parameter_float("C_gyr")
+        Mmono = self.parameter_float("M_mono")
+        Bck = self.parameter_float("Bckgrnd")
+        Chi = self.parameter_float("chi")
+        Lambda = self.parameter_float("lambda")
+        stretched = self.parameter_bool("stretched")
+        nonideal = self.parameter_bool("non-ideal")
 
         tt.data[:, 0] = ft.data[:, 0]
 
@@ -226,9 +226,9 @@ class TheoryDebye(QTheory):
         if line == "":
             self.Qprint("")
             self.Qprint("%12s %8s %8s" % ("File", "Mw", "Rg"))
-            CRg: Any = self.parameters["C_gyr"].value
-            Lambda: Any = self.parameters["lambda"].value
-            stretched: Any = self.parameters["stretched"].value
+            CRg = self.parameter_float("C_gyr")
+            Lambda = self.parameter_float("lambda")
+            stretched = self.parameter_bool("stretched")
             nfiles = len(self.parent_dataset.files)
             for i in range(nfiles):
                 f = self.parent_dataset.files[i]
