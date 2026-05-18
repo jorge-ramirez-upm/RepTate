@@ -259,8 +259,8 @@ class TheoryPETS(QTheory):
         fparamaux: dict[str, Any] = {}
         fparamaux["gdot"] = 1e-8
 
-        G: Any = self.parameters["G"].value
-        tauD: Any = self.parameters["tauD"].value
+        G = self.parameter_float("G")
+        tauD = self.parameter_float("tauD")
         data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
         if self.flow_mode == FlowMode.uext:
             data_table_tmp.data[:, 1] *= 3.0
@@ -321,8 +321,8 @@ class TheoryPETS(QTheory):
         """Get the values of Maxwell Modes from this theory"""
         tau = np.zeros(1)
         G = np.zeros(1)
-        tau[0] = self.parameters["tauD"].value
-        G[0] = self.parameters["G"].value
+        tau[0] = self.parameter_float("tauD")
+        G[0] = self.parameter_float("G")
         return tau, G, True
 
     def sigmadot_shear(self, vec: Any, t: Any, p: Any) -> list[Any]:
@@ -461,15 +461,15 @@ class TheoryPETS(QTheory):
         t = np.concatenate([[0], t])
 
         flow_rate = float(f.file_parameters["gdot"])
-        delta = float(self.parameters["delta"].value)
-        beta = float(self.parameters["beta"].value)
-        tau_free = float(self.parameters["tau_free"].value)
-        tau_as = float(self.parameters["tau_as"].value)
-        tauS = float(self.parameters["tauS"].value)
-        tauD = float(self.parameters["tauD"].value)
-        lmax = float(self.parameters["lmax"].value)
-        r_a = float(self.parameters["r_a"].value)
-        Z = float(self.parameters["Z"].value)
+        delta = self.parameter_float("delta")
+        beta = self.parameter_float("beta")
+        tau_free = self.parameter_float("tau_free")
+        tau_as = self.parameter_float("tau_as")
+        tauS = self.parameter_float("tauS")
+        tauD = self.parameter_float("tauD")
+        lmax = self.parameter_float("lmax")
+        r_a = self.parameter_float("r_a")
+        Z = self.parameter_float("Z")
         self.RD_MAX = 1 / (0.01 * min(tau_free, min(tauS, min(tauS, 0.0001 / flow_rate))))
         # flow geometry and finite extensibility
         phi0 = 1 / (1 + tau_free / tau_as)
@@ -498,7 +498,7 @@ class TheoryPETS(QTheory):
         except EndComputationRequested:
             pass
 
-        G = float(self.parameters["G"].value)
+        G = self.parameter_float("G")
         if self.flow_mode == FlowMode.shear:
             # res_vec = [f, ldeq, QAxx, QAyy, QAxy, QDxx, QDyy, QDxy]
             attached_fraction = np.delete(res_vec[:, 0], [0])

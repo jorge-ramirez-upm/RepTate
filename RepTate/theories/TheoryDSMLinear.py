@@ -149,7 +149,7 @@ class TheoryDSMLinear(QTheory):
             float(self.parent_dataset.files[0].file_parameters["T"]) + 273.15
         )  # In units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
-        rho0: Any = self.parameters["rho0"].value
+        rho0 = self.parameter_float("rho0")
         MK = self._parameter_mass_in_da("MK")
         # ---------------------------------------------
         # CALCULATE DSM PARAMETERS FROM CROSSOVER FREQUENCY
@@ -362,7 +362,7 @@ class TheoryDSMLinear(QTheory):
         """Print out parameters for DSM simulations"""
 
         Mc = self._parameter_mass_in_da("Mc")
-        tau_c: Any = self.parameters["tau_c"].value
+        tau_c = self.parameter_float("tau_c")
         # beta = self.parameters["beta"].value
         MK = self._parameter_mass_in_da("MK")
         beta = Mc / 0.56 / MK - 1.0
@@ -406,13 +406,13 @@ class TheoryDSMLinear(QTheory):
         tt.data[:, 0] = ft.data[:, 0]
 
         MK = self._parameter_mass_in_da("MK")
-        rho0: Any = self.parameters["rho0"].value
+        rho0 = self.parameter_float("rho0")
         Mw = float(file.file_parameters["Mw"]) * 1000.0  # units of Da
         T = float(file.file_parameters["T"]) + 273.15  # units of K
         R = 8.314462 * 10**3  # units of L Pa K^-1 mol^-1
 
         Mc = self._parameter_mass_in_da("Mc")
-        tau_c: Any = self.parameters["tau_c"].value
+        tau_c = self.parameter_float("tau_c")
         # beta = self.parameters["beta"].value
         beta = Mc / 0.56 / MK - 1.0
         Nc = Mw / Mc

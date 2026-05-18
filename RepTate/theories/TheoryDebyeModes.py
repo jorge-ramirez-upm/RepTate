@@ -125,7 +125,7 @@ class TheoryDebyeModesFrequency(QTheory):
                 self.parent_dataset.files[0].data_table.data[:, 1],
             )
         )
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         for i in range(nmodes_value):
             self.parameters["logDe%02d" % i] = Parameter(
                 name="logDe%02d" % i,
@@ -169,9 +169,9 @@ class TheoryDebyeModesFrequency(QTheory):
 
     def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nmode'"""
-        nmodesold: Any = self.parameters["nmodes"].value
-        wminold: Any = self.parameters["logwmin"].value
-        wmaxold: Any = self.parameters["logwmax"].value
+        nmodesold = self.parameter_int("nmodes")
+        wminold = self.parameter_float("logwmin")
+        wmaxold = self.parameter_float("logwmax")
         wold = np.logspace(wminold, wmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
@@ -200,7 +200,7 @@ class TheoryDebyeModesFrequency(QTheory):
     def drag_mode(self, dx: Any, dy: Any) -> None:
         """Move around modes"""
         dx, dy = self.convert_view_data_to_internal(dx, dy)
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         if self.current_view().log_x:
             self.set_param_value("logwmin", np.log10(dx[0]))
             self.set_param_value("logwmax", np.log10(dx[nmodes - 1]))
@@ -224,9 +224,9 @@ class TheoryDebyeModesFrequency(QTheory):
 
     def setup_graphic_modes(self) -> None:
         """Setup graphic representation of modes"""
-        nmodes: Any = self.parameters["nmodes"].value
-        logwmin: Any = self.parameters["logwmin"].value
-        logwmax: Any = self.parameters["logwmax"].value
+        nmodes = self.parameter_int("nmodes")
+        logwmin = self.parameter_float("logwmin")
+        logwmax = self.parameter_float("logwmax")
         w = np.logspace(logwmin, logwmax, nmodes)
         eps = np.zeros(nmodes)
         for i in range(nmodes):
@@ -273,9 +273,9 @@ class TheoryDebyeModesFrequency(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
-        logwmin: Any = self.parameters["logwmin"].value
-        logwmax: Any = self.parameters["logwmax"].value
+        nmodes = self.parameter_int("nmodes")
+        logwmin = self.parameter_float("logwmin")
+        logwmax = self.parameter_float("logwmax")
         freq = np.logspace(logwmin, logwmax, nmodes)
         tau = 1.0 / freq
         eps = np.zeros(nmodes)
@@ -292,10 +292,10 @@ class TheoryDebyeModesFrequency(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        einf: Any = self.parameters["einf"].value
-        nmodes: Any = self.parameters["nmodes"].value
-        logwmin: Any = self.parameters["logwmin"].value
-        logwmax: Any = self.parameters["logwmax"].value
+        einf = self.parameter_float("einf")
+        nmodes = self.parameter_int("nmodes")
+        logwmin = self.parameter_float("logwmin")
+        logwmax = self.parameter_float("logwmax")
         freq = np.logspace(logwmin, logwmax, nmodes)
         tau = 1.0 / freq
 
@@ -315,11 +315,11 @@ class TheoryDebyeModesFrequency(QTheory):
         #     return
         data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 3
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 3))
-        logwmin: Any = self.parameters["logwmin"].value
-        logwmax: Any = self.parameters["logwmax"].value
+        logwmin = self.parameter_float("logwmin")
+        logwmax = self.parameter_float("logwmax")
         freq = np.logspace(logwmin, logwmax, nmodes)
         data_table_tmp.data[:, 0] = freq
         for i in range(nmodes):

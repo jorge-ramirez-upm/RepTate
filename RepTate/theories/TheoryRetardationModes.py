@@ -144,7 +144,7 @@ class TheoryRetardationModesTime(QTheory):
             )
             / sigma
         )
-        nmodes_value: Any = self.parameters["nmodes"].value
+        nmodes_value = self.parameter_int("nmodes")
         for i in range(nmodes_value):
             self.parameters["logJ%02d" % i] = Parameter(
                 "logJ%02d" % i,
@@ -192,9 +192,9 @@ class TheoryRetardationModesTime(QTheory):
 
     def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nmode'"""
-        nmodesold: Any = self.parameters["nmodes"].value
-        tminold: Any = self.parameters["logtmin"].value
-        tmaxold: Any = self.parameters["logtmax"].value
+        nmodesold = self.parameter_int("nmodes")
+        tminold = self.parameter_float("logtmin")
+        tmaxold = self.parameter_float("logtmax")
         tauold = _logspace(tminold, tmaxold, nmodesold)
         Gold = np.zeros(nmodesold)
         for i in range(nmodesold):
@@ -223,7 +223,7 @@ class TheoryRetardationModesTime(QTheory):
     def drag_mode(self, dx: Any, dy: Any) -> None:
         """Drag modes around"""
         dx, dy = self.convert_view_data_to_internal(dx, dy)
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         self.set_param_value("logtmin", dx[0])
         self.set_param_value("logtmax", dx[nmodes - 1])
         for i in range(nmodes):
@@ -237,9 +237,9 @@ class TheoryRetardationModesTime(QTheory):
 
     def setup_graphic_modes(self) -> None:
         """Setup graphic helpers"""
-        nmodes: Any = self.parameters["nmodes"].value
-        logtmin: Any = self.parameters["logtmin"].value
-        logtmax: Any = self.parameters["logtmax"].value
+        nmodes = self.parameter_int("nmodes")
+        logtmin = self.parameter_float("logtmin")
+        logtmax = self.parameter_float("logtmax")
         tau = _logspace(logtmin, logtmax, nmodes)
         J = np.zeros(nmodes)
         for i in range(nmodes):
@@ -286,9 +286,9 @@ class TheoryRetardationModesTime(QTheory):
 
     def get_modes(self) -> ModesResult:
         """Get the values of Maxwell Modes from this theory"""
-        nmodes: Any = self.parameters["nmodes"].value
-        logtmin: Any = self.parameters["logtmin"].value
-        logtmax: Any = self.parameters["logtmax"].value
+        nmodes = self.parameter_int("nmodes")
+        logtmin = self.parameter_float("logtmin")
+        logtmax = self.parameter_float("logtmax")
         tau = _logspace(logtmin, logtmax, nmodes)
         J = np.zeros(nmodes)
         for i in range(nmodes):
@@ -309,13 +309,13 @@ class TheoryRetardationModesTime(QTheory):
         except (ValueError, KeyError):
             self.Qprint("Invalid stress value")
             return
-        nmodes: Any = self.parameters["nmodes"].value
-        logjini: Any = self.parameters["logJini"].value
-        logeta0: Any = self.parameters["logeta0"].value
+        nmodes = self.parameter_int("nmodes")
+        logjini = self.parameter_float("logJini")
+        logeta0 = self.parameter_float("logeta0")
         J0 = np.power(10, logjini)
         eta0 = np.power(10, logeta0)
-        logtmin: Any = self.parameters["logtmin"].value
-        logtmax: Any = self.parameters["logtmax"].value
+        logtmin = self.parameter_float("logtmin")
+        logtmax = self.parameter_float("logtmax")
         tau = _logspace(logtmin, logtmax, nmodes)
         try:
             rec = int(f.file_parameters["rec"])
@@ -339,11 +339,11 @@ class TheoryRetardationModesTime(QTheory):
             return
         data_table_tmp: Any = DataTable(self.axarr)
         data_table_tmp.num_columns = 2
-        nmodes: Any = self.parameters["nmodes"].value
+        nmodes = self.parameter_int("nmodes")
         data_table_tmp.num_rows = nmodes
         data_table_tmp.data = np.zeros((nmodes, 2))
-        logtmin: Any = self.parameters["logtmin"].value
-        logtmax: Any = self.parameters["logtmax"].value
+        logtmin = self.parameter_float("logtmin")
+        logtmax = self.parameter_float("logtmax")
         tau = _logspace(logtmin, logtmax, nmodes)
         data_table_tmp.data[:, 0] = tau
         for i in range(nmodes):

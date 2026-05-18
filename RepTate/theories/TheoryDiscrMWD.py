@@ -142,7 +142,7 @@ class TheoryDiscrMWD(QTheory):
         self.spinbox = QSpinBox()
         self.spinbox.setRange(self.NBIN_MIN, self.NBIN_MAX)  # min and max number of modes
         self.spinbox.setSuffix(" bins")
-        nbin_value: Any = self.parameters["nbin"].value
+        nbin_value = self.parameter_int("nbin")
         self.spinbox.setValue(nbin_value)  # initial value
         tb.addWidget(self.spinbox)
         self.thToolsLayout.insertWidget(0, tb)
@@ -186,7 +186,7 @@ class TheoryDiscrMWD(QTheory):
 
     def do_save(self, dir: str, extra_txt: str = "") -> None:
         """Save discrete MWD"""
-        nbin: Any = self.parameters["nbin"].value
+        nbin = self.parameter_int("nbin")
         file_out = os.path.join(
             dir,
             "%s_TH_%dbins%s.txt" % (self.extra_data["current_fname"], nbin, extra_txt),
@@ -218,7 +218,7 @@ class TheoryDiscrMWD(QTheory):
                 mmax = m_arr[-1]
             self.parameters["logmmin"].value = np.log10(mmin)
             self.parameters["logmmax"].value = np.log10(mmax)
-            nbin: Any = self.parameters["nbin"].value
+            nbin = self.parameter_int("nbin")
             bins_edges = np.logspace(np.log10(mmin), np.log10(mmax), nbin + 1)
             for i in range(nbin + 1):
                 self.parameters["logM%02d" % i] = Parameter(
@@ -234,14 +234,14 @@ class TheoryDiscrMWD(QTheory):
     def set_param_value(self, name: str, new_value: Any) -> tuple[str, bool]:
         """Set value of theory parameter"""
         if name == "nbin":
-            nbinold: Any = self.parameters["nbin"].value
+            nbinold = self.parameter_int("nbin")
         message, success = super().set_param_value(name, new_value)
         if not success:
             return message, success
         if name == "nbin":
-            new_nbin: Any = self.parameters["nbin"].value
-            mminold: Any = self.parameters["logmmin"].value
-            mmaxold: Any = self.parameters["logmmax"].value
+            new_nbin = self.parameter_int("nbin")
+            mminold = self.parameter_float("logmmin")
+            mmaxold = self.parameter_float("logmmax")
             for i in range(nbinold + 1):
                 del self.parameters["logM%02d" % i]
             mnew = np.logspace(mminold, mmaxold, new_nbin + 1)
@@ -257,9 +257,9 @@ class TheoryDiscrMWD(QTheory):
             if self.autocalculate:
                 self.do_calculate("")
         elif (name == "logmmin") or (name == "logmmax"):  # make bins equally spaced again
-            nbin: Any = self.parameters["nbin"].value
-            mmin: Any = self.parameters["logmmin"].value
-            mmax: Any = self.parameters["logmmax"].value
+            nbin = self.parameter_int("nbin")
+            mmin = self.parameter_float("logmmin")
+            mmax = self.parameter_float("logmmax")
             mnew = np.logspace(mmin, mmax, nbin + 1)
             for i in range(nbin + 1):
                 self.parameters["logM%02d" % i].value = np.log10(mnew[i])
@@ -269,7 +269,7 @@ class TheoryDiscrMWD(QTheory):
 
     def setup_graphic_bins(self) -> None:
         """Setup graphic helpers for the theory"""
-        nbin: Any = self.parameters["nbin"].value
+        nbin = self.parameter_int("nbin")
         # marker at the Mw value of the bin
         self.Mw_bin = self.ax.plot(np.zeros(nbin), np.zeros(nbin))[0]
         self.Mw_bin.set_marker("|")
@@ -282,8 +282,8 @@ class TheoryDiscrMWD(QTheory):
         self.Mw_bin.set_alpha(1)
 
         # setup the movable edge bins
-        logmmin: Any = self.parameters["logmmin"].value
-        logmmax: Any = self.parameters["logmmax"].value
+        logmmin = self.parameter_float("logmmin")
+        logmmax = self.parameter_float("logmmax")
         self.bins = np.logspace(logmmin, logmmax, nbin + 1)
         self.graphic_bins = self.ax.plot(self.bins, np.zeros(nbin + 1), picker=10)[0]
         self.graphic_bins.set_marker("d")
@@ -348,7 +348,7 @@ class TheoryDiscrMWD(QTheory):
     def drag_bin(self, newx: Any, newy: Any) -> None:
         """Move edges of the bins"""
         newx = self._plot_x_to_internal_mass(newx)
-        nbin: Any = self.parameters["nbin"].value
+        nbin = self.parameter_int("nbin")
         newx = np.sort(newx)
         self.parameters["logmmin"].value = np.log10(newx[0])
         self.parameters["logmmax"].value = np.log10(newx[nbin])
@@ -449,7 +449,7 @@ class TheoryDiscrMWD(QTheory):
             temp[:, 1] /= temp_area
         self.calculate_moments(temp, "input")
 
-        nbin: Any = self.parameters["nbin"].value
+        nbin = self.parameter_int("nbin")
         edge_bins = np.zeros(nbin + 1)
         for i in range(nbin + 1):
             edge_bins[i] = np.power(10, self.parameters["logM%02d" % i].value)
@@ -517,7 +517,7 @@ class TheoryDiscrMWD(QTheory):
 
     def plot_theory_stuff(self) -> None:
         """Plot theory graphic helpers"""
-        nbin: Any = self.parameters["nbin"].value
+        nbin = self.parameter_int("nbin")
         x = np.zeros(nbin + 1)
         y = np.zeros(nbin + 1)
         for i in range(nbin + 1):
