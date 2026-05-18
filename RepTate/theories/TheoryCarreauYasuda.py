@@ -34,7 +34,7 @@
 
 Carreau-Yasuda equation for the complex viscosity
 """
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from math import sqrt
@@ -178,11 +178,11 @@ class TheoryCarreauYasuda(QTheory):
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
-        eta0: Any = self.parameters["eta0"].value
-        etainf: Any = self.parameters["etainf"].value
-        lamda: Any = self.parameters["lambda"].value
-        n: Any = self.parameters["n"].value
-        a: Any = self.parameters["a"].value
+        eta0 = self.parameter_float("eta0")
+        etainf = self.parameter_float("etainf")
+        lamda = self.parameter_float("lambda")
+        n = self.parameter_float("n")
+        a = self.parameter_float("a")
 
         tt.data[:, 1] = tt.data[:, 2] = (
             (

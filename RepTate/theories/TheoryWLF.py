@@ -34,7 +34,7 @@
 
 WLF file for creating a new theory
 """
-from typing import Any, ClassVar
+from typing import ClassVar
 
 import numpy as np
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
@@ -154,14 +154,14 @@ class TheoryWLF(QTheory):
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
 
-        Tr: Any = self.parameters["Tr"].value
-        B1: Any = self.parameters["B1"].value
-        B2: Any = self.parameters["B2"].value
-        logalpha: Any = self.parameters["logalpha"].value
+        Tr = self.parameter_float("Tr")
+        B1 = self.parameter_float("B1")
+        B2 = self.parameter_float("B2")
+        logalpha = self.parameter_float("logalpha")
         alpha = np.power(10.0, logalpha)
-        CTg: Any = self.parameters["CTg"].value
-        iso: Any = self.parameters["iso"].value
-        vert: Any = self.parameters["vert"].value
+        CTg = self.parameter_float("CTg")
+        iso = self.parameter_bool("iso")
+        vert = self.parameter_bool("vert")
 
         Mw = f.file_parameters["Mw"]
 

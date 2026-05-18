@@ -1570,6 +1570,22 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Call the plot from the parent Dataset"""
         self.parent_dataset.do_plot(line)
 
+    def parameter_float(self, name: str) -> float:
+        """Return a theory parameter value as a float."""
+        return float(self.parameters[name].value)
+
+    def parameter_int(self, name: str) -> int:
+        """Return a theory parameter value as an int."""
+        return int(self.parameters[name].value)
+
+    def parameter_bool(self, name: str) -> bool:
+        """Return a theory parameter value as a bool."""
+        return bool(self.parameters[name].value)
+
+    def parameter_str(self, name: str) -> str:
+        """Return a theory parameter value as a string."""
+        return str(self.parameters[name].value)
+
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         p = self.parameters[name]
