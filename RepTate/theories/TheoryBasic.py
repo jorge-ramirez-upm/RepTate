@@ -341,7 +341,10 @@ class TheoryAlgebraicExpression(QTheory):
 
     The expression can contain standard mathematical functions such as
     sin, cos, tan, exp, log, sqrt, power, pi, e, etc., as defined in
-    ``RepTate.core.expression_parser``.
+    ``RepTate.core.expression_parser``. The expression can contain random
+    uniform randu(x, low=0.0, high=1.0) and Gaussian randn(x, mean=0.0, sigma=1.0)
+    numbers. The vector :math:`x` must be specified as argument, so the
+    generated random numbers array has the same size as x.
 
     It is the responsibility of the user to input functions that make
     mathematical sense.

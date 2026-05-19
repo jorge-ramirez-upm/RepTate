@@ -42,45 +42,14 @@ from RepTate.gui.QApplicationWindow import QApplicationWindow
 from RepTate.core.View import View
 from RepTate.core.FileType import TXTColumnFile
 from RepTate.core.typing import ApplicationLike, ApplicationManagerLike, DataTableLike, FileParameters, ViewResult
+from RepTate.core.expression_parser import evaluate_expression
 
-from numpy import (
-    sin,
-    cos,
-    tan,
-    arccos,
-    arcsin,
-    arctan,
-    arctan2,
-    deg2rad,
-    rad2deg,
-    sinh,
-    cosh,
-    tanh,
-    arcsinh,
-    arccosh,
-    arctanh,
-    around,
-    rint,
-    floor,
-    ceil,
-    trunc,
-    exp,
-    log,
-    log10,
-    fabs,
-    mod,
-    e,
-    pi,
-    power,
-    sqrt,
-)
 import numpy as np
-import re
 import configparser
 
 
 class ViewParseExpression(object):
-    """Auxiliary class to define views that must parse an expression before being shown"""
+    """Auxiliary class to define views that must parse an expression before being shown."""
 
     def __init__(
         self,
@@ -98,110 +67,84 @@ class ViewParseExpression(object):
         self.xexpr: list[str] = xexpr
         self.yexpr: list[str] = yexpr
 
-        safe_list: list[str] = [
-            "sin",
-            "cos",
-            "tan",
-            "arccos",
-            "arcsin",
-            "arctan",
-            "arctan2",
-            "deg2rad",
-            "rad2deg",
-            "sinh",
-            "cosh",
-            "tanh",
-            "arcsinh",
-            "arccosh",
-            "arctanh",
-            "around",
-            "round_",
-            "rint",
-            "floor",
-            "ceil",
-            "trunc",
-            "exp",
-            "log",
-            "log10",
-            "fabs",
-            "mod",
-            "e",
-            "pi",
-            "power",
-            "sqrt",
-        ]
-        self.safe_dict: dict[str, Any] = {}
-        for k in safe_list:
-            self.safe_dict[k] = globals().get(k, None)
+    def _prepare_expression_variables(
+        self,
+        expression: str,
+        dt: DataTableLike,
+    ) -> tuple[str, dict[str, Any]]:
+        """Replace column references and prepare variables for expression evaluation.
 
-    def view(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
-        """Actual function that processes the expression, extracts variables, file parameters and columns, and produces the view"""
+        Columns are referenced as ``{column_name}`` in the ini file. They are
+        converted to generated internal names before passing the expression to
+        the common expression parser.
+        """
+        variables: dict[str, Any] = {}
+        expression = expression.replace("^", "**")
+
+        for i, col_name in enumerate(self.col_names):
+            placeholder = "{" + col_name + "}"
+            symbol = f"COL{i}"
+
+            if placeholder in expression:
+                expression = expression.replace(placeholder, symbol)
+                variables[symbol] = dt.data[:, i]
+
+        return expression, variables
+
+    def _evaluate_view_expression(
+        self,
+        expression: str,
+        dt: DataTableLike,
+        file_parameters: FileParameters,
+    ) -> Any:
+        expression, variables = self._prepare_expression_variables(expression, dt)
+
+        return evaluate_expression(
+            expression,
+            variables,
+            file_parameters,
+        )
+
+    def view(
+        self,
+        dt: DataTableLike,
+        file_parameters: FileParameters,
+    ) -> ViewResult:
+        """Process the expressions and produce the view."""
         x = np.zeros((dt.num_rows, self.n))
         y = np.zeros((dt.num_rows, self.n))
 
         for i in range(self.n):
-            # First we do it with x
             if i < len(self.xexpr):
-                expression = self.xexpr[i].replace("^", "**")
+                x_expression = self.xexpr[i]
             else:
-                expression = self.xexpr[0].replace("^", "**")  # For x, it is not necessary to provide all expressions
-            # Find FILE PARAMETERS IN THE EXPRESSION
-            fparams = re.findall(r"\[(.*?)\]", expression)
-            for fp in fparams:
-                if fp in file_parameters:
-                    self.safe_dict[fp] = float(file_parameters[fp])
-                else:
-                    self.parent.logger.warning("File parameter not found. Review your views")
-                    self.safe_dict[fp] = 0.0
-            expression = expression.replace("[", "").replace("]", "")
-            # Find Columns in the expression
-            cols = re.findall(r"\{(.*?)\}", expression)
-            for cl in cols:
-                if cl in self.col_names:
-                    ind = self.col_names.index(cl)
-                    self.safe_dict[cl] = dt.data[:, ind]
-                else:
-                    self.parent.logger.warning("Column not found. Review your views")
-                    self.safe_dict[fp] = np.zeros_like(dt.data[:, ind])
-            expression = expression.replace("{", "").replace("}", "")
-            try:
-                x[:, i] = eval(expression, {"__builtins__": None}, self.safe_dict)
-            except NameError as e:
-                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
-            except TypeError as e:
-                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
-            except Exception as e:
-                self.parent.logger.exception("Error in view (%s) x[%d]" % (self.name, i))
+                x_expression = self.xexpr[0]
 
-            # Now do the same for y
-            expression = self.yexpr[i].replace("^", "**")
-            # Find FILE PARAMETERS IN THE EXPRESSION
-            fparams = re.findall(r"\[(.*?)\]", expression)
-            for fp in fparams:
-                if fp in file_parameters:
-                    self.safe_dict[fp] = float(file_parameters[fp])
-                else:
-                    self.parent.logger.warning("File parameter not found. Review your views")
-                    self.safe_dict[fp] = 0.0
-            expression = expression.replace("[", "").replace("]", "")
-            # Find Columns in the expression
-            cols = re.findall(r"\{(.*?)\}", expression)
-            for cl in cols:
-                if cl in self.col_names:
-                    ind = self.col_names.index(cl)
-                    self.safe_dict[cl] = dt.data[:, ind]
-                else:
-                    self.parent.logger.warning("Column not found. Review your views")
-                    self.safe_dict[fp] = np.zeros_like(dt.data[:, ind])
-            expression = expression.replace("{", "").replace("}", "")
             try:
-                y[:, i] = eval(expression, {"__builtins__": None}, self.safe_dict)
-            except NameError as e:
-                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
-            except TypeError as e:
-                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
-            except Exception as e:
-                self.parent.logger.exception("Error in view (%s) y[%d]" % (self.name, i))
+                x[:, i] = self._evaluate_view_expression(
+                    x_expression,
+                    dt,
+                    file_parameters,
+                )
+            except Exception:
+                self.parent.logger.exception(
+                    "Error in view (%s) x[%d]",
+                    self.name,
+                    i,
+                )
+
+            try:
+                y[:, i] = self._evaluate_view_expression(
+                    self.yexpr[i],
+                    dt,
+                    file_parameters,
+                )
+            except Exception:
+                self.parent.logger.exception(
+                    "Error in view (%s) y[%d]",
+                    self.name,
+                    i,
+                )
 
         return x, y, True
 
