@@ -280,7 +280,27 @@ class AddFileFunction(QDialog):
 
 
 class EditAnnotation(QDialog, Ui_EditAnnotation):
-    def __init__(self, parent=None, annotation=None):
+    color: QColor | None
+    annotation: Any
+    textLineEdit: Any
+    xLineEdit: Any
+    yLineEdit: Any
+    labelFontColor: Any
+    rotationSpinBox: Any
+    hacomboBox: Any
+    vacomboBox: Any
+    fontweightComboBox: Any
+    fontstyleComboBox: Any
+    fontsizeannotationSpinBox: Any
+    framealphaannotationSpinBox: Any
+    fontfamilyComboBox: Any
+    pickFontColor: Any
+    pushApply: Any
+    pushOK: Any
+    pushDelete: Any
+    pushCancel: Any
+
+    def __init__(self, parent: QWidget | None = None, annotation: Any = None) -> None:
         super(EditAnnotation, self).__init__(parent)
         QDialog.__init__(self)
         Ui_EditAnnotation.__init__(self)
@@ -311,7 +331,7 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
 
         self.color = None
 
-    def showColorDialog(self):
+    def showColorDialog(self) -> QColor | None:
         """Show the color picker and return the picked QtColor or `None`"""
         wtitle = 'Select color for the annotation "%s"' % self.annotation.get_text()
         color = QColorDialog.getColor(title=wtitle, options=QColorDialog.DontUseNativeDialog)
@@ -319,7 +339,7 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
             color = None
         return color
 
-    def apply_changes(self):
+    def apply_changes(self) -> None:
         self.annotation.set_text(self.textLineEdit.text())
         self.annotation.set_position((float(self.xLineEdit.text()), float(self.yLineEdit.text())))
         if self.color:
@@ -334,7 +354,7 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         self.annotation.set_family(self.fontfamilyComboBox.currentText())
         self.annotation.figure.canvas.draw()
 
-    def delete(self):
+    def delete(self) -> None:
         btns = QMessageBox.Yes | QMessageBox.No
         msg = 'Do you want to delete the the annotation "%s"' % self.annotation.get_text()
         title = "Delete annotation"
@@ -343,7 +363,7 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
             self.annotation.remove()
             self.pushCancel.click()
 
-    def handle_pickFontColor(self):
+    def handle_pickFontColor(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info.
         """
