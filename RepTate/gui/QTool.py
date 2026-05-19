@@ -76,7 +76,6 @@ QFrameAny: Any = QFrame
 QHeaderViewAny: Any = QHeaderView
 QTextCursorAny: Any = QTextCursor
 QTreeWidgetAny: Any = QTreeWidget
-QtAny: Any = Qt
 
 
 class MLStripper(HTMLParser):
@@ -279,7 +278,7 @@ class QTool(QWidget, Ui_ToolTab):
         self.toolParamTable.setEditTriggers(QAbstractItemViewAny.NoEditTriggers)
 
         self.toolTextBox.setReadOnly(True)
-        self.toolTextBox.setContextMenuPolicy(QtAny.CustomContextMenu)
+        self.toolTextBox.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.toolTextBox.customContextMenuRequested.connect(self.toolTextBox_context_menu)
 
         self.actionActive.triggered.connect(self.handle_actionActivepressed)
@@ -542,21 +541,21 @@ class QTool(QWidget, Ui_ToolTab):
                             self.toolParamTable,
                             [p.display_label(), "%0.4g" % p.display_value()],
                         )
-                    item.setData(0, QtAny.UserRole, p.name)
+                    item.setData(0, Qt.ItemDataRole.UserRole, p.name)
                     item.setToolTip(0, p.description)
 
-                    item.setFlags(item.flags() | QtAny.ItemIsEditable)
+                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
             self.toolParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         finally:
             self.toolParamTable.blockSignals(previous_block_state)
 
     def handle_parameterItemChanged(self, item: QTreeWidgetItem, column: int) -> None:
         """Modify parameter values when changed in the Tool table"""
-        param_changed = item.data(0, QtAny.UserRole) or item.text(0)
+        param_changed = item.data(0, Qt.ItemDataRole.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
-            if item.checkState(0) == QtAny.Checked:
+            if item.checkState(0) == Qt.CheckState.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
-            elif item.checkState(0) == QtAny.Unchecked:
+            elif item.checkState(0) == Qt.CheckState.Unchecked:
                 self.parameters[param_changed].opt_type = OptType.nopt
             return
         # else, assign the entered value
@@ -598,7 +597,7 @@ class QTool(QWidget, Ui_ToolTab):
     def onTreeWidgetItemDoubleClicked(self, item: QTreeWidgetItem, column: int) -> None:
         """Start editing text when a table cell is double clicked"""
         if column == 0:
-            p_name = item.data(0, QtAny.UserRole) or item.text(0)
+            p_name = item.data(0, Qt.ItemDataRole.UserRole) or item.text(0)
             dialog = EditToolParametersDialog(self, p_name)
             if dialog.exec_():
                 self.apply_tool_parameter_properties(dialog)
