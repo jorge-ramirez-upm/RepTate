@@ -1018,7 +1018,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         d.exec_()
         self.canvas.draw()
 
-    def update_legend(self):
+    def update_legend(self) -> None:
         if self.current_viewtab == 0:
             ax = self.axarr[0]
         else:
@@ -1031,8 +1031,8 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             except:
                 pass  # no legend to remove
         else:
-            L = []
-            N = []
+            L: list[Any] = []
+            N: list[str] = []
             ds = self.DataSettabWidget.currentWidget()
             if self.default_legend_labels:
                 # set default legend from app parameters
@@ -1709,11 +1709,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             axes.draw_artist(self._patch)
             canvas.update()
 
-    def delete_multiplot(self):
+    def delete_multiplot(self) -> None:
         """deletes the multiplot object"""
         del self.multiplots
 
-    def set_multiplot(self, nplots, ncols):
+    def set_multiplot(self, nplots: int, ncols: int) -> None:
         """defines the plot"""
         self.multiplots = MultiView(PlotOrganizationType.OptimalRow, nplots, ncols, self)
         self.multiplots.plotselecttabWidget.setCurrentIndex(self.current_viewtab)
@@ -1721,11 +1721,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.axarr: AxesArray = self.multiplots.axarr  #
         self.canvas = self.multiplots.canvas
 
-    def set_view_tools(self, view_name):
+    def set_view_tools(self, view_name: str) -> None:
         """Redefined in Child application. Called when view is changed"""
         pass
 
-    def add_common_theories(self):
+    def add_common_theories(self) -> None:
         """Add common theories to the list of available th"""
         for th in self.common_theories.values():
             self.theories[th.thname] = th
@@ -1859,7 +1859,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         except AttributeError as e:
             print('Tool "%s" not found' % name)
 
-    def legend(self):
+    def legend(self) -> None:
         """Show/Hide the legend"""
         self.legend_visible = not self.legend_visible
         self.set_legend_properties()
@@ -1872,7 +1872,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.update_legend()
         self.canvas.draw()
 
-    def set_axes_properties(self, autoscale=True):
+    def set_axes_properties(self, autoscale: bool = True) -> None:
         """Set axes properties"""
         for nx in range(self.nplots):
             view = self.multiviews[nx]
@@ -1931,7 +1931,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 self.axarr[nx].autoscale_view()
                 self.axarr[nx].set_aspect("auto")
 
-    def set_legend_properties(self):
+    def set_legend_properties(self) -> None:
         """Set default legend properties"""
         # pass
         leg = self.axarr[0].legend(frameon=True, ncol=2)
