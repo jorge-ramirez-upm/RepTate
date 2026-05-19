@@ -6,6 +6,16 @@ from typing import Any
 import numpy as np
 
 
+def randu(x: Any, low: float = 0.0, high: float = 1.0) -> Any:
+    """Uniform random values with the same shape as x."""
+    return np.random.uniform(low, high, np.shape(x))
+
+
+def randn(x: Any, mean: float = 0.0, sigma: float = 1.0) -> Any:
+    """Gaussian random values with the same shape as x."""
+    return np.random.normal(mean, sigma, np.shape(x))
+
+
 _SAFE_NUMPY_NAMES = [
     "sin",
     "cos",
@@ -44,6 +54,8 @@ SAFE_MATH_NAMES.update(
         "pi": np.pi,
         "e": np.e,
         "abs": np.abs,
+        "randu": randu,
+        "randn": randn,
     }
 )
 
@@ -67,11 +79,7 @@ def _replace_file_parameters(expression: str) -> tuple[str, dict[str, str]]:
 
 
 def get_expression_names(expression: str) -> set[str]:
-    """Return regular variable/function names used in an expression.
-
-    File parameters written as ``[Mw]`` are not returned as ``Mw``. They are
-    internally replaced before parsing.
-    """
+    """Return regular variable/function names used in an expression."""
     expression, _ = _replace_file_parameters(expression)
     tree = ast.parse(expression, mode="eval")
 

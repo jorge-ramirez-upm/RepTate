@@ -46,38 +46,6 @@ import re
 import traceback
 from collections.abc import Sequence
 from typing import Any, cast
-from numpy import (
-    sin,
-    cos,
-    tan,
-    arccos,
-    arcsin,
-    arctan,
-    arctan2,
-    deg2rad,
-    rad2deg,
-    sinh,
-    cosh,
-    tanh,
-    arcsinh,
-    arccosh,
-    arctanh,
-    around,
-    rint,
-    floor,
-    ceil,
-    trunc,
-    exp,
-    log,
-    log10,
-    fabs,
-    mod,
-    e,
-    pi,
-    power,
-    sqrt,
-)
-from numpy.random import rand
 import numpy as np
 from os.path import dirname, join, abspath, isfile, isdir
 import builtins
@@ -87,6 +55,7 @@ from PySide6.QtGui import (
     QIcon,
     QColor,
     QCursor,
+    QImage,
     QStandardItem,
     QIntValidator,
     QDoubleValidator,
@@ -98,7 +67,6 @@ from matplotlib.ticker import AutoMinorLocator
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 from PySide6 import QtCore
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QImage, QColor
 from PySide6.QtWidgets import (
     QMainWindow,
     QGroupBox,
@@ -111,7 +79,6 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMessageBox,
     QInputDialog,
-    QLineEdit,
     QColorDialog,
     QDialog,
     QDialogButtonBox,
@@ -126,6 +93,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
+from RepTate.core.expression_parser import evaluate_expression
 from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike, FileTypeLike
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
@@ -1825,7 +1793,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             for i in range(file.data_table.MAX_NUM_SERIES):
                 for nx in range(self.nplots):
                     # self.axarr[nx].lines.remove(file.data_table.series[nx][i])
-                        file.data_table.series[nx][i].remove()
+                    file.data_table.series[nx][i].remove()
 
     def set_views(self) -> None:
         """Set current view and assign availiable view labels to viewComboBox if in GUI mode"""
@@ -2628,75 +2596,72 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     self.addTableToCurrentDataSet(f, ftype.extension)
 
     def addFileFunction(self) -> None:
-        "Add a File to the current DataSet using a mathematical expression"
+        """Add a File to the current DataSet using mathematical expressions."""
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
+
         ds = self.DataSettabWidget.currentWidget()
         ftype = self.filetypes[list(self.filetypes)[0]]
         d = AddFileFunction(self, ftype)
-        if d.exec_():
-            fparams = {}
-            for p in d.param_dict:
-                try:
-                    fparams[p] = float(d.param_dict[p].text())
-                except:
-                    fparams[p] = 0
-            xmin = float(d.lab_dict["xmin"].text())
-            xmax = float(d.lab_dict["xmax"].text())
-            npoints = int(d.lab_dict["npoints"].text())
-            logscale = d.l_new[4].isChecked()
-            if logscale:
-                xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
-            else:
-                xrange = np.linspace(xmin, xmax, npoints)
-            f, success = ds.new_dummy_file(xrange=xrange, yval=0, fparams=fparams, file_type=ftype)
 
-            if success:
-                cols = ftype.col_names
-                self.safe_dict = {}
-                safe_list = [
-                    "sin",
-                    "cos",
-                    "tan",
-                    "arccos",
-                    "arcsin",
-                    "arctan",
-                    "arctan2",
-                    "deg2rad",
-                    "rad2deg",
-                    "sinh",
-                    "cosh",
-                    "tanh",
-                    "arcsinh",
-                    "arccosh",
-                    "arctanh",
-                    "around",
-                    "round_",
-                    "rint",
-                    "floor",
-                    "ceil",
-                    "trunc",
-                    "exp",
-                    "log",
-                    "log10",
-                    "fabs",
-                    "mod",
-                    "e",
-                    "pi",
-                    "power",
-                    "sqrt",
-                    "rand",
-                    "size",
-                ]
-                for k in safe_list:
-                    self.safe_dict[k] = globals().get(k, None)
-                self.safe_dict["x"] = xrange
-                for i, cname in enumerate(cols):  # loop over the Parameters
-                    expr = d.c_new[i].text()
-                    x2 = eval(expr, {"__builtins__": None}, self.safe_dict)
-                    f.data_table.data[:, i] = x2
+        if not d.exec_():
+            return
 
-                self.addTableToCurrentDataSet(f, ftype.extension)
+        fparams: dict[str, float] = {}
+        for p in d.param_dict:
+            try:
+                fparams[p] = float(d.param_dict[p].text())
+            except ValueError:
+                fparams[p] = 0.0
+
+        xmin = float(d.lab_dict["xmin"].text())
+        xmax = float(d.lab_dict["xmax"].text())
+        npoints = int(d.lab_dict["npoints"].text())
+        logscale = d.l_new[4].isChecked()
+
+        if logscale:
+            xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
+        else:
+            xrange = np.linspace(xmin, xmax, npoints)
+
+        f, success = ds.new_dummy_file(
+            xrange=xrange,
+            yval=0,
+            fparams=fparams,
+            file_type=ftype,
+        )
+
+        if not success:
+            return
+
+        variables: dict[str, Any] = {
+            "x": xrange,
+            "size": npoints,
+        }
+
+        for i, cname in enumerate(ftype.col_names):
+            expr = d.c_new[i].text()
+
+            try:
+                f.data_table.data[:, i] = evaluate_expression(
+                    expr,
+                    variables,
+                    fparams,
+                )
+            except Exception:
+                self.logger.exception(
+                    "Error evaluating expression '%s' for column '%s'",
+                    expr,
+                    cname,
+                )
+                QMessageBox.warning(
+                    self,
+                    "Error in expression",
+                    "Could not evaluate expression '%s' for column '%s'." % (expr, cname),
+                )
+                return
+
+        self.addTableToCurrentDataSet(f, ftype.extension)
 
     def new_tables_from_files(self, paths_to_open: list[str]) -> DataSetLike:
         """Create new Files in a DataSet from a list of files"""
