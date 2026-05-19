@@ -1760,7 +1760,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         for th in self.common_theories.values():
             self.theories[th.thname] = th
 
-    def refresh_plot(self):
+    def refresh_plot(self) -> None:
         """Refresh the current plot"""
         self.view_switch(self.current_view.name)
 
@@ -1783,7 +1783,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         array_string = "\n".join(line_strings)
         QApplication.clipboard().setText(array_string)
 
-    def new(self, line):
+    def new(self, line: str) -> tuple[QDataSet, str]:
         """Create new empty dataset in the application"""
         # TODO: Can this be removed?
         self.num_datasets += 1
@@ -1794,7 +1794,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         ds = QDataSet(dsname, self)
         return ds, dsname
 
-    def delete(self, ds_name):
+    def delete(self, ds_name: str) -> None:
         """Delete a dataset from the current application"""
         if ds_name in self.datasets.keys():
             self.remove_ds_ax_lines(ds_name)
@@ -1809,7 +1809,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             print('Data Set "%s" not found' % ds_name)
 
-    def remove_ds_ax_lines(self, ds_name):
+    def remove_ds_ax_lines(self, ds_name: str) -> None:
         """Remove all dataset file artists from ax including theory ones"""
         try:
             ds = self.datasets[ds_name]
@@ -1825,9 +1825,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             for i in range(file.data_table.MAX_NUM_SERIES):
                 for nx in range(self.nplots):
                     # self.axarr[nx].lines.remove(file.data_table.series[nx][i])
-                    file.data_table.series[nx][i].remove()
+                        file.data_table.series[nx][i].remove()
 
-    def set_views(self):
+    def set_views(self) -> None:
         """Set current view and assign availiable view labels to viewComboBox if in GUI mode"""
         for i, view_name in enumerate(self.views):  # loop over the keys
             if i == 0:
@@ -1840,7 +1840,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # index 0 is the defaut selection
         self.viewComboBox.setCurrentIndex(0)
 
-    def view_switch(self, name):
+    def view_switch(self, name: str) -> None:
         """Change to another view from open application"""
         if name in list(self.views.keys()):
             self.current_view = self.views[name]
@@ -1895,7 +1895,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.set_legend_properties()
         self.canvas.draw()
 
-    def update_plot(self):
+    def update_plot(self) -> None:
         """Update the plot in the current application"""
         self.set_axes_properties(self.autoscale)
         # self.set_legend_properties()
