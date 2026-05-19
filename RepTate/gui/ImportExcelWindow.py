@@ -31,6 +31,7 @@
 #
 # --------------------------------------------------------------------------------------------------------
 """Module for importing data form Excel spreadsheets"""
+
 import sys
 import os
 from typing import Any, ClassVar, cast
@@ -53,14 +54,9 @@ from xlrd import open_workbook
 import RepTate
 from RepTate.core.typing import FileTypeLike
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = getattr(sys, "_MEIPASS")
-else:
-    PATH = os.path.dirname(os.path.abspath(__file__))
+# PATH = os.path.dirname(os.path.abspath(__file__))
 from RepTate.gui.Ui_import_excel_dialog import Ui_Dialog as Ui_ImportExcelMainWindow
+
 
 QAbstractItemViewAny: Any = QAbstractItemView
 QItemSelectionModelAny: Any = QItemSelectionModel
@@ -224,20 +220,14 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
     def update_cols_cb(self) -> None:
         self.col1_cb.clear()
         self.col2_cb.clear()
-        self.col1.setText(
-            "Select Column <b>%s [%s]</b>" % (self.col_names[0], self.col_units[0])
-        )
-        self.col2.setText(
-            "Select Column <b>%s [%s]</b>" % (self.col_names[1], self.col_units[1])
-        )
+        self.col1.setText("Select Column <b>%s [%s]</b>" % (self.col_names[0], self.col_units[0]))
+        self.col2.setText("Select Column <b>%s [%s]</b>" % (self.col_names[1], self.col_units[1]))
         self.col1_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.addItems(self.list_AZ[: self.max_col])
         self.col2_cb.setCurrentIndex(1)
         if self.ncol > 2:
             self.col3_cb.clear()
-            self.col3.setText(
-                "Select Column <b>%s [%s]</b>" % (self.col_names[2], self.col_units[2])
-            )
+            self.col3.setText("Select Column <b>%s [%s]</b>" % (self.col_names[2], self.col_units[2]))
             self.col3_cb.addItems(self.list_AZ[: self.max_col])
             self.col3_cb.setCurrentIndex(2)
         else:
@@ -322,10 +312,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         if max_col < min(3, self.ncol):
             # not enough data columns in the spreadsheet tab
             # min(3, ) as the Excel import is configured for 3 data columns max.
-            msg = (
-                "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)"
-                % (self.ncol, max_col)
-            )
+            msg = "Could not import data. Need %d data columns and this spreadsheed has only %d column(s)" % (self.ncol, max_col)
             return {"error": True, "errmsg": msg}
 
         for k in range(self.nskip, max_row):
@@ -431,7 +418,10 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         dilogue_name = "Select Excel Data File"
         ext_filter = "Excel file (*.xls *xlsx)"
         selected_file, _ = QFileDialog.getOpenFileName(
-            self, dilogue_name, self.dir_start, ext_filter  # , options=options
+            self,
+            dilogue_name,
+            self.dir_start,
+            ext_filter,  # , options=options
         )
         self.handle_read_new_file(selected_file)
 
@@ -454,9 +444,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
                 self.sheet_names = self.wb.sheet_names()
         except:
             # password protected?
-            QMessageBox.warning(
-                self, "Open Excel File", "Error: Could not read the Excel file."
-            )
+            QMessageBox.warning(self, "Open Excel File", "Error: Could not read the Excel file.")
             return
         self.qtables = {}
 
@@ -513,10 +501,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
 
     def dropEvent(self, e: QDropEvent) -> None:
         path = e.mimeData().urls()[0].toLocalFile()
-        if (
-            os.path.splitext(path)[-1] == ".xls"
-            or os.path.splitext(path)[-1] == ".xlsx"
-        ):
+        if os.path.splitext(path)[-1] == ".xls" or os.path.splitext(path)[-1] == ".xlsx":
             self.handle_read_new_file(path)
         else:
             pass

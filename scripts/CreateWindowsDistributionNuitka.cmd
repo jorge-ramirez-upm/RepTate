@@ -1,10 +1,19 @@
+REM python -m pip install --upgrade pip
+REM python -m pip install -r requirements.txt
+REM python -m pip install -r docs/requirements.txt
+REM python scripts/build_ui.py
+REM python -m pip install -e .
+REM python -m sphinx -b html docs/source docs/build/html
+REM python -m pip install Nuitka
 python -m nuitka ^
-  --standalone ^
+  --assume-yes-for-downloads ^
+  --mode=standalone ^
   --enable-plugin=pyside6 ^
-  --windows-console-mode=attach ^
+  --windows-console-mode=disable ^
   --output-dir=dist ^
   --windows-icon-from-ico=RepTate\gui\Images\Reptate64.ico ^
   --noinclude-qt-translations ^
+  --include-package=RepTate.tools ^
   --include-module=RepTate.gui.Reptate_rc ^
   --include-module=RepTate.gui.About_rc ^
   --include-module=RepTate.gui.Theory_rc ^

@@ -41,13 +41,7 @@ import numpy as np
 from PySide6.QtWidgets import QApplication, QDialog, QWidget
 from RepTate.core.typing import FileTypeLike
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = getattr(sys, "_MEIPASS")
-else:
-    PATH = os.path.dirname(os.path.abspath(__file__))
+# PATH = os.path.dirname(os.path.abspath(__file__))
 from RepTate.gui.Ui_import_from_pasted_dialog import (
     Ui_Dialog as Ui_ImportPastedMainWindow,
 )

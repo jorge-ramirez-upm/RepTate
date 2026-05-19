@@ -92,14 +92,7 @@ import itertools
 from collections import OrderedDict
 import logging
 
-
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
-else:
-    PATH = dirname(abspath(__file__))
+# PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_DataSet import Ui_Form as Ui_DataSet
 
 

@@ -101,15 +101,10 @@ from math import ceil, floor, log
 import RepTate
 from html.parser import HTMLParser
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = getattr(sys, "_MEIPASS")
-else:
-    PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_TheoryTab import Ui_TheoryTab
 from RepTate.gui.Ui_fittingoptions import Ui_Dialog
+
+# PATH = dirname(abspath(__file__))
 import RepTate.gui.Ui_errorcalculationoptions
 
 

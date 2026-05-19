@@ -35,18 +35,13 @@
 Module that defines the About window.
 
 """
+
 import sys
 from typing import Any
 from os.path import dirname, join, abspath
 from PySide6.QtWidgets import QDialog
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = getattr(sys, "_MEIPASS")
-else:
-    PATH = dirname(abspath(__file__))
+# PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_AboutDialog import Ui_Dialog as Ui_AboutRepTateWindow
 
 

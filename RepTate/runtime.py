@@ -1,13 +1,11 @@
-import os
 import sys
-from typing import Any, cast
+
+from pathlib import Path
 
 
 def get_root_dir() -> str:
     """Return the runtime root that contains top-level data and docs folders."""
-    if getattr(sys, "frozen", False):
-        return cast(str, cast(Any, sys)._MEIPASS)
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return str(Path(__file__).resolve().parents[1])
 
 
 root_dir: str = get_root_dir()

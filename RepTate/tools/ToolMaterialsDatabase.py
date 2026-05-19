@@ -63,18 +63,12 @@ from PySide6.QtGui import QStandardItem, QFont, QIcon, QAction, QColor, QDoubleV
 from . import polymer_data
 # import RepTate.tools.polymer_data as polymer_data
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = getattr(sys, "_MEIPASS")
-else:
-    PATH = os.path.dirname(os.path.abspath(__file__))
+# PATH = os.path.dirname(os.path.abspath(__file__))
 
 # The following two lines are temporary. They can be removed after the database is pickeld with RepTate.ttols.polymer_data instead of polymer_data
 # sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 # dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(PATH)
+# sys.path.append(PATH)
 TOOLS_DIR = Path(__file__).resolve().parent
 materials_database = np.load(TOOLS_DIR / "materials_database.npy", allow_pickle=True).item()
 polymer_data.canonicalize_database(materials_database)

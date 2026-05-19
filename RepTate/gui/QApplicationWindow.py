@@ -121,13 +121,8 @@ import logging
 # except AttributeError:
 #    _fromUtf8 = lambda s: s
 
-if getattr(sys, "frozen", False):
-    # If the application is run as a bundle, the PyInstaller bootloader
-    # extends the sys module by a flag frozen=True and sets the app
-    # path into variable _MEIPASS'.
-    PATH = sys._MEIPASS
-else:
-    PATH = dirname(abspath(__file__))
+# PATH = dirname(abspath(__file__))
+
 from RepTate.gui.Ui_QApplicationWindow import Ui_MainWindow as Ui_AppWindow
 from RepTate.gui.Ui_annotationedit import Ui_Dialog as Ui_EditAnnotation
 from RepTate.gui.Ui_dummyfilesDialog import Ui_Dialog as Ui_AddDummyFiles
