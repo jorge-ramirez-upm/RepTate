@@ -36,7 +36,7 @@ Module that defines the basic GUI class from which all GUI applications are deri
 It is the GUI counterpart of Application.
 
 """
-# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false, reportCallIssue=false, reportOptionalSubscript=false, reportGeneralTypeIssues=false
+# pyright: reportAttributeAccessIssue=false, reportOptionalMemberAccess=false, reportArgumentType=false, reportCallIssue=false, reportOptionalSubscript=false, reportGeneralTypeIssues=false, reportPrivateImportUsage=false
 
 import sys
 import os
@@ -44,6 +44,7 @@ import io
 import math
 import re
 import traceback
+from collections.abc import Sequence
 from typing import Any, cast
 from numpy import (
     sin,
@@ -163,13 +164,16 @@ from RepTate.gui.Ui_dummyfilesDialog import Ui_Dialog as Ui_AddDummyFiles
 
 
 class AddDummyFiles(QDialog, Ui_AddDummyFiles):
-    def __init__(self, parent=None, filetype=None):
+    parameterTreeWidget: Any
+
+    def __init__(self, parent: QWidget | None = None, filetype: FileTypeLike | None = None) -> None:
         super(AddDummyFiles, self).__init__(parent)
         # QDialog.__init__(self)
         Ui_AddDummyFiles.__init__(self)
         self.setupUi(self)
 
-        for p in filetype.basic_file_parameters:
+        file_type = cast(FileTypeLike, filetype)
+        for p in file_type.basic_file_parameters:
             item = QTreeWidgetItem(self.parameterTreeWidget, [p, "0", "1", "10"])
             item.setCheckState(0, Qt.Unchecked)
             item.setIcon(0, QIcon())
@@ -183,7 +187,7 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
 
         self.parameterTreeWidget.itemDoubleClicked.connect(self.handle_itemDoubleClicked)
 
-    def handle_itemDoubleClicked(self, item, column):
+    def handle_itemDoubleClicked(self, item: QTreeWidgetItem, column: int) -> None:
         if column > 0 and column < 4:
             self.parameterTreeWidget.editItem(item, column)
 
@@ -341,29 +345,40 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
 
 
 class ViewShiftFactors(QDialog):
-    def __init__(self, parent=None, fnames=None, factorsx=None, factorsy=None):
+    table: SpreadsheetWidget
+
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        fnames: Sequence[str] | None = None,
+        factorsx: Sequence[Sequence[float]] | None = None,
+        factorsy: Sequence[Sequence[float]] | None = None,
+    ) -> None:
         super(ViewShiftFactors, self).__init__(parent)
 
         self.setWindowTitle("View/Edit Shift Factors")
         layout = QVBoxLayout(self)
 
-        nfiles = len(fnames)
-        ncurves = len(factorsx[0])
+        file_names = cast(Sequence[str], fnames)
+        x_factors = cast(Sequence[Sequence[float]], factorsx)
+        y_factors = cast(Sequence[Sequence[float]], factorsy)
+        nfiles = len(file_names)
+        ncurves = len(x_factors[0])
 
         self.table = SpreadsheetWidget()  # allows copy/paste
         self.table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.table.setRowCount(nfiles)
         self.table.setColumnCount(2 * ncurves)
-        hlabels = []
+        hlabels: list[str] = []
         for i in range(ncurves):
             hlabels.append("x%d" % (i + 1))
         self.table.setHorizontalHeaderLabels(hlabels)
-        self.table.setVerticalHeaderLabels(fnames)
+        self.table.setVerticalHeaderLabels(file_names)
         for i in range(nfiles):
             for j in range(ncurves):
-                self.table.setItem(i, 2 * j, QTableWidgetItem("%g" % factorsx[i][j]))
-                self.table.setItem(i, 2 * j + 1, QTableWidgetItem("%g" % factorsy[i][j]))
+                self.table.setItem(i, 2 * j, QTableWidgetItem("%g" % x_factors[i][j]))
+                self.table.setItem(i, 2 * j + 1, QTableWidgetItem("%g" % y_factors[i][j]))
         self.table.resizeRowsToContents()
         self.table.resizeColumnsToContents()
         layout.addWidget(self.table)
