@@ -129,6 +129,8 @@ class ViewLike(Protocol):
     n: int
     log_x: bool
     log_y: bool
+    x_units: str
+    y_units: str
     x_axis: "AxisLike"
     y_axis: "AxisLike"
 
@@ -147,8 +149,13 @@ class AxisLike(Protocol):
     """Minimal unit-aware axis contract exposed by views."""
 
     quantity: str
+    display_unit: str
 
     def axis_label(self) -> str: ...
+
+    def available_display_units(self) -> list[str]: ...
+
+    def set_display_unit(self, unit_symbol: str) -> None: ...
 
     def convert_from_internal(self, value: Any) -> Any: ...
 

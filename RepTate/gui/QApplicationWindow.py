@@ -96,7 +96,7 @@ from PySide6.QtWidgets import (
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
 from RepTate.core.expression_parser import evaluate_expression
-from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike, FileTypeLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike, FileTypeLike, ViewLike
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
@@ -2817,7 +2817,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if main_menu.exec_(QCursor.pos()):
             self.artists_clicked.clear()
 
-    def change_ax_view(self, n_ax, view_name):
+    def change_ax_view(self, n_ax: int, view_name: str) -> None:
         """Change the view corresponding to axis n_ax"""
         tab_ind = self.multiplots.plotselecttabWidget.currentIndex()
         if (n_ax == 0) or (n_ax == tab_ind - 1):
@@ -2828,7 +2828,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.multiviews[n_ax] = self.views[view_name]
             self.refresh_plot()
 
-    def _add_axis_unit_menu(self, main_menu, title, view, axis_name):
+    def _add_axis_unit_menu(self, main_menu: QMenu, title: str, view: ViewLike, axis_name: str) -> None:
         axis_spec = view.x_axis if axis_name == "x" else view.y_axis
         units = axis_spec.available_display_units()
         if len(units) <= 1:
@@ -2841,13 +2841,13 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             action.triggered.connect(lambda checked=False, v=view, a=axis_name, u=unit_symbol: self.set_view_axis_display_unit(v, a, u))
         main_menu.addMenu(menu)
 
-    def _axis_unit_label(self, unit_symbol):
+    def _axis_unit_label(self, unit_symbol: str) -> str:
         try:
             return get_unit(unit_symbol).label
         except ValueError:
             return unit_symbol
 
-    def set_view_axis_display_unit(self, view, axis_name, unit_symbol):
+    def set_view_axis_display_unit(self, view: ViewLike, axis_name: str, unit_symbol: str) -> None:
         axis_spec = view.x_axis if axis_name == "x" else view.y_axis
         axis_spec.set_display_unit(unit_symbol)
         if axis_name == "x":
