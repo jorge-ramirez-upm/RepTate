@@ -35,15 +35,13 @@
 Module that defines a QTableWidget that allows copy/paste of data.
 
 """
+
 from typing import Any
 
 import numpy as np
 from PySide6.QtCore import QModelIndex, Qt
 from PySide6.QtGui import QKeyEvent, QKeySequence
 from PySide6.QtWidgets import QTableWidget, QApplication, QWidget
-
-QKeySequenceAny: Any = QKeySequence
-QtAny: Any = Qt
 
 
 class SpreadsheetWidget(QTableWidget):
@@ -53,22 +51,19 @@ class SpreadsheetWidget(QTableWidget):
     in a tab-separated format and (ii) to paste the content of the clipboard into the QTableWidget
     """
 
-    delete_disabled: Any
-    file_repr: Any
-
     def __init__(self, parent: QWidget | None = None) -> None:
         """**Constructor**"""
         super().__init__(parent)
-        delete_disabled = True  # disable the possibility to delete rows
-        file_repr = None  # store the file object represented in the table
+        self.delete_disabled: bool = True  # disable the possibility to delete rows
+        self.file_repr: Any = None  # store the file object represented in the table
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         """Catch key"""
-        if event.matches(QKeySequenceAny.Copy):
+        if event.matches(QKeySequence.StandardKey.Copy):
             self.copy()
-        elif event.matches(QKeySequenceAny.Paste):
+        elif event.matches(QKeySequence.StandardKey.Paste):
             self.paste()
-        elif event.key() == QtAny.Key_Backspace or event.key() == QtAny.Key_Delete:
+        elif event.key() in (Qt.Key.Key_Backspace, Qt.Key.Key_Delete):
             self.delete()
         else:
             QTableWidget.keyPressEvent(self, event)
@@ -77,26 +72,20 @@ class SpreadsheetWidget(QTableWidget):
         if self.delete_disabled:
             pass
         else:
-            sel = (
-                self.selectedIndexes()
-            )  # returns a list of all selected item indexes in the view
+            sel = self.selectedIndexes()  # returns a list of all selected item indexes in the view
             if sel:
                 row_list: list[int] = []
                 for ind in range(len(sel)):
                     row_list.append(sel[ind].row())
                 row_list = list(set(row_list))
-                self.file_repr.data_table.data = np.delete(
-                    self.file_repr.data_table.data, row_list, axis=0
-                )
+                self.file_repr.data_table.data = np.delete(self.file_repr.data_table.data, row_list, axis=0)
                 self.file_repr.data_table.num_rows -= len(row_list)
                 self.file_repr.parent_dataset.populate_inspector()
                 self.file_repr.parent_dataset.do_plot()  # TODO: we only need to update one data series, not the whole ds
 
     def copy(self) -> None:
         """Copy the selected data of the dataInspector into the clipboard"""
-        sel: list[QModelIndex] = (
-            self.selectedIndexes()
-        )  # returns a list of all selected item indexes in the view
+        sel: list[QModelIndex] = self.selectedIndexes()  # returns a list of all selected item indexes in the view
         if sel:
             text = ""
             row0 = sel[0].row()

@@ -33,10 +33,11 @@
 """Module for importing data form Excel spreadsheets"""
 import sys
 import os
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 import numpy as np
 from PySide6.QtCore import Qt, QItemSelectionModel
+from PySide6.QtGui import QDragEnterEvent, QDropEvent
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
@@ -45,10 +46,12 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QAbstractItemView,
     QMessageBox,
+    QWidget,
 )
 from openpyxl import load_workbook
 from xlrd import open_workbook
 import RepTate
+from RepTate.core.typing import FileTypeLike
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -164,18 +167,18 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
     skip_sb: Any
     wb: Any
 
-    def __init__(self, parent: Any = None, ftype: Any = None) -> None:
+    def __init__(self, parent: QWidget | None = None, ftype: FileTypeLike | None = None) -> None:
         super().__init__()
         self.setupUi(self)
         # self.show()
-        self.filepath = ""
-        self.dir_start = os.path.join(RepTate.root_dir, "data")
-        self.is_xlsx = True
+        self.filepath: str = ""
+        self.dir_start: str = os.path.join(RepTate.root_dir, "data")
+        self.is_xlsx: bool = True
         self.wb: Any = None
-        self.sheet = None
-        self.max_row = 0
-        self.nskip = 0
-        self.max_col = 0
+        self.sheet: Any = None
+        self.max_row: int = 0
+        self.nskip: int = 0
+        self.max_col: int = 0
         self.select_file_tb.clicked.connect(self.handle_get_file)
         self.skip_sb.valueChanged.connect(self.handle_nskip_changed)
         self.qtabs.currentChanged.connect(self.handle_tab_changed)
@@ -183,10 +186,11 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.col2_cb.activated.connect(self.handle_col2_cb_activated)
         self.col3_cb.activated.connect(self.handle_col3_cb_activated)
 
-        self.col_names = ftype.col_names
-        self.col_units = ftype.col_units
+        file_type = cast(FileTypeLike, ftype)
+        self.col_names: list[str] = file_type.col_names
+        self.col_units: list[str] = file_type.col_units
         self.ncol = len(self.col_names)
-        self.file_param = ftype.basic_file_parameters
+        self.file_param: list[str] = file_type.basic_file_parameters
         self.populate_file_param(self.file_param)
         self.update_cols_cb()
 
@@ -414,7 +418,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             res_dic["col3"] = self.col3_cb.currentText()
         return res_dic
 
-    def populate_file_param(self, params: Any) -> None:
+    def populate_file_param(self, params: list[str]) -> None:
         self.file_param_txt.clear()
         txt = ""
         for p in params:
@@ -501,13 +505,13 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.skip_sb.blockSignals(False)
         self.nskip = 0
 
-    def dragEnterEvent(self, e: Any) -> None:
+    def dragEnterEvent(self, e: QDragEnterEvent) -> None:
         if e.mimeData().hasFormat("text/uri-list"):
             e.accept()
         else:
             e.ignore()
 
-    def dropEvent(self, e: Any) -> None:
+    def dropEvent(self, e: QDropEvent) -> None:
         path = e.mimeData().urls()[0].toLocalFile()
         if (
             os.path.splitext(path)[-1] == ".xls"

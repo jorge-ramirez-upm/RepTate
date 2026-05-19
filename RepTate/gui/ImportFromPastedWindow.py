@@ -31,14 +31,15 @@
 #
 # --------------------------------------------------------------------------------------------------------
 """Module to import pasted data"""
+
 import sys
 import os
 import io
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
-from PySide6.QtWidgets import QApplication, QDialog
-import RepTate
+from PySide6.QtWidgets import QApplication, QDialog, QWidget
+from RepTate.core.typing import FileTypeLike
 
 if getattr(sys, "frozen", False):
     # If the application is run as a bundle, the PyInstaller bootloader
@@ -57,23 +58,20 @@ class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
     label_columns: Any
     paste_box: Any
 
-    def __init__(self, parent: Any = None, ftype: Any = None) -> None:
+    def __init__(self, parent: QWidget | None = None, ftype: FileTypeLike | None = None) -> None:
         super().__init__()
         self.setupUi(self)
-        self.col_names = ftype.col_names
-        self.col_units = ftype.col_units
-        self.file_param = ftype.basic_file_parameters
+        file_type = cast(FileTypeLike, ftype)
+        self.col_names: list[str] = file_type.col_names
+        self.col_units: list[str] = file_type.col_units
+        self.file_param: list[str] = file_type.basic_file_parameters
         self.num_cols = len(self.col_names)
         txt = ""
         if self.file_param:
-            txt += (
-                "Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>"
-                % ("=val;".join(self.file_param))
+            txt += "Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>" % (
+                "=val;".join(self.file_param)
             )
-        col_labels = [
-            "%s [%s]" % (name, unit)
-            for name, unit in zip(self.col_names, self.col_units)
-        ]
+        col_labels = ["%s [%s]" % (name, unit) for name, unit in zip(self.col_names, self.col_units)]
         txt += "The first <b>%d</b> columns should contain values for:<br><b>%s</b>" % (
             len(self.col_names),
             ", ".join(col_labels),
@@ -89,7 +87,7 @@ class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
         is_first_line = True
         first_line_has_param = False
         all_data = np.empty((0, self.num_cols))
-        param_read = {}
+        param_read: dict[str, float] = {}
         buf = io.StringIO(pasted_txt)
         for line in buf:
             if is_first_line:
