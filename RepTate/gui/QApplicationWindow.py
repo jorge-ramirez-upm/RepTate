@@ -955,7 +955,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 'Wrote %d file(s) ending "_VIEW.txt" in "%s/"' % (nfout, folder),
             )
 
-    def handle_actionNewTool(self):
+    def handle_actionNewTool(self) -> None:
         """Create new tool"""
         if self.cbtool.currentIndex() == 0:
             # by default, open first tool in the list
@@ -968,7 +968,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.new_tool(tool_name)
             self.update_all_ds_plots()
 
-    def new_tool(self, tool_name, tool_tab_id=""):
+    def new_tool(self, tool_name: str, tool_tab_id: str = "") -> Any:
         """Create new tool"""
         newtool = self.tool_new(tool_name)
 
@@ -982,25 +982,25 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.TooltabWidget.setTabToolTip(index, tool_name)  # set new-tab tool tip
         return newtool
 
-    def handle_toolTabCloseRequested(self, index):
+    def handle_toolTabCloseRequested(self, index: int) -> None:
         """Delete a Tool tab"""
         tool_name = self.TooltabWidget.widget(index).name
         self.do_tool_delete(tool_name)  # call DataSet.do_theory_delete
         self.TooltabWidget.removeTab(index)
         self.update_all_ds_plots()
 
-    def handle_toolTabMoved(self, f, t):
+    def handle_toolTabMoved(self, f: int, t: int) -> None:
         self.tools.insert(f, self.tools.pop(t))
         self.update_all_ds_plots()
 
-    def handle_actionAutoscale(self, checked):
+    def handle_actionAutoscale(self, checked: bool) -> None:
         self.autoscale = not checked
         if self.autoscale:
             self.actionAutoscale.setIcon(QIcon(":/Images/Images/new_icons/icons8-padlock-96.png"))
         else:
             self.actionAutoscale.setIcon(QIcon(":/Images/Images/new_icons/icons8-lock-96.png"))
 
-    def dataset_actions_disabled(self, state):
+    def dataset_actions_disabled(self, state: bool) -> None:
         """Disable buttons when there is no file in the dataset"""
         self.actionMarkerSettings.setDisabled(state)
         self.viewComboBox.setDisabled(state)
@@ -1107,17 +1107,17 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 txt += "FIRST LEGEND ITEM: " + N[0]
                 QMessageBox.warning(self, "Wrong Title or labels in legend", txt)
 
-    def populate_cbPalette(self):
+    def populate_cbPalette(self) -> None:
         """Populate the list color palettes in the marker-settings dialog"""
         for palette in sorted(ColorMode.colorpalettes.value):
             self.dialog.ui.cbPalette.addItem(palette)
 
-    def populate_cbTheoryLine(self):
+    def populate_cbTheoryLine(self) -> None:
         """Populate the list theory linestyle in the marker-settings dialog"""
         for ls in ThLineMode.linestyles.value:
             self.dialog.ui.cbTheoryLine.addItem(ls)
 
-    def populate_cbSymbolType(self):
+    def populate_cbSymbolType(self) -> None:
         """Populate the list of the markers in the marker-settings dialog
 
         Populate the list of the markers of the marker-settings dialog
@@ -1133,14 +1133,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 ipath = ":/Markers/Images/Matplotlib_markers/marker_%s.png" % m
                 self.dialog.ui.cbSymbolType.addItem(QIcon(ipath), m)
 
-    def handle_pickColor1(self):
+    def handle_pickColor1(self) -> None:
         """Call the color picker and save the selected color to `color1` in RGB format"""
         color = self.showColorDialog()
         if color:  # check for none
             self.dialog.ui.labelPickedColor1.setStyleSheet("background: %s" % color.name())
             self.color1 = color.getRgbF()
 
-    def handle_pickColor2(self):
+    def handle_pickColor2(self) -> None:
         """Call the color picker and save the selected color to `color2` in
         RGB format used for gradient color type"""
         color = self.showColorDialog()
@@ -1148,7 +1148,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelPickedColor2.setStyleSheet("background: %s" % color.name())
             self.color2 = color.getRgbF()
 
-    def handle_pickThColor(self):
+    def handle_pickThColor(self) -> None:
         """Call the color picker and save the selected theory line color in
         RGB format used for gradient color type"""
         color = self.showColorDialog()
@@ -1156,7 +1156,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelThPickedColor.setStyleSheet("background: %s" % color.name())
             self.color_th = color.getRgbF()
 
-    def handle_pickFaceColor(self):
+    def handle_pickFaceColor(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
@@ -1164,7 +1164,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelFaceColor.setStyleSheet("background: %s" % color.name())
             self.legend_opts["facecolor"] = color.getRgbF()
 
-    def handle_pickEdgeColor(self):
+    def handle_pickEdgeColor(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
@@ -1172,7 +1172,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelEdgeColor.setStyleSheet("background: %s" % color.name())
             self.legend_opts["edgecolor"] = color.getRgbF()
 
-    def handle_pickFontColor(self):
+    def handle_pickFontColor(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
@@ -1180,7 +1180,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelFontColor.setStyleSheet("background: %s" % color.name())
             self.annotation_opts["color"] = color.getRgbF()
 
-    def handle_pickFontColor_ax(self):
+    def handle_pickFontColor_ax(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
@@ -1188,7 +1188,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelFontColor_ax.setStyleSheet("background: %s" % color.name())
             self.ax_opts["color_ax"] = color.getRgbF()
 
-    def handle_pickFontColor_label(self):
+    def handle_pickFontColor_label(self) -> None:
         """Call the color picker and save the selected legend face color in
         RGB format in the dataset legend info."""
         color = self.showColorDialog()
@@ -1196,11 +1196,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dialog.ui.labelFontColor_label.setStyleSheet("background: %s" % color.name())
             self.ax_opts["color_label"] = color.getRgbF()
 
-    def handle_reset_all_pb(self):
+    def handle_reset_all_pb(self) -> None:
         self.ax_opts = self.ax_opt_defaults.copy()
         self.set_axis_marker_settings()
 
-    def showColorDialog(self):
+    def showColorDialog(self) -> QColor | None:
         """Show the color picker and return the picked QtColor or `None`"""
         ds = self.DataSettabWidget.currentWidget()
         if ds:
@@ -1209,8 +1209,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             if not color.isValid():
                 color = None
             return color
+        return None
 
-    def handle_actionMarkerSettings(self):
+    def handle_actionMarkerSettings(self) -> None:
         """Show the dialog box where the user can change
         the marker properties: size, shape, color, fill"""
         ds = self.DataSettabWidget.currentWidget()
@@ -1353,7 +1354,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             ds.do_plot()
 
-    def set_axis_marker_settings(self):
+    def set_axis_marker_settings(self) -> None:
         col = QColor(
             self.ax_opts["color_label"][0] * 255,
             self.ax_opts["color_label"][1] * 255,
@@ -1856,12 +1857,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.update_all_ds_plots()
         self.autoscale = temp
 
-    def update_all_ds_plots(self):
+    def update_all_ds_plots(self) -> None:
         """Update all plots from all DataSets"""
         for ds in self.datasets.values():
             ds.do_plot()
 
-    def tool_new(self, line):
+    def tool_new(self, line: str) -> Any:
         """Add a new tool of the type specified to the list of tools"""
         tooltypes = list(self.availabletools.keys())
         extratooltypes = list(self.extratools.keys())
@@ -1878,7 +1879,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             to = None
         return to
 
-    def do_tool_delete(self, name):
+    def do_tool_delete(self, name: str) -> None:
         """Delete a tool from the current application"""
         listtools = [x.name for x in self.tools]
         try:
@@ -2282,7 +2283,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.handle_currentChanged(self.DataSettabWidget.currentIndex())
         self.update_Qplot()
 
-    def handle_currentChanged(self, index):
+    def handle_currentChanged(self, index: int) -> None:
         """Change figure when the active DataSet tab is changed
         and empty the dataInspector"""
         if self.actionView_All_Sets.isChecked():
@@ -2306,7 +2307,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.DataInspectordockWidget.setWindowTitle("File:")
         self.update_Qplot()
 
-    def handle_doubleClickTab(self, index):
+    def handle_doubleClickTab(self, index: int) -> None:
         """Edit DataSet name
 
         Edit the dataset tab name, leave the 'dataset' dictionary keys unchanged.
@@ -2324,7 +2325,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             # self.datasets[old_name].name = new_tab_name
             # self.datasets[new_tab_name] = self.datasets.pop(old_name)
 
-    def close_data_tab_handler(self, index):
+    def close_data_tab_handler(self, index: int) -> None:
         """Delete a dataset tab from the current application"""
         ds = self.DataSettabWidget.widget(index)
         if index == self.DataSettabWidget.currentIndex():
