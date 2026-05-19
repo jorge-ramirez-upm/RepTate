@@ -59,6 +59,8 @@ from PySide6.QtGui import (
     QStandardItem,
     QIntValidator,
     QDoubleValidator,
+    QDragEnterEvent,
+    QDropEvent,
 )
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
@@ -2303,10 +2305,10 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.DataSettabWidget.removeTab(index)
         self.update_legend()
 
-    def handle_change_view(self):
+    def handle_change_view(self) -> None:
         self.change_view()
 
-    def change_view(self, x_vis=False, y_vis=False):
+    def change_view(self, x_vis: bool = False, y_vis: bool = False) -> None:
         """Change plot view"""
         selected_view_name = self.viewComboBox.currentText()
         ds = self.DataSettabWidget.currentWidget()
@@ -2323,24 +2325,24 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if ds:
             ds.highlight_series()
 
-    def dragEnterEvent(self, e):
+    def dragEnterEvent(self, e: QDragEnterEvent) -> None:
         """Drag and drop stuff"""
         if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore()
 
-    def dropEvent(self, e):
+    def dropEvent(self, e: QDropEvent) -> None:
         """Drag and drop stuff"""
         # reptatelogger = logging.getLogger('ReptateLogger')
-        paths_to_open = []
+        paths_to_open: list[str] = []
         for url in e.mimeData().urls():
             path = url.toLocalFile()
             if isfile(path):
                 paths_to_open.append(path)
         self.new_tables_from_files(paths_to_open)
 
-    def update_Qplot(self):
+    def update_Qplot(self) -> None:
         """No idea. SHOULD WE DELETE THIS?"""
         pass
         # try:
@@ -2723,14 +2725,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.dir_start = dirname(selected_files[0])
         return selected_files
 
-    def showDataInspector(self, checked):
+    def showDataInspector(self, checked: bool) -> None:
         """Show Data Inspector"""
         if checked:
             self.DataInspectordockWidget.show()
         else:
             self.DataInspectordockWidget.hide()
 
-    def viewMPLToolbar(self, checked):
+    def viewMPLToolbar(self, checked: bool) -> None:
         """Show Matplotlib toolbar"""
         if checked:
             self.mpl_toolbar.show()
