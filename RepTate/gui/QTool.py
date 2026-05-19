@@ -58,9 +58,10 @@ from PySide6.QtWidgets import (
     QComboBox,
     QToolBar,
     QAbstractItemView,
+    QTextBrowser,
 )
 from PySide6.QtCore import Qt, QSize, Signal
-from PySide6.QtGui import QIcon, QCursor, QTextCursor
+from PySide6.QtGui import QAction, QIcon, QCursor, QTextCursor
 from RepTate.core.Parameter import OptType, ParameterType
 from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ParameterDict, ToolResult
 from RepTate.core.units import available_units, units_are_compatible
@@ -69,6 +70,7 @@ from collections import OrderedDict
 
 import logging
 from html.parser import HTMLParser
+
 
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
@@ -216,15 +218,15 @@ class QTool(QWidget, Ui_ToolTab):
 
     print_signal = Signal(str)
 
-    actionActive: Any
-    actionApplyToTheory: Any
-    logger: Any
+    actionActive: QAction
+    actionApplyToTheory: QAction
+    logger: logging.Logger
     parameters: ParameterDict
     parent_application: ApplicationLike
-    tb: Any
-    toolParamTable: Any
-    toolTextBox: Any
-    verticalLayout: Any
+    tb: QToolBar
+    toolParamTable: QTreeWidget
+    toolTextBox: QTextBrowser
+    verticalLayout: QVBoxLayout
 
     def __init__(self, name: str = "QTool", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
