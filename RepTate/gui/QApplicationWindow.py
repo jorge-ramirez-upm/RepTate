@@ -126,7 +126,7 @@ from PySide6.QtWidgets import (
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
-from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileTypeLike
+from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, FileLike, FileTypeLike
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
@@ -2383,7 +2383,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # self.mplvl.addWidget(self.canvas)
         # self.canvas.draw()
 
-    def addTableToCurrentDataSet(self, dt, ext):
+    def addTableToCurrentDataSet(self, dt: FileLike, ext: str) -> None:
         """Add file table to curent dataset tab"""
         ds = self.DataSettabWidget.currentWidget()
         header = ds.DataSettreeWidget.headerItem()
@@ -2415,11 +2415,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         newitem.setCheckState(0, Qt.CheckState.Checked)
         self.dataset_actions_disabled(False)  # activate buttons
 
-    def handle_createNew_Empty_Dataset(self):
+    def handle_createNew_Empty_Dataset(self) -> None:
         """Called when button 'new dataset' pushed"""
         self.createNew_Empty_Dataset()
 
-    def createNew_Empty_Dataset(self, tabname=""):
+    def createNew_Empty_Dataset(self, tabname: str = "") -> DataSetLike:
         """Add New empty tab to DataSettabWidget"""
         self.num_datasets += 1  # increment counter of Application
         num = self.num_datasets
@@ -2452,9 +2452,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             # inspect_header = dfile.col_names[:]
             inspect_header = [a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)]
             inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
-        return self.DataSettabWidget.widget(ind)
+        return cast(DataSetLike, self.DataSettabWidget.widget(ind))
 
-    def openDataset(self):
+    def openDataset(self) -> None:
         """Open Files to a new Dataset"""
         # 'allowed_ext' defines the allowed file extensions
         # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
@@ -2467,7 +2467,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             return
         self.new_tables_from_files(paths_to_open)
 
-    def handle_action_import_from_excel(self):
+    def handle_action_import_from_excel(self) -> None:
         """Import new data from an Excel file"""
         for ftype in self.filetypes.values():
             break
@@ -2523,7 +2523,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     'Some values could not be read from the file and were set to "nan"',
                 )
 
-    def handle_action_import_from_pasted(self):
+    def handle_action_import_from_pasted(self) -> None:
         """Import data from pasted text"""
         for ftype in self.filetypes.values():
             break
@@ -2566,7 +2566,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     'Some values could not be read from the file and were set to "nan"',
                 )
 
-    def addDummyFiles(self):
+    def addDummyFiles(self) -> None:
         """Add dummy files to dataset"""
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
@@ -2627,7 +2627,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 if success:
                     self.addTableToCurrentDataSet(f, ftype.extension)
 
-    def addFileFunction(self):
+    def addFileFunction(self) -> None:
         "Add a File to the current DataSet using a mathematical expression"
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
@@ -2698,7 +2698,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
                 self.addTableToCurrentDataSet(f, ftype.extension)
 
-    def new_tables_from_files(self, paths_to_open):
+    def new_tables_from_files(self, paths_to_open: list[str]) -> DataSetLike:
         """Create new Files in a DataSet from a list of files"""
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
@@ -2715,12 +2715,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             QMessageBox.about(self, "Open", success)
         ds.DataSettreeWidget.blockSignals(False)
-        return ds
+        return cast(DataSetLike, ds)
 
-    def check_no_param_missing(self, newtables, ext):
+    def check_no_param_missing(self, newtables: list[FileLike], ext: str) -> None:
         """Check"""
         for dt in newtables:
-            e_list = []
+            e_list: list[str] = []
             for param in self.filetypes[ext].basic_file_parameters[:]:
                 try:
                     temp = dt.file_parameters[param]
@@ -2739,7 +2739,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     else:
                         dt.file_parameters[e_param] = "0"
 
-    def openFileNamesDialog(self, ext_filter="All Files (*)"):
+    def openFileNamesDialog(self, ext_filter: str = "All Files (*)") -> list[str]:
         """Open Files"""
         # file browser window
         qfdlg = QFileDialog(self)
