@@ -38,7 +38,7 @@ Module that defines the GUI counterpart of the class Tool.
 
 import sys
 import ast
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar, TypeAlias, cast
 import numpy as np
 
 from os.path import dirname, join, abspath
@@ -107,15 +107,17 @@ else:
 sys.path.append(PATH)
 from RepTate.gui.Ui_ToolTab import Ui_ToolTab
 
+ParameterPropertyWidget: TypeAlias = QLineEdit | QComboBox
+
 
 class EditToolParametersDialog(QDialog):
     """Create the form used to modify a tool's parameter properties."""
 
-    all_pattr: Any
-    parent_tool: Any
-    tabs: Any
+    all_pattr: dict[str, dict[str, ParameterPropertyWidget]]
+    parent_tool: "QTool"
+    tabs: QTabWidget
 
-    def __init__(self, parent: Any, p_name: str) -> None:
+    def __init__(self, parent: "QTool", p_name: str) -> None:
         super().__init__(parent)
         self.parent_tool = parent
         self.tabs = QTabWidget()
@@ -138,13 +140,13 @@ class EditToolParametersDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Tool Parameters")
 
-    def create_param_tab(self, p_name: str) -> Any:
+    def create_param_tab(self, p_name: str) -> QWidget:
         """Create a form to edit one tool parameter's properties."""
         tab = QWidget()
         layout = QFormLayout()
 
         p = self.parent_tool.parameters[p_name]
-        attr_dict = {}
+        attr_dict: dict[str, ParameterPropertyWidget] = {}
         for attr_name, attr_value in p.__dict__.items():
             if attr_name == "type":
                 widget = QComboBox()
@@ -190,7 +192,7 @@ class EditToolParametersDialog(QDialog):
         self.all_pattr[p_name] = attr_dict
         return tab
 
-    def _display_unit_widget(self, parameter: Any, current_unit: Any) -> Any:
+    def _display_unit_widget(self, parameter: Any, current_unit: Any) -> ParameterPropertyWidget:
         try:
             compatible_units = [
                 unit.symbol for unit in available_units(parameter.quantity) if units_are_compatible(unit.symbol, parameter.internal_unit)
@@ -519,7 +521,7 @@ class QTool(QWidget, Ui_ToolTab):
         font.setPointSize(font_size)
         self.toolTextBox.document().setDefaultFont(font)
 
-    def editItem(self, item: Any, column: Any) -> None:
+    def editItem(self, item: QTreeWidgetItem, column: int) -> None:
         print(column)
 
     def update_parameter_table(self) -> None:
@@ -534,7 +536,7 @@ class QTool(QWidget, Ui_ToolTab):
                 p = self.parameters[param]
                 if p.display_flag:  # only allowed param enter the table
                     if p.type == ParameterType.string:
-                        item = QTreeWidgetItem(self.toolParamTable, [p.display_label(), p.value])
+                        item = QTreeWidgetItem(self.toolParamTable, cast(Any, [p.display_label(), p.value]))
                     else:
                         item = QTreeWidgetItem(
                             self.toolParamTable,
@@ -548,7 +550,7 @@ class QTool(QWidget, Ui_ToolTab):
         finally:
             self.toolParamTable.blockSignals(previous_block_state)
 
-    def handle_parameterItemChanged(self, item: Any, column: int) -> None:
+    def handle_parameterItemChanged(self, item: QTreeWidgetItem, column: int) -> None:
         """Modify parameter values when changed in the Tool table"""
         param_changed = item.data(0, QtAny.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
@@ -593,7 +595,7 @@ class QTool(QWidget, Ui_ToolTab):
         self.applytotheory = checked
         self.parent_application.update_all_ds_plots()
 
-    def onTreeWidgetItemDoubleClicked(self, item: Any, column: int) -> None:
+    def onTreeWidgetItemDoubleClicked(self, item: QTreeWidgetItem, column: int) -> None:
         """Start editing text when a table cell is double clicked"""
         if column == 0:
             p_name = item.data(0, QtAny.UserRole) or item.text(0)
@@ -603,25 +605,29 @@ class QTool(QWidget, Ui_ToolTab):
         elif column == 1:
             self.toolParamTable.editItem(item, column)
 
-    def apply_tool_parameter_properties(self, dialog: Any) -> None:
+    def apply_tool_parameter_properties(self, dialog: EditToolParametersDialog) -> None:
         """Apply edited tool parameter properties from the properties dialog."""
         for pname in self.parameters:
             p = self.parameters[pname]
             attr_dict = dialog.all_pattr[pname]
             for attr_name, widget in attr_dict.items():
                 if attr_name == "type":
-                    setattr(p, attr_name, ParameterType[widget.currentText()])
+                    combo = cast(QComboBox, widget)
+                    setattr(p, attr_name, ParameterType[combo.currentText()])
                 elif attr_name == "opt_type":
-                    setattr(p, attr_name, OptType[widget.currentText()])
+                    combo = cast(QComboBox, widget)
+                    setattr(p, attr_name, OptType[combo.currentText()])
                 elif attr_name == "display_flag":
-                    setattr(p, attr_name, ast.literal_eval(widget.currentText()))
+                    combo = cast(QComboBox, widget)
+                    setattr(p, attr_name, ast.literal_eval(combo.currentText()))
                 elif attr_name == "display_unit":
                     if isinstance(widget, QComboBox):
                         val = widget.currentText()
                         if units_are_compatible(val, p.internal_unit):
                             setattr(p, attr_name, val)
                 elif attr_name == "discrete_values":
-                    val = widget.text()
+                    line_edit = cast(QLineEdit, widget)
+                    val = line_edit.text()
                     values = ast.literal_eval(val)
                     if isinstance(values, list):
                         setattr(p, attr_name, values)
@@ -633,7 +639,8 @@ class QTool(QWidget, Ui_ToolTab):
                 ]:
                     continue
                 else:
-                    val = float(widget.text())
+                    line_edit = cast(QLineEdit, widget)
+                    val = float(line_edit.text())
                     setattr(p, attr_name, val)
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
