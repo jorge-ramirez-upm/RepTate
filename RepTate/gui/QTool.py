@@ -70,14 +70,6 @@ from collections import OrderedDict
 import logging
 from html.parser import HTMLParser
 
-QAbstractItemViewAny: Any = QAbstractItemView
-QDialogButtonBoxAny: Any = QDialogButtonBox
-QFrameAny: Any = QFrame
-QHeaderViewAny: Any = QHeaderView
-QTextCursorAny: Any = QTextCursor
-QTreeWidgetAny: Any = QTreeWidget
-
-
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
 
@@ -129,7 +121,7 @@ class EditToolParametersDialog(QDialog):
                 index = self.tabs.indexOf(tab)
         self.tabs.setCurrentIndex(index)
 
-        buttonBox = QDialogButtonBoxAny(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -271,11 +263,11 @@ class QTool(QWidget, Ui_ToolTab):
         self.toolParamTable.setIndentation(0)
         self.toolParamTable.setColumnCount(2)
         self.toolParamTable.setHeaderItem(QTreeWidgetItem(["Parameter", "Value"]))
-        self.toolParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
+        self.toolParamTable.header().resizeSections(QHeaderView.ResizeMode.ResizeToContents)
         self.toolParamTable.setAlternatingRowColors(True)
-        self.toolParamTable.setFrameShape(QFrameAny.NoFrame)
-        self.toolParamTable.setFrameShadow(QFrameAny.Plain)
-        self.toolParamTable.setEditTriggers(QAbstractItemViewAny.NoEditTriggers)
+        self.toolParamTable.setFrameShape(QFrame.Shape.NoFrame)
+        self.toolParamTable.setFrameShadow(QFrame.Shadow.Plain)
+        self.toolParamTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.toolTextBox.setReadOnly(True)
         self.toolTextBox.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -286,7 +278,7 @@ class QTool(QWidget, Ui_ToolTab):
 
         self.toolParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         self.toolParamTable.itemChanged.connect(self.handle_parameterItemChanged)
-        self.toolParamTable.setEditTriggers(QTreeWidgetAny.EditKeyPressed)
+        self.toolParamTable.setEditTriggers(QAbstractItemView.EditTrigger.EditKeyPressed)
 
     def write(self, type: Any, flag: Any) -> None:
         """Write numpy error logs to the logger"""
@@ -496,10 +488,10 @@ class QTool(QWidget, Ui_ToolTab):
 
     def print_qtextbox(self, msg: str) -> None:
         """Print message in the GUI log text box"""
-        self.toolTextBox.moveCursor(QTextCursorAny.End)
+        self.toolTextBox.moveCursor(QTextCursor.MoveOperation.End)
         self.toolTextBox.insertHtml(msg)
         self.toolTextBox.verticalScrollBar().setValue(self.toolTextBox.verticalScrollBar().maximum())
-        self.toolTextBox.moveCursor(QTextCursorAny.End)
+        self.toolTextBox.moveCursor(QTextCursor.MoveOperation.End)
 
     def toolTextBox_context_menu(self) -> None:
         """Custom contextual menu for the theory textbox"""
@@ -545,7 +537,7 @@ class QTool(QWidget, Ui_ToolTab):
                     item.setToolTip(0, p.description)
 
                     item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
-            self.toolParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
+            self.toolParamTable.header().resizeSections(QHeaderView.ResizeMode.ResizeToContents)
         finally:
             self.toolParamTable.blockSignals(previous_block_state)
 
