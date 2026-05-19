@@ -1734,20 +1734,20 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         """Refresh the current plot"""
         self.view_switch(self.current_view.name)
 
-    def copy_chart(self):
+    def copy_chart(self) -> None:
         """Copy current chart to clipboard"""
         buf = io.BytesIO()
         self.figure.savefig(buf, dpi=150)
         QApplication.clipboard().setImage(QImage.fromData(buf.getvalue()))
         buf.close()
 
-    def clipboard_coordinates(self, artist):
+    def clipboard_coordinates(self, artist: Any) -> None:
         """Copy data to clipboard in tab-separated format"""
         try:
             x, y = artist.get_data()
         except:
             return
-        line_strings = []
+        line_strings: list[str] = []
         for i in range(len(x)):
             line_strings.append(str(x[i]) + "\t" + str(y[i]))
         array_string = "\n".join(line_strings)
@@ -2739,7 +2739,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             self.mpl_toolbar.hide()
 
-    def printPlot(self):
+    def printPlot(self) -> None:
         """Print/save current plot"""
         fileName = QFileDialog.getSaveFileName(
             self,
@@ -2750,7 +2750,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # TODO: Set DPI, FILETYPE, etc
         plt.savefig(fileName[0])
 
-    def onpick(self, event):
+    def onpick(self, event: Any) -> None:
         """Called when clicking on a plot/artist"""
         import matplotlib
 
@@ -2759,7 +2759,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 if event.artist.get_visible():
                     self.artists_clicked.append(event.artist)  # collect all artists under mouse
 
-    def open_figure_popup_menu(self, event):
+    def open_figure_popup_menu(self, event: Any) -> None:
         """Open a menu to let the user copy data or chart to clipboard"""
         main_menu = QMenu()
 
