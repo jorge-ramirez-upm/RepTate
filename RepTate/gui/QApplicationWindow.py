@@ -193,12 +193,20 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
 
 
 class AddFileFunction(QDialog):
-    def __init__(self, parent=None, filetype=None):
+    col_dict: dict[str, QLineEdit]
+    columnsGroupBox: Any
+    filetype: FileTypeLike
+    lab_dict: dict[str, QLineEdit]
+    labelGroupBox: Any
+    param_dict: dict[str, QLineEdit]
+    parametersGroupBox: Any
+
+    def __init__(self, parent: QWidget | None = None, filetype: FileTypeLike | None = None) -> None:
         super(AddFileFunction, self).__init__(parent)
         # QDialog.__init__(self)
-        self.filetype = filetype
-        self.createParametersGroupBox(filetype)
-        self.createColumnsGroupBox(filetype)
+        self.filetype = cast(FileTypeLike, filetype)
+        self.createParametersGroupBox(self.filetype)
+        self.createColumnsGroupBox(self.filetype)
         self.createLabelGroupBox()
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.parametersGroupBox)
@@ -211,13 +219,13 @@ class AddFileFunction(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("New File from Function")
 
-    def createParametersGroupBox(self, filetype):
+    def createParametersGroupBox(self, filetype: FileTypeLike) -> None:
         """Create a form to set the new values of important file parameters"""
         self.parametersGroupBox = QGroupBox('Parameters of "%s" file' % filetype.name)
         layout = QFormLayout()
         parameters = filetype.basic_file_parameters
-        self.param_dict = {}
-        self.p_new = []
+        self.param_dict: dict[str, QLineEdit] = {}
+        self.p_new: list[QLineEdit] = []
         for i, pname in enumerate(parameters):  # loop over the Parameters
             self.p_new.append(QLineEdit())
             self.p_new[i].setValidator(QDoubleValidator())
@@ -226,13 +234,13 @@ class AddFileFunction(QDialog):
             self.param_dict[pname] = self.p_new[i]
         self.parametersGroupBox.setLayout(layout)
 
-    def createColumnsGroupBox(self, filetype):
+    def createColumnsGroupBox(self, filetype: FileTypeLike) -> None:
         """Create a form to set the new values the file columns"""
         self.columnsGroupBox = QGroupBox('Columns of "%s" file' % filetype.name)
         layout = QFormLayout()
         cols = filetype.col_names
-        self.col_dict = {}
-        self.c_new = []
+        self.col_dict: dict[str, QLineEdit] = {}
+        self.c_new: list[QLineEdit] = []
         for i, cname in enumerate(cols):  # loop over the Parameters
             self.c_new.append(QLineEdit())
             self.c_new[i].setText("x")
@@ -240,12 +248,12 @@ class AddFileFunction(QDialog):
             self.col_dict[cname] = self.c_new[i]
         self.columnsGroupBox.setLayout(layout)
 
-    def createLabelGroupBox(self):
+    def createLabelGroupBox(self) -> None:
         """Set the range and scale (linear or logarithmic) of the label x"""
         self.labelGroupBox = QGroupBox("Range of label x")
         layout = QFormLayout()
-        self.lab_dict = {}
-        self.l_new = []
+        self.lab_dict: dict[str, QLineEdit] = {}
+        self.l_new: list[QLineEdit | QRadioButton] = []
         self.l_new.append(QLineEdit())
         self.l_new[0].setText("0")
         self.l_new[0].setValidator(QDoubleValidator())
