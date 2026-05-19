@@ -38,9 +38,9 @@ Module that defines a QTableWidget that allows copy/paste of data.
 from typing import Any
 
 import numpy as np
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QKeySequence
-from PySide6.QtWidgets import QTableWidget, QApplication
+from PySide6.QtCore import QModelIndex, Qt
+from PySide6.QtGui import QKeyEvent, QKeySequence
+from PySide6.QtWidgets import QTableWidget, QApplication, QWidget
 
 QKeySequenceAny: Any = QKeySequence
 QtAny: Any = Qt
@@ -56,13 +56,13 @@ class SpreadsheetWidget(QTableWidget):
     delete_disabled: Any
     file_repr: Any
 
-    def __init__(self, parent: Any = None) -> None:
+    def __init__(self, parent: QWidget | None = None) -> None:
         """**Constructor**"""
         super().__init__(parent)
         delete_disabled = True  # disable the possibility to delete rows
         file_repr = None  # store the file object represented in the table
 
-    def keyPressEvent(self, event: Any) -> None:
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         """Catch key"""
         if event.matches(QKeySequenceAny.Copy):
             self.copy()
@@ -81,7 +81,7 @@ class SpreadsheetWidget(QTableWidget):
                 self.selectedIndexes()
             )  # returns a list of all selected item indexes in the view
             if sel:
-                row_list = []
+                row_list: list[int] = []
                 for ind in range(len(sel)):
                     row_list.append(sel[ind].row())
                 row_list = list(set(row_list))
@@ -94,7 +94,7 @@ class SpreadsheetWidget(QTableWidget):
 
     def copy(self) -> None:
         """Copy the selected data of the dataInspector into the clipboard"""
-        sel = (
+        sel: list[QModelIndex] = (
             self.selectedIndexes()
         )  # returns a list of all selected item indexes in the view
         if sel:

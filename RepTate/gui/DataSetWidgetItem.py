@@ -35,10 +35,12 @@
 Module that defines the a DataSetWidgetItem that allows to sort items in the DataSet
 
 """
+from collections.abc import Sequence
 from typing import Any, ClassVar
 
 from PySide6.QtWidgets import QTreeWidgetItem
 from RepTate.core.typing import FileTypeLike
+from RepTate.gui.DataSetWidget import DataSetWidget
 
 QTreeWidgetItemAny: Any = QTreeWidgetItem
 
@@ -54,8 +56,8 @@ class DataSetWidgetItem(QTreeWidgetItem):
 
     def __init__(
         self,
-        parent: Any = None,
-        itemlist: Any = [],
+        parent: DataSetWidget | None = None,
+        itemlist: Sequence[str] = [],
         type: int = 0,
         file_name_short: str = "dummy",
         file_type: FileTypeLike | None = None,
@@ -65,7 +67,7 @@ class DataSetWidgetItem(QTreeWidgetItem):
         # self.file_name_short = file_name_short
         # Table.__init__(self, file_name_short, file_type)
 
-    def __lt__(self, otherItem: Any) -> bool:
+    def __lt__(self, otherItem: QTreeWidgetItem) -> bool:
         """Needed for sorting purposes
         
         Re-implement the less-than operator to sort the columns based on the float

@@ -35,13 +35,17 @@
 Module that defines the a QTreeWidget that allows to select nothing.
 
 """
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeyEvent, QMouseEvent
 from PySide6.QtWidgets import QTreeWidget
 from RepTate.core.typing import DataSetLike
 
-QtAny: Any = Qt
+if TYPE_CHECKING:
+    from RepTate.gui.QDataSet import QDataSet
 
 
 class DataSetWidget(QTreeWidget):
@@ -53,19 +57,19 @@ class DataSetWidget(QTreeWidget):
 
     parent_dataset: DataSetLike
 
-    def __init__(self, parent: Any = None) -> None:
+    def __init__(self, parent: QDataSet | None = None) -> None:
         """**Constructor**"""
         super().__init__(parent)
-        self.parent_dataset = parent
+        self.parent_dataset = cast(DataSetLike, parent)
 
-    def mousePressEvent(self, event: Any) -> None:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         """Process mouse"""
         self.clearSelection()
         QTreeWidget.mousePressEvent(self, event)
 
-    def keyPressEvent(self, event: Any) -> None:
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         """Process key"""
-        if event.key() == QtAny.Key_Backspace or event.key() == QtAny.Key_Delete:
+        if event.key() in (Qt.Key.Key_Backspace, Qt.Key.Key_Delete):
             self.delete()
         else:
             QTreeWidget.keyPressEvent(self, event)
@@ -75,7 +79,7 @@ class DataSetWidget(QTreeWidget):
         selection = self.selectedItems()
         if selection == []:
             return
-        index_to_rm = []
+        index_to_rm: list[int] = []
         for item in selection:
             index_to_rm.append(self.indexOfTopLevelItem(item))  # save indices to delete
             file_name_short = item.text(0)
