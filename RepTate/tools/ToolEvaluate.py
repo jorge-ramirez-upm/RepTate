@@ -37,52 +37,27 @@ Evaluate algebraic expressions in the current view
 
 import traceback
 from typing import Any, ClassVar
-from numpy import (
-    sin,
-    cos,
-    tan,
-    arccos,
-    arcsin,
-    arctan,
-    arctan2,
-    deg2rad,
-    rad2deg,
-    sinh,
-    cosh,
-    tanh,
-    arcsinh,
-    arccosh,
-    arctanh,
-    around,
-    rint,
-    floor,
-    ceil,
-    trunc,
-    exp,
-    log,
-    log10,
-    fabs,
-    mod,
-    e,
-    pi,
-    power,
-    sqrt,
-)
-import re
+
+from RepTate.core.expression_parser import evaluate_expression
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
 
 
 class ToolEvaluate(QTool):
-    """Create new abcissa and ordinate data by evaluating an expression as a function of x and y (the abcissa and ordinate of the current view data). Standard algebraic expressions and mathematical functions (``sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round_, rint, floor, ceil, trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt``) are understood by the expression parser."""
+    """Create new abscissa and ordinate data by evaluating expressions.
+
+    The expressions are functions of ``x`` and ``y``, where ``x`` and ``y`` are
+    the abscissa and ordinate of the current view data.
+
+    Standard algebraic expressions and mathematical functions are understood by
+    the expression parser. File parameters can be referenced as ``[parameter]``.
+    """
 
     toolname: ClassVar[str] = "Eval Exp"
     description: ClassVar[str] = "Evaluate Expression Tool"
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'
-
-    safe_dict: Any
 
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
@@ -100,42 +75,6 @@ class ToolEvaluate(QTool):
             type=ParameterType.string,
         )
 
-        safe_list = [
-            "sin",
-            "cos",
-            "tan",
-            "arccos",
-            "arcsin",
-            "arctan",
-            "arctan2",
-            "deg2rad",
-            "rad2deg",
-            "sinh",
-            "cosh",
-            "tanh",
-            "arcsinh",
-            "arccosh",
-            "arctanh",
-            "around",
-            "round_",
-            "rint",
-            "floor",
-            "ceil",
-            "trunc",
-            "exp",
-            "log",
-            "log10",
-            "fabs",
-            "mod",
-            "e",
-            "pi",
-            "power",
-            "sqrt",
-        ]
-        self.safe_dict = {}
-        for k in safe_list:
-            self.safe_dict[k] = globals().get(k, None)
-
         self.update_parameter_table()
         self.parent_application.update_all_ds_plots()
 
@@ -149,40 +88,24 @@ class ToolEvaluate(QTool):
         color: Any = None,
         file_parameters: FileParameters | None = None,
     ) -> ToolResult:
-        """Evaluate function that returns the square of the y, according to the view"""
+        """Evaluate the x and y expressions for the current view data."""
         file_parameters = file_parameters or {}
-        xexpr = self.parameter_str("x")
-        yexpr = self.parameter_str("y")
-        self.safe_dict["x"] = x
-        self.safe_dict["y"] = y
 
-        # Find FILE PARAMETERS IN THE EXPRESSION
-        fparams = re.findall(r"\[(.*?)\]", xexpr)
-        for fp in fparams:
-            if fp in file_parameters:
-                self.safe_dict[fp] = float(file_parameters[fp])
-            else:
-                self.logger.warning("File parameter not found. Review your Tool expression for x")
-                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for x")
-                self.safe_dict[fp] = 0.0
-        xexpr = xexpr.replace("[", "").replace("]", "")
-
-        fparams = re.findall(r"\[(.*?)\]", yexpr)
-        for fp in fparams:
-            if fp in file_parameters:
-                self.safe_dict[fp] = float(file_parameters[fp])
-            else:
-                self.logger.warning("File parameter not found. Review your Tool expression for y")
-                self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your Tool expression for y")
-                self.safe_dict[fp] = 0.0
-        yexpr = yexpr.replace("[", "").replace("]", "")
+        variables = {"x": x, "y": y}
 
         try:
-            x2 = eval(xexpr, {"__builtins__": None}, self.safe_dict)
-            # x2 = eval(xexpr, var)
-            y2 = eval(yexpr, {"__builtins__": None}, self.safe_dict)
-            # y2 = eval(yexpr, var)
+            x2 = evaluate_expression(
+                self.parameter_str("x"),
+                variables,
+                file_parameters,
+            )
+            y2 = evaluate_expression(
+                self.parameter_str("y"),
+                variables,
+                file_parameters,
+            )
             return x2, y2
-        except Exception as e:
-            self.Qprint("in ToolEvaluate.calculate(): %s" % traceback.format_exc())
+
+        except Exception:
+            self.Qprint("<b><font color=red>in ToolEvaluate.calculate():</font></b> %s" % traceback.format_exc())
             return x, y

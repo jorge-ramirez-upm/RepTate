@@ -36,133 +36,17 @@ Module that defines the basic theories that should be available for all Applicat
 
 """
 
-import ast
-from types import CodeType
-import re
+import numpy as np
 from typing import Any, cast
 
-import numpy as np
-
 from RepTate.core.DataTable import DataTable
+from RepTate.core.expression_parser import SAFE_MATH_NAMES, compile_expression, get_expression_names
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from PySide6.QtWidgets import QToolBar, QSpinBox, QComboBox
 from PySide6.QtCore import QSize
 
-
-_ALGEBRAIC_SAFE_NUMPY_NAMES  = [
-    "sin",
-    "cos",
-    "tan",
-    "arccos",
-    "arcsin",
-    "arctan",
-    "arctan2",
-    "deg2rad",
-    "rad2deg",
-    "sinh",
-    "cosh",
-    "tanh",
-    "arcsinh",
-    "arccosh",
-    "arctanh",
-    "around",
-    "round",
-    "rint",
-    "floor",
-    "ceil",
-    "trunc",
-    "exp",
-    "log",
-    "log10",
-    "fabs",
-    "mod",
-    "e",
-    "pi",
-    "power",
-    "sqrt",
-]
-_ALGEBRAIC_SAFE_DICT: dict[str, Any] = {
-    name: getattr(np, name) for name in _ALGEBRAIC_SAFE_NUMPY_NAMES
-}
-
-
-_ALGEBRAIC_SAFE_DICT.update(
-    {
-        "pi": np.pi,
-        "e": np.e,
-        "abs": np.abs,
-    }
-)
-
-_ALGEBRAIC_FILE_PARAM_RE = re.compile(r"\[(.*?)\]")
-_ALGEBRAIC_ALLOWED_BINOPS = (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow, ast.Mod)
-_ALGEBRAIC_ALLOWED_UNARYOPS = (ast.UAdd, ast.USub)
-_ALGEBRAIC_ALLOWED_CONSTANT_TYPES = (int, float)
-
-def _compile_algebraic_expression(
-    expression: str,
-    allowed_names: set[str],
-) -> tuple[CodeType, dict[str, str]]:
-    """Compile a validated algebraic expression.
-
-    File parameters written as ``[name]`` are replaced by generated internal
-    symbols and returned as a mapping from symbol to original file parameter.
-    """
-    file_parameter_names: dict[str, str] = {}
-
-    def replace_file_parameter(match: re.Match[str]) -> str:
-        symbol = f"FP{len(file_parameter_names)}"
-        file_parameter_names[symbol] = match.group(1)
-        return symbol
-
-    expression = _ALGEBRAIC_FILE_PARAM_RE.sub(replace_file_parameter, expression)
-    tree = ast.parse(expression, mode="eval")
-    valid_names = allowed_names | set(file_parameter_names)
-
-    for node in ast.walk(tree):
-        if isinstance(node, (ast.Expression, ast.Load)):
-            continue
-
-        if isinstance(node, ast.BinOp):
-            if not isinstance(node.op, _ALGEBRAIC_ALLOWED_BINOPS):
-                raise ValueError("Unsupported algebraic operator")
-            continue
-
-        if isinstance(node, ast.UnaryOp):
-            if not isinstance(node.op, _ALGEBRAIC_ALLOWED_UNARYOPS):
-                raise ValueError("Unsupported algebraic unary operator")
-            continue
-
-        if isinstance(node, _ALGEBRAIC_ALLOWED_BINOPS + _ALGEBRAIC_ALLOWED_UNARYOPS):
-            continue
-
-        if isinstance(node, ast.Call):
-            if not isinstance(node.func, ast.Name):
-                raise ValueError("Only direct function calls are allowed")
-
-            if node.func.id not in _ALGEBRAIC_SAFE_DICT:
-                raise ValueError(f"Unknown function '{node.func.id}'")
-
-            if node.keywords:
-                raise ValueError("Function keyword arguments are not allowed")
-
-            continue
-
-        if isinstance(node, ast.Name):
-            if node.id not in valid_names:
-                raise ValueError(f"Unknown name '{node.id}'")
-            continue
-
-        if isinstance(node, ast.Constant):
-            if not isinstance(node.value, _ALGEBRAIC_ALLOWED_CONSTANT_TYPES):
-                raise ValueError("Only numeric constants are allowed")
-            continue
-
-        raise ValueError("Unsupported algebraic expression syntax")
-
-    return compile(tree, "<algebraic expression>", "eval"), file_parameter_names
 
 r"""
              _                             _       _ 
@@ -455,9 +339,12 @@ r"""
 class TheoryAlgebraicExpression(QTheory):
     """Fit a user algebraic expression with :math:`n` parameters.
 
-    The expression can contain any of the following mathematical functions: sin, cos, tan, arccos, arcsin, arctan, arctan2, deg2rad, rad2deg, sinh, cosh, tanh, arcsinh, arccosh, arctanh, around, round, rint, floor, ceil,trunc, exp, log, log10, fabs, mod, e, pi, power, sqrt
+    The expression can contain standard mathematical functions such as
+    sin, cos, tan, exp, log, sqrt, power, pi, e, etc., as defined in
+    ``RepTate.core.expression_parser``.
 
-    It is the responsability of the user to input functions that make mathematical sense.
+    It is the responsibility of the user to input functions that make
+    mathematical sense.
 
     * **Function**
         .. math::
@@ -465,7 +352,7 @@ class TheoryAlgebraicExpression(QTheory):
 
     * **Parameters**
        - :math:`n`: number of parameters.
-       - :math:`A_i`: coefficeints of the algebraic expression
+       - :math:`A_i`: coefficients of the algebraic expression.
     """
 
     thname: str = "Algebraic Expression"
@@ -476,8 +363,10 @@ class TheoryAlgebraicExpression(QTheory):
     def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """**Constructor**"""
         super().__init__(name, parent_dataset, ax)
+
         self.MAX_DEGREE: int = 10
         self.function = self.algebraicexpression
+
         self.parameters["n"] = Parameter(
             name="n", value=2, description="Number of Parameters", type=ParameterType.integer, opt_type=OptType.const, display_flag=False
         )
@@ -489,20 +378,23 @@ class TheoryAlgebraicExpression(QTheory):
             opt_type=OptType.const,
             display_flag=False,
         )
+
         n = self.parameter_int("n")
         for i in range(n):
             self.parameters["A%d" % i] = Parameter("A%d" % i, 1.0, "Parameter %d" % i, ParameterType.real, opt_type=OptType.opt)
 
-        self.safe_dict: dict[str, Any] = dict(_ALGEBRAIC_SAFE_DICT)
+        self.safe_dict: dict[str, Any] = dict(SAFE_MATH_NAMES)
 
         # add widgets specific to the theory
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
+
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, self.MAX_DEGREE)  # min and max number of modes
         self.spinbox.setToolTip("Number of parameters")
         self.spinbox.setValue(self.parameter_int("n"))  # initial value
         tb.addWidget(self.spinbox)
+
         self.expressionCB = QComboBox()
         self.expressionCB.setToolTip("Algebraic expression")
         self.expressionCB.addItem("A0+A1*x")
@@ -529,12 +421,14 @@ class TheoryAlgebraicExpression(QTheory):
         if name == "n":
             nold = self.parameter_int("n")
             Aold = np.zeros(nold)
+
             for i in range(nold):
                 Aold[i] = self.parameter_float("A%d" % i)
                 del self.parameters["A%d" % i]
 
             nnew: Any = value
             message, success = super().set_param_value("n", nnew)
+
             for i in range(nnew):
                 if i < nold:
                     Aval = Aold[i]
@@ -546,66 +440,89 @@ class TheoryAlgebraicExpression(QTheory):
 
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
+
         self.update_parameter_table()
         return message, success
 
     def algebraicexpression(self, f: FileLike | None = None) -> None:
-        """Actual function.
+        """Evaluate the algebraic expression.
 
         * **Function**
             .. math::
                 y(x) = f({A_i}, x)
         """
         file = cast(FileLike, f)
+
         ft: DataTable = file.data_table
         tt: DataTable = self.tables[file.file_name_short]
+
         tt.num_columns = ft.num_columns
         tt.num_rows = ft.num_rows
         tt.data = np.zeros((tt.num_rows, tt.num_columns))
         tt.data[:, 0] = ft.data[:, 0]
 
         expression = self.parameter_str("expression")
-        params = set(re.findall(r"A\d{1,2}", expression))
+        n = self.parameter_int("n")
+
+        try:
+            expression_names = get_expression_names(expression)
+        except SyntaxError:
+            self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
+            self.logger.exception("Error in Algebraic Expression")
+            return
+
+        params = {name for name in expression_names if name.startswith("A") and name[1:].isdigit()}
+
         nparams = len(params)
         maxparamindex = -1
+
         for p in params:
-            paramindex = int(p.split("A")[1])
+            paramindex = int(p[1:])
             if paramindex > maxparamindex:
                 maxparamindex = paramindex
-        n = self.parameter_int("n")
+
         if (maxparamindex != n - 1) or (nparams != n):
             self.logger.warning("Wrong expression or number of parameters. Review your theory")
             self.Qprint("<b><font color=red>Wrong expression or number of parameters</font></b>. Review your theory")
-        else:
-            safe_dict = dict(self.safe_dict)
-            allowed_names = set(safe_dict) | {"x"}
+            return
+
+        safe_dict = dict(self.safe_dict)
+
+        allowed_names = {"x"} | {f"A{i}" for i in range(n)}
+
+        try:
+            code, file_parameter_names = compile_expression(
+                expression,
+                allowed_names,
+            )
+
+            for symbol, fp in file_parameter_names.items():
+                if fp in file.file_parameters:
+                    safe_dict[symbol] = float(file.file_parameters[fp])
+                else:
+                    self.logger.warning("File parameter not found. Review your theory")
+                    self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your theory")
+                    safe_dict[symbol] = 0.0
+
+            safe_dict["x"] = tt.data[:, 0]
+
             for i in range(n):
-                allowed_names.add("A%d" % i)
+                safe_dict[f"A{i}"] = self.parameter_float(f"A{i}")
 
-            try:
-                code, file_parameter_names = _compile_algebraic_expression(expression, allowed_names)
-                for symbol, fp in file_parameter_names.items():
-                    if fp in file.file_parameters:
-                        safe_dict[symbol] = float(file.file_parameters[fp])
-                    else:
-                        self.logger.warning("File parameter not found. Review your theory")
-                        self.Qprint("<b><font color=red>File parameter not found</font></b>. Review your theory")
-                        safe_dict[symbol] = 0.0
+            y = eval(code, {"__builtins__": {}}, safe_dict)
 
-                safe_dict["x"] = tt.data[:, 0]
-                for i in range(n):
-                    safe_dict["A%d" % i] = self.parameter_float("A%d" % i)
+            for j in range(1, tt.num_columns):
+                tt.data[:, j] = y
 
-                y = eval(code, {"__builtins__": {}}, safe_dict)
-                for j in range(1, tt.num_columns):
-                    tt.data[:, j] = y
-            except (SyntaxError, ValueError, NameError, TypeError, FloatingPointError) as e:
-                self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
-                self.logger.exception("Error in Algebraic Expression")
-            except Exception as e:
-                self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
-                self.logger.exception("Error in Algebraic Expression")
-                # print (e.__class__, ":", e)
+        except (
+            SyntaxError,
+            ValueError,
+            NameError,
+            TypeError,
+            FloatingPointError,
+        ):
+            self.Qprint("<b><font color=red>Error in algebraic expression </font><b>")
+            self.logger.exception("Error in Algebraic Expression")
 
     def do_error(self, line: str) -> None:
         super().do_error(line)
