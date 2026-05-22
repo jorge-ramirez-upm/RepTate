@@ -51,7 +51,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout, QMessageBox, QSpinBox, QToolBar
 
 from RepTate.core.DataTable import DataTable
-from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
+from RepTate.core.DraggableArtists import DragType, DraggableModeIndividual
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike, FloatArray, ModesResult
 from RepTate.gui.QTheory import QTheory
@@ -364,9 +364,9 @@ class TheoryBaumgaertelWinter(QTheory):
         self.graphicmodes.set_markeredgewidth(3)
         self.graphicmodes.set_markersize(8)
         self.graphicmodes.set_alpha(0.5)
-        self.artistmodes = DraggableModesSeries(
+        self.artistmodes = DraggableModeIndividual(
             self.graphicmodes,
-            DragType.special,
+            DragType.both,
             self.parent_dataset.parent_application,
             self.drag_mode,
         )

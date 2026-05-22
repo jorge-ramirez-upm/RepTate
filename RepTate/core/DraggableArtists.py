@@ -476,6 +476,200 @@ class DraggableModesSeries(DraggableArtist):
         self.function(xdata, ydata)
 
 
+################################################################
+################################################################
+
+
+class DraggableModeIndividual(DraggableArtist):
+    """Draggable points of a mode series, one mode at a time.
+
+    This class is intended for theories where every mode has an independent
+    horizontal and vertical coordinate.  In contrast to DraggableModesSeries, it
+    never redistributes the x-coordinates of the other modes when the first or
+    last mode is moved.
+
+    The callback receives the complete updated x and y arrays:
+
+        function(xdata, ydata)
+
+    so theory classes can update their own parameters from the final marker
+    positions.
+    """
+
+    def __init__(
+        self,
+        artist: Any,
+        mode: DragType = DragType.both,
+        parent_application: ApplicationLike | None = None,
+        function: Callback = None,
+    ) -> None:
+        """**Constructor**"""
+        super().__init__(artist, mode, function)
+        self.parent_application: ApplicationLike = cast(ApplicationLike, parent_application)
+        self.logx: bool = False
+        self.logy: bool = False
+        self.index: int = 0
+        self.xdata: Any = None
+        self.ydata: Any = None
+        self.xdata_at_press: Any = None
+        self.ydata_at_press: Any = None
+        self.xpress: Any = None
+        self.ypress: Any = None
+        self.update_logx_logy()
+
+    def update_logx_logy(self) -> None:
+        """Update log-axis flags from the active RepTate view."""
+        self.logx = self.parent_application.current_view.log_x
+        self.logy = self.parent_application.current_view.log_y
+
+    def _get_1d_artist_data(self) -> tuple[Any, Any]:
+        """Return artist data as independent 1D float arrays."""
+        xdata_raw, ydata_raw = self.artist.get_data()
+        xdata = np.asarray(xdata_raw, dtype=float)
+        ydata = np.asarray(ydata_raw, dtype=float)
+
+        if xdata.ndim > 1:
+            xdata = xdata[:, 0]
+        if ydata.ndim > 1:
+            ydata = ydata[:, 0]
+
+        return xdata.copy(), ydata.copy()
+
+    def on_press(self, event: Any) -> None:
+        """Press event."""
+        if event.inaxes != self.artist.axes:
+            return
+        if DraggableArtist.lock is not None:
+            return
+        if event.button != 1:
+            return
+        contains, attrd = self.artist.contains(event)
+        if not contains:
+            return
+        if event.xdata is None or event.ydata is None:
+            return
+
+        self.update_logx_logy()
+        self.xdata, self.ydata = self._get_1d_artist_data()
+        self.xdata_at_press = self.xdata.copy()
+        self.ydata_at_press = self.ydata.copy()
+        self.press = event.xdata, event.ydata
+        self.xpress, self.ypress = self.press
+
+        # Pick the nearest point in the displayed data coordinates.  For log
+        # views, use logarithmic distances so mode selection is visually natural
+        # across several decades.
+        if self.logx:
+            xdist = np.log10(np.maximum(self.xdata, _LOG_FLOOR)) - np.log10(max(self.xpress, _LOG_FLOOR))
+        else:
+            xdist = self.xdata - self.xpress
+
+        if self.logy:
+            ydist = np.log10(np.maximum(self.ydata, _LOG_FLOOR)) - np.log10(max(self.ypress, _LOG_FLOOR))
+        else:
+            ydist = self.ydata - self.ypress
+
+        self.index = int(np.argmin(xdist**2 + ydist**2))
+        DraggableArtist.lock = self
+
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        self.artist.set_animated(True)
+        canvas.draw()
+        self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
+        axes.draw_artist(self.artist)
+
+    def on_motion(self, event: Any) -> None:
+        """Motion event."""
+        if DraggableArtist.lock is not self:
+            return
+        if event.inaxes != self.artist.axes:
+            return
+        if event.xdata is None or event.ydata is None:
+            return
+
+        self.update_logx_logy()
+
+        if self.logx:
+            dx = np.log10(max(event.xdata, _LOG_FLOOR)) - np.log10(max(self.xpress, _LOG_FLOOR))
+        else:
+            dx = event.xdata - self.xpress
+
+        if self.logy:
+            dy = np.log10(max(event.ydata, _LOG_FLOOR)) - np.log10(max(self.ypress, _LOG_FLOOR))
+        else:
+            dy = event.ydata - self.ypress
+
+        if self.mode == DragType.none:
+            self.modify_artist(0, 0)
+        elif self.mode == DragType.horizontal:
+            self.modify_artist(dx, 0)
+        elif self.mode == DragType.vertical:
+            self.modify_artist(0, dy)
+        elif self.mode in (DragType.both, DragType.special):
+            self.modify_artist(dx, dy)
+
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        canvas.restore_region(self.background)
+        axes.draw_artist(self.artist)
+        canvas.update()
+
+    def modify_artist(self, dx: Any, dy: Any) -> None:
+        """Move only the selected mode marker."""
+        newxdata = self.xdata_at_press.copy()
+        newydata = self.ydata_at_press.copy()
+
+        if self.logx:
+            newx = self.xdata_at_press[self.index] * np.power(10.0, dx)
+        else:
+            newx = self.xdata_at_press[self.index] + dx
+
+        if self.logy:
+            newy = self.ydata_at_press[self.index] * np.power(10.0, dy)
+        else:
+            newy = self.ydata_at_press[self.index] + dy
+
+        if self.mode in (DragType.horizontal, DragType.both, DragType.special):
+            newxdata[self.index] = newx
+        if self.mode in (DragType.vertical, DragType.both, DragType.special):
+            newydata[self.index] = newy
+
+        self.artist.set_data(newxdata, newydata)
+
+    def on_release(self, event: Any) -> None:
+        """Release event."""
+        if DraggableArtist.lock is not self:
+            return
+
+        self.press = None
+        DraggableArtist.lock = None
+        self.artist.set_animated(False)
+
+        canvas = self.artist.figure.canvas
+        axes = self.artist.axes
+        if self.background is not None:
+            canvas.restore_region(self.background)
+            axes.draw_artist(self.artist)
+        self.background = None
+
+        tmp_data = self.artist.get_data()
+        xdata = tmp_data[0]
+        ydata = tmp_data[1]
+
+        # Compatibility with mpldatacursor: keep the previous valid data if the
+        # artist temporarily returns an unexpected nested structure.
+        try:
+            float(np.asarray(xdata).ravel()[0])
+            self.data = tmp_data
+        except (TypeError, ValueError, IndexError):
+            xdata = self.data[0]
+            ydata = self.data[1]
+
+        if self.function is not None:
+            self.function(np.asarray(xdata, dtype=float), np.asarray(ydata, dtype=float))
+
+
 ###########################################################
 ###########################################################
 
