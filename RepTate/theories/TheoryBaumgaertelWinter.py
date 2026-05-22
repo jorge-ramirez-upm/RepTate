@@ -37,16 +37,18 @@ Discrete Baumgaertel-Winter relaxation spectrum from dynamic moduli.
 This first implementation covers only the frequency-domain conversion from
 G'(omega), G''(omega) to a discrete generalized Maxwell spectrum.  The original
 Baumgaertel-Winter method also discusses adaptive mode elimination/merging and
-conversion to a retardation spectrum; those parts are intentionally left for a
-later implementation.
+conversion to a retardation spectrum.  This implementation includes a conservative
+mode-simplification helper, but the retardation spectrum is intentionally left for
+a later implementation.
 """
 
 from typing import Any, ClassVar
 
 import numpy as np
+from scipy.optimize import least_squares
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QSpinBox, QToolBar
+from PySide6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout, QMessageBox, QSpinBox, QToolBar
 
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DragType, DraggableModesSeries
@@ -67,7 +69,7 @@ def _safe_log10(values: FloatArray) -> FloatArray:
 
 
 class TheoryBaumgaertelWinter(QTheory):
-    """Fit a Baumgaertel-Winter discrete relaxation spectrum to dynamic moduli.
+    r"""Fit a Baumgaertel-Winter discrete relaxation spectrum to dynamic moduli.
 
     * **Function**
         .. math::
@@ -104,6 +106,9 @@ class TheoryBaumgaertelWinter(QTheory):
         self.has_modes = True
         self.MAX_MODES = 40
         self.view_modes = True
+        self.min_logtau_separation = 0.25
+        self.max_residual_increase = 0.05
+        self.weak_mode_threshold = 1.0e-3
 
         wmin = self.parent_dataset.minpositivecol(0)
         wmax = self.parent_dataset.maxcol(0)
@@ -170,7 +175,17 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.setValue(nmodes)
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
+        self.simplify_modes_action = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broom.png"),
+            "Simplify BW spectrum",
+        )
+        self.configure_simplification_action = tb.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
+            "Configure BW simplification",
+        )
+        self.configure_simplification_action.setToolTip("Configure the Baumgaertel-Winter mode merging and deletion thresholds")
         self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
+        self.simplify_modes_action.setToolTip("Merge close modes and remove redundant modes if the relative residual increase is small")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
         self.thToolsLayout.insertWidget(0, tb)
@@ -178,6 +193,8 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         self.modesaction.triggered.connect(self.modesaction_change)
         self.save_modes_action.triggered.connect(self.save_modes)
+        self.simplify_modes_action.triggered.connect(self.simplify_spectrum)
+        self.configure_simplification_action.triggered.connect(self.configure_simplification_parameters)
 
     def _initial_tau(self, wmin: float, wmax: float, nmodes: int) -> FloatArray:
         if nmodes > 1:
@@ -293,6 +310,48 @@ class TheoryBaumgaertelWinter(QTheory):
         """Do nothing."""
         pass
 
+    def configure_simplification_parameters(self) -> None:
+        """Show a dialog to configure BW mode simplification thresholds."""
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Baumgaertel-Winter simplification")
+
+        layout = QFormLayout(dialog)
+
+        min_sep_spinbox = QDoubleSpinBox(dialog)
+        min_sep_spinbox.setDecimals(3)
+        min_sep_spinbox.setRange(0.0, 10.0)
+        min_sep_spinbox.setSingleStep(0.05)
+        min_sep_spinbox.setValue(float(self.min_logtau_separation))
+        min_sep_spinbox.setToolTip("Minimum separation between relaxation times in log10 decades before two modes are merged")
+
+        max_increase_spinbox = QDoubleSpinBox(dialog)
+        max_increase_spinbox.setDecimals(4)
+        max_increase_spinbox.setRange(0.0, 10.0)
+        max_increase_spinbox.setSingleStep(0.01)
+        max_increase_spinbox.setValue(float(self.max_residual_increase))
+        max_increase_spinbox.setToolTip("Maximum accepted relative increase of the mean square relative residual after deleting one mode")
+
+        weak_mode_spinbox = QDoubleSpinBox(dialog)
+        weak_mode_spinbox.setDecimals(6)
+        weak_mode_spinbox.setRange(0.0, 1.0)
+        weak_mode_spinbox.setSingleStep(1.0e-4)
+        weak_mode_spinbox.setValue(float(self.weak_mode_threshold))
+        weak_mode_spinbox.setToolTip("Remove modes with G_i smaller than this fraction of the total mode strength")
+
+        layout.addRow("Minimum log(tau) separation / decades", min_sep_spinbox)
+        layout.addRow("Maximum residual increase", max_increase_spinbox)
+        layout.addRow("Weak-mode threshold", weak_mode_spinbox)
+
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addRow(buttons)
+
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            self.min_logtau_separation = float(min_sep_spinbox.value())
+            self.max_residual_increase = float(max_increase_spinbox.value())
+            self.weak_mode_threshold = float(weak_mode_spinbox.value())
+
     def setup_graphic_modes(self) -> None:
         """Setup graphic helpers."""
         omega, G = self._mode_marker_data()
@@ -346,6 +405,277 @@ class TheoryBaumgaertelWinter(QTheory):
         tau, G = self._mode_values()
         omega = 1.0 / np.maximum(tau, _LOG_FLOOR)
         return omega, G
+
+    def _first_valid_file(self) -> FileLike | None:
+        """Return the first data file with omega, G' and G'' columns."""
+        for file in self.parent_dataset.files:
+            data = file.data_table.data
+            if data is not None and data.ndim == 2 and data.shape[1] >= 3 and data.shape[0] > 0:
+                return file
+        return None
+
+    def _pack_modes(self, tau: FloatArray, G: FloatArray) -> FloatArray:
+        """Pack positive mode parameters into logarithmic optimization variables."""
+        return np.r_[_safe_log10(tau), _safe_log10(G)]
+
+    def _unpack_modes(self, variables: FloatArray) -> tuple[FloatArray, FloatArray]:
+        """Unpack logarithmic optimization variables into positive mode parameters."""
+        nmodes = len(variables) // 2
+        tau = np.power(10.0, variables[:nmodes])
+        G = np.power(10.0, variables[nmodes:])
+        return tau, G
+
+    def _predict_dynamic_moduli(self, omega: FloatArray, tau: FloatArray, G: FloatArray) -> tuple[FloatArray, FloatArray]:
+        """Predict G' and G'' for a given discrete relaxation spectrum."""
+        omega = np.asarray(omega, dtype=float)
+        Gp = np.full_like(omega, self.parameter_float("Ge"), dtype=float)
+        Gpp = np.zeros_like(omega, dtype=float)
+        for tau_i, G_i in zip(tau, G):
+            wt = omega * tau_i
+            wt2 = wt**2
+            denominator = 1.0 + wt2
+            Gp += G_i * wt2 / denominator
+            Gpp += G_i * wt / denominator
+        return Gp, Gpp
+
+    def _residual_vector_for_modes(self, file: FileLike, tau: FloatArray, G: FloatArray) -> FloatArray:
+        """Return the Baumgaertel-Winter relative residual vector for one file."""
+        data = file.data_table.data
+        omega = np.asarray(data[:, 0], dtype=float)
+        Gp_exp = np.asarray(data[:, 1], dtype=float)
+        Gpp_exp = np.asarray(data[:, 2], dtype=float)
+        valid = (omega > 0.0) & (Gp_exp > 0.0) & (Gpp_exp > 0.0)
+        if not np.any(valid):
+            return np.array([], dtype=float)
+        Gp_fit, Gpp_fit = self._predict_dynamic_moduli(omega[valid], tau, G)
+        return np.r_[Gp_fit / Gp_exp[valid] - 1.0, Gpp_fit / Gpp_exp[valid] - 1.0]
+
+    def _residual_value_for_modes(self, file: FileLike, tau: FloatArray, G: FloatArray) -> float:
+        """Return the mean square Baumgaertel-Winter relative residual."""
+        residual = self._residual_vector_for_modes(file, tau, G)
+        if residual.size == 0:
+            return np.inf
+        return float(np.mean(residual**2))
+
+    def _fit_modes_to_file(self, file: FileLike, tau: FloatArray, G: FloatArray) -> tuple[FloatArray, FloatArray, float]:
+        """Refit tau and G for a fixed number of modes using scipy least_squares."""
+        x0 = self._pack_modes(tau, G)
+
+        def residual_from_variables(variables: FloatArray) -> FloatArray:
+            tau_trial, G_trial = self._unpack_modes(variables)
+            return self._residual_vector_for_modes(file, tau_trial, G_trial)
+
+        result = least_squares(
+            residual_from_variables,
+            x0,
+            method="trf",
+            max_nfev=4000,
+            xtol=1.0e-10,
+            ftol=1.0e-10,
+            gtol=1.0e-10,
+        )
+        tau_fit, G_fit = self._unpack_modes(result.x)
+        residual = self._residual_value_for_modes(file, tau_fit, G_fit)
+        order = np.argsort(tau_fit)
+        return tau_fit[order], G_fit[order], residual
+
+    def _set_mode_values(self, tau: FloatArray, G: FloatArray) -> None:
+        """Replace the current mode parameters by the supplied mode arrays."""
+        tau = np.asarray(tau, dtype=float)
+        G = np.asarray(G, dtype=float)
+        if tau.size != G.size:
+            raise ValueError("tau and G must have the same length")
+        nmodes_old = self.parameter_int("nmodes")
+        for i in range(nmodes_old):
+            self.parameters.pop("logtau%02d" % i, None)
+            self.parameters.pop("logG%02d" % i, None)
+
+        nmodes_new = int(tau.size)
+        super().set_param_value("nmodes", nmodes_new)
+        order = np.argsort(tau)
+        tau = tau[order]
+        G = G[order]
+        for i in range(nmodes_new):
+            self.parameters["logtau%02d" % i] = Parameter(
+                "logtau%02d" % i,
+                float(np.log10(max(tau[i], _LOG_FLOOR))),
+                "Log of Mode %d relaxation time" % i,
+                ParameterType.real,
+                opt_type=OptType.opt,
+                min_value=-30,
+                max_value=30,
+            )
+            self.parameters["logG%02d" % i] = Parameter(
+                "logG%02d" % i,
+                float(np.log10(max(G[i], _LOG_FLOOR))),
+                "Log of Mode %d relaxation strength" % i,
+                ParameterType.real,
+                opt_type=OptType.opt,
+                min_value=-30,
+                max_value=30,
+            )
+        self.spinbox.blockSignals(True)
+        self.spinbox.setValue(nmodes_new)
+        self.spinbox.blockSignals(False)
+
+    def _merge_close_mode_arrays(self, tau: FloatArray, G: FloatArray) -> tuple[FloatArray, FloatArray, int]:
+        """Merge modes separated by less than min_logtau_separation decades."""
+        if tau.size <= 1:
+            return tau, G, 0
+        order = np.argsort(tau)
+        logtau = _safe_log10(tau[order])
+        G_sorted = G[order]
+        merged_logtau: list[float] = []
+        merged_G: list[float] = []
+        n_merged = 0
+        i = 0
+        while i < len(logtau):
+            group = [i]
+            j = i + 1
+            while j < len(logtau) and logtau[j] - logtau[group[-1]] < self.min_logtau_separation:
+                group.append(j)
+                j += 1
+            weights = G_sorted[group]
+            total_G = float(np.sum(weights))
+            if total_G > 0.0:
+                new_logtau = float(np.sum(weights * logtau[group]) / total_G)
+            else:
+                new_logtau = float(np.mean(logtau[group]))
+            merged_logtau.append(new_logtau)
+            merged_G.append(max(total_G, _LOG_FLOOR))
+            n_merged += len(group) - 1
+            i = j
+        return np.power(10.0, np.asarray(merged_logtau)), np.asarray(merged_G), n_merged
+
+    def _weak_mode_indices(self, G: FloatArray) -> list[int]:
+        """Return indices of modes that are weak by amplitude only.
+
+        A small amplitude alone is not enough to delete a mode: a weak mode can
+        still dominate a part of the frequency window.  The returned indices are
+        therefore only candidates for residual-guarded deletion.
+        """
+        if G.size <= 1 or self.weak_mode_threshold <= 0.0:
+            return []
+        total_G = float(np.sum(G))
+        if total_G <= 0.0:
+            return []
+        keep = G >= self.weak_mode_threshold * total_G
+        if not np.any(keep):
+            keep[np.argmax(G)] = True
+        return [int(i) for i in np.flatnonzero(~keep)]
+
+    def _residual_increase_is_acceptable(self, old_residual: float, new_residual: float) -> bool:
+        """Return True if a simplified spectrum is still an acceptable fit.
+
+        The residual can be extremely small for synthetic or very clean data.  In
+        that case, using old_residual itself as denominator makes the relative
+        increase test numerically meaningless.  The floor prevents deletion of
+        physically necessary modes from an almost exact fit while still allowing
+        harmless simplifications.
+        """
+        if not np.isfinite(new_residual):
+            return False
+        if new_residual <= old_residual:
+            return True
+        residual_floor = max(old_residual, 1.0e-8)
+        relative_increase = (new_residual - old_residual) / residual_floor
+        return bool(relative_increase <= self.max_residual_increase)
+
+    def _best_single_mode_removal(
+        self,
+        file: FileLike,
+        tau: FloatArray,
+        G: FloatArray,
+        current_residual: float,
+        candidate_indices: list[int] | None = None,
+    ) -> tuple[FloatArray, FloatArray, float, bool]:
+        """Try removing candidate modes and keep the least damaging refitted spectrum."""
+        if tau.size <= 1:
+            return tau, G, current_residual, False
+        if candidate_indices is None:
+            candidate_indices = list(range(tau.size))
+        candidate_indices = [i for i in candidate_indices if 0 <= i < tau.size]
+        if len(candidate_indices) == 0:
+            return tau, G, current_residual, False
+
+        best_tau = tau
+        best_G = G
+        best_residual = np.inf
+        for i in candidate_indices:
+            tau_trial = np.delete(tau, i)
+            G_trial = np.delete(G, i)
+            tau_fit, G_fit, residual = self._fit_modes_to_file(file, tau_trial, G_trial)
+            if residual < best_residual:
+                best_tau = tau_fit
+                best_G = G_fit
+                best_residual = residual
+        accept = self._residual_increase_is_acceptable(current_residual, best_residual)
+        return best_tau, best_G, best_residual, accept
+
+    def simplify_spectrum(self) -> None:
+        """Conservatively merge/delete redundant BW modes and refit the result."""
+        file = self._first_valid_file()
+        if file is None:
+            QMessageBox.warning(self, "Baumgaertel-Winter", "No valid G', G'' data file was found.")
+            return
+
+        tau, G = self._mode_values()
+        tau, G, current_residual = self._fit_modes_to_file(file, tau, G)
+        initial_nmodes = tau.size
+        n_merged_total = 0
+        n_weak_removed_total = 0
+        n_deleted_total = 0
+
+        changed = True
+        while changed and tau.size > 1:
+            changed = False
+            tau_merged, G_merged, n_merged = self._merge_close_mode_arrays(tau, G)
+            if n_merged > 0:
+                tau_fit, G_fit, merged_residual = self._fit_modes_to_file(file, tau_merged, G_merged)
+                if self._residual_increase_is_acceptable(current_residual, merged_residual):
+                    tau, G = tau_fit, G_fit
+                    current_residual = merged_residual
+                    n_merged_total += n_merged
+                    changed = True
+
+            weak_candidates = self._weak_mode_indices(G)
+            tau_trial, G_trial, trial_residual, accept = self._best_single_mode_removal(file, tau, G, current_residual, weak_candidates)
+            if accept and tau_trial.size < tau.size:
+                tau, G = tau_trial, G_trial
+                current_residual = trial_residual
+                n_weak_removed_total += 1
+                changed = True
+                continue
+
+            tau_trial, G_trial, trial_residual, accept = self._best_single_mode_removal(file, tau, G, current_residual)
+            if accept and tau_trial.size < tau.size:
+                tau, G = tau_trial, G_trial
+                current_residual = trial_residual
+                n_deleted_total += 1
+                changed = True
+
+        self._set_mode_values(tau, G)
+        self.do_calculate("")
+        self.plot_theory_stuff()
+        self.update_parameter_table()
+        self.parent_dataset.parent_application.update_plot()
+        self.Qprint(f"<font color=red><b>Spectrum simplified from {initial_nmodes} to {tau.size} modes.</b></font>")
+        self.Qprint(f"<b>Merged close modes</b>: {n_merged_total}.")
+        self.Qprint(f"<b>Removed weak modes</b>: {n_weak_removed_total}.")
+        self.Qprint(f"<b>Accepted trial deletions</b>: {n_deleted_total}.")
+        self.Qprint(f"<b>Final mean square relative residual</b>: {current_residual:.4g}.")
+
+    #   QMessageBox.information(
+    #       self,
+    #       "Baumgaertel-Winter",
+    #       (
+    #           f"Spectrum simplified from {initial_nmodes} to {tau.size} modes.\n"
+    #           f"Merged close modes: {n_merged_total}.\n"
+    #           f"Removed weak modes: {n_weak_removed_total}.\n"
+    #           f"Accepted trial deletions: {n_deleted_total}.\n"
+    #           f"Final mean square relative residual: {current_residual:.4g}."
+    #       ),
+    #   )
 
     def get_modes(self) -> ModesResult:
         """Get relaxation times and strengths from this theory."""
