@@ -35,6 +35,7 @@
 Module for the analysis of small angle oscillatory shear data - Master curves
 
 """
+
 from typing import Any, ClassVar
 
 from RepTate.gui.QApplicationWindow import QApplicationWindow
@@ -68,6 +69,7 @@ class ApplicationLVE(QApplicationWindow):
         from RepTate.theories.TheoryShanbhagMaxwellModes import (
             TheoryShanbhagMaxwellModesFrequency,
         )
+        from RepTate.theories.TheoryBaumgaertelWinter import TheoryBaumgaertelWinter
 
         super().__init__(name, parent)
 
@@ -463,40 +465,40 @@ class ApplicationLVE(QApplicationWindow):
 
         # FILES
         ftype = TXTColumnFile(
-            name = "LVE files",
-            extension = "tts",
-            description = "LVE files",
-            col_names = ["w", "G'", "G''"],
-            basic_file_parameters = ["Mw", "T"],
-            col_units = ["rad/s", "Pa", "Pa"],
+            name="LVE files",
+            extension="tts",
+            description="LVE files",
+            col_names=["w", "G'", "G''"],
+            basic_file_parameters=["Mw", "T"],
+            col_units=["rad/s", "Pa", "Pa"],
             # Legacy RepTate theory code expects file parameter T in Celsius
             # and converts to Kelvin locally when needed.
-            file_parameter_specs = [
+            file_parameter_specs=[
                 FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )
         self.filetypes[ftype.extension] = ftype
         self.filetypes["osc"] = TXTColumnFile(
-            name = "OSC files",
-            extension = "osc",
-            description = "Small-angle oscillatory masurements from the Rheometer",
-            col_names = ["w", "G'", "G''"],
-            basic_file_parameters = ["Mw", "T"],
-            col_units = ["rad/s", "Pa", "Pa"],
-            file_parameter_specs = [
+            name="OSC files",
+            extension="osc",
+            description="Small-angle oscillatory masurements from the Rheometer",
+            col_names=["w", "G'", "G''"],
+            basic_file_parameters=["Mw", "T"],
+            col_units=["rad/s", "Pa", "Pa"],
+            file_parameter_specs=[
                 FileParameterSpec("Mw", "molar_mass", "kg/mol", "kg/mol"),
                 FileParameterSpec("T", "temperature", "ºC", "ºC"),
             ],
         )
 
         self.filetypes["xlsx"] = ExcelFile(
-            name = "Excel files",
-            extension = "xlsx",
-            description = "Excel File",
-            col_names = ["w", "G'", "G''"],
-            basic_file_parameters = [],
-            col_units = ["rad/s", "Pa", "Pa"],
+            name="Excel files",
+            extension="xlsx",
+            description="Excel File",
+            col_names=["w", "G'", "G''"],
+            basic_file_parameters=[],
+            col_units=["rad/s", "Pa", "Pa"],
         )
 
         # THEORIES
@@ -510,9 +512,8 @@ class ApplicationLVE(QApplicationWindow):
         self.theories[TheoryLP2RLVE.thname] = TheoryLP2RLVE
         self.theories[TheoryRDPLVE.thname] = TheoryRDPLVE
         self.theories[TheoryStickyReptation.thname] = TheoryStickyReptation
-        self.theories[
-            TheoryShanbhagMaxwellModesFrequency.thname
-        ] = TheoryShanbhagMaxwellModesFrequency
+        self.theories[TheoryShanbhagMaxwellModesFrequency.thname] = TheoryShanbhagMaxwellModesFrequency
+        self.theories[TheoryBaumgaertelWinter.thname] = TheoryBaumgaertelWinter
         self.add_common_theories()
 
         # set the current view
@@ -551,9 +552,7 @@ class ApplicationLVE(QApplicationWindow):
         x = np.zeros((dt.num_rows, 1))
         y = np.zeros((dt.num_rows, 1))
         x[:, 0] = np.log10(dt.data[:, 0])
-        y[:, 0] = np.log10(
-            np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0]
-        )
+        y[:, 0] = np.log10(np.sqrt(dt.data[:, 1] ** 2 + dt.data[:, 2] ** 2) / dt.data[:, 0])
         return x, y, True
 
     def viewDelta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
