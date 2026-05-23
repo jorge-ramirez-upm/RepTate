@@ -70,6 +70,7 @@ class ApplicationGt(QApplicationWindow):
     def __init__(self, name: str = "Gt", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryMaxwellModes import TheoryMaxwellModesTime
+        from RepTate.theories.TheoryBaumgaertelWinter import TheoryBaumgaertelWinterTime
         from RepTate.theories.TheoryRouse import TheoryRouseTime
         from RepTate.theories.TheoryDTDStars import TheoryDTDStarsTime
         from RepTate.theories.TheoryShanbhagMaxwellModes import (
@@ -240,6 +241,7 @@ class ApplicationGt(QApplicationWindow):
 
         # THEORIES
         self.theories[TheoryMaxwellModesTime.thname] = TheoryMaxwellModesTime
+        self.theories[TheoryBaumgaertelWinterTime.thname] = TheoryBaumgaertelWinterTime
         self.theories[TheoryRouseTime.thname] = TheoryRouseTime
         self.theories[TheoryDTDStarsTime.thname] = TheoryDTDStarsTime
         self.theories[TheoryShanbhagMaxwellModesTime.thname] = TheoryShanbhagMaxwellModesTime

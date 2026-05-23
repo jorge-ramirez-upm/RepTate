@@ -32,14 +32,15 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryBaumgaertelWinter.
 
-Discrete Baumgaertel-Winter relaxation spectrum from dynamic moduli.
+Discrete Baumgaertel-Winter relaxation spectrum from dynamic moduli or
+relaxation modulus data.
 
-This first implementation covers only the frequency-domain conversion from
-G'(omega), G''(omega) to a discrete generalized Maxwell spectrum.  The original
-Baumgaertel-Winter method also discusses adaptive mode elimination/merging and
-conversion to a retardation spectrum.  This implementation includes a conservative
-mode-simplification helper, but the retardation spectrum is intentionally left for
-a later implementation.
+The frequency-domain theory fits G'(omega), G''(omega) to a discrete generalized
+Maxwell spectrum.  The time-domain theory uses the same independent modes to fit
+G(t).  The original Baumgaertel-Winter method also discusses adaptive mode
+elimination/merging and conversion to a retardation spectrum.  This implementation
+includes a conservative mode-simplification helper for the frequency-domain data,
+but the retardation spectrum is intentionally left for a later implementation.
 """
 
 from typing import Any, ClassVar
@@ -98,11 +99,15 @@ class TheoryBaumgaertelWinter(QTheory):
     doi: ClassVar[list[str]] = ["http://dx.doi.org/10.1007/BF01332922"]
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file: ClassVar[bool] = True
+    is_time_domain: ClassVar[bool] = False
 
     def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """Constructor."""
         super().__init__(name, parent_dataset, ax)
-        self.function = self.BaumgaertelWinterFrequency
+        if self.is_time_domain:
+            self.function = self.BaumgaertelWinterTime
+        else:
+            self.function = self.BaumgaertelWinterFrequency
         self.has_modes = True
         self.MAX_MODES = 40
         self.view_modes = True
@@ -110,9 +115,9 @@ class TheoryBaumgaertelWinter(QTheory):
         self.max_residual_increase = 0.05
         self.weak_mode_threshold = 1.0e-3
 
-        wmin = self.parent_dataset.minpositivecol(0)
-        wmax = self.parent_dataset.maxcol(0)
-        nmodes = max(1, int(np.round(np.log10(wmax / wmin))))
+        xmin = self.parent_dataset.minpositivecol(0)
+        xmax = self.parent_dataset.maxcol(0)
+        nmodes = max(1, int(np.round(np.log10(xmax / xmin))))
         nmodes = min(nmodes, self.MAX_MODES)
 
         self.parameters["nmodes"] = Parameter(
@@ -134,12 +139,9 @@ class TheoryBaumgaertelWinter(QTheory):
             min_value=0.0,
         )
 
-        # Initial modes: tau spans the reciprocal experimental frequency window.
-        # The mode markers are displayed at omega_i = 1/tau_i, as in the LVE
-        # frequency plot.  tau_i itself remains a freely adjustable parameter.
-        tau = self._initial_tau(wmin, wmax, nmodes)
-        omega_modes = 1.0 / tau
-        G = self._initial_moduli(omega_modes)
+        tau = self._initial_tau(xmin, xmax, nmodes)
+        mode_x = self._mode_x_from_tau(tau)
+        G = self._initial_moduli(mode_x)
 
         for i in range(nmodes):
             self.parameters["logtau%02d" % i] = Parameter(
@@ -175,6 +177,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.setValue(nmodes)
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
+        self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.simplify_modes_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broom.png"),
             "Simplify BW spectrum",
@@ -184,7 +187,6 @@ class TheoryBaumgaertelWinter(QTheory):
             "Configure BW simplification",
         )
         self.configure_simplification_action.setToolTip("Configure the Baumgaertel-Winter mode merging and deletion thresholds")
-        self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.simplify_modes_action.setToolTip("Merge close modes and remove redundant modes if the relative residual increase is small")
         self.modesaction.setCheckable(True)
         self.modesaction.setChecked(True)
@@ -196,21 +198,30 @@ class TheoryBaumgaertelWinter(QTheory):
         self.simplify_modes_action.triggered.connect(self.simplify_spectrum)
         self.configure_simplification_action.triggered.connect(self.configure_simplification_parameters)
 
-    def _initial_tau(self, wmin: float, wmax: float, nmodes: int) -> FloatArray:
+    def _initial_tau(self, xmin: float, xmax: float, nmodes: int) -> FloatArray:
+        if self.is_time_domain:
+            if nmodes > 1:
+                return _logspace(np.log10(xmin), np.log10(xmax), nmodes)
+            return _logspace(np.log10(np.sqrt(xmin * xmax)), np.log10(np.sqrt(xmin * xmax)), nmodes)
         if nmodes > 1:
-            return _logspace(-np.log10(wmax), -np.log10(wmin), nmodes)
-        return _logspace(-np.log10(np.sqrt(wmin * wmax)), -np.log10(np.sqrt(wmin * wmax)), nmodes)
+            return _logspace(-np.log10(xmax), -np.log10(xmin), nmodes)
+        return _logspace(-np.log10(np.sqrt(xmin * xmax)), -np.log10(np.sqrt(xmin * xmax)), nmodes)
 
-    def _initial_moduli(self, omega_modes: FloatArray) -> FloatArray:
+    def _mode_x_from_tau(self, tau: FloatArray) -> FloatArray:
+        if self.is_time_domain:
+            return tau
+        return 1.0 / np.maximum(tau, _LOG_FLOOR)
+
+    def _initial_moduli(self, mode_x: FloatArray) -> FloatArray:
         data = self.parent_dataset.files[0].data_table.data
-        omega_data = data[:, 0]
+        x_data = data[:, 0]
         storage = np.abs(data[:, 1])
-        if data.shape[1] > 2:
+        if not self.is_time_domain and data.shape[1] > 2:
             loss = np.abs(data[:, 2])
             modulus_scale = np.sqrt(storage**2 + loss**2)
         else:
             modulus_scale = storage
-        return np.maximum(np.interp(omega_modes, omega_data, modulus_scale), _LOG_FLOOR)
+        return np.maximum(np.interp(mode_x, x_data, modulus_scale), _LOG_FLOOR)
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when current theory is changed."""
@@ -282,14 +293,18 @@ class TheoryBaumgaertelWinter(QTheory):
     def drag_mode(self, dx: Any, dy: Any) -> None:
         """Drag individual modes.
 
-        Mode symbols are displayed at omega_i = 1/tau_i.  Therefore horizontal
-        dragging changes logtau_i = -log10(omega_i) in logarithmic frequency
-        views.
+        In frequency-domain views, mode symbols are displayed at
+        omega_i = 1/tau_i.  In time-domain views, mode symbols are displayed at
+        tau_i.
         """
         dx, dy = self.convert_view_data_to_internal(dx, dy)
         nmodes = self.parameter_int("nmodes")
 
-        if self.current_view().log_x:
+        if self.is_time_domain and self.current_view().log_x:
+            logtau = _safe_log10(dx)
+        elif self.is_time_domain:
+            logtau = np.asarray(dx, dtype=float)
+        elif self.current_view().log_x:
             logtau = -_safe_log10(dx)
         else:
             logtau = -np.asarray(dx, dtype=float)
@@ -359,7 +374,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.graphicmodes.set_marker("D")
         self.graphicmodes.set_linestyle("")
         self.graphicmodes.set_visible(self.view_modes)
-        self.graphicmodes.set_markerfacecolor("yellow")
+        self.graphicmodes.set_markerfacecolor("orange")
         self.graphicmodes.set_markeredgecolor("black")
         self.graphicmodes.set_markeredgewidth(3)
         self.graphicmodes.set_markersize(8)
@@ -403,14 +418,14 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def _mode_marker_data(self) -> tuple[FloatArray, FloatArray]:
         tau, G = self._mode_values()
-        omega = 1.0 / np.maximum(tau, _LOG_FLOOR)
-        return omega, G
+        return self._mode_x_from_tau(tau), G
 
     def _first_valid_file(self) -> FileLike | None:
-        """Return the first data file with omega, G' and G'' columns."""
+        """Return the first data file with enough columns for this domain."""
+        min_columns = 2 if self.is_time_domain else 3
         for file in self.parent_dataset.files:
             data = file.data_table.data
-            if data is not None and data.ndim == 2 and data.shape[1] >= 3 and data.shape[0] > 0:
+            if data is not None and data.ndim == 2 and data.shape[1] >= min_columns and data.shape[0] > 0:
                 return file
         return None
 
@@ -438,9 +453,35 @@ class TheoryBaumgaertelWinter(QTheory):
             Gpp += G_i * wt / denominator
         return Gp, Gpp
 
+    def _predict_relaxation_modulus(self, time: FloatArray, tau: FloatArray, G: FloatArray, gamma: float) -> FloatArray:
+        """Predict G(t) or stress relaxation for a discrete relaxation spectrum."""
+        time = np.asarray(time, dtype=float)
+        Gt = np.full_like(time, self.parameter_float("Ge"), dtype=float)
+        for tau_i, G_i in zip(tau, G):
+            Gt += G_i * np.exp(-time / tau_i)
+        return Gt * gamma
+
+    def _file_gamma(self, file: FileLike) -> float:
+        value = file.file_parameters.get("gamma")
+        if value is None:
+            return 1.0
+        gamma = float(value)
+        if gamma == 0.0:
+            return 1.0
+        return gamma
+
     def _residual_vector_for_modes(self, file: FileLike, tau: FloatArray, G: FloatArray) -> FloatArray:
         """Return the Baumgaertel-Winter relative residual vector for one file."""
         data = file.data_table.data
+        if self.is_time_domain:
+            time = np.asarray(data[:, 0], dtype=float)
+            Gt_exp = np.asarray(data[:, 1], dtype=float)
+            valid = (time >= 0.0) & (Gt_exp > 0.0)
+            if not np.any(valid):
+                return np.array([], dtype=float)
+            Gt_fit = self._predict_relaxation_modulus(time[valid], tau, G, self._file_gamma(file))
+            return Gt_fit / Gt_exp[valid] - 1.0
+
         omega = np.asarray(data[:, 0], dtype=float)
         Gp_exp = np.asarray(data[:, 1], dtype=float)
         Gpp_exp = np.asarray(data[:, 2], dtype=float)
@@ -616,7 +657,8 @@ class TheoryBaumgaertelWinter(QTheory):
         """Conservatively merge/delete redundant BW modes and refit the result."""
         file = self._first_valid_file()
         if file is None:
-            QMessageBox.warning(self, "Baumgaertel-Winter", "No valid G', G'' data file was found.")
+            data_description = "G(t)" if self.is_time_domain else "G', G''"
+            QMessageBox.warning(self, "Baumgaertel-Winter", f"No valid {data_description} data file was found.")
             return
 
         tau, G = self._mode_values()
@@ -707,6 +749,34 @@ class TheoryBaumgaertelWinter(QTheory):
             tt.data[:, 1] += G[i] * wTsq / (1.0 + wTsq)
             tt.data[:, 2] += G[i] * wT / (1.0 + wTsq)
 
+    def BaumgaertelWinterTime(self, f: FileLike) -> None:
+        """Calculate the time-domain Maxwell relaxation response."""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+        if tt.num_columns <= 1:
+            return
+
+        value = f.file_parameters.get("gamma")
+        if value is None:
+            gamma = 1.0
+        else:
+            gamma = float(value)
+            if gamma == 0.0:
+                gamma = 1.0
+
+        tau, G = self._mode_values()
+        if tt.num_columns > 1:
+            tt.data[:, 1] = self.parameter_float("Ge") * gamma
+
+        for i in range(self.parameter_int("nmodes")):
+            if self.stop_theory_flag:
+                break
+            tt.data[:, 1] += G[i] * np.exp(-tt.data[:, 0] / tau[i]) * gamma
+
     def plot_theory_stuff(self) -> None:
         """Plot draggable mode helpers."""
         data_table_tmp: Any = DataTable(self.axarr)
@@ -729,3 +799,24 @@ class TheoryBaumgaertelWinter(QTheory):
         for i in range(data_table_tmp.MAX_NUM_SERIES):
             for nx in range(len(self.axarr)):
                 data_table_tmp.series[nx][i].remove()
+
+
+class TheoryBaumgaertelWinterTime(TheoryBaumgaertelWinter):
+    r"""Fit a Baumgaertel-Winter discrete relaxation spectrum to G(t).
+
+    * **Function**
+        .. math::
+            G(t) = G_e + \sum_{i=1}^{n_{modes}} g_i \exp(-t/\tau_i)
+
+    The mode times :math:`\tau_i` and strengths :math:`g_i` are independent
+    adjustable parameters, matching the frequency-domain Baumgaertel-Winter
+    theory but evaluated in the time domain.
+    """
+
+    thname: ClassVar[str] = "Baumgaertel-Winter"
+    description: ClassVar[str] = "Discrete relaxation spectrum from G(t)"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html"
+    is_time_domain: ClassVar[bool] = True
+
+
+TheoryBaumgaertelWinterFrequency = TheoryBaumgaertelWinter
