@@ -12,6 +12,7 @@ def test_import_rc_and_ui():
 
 def test_import_tools():
     import RepTate.tools.polymer_data  # noqa
+    import RepTate.tools.ToolResampleData  # noqa
 
 
 def test_version_exists():

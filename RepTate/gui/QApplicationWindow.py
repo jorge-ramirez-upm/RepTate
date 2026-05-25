@@ -453,6 +453,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         from RepTate.tools.ToolEvaluate import ToolEvaluate
         from RepTate.tools.ToolInterpolate import ToolInterpolateExtrapolate
         from RepTate.tools.ToolPowerLaw import ToolPowerLaw
+        from RepTate.tools.ToolResampleData import ToolResampleData
         from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 
         # Theories available everywhere
@@ -471,6 +472,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.availabletools[ToolIntegral.toolname] = ToolIntegral
         self.availabletools[ToolInterpolateExtrapolate.toolname] = ToolInterpolateExtrapolate
         self.availabletools[ToolPowerLaw.toolname] = ToolPowerLaw
+        self.availabletools[ToolResampleData.toolname] = ToolResampleData
         self.availabletools[ToolSmooth.toolname] = ToolSmooth
         self.extratools[ToolMaterialsDatabase.toolname] = ToolMaterialsDatabase
 
