@@ -43,13 +43,27 @@ includes a conservative mode-simplification helper for the frequency-domain data
 but the retardation spectrum is intentionally left for a later implementation.
 """
 
+import os
+import traceback
+from dataclasses import dataclass
+from html import escape
 from typing import Any, ClassVar
 
 import numpy as np
+import RepTate
 from scipy.optimize import least_squares
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QObject, QThread, QSize, Signal
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout, QMessageBox, QSpinBox, QToolBar
+from PySide6.QtWidgets import (
+    QDialog,
+    QDialogButtonBox,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QMessageBox,
+    QSpinBox,
+    QToolBar,
+)
 
 from RepTate.core.DataTable import DataTable
 from RepTate.core.DraggableArtists import DragType, DraggableModeIndividual
@@ -61,12 +75,163 @@ from RepTate.gui.QTheory import QTheory
 _LOG_FLOOR = 1.0e-300
 
 
+class _SimplificationCancelled(Exception):
+    """Internal exception used to stop BW simplification cleanly."""
+
+
+class _BaumgaertelWinterSimplificationWorker(QObject):
+    sig_done = Signal(object)
+
+    def __init__(self, theory: "TheoryBaumgaertelWinter", file: FileLike, tau: FloatArray, G: FloatArray) -> None:
+        super().__init__()
+        self.theory = theory
+        self.file = file
+        self.tau = tau
+        self.G = G
+
+    def work(self) -> None:
+        try:
+            result = self.theory._simplify_spectrum_worker(self.file, self.tau, self.G)
+        except _SimplificationCancelled:
+            result = {"cancelled": True}
+        except Exception:
+            result = {"error": traceback.format_exc()}
+        self.sig_done.emit(result)
+
+
+@dataclass
+class _SimplificationReportEvent:
+    pass_number: int
+    operation: str
+    modes_before: int
+    modes_after: int
+    residual_before: float
+    residual_after: float
+    accepted: bool | None
+    note: str = ""
+    mode_index: int | None = None
+
+
 def _logspace(start: float, stop: float, num: int) -> FloatArray:
     return np.logspace(start, stop, num)
 
 
 def _safe_log10(values: FloatArray) -> FloatArray:
     return np.log10(np.maximum(np.asarray(values, dtype=float), _LOG_FLOOR))
+
+
+def _format_residual(value: float) -> str:
+    if not np.isfinite(value):
+        return "N/A"
+    return "%.3e" % value
+
+
+def _format_residual_change(before: float, after: float) -> str:
+    if not np.isfinite(before) or not np.isfinite(after):
+        return ""
+    if abs(before) < 1.0e-300:
+        return "Δ = N/A"
+    change = 100.0 * (after - before) / abs(before)
+    return "Δ = %+.3g%%" % change
+
+
+def _format_modes_change(before: int, after: int) -> str:
+    return "%d &rarr; %d" % (before, after)
+
+
+def _format_decision(accepted: bool | None) -> str:
+    if accepted is True:
+        return '<font color="green">accepted</font>'
+    if accepted is False:
+        return '<font color="red">rejected</font>'
+    return ""
+
+
+def _format_simplification_report_table(events: list[_SimplificationReportEvent]) -> str:
+    rows = [
+        "<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\">",
+        "<tr><th>Pass</th><th>Operation</th><th>Modes</th><th>Residual</th><th>Decision</th><th>Note</th></tr>",
+    ]
+    for event in events:
+        residual = "%s &rarr; %s<br>%s" % (
+            _format_residual(event.residual_before),
+            _format_residual(event.residual_after),
+            _format_residual_change(event.residual_before, event.residual_after),
+        )
+        note = event.note
+        if event.mode_index is not None:
+            note = ("%s; " % note if note else "") + "mode %d" % event.mode_index
+        rows.append(
+            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+            % (
+                event.pass_number if event.pass_number > 0 else "",
+                escape(event.operation),
+                _format_modes_change(event.modes_before, event.modes_after),
+                residual,
+                _format_decision(event.accepted),
+                escape(note),
+            )
+        )
+    rows.append("</table>")
+    return "".join(rows)
+
+
+def _format_simplification_summary(result: dict[str, Any]) -> str:
+    return (
+        "<b>BW spectrum simplification summary</b><br>"
+        "<b>Initial modes</b>: %d<br>"
+        "<b>Final modes</b>: %d<br>"
+        "<b>Initial residual</b>: %s<br>"
+        "<b>Final residual</b>: %s<br>"
+        % (
+            result["initial_nmodes"],
+            int(len(result["tau"])),
+            _format_residual(result["initial_residual"]),
+            _format_residual(result["current_residual"]),
+        )
+    )
+
+
+def read_maxwell_modes_file(path: str) -> tuple[FloatArray, FloatArray]:
+    """Read positive Maxwell modes from a RepTate text file."""
+    expected_modes: int | None = None
+    modes: list[tuple[float, float]] = []
+    with open(path, "r") as handle:
+        for line_number, raw_line in enumerate(handle, start=1):
+            line = raw_line.strip()
+            if line == "" or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) == 1 and expected_modes is None and len(modes) == 0:
+                try:
+                    expected_modes = int(parts[0])
+                except ValueError as exc:
+                    raise ValueError("Invalid number of modes on line %d" % line_number) from exc
+                if expected_modes <= 0:
+                    raise ValueError("Number of modes must be positive")
+                continue
+            if len(parts) == 3:
+                tau_text, G_text = parts[1], parts[2]
+            elif len(parts) == 2:
+                tau_text, G_text = parts
+            else:
+                raise ValueError("Malformed Maxwell mode line %d" % line_number)
+            try:
+                tau_i = float(tau_text)
+                G_i = float(G_text)
+            except ValueError as exc:
+                raise ValueError("Invalid Maxwell mode value on line %d" % line_number) from exc
+            if tau_i <= 0.0 or G_i <= 0.0:
+                raise ValueError("Maxwell modes must have positive tau_i and G_i values")
+            modes.append((tau_i, G_i))
+
+    if len(modes) == 0:
+        raise ValueError("No Maxwell modes found")
+    if expected_modes is not None and expected_modes != len(modes):
+        raise ValueError("Expected %d modes but found %d data line(s)" % (expected_modes, len(modes)))
+    tau = np.asarray([mode[0] for mode in modes], dtype=float)
+    G = np.asarray([mode[1] for mode in modes], dtype=float)
+    return tau, G
 
 
 class TheoryBaumgaertelWinter(QTheory):
@@ -114,6 +279,10 @@ class TheoryBaumgaertelWinter(QTheory):
         self.min_logtau_separation = 0.25
         self.max_residual_increase = 0.05
         self.weak_mode_threshold = 1.0e-3
+        self.simplification_running = False
+        self.simplification_cancel_requested = False
+        self.simplification_thread: QThread | None = None
+        self.simplification_worker: _BaumgaertelWinterSimplificationWorker | None = None
 
         xmin = self.parent_dataset.minpositivecol(0)
         xmax = self.parent_dataset.maxcol(0)
@@ -177,6 +346,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.setValue(nmodes)
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
+        self.load_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Load Modes")
         self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.simplify_modes_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broom.png"),
@@ -194,6 +364,7 @@ class TheoryBaumgaertelWinter(QTheory):
 
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         self.modesaction.triggered.connect(self.modesaction_change)
+        self.load_modes_action.triggered.connect(self.load_modes)
         self.save_modes_action.triggered.connect(self.save_modes)
         self.simplify_modes_action.triggered.connect(self.simplify_spectrum)
         self.configure_simplification_action.triggered.connect(self.configure_simplification_parameters)
@@ -233,6 +404,12 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def handle_spinboxValueChanged(self, value: int) -> None:
         """Handle a change of the parameter 'nmodes'."""
+        if self.simplification_running:
+            self.spinbox.blockSignals(True)
+            self.spinbox.setValue(self.parameter_int("nmodes"))
+            self.spinbox.blockSignals(False)
+            self.Qprint("Cannot change modes while BW spectrum simplification is running.")
+            return
         self.set_param_value("nmodes", value)
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
@@ -240,6 +417,8 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change mode parameters when nmodes changes; otherwise call parent."""
+        if self.simplification_running and (name == "nmodes" or name.startswith("logtau") or name.startswith("logG")):
+            return "Cannot change BW modes while spectrum simplification is running", False
         if name == "nmodes":
             nmodesold = self.parameter_int("nmodes")
             logtauold = np.zeros(nmodesold)
@@ -327,6 +506,9 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def configure_simplification_parameters(self) -> None:
         """Show a dialog to configure BW mode simplification thresholds."""
+        if self.simplification_running:
+            self.Qprint("Cannot configure BW simplification while it is running.")
+            return
         dialog = QDialog(self)
         dialog.setWindowTitle("Baumgaertel-Winter simplification")
 
@@ -367,6 +549,39 @@ class TheoryBaumgaertelWinter(QTheory):
             self.max_residual_increase = float(max_increase_spinbox.value())
             self.weak_mode_threshold = float(weak_mode_spinbox.value())
 
+    def load_modes(self) -> None:
+        """Load Maxwell modes from a text file."""
+        if self.simplification_running:
+            self.Qprint("Cannot load modes while BW spectrum simplification is running.")
+            return
+        fpath, _ = QFileDialog.getOpenFileName(
+            self,
+            "Load Maxwell modes from a text file",
+            os.path.join(RepTate.root_dir, "data"),
+            "Text (*.txt);;All files (*)",
+        )
+        if fpath == "":
+            return
+        try:
+            tau, G = self._read_modes_file(fpath)
+            if tau.size > self.MAX_MODES:
+                raise ValueError("Loaded %d modes, but the maximum is %d" % (tau.size, self.MAX_MODES))
+            self._set_mode_values(tau, G)
+        except Exception as exc:
+            self.Qprint("<font color=red><b>Could not load Maxwell modes:</b></font> %s" % exc)
+            QMessageBox.warning(self, "Load Maxwell modes", str(exc))
+            return
+
+        self.update_parameter_table()
+        self.do_calculate("")
+        self.plot_theory_stuff()
+        self.parent_dataset.parent_application.update_plot()
+        self.Qprint("<font color=red><b>Loaded %d Maxwell modes from %s.</b></font>" % (tau.size, os.path.basename(fpath)))
+
+    def _read_modes_file(self, path: str) -> tuple[FloatArray, FloatArray]:
+        """Read Maxwell modes from a text file."""
+        return read_maxwell_modes_file(path)
+
     def setup_graphic_modes(self) -> None:
         """Setup graphic helpers."""
         omega, G = self._mode_marker_data()
@@ -389,6 +604,8 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def destructor(self) -> None:
         """Called when the theory tab is closed."""
+        if self.simplification_running:
+            self._request_simplification_cancel()
         self.graphicmodes_visible(False)
         self.graphicmodes.remove()
 
@@ -498,11 +715,17 @@ class TheoryBaumgaertelWinter(QTheory):
             return np.inf
         return float(np.mean(residual**2))
 
+    def _check_simplification_cancelled(self) -> None:
+        if self.simplification_cancel_requested:
+            raise _SimplificationCancelled
+
     def _fit_modes_to_file(self, file: FileLike, tau: FloatArray, G: FloatArray) -> tuple[FloatArray, FloatArray, float]:
         """Refit tau and G for a fixed number of modes using scipy least_squares."""
+        self._check_simplification_cancelled()
         x0 = self._pack_modes(tau, G)
 
         def residual_from_variables(variables: FloatArray) -> FloatArray:
+            self._check_simplification_cancelled()
             tau_trial, G_trial = self._unpack_modes(variables)
             return self._residual_vector_for_modes(file, tau_trial, G_trial)
 
@@ -518,6 +741,7 @@ class TheoryBaumgaertelWinter(QTheory):
         tau_fit, G_fit = self._unpack_modes(result.x)
         residual = self._residual_value_for_modes(file, tau_fit, G_fit)
         order = np.argsort(tau_fit)
+        self._check_simplification_cancelled()
         return tau_fit[order], G_fit[order], residual
 
     def _set_mode_values(self, tau: FloatArray, G: FloatArray) -> None:
@@ -526,6 +750,12 @@ class TheoryBaumgaertelWinter(QTheory):
         G = np.asarray(G, dtype=float)
         if tau.size != G.size:
             raise ValueError("tau and G must have the same length")
+        if tau.size < 1:
+            raise ValueError("At least one mode is required")
+        if tau.size > self.MAX_MODES:
+            raise ValueError("Number of modes must be no larger than %d" % self.MAX_MODES)
+        if np.any(tau <= 0.0) or np.any(G <= 0.0):
+            raise ValueError("tau and G mode values must be positive")
         nmodes_old = self.parameter_int("nmodes")
         for i in range(nmodes_old):
             self.parameters.pop("logtau%02d" % i, None)
@@ -558,6 +788,15 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.blockSignals(True)
         self.spinbox.setValue(nmodes_new)
         self.spinbox.blockSignals(False)
+
+    def set_modes(self, tau: Any, G: Any) -> bool:
+        """Set Maxwell modes in this theory."""
+        try:
+            self._set_mode_values(tau, G)
+        except ValueError as exc:
+            self.Qprint("<font color=red><b>Could not set Maxwell modes:</b></font> %s" % exc)
+            return False
+        return True
 
     def _merge_close_mode_arrays(self, tau: FloatArray, G: FloatArray) -> tuple[FloatArray, FloatArray, int]:
         """Merge modes separated by less than min_logtau_separation decades."""
@@ -629,20 +868,22 @@ class TheoryBaumgaertelWinter(QTheory):
         G: FloatArray,
         current_residual: float,
         candidate_indices: list[int] | None = None,
-    ) -> tuple[FloatArray, FloatArray, float, bool]:
+    ) -> tuple[FloatArray, FloatArray, float, bool, int | None]:
         """Try removing candidate modes and keep the least damaging refitted spectrum."""
         if tau.size <= 1:
-            return tau, G, current_residual, False
+            return tau, G, current_residual, False, None
         if candidate_indices is None:
             candidate_indices = list(range(tau.size))
         candidate_indices = [i for i in candidate_indices if 0 <= i < tau.size]
         if len(candidate_indices) == 0:
-            return tau, G, current_residual, False
+            return tau, G, current_residual, False, None
 
         best_tau = tau
         best_G = G
         best_residual = np.inf
+        best_removed_index: int | None = None
         for i in candidate_indices:
+            self._check_simplification_cancelled()
             tau_trial = np.delete(tau, i)
             G_trial = np.delete(G, i)
             tau_fit, G_fit, residual = self._fit_modes_to_file(file, tau_trial, G_trial)
@@ -650,11 +891,18 @@ class TheoryBaumgaertelWinter(QTheory):
                 best_tau = tau_fit
                 best_G = G_fit
                 best_residual = residual
+                best_removed_index = int(i)
         accept = self._residual_increase_is_acceptable(current_residual, best_residual)
-        return best_tau, best_G, best_residual, accept
+        return best_tau, best_G, best_residual, accept, best_removed_index
 
     def simplify_spectrum(self) -> None:
         """Conservatively merge/delete redundant BW modes and refit the result."""
+        if self.simplification_running:
+            self._request_simplification_cancel()
+            return
+        if self.thread_calc_busy or self.thread_fit_busy or self.calculate_is_busy or self.is_fitting:
+            self.Qprint("Busy calculating or minimizing theory...")
+            return
         file = self._first_valid_file()
         if file is None:
             data_description = "G(t)" if self.is_time_domain else "G', G''"
@@ -662,50 +910,251 @@ class TheoryBaumgaertelWinter(QTheory):
             return
 
         tau, G = self._mode_values()
+        self._set_simplification_running(True)
+        self.simplification_thread = QThread()
+        self.simplification_worker = _BaumgaertelWinterSimplificationWorker(self, file, tau.copy(), G.copy())
+        self.simplification_worker.moveToThread(self.simplification_thread)
+        self.simplification_worker.sig_done.connect(self._apply_simplification_result)
+        self.simplification_worker.sig_done.connect(self.simplification_thread.quit)
+        self.simplification_thread.started.connect(self.simplification_worker.work)
+        self.simplification_thread.finished.connect(self.simplification_worker.deleteLater)
+        self.simplification_thread.start()
+        self.Qprint("<font color=red><b>Started BW spectrum simplification...</b></font>")
+
+    def _simplify_spectrum_worker(self, file: FileLike, tau: FloatArray, G: FloatArray) -> dict[str, Any]:
+        """Run BW simplification away from the GUI thread."""
+        self._check_simplification_cancelled()
+        # self.Qprint("<b>Started BW spectrum simplification...</b>")
+        initial_modes_requested = int(tau.size)
         tau, G, current_residual = self._fit_modes_to_file(file, tau, G)
         initial_nmodes = tau.size
+        initial_residual = current_residual
         n_merged_total = 0
         n_weak_removed_total = 0
         n_deleted_total = 0
+        report_events = [
+            _SimplificationReportEvent(
+                pass_number=0,
+                operation="initial fit",
+                modes_before=initial_modes_requested,
+                modes_after=int(tau.size),
+                residual_before=current_residual,
+                residual_after=current_residual,
+                accepted=True,
+                note="initial refit",
+            )
+        ]
+        try:
+            changed = True
+            iteration = 0
+            while changed and tau.size > 1:
+                self._check_simplification_cancelled()
+                iteration += 1
+                self.Qprint("Pass %d: %d modes" % (iteration, tau.size))
+                changed = False
+                tau_merged, G_merged, n_merged = self._merge_close_mode_arrays(tau, G)
+                if n_merged > 0:
+                    self._check_simplification_cancelled()
+                    modes_before = int(tau.size)
+                    residual_before = current_residual
+                    tau_fit, G_fit, merged_residual = self._fit_modes_to_file(file, tau_merged, G_merged)
+                    if self._residual_increase_is_acceptable(current_residual, merged_residual):
+                        tau, G = tau_fit, G_fit
+                        current_residual = merged_residual
+                        n_merged_total += n_merged
+                        changed = True
+                        accepted = True
+                        modes_after = int(tau.size)
+                    else:
+                        accepted = False
+                        modes_after = int(tau_fit.size)
+                    report_events.append(
+                        _SimplificationReportEvent(
+                            pass_number=iteration,
+                            operation="close-mode merge",
+                            modes_before=modes_before,
+                            modes_after=modes_after,
+                            residual_before=residual_before,
+                            residual_after=merged_residual,
+                            accepted=accepted,
+                            note="%d close mode(s)" % n_merged,
+                        )
+                    )
 
-        changed = True
-        while changed and tau.size > 1:
-            changed = False
-            tau_merged, G_merged, n_merged = self._merge_close_mode_arrays(tau, G)
-            if n_merged > 0:
-                tau_fit, G_fit, merged_residual = self._fit_modes_to_file(file, tau_merged, G_merged)
-                if self._residual_increase_is_acceptable(current_residual, merged_residual):
-                    tau, G = tau_fit, G_fit
-                    current_residual = merged_residual
-                    n_merged_total += n_merged
+                weak_candidates = self._weak_mode_indices(G)
+                self._check_simplification_cancelled()
+                tau_trial, G_trial, trial_residual, accept, removed_index = self._best_single_mode_removal(
+                    file, tau, G, current_residual, weak_candidates
+                )
+                modes_before = int(tau.size)
+                residual_before = current_residual
+                if accept and tau_trial.size < tau.size:
+                    tau, G = tau_trial, G_trial
+                    current_residual = trial_residual
+                    n_weak_removed_total += 1
                     changed = True
+                    report_events.append(
+                        _SimplificationReportEvent(
+                            pass_number=iteration,
+                            operation="weak-mode deletion",
+                            modes_before=modes_before,
+                            modes_after=int(tau.size),
+                            residual_before=residual_before,
+                            residual_after=trial_residual,
+                            accepted=True,
+                            note="removed weak mode",
+                            mode_index=removed_index,
+                        )
+                    )
+                    continue
+                if weak_candidates:
+                    report_events.append(
+                        _SimplificationReportEvent(
+                            pass_number=iteration,
+                            operation="weak-mode deletion",
+                            modes_before=modes_before,
+                            modes_after=int(tau_trial.size),
+                            residual_before=residual_before,
+                            residual_after=trial_residual,
+                            accepted=False,
+                            note="best weak candidate rejected",
+                            mode_index=removed_index,
+                        )
+                    )
 
-            weak_candidates = self._weak_mode_indices(G)
-            tau_trial, G_trial, trial_residual, accept = self._best_single_mode_removal(file, tau, G, current_residual, weak_candidates)
-            if accept and tau_trial.size < tau.size:
-                tau, G = tau_trial, G_trial
-                current_residual = trial_residual
-                n_weak_removed_total += 1
-                changed = True
-                continue
+                self._check_simplification_cancelled()
+                tau_trial, G_trial, trial_residual, accept, removed_index = self._best_single_mode_removal(file, tau, G, current_residual)
+                modes_before = int(tau.size)
+                residual_before = current_residual
+                if accept and tau_trial.size < tau.size:
+                    tau, G = tau_trial, G_trial
+                    current_residual = trial_residual
+                    n_deleted_total += 1
+                    changed = True
+                    report_events.append(
+                        _SimplificationReportEvent(
+                            pass_number=iteration,
+                            operation="trial deletion",
+                            modes_before=modes_before,
+                            modes_after=int(tau.size),
+                            residual_before=residual_before,
+                            residual_after=trial_residual,
+                            accepted=True,
+                            note="removed best candidate",
+                            mode_index=removed_index,
+                        )
+                    )
+                else:
+                    report_events.append(
+                        _SimplificationReportEvent(
+                            pass_number=iteration,
+                            operation="trial deletion",
+                            modes_before=modes_before,
+                            modes_after=int(tau_trial.size),
+                            residual_before=residual_before,
+                            residual_after=trial_residual,
+                            accepted=False,
+                            note="best candidate rejected",
+                            mode_index=removed_index,
+                        )
+                    )
+            self._check_simplification_cancelled()
+        except _SimplificationCancelled:
+            self.Qprint("BW simplification stopped after pass %d with %d accepted mode(s)." % (iteration, tau.size))
+            return {
+                "cancelled": True,
+                "tau": tau,
+                "G": G,
+                "initial_nmodes": initial_nmodes,
+                "n_merged_total": n_merged_total,
+                "n_weak_removed_total": n_weak_removed_total,
+                "n_deleted_total": n_deleted_total,
+                "initial_residual": initial_residual,
+                "current_residual": current_residual,
+                "report_events": report_events,
+                "has_candidate": True,
+            }
+        self.Qprint("BW simplification finished.")
+        return {
+            "cancelled": False,
+            "tau": tau,
+            "G": G,
+            "initial_nmodes": initial_nmodes,
+            "n_merged_total": n_merged_total,
+            "n_weak_removed_total": n_weak_removed_total,
+            "n_deleted_total": n_deleted_total,
+            "initial_residual": initial_residual,
+            "current_residual": current_residual,
+            "report_events": report_events,
+        }
 
-            tau_trial, G_trial, trial_residual, accept = self._best_single_mode_removal(file, tau, G, current_residual)
-            if accept and tau_trial.size < tau.size:
-                tau, G = tau_trial, G_trial
-                current_residual = trial_residual
-                n_deleted_total += 1
-                changed = True
+    def _set_simplification_running(self, running: bool) -> None:
+        """Enable/disable controls while BW simplification is running."""
+        self.simplification_running = running
+        self.simplification_cancel_requested = False
+        self.spinbox.setDisabled(running)
+        self.thParamTable.setDisabled(running)
+        self.parent_dataset.actionCalculate_Theory.setDisabled(running)
+        self.parent_dataset.actionMinimize_Error.setDisabled(running)
+        self.save_modes_action.setDisabled(running)
+        self.load_modes_action.setDisabled(running)
+        self.configure_simplification_action.setDisabled(running)
+        if running:
+            self.simplify_modes_action.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
+            self.simplify_modes_action.setText("Cancel BW simplification")
+            self.simplify_modes_action.setToolTip("Cancel the running Baumgaertel-Winter spectrum simplification")
+        else:
+            self.simplify_modes_action.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-broom.png"))
+            self.simplify_modes_action.setText("Simplify BW spectrum")
+            self.simplify_modes_action.setToolTip("Merge close modes and remove redundant modes if the relative residual increase is small")
 
-        self._set_mode_values(tau, G)
-        self.do_calculate("")
-        self.plot_theory_stuff()
-        self.update_parameter_table()
-        self.parent_dataset.parent_application.update_plot()
-        self.Qprint(f"<font color=red><b>Spectrum simplified from {initial_nmodes} to {tau.size} modes.</b></font>")
-        self.Qprint(f"<b>Merged close modes</b>: {n_merged_total}.")
-        self.Qprint(f"<b>Removed weak modes</b>: {n_weak_removed_total}.")
-        self.Qprint(f"<b>Accepted trial deletions</b>: {n_deleted_total}.")
-        self.Qprint(f"<b>Final mean square relative residual</b>: {current_residual:.4g}.")
+    def _request_simplification_cancel(self) -> None:
+        """Request cancellation of the running BW simplification."""
+        if not self.simplification_running:
+            return
+        self.simplification_cancel_requested = True
+        self.Qprint("<font color=red><b>BW spectrum simplification cancellation requested</b></font>")
+
+    def _apply_simplification_result(self, result: dict[str, Any]) -> None:
+        """Apply the simplification result on the GUI thread."""
+        run_final_minimize = False
+        try:
+            if result.get("cancelled"):
+                if not result.get("has_candidate"):
+                    self.Qprint("<font color=red><b>BW spectrum simplification cancelled before a fitted candidate was available.</b></font>")
+                    return
+                self.Qprint("<font color=red><b>BW spectrum simplification cancelled; applying latest accepted fitted candidate.</b></font>")
+            if "error" in result:
+                self.Qprint("<font color=red><b>BW spectrum simplification failed:</b></font> %s" % result["error"])
+                return
+
+            tau = result["tau"]
+            G = result["G"]
+            self._set_mode_values(tau, G)
+            self.do_calculate("")
+            self.plot_theory_stuff()
+            self.update_parameter_table()
+            self.parent_dataset.parent_application.update_plot()
+            self.Qprint(_format_simplification_summary(result))
+            self.Qprint(_format_simplification_report_table(result.get("report_events", [])))
+            if result.get("cancelled"):
+                self.Qprint(
+                    "<font color=red><b>BW simplification cancelled by user. Applied latest accepted fitted candidate.</b></font>"
+                )
+            else:
+                self.Qprint(
+                    "<font color=red><b>BW simplification finished.</b></font>"
+                )
+            run_final_minimize = True
+        finally:
+            self._set_simplification_running(False)
+            if self.simplification_thread is not None:
+                self.simplification_thread.deleteLater()
+            self.simplification_thread = None
+            self.simplification_worker = None
+        if run_final_minimize:
+            self.Qprint("<font color=red><b>Running final Minimize Error with the simplified BW modes...</b></font>")
+            self.parent_dataset.handle_actionMinimize_Error()
 
     #   QMessageBox.information(
     #       self,

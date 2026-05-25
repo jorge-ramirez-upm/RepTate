@@ -503,6 +503,7 @@ class ApplicationLVE(QApplicationWindow):
 
         # THEORIES
         self.theories[TheoryMaxwellModesFrequency.thname] = TheoryMaxwellModesFrequency
+        self.theories[TheoryBaumgaertelWinter.thname] = TheoryBaumgaertelWinter
         self.theories[TheoryLikhtmanMcLeish2002.thname] = TheoryLikhtmanMcLeish2002
         self.theories[TheoryCarreauYasuda.thname] = TheoryCarreauYasuda
         self.theories[TheoryDSMLinear.thname] = TheoryDSMLinear
@@ -513,7 +514,6 @@ class ApplicationLVE(QApplicationWindow):
         self.theories[TheoryRDPLVE.thname] = TheoryRDPLVE
         self.theories[TheoryStickyReptation.thname] = TheoryStickyReptation
         self.theories[TheoryShanbhagMaxwellModesFrequency.thname] = TheoryShanbhagMaxwellModesFrequency
-        self.theories[TheoryBaumgaertelWinter.thname] = TheoryBaumgaertelWinter
         self.add_common_theories()
 
         # set the current view
