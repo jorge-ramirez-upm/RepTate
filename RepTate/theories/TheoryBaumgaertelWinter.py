@@ -44,6 +44,7 @@ but the retardation spectrum is intentionally left for a later implementation.
 """
 
 import os
+import time
 import traceback
 from dataclasses import dataclass
 from html import escape
@@ -90,12 +91,14 @@ class _BaumgaertelWinterSimplificationWorker(QObject):
         self.G = G
 
     def work(self) -> None:
+        start_time = time.perf_counter()
         try:
             result = self.theory._simplify_spectrum_worker(self.file, self.tau, self.G)
         except _SimplificationCancelled:
             result = {"cancelled": True}
         except Exception:
             result = {"error": traceback.format_exc()}
+        result["elapsed_seconds"] = time.perf_counter() - start_time
         self.sig_done.emit(result)
 
 
@@ -183,11 +186,13 @@ def _format_simplification_summary(result: dict[str, Any]) -> str:
         "<b>Final modes</b>: %d<br>"
         "<b>Initial residual</b>: %s<br>"
         "<b>Final residual</b>: %s<br>"
+        "<b>Simplification time</b>: %.3g s<br>"
         % (
             result["initial_nmodes"],
             int(len(result["tau"])),
             _format_residual(result["initial_residual"]),
             _format_residual(result["current_residual"]),
+            result.get("elapsed_seconds", 0.0),
         )
     )
 
