@@ -265,6 +265,7 @@ class TheoryBaumgaertelWinter(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file: ClassVar[bool] = True
     is_time_domain: ClassVar[bool] = False
+    last_load_modes_folder: ClassVar[str | None] = None
 
     def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """Constructor."""
@@ -554,14 +555,16 @@ class TheoryBaumgaertelWinter(QTheory):
         if self.simplification_running:
             self.Qprint("Cannot load modes while BW spectrum simplification is running.")
             return
+        start_folder = self.last_load_modes_folder or os.path.join(RepTate.root_dir, "data")
         fpath, _ = QFileDialog.getOpenFileName(
             self,
             "Load Maxwell modes from a text file",
-            os.path.join(RepTate.root_dir, "data"),
+            start_folder,
             "Text (*.txt);;All files (*)",
         )
         if fpath == "":
             return
+        type(self).last_load_modes_folder = os.path.dirname(fpath)
         try:
             tau, G = self._read_modes_file(fpath)
             if tau.size > self.MAX_MODES:
