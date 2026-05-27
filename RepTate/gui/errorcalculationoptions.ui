@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>275</width>
-    <height>213</height>
+    <height>90</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,42 +21,6 @@
    <enum>Qt::RightToLeft</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>Calculate error with respect to</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QRadioButton" name="View1radioButton">
-        <property name="text">
-         <string>View number 1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="AllViewsradioButton">
-        <property name="text">
-         <string>All active views</string>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="RawDataradioButton">
-        <property name="text">
-         <string>Raw data table</string>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item>
     <widget class="QCheckBox" name="NormalizecheckBox">
      <property name="text">

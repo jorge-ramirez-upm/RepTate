@@ -83,7 +83,7 @@ from RepTate.core.File import File, FileParameterSpec
 from RepTate.core.DataTable import DataTable
 from RepTate.core.typing import ApplicationLike
 from RepTate.core.units import available_units, units_are_compatible
-from RepTate.gui.QTheory import MinimizationMethod, ErrorCalculationMethod
+from RepTate.gui.QTheory import MinimizationMethod
 from RepTate.gui.DataSetWidget import DataSetWidget
 import numpy as np
 import matplotlib.patheffects as pe
@@ -1585,13 +1585,6 @@ class QDataSet(QWidget, Ui_DataSet):
 
         if not success:
             return
-
-        if th.errorcalculationdialog.ui.View1radioButton.isChecked():
-            th.errormethod = ErrorCalculationMethod.View1
-        elif th.errorcalculationdialog.ui.RawDataradioButton.isChecked():
-            th.errormethod = ErrorCalculationMethod.RawData
-        elif th.errorcalculationdialog.ui.AllViewsradioButton.isChecked():
-            th.errormethod = ErrorCalculationMethod.AllViews
 
         th.normalizebydata = th.errorcalculationdialog.ui.NormalizecheckBox.isChecked()
 

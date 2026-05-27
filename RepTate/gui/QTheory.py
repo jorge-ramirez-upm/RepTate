@@ -174,20 +174,6 @@ class MinimizationMethod(enum.Enum):
         return stt
 
 
-class ErrorCalculationMethod(enum.Enum):
-    """Method to determine the error of a theory calculation.
-
-    Options are:
-        - View1: Use current view number 1 in the application.
-        - RawData: Use the data table as defined by the application.
-        - AllViews: Use all active views.
-    """
-
-    View1 = 0
-    RawData = 1
-    AllViews = 2
-
-
 class EndComputationRequested(Exception):
     """Exception class to end computations"""
 
@@ -563,7 +549,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.BruteNs = 20
 
     def setup_default_error_calculation_options(self):
-        self.errormethod = ErrorCalculationMethod.View1
         self.normalizebydata = False
 
     def destructor(self):
@@ -1860,13 +1845,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.fittingoptionsdialog.ui.BruteNslineEdit.setText("%d" % self.BruteNs)
 
     def populate_default_error_calculation_options(self):
-        # ERROR CALCULATION METHOD
-        if self.errormethod == ErrorCalculationMethod.View1:
-            self.errorcalculationdialog.ui.View1radioButton.setChecked(True)
-        elif self.errormethod == ErrorCalculationMethod.RawData:
-            self.errorcalculationdialog.ui.RawDataradioButton.setChecked(True)
-        elif self.errormethod == ErrorCalculationMethod.AllViews:
-            self.errorcalculationdialog.ui.AllViewsradioButton.setChecked(True)
         self.errorcalculationdialog.ui.NormalizecheckBox.setChecked(self.normalizebydata)
 
     def thtextbox_context_menu(self):
