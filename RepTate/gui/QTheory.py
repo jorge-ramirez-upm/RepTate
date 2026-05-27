@@ -52,6 +52,7 @@ from scipy.optimize import (
     differential_evolution,
     shgo,
     brute,
+    minimize,
 )
 from scipy.stats.distributions import t
 from scipy.interpolate import interp1d
@@ -112,6 +113,7 @@ TheoryTables: TypeAlias = dict[str, DataTable]
 BasinhoppingAny: Any = basinhopping
 DualAnnealingAny: Any = dual_annealing
 DifferentialEvolutionAny: Any = differential_evolution
+MinimizeAny: Any = minimize
 QAbstractItemViewAny: Any = QAbstractItemView
 QDialogButtonBoxAny: Any = QDialogButtonBox
 QFrameAny: Any = QFrame
@@ -178,6 +180,32 @@ class EndComputationRequested(Exception):
     """Exception class to end computations"""
 
     pass
+
+
+def error_measure_label(normalize_by_data: bool, use_absolute_error: bool) -> str:
+    """Return the short name of the selected theory error measure."""
+    if normalize_by_data:
+        return "MRAE" if use_absolute_error else "MSRE"
+    return "MAE" if use_absolute_error else "MSE"
+
+
+def compute_error(
+    yth: Any,
+    yexp: Any,
+    normalize_by_data: bool,
+    use_absolute_error: bool,
+) -> tuple[float, str]:
+    """Compute the selected mean theory error and its short label."""
+    label = error_measure_label(normalize_by_data, use_absolute_error)
+    residual = np.asarray(yth) - np.asarray(yexp)
+    if normalize_by_data:
+        with np.errstate(divide="ignore", invalid="ignore"):
+            residual = residual / np.asarray(yexp)
+    if use_absolute_error:
+        error = np.mean(np.abs(residual))
+    else:
+        error = np.mean(residual**2)
+    return float(error), label
 
 
 # END IMPORT FROM THEORY
@@ -550,6 +578,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def setup_default_error_calculation_options(self):
         self.normalizebydata = False
+        self.use_absolute_error = False
 
     def destructor(self):
         """If the theory needs to erase some memory in a special way, any
@@ -671,22 +700,64 @@ class QTheory(QWidget, Ui_TheoryTab):
                         break
         return f_list
 
+    def error_measure_label(self) -> str:
+        return error_measure_label(self.normalizebydata, self.use_absolute_error)
+
+    def compute_error(self, yth: Any, yexp: Any) -> tuple[float, str]:
+        return compute_error(yth, yexp, self.normalizebydata, self.use_absolute_error)
+
+    def _fit_sigma(self, y: Any) -> Any | None:
+        if not self.normalizebydata:
+            return None
+        yarr = np.asarray(y)
+        if np.any(yarr == 0):
+            raise ValueError("Relative error requested, but experimental data contains zero values")
+        return np.abs(yarr)
+
+    def _minimize_selected_error(self, initial_guess: Any) -> Any:
+        bounds = list(zip(self.param_min, self.param_max))
+        ret = MinimizeAny(
+            self.func_fit_and_error,
+            initial_guess,
+            method="L-BFGS-B",
+            bounds=bounds,
+        )
+        if not ret.success:
+            raise RuntimeError(ret.message)
+        return ret.x, np.full((len(ret.x), len(ret.x)), np.nan)
+
+    def _refine_global_fit(self, x: Any, y: Any, initial_guess: Any) -> Any:
+        if self.use_absolute_error:
+            return self._minimize_selected_error(initial_guess)
+        return curve_fit(
+            self.func_fit,
+            x,
+            y,
+            p0=initial_guess,
+            bounds=(self.param_min, self.param_max),
+            method="trf",
+            sigma=self._fit_sigma(y),
+        )
+
     def do_error(self, line):
         """Report the error of the current theory
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-        File error is calculated as the mean square of the residual, averaged over all points in the file.
-        Total error is the mean square of the residual, averaged over all points in all files.
+        File error is calculated as the selected mean residual error, averaged over all points in the file.
+        Total error is the selected mean residual error, averaged over all points in all files.
         """
         total_error = 0
+        bic_total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
+        error_label = self.error_measure_label()
+        bic_uses_selected_error = error_label == "MSE"
         # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        # table+='''<tr><th>File</th><th>Error</th><th># Pts</th></tr>'''
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (RSS)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % ("Error (%s)" % error_label), "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -714,12 +785,16 @@ class QTheory(QWidget, Ui_TheoryTab):
             )
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
-            if self.normalizebydata:
-                f_error = np.mean(((yth - yexp) / yexp) ** 2)
+            if self.normalizebydata and np.any(yexp == 0):
+                self.Qprint('<font color=red><b>Relative error for "%s" contains zero experimental values</b></font>' % f.file_name_short)
+            f_error, error_label = self.compute_error(yth, yexp)
+            if bic_uses_selected_error:
+                bic_error = f_error
             else:
-                f_error = np.mean((yth - yexp) ** 2)
+                bic_error, _ = compute_error(yth, yexp, normalize_by_data=False, use_absolute_error=False)
             npt = len(yth)
             total_error += f_error * npt
+            bic_total_error += bic_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
             tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
@@ -734,23 +809,29 @@ class QTheory(QWidget, Ui_TheoryTab):
                 free_p += 1
 
         if npoints != 0 and total_error > 0:
-            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
+            self.Qprint("<b>TOTAL ERROR (%s)</b>: %12.5g (%d Pts)" % (error_label, total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
-            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
+            if bic_total_error > 0:
+                self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(bic_total_error / npoints) + free_p * log(npoints)))
+            else:
+                self.Qprint("<b>Bayesian IC</b>: %12s<br>" % "N/A")
         else:
-            self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
+            self.Qprint("<b>TOTAL ERROR (%s)</b>: %12s (%6d)<br>" % (error_label, "N/A", npoints))
 
     def do_error_interpolated(self, line):
         """Report the error of the current theory
         This routine works when the theory and the experimental data are not measured on the same points
         """
         total_error = 0
+        bic_total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
+        error_label = self.error_measure_label()
+        bic_uses_selected_error = error_label == "MSE"
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (RSS)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % ("Error (%s)" % error_label), "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -778,12 +859,16 @@ class QTheory(QWidget, Ui_TheoryTab):
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth2 = np.extract(conditionx * conditiony * conditionnaninf, yth2)
 
-            if self.normalizebydata:
-                f_error = np.mean(((yth2 - yexp) / yexp) ** 2)
+            if self.normalizebydata and np.any(yexp == 0):
+                self.Qprint('<font color=red><b>Relative error for "%s" contains zero experimental values</b></font>' % f.file_name_short)
+            f_error, error_label = self.compute_error(yth2, yexp)
+            if bic_uses_selected_error:
+                bic_error = f_error
             else:
-                f_error = np.mean((yth2 - yexp) ** 2)
+                bic_error, _ = compute_error(yth2, yexp, normalize_by_data=False, use_absolute_error=False)
             npt = len(yth2)
             total_error += f_error * npt
+            bic_total_error += bic_error * npt
             npoints += npt
             # table+= '''<tr><td>%-18s</td><td>%-18.4g</td><td>%-18d</td></tr>'''% (f.file_name_short, f_error, npt)
             tab_data.append(["%-18s" % f.file_name_short, "%-18.4g" % f_error, "%-18d" % npt])
@@ -798,24 +883,27 @@ class QTheory(QWidget, Ui_TheoryTab):
                 free_p += 1
 
         if npoints != 0 and total_error > 0:
-            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%d Pts)" % (total_error / npoints, npoints))
+            self.Qprint("<b>TOTAL ERROR (%s)</b>: %12.5g (%d Pts)" % (error_label, total_error / npoints, npoints))
             # Bayesian information criterion (BIC) penalise free parametters (overfitting)
             # Model with lowest BIC number is prefered
-            self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(total_error / npoints) + free_p * log(npoints)))
+            if bic_total_error > 0:
+                self.Qprint("<b>Bayesian IC</b>: %12.5g<br>" % (npoints * log(bic_total_error / npoints) + free_p * log(npoints)))
+            else:
+                self.Qprint("<b>Bayesian IC</b>: %12s<br>" % "N/A")
         else:
-            self.Qprint("<b>TOTAL ERROR</b>: %12s (%6d)<br>" % ("N/A", npoints))
+            self.Qprint("<b>TOTAL ERROR (%s)</b>: %12s (%6d)<br>" % (error_label, "N/A", npoints))
 
     def fit_callback_basinhopping(self, x, f, accepted):
         if accepted and f < self.fminnow:
             self.fminnow = f
-            self.Qprint("nfeval %6d f=%g" % (self.nfev, f))
+            self.Qprint("nfeval %6d Error (%s)=%g" % (self.nfev, self.error_measure_label(), f))
         if self.stop_theory_flag:
             return True
 
     def fit_callback_dualannealing(self, x, f, context):
         if f < self.fminnow:
             self.fminnow = f
-            self.Qprint("nfeval %6d f=%g" % (self.nfev, f))
+            self.Qprint("nfeval %6d Error (%s)=%g" % (self.nfev, self.error_measure_label(), f))
         if self.stop_theory_flag:
             return True
 
@@ -838,14 +926,10 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def func_fit_and_error(self, x):
         """Calls the theory function, constructs the vector with the theory predictions and
-        returns the sum of the squares of the residuals
+        returns the selected mean residual error.
         """
         # NEED TO RECOVER THE VECTOR y THAT WE CONSTRUCTED DURING FUNCTION FIT
-        if self.normalizebydata:
-            residuals = (self.fittingy - self.func_fit(self.fittingx, *x)) / self.fittingy
-        else:
-            residuals = self.fittingy - self.func_fit(self.fittingx, *x)
-        fres = sum(residuals**2)
+        fres, _ = self.compute_error(self.func_fit(self.fittingx, *x), self.fittingy)
         return fres
 
     def func_fit(self, x, *param_in):
@@ -966,6 +1050,11 @@ class QTheory(QWidget, Ui_TheoryTab):
                     x = np.append(x, xcond)
                     y = np.append(y, ycond)
 
+        if self.normalizebydata and np.any(np.asarray(y) == 0):
+            self.Qprint("<font color=red><b>Relative error requested, but selected experimental data contains zero values</b></font>")
+            self.is_fitting = False
+            return
+
         # 2. Create the array of theory parameters that will be changed during the fitting (checked parameters)
         #    It also creates the arrays with the upper and lower bounds for parameters
         initial_guess = []  # Take the initial guess for the fit from the current value of the parameter
@@ -1016,31 +1105,18 @@ class QTheory(QWidget, Ui_TheoryTab):
             self.Qprint("<b>Non-linear Least-squares</b>")
             self.Qprint("<b>Local optimisation</b>")
             try:
-                if self.LSmethod == "trf":
-                    self.Qprint("Method: Trust Region Reflective")
-                elif self.LSmethod == "dogbox":
-                    self.Qprint("Method: dogleg")
-                elif self.LSmethod == "lm":
-                    self.Qprint("Method: Levenberg-Marquardt")
-                if self.LSmethod == "trf" or self.LSmethod == "dogbox":
-                    pars, pcov = curve_fit(
-                        self.func_fit,
-                        x,
-                        y,
-                        p0=initial_guess,
-                        bounds=(self.param_min, self.param_max),
-                        method=self.LSmethod,
-                        jac=self.LSjac,
-                        ftol=self.LSftol,
-                        xtol=self.LSxtol,
-                        gtol=self.LSgtol,
-                        loss=self.LSloss,
-                        f_scale=self.LSf_scale,
-                        max_nfev=self.LSmax_fnev,
-                        tr_solver=self.LStr_solver,
-                    )
+                if self.use_absolute_error:
+                    self.Qprint("Method: L-BFGS-B")
+                    pars, pcov = self._minimize_selected_error(initial_guess)
                 else:
-                    if self.LSmax_fnev == None:
+                    sigma = self._fit_sigma(y)
+                    if self.LSmethod == "trf":
+                        self.Qprint("Method: Trust Region Reflective")
+                    elif self.LSmethod == "dogbox":
+                        self.Qprint("Method: dogleg")
+                    elif self.LSmethod == "lm":
+                        self.Qprint("Method: Levenberg-Marquardt")
+                    if self.LSmethod == "trf" or self.LSmethod == "dogbox":
                         pars, pcov = curve_fit(
                             self.func_fit,
                             x,
@@ -1048,23 +1124,44 @@ class QTheory(QWidget, Ui_TheoryTab):
                             p0=initial_guess,
                             bounds=(self.param_min, self.param_max),
                             method=self.LSmethod,
+                            sigma=sigma,
+                            jac=self.LSjac,
                             ftol=self.LSftol,
                             xtol=self.LSxtol,
                             gtol=self.LSgtol,
+                            loss=self.LSloss,
+                            f_scale=self.LSf_scale,
+                            max_nfev=self.LSmax_fnev,
+                            tr_solver=self.LStr_solver,
                         )
                     else:
-                        pars, pcov = curve_fit(
-                            self.func_fit,
-                            x,
-                            y,
-                            p0=initial_guess,
-                            bounds=(self.param_min, self.param_max),
-                            method=self.LSmethod,
-                            ftol=self.LSftol,
-                            xtol=self.LSxtol,
-                            gtol=self.LSgtol,
-                            maxfev=self.LSmax_fnev,
-                        )
+                        if self.LSmax_fnev == None:
+                            pars, pcov = curve_fit(
+                                self.func_fit,
+                                x,
+                                y,
+                                p0=initial_guess,
+                                bounds=(self.param_min, self.param_max),
+                                method=self.LSmethod,
+                                sigma=sigma,
+                                ftol=self.LSftol,
+                                xtol=self.LSxtol,
+                                gtol=self.LSgtol,
+                            )
+                        else:
+                            pars, pcov = curve_fit(
+                                self.func_fit,
+                                x,
+                                y,
+                                p0=initial_guess,
+                                bounds=(self.param_min, self.param_max),
+                                method=self.LSmethod,
+                                sigma=sigma,
+                                ftol=self.LSftol,
+                                xtol=self.LSxtol,
+                                gtol=self.LSgtol,
+                                maxfev=self.LSmax_fnev,
+                            )
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1090,14 +1187,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     seed=self.basinseed,
                 )
                 initial_guess1 = ret.x
-                pars, pcov = curve_fit(
-                    self.func_fit,
-                    x,
-                    y,
-                    p0=initial_guess1,
-                    bounds=(self.param_min, self.param_max),
-                    method="trf",
-                )
+                pars, pcov = self._refine_global_fit(x, y, initial_guess1)
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1124,14 +1214,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     x0=initial_guess,
                 )
                 initial_guess1 = ret.x
-                pars, pcov = curve_fit(
-                    self.func_fit,
-                    x,
-                    y,
-                    p0=initial_guess1,
-                    bounds=(self.param_min, self.param_max),
-                    method="trf",
-                )
+                pars, pcov = self._refine_global_fit(x, y, initial_guess1)
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1161,14 +1244,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     integrality=self.integrality,
                 )
                 initial_guess1 = ret.x
-                pars, pcov = curve_fit(
-                    self.func_fit,
-                    x,
-                    y,
-                    p0=initial_guess1,
-                    bounds=(self.param_min, self.param_max),
-                    method="trf",
-                )
+                pars, pcov = self._refine_global_fit(x, y, initial_guess1)
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1201,14 +1277,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                     sampling_method=self.SHGOsampling_method,
                 )
                 initial_guess1 = ret.x
-                pars, pcov = curve_fit(
-                    self.func_fit,
-                    x,
-                    y,
-                    p0=initial_guess1,
-                    bounds=(self.param_min, self.param_max),
-                    method="trf",
-                )
+                pars, pcov = self._refine_global_fit(x, y, initial_guess1)
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1221,14 +1290,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                 param_bounds = list(zip(self.param_min, self.param_max))
                 ret = brute(self.func_fit_and_error, ranges=param_bounds, Ns=self.BruteNs)
                 initial_guess1 = ret
-                pars, pcov = curve_fit(
-                    self.func_fit,
-                    x,
-                    y,
-                    p0=initial_guess1,
-                    bounds=(self.param_min, self.param_max),
-                    method="trf",
-                )
+                pars, pcov = self._refine_global_fit(x, y, initial_guess1)
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
@@ -1236,17 +1298,15 @@ class QTheory(QWidget, Ui_TheoryTab):
                 return
 
         # 4. Statistical analysis of the solution found
-        residuals = y - self.func_fit(x, *initial_guess)
-        fres0 = sum(residuals**2)
-        residuals = y - self.func_fit(x, *pars)
-        fres1 = sum(residuals**2)
+        fres0, error_label = self.compute_error(self.func_fit(x, *initial_guess), y)
+        fres1, error_label = self.compute_error(self.func_fit(x, *pars), y)
 
         # table='''<table border="1" width="100%">'''
         # table+='''<tr><th>Initial Error</th><th>Final Error</th></tr>'''
         # table+='''<tr><td>%g</td><td>%g</td></tr>'''%(fres0, fres1)
         # table+='''</table><br>'''
         table = [
-            ["%-18s" % "Initial Error", "%-18s" % "Final Error"],
+            ["%-18s" % ("Initial Error (%s)" % error_label), "%-18s" % ("Final Error (%s)" % error_label)],
         ]
         table.append(["%-18g" % fres0, "%-18g" % fres1])
         self.Qprint(table)
@@ -1646,23 +1706,23 @@ class QTheory(QWidget, Ui_TheoryTab):
             return "Value must be a float", False
         return self.set_param_value(name, internal_value)
 
-    def default(self, line):
-        """Called when the input command is not recognized
+    #  def default(self, line):
+    #      """Called when the input command is not recognized
 
-        Called on an input line when the command prefix is not recognized.
-        Check if there is an = sign in the line. If so, it is a parameter change.
-        Else, we execute the line as Python code."""
-        if "=" in line:
-            par = line.split("=")
-            if par[0] in self.parameters:
-                self.set_param_value(par[0], par[1])
-            else:
-                print("Parameter %s not found" % par[0])
-        elif line in self.parameters.keys():
-            print(self.parameters[line])
-            print(self.parameters[line].__repr__())
-        else:
-            super(Theory, self).default(line)  # pyright: ignore[reportUndefinedVariable]
+    #      Called on an input line when the command prefix is not recognized.
+    #      Check if there is an = sign in the line. If so, it is a parameter change.
+    #      Else, we execute the line as Python code."""
+    #      if "=" in line:
+    #          par = line.split("=")
+    #          if par[0] in self.parameters:
+    #              self.set_param_value(par[0], par[1])
+    #          else:
+    #              print("Parameter %s not found" % par[0])
+    #      elif line in self.parameters.keys():
+    #          print(self.parameters[line])
+    #          print(self.parameters[line].__repr__())
+    #      else:
+    #          super(Theory, self).default(line)  # pyright: ignore[reportUndefinedVariable]
 
     def show_theory_extras(self, show):
         pass
@@ -1846,6 +1906,8 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def populate_default_error_calculation_options(self):
         self.errorcalculationdialog.ui.NormalizecheckBox.setChecked(self.normalizebydata)
+        self.errorcalculationdialog.ui.SquaredradioButton.setChecked(not self.use_absolute_error)
+        self.errorcalculationdialog.ui.AbsoluteradioButton.setChecked(self.use_absolute_error)
 
     def thtextbox_context_menu(self):
         """Custom contextual menu for the theory textbox"""

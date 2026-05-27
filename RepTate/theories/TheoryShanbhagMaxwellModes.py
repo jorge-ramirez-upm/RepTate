@@ -1320,9 +1320,9 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
         # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        # table+='''<tr><th>File</th><th>Error (MSE)</th><th># Pts</th></tr>'''
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (RSS)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % "Error (MSE)", "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -2614,9 +2614,9 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
         # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Error (RSS)</th><th># Pts</th></tr>'''
+        # table+='''<tr><th>File</th><th>Error (MSE)</th><th># Pts</th></tr>'''
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (RSS)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % "Error (MSE)", "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:

@@ -1581,12 +1581,14 @@ class QDataSet(QWidget, Ui_DataSet):
         if not self.current_theory:
             return
         th = self.theories[self.current_theory]
+        th.populate_default_error_calculation_options()
         success = th.errorcalculationdialog.exec_()  # this blocks the rest of the app as opposed to .show()
 
         if not success:
             return
 
         th.normalizebydata = th.errorcalculationdialog.ui.NormalizecheckBox.isChecked()
+        th.use_absolute_error = th.errorcalculationdialog.ui.AbsoluteradioButton.isChecked()
 
     def end_of_computation(self, th_name):
         """Action when theory has finished computations"""

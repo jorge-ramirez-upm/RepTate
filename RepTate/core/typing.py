@@ -225,6 +225,7 @@ class DataSetLike(Protocol):
     actionVertical_Limits: Any
     actionHorizontal_Limits: Any
     actionNew_Theory: Any
+    actionCalculate_Theory: Any
     actionMinimize_Error: Any
     actionShow_Limits: Any
 
@@ -233,6 +234,8 @@ class DataSetLike(Protocol):
     def maxcol(self, col: int) -> Any: ...
 
     def handle_actionCalculate_Theory(self) -> None: ...
+
+    def handle_actionMinimize_Error(self) -> None: ...
 
     def set_limit_icon(self) -> None: ...
 

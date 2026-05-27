@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>275</width>
-    <height>90</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,32 @@
      <property name="text">
       <string>Normalize by experimental data</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="ErrorNormGroupBox">
+     <property name="title">
+      <string>Error norm</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="SquaredradioButton">
+        <property name="text">
+         <string>squared residuals</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="AbsoluteradioButton">
+        <property name="text">
+         <string>absolute residuals</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

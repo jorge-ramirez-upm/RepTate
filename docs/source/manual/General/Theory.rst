@@ -73,12 +73,21 @@ When the button "Calculate Theory" |calculatetheory| (Alt+C) is pressed, the the
 
 When the theory calculation is done, some interesting information is shown in the theory log area (see :numref:`figtheorycalclog`). By default, the information displayed contains:
 
-- A table with the list of files that theory has been applied to, with the error (calculated as the residual sum of squares, RSS) and the number of points of each file. 
-- The total error (the weighted sum of the RSS errors of all the files) and the total number of points.
-- The Bayesian Information Criterion (BIC), defined as :math:`BIC = n \log(RSS/n)+ p\log(n)`, where *n* is the number of data points and *p* is the number of free fitting parameters. In general, the model with the lowest BIC value should be preferred. 
+- A table with the list of files that theory has been applied to, with the selected error measure and the number of points of each file.
+- The total error (the weighted mean of the file errors) and the total number of points.
+- The Bayesian Information Criterion (BIC), always evaluated from the non-normalized mean squared error as :math:`BIC = n \log(MSE)+ p\log(n)`, where *n* is the number of data points and *p* is the number of free fitting parameters. In general, the model with the lowest BIC value should be preferred.
 - Some additional information may be shown by some theories (for example, in :numref:`figtheorycalclog`, the Likhtman-McLeish theory shows some tube related values for each file). 
 - The time it took to calculate the theory, in seconds. 
 - The relevant literature that the user should cite if he/she intends to use the results from the theory. The journal articles are shown as links that can be clicked in order to visit the publisher web.
+
+The error calculation options are available from the Calculate Theory button menu. The checkbox **Normalize by experimental data** controls whether residuals are divided by the experimental data before the error is computed. The **Error norm** option controls whether squared residuals or absolute residuals are averaged. The four combinations are reported in the theory log using the following labels:
+
+- **MSE**: :math:`\mathrm{mean}((y_\mathrm{th} - y_\mathrm{exp})^2)`
+- **MSRE**: :math:`\mathrm{mean}(((y_\mathrm{th} - y_\mathrm{exp}) / y_\mathrm{exp})^2)`
+- **MAE**: :math:`\mathrm{mean}(|y_\mathrm{th} - y_\mathrm{exp}|)`
+- **MRAE**: :math:`\mathrm{mean}(|(y_\mathrm{th} - y_\mathrm{exp}) / y_\mathrm{exp}|)`
+
+The default is the historical squared, non-normalized error (**MSE**).
 
 .. _figtheorycalclog:
 .. figure:: images/TheoryCalcLog.png

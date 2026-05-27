@@ -387,14 +387,14 @@ class TheoryWLFShift(QTheory):
 
         if line == "":
             # table='''<table border="1" width="100%">'''
-            # table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error</th><th># Pts.</th></tr>'''
+            # table+='''<tr><th>Mw</th><th>Mw2</th><th>phi</th><th>phi2</th><th>Error (MSE)</th><th># Pts.</th></tr>'''
             table = [
                 [
                     "%-12s" % "Mw",
                     "%-12s" % "Mw2",
                     "%-12s" % "phi",
                     "%-12s" % "phi2",
-                    "%-12s" % "Error",
+                    "%-12s" % "Error (MSE)",
                     "%-12s" % "# Pts.",
                 ],
             ]
@@ -433,7 +433,7 @@ class TheoryWLFShift(QTheory):
         else:
             total_error = 1e10
         if line == "":
-            self.Qprint("<b>TOTAL ERROR</b>: %12.5g (%6d)<br>" % (total_error, npoints))
+            self.Qprint("<b>TOTAL ERROR (MSE)</b>: %12.5g (%6d)<br>" % (total_error, npoints))
         if line == "":
             self.Qprint("")
             B1 = self.parameter_float("B1")
