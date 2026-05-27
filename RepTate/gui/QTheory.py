@@ -691,7 +691,8 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
+        File error is calculated as the mean square of the residual, averaged over all points in the file.
+        Total error is the mean square of the residual, averaged over all points in all files.
         """
         total_error = 0
         npoints = 0
