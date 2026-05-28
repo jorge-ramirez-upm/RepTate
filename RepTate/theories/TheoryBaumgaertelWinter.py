@@ -375,7 +375,7 @@ class TheoryBaumgaertelWinter(QTheory):
             QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
             "Get Modes",
         )
-        self.tbutloadmodes.setDefaultAction(self.load_modes_action)
+        self.tbutloadmodes.setDefaultAction(self.get_modes_action)
         self.tbutloadmodes.setMenu(load_modes_menu)
         tb.addWidget(self.tbutloadmodes)
         self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
