@@ -44,7 +44,7 @@ import numpy as np
 from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, compute_error, error_measure_label
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox, QFileDialog
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
@@ -57,6 +57,43 @@ import time
 
 least_squares_any: Any = least_squares
 interp1d_any: Any = interp1d
+
+
+def shanbhag_error(yth: Any, yexp: Any, normalize_by_data: bool, use_absolute_error: bool) -> tuple[float, str]:
+    """Compute the display error selected by the user for Shanbhag fit reports."""
+    if len(yexp) == 0:
+        return np.nan, error_measure_label(normalize_by_data, use_absolute_error)
+    return compute_error(yth, yexp, normalize_by_data, use_absolute_error)
+
+
+def interpolate_shanbhag_theory_to_data(xth: Any, yth: Any, xexp: Any, kind: str) -> Any:
+    """Interpolate Shanbhag theory output onto experimental view coordinates."""
+    yth_interp = np.full_like(np.asarray(xexp, dtype=float), np.nan)
+    for i in range(xexp.shape[1]):
+        x_col = np.asarray(xth[:, i], dtype=float)
+        y_col = np.asarray(yth[:, i], dtype=float)
+        valid = np.isfinite(x_col) & np.isfinite(y_col)
+        if np.count_nonzero(valid) < 2:
+            continue
+
+        x_valid = x_col[valid]
+        y_valid = y_col[valid]
+        order = np.argsort(x_valid)
+        x_valid = x_valid[order]
+        y_valid = y_valid[order]
+        x_unique, unique_index = np.unique(x_valid, return_index=True)
+        y_unique = y_valid[unique_index]
+        interp_kind = kind if kind != "cubic" or len(x_unique) >= 4 else "linear"
+        fint = interp1d_any(
+            x_unique,
+            y_unique,
+            interp_kind,
+            bounds_error=False,
+            fill_value=np.nan,
+            assume_sorted=True,
+        )
+        yth_interp[:, i] = fint(xexp[:, i])
+    return yth_interp
 
 
 class PredictionMode(enum.Enum):
@@ -1313,16 +1350,18 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
+        File error is calculated as the selected mean residual error, averaged over all points in the file.
+        Total error is the selected mean residual error, averaged over all points in all files.
         """
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
+        error_label = error_measure_label(self.normalizebydata, self.use_absolute_error)
         # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Error (MSE)</th><th># Pts</th></tr>'''
+        # table+='''<tr><th>File</th><th>Error</th><th># Pts</th></tr>'''
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (MSE)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % ("Error (%s)" % error_label), "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -1331,10 +1370,7 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             tmp_dt = self.get_non_extended_th_table(f)
             xth, yth, success = view.view_proc(tmp_dt, f.file_parameters)
 
-            yth2 = np.copy(yexp)
-            for i in range(xexp.shape[1]):
-                fint = interp1d_any(xth[:, i], yth[:, i], "linear")  # Get the theory at the same points as the data
-                yth2[:, i] = np.copy(fint(xexp[:, i]))
+            yth2 = interpolate_shanbhag_theory_to_data(xth, yth, xexp, "linear")
             xth = np.copy(xexp)
             yth = np.copy(yth2)
 
@@ -1358,7 +1394,9 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
             )
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
-            f_error = np.mean((yth - yexp) ** 2)
+            if self.normalizebydata and np.any(yexp == 0):
+                self.Qprint('<font color=red><b>Relative error for "%s" contains zero experimental values</b></font>' % f.file_name_short)
+            f_error, error_label = shanbhag_error(yth, yexp, self.normalizebydata, self.use_absolute_error)
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
@@ -2607,16 +2645,18 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
 
         Report the error of the current theory on all the files, taking into account the current selected xrange and yrange.
 
-        File error is calculated as the mean square of the residual, averaged over all points in the file. Total error is the mean square of the residual, averaged over all points in all files.
+        File error is calculated as the selected mean residual error, averaged over all points in the file.
+        Total error is the selected mean residual error, averaged over all points in all files.
         """
         total_error = 0
         npoints = 0
         view = self.parent_dataset.parent_application.current_view
         tools = self.parent_dataset.parent_application.tools
+        error_label = error_measure_label(self.normalizebydata, self.use_absolute_error)
         # table='''<table border="1" width="100%">'''
-        # table+='''<tr><th>File</th><th>Error (MSE)</th><th># Pts</th></tr>'''
+        # table+='''<tr><th>File</th><th>Error</th><th># Pts</th></tr>'''
         tab_data = [
-            ["%-18s" % "File", "%-18s" % "Error (MSE)", "%-18s" % "# Pts"],
+            ["%-18s" % "File", "%-18s" % ("Error (%s)" % error_label), "%-18s" % "# Pts"],
         ]
         for f in self.theory_files():
             if self.stop_theory_flag:
@@ -2625,12 +2665,7 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             tmp_dt = self.get_non_extended_th_table(f)
             xth, yth, success = view.view_proc(tmp_dt, f.file_parameters)
 
-            yth2 = np.copy(yexp)
-            for i in range(xexp.shape[1]):
-                fint = interp1d_any(
-                    xth[:, i], yth[:, i], "cubic", bounds_error=False
-                )  # , fill_value=nan) # Get the theory at the same points as the data
-                yth2[:, i] = np.copy(fint(xexp[:, i]))
+            yth2 = interpolate_shanbhag_theory_to_data(xth, yth, xexp, "cubic")
             xth = np.copy(xexp)
             yth = np.copy(yth2)
 
@@ -2654,7 +2689,9 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
             )
             yexp = np.extract(conditionx * conditiony * conditionnaninf, yexp)
             yth = np.extract(conditionx * conditiony * conditionnaninf, yth)
-            f_error = np.mean((yth - yexp) ** 2)
+            if self.normalizebydata and np.any(yexp == 0):
+                self.Qprint('<font color=red><b>Relative error for "%s" contains zero experimental values</b></font>' % f.file_name_short)
+            f_error, error_label = shanbhag_error(yth, yexp, self.normalizebydata, self.use_absolute_error)
             npt = len(yth)
             total_error += f_error * npt
             npoints += npt
