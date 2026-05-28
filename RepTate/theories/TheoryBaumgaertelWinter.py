@@ -64,6 +64,8 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QSpinBox,
     QToolBar,
+    QToolButton,
+    QMenu,
 )
 
 from RepTate.core.DataTable import DataTable
@@ -83,17 +85,25 @@ class _SimplificationCancelled(Exception):
 class _BaumgaertelWinterSimplificationWorker(QObject):
     sig_done = Signal(object)
 
-    def __init__(self, theory: "TheoryBaumgaertelWinter", file: FileLike, tau: FloatArray, G: FloatArray) -> None:
+    def __init__(
+        self,
+        theory: "TheoryBaumgaertelWinter",
+        file: FileLike,
+        tau: FloatArray,
+        G: FloatArray,
+        skip_initial_fit: bool,
+    ) -> None:
         super().__init__()
         self.theory = theory
         self.file = file
         self.tau = tau
         self.G = G
+        self.skip_initial_fit = skip_initial_fit
 
     def work(self) -> None:
         start_time = time.perf_counter()
         try:
-            result = self.theory._simplify_spectrum_worker(self.file, self.tau, self.G)
+            result = self.theory._simplify_spectrum_worker(self.file, self.tau, self.G, self.skip_initial_fit)
         except _SimplificationCancelled:
             result = {"cancelled": True}
         except Exception:
@@ -289,6 +299,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.simplification_cancel_requested = False
         self.simplification_thread: QThread | None = None
         self.simplification_worker: _BaumgaertelWinterSimplificationWorker | None = None
+        self._last_minimized_mode_signature: tuple[Any, ...] | None = None
 
         xmin = self.parent_dataset.minpositivecol(0)
         xmax = self.parent_dataset.maxcol(0)
@@ -352,7 +363,21 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.setValue(nmodes)
         tb.addWidget(self.spinbox)
         self.modesaction = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-visible.png"), "View modes")
-        self.load_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"), "Load Modes")
+        self.tbutloadmodes = QToolButton()
+        menu_button_popup: Any = getattr(QToolButton, "MenuButtonPopup")
+        self.tbutloadmodes.setPopupMode(menu_button_popup)
+        load_modes_menu = QMenu(self)
+        self.load_modes_action = load_modes_menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Load Modes",
+        )
+        self.get_modes_action = load_modes_menu.addAction(
+            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
+            "Get Modes",
+        )
+        self.tbutloadmodes.setDefaultAction(self.load_modes_action)
+        self.tbutloadmodes.setMenu(load_modes_menu)
+        tb.addWidget(self.tbutloadmodes)
         self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.simplify_modes_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broom.png"),
@@ -371,6 +396,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
         self.modesaction.triggered.connect(self.modesaction_change)
         self.load_modes_action.triggered.connect(self.load_modes)
+        self.get_modes_action.triggered.connect(self.get_modes_reptate)
         self.save_modes_action.triggered.connect(self.save_modes)
         self.simplify_modes_action.triggered.connect(self.simplify_spectrum)
         self.configure_simplification_action.triggered.connect(self.configure_simplification_parameters)
@@ -473,6 +499,8 @@ class TheoryBaumgaertelWinter(QTheory):
         else:
             message, success = super().set_param_value(name, value)
 
+        if success and (name == "nmodes" or name == "Ge" or name.startswith("logtau") or name.startswith("logG")):
+            self._invalidate_minimized_modes()
         return message, success
 
     def drag_mode(self, dx: Any, dy: Any) -> None:
@@ -586,6 +614,21 @@ class TheoryBaumgaertelWinter(QTheory):
         self.parent_dataset.parent_application.update_plot()
         self.Qprint("<font color=red><b>Loaded %d Maxwell modes from %s.</b></font>" % (tau.size, os.path.basename(fpath)))
 
+    def get_modes_reptate(self) -> None:
+        """Get Maxwell modes from another open RepTate theory."""
+        if self.simplification_running:
+            self.Qprint("Cannot get modes while BW spectrum simplification is running.")
+            return
+        self.Qcopy_modes()
+
+    def do_fit(self, line: str) -> None:
+        """Minimize BW modes and remember that this exact state is fitted."""
+        self._invalidate_minimized_modes()
+        nfev_before = self.nfev
+        super().do_fit(line)
+        if self.nfev > nfev_before and not self.is_fitting:
+            self._mark_modes_minimized()
+
     def _read_modes_file(self, path: str) -> tuple[FloatArray, FloatArray]:
         """Read Maxwell modes from a text file."""
         return read_maxwell_modes_file(path)
@@ -640,6 +683,27 @@ class TheoryBaumgaertelWinter(QTheory):
             tau[i] = np.power(10.0, self.parameter_float("logtau%02d" % i))
             G[i] = np.power(10.0, self.parameter_float("logG%02d" % i))
         return tau, G
+
+    def _mode_fit_signature(self, file: FileLike | None = None) -> tuple[Any, ...]:
+        """Return a compact signature for the current BW fit state."""
+        tau, G = self._mode_values()
+        if file is None:
+            file = self._first_valid_file()
+        file_id = id(file) if file is not None else None
+        return (
+            file_id,
+            self.is_time_domain,
+            self.parameter_int("nmodes"),
+            tuple(np.round(tau, decimals=14)),
+            tuple(np.round(G, decimals=14)),
+            round(self.parameter_float("Ge"), 14),
+        )
+
+    def _mark_modes_minimized(self) -> None:
+        self._last_minimized_mode_signature = self._mode_fit_signature()
+
+    def _invalidate_minimized_modes(self) -> None:
+        self._last_minimized_mode_signature = None
 
     def _mode_marker_data(self) -> tuple[FloatArray, FloatArray]:
         tau, G = self._mode_values()
@@ -754,6 +818,7 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def _set_mode_values(self, tau: FloatArray, G: FloatArray) -> None:
         """Replace the current mode parameters by the supplied mode arrays."""
+        self._invalidate_minimized_modes()
         tau = np.asarray(tau, dtype=float)
         G = np.asarray(G, dtype=float)
         if tau.size != G.size:
@@ -918,9 +983,10 @@ class TheoryBaumgaertelWinter(QTheory):
             return
 
         tau, G = self._mode_values()
+        skip_initial_fit = self._last_minimized_mode_signature == self._mode_fit_signature(file)
         self._set_simplification_running(True)
         self.simplification_thread = QThread()
-        self.simplification_worker = _BaumgaertelWinterSimplificationWorker(self, file, tau.copy(), G.copy())
+        self.simplification_worker = _BaumgaertelWinterSimplificationWorker(self, file, tau.copy(), G.copy(), skip_initial_fit)
         self.simplification_worker.moveToThread(self.simplification_thread)
         self.simplification_worker.sig_done.connect(self._apply_simplification_result)
         self.simplification_worker.sig_done.connect(self.simplification_thread.quit)
@@ -928,13 +994,27 @@ class TheoryBaumgaertelWinter(QTheory):
         self.simplification_thread.finished.connect(self.simplification_worker.deleteLater)
         self.simplification_thread.start()
         self.Qprint("<font color=red><b>Started BW spectrum simplification...</b></font>")
+        if skip_initial_fit:
+            self.Qprint("<font color=red><b>Skipping initial BW refit because the current modes were just minimized.</b></font>")
 
-    def _simplify_spectrum_worker(self, file: FileLike, tau: FloatArray, G: FloatArray) -> dict[str, Any]:
+    def _simplify_spectrum_worker(
+        self,
+        file: FileLike,
+        tau: FloatArray,
+        G: FloatArray,
+        skip_initial_fit: bool = False,
+    ) -> dict[str, Any]:
         """Run BW simplification away from the GUI thread."""
         self._check_simplification_cancelled()
         # self.Qprint("<b>Started BW spectrum simplification...</b>")
         initial_modes_requested = int(tau.size)
-        tau, G, current_residual = self._fit_modes_to_file(file, tau, G)
+        if skip_initial_fit:
+            order = np.argsort(tau)
+            tau = tau[order]
+            G = G[order]
+            current_residual = self._residual_value_for_modes(file, tau, G)
+        else:
+            tau, G, current_residual = self._fit_modes_to_file(file, tau, G)
         initial_nmodes = tau.size
         initial_residual = current_residual
         n_merged_total = 0
@@ -943,13 +1023,13 @@ class TheoryBaumgaertelWinter(QTheory):
         report_events = [
             _SimplificationReportEvent(
                 pass_number=0,
-                operation="initial fit",
+                operation="initial state" if skip_initial_fit else "initial fit",
                 modes_before=initial_modes_requested,
                 modes_after=int(tau.size),
                 residual_before=current_residual,
                 residual_after=current_residual,
                 accepted=True,
-                note="initial refit",
+                note="already minimized" if skip_initial_fit else "initial refit",
             )
         ]
         try:
@@ -1105,7 +1185,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.parent_dataset.actionCalculate_Theory.setDisabled(running)
         self.parent_dataset.actionMinimize_Error.setDisabled(running)
         self.save_modes_action.setDisabled(running)
-        self.load_modes_action.setDisabled(running)
+        self.tbutloadmodes.setDisabled(running)
         self.configure_simplification_action.setDisabled(running)
         if running:
             self.simplify_modes_action.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
