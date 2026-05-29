@@ -42,7 +42,7 @@ ApplicationManager.
 import sys
 import os
 from os.path import dirname, join, abspath, join, isfile, basename
-from typing import Any
+from typing import Any, cast
 from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
 from PySide6.QtCore import QUrl, Qt, QSize, QStandardPaths
 from PySide6.QtWidgets import (
@@ -55,6 +55,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QFileDialog,
     QTextBrowser,
+    QWidget,
 )
 
 import RepTate
@@ -521,7 +522,8 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         get_dict = {}
         set_dict = {}
         for app in self.applications.values():
-            app_index = self.ApplicationtabWidget.indexOf(app)
+            app_widget = cast(QWidget, app)
+            app_index = self.ApplicationtabWidget.indexOf(app_widget)
             app_tab_name = self.ApplicationtabWidget.tabText(app_index)
             for ds in app.datasets.values():
                 ds_index = app.DataSettabWidget.indexOf(ds)
