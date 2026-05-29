@@ -35,11 +35,9 @@
 Module that defines the GUI Splashscreen that is loaded during the startup of RepTate.
 
 """
-from typing import Any
-
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QSplashScreen, QApplication, QLabel
-from PySide6.QtGui import QPixmap, QFont, QColor
+from PySide6.QtGui import QPixmap, QFont, QColor, QMouseEvent
 import RepTate
 
 try:
@@ -50,10 +48,6 @@ except ImportError:
     l = logging.getLogger("RepTate.gui.SplashScreen")
     l.fatal("Error importing RepTate.gui.About_rc. Please, run ""python scripts/build_ui.py"" or contact the developers.")
     sys.exit(1)
-
-QFontAny: Any = QFont
-QtAny: Any = Qt
-
 
 class SplashScreen(QSplashScreen):
     """Class to define a splash screen to show loading progress"""
@@ -81,7 +75,7 @@ class SplashScreen(QSplashScreen):
         )
         font = self.font()
         font.setPixelSize(11)
-        font.setWeight(QFontAny.Bold)
+        font.setWeight(QFont.Weight.Bold)
         self.setFont(font)
         lblVersion.adjustSize()
         # lblVersion.setStyleSheet("QLabel { color : white; }")
@@ -90,7 +84,7 @@ class SplashScreen(QSplashScreen):
 
     def showMessage(self, msg: str) -> None:
         """Procedure to update message in splash"""
-        align = QtAny.Alignment(QtAny.AlignBottom | QtAny.AlignRight | QtAny.AlignAbsolute)
+        align = Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignAbsolute
         # color = QtGui.QColor(QtCore.Qt.White)
         color = QColor(0, 0, 0)
         QSplashScreen.showMessage(self, msg, align, color)
@@ -101,5 +95,5 @@ class SplashScreen(QSplashScreen):
         QSplashScreen.clearMessage(self)
         QApplication.processEvents()
 
-    def mousePressEvent(self, event: Any) -> None:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         self.hide()
