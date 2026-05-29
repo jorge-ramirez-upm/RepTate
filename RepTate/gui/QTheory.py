@@ -116,12 +116,9 @@ BasinhoppingAny: Any = basinhopping
 DualAnnealingAny: Any = dual_annealing
 DifferentialEvolutionAny: Any = differential_evolution
 MinimizeAny: Any = minimize
-QAbstractItemViewAny: Any = QAbstractItemView
-QDialogButtonBoxAny: Any = QDialogButtonBox
 QFrameAny: Any = QFrame
 QHeaderViewAny: Any = QHeaderView
 QTextCursorAny: Any = QTextCursor
-QtAny: Any = Qt
 
 
 # IMPORT FROM THEORY
@@ -241,7 +238,9 @@ class EditThParametersDialog(QDialog):
                 index = self.tabs.indexOf(tab)
         self.tabs.setCurrentIndex(index)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel)
+        buttonBox = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -363,7 +362,11 @@ class GetModesDialog(QDialog):
         rb.setChecked(True)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(QDialogButtonBoxAny.Ok | QDialogButtonBoxAny.Cancel, QtAny.Horizontal, self)
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
+            Qt.Orientation.Horizontal,
+            self,
+        )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
@@ -493,11 +496,11 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.thParamTable.setAlternatingRowColors(True)
         self.thParamTable.setFrameShape(QFrameAny.NoFrame)
         self.thParamTable.setFrameShadow(QFrameAny.Plain)
-        self.thParamTable.setEditTriggers(QAbstractItemViewAny.NoEditTriggers)
+        self.thParamTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.thTextBox.setReadOnly(True)
         self.thTextBox.setOpenExternalLinks(True)
-        self.thTextBox.setContextMenuPolicy(QtAny.CustomContextMenu)
+        self.thTextBox.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.thTextBox.customContextMenuRequested.connect(self.thtextbox_context_menu)
 
         self.thread_calc_busy = False
