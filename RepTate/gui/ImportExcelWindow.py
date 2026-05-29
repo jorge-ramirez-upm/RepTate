@@ -58,11 +58,6 @@ from RepTate.core.typing import FileTypeLike
 from RepTate.gui.Ui_import_excel_dialog import Ui_Dialog as Ui_ImportExcelMainWindow
 
 
-QAbstractItemViewAny: Any = QAbstractItemView
-QItemSelectionModelAny: Any = QItemSelectionModel
-QtAny: Any = Qt
-
-
 class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
     list_AZ: ClassVar[list[str]] = [
         "A",
@@ -282,7 +277,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             indexes += [table.model().index(k, col3) for k in range(self.nskip, nrows)]
             header_labels[col3] = self.col_names[2]
         table.setHorizontalHeaderLabels(header_labels)
-        flag = QItemSelectionModelAny.Select
+        flag = QItemSelectionModel.SelectionFlag.Select
         table.selectionModel().clearSelection()
         [table.selectionModel().select(i, flag) for i in indexes]
         table.setFocus()
@@ -460,7 +455,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
             max_row = min(max_row, self.MAX_ROW)
             max_col = min(max_col, self.MAX_COL)
             qsheet = QTableWidget(max_row, max_col, self)
-            qsheet.setSelectionMode(QAbstractItemViewAny.NoSelection)
+            qsheet.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
             for i in range(max_row):
                 for j in range(max_col):
                     if self.is_xlsx:
@@ -472,7 +467,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
                     else:
                         val = ""
                     item = QTableWidgetItem("%s" % val)
-                    item.setFlags(QtAny.ItemIsSelectable | QtAny.ItemIsEnabled)
+                    item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
                     qsheet.setItem(i, j, item)
             self.qtabs.addTab(qsheet, sname)
             selected_cols = [0, 1, 2]
