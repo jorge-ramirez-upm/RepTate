@@ -1784,7 +1784,7 @@ class QDataSet(QWidget, Ui_DataSet):
             self.parent_application.zorder += 1
         self.parent_application.update_plot()
 
-    def populate_inspector(self):
+    def populate_inspector(self) -> None:
         """Fill the data inspector table"""
         file = self.selected_file
         if not file:
@@ -1803,7 +1803,7 @@ class QDataSet(QWidget, Ui_DataSet):
         for i in range(nrow):
             for j in range(ncol):
                 item = QTableWidgetItem("%.3e" % dt.data[i, j])
-                item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
                 inspec_tab.setItem(i, j, item)  # dt.setItem(row, column, item)
         ds_index = self.parent_application.DataSettabWidget.currentIndex()
         self.parent_application.DataInspectordockWidget.setWindowTitle(
@@ -1819,12 +1819,12 @@ class QDataSet(QWidget, Ui_DataSet):
         for i in range(DataTable.MAX_NUM_SERIES):
             self.parent_application.update_shifts(0, 0, i)
 
-    def handle_itemChanged(self, item, column):
+    def handle_itemChanged(self, item: QTreeWidgetItem, column: int) -> None:
         """Detect when an item has been selected in the dataset"""
         if column == 0:
-            self.change_file_visibility(item.text(0), item.checkState(column) == Qt.Checked)
+            self.change_file_visibility(item.text(0), item.checkState(column) == Qt.CheckState.Checked)
 
-    def handle_sortIndicatorChanged(self, column, order):
+    def handle_sortIndicatorChanged(self, column: int, order: Qt.SortOrder) -> None:
         """Sort files according to the selected parameter (column) and replot"""
         # if column == 0: #do not sort file name
         #     return
@@ -1835,22 +1835,22 @@ class QDataSet(QWidget, Ui_DataSet):
                 sort_param = basic_params[column - 1]
             else:
                 sort_param = self.DataSettreeWidget.headerItem().text(column)
-            rev = True if order == Qt.AscendingOrder else False
+            rev = True if order == Qt.SortOrder.AscendingOrder else False
             if rev:
                 sort_param = sort_param + ",reverse"
             self.do_sort(sort_param)
             self.do_plot()
             self.set_table_icons(self.table_icon_list)
 
-    def Qshow_all(self):
+    def Qshow_all(self) -> None:
         """Show all the files in this dataset, except those previously hiden"""
         self.do_show_all("")
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
             if file_name in self.inactive_files:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.Unchecked)
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.CheckState.Unchecked)
             else:
-                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.Checked)
+                self.DataSettreeWidget.topLevelItem(i).setCheckState(0, Qt.CheckState.Checked)
 
     def resizeEvent(self, evt=None):
         """Resize dataset"""
