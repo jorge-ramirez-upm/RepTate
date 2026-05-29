@@ -369,14 +369,28 @@ class ThLineMode(enum.Enum):
 class EditFileParametersDialog(QDialog):
     """Create the form that is used to modify the file parameters"""
 
-    def __init__(self, parent, file):
+    parent_dataset: "QDataSet"
+    file: File
+    formGroupBox: QGroupBox
+    formGroupBoxTheory: QGroupBox
+    param_dict: dict[str, QLineEdit]
+    p_new: list[QLineEdit]
+    with_extra_x: QCheckBox
+    th_num_pts: QLineEdit
+    th_logspace: QCheckBox
+    th_xmin: QLineEdit
+    th_xmax: QLineEdit
+    view_xmin: QLabel
+    view_xmax: QLabel
+
+    def __init__(self, parent: "QDataSet", file: File) -> None:
         super().__init__(parent)
         self.parent_dataset = parent
         self.file = file
         self.createFormGroupBox(file)
         self.createFormGroupBoxTheory(file)
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
@@ -389,14 +403,14 @@ class EditFileParametersDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Edit Parameters")
 
-    def createFormGroupBox(self, file):
+    def createFormGroupBox(self, file: File) -> None:
         """Create a form to set the new values of the file parameters"""
         self.formGroupBox = QGroupBox('Parameters of "%s"' % file.file_name_short)
         layout = QFormLayout()
 
         parameters = file.file_parameters
-        self.param_dict = {}
-        self.p_new = []
+        self.param_dict: dict[str, QLineEdit] = {}
+        self.p_new: list[QLineEdit] = []
         for i, pname in enumerate(parameters):  # loop over the Parameters
             self.p_new.append(QLineEdit())
             value = file.file_parameter_value_to_display(pname)
@@ -409,7 +423,7 @@ class EditFileParametersDialog(QDialog):
             self.param_dict[pname] = self.p_new[i]
         self.formGroupBox.setLayout(layout)
 
-    def createFormGroupBoxTheory(self, file):
+    def createFormGroupBoxTheory(self, file: File) -> None:
         self.formGroupBoxTheory = QGroupBox('Extend theory xrange of "%s"' % file.file_name_short)
         layout = QFormLayout()
         self.with_extra_x = QCheckBox(self)
@@ -449,7 +463,7 @@ class EditFileParametersDialog(QDialog):
         self.formGroupBoxTheory.setLayout(layout)
         self.activate_th_widgets()
 
-    def update_current_view_xrange(self):
+    def update_current_view_xrange(self) -> None:
         view = self.parent_dataset.parent_application.current_view
         tmp_dt = DataTable(axarr=[])
         tmp_dt.data = np.empty((1, 3))
@@ -474,7 +488,7 @@ class EditFileParametersDialog(QDialog):
             x, y, success = view.view_proc(tmp_dt, self.file.file_parameters)
             self.view_xmax.setText("%.4g" % x[0, 0])
 
-    def activate_th_widgets(self):
+    def activate_th_widgets(self) -> None:
         checked = self.with_extra_x.isChecked()
         self.th_xmin.setDisabled(not checked)
         self.th_xmax.setDisabled(not checked)
