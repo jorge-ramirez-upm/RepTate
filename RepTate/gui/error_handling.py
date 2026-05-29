@@ -22,8 +22,8 @@ def my_excepthook(
     l.error(tb_msg)
     msg += "\nTry to save your work and quit RepTate.\nDo you want to help RepTate developers by reporting this bug?"
     parent: Any = None
-    yes_button: Any = getattr(QMessageBox, "Yes")
-    no_button: Any = getattr(QMessageBox, "No")
+    yes_button: Any = QMessageBox.StandardButton.Yes
+    no_button: Any = QMessageBox.StandardButton.No
     ans = QMessageBox.critical(
         parent, "Critical Error", msg, yes_button | no_button
     )
