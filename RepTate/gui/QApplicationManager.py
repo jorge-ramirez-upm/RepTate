@@ -42,6 +42,7 @@ ApplicationManager.
 import sys
 import os
 from os.path import dirname, join, abspath, join, isfile, basename
+from typing import Any
 from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
 from PySide6.QtCore import QUrl, Qt, QSize, QStandardPaths
 from PySide6.QtWidgets import (
@@ -89,21 +90,23 @@ from RepTate.gui.Ui_RepTateMainWindow import Ui_ReptateMainWindow as Ui_MainWind
 
 
 class QTextEditLogger(logging.Handler):
-    def __init__(self, parent):
+    widget: QTextBrowser
+
+    def __init__(self, parent: Any) -> None:
         super().__init__()
         # self.widget = QPlainTextEdit(parent)
         self.widget = QTextBrowser(parent)
         self.widget.setReadOnly(True)
         self.widget.setStyleSheet("background-color: rgb(255, 255, 222);")
 
-    def emit(self, record):
+    def emit(self, record: logging.LogRecord) -> None:
         msg = self.format(record)
         # self.widget.appendPlainText(msg)
 
-        self.widget.moveCursor(QTextCursor.End)
+        self.widget.moveCursor(QTextCursor.MoveOperation.End)
         self.widget.insertHtml(msg + "<br>")
         self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum())
-        self.widget.moveCursor(QTextCursor.End)
+        self.widget.moveCursor(QTextCursor.MoveOperation.End)
 
 
 class QApplicationManager(QMainWindow, Ui_MainWindow):
@@ -172,7 +175,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         except FileExistsError:
             pass
 
-        self.logger = logging.getLogger("RepTate")
+        self.logger: logging.Logger = logging.getLogger("RepTate")
         self.logger.setLevel(loglevel)
         # home_path = str(Path.home())
         logfile = os.path.join(path_to_AppData, "RepTate.log")
@@ -313,9 +316,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
-        tb.setOrientation(Qt.Vertical)
+        tb.setOrientation(Qt.Orientation.Vertical)
 
-        self.tbutlog = QToolButton()
+        self.tbutlog: QToolButton = QToolButton()
         self.tbutlog.setPopupMode(QToolButton.MenuButtonPopup)
         menu = QMenu(self)
         menu.addAction(self.actionLogNotSet)
@@ -342,7 +345,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         tb.addAction(self.actionCopyLogText)
         self.LoggerdochorizontalLayout.addWidget(tb)
 
-        self.logTextBox = QTextEditLogger(self)
+        self.logTextBox: QTextEditLogger = QTextEditLogger(self)
         formatter = logging.Formatter(
             "<font color=blue>%(asctime)s</font> <b>%(name)s <font color=red>%(levelname)s</font></b>: %(message)s",
             "%Y%m%d %H%M%S",
@@ -377,48 +380,48 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         # Hide Logger Window
         self.LoggerdockWidget.hide()
 
-    def showLogger(self, checked):
+    def showLogger(self, checked: bool) -> None:
         """Handle show Log window"""
         if checked:
             self.LoggerdockWidget.show()
         else:
             self.LoggerdockWidget.hide()
 
-    def handle_loggerVisibilityChanged(self, visible):
+    def handle_loggerVisibilityChanged(self, visible: bool) -> None:
         """Handle the hide/show event of the logger window"""
         self.actionShow_Logger.setChecked(visible)
 
-    def logNotSet(self):
+    def logNotSet(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.NOTSET)
         self.logTextBox.setLevel(logging.NOTSET)
         self.tbutlog.setDefaultAction(self.actionLogNotSet)
 
-    def logDebug(self):
+    def logDebug(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.DEBUG)
         self.logTextBox.setLevel(logging.DEBUG)
         self.tbutlog.setDefaultAction(self.actionLogDebug)
 
-    def logInfo(self):
+    def logInfo(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.INFO)
         self.logTextBox.setLevel(logging.INFO)
         self.tbutlog.setDefaultAction(self.actionLogInfo)
 
-    def logWarning(self):
+    def logWarning(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.WARNING)
         self.logTextBox.setLevel(logging.WARNING)
         self.tbutlog.setDefaultAction(self.actionLogWarning)
 
-    def logError(self):
+    def logError(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.ERROR)
         self.logTextBox.setLevel(logging.ERROR)
         self.tbutlog.setDefaultAction(self.actionLogError)
 
-    def logCritical(self):
+    def logCritical(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.CRITICAL)
         self.logTextBox.setLevel(logging.CRITICAL)
         self.tbutlog.setDefaultAction(self.actionLogCritical)
 
-    def copyLogText(self):
+    def copyLogText(self) -> None:
         self.logTextBox.widget.selectAll()
         self.logTextBox.widget.copy()
 
