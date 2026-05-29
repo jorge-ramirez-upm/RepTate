@@ -404,12 +404,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def __init__(
         self,
-        name="Application Template",
+        name: str = "Application Template",
         parent: ApplicationManagerLike | None = None,
-        nplot_max=4,
-        ncols=2,
-        **kwargs,
-    ):
+        nplot_max: int = 4,
+        ncols: int = 2,
+        **kwargs: Any,
+    ) -> None:
         """**Constructor**"""
 
         # super().__init__(name, parent, **kwargs)
@@ -417,7 +417,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         Ui_AppWindow.__init__(self)
         self.setupUi(self)
 
-        self.name = name
+        self.name: str = name
         self.parent_manager: ApplicationManagerLike = cast(ApplicationManagerLike, parent)
         self.views = OrderedDict()
         self.filetypes: OrderedDict[str, FileTypeLike] = OrderedDict()  # keep filetypes in order
@@ -425,18 +425,18 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.availabletools = OrderedDict()  # keep tools combobox in order
         self.extratools = OrderedDict()  # keep tools combobox in order
         self.datasets: dict[str, DataSetLike] = {}
-        self.tools = []
-        self.num_tools = 0
+        self.tools: list[Any] = []
+        self.num_tools: int = 0
         self.current_view: Any = 0
-        self.num_datasets = 0
+        self.num_datasets: int = 0
         self.legend_visible = False
         self.multiviews = []  # default view order in multiplot views
-        self.nplot_max = nplot_max  # maximun number of plots
-        self.nplots = nplot_max  # current number of plots
-        self.ncols = ncols  # number of columns in the multiplot
-        self.current_viewtab = 0
+        self.nplot_max: int = nplot_max  # maximun number of plots
+        self.nplots: int = nplot_max  # current number of plots
+        self.ncols: int = ncols  # number of columns in the multiplot
+        self.current_viewtab: int = 0
 
-        self.autoscale = True
+        self.autoscale: bool = True
 
         from RepTate.theories.TheoryBasic import (
             TheoryPolynomial,
@@ -522,7 +522,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.tab_count = 0
         self.curves = []
         self.zorder = 100
-        self.dir_start = join(RepTate.root_dir, "data")  # default folder opened
+        self.dir_start: str = join(RepTate.root_dir, "data")  # default folder opened
 
         # Accept Drag and drop events
         self.setAcceptDrops(True)
@@ -791,9 +791,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         }
 
         # dialog import data from excel
-        self.excel_import_gui = None
+        self.excel_import_gui: ImportExcelWindow | None = None
         # dialog import pasted data
-        self.pasted_import_gui = None
+        self.pasted_import_gui: ImportFromPastedWindow | None = None
 
         self.legend_draggable = True
         self.default_legend_labels = True
@@ -821,12 +821,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # xaxis = self.ax.get_xticklabels()
         # print (xaxis)
 
-    def sp_nviews_valueChanged(self, new_nplots):
+    def sp_nviews_valueChanged(self, new_nplots: int) -> None:
         """Change the current number of views displayed in the app"""
         self.nplots = new_nplots
         self.multiplots.reorg_fig(new_nplots)
 
-    def save_view(self):
+    def save_view(self) -> None:
         dir_start = self.dir_start
         dilogue_name = "Select Folder for Saving data in Current View as txt"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
@@ -1010,7 +1010,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.artistnotes.append(DraggableNote(ann, DragType.both, None, self.edit_annotation))
             self.canvas.draw()
 
-    def edit_annotation(self, artist):
+    def edit_annotation(self, artist: Any) -> None:
         d = EditAnnotation(self, artist)
         d.exec_()
         self.canvas.draw()
@@ -1344,7 +1344,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.dialog.ui.label_size_auto_cb.setChecked(builtins.bool(self.ax_opts["label_size_auto"]))
         self.dialog.ui.tick_label_size_auto_cb.setChecked(builtins.bool(self.ax_opts["tick_label_size_auto"]))
 
-    def resizeplot(self, event=""):
+    def resizeplot(self, event: Any = "") -> None:
         """Rescale plot graphics when the window is resized"""
         if not (self.ax_opts["label_size_auto"] or self.ax_opts["tick_label_size_auto"]):
             return
@@ -1942,7 +1942,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 pass
                 # print("legend: %s"%e)
 
-    def handle_apply_button_pressed(self):
+    def handle_apply_button_pressed(self) -> None:
         """Apply the selected marker properties to all the files in the current dataset"""
         ds = self.DataSettabWidget.currentWidget()
         if ds:
@@ -2070,7 +2070,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.resizeplot()
             ds.do_plot()  # update plot and legend
 
-    def handle_inspectorVisibilityChanged(self, visible):
+    def handle_inspectorVisibilityChanged(self, visible: bool) -> None:
         """Handle the hide/show event of the data inspector"""
         self.actionInspect_Data.setChecked(visible)
         if visible:
@@ -2080,7 +2080,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         else:
             self.disconnect_curve_drag()
 
-    def handle_actionViewShiftTriggered(self):
+    def handle_actionViewShiftTriggered(self) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
@@ -2097,7 +2097,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     f.xshift[j] = float(d.table.item(i, 2 * j).text())
                     f.yshift[j] = float(d.table.item(i, 2 * j + 1).text())
 
-    def handle_actionSaveShiftTriggered(self):
+    def handle_actionSaveShiftTriggered(self) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
@@ -2126,7 +2126,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                             fout.write("%g %g " % (f.xshift[j], f.yshift[j]))
                         fout.write("\n")
 
-    def handle_actionResetShiftTriggered(self):
+    def handle_actionResetShiftTriggered(self) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if ds is None:
             return
@@ -2140,7 +2140,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 item = self.shiftTable.item(i, j)
                 item.setText("0")
 
-    def handle_actionShiftTriggered(self):
+    def handle_actionShiftTriggered(self) -> None:
         """Allow the current 'selected_file' to be dragged"""
         self.shiftTable.setVisible((self.actionShiftHorizontally.isChecked() or self.actionShiftVertically.isChecked()))
         ds = self.DataSettabWidget.currentWidget()
@@ -2176,7 +2176,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             )
             self.curves.append(cur)
 
-    def update_shifts(self, dx, dy, index):
+    def update_shifts(self, dx: float, dy: float, index: int) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -2185,7 +2185,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         item = self.shiftTable.item(index, 1)
         item.setText("%g" % (ds.selected_file.yshift[index] + dy))
 
-    def finish_shifts(self, dx, dy, index):
+    def finish_shifts(self, dx: float, dy: float, index: int) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if not ds.selected_file:
             return
@@ -2193,7 +2193,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         ds.selected_file.yshift[index] += dy
         ds.selected_file.isshifted[index] = True
 
-    def disconnect_curve_drag(self):
+    def disconnect_curve_drag(self) -> None:
         """Remove the Matplotlib drag connections
         and reset the shift buttons in the data inspector"""
         for curve in self.curves:
@@ -2202,14 +2202,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # self.actionShiftHorizontally.setChecked(False)
         # self.actionShiftVertically.setChecked(False)
 
-    def handle_actionReload_Data(self):
+    def handle_actionReload_Data(self) -> None:
         """Reload the data files in the current DataSet"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
             return
         ds.do_reload_data()
 
-    def handle_action_save_current_dataset(self):
+    def handle_action_save_current_dataset(self) -> None:
         """Save data of the current dataset to file"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
@@ -2231,13 +2231,13 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 txt = ""
             ds.do_save(folder, txt)
 
-    def handle_actionView_All_SetTheories(self, checked):
+    def handle_actionView_All_SetTheories(self, checked: bool) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if ds:
             for th in ds.theories.values():
                 th.do_show()
 
-    def handle_actionView_All_Sets(self, checked):
+    def handle_actionView_All_Sets(self, checked: bool) -> None:
         """Show all datasets simultaneously"""
         if len(self.datasets) < 2:
             return
