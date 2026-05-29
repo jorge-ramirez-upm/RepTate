@@ -42,6 +42,7 @@ import enum
 import time
 import getpass
 import ast
+from collections.abc import Callable
 from typing import Any, TypeAlias, cast
 
 import numpy as np
@@ -110,6 +111,7 @@ import RepTate.gui.Ui_errorcalculationoptions
 
 
 TheoryTables: TypeAlias = dict[str, DataTable]
+ParameterPropertyWidget: TypeAlias = QLineEdit | QComboBox
 BasinhoppingAny: Any = basinhopping
 DualAnnealingAny: Any = dual_annealing
 DifferentialEvolutionAny: Any = differential_evolution
@@ -222,11 +224,16 @@ def compute_error(
 class EditThParametersDialog(QDialog):
     """Create the form that is used to modify the theorys parameters"""
 
-    def __init__(self, parent, p_name):
+    parent_theory: "QTheory"
+    tabs: QTabWidget
+    all_pattr: dict[str, dict[str, ParameterPropertyWidget]]
+
+    def __init__(self, parent: "QTheory", p_name: str) -> None:
         super().__init__(parent)
         self.parent_theory = parent
         self.tabs = QTabWidget()
         self.all_pattr = {}
+        index = 0
         for pname in self.parent_theory.parameters:
             tab = self.create_param_tab(pname)
             self.tabs.addTab(tab, pname)
@@ -244,15 +251,15 @@ class EditThParametersDialog(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Theory Parameters")
 
-    def create_param_tab(self, p_name):
+    def create_param_tab(self, p_name: str) -> QWidget:
         """Create a form to set the new values of the file parameters"""
         tab = QWidget()
         layout = QFormLayout()
 
         p = self.parent_theory.parameters[p_name]
         p_attributes = p.__dict__
-        attr_dict = {}
-        a_new = []
+        attr_dict: dict[str, ParameterPropertyWidget] = {}
+        a_new: list[ParameterPropertyWidget] = []
         i = 0
         for attr_name in p_attributes:  # loop over the Parameters attributes
             if attr_name == "type":
@@ -313,7 +320,7 @@ class EditThParametersDialog(QDialog):
                 ]:
                     qline.setReadOnly(True)
                 a_new.append(qline)
-                a_new[i].setText("%s" % p_attributes[attr_name])
+                qline.setText("%s" % p_attributes[attr_name])
             layout.addRow("%s:" % attr_name, a_new[i])
             attr_dict[attr_name] = a_new[i]
             i += 1
@@ -325,24 +332,26 @@ class EditThParametersDialog(QDialog):
 class CalculationThread(QObject):
     sig_done = Signal()
 
-    def __init__(self, fthread, *args):
+    def __init__(self, fthread: Callable[..., Any], *args: Any) -> None:
         super().__init__()
-        self.args = args
-        self.function = fthread
+        self.args: tuple[Any, ...] = args
+        self.function: Callable[..., Any] = fthread
 
-    def work(self):
+    def work(self) -> None:
         self.function(*self.args)
         self.sig_done.emit()
 
 
 class GetModesDialog(QDialog):
-    def __init__(self, parent=None, th_dict={}):
+    def __init__(self, parent: QWidget | None = None, th_dict: dict[str, Any] | None = None) -> None:
         super(GetModesDialog, self).__init__(parent)
+        if th_dict is None:
+            th_dict = {}
 
         self.setWindowTitle("Get Maxwell modes")
         layout = QVBoxLayout(self)
 
-        self.btngrp = QButtonGroup()
+        self.btngrp: QButtonGroup = QButtonGroup()
 
         for item in th_dict.keys():
             rb = QRadioButton(item, self)
@@ -2044,7 +2053,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
 
-    def update_parameter_table(self):
+    def update_parameter_table(self) -> None:
         """Update the theory parameter table"""
         previous_block_state = self.thParamTable.blockSignals(True)
         # clean table
@@ -2064,9 +2073,9 @@ class QTheory(QWidget, Ui_TheoryTab):
                                 self.thParamTable,
                                 [p_label, "%0.3g" % p.display_value(), "N/A"],
                             )
-                        item.setData(0, QtAny.UserRole, p.name)
-                        item.setCheckState(0, QtAny.PartiallyChecked)
-                        item.setFlags(item.flags() & ~QtAny.ItemIsUserCheckable)
+                        item.setData(0, Qt.ItemDataRole.UserRole, p.name)
+                        item.setCheckState(0, Qt.CheckState.PartiallyChecked)
+                        item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsUserCheckable)
                     else:
                         try:
                             err = "%0.3g" % p.display_value(p.error)
@@ -2079,24 +2088,24 @@ class QTheory(QWidget, Ui_TheoryTab):
                                 self.thParamTable,
                                 [p_label, "%0.3g" % p.display_value(), err],
                             )
-                        item.setData(0, QtAny.UserRole, p.name)
+                        item.setData(0, Qt.ItemDataRole.UserRole, p.name)
                         if p.opt_type == OptType.opt:
-                            item.setCheckState(0, QtAny.Checked)
+                            item.setCheckState(0, Qt.CheckState.Checked)
                         elif p.opt_type == OptType.nopt:
-                            item.setCheckState(0, QtAny.Unchecked)
+                            item.setCheckState(0, Qt.CheckState.Unchecked)
 
-                    item.setFlags(item.flags() | QtAny.ItemIsEditable)
+                    item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
                     item.setToolTip(0, p.description)
             self.thParamTable.header().resizeSections(QHeaderViewAny.ResizeToContents)
         finally:
             self.thParamTable.blockSignals(previous_block_state)
 
-    def onTreeWidgetItemDoubleClicked(self, item, column):
+    def onTreeWidgetItemDoubleClicked(self, item: QTreeWidgetItem, column: int) -> None:
         """Start editing text when a table cell is double clicked
         Or edit all parameters fittingoptionsdialog if parameter name is double clicked
         """
         if column == 0:
-            p_name = item.data(0, QtAny.UserRole) or item.text(0)
+            p_name = item.data(0, Qt.ItemDataRole.UserRole) or item.text(0)
             d = EditThParametersDialog(self, p_name)
             if d.exec_():
                 for pname in self.parameters:
@@ -2104,21 +2113,22 @@ class QTheory(QWidget, Ui_TheoryTab):
                     attr_dict = d.all_pattr[pname]
                     for attr_name in attr_dict:
                         if attr_name == "type":
-                            val = attr_dict[attr_name].currentText()
+                            val = cast(QComboBox, attr_dict[attr_name]).currentText()
                             setattr(p, attr_name, ParameterType[val])
                         elif attr_name == "opt_type":
-                            val = attr_dict[attr_name].currentText()
+                            val = cast(QComboBox, attr_dict[attr_name]).currentText()
                             setattr(p, attr_name, OptType[val])
                         elif attr_name == "display_flag":
-                            val = ast.literal_eval(attr_dict[attr_name].currentText())  # bool
+                            val = ast.literal_eval(cast(QComboBox, attr_dict[attr_name]).currentText())  # bool
                             setattr(p, attr_name, val)
                         elif attr_name == "display_unit":
-                            if isinstance(attr_dict[attr_name], QComboBox):
-                                val = attr_dict[attr_name].currentText()
+                            widget = attr_dict[attr_name]
+                            if isinstance(widget, QComboBox):
+                                val = widget.currentText()
                                 if units_are_compatible(val, p.internal_unit):
                                     setattr(p, attr_name, val)
                         elif attr_name == "discrete_values":
-                            val = attr_dict[attr_name].text()
+                            val = cast(QLineEdit, attr_dict[attr_name]).text()
                             l = ast.literal_eval(val)
                             if isinstance(l, list):
                                 setattr(p, attr_name, l)
@@ -2130,7 +2140,7 @@ class QTheory(QWidget, Ui_TheoryTab):
                         ]:
                             continue
                         else:
-                            val = float(attr_dict[attr_name].text())
+                            val = float(cast(QLineEdit, attr_dict[attr_name]).text())
                             setattr(p, attr_name, val)
                 self.update_parameter_table()
                 self.handle_parameter_metadata_changed()
@@ -2140,13 +2150,13 @@ class QTheory(QWidget, Ui_TheoryTab):
             # thcurrent = self.parent_dataset.TheorytabWidget.currentWidget()
             # thcurrent.editItem(item, column)
 
-    def handle_parameterItemChanged(self, item, column):
+    def handle_parameterItemChanged(self, item: QTreeWidgetItem, column: int) -> None:
         """Modify parameter values when changed in the theory table"""
-        param_changed = item.data(0, QtAny.UserRole) or item.text(0)
+        param_changed = item.data(0, Qt.ItemDataRole.UserRole) or item.text(0)
         if column == 0:  # param was checked/unchecked
-            if item.checkState(0) == QtAny.Checked:
+            if item.checkState(0) == Qt.CheckState.Checked:
                 self.parameters[param_changed].opt_type = OptType.opt
-            elif item.checkState(0) == QtAny.Unchecked:
+            elif item.checkState(0) == Qt.CheckState.Unchecked:
                 self.parameters[param_changed].opt_type = OptType.nopt
             return
         # else, assign the entered value
@@ -2164,14 +2174,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         else:
             QTimer.singleShot(0, self._finish_parameter_item_change)
 
-    def _finish_parameter_item_change(self):
+    def _finish_parameter_item_change(self) -> None:
         """Refresh after Qt has finished closing the active tree editor."""
         self.update_parameter_table()
         self.handle_parameter_metadata_changed()
         if self.autocalculate:
             self.parent_dataset.handle_actionCalculate_Theory()
 
-    def handle_parameter_metadata_changed(self):
+    def handle_parameter_metadata_changed(self) -> None:
         """Hook for theories with auxiliary widgets derived from parameter metadata."""
         pass
 
