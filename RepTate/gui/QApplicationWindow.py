@@ -140,9 +140,9 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
         file_type = cast(FileTypeLike, filetype)
         for p in file_type.basic_file_parameters:
             item = QTreeWidgetItem(self.parameterTreeWidget, [p, "0", "1", "10"])
-            item.setCheckState(0, Qt.Unchecked)
+            item.setCheckState(0, Qt.CheckState.Unchecked)
             item.setIcon(0, QIcon())
-            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsEditable)
             cb = QComboBox(self.parameterTreeWidget)
             cb.addItems(["Linear", "Log"])
             self.parameterTreeWidget.setItemWidget(item, 4, cb)
@@ -177,7 +177,9 @@ class AddFileFunction(QDialog):
         mainLayout.addWidget(self.parametersGroupBox)
         mainLayout.addWidget(self.columnsGroupBox)
         mainLayout.addWidget(self.labelGroupBox)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         mainLayout.addWidget(buttonBox)
@@ -299,7 +301,9 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
     def showColorDialog(self) -> QColor | None:
         """Show the color picker and return the picked QtColor or `None`"""
         wtitle = 'Select color for the annotation "%s"' % self.annotation.get_text()
-        color = QColorDialog.getColor(title=wtitle, options=QColorDialog.DontUseNativeDialog)
+        color = QColorDialog.getColor(
+            title=wtitle, options=QColorDialog.ColorDialogOption.DontUseNativeDialog
+        )
         if not color.isValid():
             color = None
         return color
@@ -320,11 +324,11 @@ class EditAnnotation(QDialog, Ui_EditAnnotation):
         self.annotation.figure.canvas.draw()
 
     def delete(self) -> None:
-        btns = QMessageBox.Yes | QMessageBox.No
+        btns = QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         msg = 'Do you want to delete the the annotation "%s"' % self.annotation.get_text()
         title = "Delete annotation"
         ans = QMessageBox.question(self, title, msg, buttons=btns)
-        if ans == QMessageBox.Yes:
+        if ans == QMessageBox.StandardButton.Yes:
             self.annotation.remove()
             self.pushCancel.click()
 
@@ -359,8 +363,8 @@ class ViewShiftFactors(QDialog):
         ncurves = len(x_factors[0])
 
         self.table = SpreadsheetWidget()  # allows copy/paste
-        self.table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table.setRowCount(nfiles)
         self.table.setColumnCount(2 * ncurves)
         hlabels: list[str] = []
@@ -377,7 +381,11 @@ class ViewShiftFactors(QDialog):
         layout.addWidget(self.table)
 
         # OK and Cancel buttons
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Qt.Horizontal, self)
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
+            Qt.Orientation.Horizontal,
+            self,
+        )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
