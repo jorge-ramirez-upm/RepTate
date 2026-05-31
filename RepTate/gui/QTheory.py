@@ -125,16 +125,16 @@ QTextCursorAny: Any = QTextCursor
 class MLStripper(HTMLParser):
     """Remove HTML tags from string"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.reset()
         self.strict = False
         self.convert_charrefs = True
-        self.fed = []
+        self.fed: list[str] = []
 
-    def handle_data(self, d):
+    def handle_data(self, d: str) -> None:
         self.fed.append(d)
 
-    def get_data(self):
+    def get_data(self) -> str:
         return "".join(self.fed)
 
 
@@ -167,7 +167,7 @@ class MinimizationMethod(enum.Enum):
         "Find the minimum on a hypergrid",
     ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         stt = ""
         N = len(self.types.value)
         for i, k in enumerate(self.types.value):
