@@ -36,10 +36,7 @@ Module that defines the About window.
 
 """
 
-import sys
-from typing import Any
-from os.path import dirname, join, abspath
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QLabel, QWidget
 
 # PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_AboutDialog import Ui_Dialog as Ui_AboutRepTateWindow
@@ -48,9 +45,9 @@ from RepTate.gui.Ui_AboutDialog import Ui_Dialog as Ui_AboutRepTateWindow
 class AboutWindow(QDialog, Ui_AboutRepTateWindow):
     """About window in the GUI"""
 
-    label: Any
+    label: QLabel
 
-    def __init__(self, parent: Any, version: str, text: str) -> None:
+    def __init__(self, parent: QWidget | None, version: str, text: str) -> None:
         """**Constructor**"""
         super(AboutWindow, self).__init__(parent)
         self.setupUi(self)
