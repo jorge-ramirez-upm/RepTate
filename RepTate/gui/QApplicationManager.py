@@ -93,7 +93,7 @@ from RepTate.gui.Ui_RepTateMainWindow import Ui_ReptateMainWindow as Ui_MainWind
 class QTextEditLogger(logging.Handler):
     widget: QTextBrowser
 
-    def __init__(self, parent: Any) -> None:
+    def __init__(self, parent: QWidget | None) -> None:
         super().__init__()
         # self.widget = QPlainTextEdit(parent)
         self.widget = QTextBrowser(parent)
@@ -253,9 +253,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         self.toolBarHelpAbout.insertSeparator(self.actionAbout_Qt)
         # self.toolBar.insertSeparator(self.actionQuit)
-        self.toolBarProject.setContextMenuPolicy(Qt.PreventContextMenu)
-        self.toolBarApps.setContextMenuPolicy(Qt.PreventContextMenu)
-        self.toolBarHelpAbout.setContextMenuPolicy(Qt.PreventContextMenu)
+        self.toolBarProject.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+        self.toolBarApps.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+        self.toolBarHelpAbout.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
 
         # # ApplicationXY button
         # #choose the button icon
@@ -426,7 +426,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logTextBox.widget.selectAll()
         self.logTextBox.widget.copy()
 
-    def handle_show_reptate_help(self):
+    def handle_show_reptate_help(self) -> None:
         """Show RepTate documentation"""
         try:
             html_help_file = self.html_help_file
@@ -435,7 +435,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             return
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
-    def handle_show_app_help(self):
+    def handle_show_app_help(self) -> None:
         """Show RepTate current application (if any) manual, or all applications"""
         try:
             html_help_file = self.ApplicationtabWidget.currentWidget().html_help_file
@@ -444,7 +444,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             html_help_file = "http://reptate.readthedocs.io/manual/Applications/applications.html"
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
-    def handle_show_th_help(self):
+    def handle_show_th_help(self) -> None:
         """Show RepTate current theory (if any) manual, or all theories"""
         try:
             app = self.ApplicationtabWidget.currentWidget()
@@ -456,27 +456,27 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             html_help_file = "http://reptate.readthedocs.io/manual/All_Theories/All_Theories.html"
         QDesktopServices.openUrl(QUrl.fromUserInput((html_help_file)))
 
-    def handle_actionShow_offline_help(self):
+    def handle_actionShow_offline_help(self) -> None:
         PATH = join(RepTate.root_dir, "docs", "build", "html", "index.html")
         QDesktopServices.openUrl(QUrl.fromLocalFile(PATH))
 
-    def handle_about_matplotlib(self):
+    def handle_about_matplotlib(self) -> None:
         """Show matplotlib web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(("https://matplotlib.org/index.html")))
 
-    def handle_about_numpy(self):
+    def handle_about_numpy(self) -> None:
         """Show numpy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(("http://www.numpy.org/")))
 
-    def handle_about_scipy(self):
+    def handle_about_scipy(self) -> None:
         """Show scipy web site"""
         QDesktopServices.openUrl(QUrl.fromUserInput(("https://scipy.org/")))
 
-    def handle_cite_RepTate(self):
+    def handle_cite_RepTate(self) -> None:
         """Visit the web site of the RepTatepaper"""
         QDesktopServices.openUrl(QUrl.fromUserInput(("https://dx.doi.org/10.1122/8.0000002")))
 
-    def check_version(self):
+    def check_version(self) -> tuple[bool, str, str]:
         url = "https://api.github.com/repos/jorge-ramirez-upm/RepTate/releases"
         releasedata = (urlopen(url).read()).decode("UTF-8")
         parsed_json = json.loads(releasedata)
@@ -493,7 +493,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         newversion = version_github > version_current
         return newversion, version_github, version_current
 
-    def handle_check_RepTate_version(self):
+    def handle_check_RepTate_version(self) -> None:
         """Query Github for the latest RepTate release"""
         newversion, version_github, version_current = self.check_version()
         if newversion:
@@ -502,10 +502,10 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 "New RepTate version found",
                 "The version of RepTate on Github (%s) is more recent than the one you are running (%s).Do you want to check the new features?"
                 % (version_github, version_current),
-                QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.Yes,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.Yes,
             )
-            if ans == QMessageBox.Yes:
+            if ans == QMessageBox.StandardButton.Yes:
                 QDesktopServices.openUrl(QUrl.fromUserInput(("https://github.com/jorge-ramirez-upm/RepTate/releases")))
         else:
             QMessageBox.information(

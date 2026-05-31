@@ -551,7 +551,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.DataSettreeWidget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)  # QAbstractItemView::SingleSelection
         hd = self.DataSettreeWidget.header()
         hd.setSectionsMovable(False)
-        hd.setContextMenuPolicy(Qt.CustomContextMenu)
+        hd.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         w = self.DataSettreeWidget.width()
         w /= hd.count()
         for i in range(hd.count()):
@@ -732,7 +732,7 @@ class QDataSet(QWidget, Ui_DataSet):
             return
         self.DataSettreeWidget.blockSignals(True)
         for file in self.files:
-            items = self.DataSettreeWidget.findItems(file.file_name_short, Qt.MatchExactly, 0)
+            items = self.DataSettreeWidget.findItems(file.file_name_short, Qt.MatchFlag.MatchExactly, 0)
             if not items:
                 continue
             item = items[0]
@@ -1392,7 +1392,7 @@ class QDataSet(QWidget, Ui_DataSet):
         self.DataSettreeWidget.blockSignals(True)  # avoid triggering 'itemChanged' signal that causes a call to do_plot()
 
         for fname, marker_name, face, color in table_icon_list:
-            item = self.DataSettreeWidget.findItems(fname, Qt.MatchCaseSensitive, column=0)  # returns list of items matching file name
+            item = self.DataSettreeWidget.findItems(fname, Qt.MatchFlag.MatchCaseSensitive, column=0)  # returns list of items matching file name
             if item:
                 # paint icon
                 folder = ":/Markers/Images/Matplotlib_markers/"
@@ -1401,7 +1401,7 @@ class QDataSet(QWidget, Ui_DataSet):
                 else:  # filled symbol
                     marker_path = folder + "marker_filled_%s" % marker_name
                 qp = QPixmap(marker_path)
-                mask = qp.createMaskFromColor(QColor(0, 0, 0), Qt.MaskOutColor)
+                mask = qp.createMaskFromColor(QColor(0, 0, 0), Qt.MaskMode.MaskOutColor)
                 qpainter = QPainter()
                 qpainter.begin(qp)
                 qpainter.setPen(
