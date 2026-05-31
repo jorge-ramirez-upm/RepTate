@@ -607,7 +607,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset()  # populate with empty dataset at app opening
         app_tabname = "%s%d" % (app_name, self.application_counter)
-        ind = self.ApplicationtabWidget.addTab(newapp, QIcon(icon), app_tabname)
+        ind = self.ApplicationtabWidget.addTab(cast(QWidget, newapp), QIcon(icon), app_tabname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return newapp
@@ -956,7 +956,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         """Open new application"""
         newapp = self.new(app_name)
         icon = QIcon(":/Icons/Images/new_icons/%s.png" % app_name)
-        ind = self.ApplicationtabWidget.addTab(newapp, icon, app_tabname)
+        ind = self.ApplicationtabWidget.addTab(cast(QWidget, newapp), icon, app_tabname)
         # self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
         return self.ApplicationtabWidget.widget(ind), ind
