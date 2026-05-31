@@ -33,12 +33,11 @@
 """Module to import pasted data"""
 
 import sys
-import os
 import io
 from typing import Any, cast
 
 import numpy as np
-from PySide6.QtWidgets import QApplication, QDialog, QWidget
+from PySide6.QtWidgets import QApplication, QDialog, QLabel, QLineEdit, QTextBrowser, QWidget
 from RepTate.core.typing import FileTypeLike
 
 # PATH = os.path.dirname(os.path.abspath(__file__))
@@ -48,9 +47,9 @@ from RepTate.gui.Ui_import_from_pasted_dialog import (
 
 
 class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
-    file_name_label: Any
-    label_columns: Any
-    paste_box: Any
+    file_name_label: QLineEdit
+    label_columns: QLabel
+    paste_box: QTextBrowser
 
     def __init__(self, parent: QWidget | None = None, ftype: FileTypeLike | None = None) -> None:
         super().__init__()
