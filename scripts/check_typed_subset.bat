@@ -28,13 +28,28 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/core/DataTable.py ^
   RepTate/core/expression_parser.py ^
   RepTate/core/axis_labels.py ^
+  RepTate/core/CmdBase.py ^
+  RepTate/core/typing.py ^
+  RepTate/core/__init__.py ^
+  RepTate/core/MultiView.py ^
   RepTate/tools/ToolResampleData.py ^
   RepTate/tools/polymer_data.py ^
   RepTate/tools/ToolGradient.py ^
   RepTate/tools/ToolIntegral.py ^
   RepTate/tools/ToolInterpolate.py ^
   RepTate/tools/ToolEvaluate.py ^
+  RepTate/tools/__init__.py ^
+  RepTate/tools/get_palettes.py ^
+  RepTate/tools/readlinlin.py ^
+  RepTate/tools/ToolTemplate.py ^
+  RepTate/tools/ToolPowerLaw.py ^
+  RepTate/tools/ToolSmooth.py ^
+  RepTate/tools/ToolBounds.py ^
   RepTate/theories/theory_helpers.py ^
-  RepTate/theories/GOpolySTRAND_initialGuess.py
+  RepTate/theories/GOpolySTRAND_initialGuess.py ^
+  RepTate/theories/timeArraySplit.py ^
+  RepTate/theories/__init__.py ^
+  RepTate/theories/kww_ctypes_helper.py ^
+  RepTate/theories/schwarzl_ctypes_helper.py
 
 exit /b %ERRORLEVEL%
