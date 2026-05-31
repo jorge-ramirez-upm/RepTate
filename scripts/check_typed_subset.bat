@@ -45,6 +45,12 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/tools/ToolPowerLaw.py ^
   RepTate/tools/ToolSmooth.py ^
   RepTate/tools/ToolBounds.py ^
+  RepTate/tools/linlin2npz.py ^
+  RepTate/tools/ReadMaterialsDataBaseFile.py ^
+  RepTate/tools/CreateMaterialsDatabaseFile.py ^
+  RepTate/tools/standard_pyQt5_icons.py ^
+  RepTate/tools/ToolFindPeaks.py ^
+  RepTate/tools/ToolMaterialsDatabase.py ^
   RepTate/theories/theory_helpers.py ^
   RepTate/theories/GOpolySTRAND_initialGuess.py ^
   RepTate/theories/timeArraySplit.py ^
