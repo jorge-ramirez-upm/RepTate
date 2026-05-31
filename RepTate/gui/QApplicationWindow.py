@@ -84,6 +84,7 @@ from PySide6.QtWidgets import (
     QColorDialog,
     QDialog,
     QDialogButtonBox,
+    QTreeWidget,
     QTreeWidgetItem,
     QTabWidget,
     QComboBox,
@@ -129,7 +130,7 @@ from RepTate.gui.Ui_dummyfilesDialog import Ui_Dialog as Ui_AddDummyFiles
 
 
 class AddDummyFiles(QDialog, Ui_AddDummyFiles):
-    parameterTreeWidget: Any
+    parameterTreeWidget: QTreeWidget
 
     def __init__(self, parent: QWidget | None = None, filetype: FileTypeLike | None = None) -> None:
         super(AddDummyFiles, self).__init__(parent)
@@ -159,12 +160,12 @@ class AddDummyFiles(QDialog, Ui_AddDummyFiles):
 
 class AddFileFunction(QDialog):
     col_dict: dict[str, QLineEdit]
-    columnsGroupBox: Any
+    columnsGroupBox: QGroupBox
     filetype: FileTypeLike
     lab_dict: dict[str, QLineEdit]
-    labelGroupBox: Any
+    labelGroupBox: QGroupBox
     param_dict: dict[str, QLineEdit]
-    parametersGroupBox: Any
+    parametersGroupBox: QGroupBox
 
     def __init__(self, parent: QWidget | None = None, filetype: FileTypeLike | None = None) -> None:
         super(AddFileFunction, self).__init__(parent)
