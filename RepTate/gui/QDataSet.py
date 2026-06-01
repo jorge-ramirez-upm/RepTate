@@ -43,6 +43,7 @@ import glob
 import enum
 import time
 import getpass
+from typing import Any, TypeAlias
 
 from os.path import dirname, join, abspath, isdir
 from PySide6.QtGui import (
@@ -94,6 +95,9 @@ import logging
 
 # PATH = dirname(abspath(__file__))
 from RepTate.gui.Ui_DataSet import Ui_Form as Ui_DataSet
+
+
+TableIconSpec: TypeAlias = tuple[str, str, str, Any]
 
 
 class ColorMode(enum.Enum):
@@ -508,34 +512,34 @@ class QDataSet(QWidget, Ui_DataSet):
         Ui_DataSet.__init__(self)
         self.setupUi(self)
 
-        self.name = name
+        self.name: str = name
         self.parent_application: ApplicationLike = parent
-        self.nplots = self.parent_application.nplots
-        self.files = []
-        self.current_file = None
-        self.num_files = 0
+        self.nplots: int = self.parent_application.nplots
+        self.files: list[File] = []
+        self.current_file: File | None = None
+        self.num_files: int = 0
         # Marker settings
-        self.marker_size = 6
-        self.line_width = 1
-        self.colormode = ColorMode.variable.value
-        self.color1 = ColorMode.color1.value
-        self.color2 = ColorMode.color2.value
-        self.th_line_mode = ThLineMode.as_data.value
-        self.th_color = ThLineMode.color.value
-        self.palette_name = "ColorBlind"
-        self.symbolmode = SymbolMode.fixed.value
-        self.symbol1 = SymbolMode.symbol1.value
-        self.symbol1_name = SymbolMode.symbol1_name.value
-        self.th_linestyle = "solid"
-        self.th_line_width = 1.5
+        self.marker_size: int = 6
+        self.line_width: int = 1
+        self.colormode: int = ColorMode.variable.value
+        self.color1: Any = ColorMode.color1.value
+        self.color2: Any = ColorMode.color2.value
+        self.th_line_mode: int = ThLineMode.as_data.value
+        self.th_color: Any = ThLineMode.color.value
+        self.palette_name: str = "ColorBlind"
+        self.symbolmode: int = SymbolMode.fixed.value
+        self.symbol1: str = SymbolMode.symbol1.value
+        self.symbol1_name: str = SymbolMode.symbol1_name.value
+        self.th_linestyle: str = "solid"
+        self.th_line_width: float = 1.5
         #
-        self.theories = {}
-        self.num_theories = 0
-        self.inactive_files = {}
-        self.current_theory = None
-        self.file_parameter_display_units = {}
-        self.table_icon_list = []  # save the file's marker shape, fill and color there
-        self.selected_file = None
+        self.theories: dict[str, Any] = {}
+        self.num_theories: int = 0
+        self.inactive_files: dict[str, File] = {}
+        self.current_theory: str | None = None
+        self.file_parameter_display_units: dict[str, str] = {}
+        self.table_icon_list: list[TableIconSpec] = []  # save the file's marker shape, fill and color there
+        self.selected_file: File | None = None
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_application.logger.name + "." + self.name)
