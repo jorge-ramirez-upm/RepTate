@@ -4,7 +4,7 @@ import os
 import sys
 from collections import OrderedDict
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import numpy.testing as npt
@@ -27,7 +27,7 @@ from RepTate.tools.ToolPowerLaw import ToolPowerLaw
 
 
 def _parameter_owner(cls: type[Any]) -> Any:
-    owner = cls.__new__(cls)
+    owner = cast(Any, cls).__new__(cls)
     owner.parameters = OrderedDict(
         [
             ("real", Parameter("real", "2.5", "real parameter", ParameterType.real)),
@@ -47,6 +47,10 @@ class _LoggerStub:
         pass
 
 
+def _qprint_stub(msg: Any, end: str = "<br>") -> None:
+    pass
+
+
 def _algebraic_expression_theory(expression: str) -> tuple[Any, Any]:
     ft = DataTable()
     ft.num_rows = 3
@@ -61,6 +65,7 @@ def _algebraic_expression_theory(expression: str) -> tuple[Any, Any]:
     )
 
     theory = TheoryAlgebraicExpression.__new__(TheoryAlgebraicExpression)
+    dynamic_theory = cast(Any, theory)
     theory.parameters = OrderedDict(
         [
             ("n", Parameter("n", 2, "number of parameters", ParameterType.integer)),
@@ -71,8 +76,8 @@ def _algebraic_expression_theory(expression: str) -> tuple[Any, Any]:
     )
     theory.tables = {"sample": tt}
     theory.safe_dict = {"sin": np.sin}
-    theory.logger = _LoggerStub()
-    theory.Qprint = lambda message: None
+    dynamic_theory.logger = _LoggerStub()
+    dynamic_theory.Qprint = _qprint_stub
     return theory, file
 
 
@@ -168,7 +173,7 @@ def test_algebraic_expression_rejects_conditional_expression() -> None:
 def test_dataset_theory_creation_and_maxwell_mode_listing() -> None:
     configure_numpy_errors()
     CmdBase.calcmode = CalcMode.singlethread
-    QApplication.instance() or QApplication(sys.argv)
+    app_instance = QApplication.instance() or QApplication(sys.argv)
     manager = QApplicationManager()
     app = manager.handle_new_app("LVE")
     assert app is not None
