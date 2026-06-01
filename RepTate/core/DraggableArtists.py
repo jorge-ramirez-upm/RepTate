@@ -45,6 +45,8 @@ from RepTate.core.typing import ApplicationLike
 Callback: TypeAlias = Any
 ConnectionId: TypeAlias = int
 
+_LOG_FLOOR = 1.0e-300
+
 class DragType(enum.Enum):
     """Describes the type of drag that the graphical object can be subjected to"""
     vertical = 1
