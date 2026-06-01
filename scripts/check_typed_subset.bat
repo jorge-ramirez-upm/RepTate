@@ -7,6 +7,30 @@ rem This is not a full-project strict type check.
 set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
 
 "%PYTHON%" -m pyright ^
+  setup.py ^
+  docs/source/conf.py ^
+  scripts/build_ui.py ^
+  RepTate/MatDB.py ^
+  RepTate/RepTate.py ^
+  RepTate/UV.py ^
+  RepTate/__init__.py ^
+  RepTate/__main__.py ^
+  RepTate/runtime.py ^
+  RepTate/applications/ApplicationCreep.py ^
+  RepTate/applications/ApplicationCrystal.py ^
+  RepTate/applications/ApplicationDielectric.py ^
+  RepTate/applications/ApplicationGt.py ^
+  RepTate/applications/ApplicationLAOS.py ^
+  RepTate/applications/ApplicationLVE.py ^
+  RepTate/applications/ApplicationMWD.py ^
+  RepTate/applications/ApplicationNLVE.py ^
+  RepTate/applications/ApplicationReact.py ^
+  RepTate/applications/ApplicationSANS.py ^
+  RepTate/applications/ApplicationTTS.py ^
+  RepTate/applications/ApplicationTTSFactors.py ^
+  RepTate/applications/ApplicationTemplate.py ^
+  RepTate/applications/ApplicationUniversalViewer.py ^
+  RepTate/applications/__init__.py ^
   RepTate/gui/DataSetWidget.py ^
   RepTate/gui/DataSetWidgetItem.py ^
   RepTate/gui/SpreadsheetWidget.py ^
@@ -112,6 +136,7 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/theories/TheoryDieneCSTR.py ^
   RepTate/theories/TheoryLDPEBatch.py ^
   RepTate/theories/TheoryMultiMetCSTR.py ^
-  RepTate/theories/TheoryTobitaCSTR.py
+  RepTate/theories/TheoryTobitaCSTR.py ^
+  RepTate/gui/Images/Matplotlib_markers/markers.py
 
 exit /b %ERRORLEVEL%
