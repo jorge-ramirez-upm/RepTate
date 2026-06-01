@@ -32,6 +32,7 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/core/typing.py ^
   RepTate/core/__init__.py ^
   RepTate/core/MultiView.py ^
+  RepTate/core/DraggableArtists.py ^
   RepTate/tools/ToolResampleData.py ^
   RepTate/tools/polymer_data.py ^
   RepTate/tools/ToolGradient.py ^
@@ -56,6 +57,19 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/theories/timeArraySplit.py ^
   RepTate/theories/__init__.py ^
   RepTate/theories/kww_ctypes_helper.py ^
-  RepTate/theories/schwarzl_ctypes_helper.py
+  RepTate/theories/schwarzl_ctypes_helper.py ^
+  RepTate/theories/dtd_ctypes_helper.py ^
+  RepTate/theories/goLandscape_ctypes_helper.py ^
+  RepTate/theories/rouse_ctypes_helper.py ^
+  RepTate/theories/BobCtypesHelper.py ^
+  RepTate/theories/react_ctypes_helper.py ^
+  RepTate/theories/rp_blend_ctypes_helper.py ^
+  RepTate/theories/sccr_ctypes_helper.py ^
+  RepTate/theories/SchneiderRate.py ^
+  RepTate/theories/QuiescentSmoothStrand.py ^
+  RepTate/theories/SmoothPolySTRAND.py ^
+  RepTate/theories/TheoryTemplate.py ^
+  RepTate/theories/TheoryBasic.py ^
+  RepTate/theories/TheoryArrhenius.py
 
 exit /b %ERRORLEVEL%
