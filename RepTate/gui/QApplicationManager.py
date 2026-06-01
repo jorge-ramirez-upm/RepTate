@@ -152,9 +152,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # SETUP APPLICATIONS
-        self.application_counter = 0
+        self.application_counter: int = 0
         self.applications: OrderedDict[str, ApplicationLike] = OrderedDict()
-        self.available_applications = OrderedDict()
+        self.available_applications: OrderedDict[str, Any] = OrderedDict()
         self.available_applications[ApplicationMWD.appname] = ApplicationMWD
         self.available_applications[ApplicationTTS.appname] = ApplicationTTS
         self.available_applications[ApplicationTTSFactors.appname] = ApplicationTTSFactors
@@ -369,8 +369,8 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.actionCopyLogText.triggered.connect(self.copyLogText)
 
         # self.add_save_load_buttons()
-        self.REPTATE_PROJ_JSON = "reptate_project.json"  # json filename inside zip
-        self.load_path = None
+        self.REPTATE_PROJ_JSON: str = "reptate_project.json"  # json filename inside zip
+        self.load_path: str | None = None
 
         # CONSOLE WINDOW (need to integrate it with cmd commands)
         # self.text_edit = Console(self)
