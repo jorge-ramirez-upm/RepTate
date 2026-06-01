@@ -101,6 +101,7 @@ from RepTate.core.typing import ApplicationManagerLike, AxesArray, DataSetLike, 
 from RepTate.core.units import get_unit
 from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
+from RepTate.core.View import View
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
 from RepTate.gui.QDataSet import ColorMode, SymbolMode, ThLineMode
 
@@ -428,11 +429,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
         self.name: str = name
         self.parent_manager: ApplicationManagerLike = cast(ApplicationManagerLike, parent)
-        self.views = OrderedDict()
+        self.views: OrderedDict[str, View] = OrderedDict()
         self.filetypes: OrderedDict[str, FileTypeLike] = OrderedDict()  # keep filetypes in order
-        self.theories = OrderedDict()  # keep theory combobox in order
-        self.availabletools = OrderedDict()  # keep tools combobox in order
-        self.extratools = OrderedDict()  # keep tools combobox in order
+        self.theories: OrderedDict[str, Any] = OrderedDict()  # keep theory combobox in order
+        self.availabletools: OrderedDict[str, Any] = OrderedDict()  # keep tools combobox in order
+        self.extratools: OrderedDict[str, Any] = OrderedDict()  # keep tools combobox in order
         self.datasets: dict[str, DataSetLike] = {}
         self.tools: list[Any] = []
         self.num_tools: int = 0
