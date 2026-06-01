@@ -428,17 +428,17 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.active: bool = True  # defines if the theory is plotted
         self.calculate_is_busy: bool = False
         self.axarr[0].autoscale(False)
-        self.autocalculate = True
-        self.extra_data = {}  # Dictionary saved during "Save Project"
+        self.autocalculate: bool = True
+        self.extra_data: dict[str, Any] = {}  # Dictionary saved during "Save Project"
 
         # THEORY OPTIONS
-        self.npoints = 100
-        self.dt = 0.001
-        self.dt_min = 1e-6
-        self.eps = 1e-4
-        self.stop_steady = False
-        self.is_fitting = False
-        self.has_modes = False
+        self.npoints: int = 100
+        self.dt: float = 0.001
+        self.dt_min: float = 1e-6
+        self.eps: float = 1e-4
+        self.stop_steady: bool = False
+        self.is_fitting: bool = False
+        self.has_modes: bool = False
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_dataset.logger.name + "." + self.name)
@@ -449,24 +449,24 @@ class QTheory(QWidget, Ui_TheoryTab):
         ax = self.ax
 
         # XRANGE for FIT
-        self.xmin = -np.inf
-        self.xmax = np.inf
+        self.xmin: float = -np.inf
+        self.xmax: float = np.inf
         self.xrange = ax.axvspan(self.xmin, self.xmax, facecolor="yellow", alpha=0.3, visible=False)
         self.xminline = ax.axvline(self.xmin, color="black", linestyle="--", marker="o", visible=False)
         self.xmaxline = ax.axvline(self.xmax, color="black", linestyle="--", marker="o", visible=False)
         self.xminlinedrag = DraggableVLine(self.xminline, DragType.horizontal, self.change_xmin, self)
         self.xmaxlinedrag = DraggableVLine(self.xmaxline, DragType.horizontal, self.change_xmax, self)
-        self.is_xrange_visible = False
+        self.is_xrange_visible: bool = False
 
         # YRANGE for FIT
-        self.ymin = -np.inf
-        self.ymax = np.inf
+        self.ymin: float = -np.inf
+        self.ymax: float = np.inf
         self.yrange = ax.axhspan(self.ymin, self.ymax, facecolor="pink", alpha=0.3, visible=False)
         self.yminline = ax.axhline(self.ymin, color="black", linestyle="--", marker="o", visible=False)
         self.ymaxline = ax.axhline(self.ymax, color="black", linestyle="--", marker="o", visible=False)
         self.yminlinedrag = DraggableHLine(self.yminline, DragType.vertical, self.change_ymin, self)
         self.ymaxlinedrag = DraggableHLine(self.ymaxline, DragType.vertical, self.change_ymax, self)
-        self.is_yrange_visible = False
+        self.is_yrange_visible: bool = False
 
         self.setup_default_minimization_options()
         self.setup_default_error_calculation_options()
@@ -485,7 +485,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         self.print_signal.connect(self.print_qtextbox)  # Asynchronous print when using multithread
         # flag for requesting end of computations
-        self.stop_theory_flag = False
+        self.stop_theory_flag: bool = False
 
         # build the therory widget
         self.thParamTable.setIndentation(0)
@@ -503,8 +503,8 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.thTextBox.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.thTextBox.customContextMenuRequested.connect(self.thtextbox_context_menu)
 
-        self.thread_calc_busy = False
-        self.thread_fit_busy = False
+        self.thread_calc_busy: bool = False
+        self.thread_fit_busy: bool = False
 
         # Setup Theory Parameters Dialog
         self.fittingoptionsdialog: Any = QDialog()
