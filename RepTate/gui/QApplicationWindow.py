@@ -439,8 +439,8 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.num_tools: int = 0
         self.current_view: Any = 0
         self.num_datasets: int = 0
-        self.legend_visible = False
-        self.multiviews = []  # default view order in multiplot views
+        self.legend_visible: bool = False
+        self.multiviews: list[View] = []  # default view order in multiplot views
         self.nplot_max: int = nplot_max  # maximun number of plots
         self.nplots: int = nplot_max  # current number of plots
         self.ncols: int = ncols  # number of columns in the multiplot
@@ -467,7 +467,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         from RepTate.tools.ToolMaterialsDatabase import ToolMaterialsDatabase
 
         # Theories available everywhere
-        self.common_theories = OrderedDict()  # keep theory combobox in order
+        self.common_theories: OrderedDict[str, Any] = OrderedDict()  # keep theory combobox in order
         self.common_theories[TheoryPolynomial.thname] = TheoryPolynomial
         self.common_theories[TheoryPowerLaw.thname] = TheoryPowerLaw
         self.common_theories[TheoryExponential.thname] = TheoryExponential
@@ -495,7 +495,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # self.figure = self.multiplots.figure
         # self.axarr = self.multiplots.axarr  #
         # self.canvas = self.multiplots.canvas
-        self.ax_opt_defaults = {
+        self.ax_opt_defaults: dict[str, Any] = {
             "fontweight": "normal",
             "fontsize": 20,
             "style": "normal",
@@ -508,7 +508,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             "label_size_auto": 1,
             "tick_label_size_auto": 1,
         }
-        self.ax_opts = self.ax_opt_defaults.copy()
+        self.ax_opts: dict[str, Any] = self.ax_opt_defaults.copy()
 
         self.figure.canvas.mpl_connect("resize_event", self.resizeplot)
         self.figure.canvas.mpl_connect("scroll_event", self.zoom_wheel)
@@ -517,11 +517,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.figure.canvas.mpl_connect("button_release_event", self.onrelease)
 
         # Variables used during matplotlib interaction
-        self.artists_clicked = []
+        self.artists_clicked: list[Any] = []
         self._pressed_button = None  # To store active button during interaction
         self._axes = None  # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
-        self._was_zooming = False
+        self._was_zooming: bool = False
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + "." + self.name)
@@ -529,9 +529,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
         self.name = name
         self.parent_application = parent
-        self.tab_count = 0
-        self.curves = []
-        self.zorder = 100
+        self.tab_count: int = 0
+        self.curves: list[Any] = []
+        self.zorder: int = 100
         self.dir_start: str = join(RepTate.root_dir, "data")  # default folder opened
 
         # Accept Drag and drop events
