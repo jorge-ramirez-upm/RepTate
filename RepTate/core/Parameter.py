@@ -114,11 +114,11 @@ class Parameter(object):
             - internal_unit {str} -- Unit used by numerical calculations
             - display_unit {str} -- Unit shown to users
         """
-        self.name = name
-        self.description = description
-        self.type = type
+        self.name: str = name
+        self.description: str = description
+        self.type: ParameterType = type
         if self.type == ParameterType.real:
-            self.value = float(value)
+            self.value: ParameterValue = float(value)
         elif self.type == ParameterType.integer:
             self.value = int(value)
         elif self.type == ParameterType.discrete_real:
@@ -135,15 +135,15 @@ class Parameter(object):
 
         else:
             pass  # NOT IMPLEMENTED YET
-        self.error = np.inf
-        self.opt_type = opt_type
-        self.min_value = min_value
-        self.max_value = max_value
-        self.display_flag = display_flag
-        self.discrete_values = discrete_values
-        self.quantity = quantity
-        self.internal_unit = internal_unit
-        self.display_unit = display_unit
+        self.error: float = np.inf
+        self.opt_type: OptType = opt_type
+        self.min_value: float = min_value
+        self.max_value: float = max_value
+        self.display_flag: bool = display_flag
+        self.discrete_values: DiscreteValues = discrete_values
+        self.quantity: str = quantity
+        self.internal_unit: str = internal_unit
+        self.display_unit: str = display_unit
 
     def copy(self, par2: "Parameter") -> None:
         """Copy the contents of another parameter"""
