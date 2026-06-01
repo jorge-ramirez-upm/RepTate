@@ -91,6 +91,26 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/theories/TheoryHavriliakNegamiModes.py ^
   RepTate/theories/TheoryRouse.py ^
   RepTate/theories/TheoryLikhtmanMcLeish2002.py ^
-  RepTate/theories/TheoryStickyReptation.py
+  RepTate/theories/TheoryStickyReptation.py ^
+  RepTate/theories/TheoryDSMLinear.py ^
+  RepTate/theories/TheoryGiesekus.py ^
+  RepTate/theories/TheoryRoliePoly.py ^
+  RepTate/theories/TheoryRolieDoublePoly.py ^
+  RepTate/theories/TheoryBobLVE.py ^
+  RepTate/theories/TheoryBobNLVE.py ^
+  RepTate/theories/TheoryLP2RLVE.py ^
+  RepTate/theories/TheoryPomPom.py ^
+  RepTate/theories/TheoryDTDStars.py ^
+  RepTate/theories/TheorySCCR.py ^
+  RepTate/theories/TheoryRDPLVE.py ^
+  RepTate/theories/TheorySmoothPolyStrand.py ^
+  RepTate/theories/GOpolySTRAND.py ^
+  RepTate/theories/TheoryGoPolyStrand.py ^
+  RepTate/theories/TheoryCreatePolyconf.py ^
+  RepTate/theories/TheoryReactMix.py ^
+  RepTate/theories/TheoryDieneCSTR.py ^
+  RepTate/theories/TheoryLDPEBatch.py ^
+  RepTate/theories/TheoryMultiMetCSTR.py ^
+  RepTate/theories/TheoryTobitaCSTR.py
 
 exit /b %ERRORLEVEL%
