@@ -102,6 +102,7 @@ class _BaumgaertelWinterSimplificationWorker(QObject):
 
     def work(self) -> None:
         start_time = time.perf_counter()
+        result: dict[str, Any]
         try:
             result = self.theory._simplify_spectrum_worker(self.file, self.tau, self.G, self.skip_initial_fit)
         except _SimplificationCancelled:

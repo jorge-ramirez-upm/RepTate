@@ -85,6 +85,12 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/theories/TheoryTTS.py ^
   RepTate/theories/TheoryTTS_Automatic.py ^
   RepTate/theories/TheoryDiscrMWD.py ^
-  RepTate/theories/TheoryPETS.py
+  RepTate/theories/TheoryPETS.py ^
+  RepTate/theories/react_gui_tools.py ^
+  RepTate/theories/TheoryBaumgaertelWinter.py ^
+  RepTate/theories/TheoryHavriliakNegamiModes.py ^
+  RepTate/theories/TheoryRouse.py ^
+  RepTate/theories/TheoryLikhtmanMcLeish2002.py ^
+  RepTate/theories/TheoryStickyReptation.py
 
 exit /b %ERRORLEVEL%
