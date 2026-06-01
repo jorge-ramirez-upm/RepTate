@@ -20,6 +20,7 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/gui/SplashScreen.py ^
   RepTate/gui/error_handling.py ^
   RepTate/gui/QAboutReptate.py ^
+  RepTate/gui/__init__.py ^
   RepTate/core/units.py ^
   RepTate/core/Parameter.py ^
   RepTate/core/File.py ^
