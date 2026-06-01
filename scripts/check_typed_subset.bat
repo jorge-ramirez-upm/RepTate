@@ -70,6 +70,21 @@ set "PYTHON=C:\WPy64-31131\python-3.11.3.amd64\python.exe"
   RepTate/theories/SmoothPolySTRAND.py ^
   RepTate/theories/TheoryTemplate.py ^
   RepTate/theories/TheoryBasic.py ^
-  RepTate/theories/TheoryArrhenius.py
+  RepTate/theories/TheoryArrhenius.py ^
+  RepTate/theories/TheoryCarreauYasuda.py ^
+  RepTate/theories/TheoryDebye.py ^
+  RepTate/theories/TheoryGEX.py ^
+  RepTate/theories/TheoryLogNormal.py ^
+  RepTate/theories/TheoryUCM.py ^
+  RepTate/theories/TheoryWLF.py ^
+  RepTate/theories/TheoryDebyeModes.py ^
+  RepTate/theories/TheoryMaxwellModes.py ^
+  RepTate/theories/TheoryRetardationModes.py ^
+  RepTate/theories/TheoryKWWModes.py ^
+  RepTate/theories/TheoryShanbhagMaxwellModes.py ^
+  RepTate/theories/TheoryTTS.py ^
+  RepTate/theories/TheoryTTS_Automatic.py ^
+  RepTate/theories/TheoryDiscrMWD.py ^
+  RepTate/theories/TheoryPETS.py
 
 exit /b %ERRORLEVEL%
