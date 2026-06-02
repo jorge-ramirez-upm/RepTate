@@ -79,6 +79,38 @@ Smooth
 
 .. automodule:: RepTate.tools.ToolSmooth.ToolSmooth
 
+The Smooth tool replaces the y-values of the current view with a
+Savitzky-Golay smoothed curve. It is useful for reducing point-to-point noise
+before visual comparison or before applying another tool that is sensitive to
+noise, such as ``Gradient``.
+
+The tool acts on the data produced by the selected view. The x-values are kept
+unchanged, and only the y-values are filtered. If the view plots a logarithm,
+converted unit, or derived quantity, the smoothing is applied to that
+current-view y-coordinate.
+
+The Smooth parameters are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``window``
+     - Number of points in the smoothing window
+   * - ``order``
+     - Polynomial order used inside the smoothing window
+
+For example, the default values ``window = 11`` and ``order = 3`` smooth each
+series using an 11-point window and a cubic polynomial. Increasing ``window``
+gives stronger smoothing, while increasing ``order`` allows more curvature to
+be preserved locally.
+
+The ``window`` parameter must be a positive odd integer, must be larger than
+``order``, and must be smaller than the number of y-values in the series. The
+``order`` parameter must be non-negative and smaller than ``window``. If these
+conditions are not satisfied, the tool reports the invalid setting and leaves
+the data unchanged.
 
 -------------------
 Power Law
