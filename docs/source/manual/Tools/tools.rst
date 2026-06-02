@@ -67,6 +67,26 @@ Gradient
 
 .. automodule:: RepTate.tools.ToolGradient.ToolGradient
 
+The Gradient tool replaces the y-values of the current view with the numerical
+derivative :math:`dy/dx`. It is useful for inspecting local slopes, checking
+power-law regions, or highlighting changes in a curve that are difficult to see
+from the original plotted data.
+
+The tool acts on the coordinates produced by the selected view. If the current
+view uses logarithms, converted units, shifted data, or derived quantities, the
+derivative is calculated with respect to those view coordinates. The x-values
+are kept unchanged, and the plotted y-values become the numerical derivative.
+
+The Gradient tool has no user parameters. It uses NumPy's gradient calculation:
+central differences are used for interior points, and one-sided differences are
+used at the boundaries. For noisy data, use ``Smooth`` before ``Gradient`` if a
+smoother derivative is needed. For a derivative over a restricted range, apply
+``Bounds`` before ``Gradient``.
+
+The x-values should be ordered and should not contain problematic repeated
+values. If the derivative calculation fails, the tool leaves the input data
+unchanged.
+
 -------------------
 Integral
 -------------------
