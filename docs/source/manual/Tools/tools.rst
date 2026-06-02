@@ -158,6 +158,35 @@ Power Law
 
 .. automodule:: RepTate.tools.ToolPowerLaw.ToolPowerLaw
 
+The Power Law tool divides the y-values of the current view by
+:math:`x^n`. It is useful for checking whether a curve follows an approximate
+power law. If the selected exponent is appropriate, a region where
+:math:`y \propto x^n` appears approximately horizontal after the transformation.
+
+The tool acts on the coordinates produced by the selected view. If the current
+view uses logarithms, converted units, shifted data, or derived quantities, the
+power-law division is applied to those view coordinates. The x-values are kept
+unchanged, and the plotted y-values become :math:`y/x^n`.
+
+The Power Law parameter is:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``n``
+     - Power-law exponent used in :math:`y/x^n`
+
+For example, set ``n = 2`` to check whether a selected range behaves as
+:math:`y \propto x^2`. This tool does not fit ``n`` automatically; the user
+chooses the exponent and inspects the transformed curve. Use ``Bounds`` before
+``Power Law`` if the check should focus on a restricted x or y range.
+
+Because the calculation divides by :math:`x^n`, zero or otherwise unsuitable
+x-values can produce undefined or non-finite results. The tool does not apply
+extra validity checks beyond the numerical calculation.
+
 ------------------
 Materials Database
 ------------------
