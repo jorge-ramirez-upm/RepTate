@@ -262,17 +262,21 @@ class ToolMaterialsDatabase(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/MaterialsDatabase.html'
 
-    actionActive: Any
-    actionApplyToTheory: Any
+    actionCalculate: QAction
+    actionCopy: QAction
+    actionDelete: QAction
+    actionEdit: QAction
+    actionNew: QAction
+    actionSave: QAction
     cbmaterial: Any
-    editMw: Any
-    editT: Any
-    isofrictional: Any
-    labelPolymer: Any
+    editMw: QLineEdit
+    editT: QLineEdit
+    isofrictional: QAction
+    labelPolymer: QLabel
     model: Any
-    shiftdata: Any
-    verticalLayout: Any
-    verticalshift: Any
+    shiftdata: QAction
+    tbMwT: QToolBar
+    verticalshift: QAction
 
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
