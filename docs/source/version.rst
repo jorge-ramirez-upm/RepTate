@@ -2,6 +2,15 @@
 Version History
 ===============
 
+Release 1.4 - 20260602
+======================
+- new Baumgaertel–Winter Maxwell-mode theory with mode loading, merging, deletion, and improved simplification workflows; available both in the LVE and Gt applications.
+- selectable theory error metrics including MSE, MAE, MSRE, and MRAE; 
+- a new data resampling tool; 
+- safer centralized expression parsing; 
+- broad internal improvements to parameter handling, typing, tests, and GUI robustness. 
+- extensive Pyright-based validation and focused tests for theory helpers, mode export, error metrics, and polymer-distribution calculations.
+
 Release 1.3.18 - 20260511
 =========================
 - Added the LP2R LVE theory backed by the original LP2R C++ code through a pybind11 solver
