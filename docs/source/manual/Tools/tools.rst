@@ -193,4 +193,11 @@ Materials Database
 
 .. automodule:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase
 
-.. todo:: Give a short example of use of all the Tools
+.. todo::
+   Continue adding source-backed tool examples. Bounds, Gradient, Integral,
+   Smooth, and Power Law now follow the user-facing pattern: purpose, when to
+   use it, current-view coordinate behavior, parameters/options, output,
+   example use, and limitations. Add similar entries for Evaluate Expression,
+   Find Peaks, and Materials Database, and check whether other available tools
+   such as Interpolate/Extrapolate and Resample Data should be added to this
+   page.
