@@ -119,7 +119,24 @@ Fitting options
 Saving theory predictions
 -------------------------
 
-.. todo:: Complete this section
+Use the ``Save Theory Data`` button in the theory toolbar to write the
+predictions of the current theory to text files. This is useful when the fitted
+or calculated theory curves should be reused outside RepTate, compared in
+another program, or archived with the data analysis.
+
+RepTate first asks for the folder where the files should be written. It then
+offers an optional text label that is appended to each output filename. For a
+data file named ``sample.tts``, the saved prediction file is named
+``sample_TH.tts`` by default, or ``sample_TH_<label>.tts`` if a label is entered.
+
+One prediction file is written for each file in the current dataset. Each file
+contains the original file parameters, a comment identifying the theory, the
+current theory parameter values, the date and user, the original file column
+names, and the numerical values stored in the theory prediction table.
+
+The saved values are the theory predictions currently stored for the theory.
+If the theory parameters or calculation range have changed, calculate the theory
+again before saving so that the written files match the displayed prediction.
 
 Copying/Pasting theory parameters
 ---------------------------------
