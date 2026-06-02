@@ -589,8 +589,8 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.BruteNs = 20
 
     def setup_default_error_calculation_options(self):
-        self.normalizebydata = False
-        self.use_absolute_error = False
+        self.normalizebydata: bool = False
+        self.use_absolute_error: bool = False
 
     def destructor(self):
         """If the theory needs to erase some memory in a special way, any
