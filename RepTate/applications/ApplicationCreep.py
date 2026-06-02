@@ -66,6 +66,15 @@ class ApplicationCreep(QApplicationWindow):
     html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/Creep/Creep.html"
     )
+    eta_label: QLabel
+    eta_view: QLineEdit
+    hlayout_view: QHBoxLayout
+    pb: QPushButton
+    sb_oversampling: QSpinBox
+    xmax_label: QLabel
+    xmax_view: QLineEdit
+    xmin_label: QLabel
+    xmin_view: QLineEdit
 
     def __init__(self, name: str = "Creep", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
@@ -80,9 +89,9 @@ class ApplicationCreep(QApplicationWindow):
         frequency_units: tuple[str, ...] = ("rad/s", "Hz")
 
         # time range for view conversion to frequency domain
-        self.eta = 10000
-        self.tmin_view = -np.inf
-        self.tmax_view = np.inf
+        self.eta: float = 10000
+        self.tmin_view: float = -np.inf
+        self.tmax_view: float = np.inf
 
         # VIEWS
         self.views["log(gamma(t))"] = View(
@@ -227,9 +236,9 @@ class ApplicationCreep(QApplicationWindow):
                 unit_choices=stress_units,
             ),
         )
-        self.OVER = 100  # initial oversampling
-        self.MIN_OVER = 1  # min oversampling
-        self.MAX_OVER = 10000  # max oversampling
+        self.OVER: int = 100  # initial oversampling
+        self.MIN_OVER: int = 1  # min oversampling
+        self.MAX_OVER: int = 10000  # max oversampling
 
         # set multiviews
         self.nplots = 1
