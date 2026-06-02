@@ -16,6 +16,39 @@ Bounds
 
 .. automodule:: RepTate.tools.ToolBounds.ToolBounds
 
+The Bounds tool keeps only the points of the current view that fall within a
+selected rectangular range. It is useful when a later tool or visual comparison
+should use only part of the plotted data, for example before applying
+``Integral`` or when excluding a low- or high-range region from the displayed
+curve.
+
+The tool acts on the coordinates produced by the selected view. If the view
+plots logarithms, shifted variables, converted units, or derived quantities, the
+limits are applied to those view coordinates rather than to the raw columns in
+the original file.
+
+The Bounds parameters are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``xmin``
+     - Minimum accepted x value
+   * - ``xmax``
+     - Maximum accepted x value
+   * - ``ymin``
+     - Minimum accepted y value
+   * - ``ymax``
+     - Maximum accepted y value
+
+Only points with ``xmin < x < xmax`` and ``ymin < y < ymax`` are kept. The
+default bounds are unbounded, so opening the tool does not remove points until
+one or more limits are changed. RepTate checks that ``xmin`` is smaller than
+``xmax`` and that ``ymin`` is smaller than ``ymax`` when the parameters are
+edited.
+
 -------------------
 Evaluate Expression
 -------------------
