@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from RepTate.theories.TheoryBaumgaertelWinter import read_maxwell_modes_file
+from RepTate.theories.TheoryBaumgaertelWinter import TheoryBaumgaertelWinter
 from RepTate.theories.TheoryBaumgaertelWinter import _format_decision
 from RepTate.theories.TheoryBaumgaertelWinter import _format_residual
 from RepTate.theories.TheoryBaumgaertelWinter import _format_residual_change
@@ -98,3 +99,52 @@ def test_simplification_report_table_contains_expected_row():
     assert "2 &rarr; 1" in html
     assert '<font color="red">rejected</font>' in html
     assert "best candidate rejected; mode 0" in html
+
+
+def test_baumgaertel_winter_pack_unpack_modes_roundtrip():
+    theory = TheoryBaumgaertelWinter.__new__(TheoryBaumgaertelWinter)
+    tau = np.array([0.01, 1.0, 100.0])
+    G = np.array([10.0, 20.0, 30.0])
+
+    packed = theory._pack_modes(tau, G)
+    unpacked_tau, unpacked_G = theory._unpack_modes(packed)
+
+    np.testing.assert_allclose(packed, [-2.0, 0.0, 2.0, 1.0, 1.0 + np.log10(2.0), 1.0 + np.log10(3.0)])
+    np.testing.assert_allclose(unpacked_tau, tau)
+    np.testing.assert_allclose(unpacked_G, G)
+
+
+def test_baumgaertel_winter_merge_close_modes_uses_modulus_weighted_log_tau():
+    theory = TheoryBaumgaertelWinter.__new__(TheoryBaumgaertelWinter)
+    theory.min_logtau_separation = 0.25
+    tau = np.array([1.0, 10.0, 1.1])
+    G = np.array([2.0, 5.0, 4.0])
+
+    merged_tau, merged_G, n_merged = theory._merge_close_mode_arrays(tau, G)
+
+    expected_logtau = (2.0 * np.log10(1.0) + 4.0 * np.log10(1.1)) / 6.0
+    np.testing.assert_allclose(merged_tau, [10.0**expected_logtau, 10.0])
+    np.testing.assert_allclose(merged_G, [6.0, 5.0])
+    assert n_merged == 1
+
+
+def test_baumgaertel_winter_weak_mode_candidates_keep_strongest_mode():
+    theory = TheoryBaumgaertelWinter.__new__(TheoryBaumgaertelWinter)
+    theory.weak_mode_threshold = 0.2
+
+    assert theory._weak_mode_indices(np.array([1.0, 100.0, 2.0])) == [0, 2]
+
+    theory.weak_mode_threshold = 2.0
+    assert theory._weak_mode_indices(np.array([1.0, 2.0, 3.0])) == [0, 1]
+
+
+def test_baumgaertel_winter_residual_increase_acceptance_uses_floor_and_threshold():
+    theory = TheoryBaumgaertelWinter.__new__(TheoryBaumgaertelWinter)
+    theory.max_residual_increase = 0.05
+
+    assert theory._residual_increase_is_acceptable(0.1, 0.09) is True
+    assert theory._residual_increase_is_acceptable(0.1, 0.104) is True
+    assert theory._residual_increase_is_acceptable(0.1, 0.106) is False
+    assert theory._residual_increase_is_acceptable(0.0, 1.0e-10) is True
+    assert theory._residual_increase_is_acceptable(0.0, 1.0e-6) is False
+    assert theory._residual_increase_is_acceptable(0.1, np.inf) is False
