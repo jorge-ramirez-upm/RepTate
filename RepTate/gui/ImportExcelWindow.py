@@ -152,7 +152,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
     file_param_txt: Any
     paste_box: Any
     qtabs: Any
-    qtables: Any
+    qtables: dict[str, Any]
     select_file_tb: Any
     selected_file_label: Any
     skip_sb: Any
@@ -167,6 +167,8 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         self.is_xlsx: bool = True
         self.wb: Any = None
         self.sheet: Any = None
+        self.sheet_names: list[str] = []
+        self.qtables = {}
         self.max_row: int = 0
         self.nskip: int = 0
         self.max_col: int = 0
@@ -180,7 +182,7 @@ class ImportExcelWindow(QDialog, Ui_ImportExcelMainWindow):
         file_type = cast(FileTypeLike, ftype)
         self.col_names: list[str] = file_type.col_names
         self.col_units: list[str] = file_type.col_units
-        self.ncol = len(self.col_names)
+        self.ncol: int = len(self.col_names)
         self.file_param: list[str] = file_type.basic_file_parameters
         self.populate_file_param(self.file_param)
         self.update_cols_cb()
