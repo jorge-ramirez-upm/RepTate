@@ -2,11 +2,31 @@
 Using the Tools
 -----------------------
 
-- Opening a New Tool
-- How the Tooks work
-- Shuffling the Tools
+Tools are opened from the tools area of an application window. Select the tool
+from the tool drop-down list and press the ``New Tool`` button. A new tab is
+added to the tools panel, and the plot is updated immediately using the new
+tool.
 
-.. todo:: Complete this section
+Tools operate on the data shown in the current application views. For each
+visible file, RepTate first calculates the selected view and then applies the
+active tools in the order shown by the tool tabs. The transformed data are then
+plotted. If theories are visible, the same tool sequence is also applied to the
+theory curves when the tool's ``Apply to Theory`` toggle is enabled.
+
+Each tool tab contains its own parameter table and output text area. Changing a
+parameter value updates the plots. The ``Active`` toggle enables or disables the
+tool without deleting it. Closing the tab removes the tool from the application.
+
+When several tools are open, their order matters. For example, applying
+``Bounds`` before ``Integral`` restricts the data range before the integral is
+calculated, while applying the tools in the opposite order integrates first and
+then filters the plotted result. Tool tabs can be dragged to reorder the tool
+sequence; RepTate recalculates the plots after the order is changed.
+
+Tools work on the coordinates of the current view, not necessarily on the raw
+columns stored in the data file. If the selected view uses logarithms,
+converted units, or derived quantities, the tool receives those displayed-view
+coordinates.
 
 Tool parameters
 ---------------
