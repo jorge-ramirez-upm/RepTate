@@ -42,7 +42,7 @@ from scipy.optimize import curve_fit
 from RepTate.core.Parameter import Parameter, ParameterType
 from RepTate.core.typing import AnyArray, ApplicationLike, AxesLike, FileParameters, ToolResult
 from RepTate.gui.QTool import QTool
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QAction, QIcon
 
 
 class ToolFindPeaks(QTool):
@@ -56,10 +56,10 @@ class ToolFindPeaks(QTool):
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/FindPeaks.html'
 
-    axarray: Any
-    minpeaks: Any
-    parabola: Any
-    seriesarray: Any
+    axarray: list[AxesLike]
+    minpeaks: QAction
+    parabola: QAction
+    seriesarray: list[Any]
     tb: Any
 
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
@@ -92,8 +92,8 @@ class ToolFindPeaks(QTool):
             type=ParameterType.boolean,
             display_flag=False,
         )
-        self.seriesarray = []
-        self.axarray = []
+        self.seriesarray: list[Any] = []
+        self.axarray: list[AxesLike] = []
 
         self.update_parameter_table()
         self.tb.addSeparator()
