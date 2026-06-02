@@ -102,7 +102,33 @@ The default is the historical squared, non-normalized error (**MSE**).
 Fitting the theory
 ------------------
 
-.. todo:: Complete this section
+Use the ``Minimize Error`` button in the theory toolbar, or press ``Alt+M``,
+to fit the currently active theory tab to the active files in the current
+dataset. Fitting changes only the parameters that are checked in the theory
+parameter table; unchecked parameters keep their current values, and grayed
+parameters cannot be optimized.
+
+The fit uses the data as shown in the current view. Hidden files are ignored.
+For theories that can only use one file, RepTate warns if more than one file is
+active and then uses the highlighted file, or the first active file if no file
+is highlighted.
+
+When fitting starts, RepTate writes a ``Parameter Fitting`` section in the
+theory log. If graphical x- or y-range limits are visible, the selected ranges
+are reported there and only points inside those ranges are used. Points with
+``NaN`` or infinite values are excluded from the fit.
+
+During a fit, the ``Minimize Error`` button changes to a stop button. Pressing
+it again requests the current fit to stop. If a theory calculation is already
+running, RepTate does not start a fit and reports that the theory is busy
+calculating.
+
+After a successful fit, the optimized parameter values are stored in the active
+theory, the parameter table is updated, and the theory is recalculated with the
+fitted parameters. The log reports the initial and final error, the number of
+function evaluations, the fitted parameter values with estimated errors when
+available, the elapsed fitting time, and any citation information supplied by
+the theory.
 
 How the fitting is done
 -----------------------
