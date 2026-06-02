@@ -271,7 +271,6 @@ class ToolMaterialsDatabase(QTool):
     labelPolymer: Any
     model: Any
     shiftdata: Any
-    tb: Any
     verticalLayout: Any
     verticalshift: Any
 

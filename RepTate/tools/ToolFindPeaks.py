@@ -60,7 +60,6 @@ class ToolFindPeaks(QTool):
     minpeaks: QAction
     parabola: QAction
     seriesarray: list[Any]
-    tb: Any
 
     def __init__(self, name: str = "", parent_app: ApplicationLike | None = None) -> None:
         """**Constructor**"""
