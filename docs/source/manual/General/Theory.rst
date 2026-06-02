@@ -138,7 +138,27 @@ How the fitting is done
 Setting x and y-range limits to the fitting graphically
 -------------------------------------------------------
 
-.. todo:: Complete this section
+Use the ``Show Limits`` toolbar button menu to restrict the data points used
+when fitting the active theory. The ``xrange`` action shows or hides vertical
+limit lines and a yellow x-range span. The ``yrange`` action shows or hides
+horizontal limit lines and a pink y-range span. When a limit selector is first
+shown, RepTate initializes it from the current plot limits.
+
+The limit lines can be dragged on the plot. During fitting, RepTate uses only
+the points from active files whose current-view coordinates are inside the
+visible ranges. If both ranges are visible, a point must satisfy both the
+x-range and y-range tests. The selected ranges are written to the theory log at
+the start of the fit.
+
+These limits are view-based fitting limits. They are applied after the
+application view has transformed the file data, so the numbers correspond to the
+axes currently shown in the plot rather than necessarily to raw file columns.
+The limits belong to the active theory tab.
+
+Hiding a range selector disables that range filter for fitting. The original
+data remain displayed, and excluded points are not deleted from the dataset.
+After the fit, RepTate recalculates the theory with the fitted parameters; the
+prediction table is not limited to only the selected fitting interval.
 
 Fitting options
 ---------------
