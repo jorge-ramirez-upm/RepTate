@@ -80,6 +80,9 @@ When the theory calculation is done, some interesting information is shown in th
 - The time it took to calculate the theory, in seconds. 
 - The relevant literature that the user should cite if he/she intends to use the results from the theory. The journal articles are shown as links that can be clicked in order to visit the publisher web.
 
+Error calculation options
+-------------------------
+
 The error calculation options are available from the Calculate Theory button menu. The checkbox **Normalize by experimental data** controls whether residuals are divided by the experimental data before the error is computed. The **Error norm** option controls whether squared residuals or absolute residuals are averaged. The four combinations are reported in the theory log using the following labels:
 
 - **MSE**: :math:`\mathrm{mean}((y_\mathrm{th} - y_\mathrm{exp})^2)`
@@ -167,4 +170,22 @@ to auto-calculate, RepTate recalculates the theory after the paste operation.
 Showing all theories applied to current DataSet
 -----------------------------------------------
 
-.. todo:: Complete this section
+Use ``View All Theories (Same DataSet)`` from the ``View All Sets`` toolbar
+button menu to display the predictions from all theory tabs in the current
+dataset at the same time. This is useful when several theories have been
+calculated for the same files and their curves need to be compared directly on
+the plot.
+
+The action does not create, calculate, or fit any theory. It only changes the
+visibility of the theory curves that already exist for the current dataset.
+Each theory is shown using the prediction tables currently stored in its theory
+tab, so calculate or fit each theory first if its displayed prediction is out of
+date.
+
+The command applies only to theories that belong to the active dataset tab.
+It does not show theories from other datasets. Files that have been hidden in
+the dataset remain hidden, together with their corresponding theory curves.
+
+After using this command, selecting a different theory tab returns to the usual
+single-active-theory display: RepTate hides the other theory curves and shows
+the curves associated with the selected tab.
