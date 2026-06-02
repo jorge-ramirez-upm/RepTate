@@ -230,11 +230,11 @@ class QTool(QWidget, Ui_ToolTab):
         # super().__init__(name=name, parent_app=parent_app)
         self.setupUi(self)
 
-        self.name = name
+        self.name: str = name
         self.parent_application = cast(ApplicationLike, parent_app)
         self.parameters: ParameterDict = OrderedDict()  # keep the dictionary key in order for the parameter table
-        self.active = True  # defines if the Tool is plotted
-        self.applytotheory = True  # Do we also apply the tool to the theory?
+        self.active: bool = True  # defines if the Tool is plotted
+        self.applytotheory: bool = True  # Do we also apply the tool to the theory?
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_application.logger.name + "." + self.name)
