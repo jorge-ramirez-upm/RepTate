@@ -124,10 +124,10 @@ class MultiView(QWidget):
         self.pot: PlotOrganizationType = pot
         self.nplots: int = nplots
         self.ncols: int = ncols
-        self.horizontalLayout: Any
-        self.plotselecttabWidget: Any
-        self.tab: Any
-        self.plotcontainer: Any
+        self.horizontalLayout: QHBoxLayout
+        self.plotselecttabWidget: QTabWidget
+        self.tab: QWidget
+        self.plotcontainer: QVBoxLayout
         self.figure: Any
         self.gs: Any
         self.gsmax: Any
@@ -135,7 +135,7 @@ class MultiView(QWidget):
         self.canvas: Any
         self.hidden_tab: HiddenTabList
         self.bbox: list[Any]
-        self.bboxmax: list[Any]
+        self.bboxmax: list[float]
         self.setupUi()
         mpl.rcParams["savefig.dpi"] = self.SAVE_DPI
 
