@@ -73,6 +73,26 @@ Integral
 
 .. automodule:: RepTate.tools.ToolIntegral.ToolIntegral
 
+The Integral tool replaces the y-values of the current view with the cumulative
+integral of y with respect to x. It is useful when the area under the displayed
+curve is the quantity of interest, or when the integrated curve should be
+compared between files or against a theory.
+
+The tool acts on the coordinates produced by the selected view. If the current
+view uses logarithms, converted units, shifted data, or derived quantities, the
+integral is taken over those view coordinates. To integrate only part of a
+curve, apply ``Bounds`` before ``Integral`` and set the desired x and y limits.
+
+The Integral tool has no user parameters. Before integrating, repeated x-values
+are removed. The remaining points are interpolated with a cubic spline, and the
+cumulative integral is calculated over the x-values of the current view. The
+plotted x-values are the unique x-values, and the plotted y-values are the
+cumulative integral from the first retained x-value.
+
+The final value of the cumulative integral is printed in the tool output area
+as ``I``. If the interpolation or integration fails, the tool reports the error
+and leaves the input data unchanged.
+
 -------------------
 Smooth
 -------------------
