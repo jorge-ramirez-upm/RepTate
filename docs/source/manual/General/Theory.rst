@@ -141,7 +141,28 @@ again before saving so that the written files match the displayed prediction.
 Copying/Pasting theory parameters
 ---------------------------------
 
-.. todo:: Complete this section
+Use the ``Copy Parameters`` and ``Paste Parameters`` actions in the theory
+toolbar menu to transfer parameter values through the system clipboard. These
+actions operate on the currently active theory tab and are useful for reusing a
+set of parameters in another theory instance of the same type, or for storing a
+parameter set temporarily in an external text editor.
+
+``Copy Parameters`` writes one parameter per line, using the parameter name and
+its current stored value separated by a tab. ``Paste Parameters`` reads the
+clipboard line by line and updates only the parameters whose names match
+parameters in the active theory. Lines that do not contain exactly two entries,
+or whose parameter name is not present in the active theory, are ignored.
+
+Pasted values are checked with the same parameter rules used by the theory:
+real and integer values must be valid numbers, bounded parameters are clipped
+to their allowed range, and discrete parameters must match one of their allowed
+values. Boolean parameters accept common true values such as ``True`` or ``1``;
+other values are interpreted as false.
+
+The clipboard format uses the theory's stored parameter values. For
+unit-aware parameters this means the internal value is copied and pasted, not
+the display-unit value shown in the parameter table. If the active theory is set
+to auto-calculate, RepTate recalculates the theory after the paste operation.
 
 Showing all theories applied to current DataSet
 -----------------------------------------------
