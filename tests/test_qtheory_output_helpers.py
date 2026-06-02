@@ -3,6 +3,9 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import Any, cast
 
+import numpy as np
+import pytest
+
 from RepTate.gui.QTheory import QTheory
 
 
@@ -93,3 +96,31 @@ def test_get_material_parameters_returns_false_without_chemistry() -> None:
     )
 
     assert theory.get_material_parameters() is False
+
+
+def test_fit_sigma_returns_none_for_absolute_error_fit() -> None:
+    theory = _qtheory_stub()
+    dynamic_theory = cast(Any, theory)
+    dynamic_theory.normalizebydata = False
+
+    assert theory._fit_sigma(np.array([1.0, -2.0])) is None
+
+
+def test_fit_sigma_uses_absolute_experimental_values_for_relative_error_fit() -> None:
+    theory = _qtheory_stub()
+    dynamic_theory = cast(Any, theory)
+    dynamic_theory.normalizebydata = True
+
+    sigma = theory._fit_sigma(np.array([1.0, -2.0]))
+
+    assert sigma is not None
+    np.testing.assert_allclose(sigma, np.array([1.0, 2.0]))
+
+
+def test_fit_sigma_rejects_zero_values_for_relative_error_fit() -> None:
+    theory = _qtheory_stub()
+    dynamic_theory = cast(Any, theory)
+    dynamic_theory.normalizebydata = True
+
+    with pytest.raises(ValueError, match="zero values"):
+        theory._fit_sigma(np.array([1.0, 0.0]))
