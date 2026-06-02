@@ -1772,14 +1772,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.show_theory_extras(True)
         self.parent_dataset.do_plot("")
 
-    def Qprint(self, msg, end="<br>"):
+    def Qprint(self, msg: Any, end: str = "<br>") -> None:
         """Print a message on the theory log area or on the terminal"""
 
         if isinstance(msg, list):
             msg = self.table_as_html(msg)
         self.print_signal.emit(msg + end)
 
-    def table_as_html(self, tab):
+    def table_as_html(self, tab: list[list[Any]]) -> str:
         header = tab[0]
         rows = tab[1:]
         nrows = len(rows)
@@ -1797,26 +1797,26 @@ class QTheory(QWidget, Ui_TheoryTab):
         table += """</table><br>"""
         return table
 
-    def table_as_ascii(self, tab):
+    def table_as_ascii(self, tab: list[list[str]]) -> str:
         text = ""
         for row in tab:
             text += " ".join(row)
             text += "\n"
         return text
 
-    def strip_tags(self, html_text):
+    def strip_tags(self, html_text: str) -> str:
         s = MLStripper()
         s.feed(html_text)
         return s.get_data()
 
-    def print_qtextbox(self, msg):
+    def print_qtextbox(self, msg: str) -> None:
         """Print message in the GUI log text box"""
         self.thTextBox.moveCursor(QTextCursorAny.End)
         self.thTextBox.insertHtml(msg)
         self.thTextBox.verticalScrollBar().setValue(self.thTextBox.verticalScrollBar().maximum())
         self.thTextBox.moveCursor(QTextCursorAny.End)
 
-    def get_material_parameters(self):
+    def get_material_parameters(self) -> bool:
         """Get theory parameters from materials database"""
         try:
             fparam = self.parent_dataset.files[0].file_parameters
