@@ -124,3 +124,36 @@ def test_fit_sigma_rejects_zero_values_for_relative_error_fit() -> None:
 
     with pytest.raises(ValueError, match="zero values"):
         theory._fit_sigma(np.array([1.0, 0.0]))
+
+
+def test_qtheory_error_measure_label_uses_selected_error_options() -> None:
+    theory = _qtheory_stub()
+    dynamic_theory = cast(Any, theory)
+
+    cases = [
+        (False, False, "MSE"),
+        (False, True, "MAE"),
+        (True, False, "MSRE"),
+        (True, True, "MRAE"),
+    ]
+
+    for normalizebydata, use_absolute_error, expected_label in cases:
+        dynamic_theory.normalizebydata = normalizebydata
+        dynamic_theory.use_absolute_error = use_absolute_error
+
+        assert theory.error_measure_label() == expected_label
+
+
+def test_func_fit_and_error_uses_selected_relative_absolute_metric() -> None:
+    theory = _qtheory_stub()
+    dynamic_theory = cast(Any, theory)
+    dynamic_theory.normalizebydata = True
+    dynamic_theory.use_absolute_error = True
+    dynamic_theory.fittingx = np.array([1.0, 2.0, 4.0])
+    dynamic_theory.fittingy = np.array([1.0, 4.0, 8.0])
+    dynamic_theory.func_fit = lambda x, scale: x * scale
+
+    error = theory.func_fit_and_error(np.array([3.0]))
+
+    expected = np.mean(np.abs((np.array([3.0, 6.0, 12.0]) - theory.fittingy) / theory.fittingy))
+    assert error == pytest.approx(expected)
