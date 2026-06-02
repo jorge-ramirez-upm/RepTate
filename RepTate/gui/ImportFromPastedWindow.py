@@ -58,7 +58,7 @@ class ImportFromPastedWindow(QDialog, Ui_ImportPastedMainWindow):
         self.col_names: list[str] = file_type.col_names
         self.col_units: list[str] = file_type.col_units
         self.file_param: list[str] = file_type.basic_file_parameters
-        self.num_cols = len(self.col_names)
+        self.num_cols: int = len(self.col_names)
         txt = ""
         if self.file_param:
             txt += "Parameters values describing the data can be added to the first line as:<br><b>%s=val;</b><br>" % (
