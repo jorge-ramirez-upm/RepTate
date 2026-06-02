@@ -42,8 +42,12 @@ from typing import Any, ClassVar, TypeAlias, cast
 
 from RepTate.core.typing import ApplicationLike
 
+ArtistData: TypeAlias = Any
+BlitBackground: TypeAlias = Any
 Callback: TypeAlias = Any
 ConnectionId: TypeAlias = int
+MatplotlibArtist: TypeAlias = Any
+MatplotlibEvent: TypeAlias = Any
 
 _LOG_FLOOR = 1.0e-300
 
@@ -61,19 +65,19 @@ class DraggableArtist(object):
 
     def __init__(
         self,
-        artist: Any = None,
+        artist: MatplotlibArtist = None,
         mode: DragType = DragType.none,
         function: Callback = None,
         parent_theory: Any = None,
     ) -> None:
         """**Constructor**"""
         self.parent_theory: Any = parent_theory
-        self.artist: Any = artist
+        self.artist: MatplotlibArtist = artist
         self.press: Any = None
-        self.background: Any = None
+        self.background: BlitBackground = None
         self.mode: DragType = mode
         self.function: Callback = function
-        self.data: Any = None
+        self.data: ArtistData = None
         self.cidpress: ConnectionId
         self.cidrelease: ConnectionId
         self.cidmotion: ConnectionId
@@ -85,7 +89,7 @@ class DraggableArtist(object):
         self.cidrelease = self.artist.figure.canvas.mpl_connect('button_release_event', self.on_release)
         self.cidmotion = self.artist.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press events"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -104,7 +108,7 @@ class DraggableArtist(object):
         canvas.update()
         #canvas.blit(axes.bbox)
 
-    def on_motion(self, event: Any) -> None:
+    def on_motion(self, event: MatplotlibEvent) -> None:
         """Motion event"""
         if DraggableArtist.lock is not self:
             return
@@ -137,7 +141,7 @@ class DraggableArtist(object):
         """Do nothing"""
         pass
 
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
@@ -178,7 +182,7 @@ class DraggableBinSeries(DraggableArtist):
     """Dragabble histogram"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         logx: bool = False,
         logy: bool = False,
@@ -189,7 +193,7 @@ class DraggableBinSeries(DraggableArtist):
         self.logx: bool = logx
         self.logy: bool = logy
     
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return 
@@ -221,7 +225,7 @@ class DraggableBinSeries(DraggableArtist):
         # redraw just the curve
         axes.draw_artist(self.artist)
 
-    def on_motion(self, event: Any) -> None:
+    def on_motion(self, event: MatplotlibEvent) -> None:
         """Motion event"""
         if DraggableArtist.lock is not self:
             return
@@ -282,7 +286,7 @@ class DraggableBinSeries(DraggableArtist):
 
         self.artist.set_data(newxdata, newydata)
 
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
@@ -326,7 +330,7 @@ class DraggableModesSeries(DraggableArtist):
     """Draggable points of a series"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         parent_application: ApplicationLike | None = None,
         function: Callback = None,
@@ -340,7 +344,7 @@ class DraggableModesSeries(DraggableArtist):
         self.logx = self.parent_application.current_view.log_x
         self.logy = self.parent_application.current_view.log_y
 
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -370,7 +374,7 @@ class DraggableModesSeries(DraggableArtist):
         axes.draw_artist(self.artist)
         #canvas.blit(axes.bbox)
 
-    def on_motion(self, event: Any) -> None:
+    def on_motion(self, event: MatplotlibEvent) -> None:
         """Motion event"""
         if DraggableArtist.lock is not self:
             return
@@ -432,7 +436,7 @@ class DraggableModesSeries(DraggableArtist):
 
         self.artist.set_data(newxdata, newydata)
 
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
@@ -500,7 +504,7 @@ class DraggableModeIndividual(DraggableArtist):
 
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.both,
         parent_application: ApplicationLike | None = None,
         function: Callback = None,
@@ -537,7 +541,7 @@ class DraggableModeIndividual(DraggableArtist):
 
         return xdata.copy(), ydata.copy()
 
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event."""
         if event.inaxes != self.artist.axes:
             return
@@ -581,7 +585,7 @@ class DraggableModeIndividual(DraggableArtist):
         self.background = canvas.copy_from_bbox(self.artist.axes.bbox)
         axes.draw_artist(self.artist)
 
-    def on_motion(self, event: Any) -> None:
+    def on_motion(self, event: MatplotlibEvent) -> None:
         """Motion event."""
         if DraggableArtist.lock is not self:
             return
@@ -639,7 +643,7 @@ class DraggableModeIndividual(DraggableArtist):
 
         self.artist.set_data(newxdata, newydata)
 
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event."""
         if DraggableArtist.lock is not self:
             return
@@ -679,7 +683,7 @@ class DraggableSeries(DraggableArtist):
     """Full draggable series"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         logx: bool = False,
         logy: bool = False,
@@ -705,7 +709,7 @@ class DraggableSeries(DraggableArtist):
         """Return data"""
         self.data = self.artist.get_data()
     
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -725,7 +729,7 @@ class DraggableSeries(DraggableArtist):
         axes.draw_artist(self.artist)
         #canvas.blit(axes.bbox)
 
-    def on_motion(self, event: Any) -> None:
+    def on_motion(self, event: MatplotlibEvent) -> None:
         """Motion event"""
         if DraggableArtist.lock is not self:
             return
@@ -773,7 +777,7 @@ class DraggableSeries(DraggableArtist):
             newy = [y + dy for y in self.data[1]]
         self.artist.set_data(newx, newy)
 
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event"""
         if DraggableArtist.lock is not self: return
         if (self.mode==DragType.none):   
@@ -807,7 +811,7 @@ class DraggablePatch(DraggableArtist):
     """Draggable Patch"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
     ) -> None:
@@ -826,7 +830,7 @@ class DraggableRectangle(DraggableArtist):
     """Draggable rectangle"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
     ) -> None:
@@ -846,7 +850,7 @@ class DraggableVLine(DraggableArtist):
     """Draggable Verticla line"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
         parent_theory: Any = None,
@@ -854,7 +858,7 @@ class DraggableVLine(DraggableArtist):
         """**Constructor**"""
         super(DraggableVLine, self).__init__(artist, mode, function, parent_theory)
     
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -886,7 +890,7 @@ class DraggableHLine(DraggableArtist):
     """Draggable Horizontal line"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
         parent_theory: Any = None,
@@ -894,7 +898,7 @@ class DraggableHLine(DraggableArtist):
         """**Constructor**"""
         super(DraggableHLine, self).__init__(artist, mode, function, parent_theory)
     
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if event.inaxes != self.artist.axes: return
         if DraggableArtist.lock is not None: return
@@ -925,7 +929,7 @@ class DraggableVSpan(DraggableArtist):
     """Draggable Vertical Span"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
     ) -> None:
@@ -946,7 +950,7 @@ class DraggableHSpan(DraggableArtist):
     """Draggable Horizontal Span"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
     ) -> None:
@@ -967,7 +971,7 @@ class DraggableNote(DraggableArtist):
     """Draggable annotation box"""
     def __init__(
         self,
-        artist: Any,
+        artist: MatplotlibArtist,
         mode: DragType = DragType.none,
         function: Callback = None,
         function2: Callback = None,
@@ -985,7 +989,7 @@ class DraggableNote(DraggableArtist):
         """Modify the artist position"""
         self.artist.set_position([self.press[0]+dx, self.press[1]+dy])
 
-    def on_press(self, event: Any) -> None:
+    def on_press(self, event: MatplotlibEvent) -> None:
         """Press event"""
         if not event.dblclick:
             super(DraggableNote, self).on_press(event)
@@ -998,7 +1002,7 @@ class DraggableNote(DraggableArtist):
         if not contains: return
         self.function2(self.artist)
                     
-    def on_release(self, event: Any) -> None:
+    def on_release(self, event: MatplotlibEvent) -> None:
         """Release event"""
         if DraggableArtist.lock is not self: return
         xpress, ypress = self.press
