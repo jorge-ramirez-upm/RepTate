@@ -121,4 +121,36 @@ Steady Nucleation
 ---------------------
 .. automethod:: RepTate.applications.ApplicationCrystal.ApplicationCrystal.view_steadyNuc
 
-.. todo:: Document the views 
+The Crystal application views use the columns of the loaded crystallisation
+file. For the ``.shearxs`` files described above, the columns are time,
+transient stress, nucleation rate, crystal fraction, and nucleation density. The
+flow rate is taken from the file parameters and is used to calculate transient
+viscosity and strain.
+
+Use ``log(eta(t))`` or ``eta(t)`` to inspect the transient viscosity,
+:math:`\eta^+(t)=\sigma^+(t)/\dot\gamma`. The logarithmic view calculates
+:math:`\log_{10}(t)` and :math:`\log_{10}(\eta^+)` explicitly; the ``eta(t)``
+view plots the same quantity using logarithmic axes by default.
+
+Use the ``Ndot(t)``, ``N(t)``, and ``phiX(t)`` views to follow the crystallisation
+quantities as functions of time. ``Ndot(t)`` shows the nucleation rate,
+``N(t)`` shows the nucleation density, and ``phiX(t)`` shows the crystal
+fraction. Each quantity is available with log-log and log-lin scaling so that
+early-time and late-time behaviour can be inspected without changing the data.
+
+Use ``sigma(t)`` and ``log(sigma(t))`` to inspect the transient stress as a
+function of time. ``sigma(t) [log-lin]`` keeps the stress on a linear axis while
+using a logarithmic time axis. Use ``sigma(gamma)`` and ``log(sigma(gamma))`` to
+plot the same transient stress against strain, where the strain is computed from
+time multiplied by the flow rate.
+
+``Flow Curve`` and ``Steady Nucleation`` provide one point per file. ``Flow
+Curve`` plots the final stress value against the flow rate, and ``Steady
+Nucleation`` plots the final nucleation-rate value against the flow rate. These
+views are useful when several files at different flow rates are loaded in the
+same dataset.
+
+Logarithmic views require positive time and positive values of the plotted
+quantity. The steady views use the last row of each file as the steady-state
+estimate, so they assume that the imported data extend far enough in time for
+the final value to be representative.
