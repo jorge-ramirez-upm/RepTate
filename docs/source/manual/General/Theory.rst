@@ -133,7 +133,42 @@ the theory.
 How the fitting is done
 -----------------------
 
-.. todo:: Complete this section
+During fitting, RepTate minimizes the selected error between the active theory
+prediction and the selected experimental data. The experimental data are first
+converted through the current application view, so fitting is performed on the
+same coordinates that are displayed in the plot. Only active files are used.
+If x- or y-range fitting limits are visible, only points inside those ranges
+are included. Points with ``NaN`` or infinite x or y values are ignored.
+
+The optimizer changes only the theory parameters that are checked in the
+parameter table. Unchecked parameters keep their current values, and grayed
+parameters cannot be selected for fitting. The starting values are the current
+parameter values. The minimum and maximum values in the parameter properties
+are passed to the fitting method as bounds, and integer parameters are marked
+as integer-valued where the selected method supports this.
+
+For each trial set of parameter values, RepTate recalculates the theory and
+compares the resulting prediction with the selected experimental points. The
+error measure is the one selected in the error-calculation options: squared or
+absolute residuals, with optional normalization by the experimental data. If
+normalization by experimental data is selected and the fitting data contain
+zero values, the fit is stopped because the relative error cannot be evaluated.
+
+The default ``LS`` method is a local fit starting from the current parameter
+values. The global fitting methods first search more broadly over the allowed
+parameter bounds, then RepTate refines the result with a local fitting step
+before storing the final parameters. A fit can still depend on the chosen
+starting values, parameter bounds, data range, error measure, and fitting
+method; RepTate does not guarantee that a global optimum has been found.
+Individual theories may also extend or override parts of the generic
+calculation.
+
+When fitting finishes successfully, the active theory parameters are updated,
+the theory is recalculated with the fitted values, and the plot is refreshed.
+The theory log reports the fitting method, any active fitting ranges, progress
+messages from the selected method, the initial and final error, the number of
+function evaluations, fitted parameter values with estimated errors when
+available, the elapsed fitting time, and theory citation information.
 
 Setting x and y-range limits to the fitting graphically
 -------------------------------------------------------
