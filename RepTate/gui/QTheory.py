@@ -1508,7 +1508,6 @@ class QTheory(QWidget, Ui_TheoryTab):
         if visible == None:
             visible = not self.xrange.get_visible()
         if line == "":
-            # TODO: Set range to current view limits
             self.xmin, self.xmax = self.ax.get_xlim()
             self.xminline.set_data([self.xmin, self.xmin], [0, 1])
             self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])

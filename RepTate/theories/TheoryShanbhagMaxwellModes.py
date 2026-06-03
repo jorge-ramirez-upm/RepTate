@@ -1334,7 +1334,6 @@ class TheoryShanbhagMaxwellModesFrequency(QTheory):
         if plateau:
             self.GstM[:n] += G0
 
-        # TODO: DECIDE IF WE PLOT THE CONTINUOUS OR DISCRETE FIT TO G*(omega)
         if self.prediction_mode == PredictionMode.disc:
             tt.data[:, 1] = self.GstM[:n]
             tt.data[:, 2] = self.GstM[n:]
@@ -2619,7 +2618,6 @@ class TheoryShanbhagMaxwellModesTime(QTheory):
         if plateau:
             self.GtM += G0
 
-        # TODO: DECIDE IF WE PLOT THE CONTINUOUS OR DISCRETE FIT TO G*(omega)
         if self.prediction_mode == PredictionMode.disc:
             self.Qprint("<b>Fit from discrete spectrum</b>")
             tt.num_rows = len(t)
