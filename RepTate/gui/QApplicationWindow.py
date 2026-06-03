@@ -89,10 +89,16 @@ from PySide6.QtWidgets import (
     QTabWidget,
     QComboBox,
     QVBoxLayout,
+    QHBoxLayout,
     QSplitter,
     QTableWidgetItem,
     QRadioButton,
     QApplication,
+    QCheckBox,
+    QSpinBox,
+    QDoubleSpinBox,
+    QPushButton,
+    QLabel,
 )
 import RepTate
 from RepTate.gui.QDataSet import QDataSet
@@ -246,6 +252,179 @@ class AddFileFunction(QDialog):
         self.l_new[4].setText("Logarithmic")
         layout.addRow("", self.l_new[4])
         self.labelGroupBox.setLayout(layout)
+
+
+class SaveFigureDialog(QDialog):
+    """Dialog for Matplotlib savefig path and common export options."""
+
+    RASTER_FORMATS = {"png", "jpg", "jpeg", "tif", "tiff", "webp", "raw", "rgba"}
+    PREFERRED_FORMAT_ORDER = ["png", "pdf", "svg", "eps", "ps", "jpg", "jpeg", "tif", "tiff", "webp"]
+
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        supported_filetypes: dict[str, str] | None = None,
+        start_dir: str = "",
+    ) -> None:
+        super().__init__(parent)
+        self.setWindowTitle("Export plot")
+        self.supported_filetypes = supported_filetypes or {}
+        self.formats = self._ordered_formats()
+        self._updating_format = False
+
+        default_format = "png" if "png" in self.formats else self.formats[0]
+        default_path = os.path.join(start_dir, "plot.%s" % default_format) if start_dir else "plot.%s" % default_format
+
+        self.pathLineEdit = QLineEdit(default_path)
+        self.browseButton = QPushButton("Browse...")
+
+        pathLayout = QHBoxLayout()
+        pathLayout.addWidget(self.pathLineEdit)
+        pathLayout.addWidget(self.browseButton)
+
+        self.formatComboBox = QComboBox()
+        for fmt in self.formats:
+            description = self.supported_filetypes.get(fmt, fmt.upper())
+            self.formatComboBox.addItem("%s (*.%s)" % (description, fmt), fmt)
+        self.formatComboBox.setCurrentIndex(max(0, self.formats.index(default_format)))
+
+        self.specifyDpiCheckBox = QCheckBox("Specify DPI")
+        self.dpiSpinBox = QSpinBox()
+        self.dpiSpinBox.setRange(1, 2400)
+        self.dpiSpinBox.setValue(300)
+        self.dpiSpinBox.setEnabled(False)
+
+        self.transparentCheckBox = QCheckBox("Transparent background")
+
+        self.tightBBoxCheckBox = QCheckBox("Tight bounding box")
+        self.padInchesSpinBox = QDoubleSpinBox()
+        self.padInchesSpinBox.setRange(0.0, 10.0)
+        self.padInchesSpinBox.setSingleStep(0.05)
+        self.padInchesSpinBox.setDecimals(2)
+        self.padInchesSpinBox.setValue(0.1)
+        self.padInchesSpinBox.setEnabled(False)
+
+        optionsGroup = QGroupBox("Options")
+        optionsLayout = QFormLayout()
+        optionsLayout.addRow("File:", pathLayout)
+        optionsLayout.addRow("Format:", self.formatComboBox)
+        optionsLayout.addRow(self.specifyDpiCheckBox, self.dpiSpinBox)
+        optionsLayout.addRow("", QLabel("DPI affects raster output and rasterized artists in vector output."))
+        optionsLayout.addRow("", self.transparentCheckBox)
+        optionsLayout.addRow(self.tightBBoxCheckBox, self.padInchesSpinBox)
+        optionsGroup.setLayout(optionsLayout)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+
+        layout = QVBoxLayout()
+        layout.addWidget(optionsGroup)
+        layout.addWidget(buttonBox)
+        self.setLayout(layout)
+
+        self.browseButton.clicked.connect(self.browse)
+        self.formatComboBox.currentIndexChanged.connect(self.handle_format_changed)
+        self.specifyDpiCheckBox.toggled.connect(self.dpiSpinBox.setEnabled)
+        self.tightBBoxCheckBox.toggled.connect(self.padInchesSpinBox.setEnabled)
+        self.handle_format_changed()
+
+    def _ordered_formats(self) -> list[str]:
+        formats = [fmt.lower() for fmt in self.supported_filetypes]
+        ordered = [fmt for fmt in self.PREFERRED_FORMAT_ORDER if fmt in formats]
+        ordered.extend(sorted(fmt for fmt in formats if fmt not in ordered))
+        return ordered or ["png"]
+
+    def _selected_format(self) -> str:
+        return str(self.formatComboBox.currentData())
+
+    def _file_filter(self, fmt: str) -> str:
+        description = self.supported_filetypes.get(fmt, fmt.upper())
+        return "%s (*.%s)" % (description, fmt)
+
+    def _filters(self) -> str:
+        return ";;".join(self._file_filter(fmt) for fmt in self.formats)
+
+    def browse(self) -> None:
+        fmt = self._selected_format()
+        path, selected_filter = QFileDialog.getSaveFileName(
+            self,
+            "Export plot",
+            self.pathLineEdit.text(),
+            self._filters(),
+            self._file_filter(fmt),
+        )
+        if not path:
+            return
+        self.pathLineEdit.setText(path)
+        selected_format = None
+        for candidate in self.formats:
+            if selected_filter == self._file_filter(candidate):
+                selected_format = candidate
+                break
+        ext = os.path.splitext(path)[1].lstrip(".").lower()
+        if ext in self.formats:
+            selected_format = ext
+        if selected_format is not None:
+            self.formatComboBox.setCurrentIndex(self.formats.index(selected_format))
+        self._set_path_extension(self._selected_format())
+
+    def handle_format_changed(self, *_args: Any) -> None:
+        fmt = self._selected_format()
+        self.specifyDpiCheckBox.setText(
+            "Specify DPI" if fmt in self.RASTER_FORMATS else "Specify rasterized-elements DPI"
+        )
+        if not self._updating_format:
+            self._set_path_extension(fmt)
+
+    def _set_path_extension(self, fmt: str) -> None:
+        path = self.pathLineEdit.text().strip()
+        if not path:
+            return
+        root, ext = os.path.splitext(path)
+        if not root:
+            return
+        if ext.lstrip(".").lower() == fmt:
+            return
+        self.pathLineEdit.setText("%s.%s" % (root, fmt))
+
+    def _sync_format_from_path(self) -> None:
+        ext = os.path.splitext(self.pathLineEdit.text())[1].lstrip(".").lower()
+        if ext in self.formats:
+            self._updating_format = True
+            try:
+                self.formatComboBox.setCurrentIndex(self.formats.index(ext))
+            finally:
+                self._updating_format = False
+
+    def _path_with_extension(self) -> str:
+        path = self.pathLineEdit.text().strip()
+        if not os.path.splitext(path)[1]:
+            path = "%s.%s" % (path, self._selected_format())
+        return path
+
+    def accept(self) -> None:
+        self._sync_format_from_path()
+        path = self.pathLineEdit.text().strip()
+        if not path:
+            QMessageBox.warning(self, "Export plot", "Choose a file name for the exported plot.")
+            return
+        ext = os.path.splitext(path)[1].lstrip(".").lower()
+        if ext and ext not in self.formats:
+            QMessageBox.warning(self, "Export plot", 'Unsupported file extension ".%s".' % ext)
+            return
+        super().accept()
+
+    def savefig_options(self) -> tuple[str, dict[str, Any]]:
+        options: dict[str, Any] = {"format": self._selected_format()}
+        if self.specifyDpiCheckBox.isChecked():
+            options["dpi"] = self.dpiSpinBox.value()
+        if self.transparentCheckBox.isChecked():
+            options["transparent"] = True
+        if self.tightBBoxCheckBox.isChecked():
+            options["bbox_inches"] = "tight"
+            options["pad_inches"] = self.padInchesSpinBox.value()
+        return self._path_with_extension(), options
 
 
 class EditAnnotation(QDialog, Ui_EditAnnotation):
@@ -2750,14 +2929,19 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def printPlot(self) -> None:
         """Print/save current plot"""
-        fileName = QFileDialog.getSaveFileName(
-            self,
-            "Export plot",
-            "",
-            "Image (*.png);;PDF (*.pdf);; Postscript (*.ps);; EPS (*.eps);; Vector graphics (*.svg)",
-        )
-        # TODO: Set DPI, FILETYPE, etc
-        plt.savefig(fileName[0])
+        supported_filetypes = self.figure.canvas.get_supported_filetypes()
+        export_dir = getattr(self, "figure_export_dir", self.dir_start)
+        dialog = SaveFigureDialog(self, supported_filetypes, export_dir)
+        if not dialog.exec_():
+            return
+
+        file_path, savefig_options = dialog.savefig_options()
+        try:
+            self.figure.savefig(file_path, **savefig_options)
+        except Exception as e:
+            QMessageBox.warning(self, "Export plot", 'Could not save plot to "%s":\n%s' % (file_path, e))
+            return
+        self.figure_export_dir = dirname(file_path)
 
     def onpick(self, event: Any) -> None:
         """Called when clicking on a plot/artist"""
@@ -2777,7 +2961,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         copy_chart_action.triggered.connect(self.copy_chart)
         # save chart action
         save_chart_action = main_menu.addAction("Save Chart")
-        save_chart_action.triggered.connect(self.mpl_toolbar.save_figure)
+        save_chart_action.triggered.connect(self.printPlot)
 
         # copy data sub-menu
         if self.artists_clicked:  # do nothing if list of artists is empty

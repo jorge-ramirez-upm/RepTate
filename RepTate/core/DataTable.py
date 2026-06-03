@@ -78,7 +78,6 @@ class DataTable(object):
     def __str__(self) -> Any:
         """Returns a string describing the data
         """
-        # TODO: Refine this. It doesn't work
         return self.data.__str__()
         
     def mincol(self, col: int) -> Any:
