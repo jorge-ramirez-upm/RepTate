@@ -12,9 +12,11 @@ RepTate Keyboard Shortcuts
 Application Manager (Main Window)
 ---------------------------------
 
-==============  ==============================
+The shortcuts below are assigned to RepTate actions in the current GUI.
+
+==============  =================================
 Press this key  To do this
-==============  ==============================
+==============  =================================
 Ctrl+1          New MWD Application
 Ctrl+2          New TTS Application
 Ctrl+3          New LVE Application
@@ -24,37 +26,36 @@ Ctrl+6          New Creep Application
 Ctrl+7          New SANS Application
 Ctrl+8          New React Application
 Ctrl+9          New Dielectric Application
-Ctrl+0          New S(q,t) Application
 Ctrl+Q          Quit RepTate
-==============  ==============================
+Ctrl+Alt+L      Show the logger
+==============  =================================
 
 -----------
 Application
 -----------
 
-==============  ==============================
+==============  ================================
 Press this key  To do this
-==============  ==============================
+==============  ================================
 Alt+T           New Tool (selected from dropdown box)
 Ctrl+A          View All Data Sets
-Ctrl+F          Show Figure Tools
-Ctrl+I          Open Data Inspector
+Ctrl+F          Show or hide the Figure Toolbar
+Ctrl+I          Inspect data files
 Ctrl+N          New Empty Data Set
-Ctrl+O          Add files to New Data Set (if no Data Set is available)
-==============  ==============================
+Ctrl+O          Open Data File
+==============  ================================
 
 --------
 Data Set
 --------
 
-==============  ==============================
+==============  ===============================
 Press this key  To do this
-==============  ==============================
-Alt+N           New theory (selected from dropdown box)
-Ctrl+M          Open Marker/Legend settings
-Ctrl+O          Add files to current Data Set
-Ctrl+R          Reload Data in current Data Set
-==============  ==============================
+==============  ===============================
+Alt+N           Create selected theory
+Ctrl+M          Select Dataset Plot Style
+Ctrl+R          Reload data files and theories
+==============  ===============================
 
 ------
 Theory
@@ -64,22 +65,5 @@ Theory
 Press this key  To do this
 ==============  ==============================
 Alt+C           Calculate current theory
-Alt+M           Fit current theory
-Ctrl+C          Copy Parameters
-Ctrl+V          Paste Parameters
+Alt+M           Minimize Error
 ==============  ==============================
-
-
-----
-Tool
-----
-
-==============  ==============================
-Press this key  To do this
-==============  ==============================
-F2              Edit Tool Parameter
-==============  ==============================
-
-
-.. todo:: Update keyboard shortcuts
-
