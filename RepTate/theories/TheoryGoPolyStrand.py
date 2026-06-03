@@ -1186,7 +1186,7 @@ class TheoryGoPolyStrand(QTheory):
         if name == "nmodes":
             oldn = self.parameter_int("nmodes")
             # self.spinbox.setMaximum(int(value))
-        message, success = super(BaseTheoryGoPolyStrand, self).set_param_value(name, value)  # pyright: ignore[reportUndefinedVariable]
+        message, success = super().set_param_value(name, value)
         if not success:
             return message, success
         if name == "nmodes":
