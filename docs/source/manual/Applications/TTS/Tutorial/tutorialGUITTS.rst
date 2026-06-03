@@ -77,5 +77,11 @@ TTS Tutorial
     When the "Vertical Shift" button |arrow_up| is checked, 
     vertical shift of the data is allowed.
 
-.. todo::
-    When the "Shift to Isofrictional State" button |iso| is checked ...
+.. note::
+    When the "Shift to Isofrictional State" button |iso| is checked,
+    RepTate includes the molecular-weight dependence of :math:`T_g` in the WLF
+    horizontal shift. The correction uses the file molecular weight ``Mw`` and
+    the theory parameters ``CTg`` and ``dx12``. Untick this option when this
+    correction should not be applied, for example for well-entangled
+    monodisperse samples where the molecular-weight dependence of :math:`T_g`
+    can be neglected.
