@@ -21,6 +21,7 @@ columns of a ``.laos`` file: time, strain, and stress. The file parameters
 ``omega`` and ``gamma`` are also required; ``omega`` is used when the view needs
 the strain-rate or harmonic frequencies.
 
+This application is inspired by the software `MITlaos <https://web.mit.edu/nnf/research/phenomena/mit_laos.html>`_.
 
 ----------
 Data Files
