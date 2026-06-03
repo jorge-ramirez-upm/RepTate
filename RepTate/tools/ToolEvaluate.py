@@ -54,7 +54,7 @@ class ToolEvaluate(QTool):
     the expression parser. File parameters can be referenced as ``[parameter]``.
     """
 
-    toolname: ClassVar[str] = "Eval Exp"
+    toolname: ClassVar[str] = "Evaluate Expression"
     description: ClassVar[str] = "Evaluate Expression Tool"
     citations: ClassVar[list[str]] = []
     # html_help_file = 'http://reptate.readthedocs.io/manual/Tools/template.html'

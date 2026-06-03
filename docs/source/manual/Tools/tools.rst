@@ -216,6 +216,49 @@ The final value of the cumulative integral is printed in the tool output area
 as ``I``. If the interpolation or integration fails, the tool reports the error
 and leaves the input data unchanged.
 
+-----------------------
+Interpolate/Extrapolate
+-----------------------
+
+.. automodule:: RepTate.tools.ToolInterpolate.ToolInterpolateExtrapolate
+
+The Interpolate/Extrapolate tool evaluates the current-view curve at one
+user-selected x-value and prints the corresponding y-value in the tool output
+area. It is useful for reading an interpolated value from a curve without
+manually estimating it from the plot.
+
+The tool acts on the coordinates produced by the selected view. If the current
+view uses logarithms, shifted variables, converted units, or derived
+quantities, the interpolation is performed on those view coordinates. The tool
+does not replace the plotted data; it returns the original x- and y-values
+unchanged after printing the result.
+
+The Interpolate/Extrapolate parameter is:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``x``
+     - Current-view x-value at which y should be evaluated
+
+Before interpolation, repeated x-values are removed by keeping the first
+occurrence. The remaining points are passed to SciPy's ``interp1d`` with
+``kind = "cubic"``, ``assume_sorted = True``, and
+``fill_value = "extrapolate"``. This means values outside the data range are
+extrapolated rather than rejected.
+
+For example, set ``x = 10`` to print the interpolated or extrapolated y-value
+at the displayed x-coordinate 10. The output area shows a small table with the
+selected ``x`` and calculated ``y``.
+
+The source data should be ordered by increasing x for the selected view. Cubic
+interpolation can fail or give unreliable extrapolated values if there are too
+few points, unsuitable repeated values, non-finite values, or if the requested
+x-value is far outside the data range. If the calculation fails, RepTate prints
+the error in the tool output area and leaves the plotted data unchanged.
+
 -------------------
 Smooth
 -------------------
@@ -290,6 +333,57 @@ Because the calculation divides by :math:`x^n`, zero or otherwise unsuitable
 x-values can produce undefined or non-finite results. The tool does not apply
 extra validity checks beyond the numerical calculation.
 
+-------------
+Resample Data
+-------------
+
+.. automodule:: RepTate.tools.ToolResampleData.ToolResampleData
+
+The Resample Data tool replaces the current-view curve with an interpolated
+curve on a new x-grid. It is useful for comparing curves on a common number of
+points, preparing smoother-looking interpolated data, or placing several
+displayed series on the same x-grid.
+
+The tool acts on the coordinates produced by the selected view. For
+multi-series views, RepTate converts the displayed coordinates to the view's
+display representation before constructing the common resampling grid, and then
+converts the resampled result back to the view's internal representation for
+plotting. For single-series processing, the tool works directly on the x- and
+y-values passed to the tool.
+
+The Resample Data parameters and toolbar controls are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Control
+     - Meaning
+   * - ``npoints``
+     - Number of output points
+   * - ``Method``
+     - Interpolation method: ``PCHIP`` or ``Cubic spline``
+   * - ``Scale``
+     - Interpolation scale: ``Linear`` or ``Logarithmic``
+
+The output x-grid is uniformly spaced in the selected scale. ``Linear`` uses
+``linspace`` between the valid x-range limits. ``Logarithmic`` uses
+``logspace`` and requires positive x-values. The default interpolation method
+is ``PCHIP``. ``Cubic spline`` is also available, but it requires at least four
+finite points with distinct x-values in each processed series.
+
+Before interpolation, RepTate removes ``NaN`` and infinite points, sorts data by
+x, and consolidates repeated x-values by averaging the corresponding y-values.
+The tool reports how many invalid points were ignored and how many repeated
+x-values were consolidated. It also reports the number of output points, the
+interpolation method, and the scale.
+
+For multi-series views, all displayed y-series must cover the common x-range
+that RepTate constructs from the valid series ranges. The tool does not
+extrapolate outside the valid x-range. For logarithmic interpolation, x-values,
+y-values, and output x-values must all be positive. If any requirement is not
+met, RepTate prints the error in the tool output area and leaves the input data
+unchanged.
+
 ------------------
 Materials Database
 ------------------
@@ -363,11 +457,3 @@ current dataset. It expects the files to contain suitable ``T`` and ``Mw`` file
 parameters and only shifts columns with the names listed above. Materials or
 parameters that are not present in the selected material cannot be supplied
 automatically to theories.
-
-.. todo::
-   Continue adding source-backed tool examples. Bounds, Evaluate Expression,
-   Find Peaks, Gradient, Integral, Materials Database, Smooth, and Power Law now
-   follow the user-facing pattern: purpose, when to use it, current-view
-   coordinate behavior, parameters/options, output, example use, and
-   limitations. Check whether other available tools such as
-   Interpolate/Extrapolate and Resample Data should be added to this page.
