@@ -29,6 +29,9 @@ from external libraries, e.g. calling pre-compiled C functions. It is a very eff
 
 In RepTate, some theories (most notably the React application theories) are written in C code and interfaced with Python using,
 `Ctypes <https://docs.python.org/3.6/library/ctypes.html>`_.
+Newer compiled theory code can also be exposed with
+`pybind11 <https://pybind11.readthedocs.io/>`_, which is usually more convenient
+for C++ classes, ``std::vector`` values, exceptions, and Python-style modules.
 
 In general, already-written C code will require **no** modifications to be used by Python.
 The only work we need to do to integrate C code in Python is on Python's side.
@@ -40,6 +43,255 @@ The steps for interfacing Python with C using
 #. compile the C code as a shared library
 #. write some Python lines of code to "extract" the C functions from the library
 #. run!
+
+-------------------------------------------------
+Modern C++ interfaces with pybind11: LP2R example
+-------------------------------------------------
+
+The LP2R LVE theory is an example of the newer RepTate approach for C++ code.
+Instead of loading a manually compiled shared library with ``ctypes``, RepTate
+builds a normal Python extension module named ``RepTate.theories._lp2r``.  The
+extension is compiled from C++ sources during package installation, imported like
+any other Python module, and then used by ``TheoryLP2RLVE`` to run the numerical
+solver.
+
+The relevant files are:
+
+- ``RepTate/theories/modified_LP2R1.1/pybind/lp2r_types.h``
+- ``RepTate/theories/modified_LP2R1.1/pybind/lp2r_solver.h``
+- ``RepTate/theories/modified_LP2R1.1/pybind/lp2r_solver.cpp``
+- ``RepTate/theories/modified_LP2R1.1/pybind/lp2r_bindings.cpp``
+- ``RepTate/theories/TheoryLP2RLVE.py``
+- ``pyproject.toml`` and ``setup.py``
+
+The C++ side first defines small data structures for the values Python must set
+or read.  For example, ``LP2RMaterial`` contains material parameters, while
+``LP2RResult`` contains the calculated spectra:
+
+.. code-block:: cpp
+
+    struct LP2RMaterial {
+        double m_kuhn = 0.0;
+        double m_e = 0.0;
+        double g0 = 0.0;
+        double tau_e = 0.0;
+        double g_glass = 0.0;
+        double tau_glass = 0.0;
+        double beta_glass = 0.0;
+    };
+
+    struct LP2RResult {
+        std::vector<double> omega;
+        std::vector<double> gp;
+        std::vector<double> gpp;
+        std::vector<double> eta;
+        double eta0 = 0.0;
+    };
+
+The solver is then exposed as a C++ class with an explicit public API.  This is
+the boundary that RepTate's Python code uses; implementation details such as the
+individual polymer state remain private in C++:
+
+.. code-block:: cpp
+
+    class LP2RSolver {
+    public:
+        LP2RSolver(LP2RMaterial material, LP2RControls controls);
+
+        void add_lognormal_component(double weight, int n, double mw, double pdi);
+        void add_discrete_component(const std::vector<double>& mass,
+                                    const std::vector<double>& weight,
+                                    double component_weight = 1.0);
+
+        void prepare();
+        bool step();
+        LP2RResult calculate_spectra(double freq_min,
+                                     double freq_max,
+                                     double freq_ratio) const;
+        void cancel();
+        double progress() const;
+    };
+
+The file ``lp2r_bindings.cpp`` is the pybind11 interface.  It declares the Python
+module name, maps C++ structs and classes to Python classes, and exposes selected
+members and methods:
+
+.. code-block:: cpp
+
+    #include "lp2r_solver.h"
+
+    #include <pybind11/pybind11.h>
+    #include <pybind11/stl.h>
+
+    namespace py = pybind11;
+    using namespace reptate_lp2r;
+
+    PYBIND11_MODULE(_lp2r, m)
+    {
+        py::class_<LP2RMaterial>(m, "Material")
+            .def(py::init<>())
+            .def_readwrite("m_kuhn", &LP2RMaterial::m_kuhn)
+            .def_readwrite("m_e", &LP2RMaterial::m_e)
+            .def_readwrite("g0", &LP2RMaterial::g0);
+
+        py::class_<LP2RSolver>(m, "Solver")
+            .def(py::init<LP2RMaterial, LP2RControls>())
+            .def("add_lognormal_component",
+                 &LP2RSolver::add_lognormal_component)
+            .def("step", &LP2RSolver::step,
+                 py::call_guard<py::gil_scoped_release>())
+            .def("calculate_spectra", &LP2RSolver::calculate_spectra,
+                 py::call_guard<py::gil_scoped_release>());
+    }
+
+The ``pybind11/stl.h`` include lets pybind11 convert common STL containers such
+as ``std::vector<double>`` to and from Python lists.  The
+``py::gil_scoped_release`` guards release Python's Global Interpreter Lock while
+long C++ calculations run.  This is important for RepTate because the numerical
+work can be expensive, and the theory also needs cancellation and progress
+checks.
+
+On the Python side, the compiled module is imported directly:
+
+.. code-block:: python
+
+    from RepTate.theories import _lp2r
+
+``TheoryLP2RLVE`` then creates the C++ objects, copies RepTate parameters into
+them, and performs unit conversions at the interface.  For example, molar masses
+stored in RepTate as ``kg/mol`` are passed to LP2R in ``g/mol``:
+
+.. code-block:: python
+
+    material = _lp2r.Material()
+    material.m_kuhn = self.parameter_float("MK") * 1000.0
+    material.m_e = self.parameter_float("Me") * 1000.0
+    material.g0 = self.parameter_float("G0")
+    material.tau_e = self.parameter_float("tau_e")
+
+    controls = _lp2r.Controls()
+    controls.alpha = self.parameter_float("alpha")
+    controls.time_ratio = self.parameter_float("time_ratio")
+
+    solver = _lp2r.Solver(material, controls)
+
+Polymer components are added through the exposed C++ methods:
+
+.. code-block:: python
+
+    solver.add_lognormal_component(
+        weight=component["weight"],
+        n=component["npoly"],
+        mw=component["Mw"] * 1000.0,
+        pdi=component["PDI"],
+    )
+
+    solver.add_discrete_component(
+        mass=[mass * 1000.0 for mass in component["masses"]],
+        weight=component["weights"],
+        component_weight=component["weight"],
+    )
+
+The calculation loop remains Python-controlled, so RepTate can update the theory
+text box, check the stop flag, and clear the output table if the user cancels:
+
+.. code-block:: python
+
+    self.solver.prepare()
+    while self.solver.step():
+        if self.stop_theory_flag:
+            self.solver.cancel()
+            self._clear_table(tt)
+            return
+        last_progress = self._report_progress(
+            self.solver.progress(), last_progress
+        )
+
+    result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
+
+Finally, the result vectors exposed by pybind11 are copied into the RepTate
+theory table:
+
+.. code-block:: python
+
+    tt.num_rows = len(result.omega)
+    tt.data = np.zeros((tt.num_rows, tt.num_columns))
+    tt.data[:, 0] = result.omega
+    tt.data[:, 1] = result.gp
+    tt.data[:, 2] = result.gpp
+
+Compiling the extension
+-----------------------
+
+The extension is declared in ``setup.py``.  The module name
+``RepTate.theories._lp2r`` determines where Python imports it from after the
+build:
+
+.. code-block:: python
+
+    lp2r_extension = Extension(
+        "RepTate.theories._lp2r",
+        sources=[
+            str(LP2R_PYBIND_DIR / "lp2r_bindings.cpp"),
+            str(LP2R_PYBIND_DIR / "lp2r_solver.cpp"),
+            str(LP2R_PYBIND_DIR / "kww_adapter.cpp"),
+            str(LP2R_PYBIND_DIR / "kww_cpp.cpp"),
+        ],
+        include_dirs=[
+            pybind11.get_include(),
+            str(LP2R_PYBIND_DIR),
+        ],
+        language="c++",
+        extra_compile_args=["/std:c++17"] if os.name == "nt" else ["-std=c++17"],
+    )
+
+The build requirements are declared in ``pyproject.toml``:
+
+.. code-block:: toml
+
+    [build-system]
+    requires = ["setuptools>=68", "wheel", "setuptools-scm>=8", "pybind11>=2.12,<3"]
+    build-backend = "setuptools.build_meta"
+
+This means a local editable install is enough to build the extension:
+
+.. code-block:: bash
+
+    python -m pip install -e .
+
+If the C++ compiler and build dependencies are available, this produces the
+platform-specific compiled module inside ``RepTate/theories``.  On Windows the
+file is a ``.pyd`` extension module; on Linux and macOS it is a ``.so`` extension
+module.
+
+GitHub release builds
+---------------------
+
+The GitHub workflows compile the pybind11 extension automatically.  In
+``.github/workflows/ci.yml``, the test job runs on Windows and Linux and installs
+RepTate with:
+
+.. code-block:: bash
+
+    python -m pip install -e .
+
+That step invokes the normal setuptools build and therefore verifies that the
+LP2R extension can be compiled before the tests run.
+
+Release binaries are built by ``.github/workflows/release-binaries.yml`` when a
+tag matching ``v*`` is pushed.  Each release job checks out the repository,
+installs the Python dependencies, builds the generated Qt files, and again runs:
+
+.. code-block:: bash
+
+    python -m pip install -e .
+
+The editable install compiles ``RepTate.theories._lp2r`` on the GitHub runner for
+that operating system.  The workflow then runs Nuitka on Windows, Linux, and
+macOS to produce standalone RepTate distributions and uploads the zipped
+artifacts to the GitHub release.  In practice, adding or changing pybind11 source
+files requires keeping ``setup.py`` in sync; the CI and release workflows will
+then build the extension as part of the normal install step.
 
 ----------
 Our C code

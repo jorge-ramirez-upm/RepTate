@@ -1,0 +1,9 @@
+%% PS8 of Monfort et al Rheol. Acta. 18, 623–628 (1979)
+% MWD described by a log-normal distribution with exponential cutoff at high M
+% Code to generate the polymers in "conf" subdirectory
+1.0e-5 1.0e3 1.5
+720.0 12870.0 230000.0 2.0e-3
+1.20e9 1.30e-9 0.380
+1
+2 1.0  % ptype=2 : weights supplied in a file
+PS390Kmcut.dat  % Filename for Discrete molar mass and weights

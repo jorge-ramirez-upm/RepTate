@@ -79,6 +79,19 @@ def _read_lp2r_expected(path):
     return expected
 
 
+def _read_lp2r_discrete_dat(path):
+    masses = []
+    weights = []
+    for raw_line in Path(path).read_text().splitlines():
+        line = raw_line.split("%", 1)[0].strip()
+        if not line or line.startswith("#"):
+            continue
+        mass, weight = map(float, line.split()[:2])
+        masses.append(mass)
+        weights.append(weight)
+    return masses, weights
+
+
 def _meaningful_lp2r_input_lines(path):
     lines = []
     for raw_line in Path(path).read_text().splitlines():
@@ -128,9 +141,13 @@ def _run_lp2r_lve_input(input_path):
             mwd_path = input_path.parent / lines[index].split()[0]
             if not mwd_path.exists() and mwd_path.suffix == ".dat":
                 mwd_path = mwd_path.with_suffix(".gpc")
-            masses, weights = TheoryLP2RLVE.read_gpc_mwd(mwd_path)
+            if mwd_path.suffix == ".gpc":
+                masses, weights = TheoryLP2RLVE.read_gpc_mwd(mwd_path)
+                masses = [mass * 1000.0 for mass in masses]
+            else:
+                masses, weights = _read_lp2r_discrete_dat(mwd_path)
             solver.add_discrete_component(
-                [mass * 1000.0 for mass in masses],
+                masses,
                 weights,
                 component_weight=float(weight),
             )
@@ -577,6 +594,21 @@ def test_lp2r_pi_blend_reference_matches_expected_output():
 
 def test_lp2r_gpc_mwd_reference_matches_expected_output():
     case_dir = Path("data/L2PR/LVE/03MWD")
+    result = _run_lp2r_lve_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
+
+    assert len(result.omega) == len(expected)
+    for actual_row, expected_row in zip(
+        zip(result.omega, result.gp, result.gpp),
+        expected,
+    ):
+        for actual_value, expected_value in zip(actual_row, expected_row):
+            scale = max(abs(expected_value), 1.0)
+            assert abs(actual_value - expected_value) / scale < 1.0e-5
+
+
+def test_lp2r_ps8_reference_matches_expected_output():
+    case_dir = Path("data/L2PR/LVE/03PS8")
     result = _run_lp2r_lve_input(case_dir / "inp.dat")
     expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
 
