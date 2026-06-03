@@ -1,6 +1,6 @@
------------------------
-Havriliak-Negami modes 
------------------------
+----------------------
+Havriliak-Negami modes
+----------------------
 
 .. toctree::
    :maxdepth: 2
@@ -13,30 +13,52 @@ Summary
 Description
 -----------
 
-.. todo:: Complete docs for this theory
-      
-Fit of dielectric spectroscopy data with a set of :math:`N` discrete equidistant Debye modes. 
-The number of modes can be selected by pressing the Up/Down arrows in the theory window. 
-The frequencies of the Debye modes are equally distributed in logarithmic scale between 
-a minimum frequency, :math:`\omega_\text{min}`, and a maximum frequency, :math:`\omega_\text{max}`,
-which can be fixed or set free by ticking the corresponding checkboxes. 
-The position of :math:`\omega_\text{min}` and :math:`\omega_\text{max}` 
-can be changed by dragging the leftmost and rightmost modes with the mouse. 
-The vertical position of the modes can be changed by dragging the yellow points.
+Fit dielectric spectroscopy data with a set of :math:`N` discrete
+Havriliak-Negami modes. Each mode contributes a relaxation strength
+:math:`\Delta\epsilon_i`, a characteristic time :math:`\tau_i`, and the common
+shape parameters :math:`\alpha` and :math:`\gamma`.
 
-Each mode contributes to the dielectric relaxation spectrum through the following formulas:
+The mode frequencies are equally distributed on a logarithmic scale between
+a minimum frequency, :math:`\omega_\text{min}`, and a maximum frequency,
+:math:`\omega_\text{max}`. RepTate stores these bounds as ``logwmin`` and
+``logwmax`` and uses :math:`\tau_i=1/\omega_i`.
+
+For a frequency :math:`\omega`, the implemented complex response is
 
 .. math::
-    \epsilon_i'(\omega) &= \Delta\epsilon_i \frac{1}{1+ (\omega \tau_i)^2}\\
-    \epsilon_i''(\omega) &= \Delta\epsilon_i \frac{\omega \tau_i}{1+ (\omega \tau_i)^2}
 
-with :math:`\Delta\epsilon_i` the amplitude and :math:`\tau_i` the characteristic relaxation time of 
-the mode :math:`i` (inverse of the frequency). 
+    \epsilon^*(\omega) =
+        \epsilon_\infty +
+        \sum_i
+        \frac{\Delta\epsilon_i}
+        {\left[1+\left(i\omega\tau_i\right)^\alpha\right]^\gamma}
 
-The parameters of the theory are the number of modes (which is fixed by the user and 
-is not minimized), :math:`\omega_\text{min}`, :math:`\omega_\text{max}`,
-and a value of :math:`\Delta\epsilon_i` for each mode. 
-:math:`\Delta\epsilon_i` is calculated in logarithmic scale.
+The calculated :math:`\epsilon'` column is the real part of this response and
+the calculated :math:`\epsilon''` column is minus the imaginary part, matching
+the sign convention used in the implementation. The theory output keeps the
+same frequency points as the input file.
+
+The adjustable parameters exposed in the theory table are:
+
+* ``einf``: unrelaxed permittivity, :math:`\epsilon_\infty`.
+* ``alpha``: asymmetry parameter.
+* ``gamma``: broadness parameter.
+* ``logwmin`` and ``logwmax``: base-10 logarithms of the frequency range bounds,
+  expressed in ``rad/s``.
+* ``logDe00``, ``logDe01``, ...: base-10 logarithms of the mode strengths
+  :math:`\Delta\epsilon_i`.
+
+The number of modes, ``nmodes``, is controlled from the theory toolbar and is
+not fitted directly. When the theory is created, the initial number of modes is
+estimated from the frequency span of the data. The initial mode strengths are
+interpolated from the first file in the data set. The ``View modes`` button
+shows or hides the yellow mode markers; dragging the markers changes the
+frequency range and mode strengths in the current view coordinates.
+
+The Havriliak-Negami modes theory is available in the Dielectric application as
+``Havriliak-Negami modes`` and is intended for ``.dls`` dielectric spectroscopy
+files with columns :math:`\omega`, :math:`\epsilon'`, and
+:math:`\epsilon''`.
 
 .. warning::
     The theory can only be applied to one file per data set. 
