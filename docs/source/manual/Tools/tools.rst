@@ -55,6 +55,54 @@ Evaluate Expression
 
 .. automodule:: RepTate.tools.ToolEvaluate.ToolEvaluate
 
+The Evaluate Expression tool replaces the x- and y-values of the current view
+with values computed from user-defined algebraic expressions. It is useful for
+quick derived-coordinate checks, rescaling a plotted curve, comparing a
+normalized quantity, or applying a simple transformation without changing the
+original data file.
+
+The tool acts on the coordinates produced by the selected view. In the
+expressions, ``x`` is the current-view abscissa array and ``y`` is the
+current-view ordinate array. If the view already plots logarithms, shifted
+variables, converted units, or derived quantities, the expressions operate on
+those displayed coordinates rather than on the raw file columns.
+
+The Evaluate Expression parameters are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``x``
+     - Expression used to compute the output x-values
+   * - ``y``
+     - Expression used to compute the output y-values
+
+The default expressions are ``x`` and ``y``, which leave the plotted data
+unchanged. For example, set ``y = y/x`` to plot the current-view ordinate
+divided by the current-view abscissa, or set ``x = log10(x)`` and ``y = y`` to
+show the same y-values against :math:`\log_{10}(x)`.
+
+Expressions may use numeric constants, the operators ``+``, ``-``, ``*``, ``/``,
+``**``, and ``%``, unary signs, and the functions ``sin``, ``cos``, ``tan``,
+``arcsin``, ``arccos``, ``arctan``, ``arctan2``, ``sinh``, ``cosh``, ``tanh``,
+``arcsinh``, ``arccosh``, ``arctanh``, ``deg2rad``, ``rad2deg``, ``round``,
+``around``, ``rint``, ``floor``, ``ceil``, ``trunc``, ``exp``, ``log``,
+``log10``, ``fabs``, ``abs``, ``mod``, ``power``, and ``sqrt``. The constants
+``pi`` and ``e`` are available. The helper functions ``randu(x)`` and
+``randn(x)`` generate random arrays with the same shape as ``x``.
+
+File parameters can be referenced with square brackets, for example
+``[Mw]`` or ``[T]``. If a named file parameter is not present in a file, RepTate
+uses ``0.0`` for that parameter in the expression.
+
+The expression syntax is intentionally restricted. Function calls must be
+direct calls to the supported functions, keyword arguments are not accepted, and
+unknown names or unsupported syntax are rejected. If evaluating either
+expression fails, RepTate prints the error in the tool output area and leaves
+the input x- and y-values unchanged.
+
 -------------------
 Find Peaks
 -------------------
@@ -194,10 +242,10 @@ Materials Database
 .. automodule:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase
 
 .. todo::
-   Continue adding source-backed tool examples. Bounds, Gradient, Integral,
-   Smooth, and Power Law now follow the user-facing pattern: purpose, when to
-   use it, current-view coordinate behavior, parameters/options, output,
-   example use, and limitations. Add similar entries for Evaluate Expression,
-   Find Peaks, and Materials Database, and check whether other available tools
-   such as Interpolate/Extrapolate and Resample Data should be added to this
-   page.
+   Continue adding source-backed tool examples. Bounds, Evaluate Expression,
+   Gradient, Integral, Smooth, and Power Law now follow the user-facing
+   pattern: purpose, when to use it, current-view coordinate behavior,
+   parameters/options, output, example use, and limitations. Add similar
+   entries for Find Peaks and Materials Database, and check whether other
+   available tools such as Interpolate/Extrapolate and Resample Data should be
+   added to this page.
