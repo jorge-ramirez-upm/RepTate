@@ -296,11 +296,78 @@ Materials Database
 
 .. automodule:: RepTate.tools.ToolMaterialsDatabase.ToolMaterialsDatabase
 
+The Materials Database tool lets the user inspect RepTate's polymer material
+database and manage a personal material database. It is useful when a theory or
+workflow needs standard polymer parameters such as WLF shift parameters,
+entanglement time, entanglement modulus, entanglement molar mass, density, or
+repeat-unit information.
+
+This tool is not a current-view coordinate transformation like ``Bounds``,
+``Smooth``, or ``Gradient``. Applying the tool to plotted data leaves the x- and
+y-values unchanged. Its main output is the selected material information and
+derived material calculations printed in the tool output area. Some theories
+also use the same database helpers to initialize matching theory parameters
+from a file's ``chem`` parameter.
+
+The material selector lists the built-in RepTate material database followed by
+materials from the user's database. User materials are shown in red. When the
+tool opens, it tries to select the ``chem`` value from the first file in the
+first dataset, if such a file parameter is available. Selecting a material
+loads its parameters into the tool parameter table and shows the material's long
+name above the tool controls.
+
+The toolbar actions are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Control
+     - Meaning
+   * - ``Calculate stuff with selected Mw/T``
+     - Print derived WLF and tube-theory quantities for the selected material
+   * - ``New Material``
+     - Create a new user material from default values
+   * - ``Edit/View Material Properties``
+     - Edit the selected material, if it belongs to the user database
+   * - ``Duplicate Material``
+     - Copy the selected material into the user database under a new name
+   * - ``Delete Material``
+     - Delete the selected material, if it belongs to the user database
+   * - ``Save User Material Database``
+     - Save the user database to ``user_database.npy`` in the application data folder
+
+Built-in materials can be viewed and duplicated, but they cannot be edited or
+deleted. Editing and deleting are restricted to user materials. New and copied
+materials are stored in memory until ``Save User Material Database`` is used.
+RepTate also reads an older ``user_database.npy`` from the user's home folder
+when present and merges it with the application-data user database.
+
+The ``Mw (kDa)`` and ``T (°C)`` fields provide the molar mass and temperature
+used by the calculation action. The calculation prints the selected chemistry,
+``Mw``, ``T``, WLF quantities ``C1`` and ``C2``, adjusted ``tau_e`` and ``Ge``,
+and the derived quantities ``Z``, ``tau_R``, and ``tau_D``. The
+``Shift to isofrictional state`` and ``Vertical shift`` toggles affect these
+calculations.
+
+The ``Shift all Files in the current Application`` action asks for confirmation
+and then shifts all files in the current dataset to the selected target
+temperature using the selected material's WLF parameters. It updates file data
+columns whose names are recognized by the source code: ``t`` or ``time`` are
+divided by the horizontal shift factor, ``w`` is multiplied by it, and stress or
+modulus columns such as ``G'``, ``G''``, ``Gt``, ``sigma_xy``, ``N1``,
+``sigma``, are multiplied by the vertical shift factor when vertical shifting is
+enabled. The file parameter ``T`` is then set to the target temperature.
+
+Use care with the shift action because it modifies the data tables in the
+current dataset. It expects the files to contain suitable ``T`` and ``Mw`` file
+parameters and only shifts columns with the names listed above. Materials or
+parameters that are not present in the selected material cannot be supplied
+automatically to theories.
+
 .. todo::
    Continue adding source-backed tool examples. Bounds, Evaluate Expression,
-   Find Peaks, Gradient, Integral, Smooth, and Power Law now follow the
-   user-facing pattern: purpose, when to use it, current-view coordinate
-   behavior, parameters/options, output, example use, and limitations. Add a
-   similar entry for Materials Database, and check whether other available tools
-   such as Interpolate/Extrapolate and Resample Data should be added to this
-   page.
+   Find Peaks, Gradient, Integral, Materials Database, Smooth, and Power Law now
+   follow the user-facing pattern: purpose, when to use it, current-view
+   coordinate behavior, parameters/options, output, example use, and
+   limitations. Check whether other available tools such as
+   Interpolate/Extrapolate and Resample Data should be added to this page.
