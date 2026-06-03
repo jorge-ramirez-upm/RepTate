@@ -16,12 +16,12 @@ Disentanglement_Switch=1.0
 Start_time=1.0e-3  
 Time_ratio=1.02
 
-CalcDielectric=no 
+CalcDielectric=yes 
 OutTermRelaxPathways=no 
 OutPhiPhiST=no  
-Output_G_of_t=no
+Output_G_of_t=yes
 
-OutputFormat=Default 
+OutputFormat=RepTate 
 CSVdelimiter=, 
 Add_header=yes 
 label= 

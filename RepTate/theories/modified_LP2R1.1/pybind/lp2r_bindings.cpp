@@ -42,10 +42,18 @@ PYBIND11_MODULE(_lp2r, m)
         .def_readonly("gp", &LP2RResult::gp)
         .def_readonly("gpp", &LP2RResult::gpp)
         .def_readonly("eta", &LP2RResult::eta)
+        .def_readonly("epsilonp", &LP2RResult::epsilonp)
+        .def_readonly("epsilonpp", &LP2RResult::epsilonpp)
         .def_readonly("mn", &LP2RResult::mn)
         .def_readonly("mw", &LP2RResult::mw)
         .def_readonly("pdi", &LP2RResult::pdi)
         .def_readonly("eta0", &LP2RResult::eta0);
+
+    py::class_<LP2RRelaxationResult>(m, "RelaxationResult")
+        .def_readonly("time", &LP2RRelaxationResult::time)
+        .def_readonly("gt", &LP2RRelaxationResult::gt)
+        .def_readonly("mu", &LP2RRelaxationResult::mu)
+        .def_readonly("r", &LP2RRelaxationResult::r);
 
     py::class_<LP2RSolver>(m, "Solver")
         .def(py::init<LP2RMaterial, LP2RControls>(), py::arg("material"), py::arg("controls"))
@@ -61,6 +69,8 @@ PYBIND11_MODULE(_lp2r, m)
              py::call_guard<py::gil_scoped_release>())
         .def("calculate_spectra", &LP2RSolver::calculate_spectra,
              py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"),
+             py::call_guard<py::gil_scoped_release>())
+        .def("calculate_relaxation_modulus", &LP2RSolver::calculate_relaxation_modulus,
              py::call_guard<py::gil_scoped_release>())
         .def("run", &LP2RSolver::run,
              py::arg("freq_min"), py::arg("freq_max"), py::arg("freq_ratio"),

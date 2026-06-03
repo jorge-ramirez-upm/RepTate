@@ -43,6 +43,13 @@ LP2R_ORIGINAL_DISCRETE_REFERENCE = [
     (163.84, 71502.5, 44100.8),
 ]
 
+LP2R_CASE_DIRS = [
+    Path("data/LP2R/01rcdefault"),
+    Path("data/LP2R/02PIblend"),
+    Path("data/LP2R/03MWD"),
+    Path("data/LP2R/03PS8"),
+]
+
 
 def _lp2r_module() -> Any:
     return import_module("RepTate.theories._lp2r")
@@ -74,8 +81,10 @@ def _assert_matches_reference(result, reference):
 def _read_lp2r_expected(path):
     expected = []
     for line in Path(path).read_text().splitlines():
-        if line and not line.startswith("#") and "=" not in line:
+        try:
             expected.append(tuple(map(float, line.split()[:3])))
+        except ValueError:
+            continue
     return expected
 
 
@@ -101,12 +110,11 @@ def _meaningful_lp2r_input_lines(path):
     return lines
 
 
-def _run_lp2r_lve_input(input_path):
+def _build_lp2r_solver_from_input(input_path):
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 
     _lp2r = _lp2r_module()
     lines = _meaningful_lp2r_input_lines(input_path)
-    freq_min, freq_max, freq_ratio = map(float, lines[0].split()[:3])
     m_kuhn, m_e, g0, tau_e = map(float, lines[1].split()[:4])
     g_glass, tau_glass, beta_glass = map(float, lines[2].split()[:3])
     ncomponents = int(lines[3].split()[0])
@@ -154,7 +162,35 @@ def _run_lp2r_lve_input(input_path):
             index += 1
         else:
             raise ValueError("Unsupported LP2R test ptype %s" % ptype)
+    return solver
+
+
+def _run_lp2r_lve_input(input_path):
+    lines = _meaningful_lp2r_input_lines(input_path)
+    freq_min, freq_max, freq_ratio = map(float, lines[0].split()[:3])
+    solver = _build_lp2r_solver_from_input(input_path)
     return solver.run(freq_min, freq_max, freq_ratio)
+
+
+def _run_lp2r_dielectric_input(input_path):
+    result = _run_lp2r_lve_input(input_path)
+    return list(zip(result.omega, result.epsilonp, result.epsilonpp))
+
+
+def _run_lp2r_gt_input(input_path):
+    solver = _build_lp2r_solver_from_input(input_path)
+    solver.prepare()
+    solver.run_relaxation()
+    result = solver.calculate_relaxation_modulus()
+    return list(zip(result.time, result.gt))
+
+
+def _assert_rows_match_reference(actual, expected, tolerance=1.0e-5):
+    assert len(actual) == len(expected)
+    for actual_row, expected_row in zip(actual, expected):
+        for actual_value, expected_value in zip(actual_row, expected_row):
+            scale = max(abs(expected_value), 1.0)
+            assert abs(actual_value - expected_value) / scale < tolerance
 
 
 def test_lp2r_import_and_lognormal_smoke():
@@ -173,6 +209,43 @@ def test_lp2r_import_and_lognormal_smoke():
     assert all(a < b for a, b in zip(result.omega, result.omega[1:]))
     assert math.isfinite(result.mw)
     assert math.isfinite(result.eta0)
+
+
+def test_lp2r_dielectric_and_gt_outputs_are_available_and_finite():
+    _lp2r = _lp2r_module()
+
+    material = _lp2r.Material()
+    material.m_kuhn = 720.0
+    material.m_e = 12870.0
+    material.g0 = 230000.0
+    material.tau_e = 2.0e-3
+    material.g_glass = 1.20e9
+    material.tau_glass = 1.30e-9
+    material.beta_glass = 0.380
+
+    masses, weights = _read_lp2r_discrete_dat("data/LP2R/03PS8/PS390Kmcut.dat")
+    solver = _lp2r.Solver(material, _lp2r.Controls())
+    solver.add_discrete_component(masses, weights)
+    solver.prepare()
+    solver.run_relaxation()
+
+    spectra = solver.calculate_spectra(freq_min=1.0e-5, freq_max=1.0e3, freq_ratio=1.5)
+    assert len(spectra.epsilonp) == len(spectra.omega)
+    assert len(spectra.epsilonpp) == len(spectra.omega)
+    assert all(math.isfinite(v) for v in spectra.epsilonp)
+    assert all(math.isfinite(v) for v in spectra.epsilonpp)
+    assert max(spectra.epsilonp) == pytest.approx(0.935252)
+    assert max(spectra.epsilonpp) == pytest.approx(0.13554746727566974)
+
+    relaxation = solver.calculate_relaxation_modulus()
+    assert len(relaxation.time) > 0
+    assert len(relaxation.time) == len(relaxation.gt) == len(relaxation.mu) == len(relaxation.r)
+    assert all(math.isfinite(v) and v > 0.0 for v in relaxation.time)
+    assert all(math.isfinite(v) for v in relaxation.gt)
+    assert all(a < b for a, b in zip(relaxation.time, relaxation.time[1:]))
+    assert relaxation.time[0] == pytest.approx(2.0e-7)
+    assert relaxation.gt[0] == pytest.approx(6395753.232983634)
+    assert relaxation.gt[50] == pytest.approx(1655530.3089384811)
 
 
 def test_lp2r_discrete_component_and_cancel():
@@ -379,7 +452,7 @@ def test_lp2r_lve_gpc_import_converts_declared_mass_units():
     from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
 
     masses, weights = TheoryLP2RLVE.read_gpc_mwd(
-        "data/L2PR/LVE/03MWD/MWD.gpc"
+        "data/LP2R/03MWD/MWD.gpc"
     )
 
     assert masses == pytest.approx([100.0, 1000.0, 10000.0])
@@ -553,73 +626,60 @@ def test_lp2r_lve_application_registration():
     from PySide6.QtWidgets import QApplication
 
     from RepTate.gui.QApplicationManager import QApplicationManager
-    from RepTate.theories.TheoryLP2RLVE import TheoryLP2RLVE
+    from RepTate.theories.TheoryLP2RLVE import (
+        TheoryLP2RDielectric,
+        TheoryLP2RGt,
+        TheoryLP2RLVE,
+    )
 
     _qt_app = QApplication.instance() or QApplication([])
-    app = QApplicationManager().handle_new_app("LVE")
+    manager = QApplicationManager()
+
+    app = manager.handle_new_app("LVE")
     assert app is not None
 
     assert app.theories[TheoryLP2RLVE.thname] is TheoryLP2RLVE
 
+    app = manager.handle_new_app("Dielectric")
+    assert app is not None
+    assert app.theories[TheoryLP2RDielectric.thname] is TheoryLP2RDielectric
 
-def test_lp2r_auhl_reference_matches_expected_output():
-    case_dir = Path("data/L2PR/LVE/01rcdefault")
+    app = manager.handle_new_app("Gt")
+    assert app is not None
+    assert app.theories[TheoryLP2RGt.thname] is TheoryLP2RGt
+
+
+@pytest.mark.parametrize("case_dir", LP2R_CASE_DIRS, ids=lambda path: path.name)
+def test_lp2r_lve_references_match_expected_output(case_dir):
     result = _run_lp2r_lve_input(case_dir / "inp.dat")
     expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
 
-    assert len(result.omega) == len(expected)
-    for actual_row, expected_row in zip(
-        zip(result.omega, result.gp, result.gpp),
+    _assert_rows_match_reference(
+        list(zip(result.omega, result.gp, result.gpp)),
         expected,
-    ):
-        for actual_value, expected_value in zip(actual_row, expected_row):
-            scale = max(abs(expected_value), 1.0)
-            assert abs(actual_value - expected_value) / scale < 1.0e-5
+    )
 
 
-def test_lp2r_pi_blend_reference_matches_expected_output():
-    case_dir = Path("data/L2PR/LVE/02PIblend")
-    result = _run_lp2r_lve_input(case_dir / "inp.dat")
-    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
+@pytest.mark.parametrize("case_dir", LP2R_CASE_DIRS, ids=lambda path: path.name)
+def test_lp2r_dielectric_references_match_expected_output(case_dir):
+    actual = _run_lp2r_dielectric_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.dls")
 
-    assert len(result.omega) == len(expected)
-    for actual_row, expected_row in zip(
-        zip(result.omega, result.gp, result.gpp),
+    _assert_rows_match_reference(
+        actual,
         expected,
-    ):
-        for actual_value, expected_value in zip(actual_row, expected_row):
-            scale = max(abs(expected_value), 1.0)
-            assert abs(actual_value - expected_value) / scale < 1.0e-5
+    )
 
 
-def test_lp2r_gpc_mwd_reference_matches_expected_output():
-    case_dir = Path("data/L2PR/LVE/03MWD")
-    result = _run_lp2r_lve_input(case_dir / "inp.dat")
-    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
+@pytest.mark.parametrize("case_dir", LP2R_CASE_DIRS, ids=lambda path: path.name)
+def test_lp2r_gt_references_match_expected_output(case_dir):
+    actual = _run_lp2r_gt_input(case_dir / "inp.dat")
+    expected = _read_lp2r_expected(case_dir / "Expected_Output.gt")
 
-    assert len(result.omega) == len(expected)
-    for actual_row, expected_row in zip(
-        zip(result.omega, result.gp, result.gpp),
+    _assert_rows_match_reference(
+        actual,
         expected,
-    ):
-        for actual_value, expected_value in zip(actual_row, expected_row):
-            scale = max(abs(expected_value), 1.0)
-            assert abs(actual_value - expected_value) / scale < 1.0e-5
-
-
-def test_lp2r_ps8_reference_matches_expected_output():
-    case_dir = Path("data/L2PR/LVE/03PS8")
-    result = _run_lp2r_lve_input(case_dir / "inp.dat")
-    expected = _read_lp2r_expected(case_dir / "Expected_Output.tts")
-
-    assert len(result.omega) == len(expected)
-    for actual_row, expected_row in zip(
-        zip(result.omega, result.gp, result.gpp),
-        expected,
-    ):
-        for actual_value, expected_value in zip(actual_row, expected_row):
-            scale = max(abs(expected_value), 1.0)
-            assert abs(actual_value - expected_value) / scale < 1.0e-5
+    )
 
 
 def test_lp2r_kww_midrange_failure_reports_as_exception_not_abort():

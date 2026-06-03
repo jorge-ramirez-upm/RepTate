@@ -21,6 +21,7 @@ public:
     bool step();
     void run_relaxation();
     LP2RResult calculate_spectra(double freq_min, double freq_max, double freq_ratio) const;
+    LP2RRelaxationResult calculate_relaxation_modulus() const;
     LP2RResult run(double freq_min, double freq_max, double freq_ratio);
 
     void cancel();
@@ -63,6 +64,9 @@ private:
     void gstar_rouse(double w, double& gp, double& gpp, double& ep, double& epp) const;
     void gstar_fast_rouse(double w, double& gp, double& gpp) const;
     void gstar_slow(double w, double& gp, double& gpp, double& ep, double& epp) const;
+    double goft_rouse(double t) const;
+    double goft_fast(double t) const;
+    double goft_tube(double t, double& muoft, double& roft) const;
     double calc_visc() const;
 
     LP2RMaterial material_;

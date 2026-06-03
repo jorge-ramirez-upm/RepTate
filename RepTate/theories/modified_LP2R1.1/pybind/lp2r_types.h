@@ -37,10 +37,19 @@ struct LP2RResult {
     std::vector<double> gp;
     std::vector<double> gpp;
     std::vector<double> eta;
+    std::vector<double> epsilonp;
+    std::vector<double> epsilonpp;
     double mn = 0.0;
     double mw = 0.0;
     double pdi = 1.0;
     double eta0 = 0.0;
+};
+
+struct LP2RRelaxationResult {
+    std::vector<double> time;
+    std::vector<double> gt;
+    std::vector<double> mu;
+    std::vector<double> r;
 };
 
 }  // namespace reptate_lp2r

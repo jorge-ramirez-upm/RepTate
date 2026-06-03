@@ -336,18 +336,56 @@ LP2RResult LP2RSolver::calculate_spectra(double freq_min, double freq_max, doubl
             gstar_slow(freq, gp_tmp, gpp_tmp, ep_tmp, epp_tmp);
             gp += (1.0 - rouse_wt_) * gp_tmp;
             gpp += (1.0 - rouse_wt_) * gpp_tmp;
+            ep += (1.0 - rouse_wt_) * ep_tmp;
+            epp += (1.0 - rouse_wt_) * epp_tmp;
         }
 
         result.omega.push_back(freq / material_.tau_e);
         result.gp.push_back(gp * material_.g0);
         result.gpp.push_back(gpp * material_.g0);
         result.eta.push_back(material_.g0 * material_.tau_e * std::sqrt(gp * gp + gpp * gpp) / freq);
+        result.epsilonp.push_back(ep);
+        result.epsilonpp.push_back(epp);
     }
 
     result.mn = sys_mn_;
     result.mw = sys_mw_;
     result.pdi = sys_pdi_;
     result.eta0 = calc_visc();
+    return result;
+}
+
+LP2RRelaxationResult LP2RSolver::calculate_relaxation_modulus() const
+{
+    if (!prepared_) {
+        throw std::runtime_error("prepare() must be called before calculate_relaxation_modulus()");
+    }
+
+    const double t_min = 1.0e-4;
+    double t_max = 1.0e4;
+    if (entangled_dynamics_ && !t_ar_.empty()) {
+        t_max = t_ar_.back() * 1.0e4;
+    }
+    const double t_ratio = 1.1;
+
+    LP2RRelaxationResult result;
+    double tt = t_min / t_ratio;
+    while (tt < t_max) {
+        tt *= t_ratio;
+        double muoft = 0.0;
+        double roft = 0.0;
+        const double gt_glass = g_glass_scaled_ *
+                                std::exp(-std::pow(tt / tau_glass_scaled_, material_.beta_glass));
+        const double gt_rouse = goft_rouse(tt);
+        const double gt_fast = goft_fast(tt);
+        const double gt_tube = goft_tube(tt, muoft, roft);
+        const double gt = material_.g0 * (gt_glass + gt_rouse + gt_fast + gt_tube);
+
+        result.time.push_back(tt * material_.tau_e);
+        result.gt.push_back(gt);
+        result.mu.push_back(muoft);
+        result.r.push_back(roft);
+    }
     return result;
 }
 
@@ -742,6 +780,76 @@ void LP2RSolver::gstar_slow(double w, double& gp, double& gpp, double& ep, doubl
     gpp *= w;
     ep *= wsq;
     epp *= w;
+}
+
+double LP2RSolver::goft_rouse(double t) const
+{
+    double gt = 0.0;
+    for (const auto& polymer : polymers_) {
+        if (!polymer.relax_free_rouse) {
+            continue;
+        }
+        double gr = 0.0;
+        const double tau1 = polymer.t_frouse;
+        const int pmax = static_cast<int>(std::ceil(polymer.z_chain * n_e_));
+        for (int p = 1; p <= pmax; ++p) {
+            const double psq = static_cast<double>(p * p);
+            const double taup = tau1 / (2.0 * psq);
+            gr += std::exp(-t / taup);
+        }
+        gt += gr * 5.0 * polymer.wt / (4.0 * polymer.z_chain);
+    }
+    return gt;
+}
+
+double LP2RSolver::goft_fast(double t) const
+{
+    double gt = 0.0;
+    for (const auto& polymer : polymers_) {
+        if (polymer.relax_free_rouse) {
+            continue;
+        }
+        const double zz = polymer.z_chain;
+        const double tau_r = polymer.t_frouse;
+        const int zi = static_cast<int>(std::ceil(zz));
+        double gr = 0.0;
+        for (int p = 1; p < zi; ++p) {
+            const double psq = static_cast<double>(p * p);
+            gr += std::exp(-psq * t / tau_r);
+        }
+        const int max_term = static_cast<int>(std::ceil(n_e_ * zz));
+        for (int p = zi; p < max_term; ++p) {
+            const double psq2 = static_cast<double>(2 * p * p);
+            gr += 5.0 * std::exp(-psq2 * t / tau_r);
+        }
+        gt += gr * polymer.wt / (4.0 * zz);
+    }
+    return gt;
+}
+
+double LP2RSolver::goft_tube(double t, double& muoft, double& roft) const
+{
+    muoft = 0.0;
+    roft = 0.0;
+    double goft = 0.0;
+    const int n = static_cast<int>(t_ar_.size());
+    if (entangled_dynamics_) {
+        for (int k = 1; k < n; ++k) {
+            const double dphi = phi_ar_[k - 1] - phi_ar_[k];
+            const double tk = t_ar_[k];
+            muoft += dphi * std::exp(-t / tk);
+            const double dphi_st = std::pow(phi_st_ar_[k - 1], controls_.alpha) -
+                                   std::pow(phi_st_ar_[k], controls_.alpha);
+            roft += dphi_st * std::exp(-t / tk);
+        }
+        const double tau_d = t_ar_[n - 1];
+        const double rint = 0.50 * std::pow(phi_st_ar_[n - 1], controls_.alpha) *
+                            kSqrtPi * std::sqrt(tau_d / t) *
+                            std::erf(std::sqrt(t / tau_d));
+        roft += rint;
+        goft = muoft * roft;
+    }
+    return goft;
 }
 
 double LP2RSolver::calc_visc() const

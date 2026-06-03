@@ -1304,21 +1304,68 @@ class TheoryLP2RLVE(QTheory):
         """Calculate error by interpolating the generated LP2R spectrum."""
         self.do_error_interpolated(line="")
 
+    def _positive_abscissa_range(self, f: FileLike, label: str):
+        """Return the positive finite range of the first file column."""
+        data = np.asarray(f.data_table.data[:, 0], dtype=float)
+        data = data[np.isfinite(data) & (data > 0)]
+        if len(data) == 0:
+            self.Qprint("<font color=red><b>LP2R needs positive %s</b></font>" % label)
+            return None
+        return float(np.min(data)), float(np.max(data))
+
+    def _prepare_solver_for_calculation(self, tt):
+        """Build the LP2R solver and run the relaxation stage."""
+        try:
+            components = self.validate_lp2r_components(self.current_lp2r_components())
+        except ValueError as exc:
+            self.Qprint("<font color=red><b>LP2R calculation stopped: %s</b></font>" % exc)
+            self._clear_table(tt)
+            return False
+        if not self.is_fitting:
+            self.Qprint("<b>LP2R components for current calculation</b>")
+            self.Qprint(self.component_table(components))
+
+        self.solver = self._build_solver()
+        self.solver.prepare()
+        last_progress = 0
+        if not self.is_fitting:
+            self.Qprint("LP2R relaxation:<br>  0% ", end="")
+        while self.solver.step():
+            if self.stop_theory_flag:
+                self.solver.cancel()
+                self._clear_table(tt)
+                self.Qprint(
+                    "<br><font color=red><b>LP2R calculation cancelled</b></font>"
+                )
+                return False
+            if not self.is_fitting:
+                last_progress = self._report_progress(
+                    self.solver.progress(), last_progress
+                )
+        if self.solver.cancelled():
+            self._clear_table(tt)
+            self.Qprint(
+                "<br><font color=red><b>LP2R calculation cancelled</b></font>"
+            )
+            return False
+        if not self.is_fitting:
+            while last_progress < 100:
+                self.Qprint("-", end="")
+                last_progress += 10
+            self.Qprint(" 100%")
+        return True
+
     def calculate(self, f: FileLike) -> None:
         """Calculate LP2R G' and G'' over the active LVE frequency range."""
         ft = f.data_table
         tt = self.tables[f.file_name_short]
         tt.num_columns = ft.num_columns
 
-        omega_data = np.asarray(ft.data[:, 0], dtype=float)
-        omega_data = omega_data[np.isfinite(omega_data) & (omega_data > 0)]
-        if len(omega_data) == 0:
-            self.Qprint("<font color=red><b>LP2R needs positive frequencies</b></font>")
+        frequency_range = self._positive_abscissa_range(f, "frequencies")
+        if frequency_range is None:
             self._clear_table(tt)
             return
-
-        freq_min = float(np.min(omega_data))
-        freq_max = float(np.max(omega_data))
+        freq_min, freq_max = frequency_range
         freq_ratio = self.parameter_float("freq_ratio")
         if freq_ratio <= 1.0:
             self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
@@ -1326,44 +1373,8 @@ class TheoryLP2RLVE(QTheory):
             return
 
         try:
-            components = self.validate_lp2r_components(self.current_lp2r_components())
-        except ValueError as exc:
-            self.Qprint("<font color=red><b>LP2R calculation stopped: %s</b></font>" % exc)
-            self._clear_table(tt)
-            return
-        if not self.is_fitting:
-            self.Qprint("<b>LP2R components for current calculation</b>")
-            self.Qprint(self.component_table(components))
-
-        try:
-            self.solver = self._build_solver()
-            self.solver.prepare()
-            last_progress = 0
-            if not self.is_fitting:
-                self.Qprint("LP2R relaxation:<br>  0% ", end="")
-            while self.solver.step():
-                if self.stop_theory_flag:
-                    self.solver.cancel()
-                    self._clear_table(tt)
-                    self.Qprint(
-                        "<br><font color=red><b>LP2R calculation cancelled</b></font>"
-                    )
-                    return
-                if not self.is_fitting:
-                    last_progress = self._report_progress(
-                        self.solver.progress(), last_progress
-                    )
-            if self.solver.cancelled():
-                self._clear_table(tt)
-                self.Qprint(
-                    "<br><font color=red><b>LP2R calculation cancelled</b></font>"
-                )
+            if not self._prepare_solver_for_calculation(tt):
                 return
-            if not self.is_fitting:
-                while last_progress < 100:
-                    self.Qprint("-", end="")
-                    last_progress += 10
-                self.Qprint(" 100%")
             result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
         except Exception as exc:
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
@@ -1379,3 +1390,78 @@ class TheoryLP2RLVE(QTheory):
             tt.data[:, 1] = result.gp
         if tt.num_columns > 2:
             tt.data[:, 2] = result.gpp
+
+
+class TheoryLP2RDielectric(TheoryLP2RLVE):
+    """LP2R type-A dielectric spectroscopy predictions."""
+
+    thname: ClassVar[str] = "LP2R Dielectric"
+    description: ClassVar[str] = "Dielectric rheology of polydisperse linear polymers"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html"
+
+    def calculate(self, f: FileLike) -> None:
+        """Calculate LP2R epsilon' and epsilon'' over the active frequency range."""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+
+        frequency_range = self._positive_abscissa_range(f, "frequencies")
+        if frequency_range is None:
+            self._clear_table(tt)
+            return
+        freq_min, freq_max = frequency_range
+        freq_ratio = self.parameter_float("freq_ratio")
+        if freq_ratio <= 1.0:
+            self.Qprint("<font color=red><b>LP2R freq_ratio must be larger than 1</b></font>")
+            self._clear_table(tt)
+            return
+
+        try:
+            if not self._prepare_solver_for_calculation(tt):
+                return
+            result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
+        except Exception as exc:
+            self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
+            self._clear_table(tt)
+            return
+        finally:
+            self.solver = None
+
+        tt.num_rows = len(result.omega)
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = result.omega
+        if tt.num_columns > 1:
+            tt.data[:, 1] = result.epsilonp
+        if tt.num_columns > 2:
+            tt.data[:, 2] = result.epsilonpp
+
+
+class TheoryLP2RGt(TheoryLP2RLVE):
+    """LP2R relaxation modulus predictions."""
+
+    thname: ClassVar[str] = "LP2R G(t)"
+    description: ClassVar[str] = "Relaxation modulus of polydisperse linear polymers"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html"
+
+    def calculate(self, f: FileLike) -> None:
+        """Calculate LP2R G(t)."""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+
+        try:
+            if not self._prepare_solver_for_calculation(tt):
+                return
+            result = self.solver.calculate_relaxation_modulus()
+        except Exception as exc:
+            self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
+            self._clear_table(tt)
+            return
+        finally:
+            self.solver = None
+
+        tt.num_rows = len(result.time)
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = result.time
+        if tt.num_columns > 1:
+            tt.data[:, 1] = result.gt

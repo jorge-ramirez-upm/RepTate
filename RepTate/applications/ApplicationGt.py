@@ -76,6 +76,7 @@ class ApplicationGt(QApplicationWindow):
         from RepTate.theories.TheoryShanbhagMaxwellModes import (
             TheoryShanbhagMaxwellModesTime,
         )
+        from RepTate.theories.TheoryLP2RLVE import TheoryLP2RGt
 
         super().__init__(name, parent)
 
@@ -245,6 +246,7 @@ class ApplicationGt(QApplicationWindow):
         self.theories[TheoryRouseTime.thname] = TheoryRouseTime
         self.theories[TheoryDTDStarsTime.thname] = TheoryDTDStarsTime
         self.theories[TheoryShanbhagMaxwellModesTime.thname] = TheoryShanbhagMaxwellModesTime
+        self.theories[TheoryLP2RGt.thname] = TheoryLP2RGt
 
         self.add_common_theories()
 
