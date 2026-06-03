@@ -10,4 +10,4 @@ Summary
 
 .. automodule:: RepTate.theories.TheoryShanbhagMaxwellModes.TheoryShanbhagMaxwellModesFrequency
 
-.. todo:: Complete docs for this theory
+For details about how to use this theory, check :cite:`LVE-Takeh_2013`.

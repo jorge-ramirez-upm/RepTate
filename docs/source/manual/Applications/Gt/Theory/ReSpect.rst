@@ -11,4 +11,4 @@ Summary
 .. automodule:: RepTate.theories.TheoryShanbhagMaxwellModes.TheoryShanbhagMaxwellModesTime
 
 
-.. todo:: Complete docs for this theory
+For details about how to use this theory, check :cite:`Gt-Shanbhag_2019`.
