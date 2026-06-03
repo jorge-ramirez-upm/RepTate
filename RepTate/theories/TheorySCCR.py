@@ -47,7 +47,6 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 
 from math import sqrt, exp, pow
-import time
 import RepTate.theories.sccr_ctypes_helper as sch
 from ctypes import c_int, c_double
 from PySide6.QtCore import Signal
@@ -225,13 +224,16 @@ class TheorySCCR(QTheory):
         self.handle_recommendedN(recommended_n)
 
     def launch_get_MW_dialog(self) -> None:
-        title = 'Missing "Mw" value'
-        msg = 'Set "Mw" value for file "%s"' % self.fname_missing_mw
-        def_val = 10
-        min_val = 0
-        val, success = QInputDialog.getDouble(self, title, msg, def_val, min_val)
-        self.success_MW = success
-        self.new_MW_val = val
+        try:
+            title = 'Missing "Mw" value'
+            msg = 'Set "Mw" value for file "%s"' % self.fname_missing_mw
+            def_val = 10
+            min_val = 0
+            val, success = QInputDialog.getDouble(self, title, msg, def_val, min_val)
+            self.success_MW = success
+            self.new_MW_val = val
+        finally:
+            self.notify_dialog_result("success_MW")
 
     def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
@@ -377,8 +379,7 @@ class TheorySCCR(QTheory):
             self.success_MW = None
             self.fname_missing_mw = f.file_name_short
             self.signal_get_MW.emit(self)
-            while self.success_MW is None:
-                time.sleep(0.5)
+            self.wait_for_dialog_result("success_MW")
             if self.success_MW:
                 f.file_parameters["Mw"] = self.new_MW_val
                 Mw = self.new_MW_val

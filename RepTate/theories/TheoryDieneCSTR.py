@@ -37,7 +37,6 @@
 from typing import Any, ClassVar
 
 import numpy as np
-import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
@@ -370,10 +369,7 @@ class TheoryDieneCSTR(QTheory):
                 else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
-                    # wait for the end of QDialog
-                    while self.success_increase_memory is None:
-                        # TODO: find a better way to wait for the dialog thread to finish
-                        time.sleep(0.5)
+                    self.wait_for_dialog_result("success_increase_memory")
                     if self.success_increase_memory:
                         continue  # back to the start of while loop
                     else:
@@ -389,9 +385,7 @@ class TheoryDieneCSTR(QTheory):
             else:  # polymer wasn't available
                 self.success_increase_memory = None
                 self.signal_request_polymer.emit(self)
-                while self.success_increase_memory is None:
-                    # TODO: find a better way to wait for the dialog thread to finish
-                    time.sleep(0.5)
+                self.wait_for_dialog_result("success_increase_memory")
                 if self.success_increase_memory:
                     continue
                 else:

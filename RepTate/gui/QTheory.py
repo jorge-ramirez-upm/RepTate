@@ -80,7 +80,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QAbstractItemView,
 )
-from PySide6.QtCore import Qt, QObject, QThread, QTimer, Signal
+from PySide6.QtCore import Qt, QObject, QEventLoop, QThread, QTimer, Signal
 from PySide6.QtGui import QIntValidator, QDoubleValidator, QCursor, QTextCursor
 from RepTate.core.File import File
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
@@ -387,6 +387,7 @@ class QTheory(QWidget, Ui_TheoryTab):
     """ nfev {int} -- Number of function evaluations """
 
     print_signal = Signal(str)
+    dialog_result_ready = Signal(str)
 
     def __init__(self, name: str = "QTheory", parent_dataset: DataSetLike | None = None, axarr: AxesArray | None = None) -> None:
         """
@@ -518,6 +519,31 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         self.thParamTable.itemDoubleClicked.connect(self.onTreeWidgetItemDoubleClicked)
         self.thParamTable.itemChanged.connect(self.handle_parameterItemChanged)
+
+    def notify_dialog_result(self, result_attr: str) -> None:
+        """Notify a waiting calculation thread that a GUI dialog set its result."""
+        self.dialog_result_ready.emit(result_attr)
+
+    def wait_for_dialog_result(self, result_attr: str) -> None:
+        """Block until a GUI dialog writes a non-None result attribute."""
+        if getattr(self, result_attr) is not None:
+            return
+
+        dialog_loop = QEventLoop()
+        notified = False
+
+        def quit_if_ready(attr: str) -> None:
+            nonlocal notified
+            if attr == result_attr:
+                notified = True
+                dialog_loop.quit()
+
+        self.dialog_result_ready.connect(quit_if_ready)
+        try:
+            while getattr(self, result_attr) is None and not notified:
+                dialog_loop.exec()
+        finally:
+            self.dialog_result_ready.disconnect(quit_if_ready)
 
     def current_view(self) -> ViewLike:
         return self.parent_dataset.parent_application.current_view
@@ -1087,8 +1113,6 @@ class QTheory(QWidget, Ui_TheoryTab):
             return
 
         # 3. This is where the actual optimization is done
-        # TODO: We should add the option to use different minimization methods
-        #       like those included in scipy or even other ones implemented by us (MC methods)
         # opt = dict(return_full=True) # I think this is not used
         self.nfev = 0
         self.fittingx = x  # MAKE EXPERIMENTAL x VECTOR AVAILABLE GLOBAL OPTIMISATION
@@ -1484,7 +1508,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         if visible == None:
             visible = not self.xrange.get_visible()
         if line == "":
-            """.. todo:: Set range to current view limits"""
+            # TODO: Set range to current view limits
             self.xmin, self.xmax = self.ax.get_xlim()
             self.xminline.set_data([self.xmin, self.xmin], [0, 1])
             self.xmaxline.set_data([self.xmax, self.xmax], [0, 1])

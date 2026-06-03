@@ -241,27 +241,34 @@ class TheoryBobNLVE(QTheory):
     def launch_param_dialog(self) -> None:
         """Show a dialog to get the filename of the polymer configuration.
         This function is called via a Signal for multithread compatibility"""
-        if not self.dialog.exec_():
-            self.success_dialog = False
-            return
-        conffile: Any = self.selected_file
-        if not self.is_ascii(conffile):
-            # ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
-            # copy2(conffile, ok_path)
-            # conffile = ok_path
-            self.Qprint('<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>' % conffile)
-            print('"%s" contains non-ascii characters. BoB might not like it...' % conffile)
-        if conffile == "" or os.path.splitext(conffile)[1] == "":
-            self.Qprint("<font color=red><b>Set the output filepath to write the polyconf file</b></font>")
-            return
-        nlines = self.num_file_lines(conffile)
-        # inpf = os.path.join('theories', 'temp', 'temp_inpf.dat')
-        inpf = "inpf.dat"  # dummy name
-        self.create_bob_input_file(nlines, inpf)
+        try:
+            if not self.dialog.exec_():
+                self.success_dialog = False
+                return
+            conffile: Any = self.selected_file
+            if not self.is_ascii(conffile):
+                # ok_path = os.path.join('theories', 'temp', 'target_polyconf.dat')
+                # copy2(conffile, ok_path)
+                # conffile = ok_path
+                self.Qprint(
+                    '<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>'
+                    % conffile
+                )
+                print('"%s" contains non-ascii characters. BoB might not like it...' % conffile)
+            if conffile == "" or os.path.splitext(conffile)[1] == "":
+                self.Qprint("<font color=red><b>Set the output filepath to write the polyconf file</b></font>")
+                self.success_dialog = False
+                return
+            nlines = self.num_file_lines(conffile)
+            # inpf = os.path.join('theories', 'temp', 'temp_inpf.dat')
+            inpf = "inpf.dat"  # dummy name
+            self.create_bob_input_file(nlines, inpf)
 
-        # BoB main arguments
-        self.argv = ["./bob", "-i", inpf, "-c", conffile]
-        self.success_dialog = True
+            # BoB main arguments
+            self.argv = ["./bob", "-i", inpf, "-c", conffile]
+            self.success_dialog = True
+        finally:
+            self.notify_dialog_result("success_dialog")
 
     def is_ascii(self, s: Any) -> bool:
         """Check if `s` contains non ASCII characters"""
@@ -304,11 +311,9 @@ class TheoryBobNLVE(QTheory):
 
         # show form if not filled yet
         if not self.success_dialog:
-            self.signal_param_dialog.emit(self)
             self.success_dialog = None
-            while self.success_dialog is None:  # wait for the end of QDialog
-                # TODO: find a better way to wait for the dialog thread to finish
-                time.sleep(0.5)
+            self.signal_param_dialog.emit(self)
+            self.wait_for_dialog_result("success_dialog")
         if not self.success_dialog:
             self.Qprint("Operation cancelled")
             return

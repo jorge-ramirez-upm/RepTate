@@ -780,63 +780,67 @@ FunH
         """Show the dialog to set-up number of the polymer components in the mix
         and all the relevant parameters for each component.
         This function is called via a Signal for multithread compatibility"""
-        if self.dialog.exec_():
-            # # create temporary file for BoB input
-            # temp_dir = os.path.join('theories', 'temp')
-            # #create temp folder if does not exist
-            # if not os.path.exists(temp_dir):
-            #     os.makedirs(temp_dir)
+        try:
+            if self.dialog.exec_():
+                # # create temporary file for BoB input
+                # temp_dir = os.path.join('theories', 'temp')
+                # #create temp folder if does not exist
+                # if not os.path.exists(temp_dir):
+                #     os.makedirs(temp_dir)
 
-            # # path to 'bob_inp.dat'
-            # temp_inp = os.path.join(temp_dir, 'bob_inp.dat')
-            temp_inp = "bob_inp.dat"  # dummy name, virtual files used now
-            self.dump_text_to_file(temp_inp, self.d.text_box)
+                # # path to 'bob_inp.dat'
+                # temp_inp = os.path.join(temp_dir, 'bob_inp.dat')
+                temp_inp = "bob_inp.dat"  # dummy name, virtual files used now
+                self.dump_text_to_file(temp_inp, self.d.text_box)
 
-            if self.flag_prototype > 0:
-                # path to 'poly.proto'
-                temp_proto = os.path.join(temp_dir, "poly.proto")  # pyright: ignore[reportUndefinedVariable]
-                self.dump_text_to_file(temp_proto, self.d.proto_text)
-                tmp = self.d.proto_text.toPlainText().split()
-                self.protoname = []
-                self.virtual_proto_file = []
-                for x in tmp:
-                    try:
-                        self.virtual_proto_file.append(float(x))
-                    except ValueError:
-                        self.protoname.append(x)
-                if len(self.protoname) < self.flag_prototype:
-                    # weak check on length of protofile
-                    self.Qprint("Error in the prototype file")
-                    return
+                if self.flag_prototype > 0:
+                    # path to 'poly.proto'
+                    temp_proto = os.path.join(temp_dir, "poly.proto")  # pyright: ignore[reportUndefinedVariable]
+                    self.dump_text_to_file(temp_proto, self.d.proto_text)
+                    tmp = self.d.proto_text.toPlainText().split()
+                    self.protoname = []
+                    self.virtual_proto_file = []
+                    for x in tmp:
+                        try:
+                            self.virtual_proto_file.append(float(x))
+                        except ValueError:
+                            self.protoname.append(x)
+                    if len(self.protoname) < self.flag_prototype:
+                        # weak check on length of protofile
+                        self.Qprint("Error in the prototype file")
+                        self.success_dialog = False
+                        return
 
-            # ask where to save the polymer config file
-            out_file: Any = self.polyconf_file_out
-            tmp1, tmp2 = os.path.splitext(out_file)
-            if tmp2 == "":
-                self.Qprint(
-                    "<font color=red><b>Set the output filepath to write the polyconf file</b></font>"
-                )
-            else:
-                if self.polyconf_file_out is not None:
-                    if not self.is_ascii(self.polyconf_file_out):
-                        # to avoid path name troubles
-                        # out_file = os.path.join(temp_dir, 'temp_polyconf.dat') # commented: avoid create files
-                        self.Qprint(
-                            '<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>'
-                            % out_file
-                        )
-                        print(
-                            '"%s" contains non-ascii characters. BoB might not like it...'
-                            % out_file
-                        )
-                    # BoB main arguments
-                    self.argv = ["./bob", "-i", temp_inp, "-c", out_file, "-p"]
-                    if self.flag_prototype > 0:
-                        self.argv.append("-x")
-                        self.argv.append(temp_proto)
-                    self.success_dialog = True
-                    return
-        self.success_dialog = False
+                # ask where to save the polymer config file
+                out_file: Any = self.polyconf_file_out
+                tmp1, tmp2 = os.path.splitext(out_file)
+                if tmp2 == "":
+                    self.Qprint(
+                        "<font color=red><b>Set the output filepath to write the polyconf file</b></font>"
+                    )
+                else:
+                    if self.polyconf_file_out is not None:
+                        if not self.is_ascii(self.polyconf_file_out):
+                            # to avoid path name troubles
+                            # out_file = os.path.join(temp_dir, 'temp_polyconf.dat') # commented: avoid create files
+                            self.Qprint(
+                                '<font color=orange><b>"%s" contains non-ascii characters. BoB might not like it...</b></font>'
+                                % out_file
+                            )
+                            print(
+                                '"%s" contains non-ascii characters. BoB might not like it...'
+                                % out_file
+                            )
+                        # BoB main arguments
+                        self.argv = ["./bob", "-i", temp_inp, "-c", out_file, "-p"]
+                        if self.flag_prototype > 0:
+                            self.argv.append("-x")
+                            self.argv.append(temp_proto)
+                        self.success_dialog = True
+                        return
+            self.success_dialog = False
+        finally:
+            self.notify_dialog_result("success_dialog")
 
     def dump_text_to_file(self, temp_file: Any, text_widget: Any) -> None:
         """NOT USED ANYMORE. Use virtual files only.
@@ -889,10 +893,7 @@ FunH
         # show form
         self.success_dialog = None
         self.signal_param_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            time.sleep(
-                0.5
-            )  # TODO: find a better way to wait for the dialog thread to finish
+        self.wait_for_dialog_result("success_dialog")
         if not self.success_dialog:
             self.Qprint("Operation cancelled")
             return

@@ -79,19 +79,25 @@ else:
 def launch_mix_dialog(parent_theory):
     """Launch a dialog box to select the React-Mix theory parameters"""
     dialog = ParameterReactMix(parent_theory)
-    if dialog.exec_():
-        parent_theory.success_dialog = True
-    else:
-        parent_theory.success_dialog = False
+    try:
+        if dialog.exec_():
+            parent_theory.success_dialog = True
+        else:
+            parent_theory.success_dialog = False
+    finally:
+        parent_theory.notify_dialog_result("success_dialog")
 
 
 def launch_mulmet_dialog(parent_theory):
     """Launch a dialog box to select the Multi-Metallocene theory parameters"""
     dialog = ParameterMultiMetCSTR(parent_theory)
-    if dialog.exec_():
-        parent_theory.success_dialog = True
-    else:
-        parent_theory.success_dialog = False
+    try:
+        if dialog.exec_():
+            parent_theory.success_dialog = True
+        else:
+            parent_theory.success_dialog = False
+    finally:
+        parent_theory.notify_dialog_result("success_dialog")
 
 
 def request_more_polymer(parent_theory):
@@ -107,6 +113,7 @@ def request_more_polymer(parent_theory):
         parent_theory.Qprint("Number of polymers was increased to %.4g" % new_max)
 
     parent_theory.success_increase_memory = success_increase_memory
+    parent_theory.notify_dialog_result("success_increase_memory")
 
 
 def request_more_arm(parent_theory):
@@ -125,6 +132,7 @@ def request_more_arm(parent_theory):
     else:
         parent_theory.Qprint("Number of arms was increased to %.4g" % new_max)
     parent_theory.success_increase_memory = success_increase_memory
+    parent_theory.notify_dialog_result("success_increase_memory")
 
 
 def request_more_dist(parent_theory):

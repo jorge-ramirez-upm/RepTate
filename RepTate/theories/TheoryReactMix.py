@@ -37,7 +37,6 @@
 from typing import Any, ClassVar
 
 import numpy as np
-import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
@@ -142,10 +141,7 @@ class TheoryReactMix(QTheory):
         # show form
         self.success_dialog = None
         self.signal_mix_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            time.sleep(
-                0.5
-            )  # TODO: find a better way to wait for the dialog thread to finish
+        self.wait_for_dialog_result("success_dialog")
         if not self.success_dialog:
             self.Qprint("Mixture cancelled")
             return

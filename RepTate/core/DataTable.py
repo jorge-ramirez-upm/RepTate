@@ -77,16 +77,12 @@ class DataTable(object):
 
     def __str__(self) -> Any:
         """Returns a string describing the data
-
-        .. todo:: Refine this. It doesn't work
-
         """
+        # TODO: Refine this. It doesn't work
         return self.data.__str__()
         
     def mincol(self, col: int) -> Any:
         """Minimum value in table column col
-        
-        .. todo:: Example **todo** in the code
         """
         return np.min(self.data[:,col])
         

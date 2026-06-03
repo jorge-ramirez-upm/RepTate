@@ -37,7 +37,6 @@
 from typing import Any, ClassVar
 
 import numpy as np
-import time
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike
 from RepTate.gui.QTheory import QTheory
@@ -242,10 +241,7 @@ class TheoryMultiMetCSTR(QTheory):
         # launch form
         self.success_dialog = None
         self.signal_mulmet_dialog.emit(self)
-        while self.success_dialog is None:  # wait for the end of QDialog
-            time.sleep(
-                0.5
-            )  # TODO: find a better way to wait for the dialog thread to finish
+        self.wait_for_dialog_result("success_dialog")
         if not self.success_dialog:
             return
 
@@ -321,12 +317,7 @@ class TheoryMultiMetCSTR(QTheory):
                 else:  # error message if we ran out of arms
                     self.success_increase_memory = None
                     self.signal_request_arm.emit(self)
-                    while (
-                        self.success_increase_memory is None
-                    ):  # wait for the end of QDialog
-                        time.sleep(
-                            0.5
-                        )  # TODO: find a better way to wait for the dialog thread to finish
+                    self.wait_for_dialog_result("success_increase_memory")
                     if self.success_increase_memory:
                         continue  # back to the start of while loop
                     else:
@@ -342,10 +333,7 @@ class TheoryMultiMetCSTR(QTheory):
             else:  # polymer wasn't available
                 self.success_increase_memory = None
                 self.signal_request_polymer.emit(self)
-                while self.success_increase_memory is None:
-                    time.sleep(
-                        0.5
-                    )  # TODO: find a better way to wait for the dialog thread to finish
+                self.wait_for_dialog_result("success_increase_memory")
                 if self.success_increase_memory:
                     continue
                 else:
