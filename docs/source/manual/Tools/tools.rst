@@ -109,6 +109,61 @@ Find Peaks
 
 .. automodule:: RepTate.tools.ToolFindPeaks.ToolFindPeaks
 
+The Find Peaks tool identifies local maxima or minima. It acts on current-view
+ordinate values and marks peaks on the plot. It is useful for quickly locating
+peak positions, comparing peak shifts between files, or reading approximate
+peak coordinates from the tool output area.
+
+The tool acts on the coordinates produced by the selected view. The peak search
+uses the displayed x- and y-values, so logarithms, shifted variables, converted
+units, or derived quantities from the active view affect both the detected peak
+positions and the reported coordinates. The original curve is kept unchanged;
+the tool adds peak markers and prints the peak coordinates.
+
+The Find Peaks parameters are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Meaning
+   * - ``threshold``
+     - Relative y-level used to reject small peaks
+   * - ``minimum_distance``
+     - Minimum separation between accepted peaks, in data points
+
+By default, the tool searches for maxima. The toolbar ``Minimum peaks`` toggle
+switches the search to minima by applying the same peak-detection logic to
+``-y``. The ``Fit Parabola`` toggle optionally fits a parabola around each
+detected peak and reports the analytical maximum or minimum of that fitted
+parabola instead of the raw data point.
+
+The threshold is interpreted relative to the current y-range. RepTate computes
+``threshold * (max(y) - min(y)) + min(y)`` and keeps only maxima above that
+level. For minima, the same calculation is applied after changing the sign of
+``y``. For example, with the default ``threshold = 0.3``, maxima must be above
+30 percent of the displayed y-span measured from the lowest displayed y-value.
+
+The algorithm looks for sign changes in the first difference of the y-values.
+Flat neighboring values are handled by borrowing nearby non-zero differences.
+When several candidate peaks are closer than ``minimum_distance`` points, the
+stronger peak is kept and nearby weaker candidates are rejected. If ``Fit
+Parabola`` is enabled, ``minimum_distance`` also controls the number of points
+around the detected data point used for the local parabolic fit.
+
+The output area reports how many maxima or minima were found and, when at least
+one is found, prints a table of ``x`` and ``y`` peak coordinates. The plot shows
+the peaks as large diamond markers with the same face color as the processed
+curve and a black edge.
+
+Noisy data can produce many local extrema, and the
+method can be inaccurate and slow in that case. Use ``Smooth`` before ``Find
+Peaks`` when noise creates too many spurious peaks, or ``Bounds`` first when
+only a restricted x or y range should be searched. The parabolic refinement is a
+local numerical fit around each detected point; it can fail or give unreliable
+coordinates if there are too few suitable neighboring points, repeated x-values,
+or a poorly shaped local peak.
+
 -------------------
 Gradient
 -------------------
@@ -243,9 +298,9 @@ Materials Database
 
 .. todo::
    Continue adding source-backed tool examples. Bounds, Evaluate Expression,
-   Gradient, Integral, Smooth, and Power Law now follow the user-facing
-   pattern: purpose, when to use it, current-view coordinate behavior,
-   parameters/options, output, example use, and limitations. Add similar
-   entries for Find Peaks and Materials Database, and check whether other
-   available tools such as Interpolate/Extrapolate and Resample Data should be
-   added to this page.
+   Find Peaks, Gradient, Integral, Smooth, and Power Law now follow the
+   user-facing pattern: purpose, when to use it, current-view coordinate
+   behavior, parameters/options, output, example use, and limitations. Add a
+   similar entry for Materials Database, and check whether other available tools
+   such as Interpolate/Extrapolate and Resample Data should be added to this
+   page.
