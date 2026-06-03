@@ -163,7 +163,37 @@ prediction table is not limited to only the selected fitting interval.
 Fitting options
 ---------------
 
-.. todo:: Complete this section
+The ``Minimize Error`` button has a menu entry called ``Fitting Options``.
+It opens the fitting-options dialog for the active theory tab. The selected
+tab in this dialog chooses the minimization method used the next time
+``Minimize Error`` is pressed, and the fields on that tab set the numerical
+options passed to that method.
+
+The default tab is ``LS`` (least squares). It is a local optimization method
+and uses the current values of the checked theory parameters as the starting
+point. For squared-error fits, the ``LS`` tab lets the user choose the
+``trf``, ``dogbox``, or ``lm`` SciPy method, set the ``ftol``, ``xtol``, and
+``gtol`` stopping tolerances when their check boxes are enabled, choose the
+loss function and ``f_scale`` used by the trust-region methods, and optionally
+limit the maximum number of function evaluations. If the absolute-error
+measure is selected in the error-calculation options, RepTate minimizes that
+selected error with an ``L-BFGS-B`` local minimizer instead of using the
+least-squares residual solver.
+
+The other tabs select global search methods: ``Basin Hopping``,
+``Annealing``, ``Evolution``, ``SHGO``, and ``Brute``. These options are useful
+when the initial parameter values may be far from the best solution or when the
+error surface may contain several local minima. They can require many more
+theory evaluations than the default least-squares fit. After a global search,
+RepTate refines the result with the local least-squares fitting step before
+reporting the final fitted parameters.
+
+Global methods use the minimum and maximum bounds defined in the theory
+parameter properties. ``Annealing``, ``Evolution``, and ``SHGO`` require finite
+parameter bounds; if any optimized parameter has an infinite or undefined bound,
+RepTate stops the fit and reports that the selected method cannot be used.
+Several global-method tabs include an optional random-number seed. Enabling and
+setting the seed makes the stochastic part of that search reproducible.
 
 Saving theory predictions
 -------------------------
