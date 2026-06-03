@@ -103,7 +103,7 @@ from RepTate.core.DataTable import DataTable
 from RepTate.core.MultiView import MultiView, PlotOrganizationType
 from RepTate.core.View import View
 from RepTate.gui.DataSetWidgetItem import DataSetWidgetItem
-from RepTate.gui.QDataSet import ColorMode, SymbolMode, ThLineMode
+from RepTate.gui.QDataSet import ColorMode, SymbolMode, ThLineMode, first_selectable_combobox_index
 
 from RepTate.core.DraggableArtists import DragType, DraggableSeries, DraggableNote
 from RepTate.gui.SpreadsheetWidget import SpreadsheetWidget
@@ -619,6 +619,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
         item = QStandardItem("Select:")
         item.setForeground(QColor("grey"))
+        item.setEnabled(False)
         model.appendRow(item)
         i = 1
         for tool_name in self.availabletools.keys():
@@ -632,6 +633,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             item.setForeground(QColor("blue"))
             item.setToolTip(self.extratools[tool_name].description)
             model.appendRow(item)
+        self.cbtool.setCurrentIndex(first_selectable_combobox_index(self.cbtool))
 
         tb.addWidget(self.cbtool)
         vblayout2.addWidget(tb)
@@ -936,11 +938,11 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         """Create new tool"""
         if self.cbtool.currentIndex() == 0:
             # by default, open first tool in the list
-            tool_name = self.cbtool.itemText(1)
+            tool_name = self.cbtool.itemText(first_selectable_combobox_index(self.cbtool))
         else:
             tool_name = self.cbtool.currentText()
         # reset the combobox selection
-        self.cbtool.setCurrentIndex(0)
+        self.cbtool.setCurrentIndex(first_selectable_combobox_index(self.cbtool))
         if tool_name != "":
             self.new_tool(tool_name)
             self.update_all_ds_plots()

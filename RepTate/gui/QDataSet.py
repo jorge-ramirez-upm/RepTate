@@ -100,6 +100,14 @@ from RepTate.gui.Ui_DataSet import Ui_Form as Ui_DataSet
 TableIconSpec: TypeAlias = tuple[str, str, str, Any]
 
 
+def first_selectable_combobox_index(combo: QComboBox) -> int:
+    """Return the first non-placeholder, non-separator item in a combo box."""
+    for i in range(combo.count()):
+        if combo.itemText(i) and combo.itemText(i) != "Select:":
+            return i
+    return 0
+
+
 class ColorMode(enum.Enum):
     """Class to describe how to change colors in the current DataSet"""
 
@@ -571,6 +579,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
         item = QStandardItem("Select:")
         item.setForeground(QColor("grey"))
+        item.setEnabled(False)
         model.appendRow(item)
         i = 1
         for th_name in self.parent_application.theories:
@@ -588,7 +597,7 @@ class QDataSet(QWidget, Ui_DataSet):
                 item = QStandardItem(th_name)
                 item.setToolTip(self.parent_application.theories[th_name].description)
                 model.appendRow(item)
-        self.cbtheory.setCurrentIndex(0)
+        self.cbtheory.setCurrentIndex(first_selectable_combobox_index(self.cbtheory))
 
         ###
 
@@ -1932,10 +1941,10 @@ class QDataSet(QWidget, Ui_DataSet):
         self.actionNew_Theory.setDisabled(True)
         if self.cbtheory.currentIndex() == 0:
             # by default, open first theory in the list
-            th_name = self.cbtheory.itemText(1)
+            th_name = self.cbtheory.itemText(first_selectable_combobox_index(self.cbtheory))
         else:
             th_name = self.cbtheory.currentText()
-        self.cbtheory.setCurrentIndex(0)  # reset the combobox selection
+        self.cbtheory.setCurrentIndex(first_selectable_combobox_index(self.cbtheory))
         if th_name != "":
             self.new_theory(th_name)
         self.actionNew_Theory.setDisabled(False)
