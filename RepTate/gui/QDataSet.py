@@ -1139,16 +1139,10 @@ class QDataSet(QWidget, Ui_DataSet):
         else:
             for i in range(1, dt.num_columns):
                 dt.data[:, i] = yval
-        if dt.num_columns > 2:
-            if zval is None:
-                dt.data[:, 2] = np.nan
-            else:
-                dt.data[:, 2] = zval[:]
-        if dt.num_columns > 3:
-            if z2val is None:
-                dt.data[:, 3] = np.nan
-            else:
-                dt.data[:, 3] = z2val[:]
+        if dt.num_columns > 2 and zval is not None:
+            dt.data[:, 2] = zval[:]
+        if dt.num_columns > 3 and z2val is not None:
+            dt.data[:, 3] = z2val[:]
         unique = True
         for file in self.files:
             if f.file_name_short == file.file_name_short:  # check if file already exists in current ds
