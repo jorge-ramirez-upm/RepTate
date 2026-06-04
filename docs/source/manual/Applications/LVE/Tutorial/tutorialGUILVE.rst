@@ -139,6 +139,11 @@ In all examples below, load the corresponding ``Expected_Output.tts`` file
 first. This gives RepTate the same frequency window as the reference output and
 lets you compare the LP2R prediction directly with the expected spectrum.
 
+.. hint:: 
+    The same steps can be followed to reproduce the results from the files 
+    ``Expected_Output.gt`` and ``Expected_Output.dls`` in the applications
+    for Relaxation Modulus and Dielectric relaxation, respectively.
+
 Common steps
 ^^^^^^^^^^^^
 
@@ -178,9 +183,6 @@ monodisperse PI melt represented by one lognormal LP2R component.
 
     .. code-block:: text
 
-        Mw 634.5
-        PDI 1.03
-        n 50
         MK 0.113
         Me 4.35
         G0 476000
@@ -189,20 +191,6 @@ monodisperse PI melt represented by one lognormal LP2R component.
         tau_glass 7.0e-11
         beta_glass 0.370
         freq_ratio 1.1
-        alpha 1
-        t_cr_start 1
-        delta_cr 0.3
-        b_zeta 2
-        a_eq 2
-        b_eq 10
-        ret_pref 0.189
-        ret_pref_0 0.02
-        ret_switch_exponent 0.42
-        rept_switch_factor 1.664
-        rouse_switch_factor 1.5
-        disentanglement_switch 1
-        start_time 0.001
-        time_ratio 1.02
 
 #.  Open ``LP2R components``. Keep one lognormal component and double-click its
     row to set it to:
@@ -245,20 +233,6 @@ binary PI blend represented by two lognormal components.
         tau_glass 7.0e-11
         beta_glass 0.370
         freq_ratio 1.1
-        alpha 1
-        t_cr_start 1
-        delta_cr 0.3
-        b_zeta 2
-        a_eq 2
-        b_eq 10
-        ret_pref 0.189
-        ret_pref_0 0.02
-        ret_switch_exponent 0.42
-        rept_switch_factor 1.664
-        rouse_switch_factor 1.5
-        disentanglement_switch 1
-        start_time 0.001
-        time_ratio 1.02
 
 #.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
     then click ``Add lognormal`` twice and enter:
@@ -300,20 +274,6 @@ discrete molar-mass distribution with three equally weighted PS components.
         tau_glass 1.30e-9
         beta_glass 0.380
         freq_ratio 1.5
-        alpha 1
-        t_cr_start 1
-        delta_cr 0.3
-        b_zeta 2
-        a_eq 2
-        b_eq 10
-        ret_pref 0.189
-        ret_pref_0 0.02
-        ret_switch_exponent 0.42
-        rept_switch_factor 1.664
-        rouse_switch_factor 1.5
-        disentanglement_switch 1
-        start_time 0.001
-        time_ratio 1.02
 
 #.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
     then add one MWD component using one of the following equivalent methods:
@@ -357,20 +317,6 @@ discrete PS8 molar-mass distribution stored in
         tau_glass 1.30e-9
         beta_glass 0.380
         freq_ratio 1.5
-        alpha 1
-        t_cr_start 1
-        delta_cr 0.3
-        b_zeta 2
-        a_eq 2
-        b_eq 10
-        ret_pref 0.189
-        ret_pref_0 0.02
-        ret_switch_exponent 0.42
-        rept_switch_factor 1.664
-        rouse_switch_factor 1.5
-        disentanglement_switch 1
-        start_time 0.001
-        time_ratio 1.02
 
 #.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
     then click ``Get MWD (.gpc file)`` and select
