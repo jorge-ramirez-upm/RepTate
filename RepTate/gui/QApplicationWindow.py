@@ -2760,7 +2760,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if self.excel_import_gui.exec_():
             res_dic = self.excel_import_gui.get_data()
             if res_dic["error"]:
-                self.logger.debug("Import from Excel failed in dialog validation: app=%s error=%s", self.name, res_dic["errmsg"])
+                self.logger.warning("Import from Excel failed in dialog validation: app=%s error=%s", self.name, res_dic["errmsg"])
                 QMessageBox.warning(self, "Import Error", res_dic["errmsg"])
                 return
             params = self.excel_import_gui.file_param_txt.text().split(";")
@@ -2813,7 +2813,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 self.logger.debug("Excel data import skipped duplicate file: app=%s dataset=%s fname=%s", self.name, ds.name, fname)
             ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
-                self.logger.debug("Excel import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
+                self.logger.warning("Excel import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
                 QMessageBox.warning(
                     self,
                     "Open Excel File",
@@ -2836,7 +2836,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if self.pasted_import_gui.exec_():
             res_dic = self.pasted_import_gui.get_data()
             if res_dic["nrows"] == 0:
-                self.logger.debug("Import from pasted text failed: app=%s rows=0", self.name)
+                self.logger.warning("Import from pasted text failed: app=%s rows=0", self.name)
                 QMessageBox.warning(self, "Import From Pasted Data", "Could not read pasted data")
                 return
             ds = self.DataSettabWidget.currentWidget()
@@ -2876,7 +2876,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 )
             ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
-                self.logger.debug("Pasted text import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
+                self.logger.warning("Pasted text import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
                 QMessageBox.warning(
                     self,
                     "Import From Pasted Data",
@@ -3074,7 +3074,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.update_Qplot()
             ds.set_table_icons(ds.table_icon_list)
         else:
-            self.logger.debug("Opening files failed: app=%s dataset=%s message=%s", self.name, ds.name, success)
+            self.logger.warning("Opening files failed: app=%s dataset=%s message=%s", self.name, ds.name, success)
             QMessageBox.about(self, "Open", success)
         ds.DataSettreeWidget.blockSignals(False)
         return cast(DataSetLike, ds)

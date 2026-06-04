@@ -1433,6 +1433,7 @@ class TheoryLP2RLVE(QTheory):
                 return
             result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
         except Exception as exc:
+            self.logger.exception("LP2R calculation failed: theory=%s thname=%s file=%s", self.name, self.thname, f.file_name_short)
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
             self._clear_table(tt)
             return
@@ -1477,6 +1478,7 @@ class TheoryLP2RDielectric(TheoryLP2RLVE):
                 return
             result = self.solver.calculate_spectra(freq_min, freq_max, freq_ratio)
         except Exception as exc:
+            self.logger.exception("LP2R calculation failed: theory=%s thname=%s file=%s", self.name, self.thname, f.file_name_short)
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
             self._clear_table(tt)
             return
@@ -1510,6 +1512,7 @@ class TheoryLP2RGt(TheoryLP2RLVE):
                 return
             result = self.solver.calculate_relaxation_modulus()
         except Exception as exc:
+            self.logger.exception("LP2R calculation failed: theory=%s thname=%s file=%s", self.name, self.thname, f.file_name_short)
             self.Qprint("<font color=red><b>LP2R calculation failed: %s</b></font>" % exc)
             self._clear_table(tt)
             return

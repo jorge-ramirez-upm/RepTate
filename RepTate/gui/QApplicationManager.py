@@ -1217,7 +1217,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         self.logger.debug("Opening RepTate project: path=%s", project_path)
         if not isfile(project_path):
-            self.logger.debug("RepTate project path does not exist: path=%s", project_path)
+            self.logger.warning("RepTate project path does not exist: path=%s", project_path)
             return
         self.load_path = project_path
         try:

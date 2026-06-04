@@ -1140,7 +1140,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         if self.normalizebydata and np.any(np.asarray(y) == 0):
             self.Qprint("<font color=red><b>Relative error requested, but selected experimental data contains zero values</b></font>")
-            self.logger.debug("Fit aborted because relative error found zero data values: theory=%s thname=%s", self.name, self.thname)
+            self.logger.warning("Fit aborted because relative error found zero data values: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
 
@@ -1186,7 +1186,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             ):
                 msg = "This fitting method cannot be used if any of the bounds is ± nan or ± inf"
                 self.Qprint(msg)
-                self.logger.debug(
+                self.logger.warning(
                     "Fit aborted because global bounds contain NaN/Inf: theory=%s thname=%s method=%s",
                     self.name,
                     self.thname,
@@ -1259,7 +1259,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during least-squares optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during least-squares optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1286,7 +1286,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during basin hopping optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during basin hopping optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1314,7 +1314,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during dual annealing optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during dual annealing optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1345,7 +1345,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during differential evolution optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during differential evolution optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1379,7 +1379,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during SHGO optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during SHGO optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1393,7 +1393,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
-                self.logger.debug("Fit failed during brute-force optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
+                self.logger.exception("Fit failed during brute-force optimization: theory=%s thname=%s", self.name, self.thname)
                 self.is_fitting = False
                 return
 
@@ -1742,11 +1742,12 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def _log_parameter_change(self, name: str, old_value: Any, message: str, success: bool) -> None:
         """Log user/script-level parameter changes without touching optimizer iterations."""
-        self.logger.debug(
+        logger = getattr(self, "logger", logging.getLogger("RepTate.gui.QTheory"))
+        logger.debug(
             "Theory parameter %s: theory=%s thname=%s parameter=%s old=%s new=%s success=%s message=%s",
             "changed" if success else "rejected",
-            self.name,
-            self.thname,
+            getattr(self, "name", "<uninitialized>"),
+            getattr(self, "thname", type(self).__name__),
             name,
             old_value,
             self.parameters[name].value,

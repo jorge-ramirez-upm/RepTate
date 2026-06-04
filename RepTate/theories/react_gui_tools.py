@@ -424,6 +424,7 @@ def handle_increase_records(parent_theory, name):
             new_max = int(current_max * 5)
         success = f(ct.c_int(new_max))  # call C routine to allocate more memory (using 'realloc')
         if not success:
+            parent_theory.logger.error("Allocation of new React memory failed: theory=%s records=%d kind=%s", parent_theory.name, current_max, name)
             parent_theory.Qprint("Allocation of new memory failed. %d %s records in memory" % (current_max, name))
         return new_max, success
     else:

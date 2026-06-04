@@ -21,7 +21,7 @@ try:
     rp_blend_lib = CDLL(lib_path)
     logger.debug("Loaded RP-blend shared library: path=%s", lib_path)
 except OSError as exc:
-    logger.debug("Failed to load RP-blend shared library: path=%s", lib_path, exc_info=True)
+    logger.exception("Failed to load RP-blend shared library: path=%s", lib_path)
     print(f"OS {sys.platform} not recognized in Rouse CH module: {exc}")
 
 derivs_rp_blend_shear = rp_blend_lib.derivs_rp_blend_shear

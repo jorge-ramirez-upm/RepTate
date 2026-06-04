@@ -21,7 +21,7 @@ try:
     dtd_lib = CDLL(lib_path)
     logger.debug("Loaded DTD shared library: path=%s", lib_path)
 except OSError as exc:
-    logger.debug("Failed to load DTD shared library: path=%s", lib_path, exc_info=True)
+    logger.exception("Failed to load DTD shared library: path=%s", lib_path)
     print(f"OS {sys.platform} not recognized in DTD CH: {exc}")
 
 dynamic_tube_dilution_freq = dtd_lib.dynamic_tube_dilution_freq

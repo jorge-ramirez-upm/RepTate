@@ -653,6 +653,7 @@ class TheoryRolieDoublePoly(QTheory):
         taue = self.parameter_float("tau_e")
         res: Any = Dilution(m, phi, taue, Me, self).res
         if res[0] == False:
+            self.logger.warning("Could not set modes from MWD: theory=%s thname=%s", self.name, self.thname)
             self.Qprint("Could not set modes from MDW")
             return
         _, phi, taus, taud = res

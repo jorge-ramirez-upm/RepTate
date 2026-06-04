@@ -1138,9 +1138,11 @@ class QDataSet(QWidget, Ui_DataSet):
         yval: float
         fparam: dict containing file parameter names and values
         """
-        self.logger.debug(
+        logger = getattr(self, "logger", logging.getLogger("RepTate.gui.QDataSet"))
+        dataset_name = getattr(self, "name", "<uninitialized>")
+        logger.debug(
             "Creating dummy file: dataset=%s fname=%s filetype=%s rows=%d parameters=%s",
-            self.name,
+            dataset_name,
             fname,
             file_type.extension if file_type else None,
             len(xrange),
@@ -1190,9 +1192,9 @@ class QDataSet(QWidget, Ui_DataSet):
                 # add a theory table
                 self.theories[th_name].tables[f.file_name_short] = DataTable(self.parent_application.axarr, "TH_" + f.file_name_short)
                 self.theories[th_name].function(f)
-            self.logger.debug(
+            logger.debug(
                 "Dummy file created: dataset=%s file=%s rows=%d columns=%d theories_updated=%d",
-                self.name,
+                dataset_name,
                 f.file_name_short,
                 dt.num_rows,
                 dt.num_columns,
@@ -1200,7 +1202,7 @@ class QDataSet(QWidget, Ui_DataSet):
             )
             return f, True
         else:
-            self.logger.debug("Dummy file skipped because name already exists: dataset=%s file=%s", self.name, f.file_name_short)
+            logger.debug("Dummy file skipped because name already exists: dataset=%s file=%s", dataset_name, f.file_name_short)
             return None, False
 
     def do_open(self, line):
@@ -1222,7 +1224,7 @@ class QDataSet(QWidget, Ui_DataSet):
             skipped = 0
             for f in f_names:
                 if not os.path.isfile(f):
-                    self.logger.debug("Dataset file path does not exist: dataset=%s path=%s", self.name, f)
+                    self.logger.warning("Dataset file path does not exist: dataset=%s path=%s", self.name, f)
                     print('File "%s" does not exists' % f)
                     continue  # next file name
                 df = ft.read_file(f, self, self.parent_application.axarr)

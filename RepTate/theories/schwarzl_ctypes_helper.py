@@ -52,7 +52,7 @@ try:
     schwarzl_lib = CDLL(lib_path)
     logger.debug("Loaded Schwarzl shared library: path=%s", lib_path)
 except OSError as exc:
-    logger.debug("Failed to load Schwarzl shared library: path=%s", lib_path, exc_info=True)
+    logger.exception("Failed to load Schwarzl shared library: path=%s", lib_path)
     print(f"OS {sys.platform} not recognized in Schwarzl CH module: {exc}")
 
 schwarzl_gt = schwarzl_lib.schwarzl_gt

@@ -268,7 +268,7 @@ class TXTColumnFile(object):
             self.col_names,
         )
         if not os.path.isfile(filename):
-            logger.debug("Text file path does not exist: path=%s", filename)
+            logger.warning("Text file path does not exist: path=%s", filename)
             print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
@@ -385,7 +385,7 @@ class ExcelFile(object):
             self.col_names,
         )
         if not os.path.isfile(filename):
-            logger.debug("Excel file path does not exist: path=%s", filename)
+            logger.warning("Excel file path does not exist: path=%s", filename)
             print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
