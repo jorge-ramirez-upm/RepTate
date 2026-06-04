@@ -42,6 +42,7 @@ from typing import Any, ClassVar
 from math import exp  # faster than np for scalar
 from scipy.integrate import odeint
 import RepTate
+from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory, EndComputationRequested, MinimizationMethod
@@ -162,6 +163,15 @@ class TheoryPomPom(QTheory):
             )
 
         self.MAX_MODES = 40
+        self.view_LVEenvelope = False
+        auxseries = self.ax.plot([], [], label="")
+        self.LVEenvelopeseries = auxseries[0]
+        self.LVEenvelopeseries.set_marker("")
+        self.LVEenvelopeseries.set_linestyle("--")
+        self.LVEenvelopeseries.set_visible(self.view_LVEenvelope)
+        self.LVEenvelopeseries.set_color("green")
+        self.LVEenvelopeseries.set_linewidth(5)
+        self.LVEenvelopeseries.set_label("")
         self.init_flow_mode()
 
         # add widgets specific to the theory
@@ -183,11 +193,11 @@ class TheoryPomPom(QTheory):
             tb.addWidget(self.tbutflow)
             self.shear_flow_action.triggered.connect(self.select_shear_flow)
             self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
-            # self.read_gdot_action = tb.addAction(
-            #     QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
-            #     "Read gdot from file",
-            # )
-            # self.read_gdot_action.setCheckable(True)
+            self.read_gdot_action = tb.addAction(
+                QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
+                "Read gdot from file",
+            )
+            self.read_gdot_action.setCheckable(True)
         else:
             self.function = self.calculate_PomPomLAOS
 
@@ -203,6 +213,11 @@ class TheoryPomPom(QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
+        # Show LVE button
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
+        self.linearenvelope.setCheckable(True)
+        self.linearenvelope.setChecked(False)
+
         # Save to flowsolve button
         self.flowsolve_btn = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-save-flowsolve.png"),
@@ -216,6 +231,7 @@ class TheoryPomPom(QTheory):
         self.edit_modes_action.triggered.connect(self.edit_modes_window)
         self.plot_modes_action.triggered.connect(self.plot_modes_graph)
         self.save_modes_action.triggered.connect(self.save_modes)
+        self.linearenvelope.triggered.connect(self.show_linear_envelope)
         self.flowsolve_btn.triggered.connect(self.handle_flowsolve_btn)
 
     def handle_flowsolve_btn(self) -> None:
@@ -321,6 +337,61 @@ class TheoryPomPom(QTheory):
     def plot_modes_graph(self) -> None:
         pass
 
+    def Qhide_theory_extras(self, show: Any) -> None:
+        """Uncheck the LVE button. Called when curent theory is changed"""
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
+
+    def show_linear_envelope(self, state: Any) -> None:
+        self.extra_graphic_visible(state)
+
+    def plot_theory_stuff(self) -> None:
+        """Plot theory helpers"""
+        if not isinstance(self.parent_dataset.parent_application, ApplicationLAOS):
+            data_table_tmp: Any = DataTable(self.axarr)
+            data_table_tmp.num_columns = 2
+            data_table_tmp.num_rows = 100
+            data_table_tmp.data = np.zeros((100, 2))
+
+            times = np.logspace(-2, 3, 100)
+            data_table_tmp.data[:, 0] = times
+            nmodes = self.parameter_int("nmodes")
+            data_table_tmp.data[:, 1] = 0
+            fparamaux: dict[str, Any] = {}
+            fparamaux["gdot"] = 1e-8
+            for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
+                G = self.parameter_float("G%02d" % i)
+                tauB = self.parameter_float("tauB%02d" % i)
+                data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauB * (1 - np.exp(-times / tauB))
+            if self.flow_mode == FlowMode.uext:
+                data_table_tmp.data[:, 1] *= 3.0
+            view = self.parent_dataset.parent_application.current_view
+            try:
+                x, y, success = view.view_proc(data_table_tmp, fparamaux)
+            except TypeError as e:
+                print(e)
+                return
+            x, y = self.convert_view_data_to_display(x, y, view)
+            self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+
+    def destructor(self) -> None:
+        """Called when the theory tab is closed"""
+        self.extra_graphic_visible(False)
+        self.LVEenvelopeseries.remove()
+
+    def show_theory_extras(self, show: Any = False) -> None:
+        """Called when the active theory is changed"""
+        self.Qhide_theory_extras(show)
+
+    def extra_graphic_visible(self, state: Any) -> None:
+        """Change visibility of theory helpers"""
+        self.LVEenvelopeseries.set_visible(state)
+        self.parent_dataset.parent_application.update_plot()
+
     def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
         try:
@@ -358,10 +429,6 @@ class TheoryPomPom(QTheory):
             raise EndComputationRequested
         q, tauB, tauS, gdot = p
 
-        # If the deformation rate is read from the file
-        # if self.read_gdot_action.isChecked():
-        #     gdot = np.interp(t, self.times, self.gfile)
-
         if (l >= q) or (q == 1):
             l = q
             dydx = 0
@@ -387,10 +454,6 @@ class TheoryPomPom(QTheory):
             raise EndComputationRequested
         q, tauB, tauS, edot = p
 
-        # If the deformation rate is read from the file
-        # if self.read_gdot_action.isChecked():
-        #     edot = np.interp(t, self.times, self.gfile)
-
         if (l >= q) or (q == 1):
             l = q
             dydx = 0
@@ -411,6 +474,59 @@ class TheoryPomPom(QTheory):
             else:
                 dydx = firstterm - (l - 1) / tauS * exp(nustar * (l - 1))
         return dydx
+
+    def sigmadot_shear_gdot_file(self, sigma: Any, t: Any, p: Any) -> list[Any]:
+        """PomPom model in shear with deformation rate read from the data file."""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        q, tauB, tauS = p
+        l, Axx, Ayy, Axy = sigma
+        gdot = np.interp(t, self.times, self.gfile)
+
+        dAxx = 2 * gdot * Axy - (Axx - 1) / tauB
+        dAyy = -(Ayy - 1) / tauB
+        dAxy = gdot * Ayy - Axy / tauB
+        trace = Axx + 2 * Ayy
+
+        if (l >= q) or (q == 1):
+            dl = 0
+        elif l < 1:
+            dl = 0
+        else:
+            nustar = 2.0 / (q - 1)
+            aux = tauS / exp(nustar * (l - 1))
+            if aux * abs(gdot) < 1e-3:
+                dl = 0
+            else:
+                dl = l * gdot * Axy / trace - (l - 1) / tauS * exp(nustar * (l - 1))
+
+        return [dl, dAxx, dAyy, dAxy]
+
+    def sigmadot_uext_gdot_file(self, sigma: Any, t: Any, p: Any) -> list[Any]:
+        """PomPom model in uniaxial extension with deformation rate read from the data file."""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        q, tauB, tauS = p
+        l, Axx, Ayy = sigma
+        edot = np.interp(t, self.times, self.gfile)
+
+        dAxx = 2 * edot * Axx - (Axx - 1) / tauB
+        dAyy = -edot * Ayy - (Ayy - 1) / tauB
+        trace = Axx + 2 * Ayy
+
+        if (l >= q) or (q == 1):
+            dl = 0
+        elif l < 1:
+            dl = 0
+        else:
+            nustar = 2.0 / (q - 1.0)
+            aux = tauS / exp(nustar * (l - 1))
+            if aux * abs(edot) < 1e-3:
+                dl = 0
+            else:
+                dl = l * edot * (Axx - Ayy) / trace - (l - 1) / tauS * exp(nustar * (l - 1))
+
+        return [dl, dAxx, dAyy]
 
     def sigmadot_shearLAOS(self, l: Any, t: Any, p: Any) -> Any:
         """PomPom model in shear LAOS"""
@@ -459,8 +575,12 @@ class TheoryPomPom(QTheory):
         # flow geometry
         if self.flow_mode == FlowMode.shear:
             pde_stretch = self.sigmadot_shear
+            pde_gdot_file = self.sigmadot_shear_gdot_file
+            sigma0 = [1.0, 1.0, 1.0, 0.0]  # lambda, Axx, Ayy, Axy
         elif self.flow_mode == FlowMode.uext:
             pde_stretch = self.sigmadot_uext
+            pde_gdot_file = self.sigmadot_uext_gdot_file
+            sigma0 = [1.0, 1.0, 1.0]  # lambda, Axx, Ayy
         else:
             return
 
@@ -489,23 +609,49 @@ class TheoryPomPom(QTheory):
             p = [q, tauB, tauS, flow_rate]
 
             # solve ODEs
-            stretch_ini = 1
-            try:
-                l = odeint(
-                    pde_stretch,
-                    stretch_ini,
-                    self.times,
-                    args=(p,),
-                    atol=abserr,
-                    rtol=relerr,
-                )
-            except EndComputationRequested:
-                break
-            # write results in table
-            l = np.delete(l, [0])  # delete the t=0 value
             t = np.delete(self.times, [0])  # delete the t=0 value
-            # TODO: Need to check the following lines for time dependent gdot
-            if self.flow_mode == FlowMode.shear:
+            if self.read_gdot_action.isChecked():
+                try:
+                    sig = odeint(
+                        pde_gdot_file,
+                        sigma0,
+                        self.times,
+                        args=([q, tauB, tauS],),
+                        atol=abserr,
+                        rtol=relerr,
+                    )
+                except EndComputationRequested:
+                    break
+                l = np.delete(sig[:, 0], [0])
+                if self.flow_mode == FlowMode.shear:
+                    Axx_arr = np.delete(sig[:, 1], [0])
+                    Ayy_arr = np.delete(sig[:, 2], [0])
+                    Axy_arr = np.delete(sig[:, 3], [0])
+                    tt.data[:, 1] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0 * Ayy_arr)
+                elif self.flow_mode == FlowMode.uext:
+                    Axx_arr = np.delete(sig[:, 1], [0])
+                    Ayy_arr = np.delete(sig[:, 2], [0])
+                    k = np.ones(len(t))
+                    k[Axx_arr < 1e240] = (Axx_arr[Axx_arr < 1e240] - Ayy_arr[Axx_arr < 1e240]) / (
+                        Axx_arr[Axx_arr < 1e240] + 2 * Ayy_arr[Axx_arr < 1e240]
+                    )
+                    tt.data[:, 1] += 3 * G * l * l * k
+            else:
+                stretch_ini = 1
+                try:
+                    l = odeint(
+                        pde_stretch,
+                        stretch_ini,
+                        self.times,
+                        args=(p,),
+                        atol=abserr,
+                        rtol=relerr,
+                    )
+                except EndComputationRequested:
+                    break
+                # write results in table
+                l = np.delete(l, [0])  # delete the t=0 value
+            if not self.read_gdot_action.isChecked() and self.flow_mode == FlowMode.shear:
                 Axy_arr = flow_rate * tauB * (1 - np.exp(-t / tauB))
                 Axx_arr = (
                     2 * flow_rate * flow_rate * tauB * tauB * (1 - np.exp(-t / tauB))
@@ -514,7 +660,7 @@ class TheoryPomPom(QTheory):
                 )
                 tt.data[:, 1] += 3 * G * l * l * Axy_arr / (Axx_arr + 2.0)
 
-            elif self.flow_mode == FlowMode.uext:
+            elif not self.read_gdot_action.isChecked() and self.flow_mode == FlowMode.uext:
                 Axx_arr = (1 - 2 * flow_rate * tauB * np.exp((2 * flow_rate * tauB - 1) * t / tauB)) / (1 - 2 * flow_rate * tauB)
                 Ayy_arr = (1 + flow_rate * tauB * np.exp(-(1 + flow_rate * tauB) * t / tauB)) / (1 + flow_rate * tauB)
 

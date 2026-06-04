@@ -39,9 +39,10 @@ Module for the Upper Convected Maxwell model
 from typing import Any, ClassVar, cast
 
 import numpy as np
+from scipy.integrate import odeint
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AnyArray, AxesArray, DataSetLike, FileLike, ModesResult
-from RepTate.gui.QTheory import QTheory
+from RepTate.gui.QTheory import QTheory, EndComputationRequested
 from PySide6.QtWidgets import QToolBar, QToolButton, QMenu, QMessageBox
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
@@ -159,6 +160,12 @@ class TheoryUCM(QTheory):
             self.tbutflow.setMenu(menu)
             tb.addWidget(self.tbutflow)
 
+            self.read_gdot_action = tb.addAction(
+                QIcon(":/Icon8/Images/new_icons/icons8-file-gdot.png"),
+                "Read gdot from file",
+            )
+            self.read_gdot_action.setCheckable(True)
+
             self.shear_flow_action.triggered.connect(self.select_shear_flow)
             self.extensional_flow_action.triggered.connect(self.select_extensional_flow)
 
@@ -269,6 +276,37 @@ class TheoryUCM(QTheory):
 
         return G * (sxx - syy)
 
+    def sigmadot_shear(self, sigma: Any, times: Any, p: Any) -> list[Any]:
+        """Upper Convected Maxwell model in shear."""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        _, tauD, gdot = p
+        sxx, syy, sxy = sigma
+
+        if self.read_gdot_action.isChecked():
+            gdot = np.interp(times, self.t, self.gfile)
+
+        dsxx = 2 * gdot * sxy - (sxx - 1) / tauD
+        dsyy = -(syy - 1) / tauD
+        dsxy = gdot * syy - sxy / tauD
+
+        return [dsxx, dsyy, dsxy]
+
+    def sigmadot_uext(self, sigma: Any, times: Any, p: Any) -> list[Any]:
+        """Upper Convected Maxwell model in uniaxial extension."""
+        if self.stop_theory_flag:
+            raise EndComputationRequested
+        _, tauD, edot = p
+        sxx, syy = sigma
+
+        if self.read_gdot_action.isChecked():
+            edot = np.interp(times, self.t, self.gfile)
+
+        dsxx = 2 * edot * sxx - (sxx - 1) / tauD
+        dsyy = -edot * syy - (syy - 1) / tauD
+
+        return [dsxx, dsyy]
+
     def calculate_UCM(self, f: FileLike | None = None) -> None:
         """Calculate the theory"""
         file = cast(FileLike, f)
@@ -281,7 +319,28 @@ class TheoryUCM(QTheory):
 
         tt.data[:, 0] = times
 
+        if self.flow_mode == FlowMode.shear:
+            sigma0 = [1.0, 1.0, 0.0]  # sxx, syy, sxy
+            pde = self.sigmadot_shear
+        elif self.flow_mode == FlowMode.uext:
+            sigma0 = [1.0, 1.0]  # sxx, syy
+            pde = self.sigmadot_uext
+        else:
+            return
+
         flow_rate = float(file.file_parameters["gdot"])
+        if self.read_gdot_action.isChecked():
+            self.t = times
+            if file.file_type.extension == "shear":
+                self.gfile = ft.data[:, 3]
+            elif file.file_type.extension == "uext":
+                self.gfile = ft.data[:, 2]
+            self.t = np.concatenate([[0], self.t])
+            self.gfile = np.concatenate([[self.gfile[0]], self.gfile])
+            times_ode = self.t
+
+        abserr = 1.0e-8
+        relerr = 1.0e-6
         nmodes = self.parameter_int("nmodes")
         for i in range(nmodes):
             if self.stop_theory_flag:
@@ -291,7 +350,18 @@ class TheoryUCM(QTheory):
 
             p = [G, tauD, flow_rate]
 
-            if self.flow_mode == FlowMode.shear:
+            if self.read_gdot_action.isChecked():
+                try:
+                    sig = odeint(pde, sigma0, times_ode, args=(p,), atol=abserr, rtol=relerr)
+                except EndComputationRequested:
+                    break
+                if self.flow_mode == FlowMode.shear:
+                    tt.data[:, 1] += G * np.delete(sig[:, 2], [0])
+                elif self.flow_mode == FlowMode.uext:
+                    sxx = np.delete(sig[:, 0], [0])
+                    syy = np.delete(sig[:, 1], [0])
+                    tt.data[:, 1] += G * (sxx - syy)
+            elif self.flow_mode == FlowMode.shear:
                 tt.data[:, 1] += self.sigma_xy_shear(p, times)
             elif self.flow_mode == FlowMode.uext:
                 tt.data[:, 1] += self.n1_uext(p, times)

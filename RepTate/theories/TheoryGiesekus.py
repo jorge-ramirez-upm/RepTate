@@ -40,6 +40,7 @@ from typing import Any, ClassVar, cast
 
 import numpy as np
 from scipy.integrate import odeint
+from RepTate.core.DataTable import DataTable
 from RepTate.core.Parameter import Parameter, ParameterType, OptType
 from RepTate.core.typing import AnyArray, AxesArray, DataSetLike, FileLike, ModesResult
 from RepTate.gui.QTheory import QTheory, EndComputationRequested
@@ -140,6 +141,15 @@ class TheoryGiesekus(QTheory):
             )
 
         self.MAX_MODES = 40
+        self.view_LVEenvelope = False
+        auxseries = self.ax.plot([], [], label="")
+        self.LVEenvelopeseries = auxseries[0]
+        self.LVEenvelopeseries.set_marker("")
+        self.LVEenvelopeseries.set_linestyle("--")
+        self.LVEenvelopeseries.set_visible(self.view_LVEenvelope)
+        self.LVEenvelopeseries.set_color("green")
+        self.LVEenvelopeseries.set_linewidth(5)
+        self.LVEenvelopeseries.set_label("")
         self.init_flow_mode()
 
         # add widgets specific to the theory
@@ -182,6 +192,11 @@ class TheoryGiesekus(QTheory):
         self.tbutmodes.setMenu(menu)
         tb.addWidget(self.tbutmodes)
 
+        # Show LVE button
+        self.linearenvelope = tb.addAction(QIcon(":/Icon8/Images/new_icons/lve-icon.png"), "Show Linear Envelope")
+        self.linearenvelope.setCheckable(True)
+        self.linearenvelope.setChecked(False)
+
         # SpinBox "n-stretch modes"
         self.spinbox = QSpinBox()
         nmodes_value = self.parameter_int("nmodes")
@@ -197,6 +212,7 @@ class TheoryGiesekus(QTheory):
         self.edit_modes_action.triggered.connect(self.edit_modes_window)
         self.plot_modes_action.triggered.connect(self.plot_modes_graph)
         self.save_modes_action.triggered.connect(self.save_modes)
+        self.linearenvelope.triggered.connect(self.show_linear_envelope)
         self.spinbox.valueChanged.connect(self.handle_spinboxValueChanged)
 
     def handle_spinboxValueChanged(self, value: int) -> None:
@@ -242,6 +258,61 @@ class TheoryGiesekus(QTheory):
 
     def plot_modes_graph(self) -> None:
         pass
+
+    def Qhide_theory_extras(self, show: Any) -> None:
+        """Uncheck the LVE button. Called when curent theory is changed"""
+        if show:
+            self.LVEenvelopeseries.set_visible(self.linearenvelope.isChecked())
+        else:
+            self.LVEenvelopeseries.set_visible(False)
+
+    def show_linear_envelope(self, state: Any) -> None:
+        self.extra_graphic_visible(state)
+
+    def plot_theory_stuff(self) -> None:
+        """Plot theory helpers"""
+        if not isinstance(self.parent_dataset.parent_application, ApplicationLAOS):
+            data_table_tmp: Any = DataTable(self.axarr)
+            data_table_tmp.num_columns = 2
+            data_table_tmp.num_rows = 100
+            data_table_tmp.data = np.zeros((100, 2))
+
+            times = np.logspace(-2, 3, 100)
+            data_table_tmp.data[:, 0] = times
+            nmodes = self.parameter_int("nmodes")
+            data_table_tmp.data[:, 1] = 0
+            fparamaux: dict[str, Any] = {}
+            fparamaux["gdot"] = 1e-8
+            for i in range(nmodes):
+                if self.stop_theory_flag:
+                    break
+                G = self.parameter_float("G%02d" % i)
+                tauD = self.parameter_float("tauD%02d" % i)
+                data_table_tmp.data[:, 1] += G * fparamaux["gdot"] * tauD * (1 - np.exp(-times / tauD))
+            if self.flow_mode == FlowMode.uext:
+                data_table_tmp.data[:, 1] *= 3.0
+            view = self.parent_dataset.parent_application.current_view
+            try:
+                x, y, success = view.view_proc(data_table_tmp, fparamaux)
+            except TypeError as e:
+                print(e)
+                return
+            x, y = self.convert_view_data_to_display(x, y, view)
+            self.LVEenvelopeseries.set_data(x[:, 0], y[:, 0])
+
+    def destructor(self) -> None:
+        """Called when the theory tab is closed"""
+        self.extra_graphic_visible(False)
+        self.LVEenvelopeseries.remove()
+
+    def show_theory_extras(self, show: Any = False) -> None:
+        """Called when the active theory is changed"""
+        self.Qhide_theory_extras(show)
+
+    def extra_graphic_visible(self, state: Any) -> None:
+        """Change visibility of theory helpers"""
+        self.LVEenvelopeseries.set_visible(state)
+        self.parent_dataset.parent_application.update_plot()
 
     def init_flow_mode(self) -> None:
         """Find if data files are shear or extension"""
