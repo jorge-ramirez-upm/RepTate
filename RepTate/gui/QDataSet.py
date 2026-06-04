@@ -551,7 +551,12 @@ class QDataSet(QWidget, Ui_DataSet):
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_application.logger.name + "." + self.name)
-        self.logger.debug("New DataSet")
+        self.logger.debug(
+            "New DataSet: name=%s app=%s nplots=%d",
+            self.name,
+            self.parent_application.name,
+            self.nplots,
+        )
         np.seterrcall(self.write)
 
         self.DataSettreeWidget = DataSetWidget(self)
@@ -676,10 +681,16 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
-        self.logger.info("numpy: %s (flag %s)" % (type, flag))
+        self.logger.warning("numpy: %s (flag %s)", type, flag)
 
     def change_file_visibility(self, file_name_short, check_state=True):
         """Hide/Show file in the figure"""
+        self.logger.debug(
+            "Changing file visibility: dataset=%s file=%s visible=%s",
+            self.name,
+            file_name_short,
+            check_state,
+        )
         file_matching = []
         for file in self.files:
             if file.file_name_short == file_name_short:  # find changed file
@@ -794,6 +805,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def do_show_all(self, line):
         """Show all files in the current DataSet"""
+        self.logger.debug("Showing all dataset files: dataset=%s files=%d", self.name, len(self.files))
         for file in self.files:
             if file.file_name_short not in self.inactive_files:
                 file.active = True
@@ -807,6 +819,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def do_hide_all(self, line):
         """Hide all files in the current DataSet"""
+        self.logger.debug("Hiding all dataset files: dataset=%s files=%d", self.name, len(self.files))
         for file in self.files:
             file.active = False
             dt = file.data_table
@@ -820,6 +833,18 @@ class QDataSet(QWidget, Ui_DataSet):
     def do_plot(self, line=""):
         """Plot the current dataset using the current view of the parent application"""
         # view = self.parent_application.current_view
+        if self.logger.isEnabledFor(logging.DEBUG):
+            active_files = sum(1 for file in self.files if file.active)
+            active_theories = sum(1 for theory in self.theories.values() if theory.active)
+            self.logger.debug(
+                "Plotting dataset: dataset=%s files=%d active_files=%d theories=%d active_theories=%d nplots=%d",
+                self.name,
+                len(self.files),
+                active_files,
+                len(self.theories),
+                active_theories,
+                self.nplots,
+            )
 
         self.table_icon_list.clear()
         filled = False
@@ -974,7 +999,7 @@ class QDataSet(QWidget, Ui_DataSet):
                                 try:
                                     label += pmt + "=" + str(file.file_parameters[pmt]) + " "
                                 except KeyError as e:  # if parameter missing from data file
-                                    self.logger.warning("Parameter %s not found in data file" % e)
+                                    self.logger.warning("Parameter %s not found in data file", e)
                             dt.series[nx][i].set_label(label)
                         else:
                             dt.series[nx][i].set_label("")
@@ -1061,6 +1086,7 @@ class QDataSet(QWidget, Ui_DataSet):
                             tt.series[nx][i].set_label("")
         # self.parent_application.update_datacursor_artists()
         self.parent_application.update_plot()
+        self.logger.debug("Dataset plot updated: dataset=%s", self.name)
 
     def do_sort(self, line):
         """Sort files in dataset according to the value of a file parameter
@@ -1086,13 +1112,15 @@ class QDataSet(QWidget, Ui_DataSet):
 
         if self.current_file:
             if fp in self.current_file.file_parameters:
+                self.logger.debug("Sorting dataset files: dataset=%s parameter=%s reverse=%s", self.name, fp, rev)
                 self.files.sort(key=lambda x: float(x.file_parameters[fp]), reverse=rev)
                 self.do_plot()
             elif fp == "File":
+                self.logger.debug("Sorting dataset files: dataset=%s parameter=File reverse=%s", self.name, rev)
                 self.files.sort(key=lambda x: x.file_name_short, reverse=rev)
                 self.do_plot()
             else:
-                self.logger.warning("Parameter %s not found in files" % line)
+                self.logger.warning("Parameter %s not found in files", line)
                 # print("Parameter %s not found in files" % line)
 
     def new_dummy_file(
@@ -1110,6 +1138,14 @@ class QDataSet(QWidget, Ui_DataSet):
         yval: float
         fparam: dict containing file parameter names and values
         """
+        self.logger.debug(
+            "Creating dummy file: dataset=%s fname=%s filetype=%s rows=%d parameters=%s",
+            self.name,
+            fname,
+            file_type.extension if file_type else None,
+            len(xrange),
+            list(fparams.keys()),
+        )
         if fname == "":
             filename = "dummy_" + "_".join([pname + "%.3g" % fparams[pname] for pname in fparams]) + "." + file_type.extension
         else:
@@ -1154,25 +1190,39 @@ class QDataSet(QWidget, Ui_DataSet):
                 # add a theory table
                 self.theories[th_name].tables[f.file_name_short] = DataTable(self.parent_application.axarr, "TH_" + f.file_name_short)
                 self.theories[th_name].function(f)
+            self.logger.debug(
+                "Dummy file created: dataset=%s file=%s rows=%d columns=%d theories_updated=%d",
+                self.name,
+                f.file_name_short,
+                dt.num_rows,
+                dt.num_columns,
+                len(self.theories),
+            )
             return f, True
         else:
+            self.logger.debug("Dummy file skipped because name already exists: dataset=%s file=%s", self.name, f.file_name_short)
             return None, False
 
     def do_open(self, line):
         r"""Open file(s). Arguments: FILENAME(s) (pattern expansion characters -- \*, ? -- allowed"""
         f_names = line
         newtables = []
+        self.logger.debug("Opening dataset files: dataset=%s requested=%d", self.name, len(f_names) if f_names else 0)
         if line == "" or len(f_names) == 0:
             message = "No valid file names provided"
+            self.logger.debug("Opening dataset files failed: dataset=%s reason=%s", self.name, message)
             return (message, None, None)
         f_ext = [os.path.splitext(x)[1].split(".")[-1] for x in f_names]
         if f_ext.count(f_ext[0]) != len(f_ext):
             message = "File extensions of files must be equal!"
+            self.logger.debug("Opening dataset files failed: dataset=%s reason=%s extensions=%s", self.name, message, f_ext)
             return (message, None, None)
         if f_ext[0] in self.parent_application.filetypes:
             ft = self.parent_application.filetypes[f_ext[0]]
+            skipped = 0
             for f in f_names:
                 if not os.path.isfile(f):
+                    self.logger.debug("Dataset file path does not exist: dataset=%s path=%s", self.name, f)
                     print('File "%s" does not exists' % f)
                     continue  # next file name
                 df = ft.read_file(f, self, self.parent_application.axarr)
@@ -1190,21 +1240,35 @@ class QDataSet(QWidget, Ui_DataSet):
                         self.theories[th_name].tables[df.file_name_short] = DataTable(
                             self.parent_application.axarr, "TH_" + df.file_name_short
                         )
+                else:
+                    skipped += 1
+            self.logger.debug(
+                "Dataset files opened: dataset=%s ext=%s opened=%d skipped=%d total_files=%d",
+                self.name,
+                f_ext[0],
+                len(newtables),
+                skipped,
+                len(self.files),
+            )
             return (True, newtables, f_ext[0])
         else:
             message = 'File type "%s" does not exists' % f_ext[0]
+            self.logger.debug("Opening dataset files failed: dataset=%s reason=%s", self.name, message)
             return (message, None, None)
 
     def do_reload_data(self, line=""):
         """Reload data files in the current DataSet"""
+        active_files = [file for file in self.files if file.active]
+        self.logger.debug("Reloading dataset data: dataset=%s active_files=%d total_files=%d", self.name, len(active_files), len(self.files))
         self.DataSettreeWidget.blockSignals(True)
+        reloaded = 0
         for file in self.files:
             if not file.active:
                 continue
             path = file.file_full_path
             ft = file.file_type
             if not os.path.isfile(path):
-                self.logger.warning("Could not open file %s: %s" % (file.file_name_short, path))
+                self.logger.warning("Could not open file %s: %s", file.file_name_short, path)
                 continue
             df = ft.read_file(path, self, None)
             self.apply_file_parameter_display_unit_overrides(df)
@@ -1219,10 +1283,12 @@ class QDataSet(QWidget, Ui_DataSet):
             file.data_table.data = np.array(df.data_table.data)
             file.data_table.num_columns = df.data_table.num_columns
             file.data_table.num_rows = df.data_table.num_rows
+            reloaded += 1
         self.DataSettreeWidget.blockSignals(False)
         self.refresh_parameter_column_headers()
         self.refresh_parameter_column_values()
         self.do_plot("")
+        self.logger.debug("Dataset data reloaded: dataset=%s reloaded=%d", self.name, reloaded)
 
     def __listdir(self, root):
         """List directory 'root' appending the path separator to subdirs."""
@@ -1238,6 +1304,7 @@ class QDataSet(QWidget, Ui_DataSet):
     def do_delete(self, name):
         """Delete a theory from the current dataset"""
         if name in self.theories.keys():
+            self.logger.debug("Deleting theory: dataset=%s theory=%s", self.name, name)
             self.theories[name].destructor()
             for tt in self.theories[name].tables.values():  # remove matplotlib artist from ax
                 for i in range(tt.MAX_NUM_SERIES):
@@ -1246,12 +1313,15 @@ class QDataSet(QWidget, Ui_DataSet):
                         # self.parent_application.axarr[nx].lines.remove(tt.series[nx][i])
             del self.theories[name]
             self.do_plot("")
+            self.logger.debug("Theory deleted: dataset=%s theory=%s remaining_theories=%d", self.name, name, len(self.theories))
         else:
+            self.logger.debug("Delete requested for missing theory: dataset=%s theory=%s", self.name, name)
             print('Theory "%s" not found' % name)
 
     def do_save(self, line="", extra_txt=""):
         """Save the active files of the current dataset to file"""
         counter = 0
+        self.logger.debug("Saving dataset files: dataset=%s folder=%s extra_txt=%s files=%d", self.name, line, extra_txt, len(self.files))
 
         for f in self.files:
             table = f.data_table
@@ -1284,6 +1354,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
         # print information
         msg = 'Saved %d dataset file(s) in "%s"' % (counter, line)
+        self.logger.debug("Dataset files saved: dataset=%s saved=%d folder=%s", self.name, counter, line)
         QMessageBox.information(self, "Saved DataSet", msg)
 
     def new(self, line):
@@ -1292,6 +1363,7 @@ class QDataSet(QWidget, Ui_DataSet):
         thtypes = list(self.parent_application.theories.keys())
         if line in thtypes:
             if self.current_file is None:
+                self.logger.debug("Theory creation skipped for empty dataset: dataset=%s theory=%s", self.name, line)
                 print("Current dataset is empty\n%s was not created" % line)
                 return
             self.num_theories += 1
@@ -1300,12 +1372,21 @@ class QDataSet(QWidget, Ui_DataSet):
             th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
+            self.logger.debug(
+                "Theory created: dataset=%s theory=%s tab_id=%s autocalculate=%s files=%d",
+                self.name,
+                line,
+                th_id,
+                th.autocalculate,
+                len(self.files),
+            )
             if th.autocalculate:
                 th.do_calculate("")
             else:
                 th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
             return th, th_id
         else:
+            self.logger.debug("Theory creation requested for unavailable theory: dataset=%s theory=%s", self.name, line)
             print('Theory "%s" does not exists' % line)
             return None, None
 
@@ -1314,6 +1395,7 @@ class QDataSet(QWidget, Ui_DataSet):
         thtypes = list(self.parent_application.theories.keys())
         if line in thtypes:
             if self.current_file is None:
+                self.logger.debug("Theory creation skipped for empty dataset: dataset=%s theory=%s", self.name, line)
                 print("Current dataset is empty\n%s was not created" % line)
                 return
             self.num_theories += 1
@@ -1325,12 +1407,22 @@ class QDataSet(QWidget, Ui_DataSet):
             th = self.parent_application.theories[line](th_id, self, self.parent_application.axarr)
             self.theories[th.name] = th
             self.current_theory = th.name
+            self.logger.debug(
+                "Theory created: dataset=%s theory=%s tab_id=%s calculate=%s autocalculate=%s files=%d",
+                self.name,
+                line,
+                th_id,
+                calculate,
+                th.autocalculate,
+                len(self.files),
+            )
             if calculate and th.autocalculate:
                 th.do_calculate("")
             else:
                 th.Qprint('<font color=green><b>Press "Calculate"</b></font>')
             return th
         else:
+            self.logger.debug("Theory creation requested for unavailable theory: dataset=%s theory=%s", self.name, line)
             print('Theory "%s" does not exists' % line)
 
     def mincol(self, col):
@@ -1364,18 +1456,21 @@ class QDataSet(QWidget, Ui_DataSet):
         """Copy the parameters of the currently active theory to the clipboard"""
         th = self.current_theory
         if th:
+            self.logger.debug("Copy theory parameters requested: dataset=%s theory=%s", self.name, th)
             self.theories[th].copy_parameters()
 
     def paste_parameters(self):
         """Paste the parameters from the clipboard to the currently active theory"""
         th = self.current_theory
         if th:
+            self.logger.debug("Paste theory parameters requested: dataset=%s theory=%s", self.name, th)
             self.theories[th].paste_parameters()
 
     def handle_action_save_theory_data(self):
         """Save theory data of current theory"""
         th = self.current_theory
         if th:
+            self.logger.debug("Save theory data requested: dataset=%s theory=%s", self.name, th)
             # file browser window
             dir_start = join(RepTate.root_dir, "data")
             dilogue_name = "Select Folder"
@@ -1392,7 +1487,10 @@ class QDataSet(QWidget, Ui_DataSet):
                         txt = "_" + txt
                 else:
                     txt = ""
+                self.logger.debug("Saving theory data: dataset=%s theory=%s folder=%s label=%s", self.name, th, folder, txt)
                 self.theories[th].do_save(folder, txt)
+            else:
+                self.logger.debug("Save theory data cancelled: dataset=%s theory=%s", self.name, th)
 
     def set_table_icons(self, table_icon_list):
         """The list 'table_icon_list' contains tuples (file_name_short, marker_name, face, color)"""
@@ -1458,6 +1556,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def toggle_vertical_limits(self, checked):
         """Show/Hide the xrange selector for fit"""
+        self.logger.debug("Vertical limits toggled: dataset=%s checked=%s current_theory=%s", self.name, checked, self.current_theory)
         if self.current_theory:
             th = self.theories[self.current_theory]
             th.do_xrange("", checked)
@@ -1466,6 +1565,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def toggle_horizontal_limits(self, checked):
         """Show/Hide the yrange selector for fit"""
+        self.logger.debug("Horizontal limits toggled: dataset=%s checked=%s current_theory=%s", self.name, checked, self.current_theory)
         if self.current_theory:
             th = self.theories[self.current_theory]
             th.do_yrange("", checked)
@@ -1474,8 +1574,10 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def handle_fitting_options(self):
         if not self.current_theory:
+            self.logger.debug("Fitting options requested with no current theory: dataset=%s", self.name)
             return
         th = self.theories[self.current_theory]
+        self.logger.debug("Fitting options requested: dataset=%s theory=%s", self.name, th.name)
         th.fittingoptionsdialog.ui.tabWidget.setCurrentIndex(th.mintype.value)
         success = th.fittingoptionsdialog.exec_()  # this blocks the rest of the app as opposed to .show()
 
@@ -1600,8 +1702,10 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def handle_error_calculation_options(self):
         if not self.current_theory:
+            self.logger.debug("Error calculation options requested with no current theory: dataset=%s", self.name)
             return
         th = self.theories[self.current_theory]
+        self.logger.debug("Error calculation options requested: dataset=%s theory=%s", self.name, th.name)
         th.populate_default_error_calculation_options()
         success = th.errorcalculationdialog.exec_()  # this blocks the rest of the app as opposed to .show()
 
@@ -1613,6 +1717,7 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def end_of_computation(self, th_name):
         """Action when theory has finished computations"""
+        self.logger.debug("Theory computation ended: dataset=%s theory=%s", self.name, th_name)
         try:
             th = self.theories[th_name]
             th.stop_theory_flag = False
@@ -1625,10 +1730,13 @@ class QDataSet(QWidget, Ui_DataSet):
     def handle_actionCalculate_Theory(self):
         if self.current_theory and self.files:
             th = self.theories[self.current_theory]
+            self.logger.debug("Calculate theory requested: dataset=%s theory=%s files=%d", self.name, th.name, len(self.files))
             if th.thread_calc_busy:  # request stop if in do_calculate
+                self.logger.debug("Requesting calculation stop: dataset=%s theory=%s", self.name, th.name)
                 th.request_stop_computations()
                 return
             elif th.is_fitting or th.thread_fit_busy:  # do nothing if already busy in do_fit
+                self.logger.debug("Calculate theory ignored because fitting is busy: dataset=%s theory=%s", self.name, th.name)
                 th.Qprint("Busy minimising theory...")
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files)) > 1:
@@ -1646,10 +1754,13 @@ class QDataSet(QWidget, Ui_DataSet):
         """Minimize the error"""
         if self.current_theory and self.files:
             th = self.theories[self.current_theory]
+            self.logger.debug("Minimize theory requested: dataset=%s theory=%s files=%d", self.name, th.name, len(self.files))
             if th.is_fitting or th.thread_fit_busy:  # request stop if in do_fit
+                self.logger.debug("Requesting fit stop: dataset=%s theory=%s", self.name, th.name)
                 th.request_stop_computations()
                 return
             elif th.calculate_is_busy or th.thread_calc_busy:  # do nothing if already busy in do_calculate
+                self.logger.debug("Minimize theory ignored because calculation is busy: dataset=%s theory=%s", self.name, th.name)
                 th.Qprint("Busy calculating theory...")
                 return
             if th.single_file and (len(self.files) - len(self.inactive_files)) > 1:
@@ -1683,11 +1794,13 @@ class QDataSet(QWidget, Ui_DataSet):
 
     def handle_thCurrentChanged(self, index):
         """Change figure when the active theory tab is changed"""
+        self.logger.debug("Current theory tab changed: dataset=%s index=%d", self.name, index)
         self.icon_calculate_is_stop(False)
         self.icon_fit_is_stop(False)
         th = self.TheorytabWidget.widget(index)
         if th:
             self.current_theory = th.name
+            self.logger.debug("Current theory selected: dataset=%s theory=%s", self.name, th.name)
             ntab = self.TheorytabWidget.count()
             # hide all theory curves
             for i in range(ntab):
@@ -1703,6 +1816,7 @@ class QDataSet(QWidget, Ui_DataSet):
         else:
             self.current_theory = None
             self.theory_actions_disabled(True)
+            self.logger.debug("No current theory selected: dataset=%s", self.name)
         self.parent_application.update_plot()
         self.parent_application.update_Qplot()
 
@@ -1712,6 +1826,7 @@ class QDataSet(QWidget, Ui_DataSet):
         Edit the theory tab name, leave 'theories' dictionary keys unchanged.
         Two tabs can share the same name"""
         old_name = self.TheorytabWidget.tabText(index)
+        self.logger.debug("Theory tab rename requested: dataset=%s index=%d old_name=%s", self.name, index, old_name)
         dlg = QInputDialog(self)
         dlg.setWindowTitle("Change Theory Name")
         dlg.setLabelText("New Theory Name:")
@@ -1721,29 +1836,42 @@ class QDataSet(QWidget, Ui_DataSet):
         new_tab_name = dlg.textValue()
         if success and new_tab_name != "":
             self.TheorytabWidget.setTabText(index, new_tab_name)
+            self.logger.debug(
+                "Theory tab renamed: dataset=%s index=%d old_name=%s new_name=%s",
+                self.name,
+                index,
+                old_name,
+                new_tab_name,
+            )
             # self.theories[old_name].name = new_tab_name
             # self.theories[new_tab_name] = self.theories.pop(old_name)
             # self.current_theory = new_tab_name
+        else:
+            self.logger.debug("Theory tab rename cancelled: dataset=%s index=%d old_name=%s", self.name, index, old_name)
 
     def handle_thTabCloseRequested(self, index):
         """Delete a theory tab from the current dataset"""
         th_name = self.TheorytabWidget.widget(index).name
+        self.logger.debug("Theory tab close requested: dataset=%s index=%d theory=%s", self.name, index, th_name)
         th = self.theories[th_name]
         th.Qprint("Close theory tab requested")
         th.request_stop_computations()
         self.set_no_limits(th_name)
         self.do_delete(th_name)  # call DataSet.do_delete
         self.TheorytabWidget.removeTab(index)
+        self.logger.debug("Theory tab closed: dataset=%s theory=%s remaining_tabs=%d", self.name, th_name, self.TheorytabWidget.count())
 
     def handle_itemSelectionChanged(self):
         """Define actions for when a file table is selected"""
         selection = self.DataSettreeWidget.selectedItems()
         if selection == []:
+            self.logger.debug("Dataset file selection cleared: dataset=%s", self.name)
             self.selected_file = None
             self.highlight_series()
             return
         for f in self.files:
             if f.file_name_short == selection[0].text(0):
+                self.logger.debug("Dataset file selected: dataset=%s file=%s", self.name, f.file_name_short)
                 self.parent_application.disconnect_curve_drag()
                 self.selected_file = f
                 self.highlight_series()
@@ -1795,14 +1923,23 @@ class QDataSet(QWidget, Ui_DataSet):
         """Fill the data inspector table"""
         file = self.selected_file
         if not file:
+            self.logger.debug("Populate inspector skipped with no selected file: dataset=%s", self.name)
             self.parent_application.inspector_table.setRowCount(0)
             self.parent_application.DataInspectordockWidget.setWindowTitle("File:")
             return
         if self.parent_application.DataInspectordockWidget.isHidden():
+            self.logger.debug("Populate inspector skipped because inspector is hidden: dataset=%s file=%s", self.name, file.file_name_short)
             return
         dt = file.data_table
         nrow = dt.num_rows
         ncol = dt.num_columns
+        self.logger.debug(
+            "Populating inspector: dataset=%s file=%s rows=%d columns=%d",
+            self.name,
+            file.file_name_short,
+            nrow,
+            ncol,
+        )
         inspec_tab = self.parent_application.inspector_table
         inspec_tab.file_repr = file
         inspec_tab.setRowCount(nrow)
@@ -1829,6 +1966,12 @@ class QDataSet(QWidget, Ui_DataSet):
     def handle_itemChanged(self, item: QTreeWidgetItem, column: int) -> None:
         """Detect when an item has been selected in the dataset"""
         if column == 0:
+            self.logger.debug(
+                "Dataset file checkbox changed: dataset=%s file=%s checked=%s",
+                self.name,
+                item.text(0),
+                item.checkState(column) == Qt.CheckState.Checked,
+            )
             self.change_file_visibility(item.text(0), item.checkState(column) == Qt.CheckState.Checked)
 
     def handle_sortIndicatorChanged(self, column: int, order: Qt.SortOrder) -> None:
@@ -1845,12 +1988,14 @@ class QDataSet(QWidget, Ui_DataSet):
             rev = True if order == Qt.SortOrder.AscendingOrder else False
             if rev:
                 sort_param = sort_param + ",reverse"
+            self.logger.debug("Dataset sort indicator changed: dataset=%s column=%d sort=%s", self.name, column, sort_param)
             self.do_sort(sort_param)
             self.do_plot()
             self.set_table_icons(self.table_icon_list)
 
     def Qshow_all(self) -> None:
         """Show all the files in this dataset, except those previously hiden"""
+        self.logger.debug("Qshow all files requested: dataset=%s files=%d", self.name, len(self.files))
         self.do_show_all("")
         for i in range(self.DataSettreeWidget.topLevelItemCount()):
             file_name = self.DataSettreeWidget.topLevelItem(i).text(0)
@@ -1889,10 +2034,12 @@ class QDataSet(QWidget, Ui_DataSet):
         #             self.DataSettreeWidget.blockSignals(False)
         # else:
         file_name_short = item.text(0)
+        self.logger.debug("File parameter edit requested: dataset=%s file=%s", self.name, file_name_short)
         for file in self.files:
             if file.file_name_short == file_name_short:
                 d = EditFileParametersDialog(self, file)
                 if d.exec_():
+                    self.logger.debug("File parameters updated: dataset=%s file=%s", self.name, file_name_short)
                     for p in d.param_dict:
                         if isinstance(file.file_parameters[p], str):
                             file.file_parameters[p] = d.param_dict[p].text()
@@ -1938,6 +2085,7 @@ class QDataSet(QWidget, Ui_DataSet):
             th_name = self.cbtheory.itemText(first_selectable_combobox_index(self.cbtheory))
         else:
             th_name = self.cbtheory.currentText()
+        self.logger.debug("New theory action triggered: dataset=%s theory=%s", self.name, th_name)
         self.cbtheory.setCurrentIndex(first_selectable_combobox_index(self.cbtheory))
         if th_name != "":
             self.new_theory(th_name)
@@ -1946,7 +2094,16 @@ class QDataSet(QWidget, Ui_DataSet):
     def new_theory(self, th_name, th_tab_id="", calculate=True, show=True):
         """Create a new theory from name"""
         if not self.files:
+            self.logger.debug("New theory skipped because dataset has no files: dataset=%s theory=%s", self.name, th_name)
             return
+        self.logger.debug(
+            "Creating theory tab: dataset=%s theory=%s requested_tab_id=%s calculate=%s show=%s",
+            self.name,
+            th_name,
+            th_tab_id,
+            calculate,
+            show,
+        )
         if self.current_theory:
             self.set_no_limits(self.current_theory)  # remove the xy-range limits
         self.theory_actions_disabled(False)  # enable theory buttons
@@ -1972,4 +2129,12 @@ class QDataSet(QWidget, Ui_DataSet):
         if show:
             newth.update_parameter_table()
             newth.do_show("")
+        self.logger.debug(
+            "Theory tab created: dataset=%s theory=%s tab_id=%s index=%d total_theories=%d",
+            self.name,
+            th_name,
+            th_tab_id,
+            index,
+            self.TheorytabWidget.count(),
+        )
         return newth
