@@ -238,6 +238,7 @@ class ApplicationUniversalViewer(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewyx(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Example View function"""

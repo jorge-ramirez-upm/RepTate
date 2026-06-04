@@ -162,6 +162,7 @@ class ApplicationMWD(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def view_WM(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """:math:`W(M)` vs :math:`M`"""

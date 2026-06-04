@@ -206,6 +206,7 @@ class ApplicationTTSFactors(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewLogaT(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the horizontal shift factor"""

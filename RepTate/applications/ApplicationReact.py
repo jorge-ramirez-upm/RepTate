@@ -461,6 +461,7 @@ class ApplicationReact(QApplicationWindow):
 
         #set the current view
         self.set_views()
+        self.finalize_application_setup()
         # for _ in self.extra_view_names:
         #     self.viewComboBox.removeItem(self.viewComboBox.count() - 1)
 

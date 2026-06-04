@@ -110,6 +110,7 @@ class ApplicationTemplate(QApplicationWindow):
         self.set_views()
 
         # add the GUI-specific objects here:
+        self.finalize_application_setup()
 
     def viewyx(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Function that defines how the view is shown. In this example, just the 1st and 2nd columns are shown.

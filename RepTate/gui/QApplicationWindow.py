@@ -704,7 +704,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + "." + self.name)
-        self.logger.debug("New %s app" % self.appname)
+        self.logger.debug("New %s app", self.appname)
 
         self.name = name
         self.parent_application = parent
@@ -937,6 +937,13 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # self.actionTrack_data.triggered.connect(self.handle_annotation)
         self.graphicnotes = []
         self.artistnotes = []
+        self.logger.debug(
+            "ApplicationWindow base initialized: name=%s appname=%s common_tools=%d extra_tools=%d",
+            self.name,
+            self.appname,
+            len(self.availabletools),
+            len(self.extratools),
+        )
         # plt.connect('motion_notify_event', self.mpl_motion_event)
 
         # Setting up the marker-settings dialog
@@ -1011,6 +1018,19 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # TEST GET CLICKABLE OBJECTS ON THE X AXIS
         # xaxis = self.ax.get_xticklabels()
         # print (xaxis)
+
+    def finalize_application_setup(self) -> None:
+        """Log final application setup after derived classes register views and theories."""
+        self.logger.debug(
+            "Application setup complete: name=%s appname=%s filetypes=%s views=%s theories=%s tools=%s extra_tools=%s",
+            self.name,
+            self.appname,
+            list(self.filetypes.keys()),
+            list(self.views.keys()),
+            list(self.theories.keys()),
+            list(self.availabletools.keys()),
+            list(self.extratools.keys()),
+        )
 
     def sp_nviews_valueChanged(self, new_nplots: int) -> None:
         """Change the current number of views displayed in the app"""
@@ -1120,6 +1140,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             tool_name = self.cbtool.itemText(first_selectable_combobox_index(self.cbtool))
         else:
             tool_name = self.cbtool.currentText()
+        self.logger.debug("New tool action triggered: app=%s tool=%s", self.name, tool_name)
         # reset the combobox selection
         self.cbtool.setCurrentIndex(first_selectable_combobox_index(self.cbtool))
         if tool_name != "":
@@ -1128,6 +1149,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def new_tool(self, tool_name: str, tool_tab_id: str = "") -> Any:
         """Create new tool"""
+        self.logger.debug("Creating tool: app=%s tool=%s requested_tab_id=%s", self.name, tool_name, tool_tab_id)
         newtool = self.tool_new(tool_name)
 
         # add new tool tab
@@ -1138,21 +1160,33 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         index = self.TooltabWidget.addTab(newtool, tool_tab_id)
         self.TooltabWidget.setCurrentIndex(index)  # set new tool tab as curent tab
         self.TooltabWidget.setTabToolTip(index, tool_name)  # set new-tab tool tip
+        self.logger.debug(
+            "Tool created: app=%s tool=%s tab_id=%s index=%d total_tools=%d",
+            self.name,
+            tool_name,
+            tool_tab_id,
+            index,
+            self.TooltabWidget.count(),
+        )
         return newtool
 
     def handle_toolTabCloseRequested(self, index: int) -> None:
         """Delete a Tool tab"""
         tool_name = self.TooltabWidget.widget(index).name
+        self.logger.debug("Closing tool tab: app=%s index=%d tool=%s", self.name, index, tool_name)
         self.do_tool_delete(tool_name)  # call DataSet.do_theory_delete
         self.TooltabWidget.removeTab(index)
         self.update_all_ds_plots()
+        self.logger.debug("Tool tab closed: app=%s tool=%s remaining_tools=%d", self.name, tool_name, self.TooltabWidget.count())
 
     def handle_toolTabMoved(self, f: int, t: int) -> None:
+        self.logger.debug("Tool tab moved: app=%s from=%d to=%d", self.name, f, t)
         self.tools.insert(f, self.tools.pop(t))
         self.update_all_ds_plots()
 
     def handle_actionAutoscale(self, checked: bool) -> None:
         self.autoscale = not checked
+        self.logger.debug("Autoscale toggled: app=%s autoscale=%s", self.name, self.autoscale)
         if self.autoscale:
             self.actionAutoscale.setIcon(QIcon(":/Images/Images/new_icons/icons8-padlock-96.png"))
         else:
@@ -1955,16 +1989,26 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
     def delete(self, ds_name: str) -> None:
         """Delete a dataset from the current application"""
         if ds_name in self.datasets.keys():
+            ds = self.datasets[ds_name]
+            self.logger.debug(
+                "Deleting dataset: app=%s dataset=%s files=%d theories=%d",
+                self.name,
+                ds_name,
+                len(ds.files),
+                len(ds.theories),
+            )
             self.remove_ds_ax_lines(ds_name)
-            for th in self.datasets[ds_name].theories.values():
+            for th in ds.theories.values():
                 try:
                     th.destructor()
                 except:
                     pass
-            self.datasets[ds_name].theories.clear()
-            self.datasets[ds_name].files.clear()
+            ds.theories.clear()
+            ds.files.clear()
             del self.datasets[ds_name]
+            self.logger.debug("Dataset deleted: app=%s dataset=%s remaining_datasets=%d", self.name, ds_name, len(self.datasets))
         else:
+            self.logger.debug("Delete requested for missing dataset: app=%s dataset=%s", self.name, ds_name)
             print('Data Set "%s" not found' % ds_name)
 
     def remove_ds_ax_lines(self, ds_name: str) -> None:
@@ -2397,14 +2441,19 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         """Reload the data files in the current DataSet"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
+            self.logger.debug("Reload data requested with no current dataset: app=%s", self.name)
             return
+        self.logger.debug("Reloading dataset data: app=%s dataset=%s files=%d", self.name, ds.name, len(ds.files))
         ds.do_reload_data()
+        self.logger.debug("Dataset data reloaded: app=%s dataset=%s", self.name, ds.name)
 
     def handle_action_save_current_dataset(self) -> None:
         """Save data of the current dataset to file"""
         ds = self.DataSettabWidget.currentWidget()
         if not ds:
+            self.logger.debug("Save current dataset requested with no current dataset: app=%s", self.name)
             return
+        self.logger.debug("Save current dataset requested: app=%s dataset=%s files=%d", self.name, ds.name, len(ds.files))
         dir_start = join(RepTate.root_dir, "data")
         dilogue_name = "Select Folder"
         folder = QFileDialog.getExistingDirectory(self, dilogue_name, dir_start)
@@ -2420,18 +2469,36 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                     txt = "_" + txt
             else:
                 txt = ""
+            self.logger.debug(
+                "Saving current dataset: app=%s dataset=%s folder=%s label=%s",
+                self.name,
+                ds.name,
+                folder,
+                txt,
+            )
             ds.do_save(folder, txt)
+            self.logger.debug("Current dataset saved: app=%s dataset=%s folder=%s", self.name, ds.name, folder)
+        else:
+            self.logger.debug("Save current dataset cancelled: app=%s dataset=%s", self.name, ds.name)
 
     def handle_actionView_All_SetTheories(self, checked: bool) -> None:
         ds = self.DataSettabWidget.currentWidget()
         if ds:
+            self.logger.debug(
+                "Showing all theories in current dataset: app=%s dataset=%s theories=%d",
+                self.name,
+                ds.name,
+                len(ds.theories),
+            )
             for th in ds.theories.values():
                 th.do_show()
 
     def handle_actionView_All_Sets(self, checked: bool) -> None:
         """Show all datasets simultaneously"""
         if len(self.datasets) < 2:
+            self.logger.debug("View all datasets ignored: app=%s datasets=%d", self.name, len(self.datasets))
             return
+        self.logger.debug("View all datasets toggled: app=%s checked=%s datasets=%d", self.name, checked, len(self.datasets))
         if checked:
             for ds in self.datasets.values():
                 ds.Qshow_all()
@@ -2447,6 +2514,12 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if self.actionView_All_Sets.isChecked():
             return
         ds = self.DataSettabWidget.widget(index)
+        self.logger.debug(
+            "Current dataset tab changed: app=%s index=%d dataset=%s",
+            self.name,
+            index,
+            ds.name if ds else None,
+        )
         if ds:
             disable_buttons = True if not ds.files else False
             self.dataset_actions_disabled(disable_buttons)  # disable/activate buttons buttons
@@ -2471,6 +2544,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         Edit the dataset tab name, leave the 'dataset' dictionary keys unchanged.
         Two datasets can share the sae name."""
         old_name = self.DataSettabWidget.tabText(index)
+        self.logger.debug("Dataset tab rename requested: app=%s index=%d old_name=%s", self.name, index, old_name)
         dlg = QInputDialog(self)
         dlg.setWindowTitle("Change DataSet Name")
         dlg.setLabelText("New DataSet Name:")
@@ -2480,18 +2554,36 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         new_tab_name = dlg.textValue()
         if success and new_tab_name != "":
             self.DataSettabWidget.setTabText(index, new_tab_name)
+            self.logger.debug(
+                "Dataset tab renamed: app=%s index=%d old_name=%s new_name=%s",
+                self.name,
+                index,
+                old_name,
+                new_tab_name,
+            )
             # self.datasets[old_name].name = new_tab_name
             # self.datasets[new_tab_name] = self.datasets.pop(old_name)
+        else:
+            self.logger.debug("Dataset tab rename cancelled: app=%s index=%d old_name=%s", self.name, index, old_name)
 
     def close_data_tab_handler(self, index: int) -> None:
         """Delete a dataset tab from the current application"""
         ds = self.DataSettabWidget.widget(index)
+        self.logger.debug(
+            "Closing dataset tab: app=%s index=%d dataset=%s files=%d theories=%d",
+            self.name,
+            index,
+            ds.name,
+            len(ds.files),
+            len(ds.theories),
+        )
         if index == self.DataSettabWidget.currentIndex():
             self.disconnect_curve_drag()
             ds.set_no_limits(ds.current_theory)
         self.delete(ds.name)  # call Application.delete to delete DataSet
         self.DataSettabWidget.removeTab(index)
         self.update_legend()
+        self.logger.debug("Dataset tab closed: app=%s dataset=%s remaining_datasets=%d", self.name, ds.name, len(self.datasets))
 
     def handle_change_view(self) -> None:
         self.change_view()
@@ -2500,6 +2592,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         """Change plot view"""
         selected_view_name = self.viewComboBox.currentText()
         ds = self.DataSettabWidget.currentWidget()
+        self.logger.debug(
+            "Changing view: app=%s view=%s dataset=%s x_limits_visible=%s y_limits_visible=%s",
+            self.name,
+            selected_view_name,
+            ds.name if ds else None,
+            x_vis,
+            y_vis,
+        )
         if ds:
             if ds.current_theory:
                 ds.theories[ds.current_theory].is_xrange_visible = x_vis
@@ -2512,6 +2612,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self.disconnect_curve_drag()
         if ds:
             ds.highlight_series()
+        self.logger.debug("View changed: app=%s view=%s dataset=%s", self.name, selected_view_name, ds.name if ds else None)
 
     def dragEnterEvent(self, e: QDragEnterEvent) -> None:
         """Drag and drop stuff"""
@@ -2528,6 +2629,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             path = url.toLocalFile()
             if isfile(path):
                 paths_to_open.append(path)
+        self.logger.debug("Drop event received: app=%s files=%d", self.name, len(paths_to_open))
         self.new_tables_from_files(paths_to_open)
 
     def update_Qplot(self) -> None:
@@ -2544,6 +2646,15 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
     def addTableToCurrentDataSet(self, dt: FileLike, ext: str) -> None:
         """Add file table to curent dataset tab"""
         ds = self.DataSettabWidget.currentWidget()
+        self.logger.debug(
+            "Adding table to dataset: app=%s dataset=%s file=%s ext=%s rows=%d columns=%d",
+            self.name,
+            ds.name if ds else None,
+            dt.file_name_short,
+            ext,
+            dt.data_table.num_rows,
+            dt.data_table.num_columns,
+        )
         header = ds.DataSettreeWidget.headerItem()
         lnew = []
         for i, param in enumerate(self.filetypes[ext].basic_file_parameters[:]):
@@ -2572,13 +2683,16 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         # newitem.setCheckState(0, 2)
         newitem.setCheckState(0, Qt.CheckState.Checked)
         self.dataset_actions_disabled(False)  # activate buttons
+        self.logger.debug("Table added to dataset: app=%s dataset=%s file=%s", self.name, ds.name, file_name_short)
 
     def handle_createNew_Empty_Dataset(self) -> None:
         """Called when button 'new dataset' pushed"""
+        self.logger.debug("New empty dataset action triggered: app=%s", self.name)
         self.createNew_Empty_Dataset()
 
     def createNew_Empty_Dataset(self, tabname: str = "") -> DataSetLike:
         """Add New empty tab to DataSettabWidget"""
+        self.logger.debug("Creating empty dataset: app=%s requested_tabname=%s", self.name, tabname)
         self.num_datasets += 1  # increment counter of Application
         num = self.num_datasets
         ds_name = "Set%d" % num
@@ -2610,30 +2724,43 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             # inspect_header = dfile.col_names[:]
             inspect_header = [a + " [" + b + "]" for a, b in zip(dfile.col_names, dfile.col_units)]
             inspec_tab = self.inspector_table.setHorizontalHeaderLabels(inspect_header)
+        self.logger.debug(
+            "Empty dataset created: app=%s dataset=%s tabname=%s index=%d total_datasets=%d",
+            self.name,
+            ds_name,
+            tabname,
+            ind,
+            self.DataSettabWidget.count(),
+        )
         return cast(DataSetLike, self.DataSettabWidget.widget(ind))
 
     def openDataset(self) -> None:
         """Open Files to a new Dataset"""
         # 'allowed_ext' defines the allowed file extensions
         # should be of form, e.g., "LVE (*.tts *.osc);;Text file (*.txt)"
+        self.logger.debug("Open dataset action triggered: app=%s", self.name)
         allowed_ext = ""
         for ftype in self.filetypes.values():
             allowed_ext += "%s (*%s);;" % (ftype.name, ftype.extension)
         allowed_ext = allowed_ext.rstrip(";")
         paths_to_open = self.openFileNamesDialog(allowed_ext)
         if not paths_to_open:
+            self.logger.debug("Open dataset cancelled: app=%s", self.name)
             return
+        self.logger.debug("Open dataset selected files: app=%s files=%d", self.name, len(paths_to_open))
         self.new_tables_from_files(paths_to_open)
 
     def handle_action_import_from_excel(self) -> None:
         """Import new data from an Excel file"""
         for ftype in self.filetypes.values():
             break
+        self.logger.debug("Import from Excel action triggered: app=%s filetype=%s", self.name, ftype.extension)
         if self.excel_import_gui is None:
             self.excel_import_gui = ImportExcelWindow(parent=self, ftype=ftype)
         if self.excel_import_gui.exec_():
             res_dic = self.excel_import_gui.get_data()
             if res_dic["error"]:
+                self.logger.debug("Import from Excel failed in dialog validation: app=%s error=%s", self.name, res_dic["errmsg"])
                 QMessageBox.warning(self, "Import Error", res_dic["errmsg"])
                 return
             params = self.excel_import_gui.file_param_txt.text().split(";")
@@ -2653,6 +2780,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             if ds is None:
                 self.createNew_Empty_Dataset()
                 ds = self.DataSettabWidget.currentWidget()
+            self.logger.debug(
+                "Importing Excel data: app=%s dataset=%s rows=%d file=%s sheet=%s",
+                self.name,
+                ds.name,
+                len(res_dic["x"]),
+                res_dic["file"],
+                res_dic["sheet"],
+            )
             fname = "%s_%s_%s_%s" % (
                 res_dic["file"],
                 res_dic["sheet"],
@@ -2673,18 +2808,25 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             )
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
+                self.logger.debug("Excel data imported: app=%s dataset=%s file=%s", self.name, ds.name, f.file_name_short)
+            else:
+                self.logger.debug("Excel data import skipped duplicate file: app=%s dataset=%s fname=%s", self.name, ds.name, fname)
             ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
+                self.logger.debug("Excel import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
                 QMessageBox.warning(
                     self,
                     "Open Excel File",
                     'Some values could not be read from the file and were set to "nan"',
                 )
+        else:
+            self.logger.debug("Import from Excel cancelled: app=%s", self.name)
 
     def handle_action_import_from_pasted(self) -> None:
         """Import data from pasted text"""
         for ftype in self.filetypes.values():
             break
+        self.logger.debug("Import from pasted text action triggered: app=%s filetype=%s", self.name, ftype.extension)
         if self.pasted_import_gui is None:
             self.pasted_import_gui = ImportFromPastedWindow(parent=self, ftype=ftype)
             self.count_pasted_data = 1
@@ -2694,12 +2836,20 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         if self.pasted_import_gui.exec_():
             res_dic = self.pasted_import_gui.get_data()
             if res_dic["nrows"] == 0:
+                self.logger.debug("Import from pasted text failed: app=%s rows=0", self.name)
                 QMessageBox.warning(self, "Import From Pasted Data", "Could not read pasted data")
                 return
             ds = self.DataSettabWidget.currentWidget()
             if ds is None:
                 self.createNew_Empty_Dataset()
                 ds = self.DataSettabWidget.currentWidget()
+            self.logger.debug(
+                "Importing pasted text data: app=%s dataset=%s rows=%d fname=%s",
+                self.name,
+                ds.name,
+                res_dic["nrows"],
+                res_dic["fname"],
+            )
             fparam = {}
             for pname in ftype.basic_file_parameters:
                 fparam[pname] = 0
@@ -2716,16 +2866,28 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             if success:
                 self.addTableToCurrentDataSet(f, ftype.extension)
                 self.count_pasted_data += 1
+                self.logger.debug("Pasted text data imported: app=%s dataset=%s file=%s", self.name, ds.name, f.file_name_short)
+            else:
+                self.logger.debug(
+                    "Pasted text data import skipped duplicate file: app=%s dataset=%s fname=%s",
+                    self.name,
+                    ds.name,
+                    res_dic["fname"],
+                )
             ds.set_table_icons(ds.table_icon_list)  # update the ds table marker icon
             if res_dic["flag_nan"]:
+                self.logger.debug("Pasted text import contained unreadable values set to NaN: app=%s dataset=%s", self.name, ds.name)
                 QMessageBox.warning(
                     self,
                     "Import From Pasted Data",
                     'Some values could not be read from the file and were set to "nan"',
                 )
+        else:
+            self.logger.debug("Import from pasted text cancelled: app=%s", self.name)
 
     def addDummyFiles(self) -> None:
         """Add dummy files to dataset"""
+        self.logger.debug("Add dummy files action triggered: app=%s", self.name)
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
@@ -2777,6 +2939,17 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
             else:
                 xrange = np.linspace(xmin, xmax, npoints)
+            self.logger.debug(
+                "Creating dummy files: app=%s dataset=%s filetype=%s cases=%d rows=%d varied_parameters=%d",
+                self.name,
+                ds.name,
+                ftype.extension,
+                len(cases),
+                len(xrange),
+                nparameterstochange,
+            )
+            created = 0
+            skipped = 0
             for c in cases:
                 fparams = {}
                 for i, pname in enumerate(paramsnames):
@@ -2784,9 +2957,22 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 f, success = ds.new_dummy_file(xrange=xrange, yval=yval, fparams=fparams, file_type=ftype)
                 if success:
                     self.addTableToCurrentDataSet(f, ftype.extension)
+                    created += 1
+                else:
+                    skipped += 1
+            self.logger.debug(
+                "Dummy files created: app=%s dataset=%s created=%d skipped=%d",
+                self.name,
+                ds.name,
+                created,
+                skipped,
+            )
+        else:
+            self.logger.debug("Add dummy files cancelled: app=%s", self.name)
 
     def addFileFunction(self) -> None:
         """Add a File to the current DataSet using mathematical expressions."""
+        self.logger.debug("Add file from function action triggered: app=%s", self.name)
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
 
@@ -2795,6 +2981,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         d = AddFileFunction(self, ftype)
 
         if not d.exec_():
+            self.logger.debug("Add file from function cancelled: app=%s", self.name)
             return
 
         fparams: dict[str, float] = {}
@@ -2813,6 +3000,15 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             xrange = np.logspace(np.log10(xmin), np.log10(xmax), npoints)
         else:
             xrange = np.linspace(xmin, xmax, npoints)
+        self.logger.debug(
+            "Creating file from function: app=%s dataset=%s filetype=%s rows=%d columns=%d logscale=%s",
+            self.name,
+            ds.name,
+            ftype.extension,
+            npoints,
+            len(ftype.col_names),
+            logscale,
+        )
 
         f, success = ds.new_dummy_file(
             xrange=xrange,
@@ -2822,6 +3018,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         )
 
         if not success:
+            self.logger.debug("File from function skipped duplicate file: app=%s dataset=%s", self.name, ds.name)
             return
 
         variables: dict[str, Any] = {
@@ -2852,15 +3049,24 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
                 return
 
         self.addTableToCurrentDataSet(f, ftype.extension)
+        self.logger.debug("File from function created: app=%s dataset=%s file=%s", self.name, ds.name, f.file_name_short)
 
     def new_tables_from_files(self, paths_to_open: list[str]) -> DataSetLike:
         """Create new Files in a DataSet from a list of files"""
+        self.logger.debug("Opening files into dataset: app=%s files=%d", self.name, len(paths_to_open))
         if self.DataSettabWidget.count() == 0:
             self.createNew_Empty_Dataset()
         ds = self.DataSettabWidget.currentWidget()
         ds.DataSettreeWidget.blockSignals(True)  # avoid triggering 'itemChanged' signal that causes a call to do_plot()
         success, newtables, ext = ds.do_open(paths_to_open)
         if success == True:
+            self.logger.debug(
+                "Files opened: app=%s dataset=%s files=%d ext=%s",
+                self.name,
+                ds.name,
+                len(newtables),
+                ext,
+            )
             self.check_no_param_missing(newtables, ext)
             for dt in newtables:
                 self.addTableToCurrentDataSet(dt, ext)
@@ -2868,6 +3074,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
             self.update_Qplot()
             ds.set_table_icons(ds.table_icon_list)
         else:
+            self.logger.debug("Opening files failed: app=%s dataset=%s message=%s", self.name, ds.name, success)
             QMessageBox.about(self, "Open", success)
         ds.DataSettreeWidget.blockSignals(False)
         return cast(DataSetLike, ds)
@@ -2896,6 +3103,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def openFileNamesDialog(self, ext_filter: str = "All Files (*)") -> list[str]:
         """Open Files"""
+        self.logger.debug("Open file dialog requested: app=%s dir_start=%s filter=%s", self.name, self.dir_start, ext_filter)
         # file browser window
         qfdlg = QFileDialog(self)
         # options = QFileDialog.Options()
@@ -2911,10 +3119,14 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         )
         if selected_files:
             self.dir_start = dirname(selected_files[0])
+            self.logger.debug("Open file dialog selected files: app=%s files=%d dir_start=%s", self.name, len(selected_files), self.dir_start)
+        else:
+            self.logger.debug("Open file dialog cancelled: app=%s", self.name)
         return selected_files
 
     def showDataInspector(self, checked: bool) -> None:
         """Show Data Inspector"""
+        self.logger.debug("Data inspector visibility requested: app=%s checked=%s", self.name, checked)
         if checked:
             self.DataInspectordockWidget.show()
         else:
@@ -2922,6 +3134,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def viewMPLToolbar(self, checked: bool) -> None:
         """Show Matplotlib toolbar"""
+        self.logger.debug("Matplotlib toolbar visibility requested: app=%s checked=%s", self.name, checked)
         if checked:
             self.mpl_toolbar.show()
         else:
@@ -2929,19 +3142,23 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
 
     def printPlot(self) -> None:
         """Print/save current plot"""
+        self.logger.debug("Save plot action triggered: app=%s", self.name)
         supported_filetypes = self.figure.canvas.get_supported_filetypes()
         export_dir = getattr(self, "figure_export_dir", self.dir_start)
         dialog = SaveFigureDialog(self, supported_filetypes, export_dir)
         if not dialog.exec_():
+            self.logger.debug("Save plot cancelled: app=%s", self.name)
             return
 
         file_path, savefig_options = dialog.savefig_options()
         try:
             self.figure.savefig(file_path, **savefig_options)
         except Exception as e:
+            self.logger.exception("Could not save plot: app=%s path=%s", self.name, file_path)
             QMessageBox.warning(self, "Export plot", 'Could not save plot to "%s":\n%s' % (file_path, e))
             return
         self.figure_export_dir = dirname(file_path)
+        self.logger.debug("Plot saved: app=%s path=%s", self.name, file_path)
 
     def onpick(self, event: Any) -> None:
         """Called when clicking on a plot/artist"""

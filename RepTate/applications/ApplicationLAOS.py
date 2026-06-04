@@ -356,6 +356,7 @@ class ApplicationLAOS(QApplicationWindow):
         self.set_HHSR_widget_visible(False)
         self.add_PPQC_widget()
         self.set_PPQC_widget_visible(False)
+        self.finalize_application_setup()
 
     def add_HHSR_widget(self) -> None:
         """Add spinbox for HHSR"""

@@ -174,6 +174,7 @@ class ApplicationSANS(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewLogSANS(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the scattered intensity :math:`\\log (I(q))` vs the logarithm of the scattering vector :math:`\\log(q)`"""

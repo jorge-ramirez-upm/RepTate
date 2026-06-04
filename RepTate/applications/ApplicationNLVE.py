@@ -272,6 +272,7 @@ class ApplicationNLVE(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewLogeta(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the transient shear or extensional viscosity (depending on the experiment) :math:`\\eta(t)` vs logarithm of time :math:`t`"""

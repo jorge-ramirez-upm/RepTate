@@ -473,6 +473,7 @@ class ApplicationTTS(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewLogG1G2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Logarithm of the storage modulus :math:`\\log(G'(\\omega))` and loss modulus :math:`\\log(G''(\\omega))` vs :math:`\\log(\\omega)`"""

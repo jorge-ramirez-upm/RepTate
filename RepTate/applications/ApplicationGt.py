@@ -259,6 +259,7 @@ class ApplicationGt(QApplicationWindow):
 
         self.add_xrange_widget_view()
         self.set_xrange_widgets_view_visible(False)
+        self.finalize_application_setup()
 
     def add_oversampling_widget(self) -> None:
         """Add spinbox for the oversampling ratio"""

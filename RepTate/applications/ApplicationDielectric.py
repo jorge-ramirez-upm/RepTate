@@ -232,6 +232,7 @@ class ApplicationDielectric(QApplicationWindow):
 
         # set the current view
         self.set_views()
+        self.finalize_application_setup()
 
     def viewLogE1E2(self, dt: DataTableLike, file_parameters: FileParameters) -> ViewResult:
         """Log or the relative permittivity and Dielectric Loss :math:`\\epsilon'(\\omega), \\epsilon''(\\omega)` vs logarithm of the frequency :math:`\\omega`"""
