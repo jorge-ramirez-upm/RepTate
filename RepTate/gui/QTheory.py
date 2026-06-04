@@ -441,7 +441,13 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_dataset.logger.name + "." + self.name)
-        self.logger.debug("New " + self.thname + " Theory")
+        self.logger.debug(
+            "New theory initialized: name=%s thname=%s dataset=%s files=%d",
+            self.name,
+            self.thname,
+            self.parent_dataset.name,
+            len(self.parent_dataset.files),
+        )
         # np.seterr(all="call")
         np.seterrcall(self.write)
 
@@ -558,7 +564,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
-        self.logger.warning("numpy: %s (flag %s)" % (type, flag))
+        self.logger.warning("numpy: %s (flag %s)", type, flag)
 
     def setup_default_minimization_options(self):
         # MINIMIZATION OPTIONS
@@ -633,23 +639,47 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def request_stop_computations(self):
         """Called when user wants to terminate the current computation"""
+        self.logger.debug("Stop requested for theory computation: theory=%s thname=%s", self.name, self.thname)
         self.Qprint("<font color=red><b>Stop current calculation requested</b></font>")
         self.stop_theory_flag = True
 
     def do_calculate(self, line: str, timing: bool = True) -> None:
         """Calculate the theory"""
         if self.calculate_is_busy:
+            self.logger.debug("Calculation skipped because theory is already busy: theory=%s thname=%s", self.name, self.thname)
             return
         if not self.tables:
+            self.logger.debug("Calculation skipped because theory has no tables: theory=%s thname=%s", self.name, self.thname)
             return
 
         self.calculate_is_busy = True
         self.start_time_cal = time.time()
         th_files = self.theory_files()
+        log_calculation = not self.is_fitting
+        if log_calculation:
+            self.logger.debug(
+                "Theory calculation started: theory=%s thname=%s files=%d timing=%s parameters=%s",
+                self.name,
+                self.thname,
+                len(th_files),
+                timing,
+                list(self.parameters),
+            )
         for f in self.parent_dataset.files:
             if f in th_files:
                 if self.stop_theory_flag:
+                    if log_calculation:
+                        self.logger.debug("Theory calculation stopped before file: theory=%s file=%s", self.name, f.file_name_short)
                     break
+                if log_calculation:
+                    self.logger.debug(
+                        "Calculating %s for file %s: rows=%d columns=%d parameters=%s",
+                        self.thname,
+                        f.file_name_short,
+                        f.data_table.num_rows,
+                        f.data_table.num_columns,
+                        list(self.parameters),
+                    )
                 if f.with_extra_x:
                     data_copy = f.data_table.data.copy()
                     self.extend_xrange(f)
@@ -663,6 +693,8 @@ class QTheory(QWidget, Ui_TheoryTab):
                 tt = self.tables[f.file_name_short]
                 tt.data = np.empty((tt.num_rows, tt.num_columns))
                 tt.data[:] = np.nan
+                if log_calculation:
+                    self.logger.debug("Single-file theory cleared inactive theory table: theory=%s file=%s", self.name, f.file_name_short)
 
         if not self.is_fitting:
             self.do_plot(line)
@@ -670,6 +702,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         if timing:
             self.Qprint("""<i>---Calculated in %.3g seconds---</i><br>""" % (time.time() - self.start_time_cal))
             self.do_cite("")
+        if log_calculation:
+            self.logger.debug(
+                "Theory calculation finished: theory=%s thname=%s elapsed=%.3g stopped=%s",
+                self.name,
+                self.thname,
+                time.time() - self.start_time_cal,
+                self.stop_theory_flag,
+            )
         self.calculate_is_busy = False
 
     def extend_xrange(self, fcopy: File) -> None:
@@ -1021,13 +1061,16 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Minimize the error"""
         # Do some initial checks on the status of datasets and theories
         if not self.tables:
+            self.logger.debug("Fit skipped because theory has no tables: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
         if len(self.parent_dataset.inactive_files) == len(self.parent_dataset.files):  # all files hidden
+            self.logger.debug("Fit skipped because all dataset files are inactive: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
         th_files = self.theory_files()
         if not th_files:
+            self.logger.debug("Fit skipped because no theory files are available: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
 
@@ -1037,6 +1080,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.is_fitting = True
         start_time = time.time()
         view = self.parent_dataset.parent_application.current_view
+        self.logger.debug(
+            "Theory fit started: theory=%s thname=%s method=%s files=%d parameters=%s",
+            self.name,
+            self.thname,
+            self.minimization_method_label(),
+            len(th_files),
+            list(self.parameters),
+        )
         self.Qprint("""<hr><h2>Parameter Fitting</h2>""")
         # Vectors that contain all X and Y in the files & view
         x: Any = []
@@ -1057,6 +1108,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         for f in th_files:
             if self.stop_theory_flag:
+                self.logger.debug("Theory fit stopped while collecting data: theory=%s thname=%s", self.name, self.thname)
                 return
             if f.active:
                 xexp, yexp, success = view.view_proc(f.data_table, f.file_parameters)
@@ -1088,6 +1140,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         if self.normalizebydata and np.any(np.asarray(y) == 0):
             self.Qprint("<font color=red><b>Relative error requested, but selected experimental data contains zero values</b></font>")
+            self.logger.debug("Fit aborted because relative error found zero data values: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
 
@@ -1109,6 +1162,7 @@ class QTheory(QWidget, Ui_TheoryTab):
         # Return if the list of checked parameters is empty
         if (not initial_guess) or (not self.param_min) or (not self.param_max):
             self.Qprint("No parameter to minimize")
+            self.logger.debug("Fit aborted because no parameters are selected: theory=%s thname=%s", self.name, self.thname)
             self.is_fitting = False
             return
 
@@ -1132,6 +1186,12 @@ class QTheory(QWidget, Ui_TheoryTab):
             ):
                 msg = "This fitting method cannot be used if any of the bounds is ± nan or ± inf"
                 self.Qprint(msg)
+                self.logger.debug(
+                    "Fit aborted because global bounds contain NaN/Inf: theory=%s thname=%s method=%s",
+                    self.name,
+                    self.thname,
+                    self.minimization_method_label(),
+                )
                 self.is_fitting = False
                 return
 
@@ -1199,6 +1259,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during least-squares optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1225,6 +1286,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during basin hopping optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1252,6 +1314,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during dual annealing optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1282,6 +1345,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during differential evolution optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1315,6 +1379,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during SHGO optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1328,6 +1393,7 @@ class QTheory(QWidget, Ui_TheoryTab):
             except Exception as e:
                 print("In do_fit()", e)
                 self.Qprint("%s" % e)
+                self.logger.debug("Fit failed during brute-force optimization: theory=%s thname=%s", self.name, self.thname, exc_info=True)
                 self.is_fitting = False
                 return
 
@@ -1390,6 +1456,16 @@ class QTheory(QWidget, Ui_TheoryTab):
         self.do_calculate(line, timing=False)
         self.Qprint("""<i>---Fitted in %.3g seconds---</i><br>""" % (time.time() - start_time))
         self.do_cite("")
+        self.logger.debug(
+            "Theory fit finished: theory=%s thname=%s method=%s elapsed=%.3g evaluations=%d initial_error=%g final_error=%g",
+            self.name,
+            self.thname,
+            self.minimization_method_label(),
+            time.time() - start_time,
+            self.nfev,
+            fres0,
+            fres1,
+        )
 
     def plot_theory_stuff(self):
         """Plot theory helpers"""
@@ -1399,6 +1475,14 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Save the results from all theory predictions to file"""
         self.Qprint("Saving prediction(s) of " + self.name + " theory")
         counter = 0
+        self.logger.debug(
+            "Saving theory predictions: theory=%s thname=%s destination=%s extra=%s files=%d",
+            self.name,
+            self.thname,
+            line,
+            extra_txt,
+            len(self.parent_dataset.files),
+        )
         for f in self.parent_dataset.files:
             fparam = f.file_parameters
             ttable = self.tables[f.file_name_short]
@@ -1438,6 +1522,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
         # print information
         msg = 'Saved %d theory file(s) in "%s"' % (counter, line)
+        self.logger.debug("Saved theory predictions: theory=%s thname=%s files=%d destination=%s", self.name, self.thname, counter, line)
         QMessageBox.information(self, "Saved Theory", msg)
 
     def change_xmin(self, dx, dy):
@@ -1614,6 +1699,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def get_modes(self):
         """Get Maxwell modes from this theory. This function must be rewritten from derived theories"""
+        self.logger.debug("Maxwell modes requested from unsupported theory: theory=%s thname=%s", self.name, self.thname)
         tau = np.ones(1)
         G = np.ones(1)
         return tau, G, False
@@ -1621,7 +1707,7 @@ class QTheory(QWidget, Ui_TheoryTab):
     def set_modes(self, tau, G):
         """Set Maxwell modes in this theory. This function must be rewritten from derived theories
         that provide this functionality."""
-        self.logger.warning("set_modes not allowed in this theory (%s)" % self.thname)
+        self.logger.warning("set_modes not allowed in this theory (%s)", self.thname)
         return False
 
     def do_cite(self, line):
@@ -1650,64 +1736,105 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Return a theory parameter value as a string."""
         return str(self.parameters[name].value)
 
+    def minimization_method_label(self) -> str:
+        """Return a robust label for the active minimization method."""
+        return getattr(self.mintype, "name", str(self.mintype))
+
+    def _log_parameter_change(self, name: str, old_value: Any, message: str, success: bool) -> None:
+        """Log user/script-level parameter changes without touching optimizer iterations."""
+        self.logger.debug(
+            "Theory parameter %s: theory=%s thname=%s parameter=%s old=%s new=%s success=%s message=%s",
+            "changed" if success else "rejected",
+            self.name,
+            self.thname,
+            name,
+            old_value,
+            self.parameters[name].value,
+            success,
+            message,
+        )
+
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Set the value of a theory parameter"""
         p = self.parameters[name]
+        old_value = p.value
         try:
             if p.type == ParameterType.real:
                 try:
                     val = float(value)
                 except ValueError:
-                    return "Value must be a float", False
+                    message = "Value must be a float"
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 if val < p.min_value:
                     p.value = p.min_value
-                    return "Value must be greater than %.4g" % p.min_value, False
+                    message = "Value must be greater than %.4g" % p.min_value
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 elif val > p.max_value:
                     p.value = p.max_value
-                    return "Value must be smaller than %.4g" % p.max_value, False
+                    message = "Value must be smaller than %.4g" % p.max_value
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 else:
                     p.value = val
+                    self._log_parameter_change(name, old_value, "", True)
                     return "", True
 
             elif p.type == ParameterType.integer:
                 try:
                     val = int(value)  # convert to int
                 except ValueError:
-                    return "Value must be an integer", False
+                    message = "Value must be an integer"
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 if val < p.min_value:
                     p.value = p.min_value
-                    return "Value must be greater than %d" % p.min_value, False
+                    message = "Value must be greater than %d" % p.min_value
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 elif val > p.max_value:
                     p.value = p.max_value
-                    return "Value must be smaller than %d" % p.max_value, False
+                    message = "Value must be smaller than %d" % p.max_value
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 else:
                     p.value = val
+                    self._log_parameter_change(name, old_value, "", True)
                     return "", True
 
             elif p.type == ParameterType.discrete_integer:
                 try:
                     val = int(value)  # convert to int
                 except ValueError:
-                    return "Value must be an integer", False
+                    message = "Value must be an integer"
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 if val in p.discrete_values:
                     p.value = val
+                    self._log_parameter_change(name, old_value, "", True)
                     return "", True
                 else:
                     message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
+                    self._log_parameter_change(name, old_value, message, False)
                     return message, False
 
             elif p.type == ParameterType.discrete_real:
                 try:
                     val = float(value)
                 except ValueError:
-                    return "Value must be a float", False
+                    message = "Value must be a float"
+                    self._log_parameter_change(name, old_value, message, False)
+                    return message, False
                 if val in p.discrete_values:
                     p.value = val
+                    self._log_parameter_change(name, old_value, "", True)
                     return "", True
                 else:
                     message = "Values allowed: " + ", ".join([str(s) for s in p.discrete_values])
                     print(message)
+                    self._log_parameter_change(name, old_value, message, False)
                     return message, False
 
             elif p.type == ParameterType.boolean:
@@ -1715,17 +1842,21 @@ class QTheory(QWidget, Ui_TheoryTab):
                     p.value = True
                 else:
                     p.value = False
+                self._log_parameter_change(name, old_value, "", True)
                 return "", True
 
             elif p.type == ParameterType.string:
                 p.value = value
+                self._log_parameter_change(name, old_value, "", True)
                 return "", True
 
             else:
+                self._log_parameter_change(name, old_value, "Unsupported parameter type", False)
                 return "", False
 
         except ValueError as e:
             print("In set_param_value:", e)
+            self._log_parameter_change(name, old_value, str(e), False)
             return "", False
 
     def set_param_value_from_display(self, name: str, value: Any) -> tuple[str, bool]:
@@ -1736,7 +1867,19 @@ class QTheory(QWidget, Ui_TheoryTab):
         try:
             internal_value = p.value_from_display(float(value))
         except ValueError:
-            return "Value must be a float", False
+            message = "Value must be a float"
+            self._log_parameter_change(name, p.value, message, False)
+            return message, False
+        self.logger.debug(
+            "Theory display parameter converted: theory=%s thname=%s parameter=%s display_value=%s internal_value=%s display_unit=%s internal_unit=%s",
+            self.name,
+            self.thname,
+            name,
+            value,
+            internal_value,
+            p.display_unit,
+            p.internal_unit,
+        )
         return self.set_param_value(name, internal_value)
 
     #  def default(self, line):
@@ -1763,6 +1906,7 @@ class QTheory(QWidget, Ui_TheoryTab):
     def do_hide(self, line=""):
         """Hide the theory artists and associated tools"""
         if self.active:
+            self.logger.debug("Hiding theory: theory=%s thname=%s tables=%d", self.name, self.thname, len(self.tables))
             self.set_xy_limits_visible(False, False)  # hide xrange and yrange
             for table in self.tables.values():
                 for i in range(table.MAX_NUM_SERIES):
@@ -1780,10 +1924,12 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def do_show(self, line=""):
         """Show theory"""
+        self.logger.debug("Showing theory: theory=%s thname=%s tables=%d", self.name, self.thname, len(self.tables))
         self.active = True
         self.set_xy_limits_visible(self.is_xrange_visible, self.is_yrange_visible)
         for fname in self.tables:
             if fname in self.parent_dataset.inactive_files:
+                self.logger.debug("Show theory stopped at inactive file: theory=%s file=%s", self.name, fname)
                 return
             else:
                 tt = self.tables[fname]
@@ -2213,21 +2359,24 @@ class QTheory(QWidget, Ui_TheoryTab):
         """Copy Maxwell modes between theories"""
         apmng: ApplicationManagerLike = self.parent_dataset.parent_application.parent_manager
         G, S = apmng.list_theories_Maxwell(th_exclude=self)
+        self.logger.debug("Import modes requested: theory=%s thname=%s candidates=%d", self.name, self.thname, len(G))
         if G:
             d = GetModesDialog(self, G)
             if d.exec_() and d.btngrp.checkedButton() != None:
                 item = d.btngrp.checkedButton().text()
+                self.logger.debug("Importing modes: target=%s source=%s", self.name, item)
                 tau, G0, success = G[item]()
                 if not success:
-                    self.logger.warning("Could not get modes successfully")
+                    self.logger.warning("Could not get modes successfully from %s", item)
                     return
                 tauinds = (-tau).argsort()
                 tau = tau[tauinds]
                 G0 = G0[tauinds]
                 success = self.set_modes(tau, G0)
                 if not success:
-                    self.logger.warning("Could not set modes successfully")
+                    self.logger.warning("Could not set modes successfully for %s", self.name)
                     return
+                self.logger.debug("Imported modes: theory=%s source=%s modes=%d", self.name, item, len(tau))
                 self.update_parameter_table()
                 self.parent_dataset.handle_actionCalculate_Theory()
         else:
@@ -2242,13 +2391,15 @@ class QTheory(QWidget, Ui_TheoryTab):
             "Text (*.txt)",
         )
         if fpath == "":
+            self.logger.debug("Save Maxwell modes cancelled: theory=%s thname=%s", self.name, self.thname)
             return
 
         with open(fpath, "w") as f:
             times, G, success = self.get_modes()
             if not success:
-                self.logger.warning("Could not get modes correctly")
+                self.logger.warning("Could not get modes correctly for %s", self.name)
                 return
+            self.logger.debug("Saving Maxwell modes: theory=%s thname=%s path=%s modes=%d", self.name, self.thname, fpath, len(times))
 
             header = "# Maxwell modes\n"
             # verdata = RepTate._version.get_versions()
@@ -2284,4 +2435,5 @@ class QTheory(QWidget, Ui_TheoryTab):
 
             f.write("\n#end")
 
+        self.logger.debug("Saved Maxwell modes: theory=%s thname=%s path=%s modes=%d", self.name, self.thname, fpath, len(times))
         QMessageBox.information(self, "Success", 'Wrote Maxwell modes "%s"' % fpath)

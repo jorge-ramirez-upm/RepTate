@@ -39,6 +39,9 @@ import ctypes as ct
 import sys
 import os
 from typing import Any
+import logging
+
+logger = logging.getLogger("RepTate.theories.react_ctypes_helper")
 
 dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
 if sys.maxsize > 2**32:
@@ -49,7 +52,9 @@ else:
     lib_path = os.path.join(dir_path, "react_lib_%s_i686.so" % (sys.platform))
 try:
     react_lib = ct.CDLL(lib_path)
+    logger.debug("Loaded React shared library: path=%s", lib_path)
 except OSError as exc:
+    logger.debug("Failed to load React shared library: path=%s", lib_path, exc_info=True)
     print(f"OS {sys.platform} not recognized in React CH module: {exc}")
 
 ###############

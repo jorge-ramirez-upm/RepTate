@@ -48,6 +48,9 @@ from ctypes import (
 )
 import sys
 import os
+import logging
+
+logger = logging.getLogger("RepTate.theories.BobCtypesHelper")
 
 if sys.platform == "darwin" or sys.platform == "linux":
     CHARCODE = "utf-8"
@@ -83,7 +86,9 @@ class BobCtypesHelper:
             self.lib_path = os.path.join(dir_path, "bob2p5_lib_%s_i686.so" % (sys.platform))
         try:
             self.bob_lib = CDLL(self.lib_path)
+            logger.debug("Loaded BoB shared library: path=%s", self.lib_path)
         except OSError as exc:
+            logger.debug("Failed to load BoB shared library: path=%s", self.lib_path, exc_info=True)
             print(f"Could not load shared library {self.lib_path}: {exc}")
         # link the C function to Python
         self.link_c_functions()
@@ -201,6 +206,15 @@ class BobCtypesHelper:
     def save_polyconf_and_return_gpc(self, arg_list, npol_tot):
         """Run BoB asking for a polyconf file only (no relaxation etc) and
         output the characteristics of the polymer configuration"""
+        log_helper_call = not self.parent_theory.is_fitting
+        if log_helper_call:
+            self.parent_theory.logger.debug(
+                "Calling BoB polyconf/GPC helper: theory=%s thname=%s args=%d polymers=%d",
+                self.parent_theory.name,
+                self.parent_theory.thname,
+                len(arg_list),
+                npol_tot,
+            )
         # prepare the arguments for bob_main function
         n_arg = len(arg_list)
         argv = (c_char_p * n_arg)()
@@ -242,13 +256,32 @@ class BobCtypesHelper:
         ):
             # return results
             arrs = [lgmid_arr[:], wtbin_arr[:], brbin_arr[:], gbin_arr[:]]
+            if log_helper_call:
+                self.parent_theory.logger.debug(
+                    "BoB polyconf/GPC helper finished: theory=%s thname=%s bins=%d Mn=%g Mw=%g",
+                    self.parent_theory.name,
+                    self.parent_theory.thname,
+                    nbin,
+                    mn.value,
+                    mw.value,
+                )
             return [mn.value, mw.value, arrs]
 
         # BoB encountered error
+        if log_helper_call:
+            self.parent_theory.logger.debug("BoB polyconf/GPC helper failed: theory=%s thname=%s", self.parent_theory.name, self.parent_theory.thname)
         raise BobError
 
     def return_bob_lve(self, arg_list):
         """Run BoB LVE and copy results to arrays"""
+        log_helper_call = not self.parent_theory.is_fitting
+        if log_helper_call:
+            self.parent_theory.logger.debug(
+                "Calling BoB LVE helper: theory=%s thname=%s args=%d",
+                self.parent_theory.name,
+                self.parent_theory.thname,
+                len(arg_list),
+            )
         # virtual inp file
         self.parent_theory.inp_counter = 0
         # prepare the arguments for bob_main function
@@ -267,13 +300,34 @@ class BobCtypesHelper:
             g_pp = (c_double * out_size.value)()
 
             if self.get_bob_lve(omega, g_p, g_pp):
+                if log_helper_call:
+                    self.parent_theory.logger.debug(
+                        "BoB LVE helper finished: theory=%s thname=%s rows=%d",
+                        self.parent_theory.name,
+                        self.parent_theory.thname,
+                        out_size.value,
+                    )
                 return [omega[:], g_p[:], g_pp[:]]
 
         # BoB encountered error
+        if log_helper_call:
+            self.parent_theory.logger.debug("BoB LVE helper failed: theory=%s thname=%s", self.parent_theory.name, self.parent_theory.thname)
         raise BobError
 
     def return_bob_nlve(self, arg_list, flowrate, tmin, tmax, is_shear):
         """Run BoB NLVE and copy results to arrays"""
+        log_helper_call = not self.parent_theory.is_fitting
+        if log_helper_call:
+            self.parent_theory.logger.debug(
+                "Calling BoB NLVE helper: theory=%s thname=%s args=%d flowrate=%g tmin=%g tmax=%g shear=%s",
+                self.parent_theory.name,
+                self.parent_theory.thname,
+                len(arg_list),
+                flowrate,
+                tmin,
+                tmax,
+                is_shear,
+            )
         # virtual inp file
         self.parent_theory.inp_counter = 0
         # prepare the arguments for bob_main function
@@ -300,7 +354,17 @@ class BobCtypesHelper:
             N1_arr = (c_double * out_size.value)()
 
             if self.get_bob_nlve_results(time_arr, stress_arr, N1_arr, c_bool(is_shear)):
+                if log_helper_call:
+                    self.parent_theory.logger.debug(
+                        "BoB NLVE helper finished: theory=%s thname=%s rows=%d shear=%s",
+                        self.parent_theory.name,
+                        self.parent_theory.thname,
+                        out_size.value,
+                        is_shear,
+                    )
                 return [time_arr[:], stress_arr[:]]
 
         # BoB encountered error
+        if log_helper_call:
+            self.parent_theory.logger.debug("BoB NLVE helper failed: theory=%s thname=%s", self.parent_theory.name, self.parent_theory.thname)
         raise BobError

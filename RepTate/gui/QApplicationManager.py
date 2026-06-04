@@ -44,7 +44,7 @@ import os
 from os.path import dirname, join, abspath, join, isfile, basename
 from typing import Any, cast
 from PySide6.QtGui import QIcon, QDesktopServices, QTextCursor
-from PySide6.QtCore import QUrl, Qt, QSize, QStandardPaths
+from PySide6.QtCore import QObject, QUrl, Qt, QSize, QStandardPaths, Signal, Slot
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -90,6 +90,22 @@ import logging.handlers
 from RepTate.gui.Ui_RepTateMainWindow import Ui_ReptateMainWindow as Ui_MainWindow
 
 
+class _QTextEditLogAppender(QObject):
+    append_text = Signal(str)
+
+    def __init__(self, widget: QTextBrowser) -> None:
+        super().__init__(widget)
+        self.widget = widget
+        self.append_text.connect(self.append_to_widget)
+
+    @Slot(str)
+    def append_to_widget(self, msg: str) -> None:
+        self.widget.moveCursor(QTextCursor.MoveOperation.End)
+        self.widget.insertHtml(msg + "<br>")
+        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum())
+        self.widget.moveCursor(QTextCursor.MoveOperation.End)
+
+
 class QTextEditLogger(logging.Handler):
     widget: QTextBrowser
 
@@ -99,15 +115,12 @@ class QTextEditLogger(logging.Handler):
         self.widget = QTextBrowser(parent)
         self.widget.setReadOnly(True)
         self.widget.setStyleSheet("background-color: rgb(255, 255, 222);")
+        self.appender = _QTextEditLogAppender(self.widget)
 
     def emit(self, record: logging.LogRecord) -> None:
         msg = self.format(record)
         # self.widget.appendPlainText(msg)
-
-        self.widget.moveCursor(QTextCursor.MoveOperation.End)
-        self.widget.insertHtml(msg + "<br>")
-        self.widget.verticalScrollBar().setValue(self.widget.verticalScrollBar().maximum())
-        self.widget.moveCursor(QTextCursor.MoveOperation.End)
+        self.appender.append_text.emit(msg)
 
 
 class QApplicationManager(QMainWindow, Ui_MainWindow):

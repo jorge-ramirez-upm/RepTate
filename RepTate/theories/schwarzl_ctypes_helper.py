@@ -37,6 +37,9 @@ Define the C-variables and functions from the C-files that are needed in Python
 from ctypes import c_double, c_int, CDLL
 import sys
 import os
+import logging
+
+logger = logging.getLogger("RepTate.theories.schwarzl_ctypes_helper")
 
 dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
 if sys.maxsize > 2**32:
@@ -47,7 +50,9 @@ else:
     lib_path = os.path.join(dir_path, "schwarzl_lib_%s_i686.so" % (sys.platform))
 try:
     schwarzl_lib = CDLL(lib_path)
+    logger.debug("Loaded Schwarzl shared library: path=%s", lib_path)
 except OSError as exc:
+    logger.debug("Failed to load Schwarzl shared library: path=%s", lib_path, exc_info=True)
     print(f"OS {sys.platform} not recognized in Schwarzl CH module: {exc}")
 
 schwarzl_gt = schwarzl_lib.schwarzl_gt

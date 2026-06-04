@@ -5,6 +5,9 @@ Define the C-variables and functions from the C-files that are needed in Python
 from ctypes import c_double, CDLL
 import sys
 import os
+import logging
+
+logger = logging.getLogger("RepTate.theories.kww_ctypes_helper")
 
 dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
 if sys.maxsize > 2**32:
@@ -15,7 +18,9 @@ else:
     lib_path = os.path.join(dir_path, "kww_lib_%s_i686.so" % (sys.platform))
 try:
     kww_lib = CDLL(lib_path)
+    logger.debug("Loaded KWW shared library: path=%s", lib_path)
 except OSError as exc:
+    logger.debug("Failed to load KWW shared library: path=%s", lib_path, exc_info=True)
     print(f"OS {sys.platform} not recognized in KWW CH: {exc}")
 
 kwwc = kww_lib.kwwc

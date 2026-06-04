@@ -5,6 +5,9 @@ Define the C-variables and functions from the C-files that are needed in Python
 from ctypes import c_double, c_int, CDLL
 import sys
 import os
+import logging
+
+logger = logging.getLogger("RepTate.theories.sccr_ctypes_helper")
 
 dir_path = os.path.dirname(os.path.realpath(__file__))  # get the directory path of current file
 if sys.maxsize > 2**32:
@@ -15,7 +18,9 @@ else:
     lib_path = os.path.join(dir_path, "sccr_lib_%s_i686.so" % (sys.platform))
 try:
     sccr_lib = CDLL(lib_path)
+    logger.debug("Loaded SCCR shared library: path=%s", lib_path)
 except OSError as exc:
+    logger.debug("Failed to load SCCR shared library: path=%s", lib_path, exc_info=True)
     print(f"OS {sys.platform} not recognized in SCCR CH: {exc}")
 
 set_static_int = sccr_lib.set_static_int
@@ -33,5 +38,6 @@ sccr_dy.restype = None
 
 def set_yeq_static(yeq):
     n = len(yeq)
+    logger.debug("Sending SCCR equilibrium vector to C helper: rows=%d", n)
     arr = (c_double * n)(*yeq[:])
     set_yeq_static_in_C(arr, c_int(n))
