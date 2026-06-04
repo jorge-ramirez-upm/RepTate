@@ -381,6 +381,11 @@ LP2RRelaxationResult LP2RSolver::calculate_relaxation_modulus() const
         const double gt_tube = goft_tube(tt, muoft, roft);
         const double gt = material_.g0 * (gt_glass + gt_rouse + gt_fast + gt_tube);
 
+        // Match the reference output and avoid log-view zero tails.
+        if (gt == 0.0) {
+            break;
+        }
+
         result.time.push_back(tt * material_.tau_e);
         result.gt.push_back(gt);
         result.mu.push_back(muoft);
