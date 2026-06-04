@@ -35,12 +35,12 @@
 Module for the basic definition of file types.
 
 """
+import logging
 import os
 from typing import Any, TypeAlias
 
 import numpy as np
 
-# import logging
 from openpyxl import load_workbook
 from RepTate.core.File import File, FileParameterSpec
 from RepTate.core.typing import AxesArray, DataSetLike
@@ -53,6 +53,7 @@ from RepTate.core.units import (
 
 
 FileParameterSpecs: TypeAlias = dict[str, FileParameterSpec]
+logger = logging.getLogger("RepTate.core.FileType")
 
 
 class TXTColumnFile(object):
@@ -155,6 +156,7 @@ class TXTColumnFile(object):
         """Get the file parameters"""
         items = line.split(";")
         file.file_parameters = {}
+        parsed_count = 0
         for i in range(len(items)):
             par = items[i].split("=", 1)
             if len(par) > 1:
@@ -171,11 +173,24 @@ class TXTColumnFile(object):
                     file.set_file_parameter(name, parsed_value)
                 else:
                     file.set_file_parameter(name, parsed_value)
+                parsed_count += 1
+        logger.debug(
+            "Parsed file parameters: file=%s count=%d names=%s",
+            file.file_name_short,
+            parsed_count,
+            list(file.file_parameters.keys()),
+        )
 
     def find_col_names_and_first_data_lines(
         self, lines: list[str], file: File
     ) -> tuple[int, int]:
         """Find column names and first row with data"""
+        logger.debug(
+            "Scanning text file header: file=%s expected_columns=%s lines=%d",
+            file.file_name_short,
+            self.col_names,
+            len(lines),
+        )
         colnameline = 0
         firstdata = 0
         for i in range(1, len(lines)):
@@ -189,6 +204,13 @@ class TXTColumnFile(object):
             else:
                 # Otherwise, this must be a header line
                 file.header_lines.append(lines[i])
+        logger.debug(
+            "Text file header scanned: file=%s col_names_line=%d first_data_line=%d header_lines=%d",
+            file.file_name_short,
+            colnameline,
+            firstdata,
+            len(file.header_lines),
+        )
         return colnameline, firstdata
 
     def parse_column_header(self, line: str) -> tuple[list[int], list[str], list[str]]:
@@ -225,18 +247,34 @@ class TXTColumnFile(object):
                 col_units.append(unit or default_unit)
             data_col_index += 1
             i += 1
+        logger.debug(
+            "Parsed text column header: filetype=%s indexes=%s labels=%s units=%s",
+            self.name,
+            col_index,
+            col_labels,
+            col_units,
+        )
         return col_index, col_labels, col_units
 
     def read_file(
         self, filename: str, parent_dataset: DataSetLike | None, axarr: AxesArray | None
     ) -> File | None:
         """Gets all the data from the file"""
+        logger.debug(
+            "Reading text file: path=%s filetype=%s extension=%s expected_columns=%s",
+            filename,
+            self.name,
+            self.extension,
+            self.col_names,
+        )
         if not os.path.isfile(filename):
+            logger.debug("Text file path does not exist: path=%s", filename)
             print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
-        f = open(filename, "r", encoding="latin-1")
-        lines = f.readlines()
+        with open(filename, "r", encoding="latin-1") as f:
+            lines = f.readlines()
+        logger.debug("Text file lines read: file=%s lines=%d", file.file_name_short, len(lines))
 
         self.get_parameters(lines[0], file)
         (
@@ -254,6 +292,13 @@ class TXTColumnFile(object):
             self.col_index = list(range(len(self.col_names)))
             col_labels = self.col_names[:]
             col_units = self.col_units[:]
+        logger.debug(
+            "Text file columns mapped: file=%s indexes=%s labels=%s units=%s",
+            file.file_name_short,
+            self.col_index,
+            col_labels,
+            col_units,
+        )
         expected_units = [
             self.col_units[self.col_names.index(label)]
             if label in self.col_names and self.col_names.index(label) < len(self.col_units)
@@ -288,6 +333,14 @@ class TXTColumnFile(object):
             file.data_table.data[:, j] = convert_array_to_internal(
                 file.data_table.data[:, j], spec.display_unit, spec.internal_unit
             )
+        logger.debug(
+            "Text file read complete: file=%s rows=%d columns=%d parameters=%d header_lines=%d",
+            file.file_name_short,
+            file.data_table.num_rows,
+            file.data_table.num_columns,
+            len(file.file_parameters),
+            len(file.header_lines),
+        )
 
         return file
 
@@ -324,11 +377,20 @@ class ExcelFile(object):
         self, filename: str, parent_dataset: DataSetLike | None, axarr: AxesArray | None
     ) -> File | None:
         """Read Excel File"""
+        logger.debug(
+            "Reading Excel file: path=%s filetype=%s extension=%s expected_columns=%s",
+            filename,
+            self.name,
+            self.extension,
+            self.col_names,
+        )
         if not os.path.isfile(filename):
+            logger.debug("Excel file path does not exist: path=%s", filename)
             print('File "%s" does not exists' % filename)
             return
         file = File(filename, self, parent_dataset, axarr)
         wb = load_workbook(filename)
+        logger.debug("Excel workbook loaded: file=%s sheets=%s", file.file_name_short, wb.sheetnames)
         for i, k in enumerate(wb.sheetnames):
             print("%d: %s" % (i, k))
         opt = int(
@@ -340,6 +402,13 @@ class ExcelFile(object):
         if opt < 0 or opt >= len(wb.sheetnames):
             print("Invalid option!")
         ws = wb[wb.sheetnames[opt]]
+        logger.debug(
+            "Excel sheet selected: file=%s sheet=%s rows=%d columns=%d",
+            file.file_name_short,
+            ws.title,
+            ws.max_row,
+            ws.max_column,
+        )
         cexcelnames = ["A", "B", "C", "D", "E", "F"]
         for i in range(ws.max_column):
             print("%10s" % cexcelnames[i], end=" ")
@@ -367,7 +436,14 @@ class ExcelFile(object):
             opt = ""
             while opt not in cexcelnames:
                 opt = input("Column that contains the data for %s > " % n)
+            logger.debug("Excel column selected: file=%s data_column=%s excel_column=%s", file.file_name_short, n, opt)
             for i in range(3, ws.max_row + 1):
                 cell_name = "{}{}".format(opt, i)
                 file.data_table.data[i - 3, j] = ws[cell_name].value
+        logger.debug(
+            "Excel file read complete: file=%s rows=%d columns=%d",
+            file.file_name_short,
+            file.data_table.num_rows,
+            file.data_table.num_columns,
+        )
         return file
