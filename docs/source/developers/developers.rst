@@ -12,4 +12,5 @@ Contents:
    units
    code
    callgraphGUI
+   workflow_map
    todo

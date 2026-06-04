@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepTate GUI Workflow Map</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --ink: #1d252c;
+      --muted: #66727c;
+      --line: #c9d1d9;
+      --active: #d64545;
+      --active-soft: #fff0ee;
+      --pkg: #2f6f8f;
+      --class: #5d6b2f;
+      --core: #7a4f9a;
+      --shadow: 0 16px 36px rgba(29, 37, 44, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    header {
+      padding: 24px 32px 18px;
+      background: #24313b;
+      color: #fff;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 980px;
+      margin: 0;
+      color: #d8e0e7;
+      font-size: 15px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 280px minmax(620px, 1fr) 360px;
+      gap: 18px;
+      padding: 18px;
+      min-height: calc(100vh - 112px);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid #dde3e8;
+      border-radius: 8px;
+      box-shadow: 0 1px 0 rgba(29, 37, 44, 0.04);
+    }
+
+    .sidebar,
+    .details {
+      align-self: start;
+      position: sticky;
+      top: 18px;
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+    }
+
+    .panel h2 {
+      margin: 0;
+      padding: 16px 16px 10px;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #4b5963;
+      border-bottom: 1px solid #e6ebef;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    button.action {
+      width: 100%;
+      border: 1px solid #cad3db;
+      background: #fff;
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 10px 12px;
+      text-align: left;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button.action:hover,
+    button.action:focus-visible {
+      border-color: #7d98a8;
+      outline: 0;
+      background: #f2f7fa;
+    }
+
+    button.action.active {
+      border-color: var(--active);
+      background: var(--active-soft);
+      color: #8f2424;
+    }
+
+    .legend {
+      padding: 12px 16px 16px;
+      border-top: 1px solid #e6ebef;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 7px;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .map-wrap {
+      position: relative;
+      min-height: 860px;
+      overflow: hidden;
+    }
+
+    .map {
+      position: relative;
+      min-height: 860px;
+      padding: 24px;
+    }
+
+    svg#links {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .nodes {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      grid-auto-rows: minmax(96px, auto);
+      gap: 18px;
+    }
+
+    .node {
+      min-height: 96px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #cfd8df;
+      border-radius: 8px;
+      box-shadow: 0 8px 18px rgba(29, 37, 44, 0.07);
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease, opacity 140ms ease;
+    }
+
+    .node.dimmed { opacity: 0.35; }
+    .node.active {
+      border-color: var(--active);
+      background: var(--active-soft);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .node .name {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .node .pkg {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .node .kind {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #eef2f5;
+      color: #53616c;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .node[data-package^="RepTate.gui"] .kind { background: #e9f3f7; color: var(--pkg); }
+    .node[data-package^="RepTate.core"] .kind { background: #f0eaf6; color: var(--core); }
+    .node[data-package^="RepTate.theories"] .kind,
+    .node[data-package^="RepTate.applications"] .kind { background: #eef2df; color: var(--class); }
+
+    .edge {
+      stroke: var(--line);
+      stroke-width: 1.6;
+      fill: none;
+      opacity: 0.55;
+      marker-end: url(#arrow);
+    }
+
+    .edge.active {
+      stroke: var(--active);
+      stroke-width: 4;
+      opacity: 1;
+      marker-end: url(#arrowActive);
+    }
+
+    .edge-label {
+      fill: #4a555d;
+      font-size: 11px;
+      paint-order: stroke;
+      stroke: #fff;
+      stroke-width: 5px;
+      stroke-linejoin: round;
+      opacity: 0;
+    }
+
+    .edge-label.active { opacity: 1; }
+
+    .details .content {
+      padding: 16px;
+    }
+
+    .details h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .details p {
+      margin: 0 0 14px;
+      color: #4c5963;
+      font-size: 14px;
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .step {
+      border-left: 4px solid var(--active);
+      background: #fbfcfd;
+      border-radius: 6px;
+      padding: 10px 10px 10px 12px;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .step code {
+      display: block;
+      margin: 5px 0;
+      white-space: normal;
+      color: #24313b;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    .step span {
+      color: #5b6872;
+      font-size: 12px;
+    }
+
+    .component-info {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #e6ebef;
+    }
+
+    .component-info h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: #4b5963;
+    }
+
+    .component-info dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 5px 10px;
+      font-size: 12px;
+    }
+
+    .component-info dt {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .component-info dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .json-note {
+      padding: 12px 16px 16px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid #e6ebef;
+    }
+
+    @media (max-width: 1180px) {
+      main {
+        grid-template-columns: 240px 1fr;
+      }
+      .details {
+        grid-column: 1 / -1;
+        position: static;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 780px) {
+      header { padding: 18px; }
+      main {
+        display: block;
+        padding: 12px;
+      }
+      .sidebar,
+      .details {
+        position: static;
+        max-height: none;
+        margin-bottom: 12px;
+      }
+      .map-wrap,
+      .map { min-height: 1320px; }
+      .nodes {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RepTate GUI Workflow Map</h1>
+    <p>Click an action to highlight the classes, packages, and data handoffs involved in that workflow. The map is generated from the JSON document embedded below, with a maintainable copy in <code>reptate_workflow_flows.json</code>.</p>
+  </header>
+
+  <main>
+    <aside class="panel sidebar">
+      <h2>Actions</h2>
+      <div id="actions" class="actions"></div>
+      <div class="legend">
+        <div><span class="swatch" style="background:#d64545"></span> Active workflow path</div>
+        <div><span class="swatch" style="background:#c9d1d9"></span> Available component relation</div>
+        <div><span class="swatch" style="background:#fff0ee;border:1px solid #d64545"></span> Component used by selected action</div>
+      </div>
+      <div class="json-note">Edit the flow definitions in <code>reptate_workflow_flows.json</code>, then mirror the same JSON into the page's <code>workflow-data</code> script block when distributing as a single file.</div>
+    </aside>
+
+    <section class="panel map-wrap">
+      <div class="map" id="map">
+        <svg id="links" aria-hidden="true"></svg>
+        <div class="nodes" id="nodes"></div>
+      </div>
+    </section>
+
+    <aside class="panel details">
+      <h2>Flow Details</h2>
+      <div class="content" id="details"></div>
+    </aside>
+  </main>
+
+  <script id="workflow-data" type="application/json">
+{
+  "title": "RepTate GUI Workflow Map",
+  "description": "Interactive documentation data for major RepTate GUI flows between packages, classes, and runtime components.",
+  "sources": [
+    "RepTate/__main__.py",
+    "RepTate/gui/QApplicationManager.py",
+    "RepTate/gui/QApplicationWindow.py",
+    "RepTate/gui/QDataSet.py",
+    "RepTate/gui/QTheory.py",
+    "RepTate/core/File.py",
+    "RepTate/core/DataTable.py",
+    "RepTate/core/View.py",
+    "RepTate/core/MultiView.py"
+  ],
+  "components": [
+    {"id":"entry","name":"RepTate entry point","package":"RepTate","kind":"module","file":"RepTate/__main__.py","summary":"Creates the PySide6 QApplication and then instantiates the GUI application manager."},
+    {"id":"qt","name":"QApplication / Qt event loop","package":"PySide6.QtWidgets","kind":"framework","file":"RepTate/__main__.py","summary":"Owns the GUI event loop and dispatches QAction, tab, and widget signals."},
+    {"id":"manager","name":"QApplicationManager","package":"RepTate.gui","kind":"class","file":"RepTate/gui/QApplicationManager.py","summary":"Top-level RepTate window. Registers available application classes, opens application tabs, saves projects, and routes help/log actions."},
+    {"id":"applications","name":"Application* subclasses","package":"RepTate.applications","kind":"package/classes","file":"RepTate/applications/Application*.py","summary":"Domain-specific applications such as MWD, LVE, NLVE, Crystal, React, Dielectric, LAOS, and others."},
+    {"id":"appwindow","name":"QApplicationWindow","package":"RepTate.gui","kind":"base class","file":"RepTate/gui/QApplicationWindow.py","summary":"Base GUI application window. Owns views, file types, datasets, tools, matplotlib canvases, and application-level actions."},
+    {"id":"multiview","name":"MultiView","package":"RepTate.core","kind":"class","file":"RepTate/core/MultiView.py","summary":"Creates and manages the matplotlib Figure, axes array, canvas, and plot layout used by an application."},
+    {"id":"view","name":"View","package":"RepTate.core","kind":"class","file":"RepTate/core/View.py","summary":"Transforms raw or theory tables into display x/y arrays, labels, scaling, and view-specific plot semantics."},
+    {"id":"dataset","name":"QDataSet","package":"RepTate.gui","kind":"class","file":"RepTate/gui/QDataSet.py","summary":"Dataset tab widget. Owns files, current theory selection, theory tabs, dataset tree, and dataset-level plot refreshes."},
+    {"id":"datasetwidget","name":"DataSetWidget","package":"RepTate.gui","kind":"widget","file":"RepTate/gui/DataSetWidget.py","summary":"Tree widget used to display files and file parameters inside a dataset."},
+    {"id":"filetype","name":"FileType","package":"RepTate.core","kind":"class","file":"RepTate/core/FileType.py","summary":"Application-specific file parser and metadata definition. Converts disk files into File objects."},
+    {"id":"file","name":"File","package":"RepTate.core","kind":"class","file":"RepTate/core/File.py","summary":"Represents one loaded data file, including file parameters, active state, theory x-range settings, and a DataTable."},
+    {"id":"datatable","name":"DataTable","package":"RepTate.core","kind":"class","file":"RepTate/core/DataTable.py","summary":"Stores numeric arrays and matplotlib series for data, theory, and transformed view data."},
+    {"id":"theoryregistry","name":"Application theory registry","package":"RepTate.applications","kind":"mapping","file":"RepTate/applications/Application*.py","summary":"Ordered mapping from user-visible theory names to concrete QTheory subclasses available in an application."},
+    {"id":"qtheory","name":"QTheory","package":"RepTate.gui","kind":"base class","file":"RepTate/gui/QTheory.py","summary":"Base GUI theory. Owns parameters, theory tables, calculation/fitting actions, error metrics, and output text."},
+    {"id":"theories","name":"Theory* subclasses","package":"RepTate.theories","kind":"package/classes","file":"RepTate/theories/Theory*.py","summary":"Scientific model implementations. Each subclass defines parameters, calculation function, optional extra UI, and references."},
+    {"id":"parameter","name":"Parameter","package":"RepTate.core","kind":"class","file":"RepTate/core/Parameter.py","summary":"Stores theory parameter value, bounds, optimization type, display flags, and unit metadata."},
+    {"id":"optimizer","name":"SciPy optimizers","package":"scipy.optimize","kind":"library","file":"RepTate/gui/QTheory.py","summary":"Used by QTheory.do_fit for least-squares and global minimization methods."},
+    {"id":"tools","name":"QTool / Tool*","package":"RepTate.tools","kind":"package/classes","file":"RepTate/gui/QTool.py; RepTate/tools/Tool*.py","summary":"Optional data and theory processing tools applied during plotting."},
+    {"id":"plot","name":"matplotlib canvas","package":"matplotlib","kind":"framework","file":"RepTate/gui/QApplicationWindow.py","summary":"Receives updated line data from DataTable series and redraws the application plots."},
+    {"id":"project","name":"Project JSON in .rept zip","package":"RepTate.gui","kind":"serialization","file":"RepTate/gui/QApplicationManager.py","summary":"Project save/load representation containing apps, datasets, files, theories, parameter values, tables, and tool state."}
+  ],
+  "flows": [
+    {"id":"create-application","label":"Create Application","summary":"A toolbar QAction creates an application-specific QApplicationWindow subclass, gives it an empty dataset, and adds it as a tab.","steps":[
+      {"from":"qt","to":"manager","call":"QAction.triggered -> handle_new_app(app_name)","payload":"app_name such as MWD, LVE, TTS, React, or LAOS"},
+      {"from":"manager","to":"applications","call":"available_applications[app_name](name, self)","payload":"Generated application name, parent manager, logger context"},
+      {"from":"applications","to":"appwindow","call":"Application subclass __init__ -> QApplicationWindow.__init__","payload":"Application-specific views, file types, theory registry additions"},
+      {"from":"appwindow","to":"multiview","call":"set_multiplot(nplots, ncols)","payload":"Figure, axes array, canvas, event bindings"},
+      {"from":"manager","to":"dataset","call":"newapp.createNew_Empty_Dataset()","payload":"Initial dataset tab named and attached to the new application"},
+      {"from":"manager","to":"appwindow","call":"ApplicationtabWidget.addTab(newapp, icon, app_tabname)","payload":"Widget ownership moves to the manager tab widget"}]},
+    {"id":"new-dataset-from-file","label":"New Dataset From File","summary":"Selected files are parsed through the application file type and added as File/DataTable objects to the current dataset before plotting.","steps":[
+      {"from":"qt","to":"appwindow","call":"actionNew_Dataset_From_File -> file dialog","payload":"List of filesystem paths chosen by the user"},
+      {"from":"appwindow","to":"dataset","call":"new_tables_from_files(paths) -> ds.do_open(paths)","payload":"Current dataset, blocked tree signals during import"},
+      {"from":"dataset","to":"filetype","call":"FileType parser for extension","payload":"File parameters, column definitions, unit-aware parameter specs"},
+      {"from":"filetype","to":"file","call":"Create File","payload":"Filename, file type, parent dataset, axes array"},
+      {"from":"file","to":"datatable","call":"Populate data_table","payload":"Numeric NumPy array plus matplotlib series handles"},
+      {"from":"dataset","to":"datasetwidget","call":"addTableToCurrentDataSet and tree refresh","payload":"Visible file rows, file parameters, active check states"},
+      {"from":"dataset","to":"plot","call":"do_plot(); update_Qplot()","payload":"View-transformed x/y data and line styling"}]},
+    {"id":"new-theory","label":"New Theory","summary":"The current dataset creates a concrete theory from the application theory registry, optionally calculates it, and shows it in a theory tab.","steps":[
+      {"from":"qt","to":"dataset","call":"actionNew_Theory.triggered -> handle_actionNew_Theory()","payload":"Selected cbtheory text, with first selectable theory as fallback"},
+      {"from":"dataset","to":"theoryregistry","call":"new_theory(th_name) -> do_new(th_name, calculate)","payload":"Theory user-visible name and current dataset state"},
+      {"from":"theoryregistry","to":"theories","call":"parent_application.theories[th_name](th_id, dataset, axarr)","payload":"Theory id, parent dataset, application axes array"},
+      {"from":"theories","to":"qtheory","call":"Subclass constructor -> QTheory base setup","payload":"Parameter dictionary, theory tables, widgets, calculation function"},
+      {"from":"qtheory","to":"parameter","call":"Create/update Parameter entries","payload":"Values, bounds, optimization flags, units, display metadata"},
+      {"from":"qtheory","to":"datatable","call":"Initialize theory tables keyed by file_name_short","payload":"One theory DataTable per file in the dataset"},
+      {"from":"dataset","to":"qtheory","call":"TheorytabWidget.addTab(newth, th_tab_id); do_show()","payload":"New active theory tab and visible theory curves"},
+      {"from":"qtheory","to":"plot","call":"Optional autocalculate -> do_plot()","payload":"Theory line data and updated plot canvas"}]},
+    {"id":"calculate-theory","label":"Calculate Theory","summary":"The active theory evaluates its scientific function over active files, fills theory DataTables, computes errors, and redraws.","steps":[
+      {"from":"qt","to":"dataset","call":"actionCalculate_Theory.triggered -> handle_actionCalculate_Theory()","payload":"Current theory name and active files"},
+      {"from":"dataset","to":"qtheory","call":"th.handle_actionCalculate_Theory()","payload":"Busy/stop state, single-file guard, calculate icon state"},
+      {"from":"qtheory","to":"theories","call":"do_calculate() -> self.function(file)","payload":"Active File objects, optional extended theory x-range"},
+      {"from":"theories","to":"datatable","call":"Write theory table data","payload":"Calculated y columns, extra tables where needed"},
+      {"from":"qtheory","to":"view","call":"do_plot() -> view.view_proc(theory_table, file_parameters)","payload":"Theory table transformed into view-specific display arrays"},
+      {"from":"qtheory","to":"dataset","call":"do_error(); end_of_computation()","payload":"Error metric text, reset busy flags and toolbar icons"},
+      {"from":"dataset","to":"plot","call":"parent_application.update_Qplot()","payload":"Updated matplotlib series data"}]},
+    {"id":"minimize","label":"Minimize","summary":"The dataset delegates fitting to the active theory, which calls SciPy optimizers, updates parameters, recalculates theory tables, and refreshes the plot.","steps":[
+      {"from":"qt","to":"dataset","call":"actionMinimize_Error.triggered -> handle_actionMinimize_Error()","payload":"Current theory, files, stop/busy state"},
+      {"from":"dataset","to":"qtheory","call":"th.handle_actionMinimize_Error()","payload":"Disabled new-theory button, disabled theory buttons, fit icon as stop"},
+      {"from":"qtheory","to":"parameter","call":"Build optimizable parameter vector","payload":"Parameters with opt_type, current values, bounds, optional sigma/error settings"},
+      {"from":"qtheory","to":"optimizer","call":"do_fit() -> curve_fit/minimize/global optimizer","payload":"Objective function, selected MinimizationMethod, active file data"},
+      {"from":"optimizer","to":"qtheory","call":"Return fit result","payload":"Best-fit parameter vector, covariance/error estimates where available"},
+      {"from":"qtheory","to":"theories","call":"Recalculate with fitted parameters","payload":"Updated Parameter values used by scientific model function"},
+      {"from":"qtheory","to":"datatable","call":"Update theory tables and parameter table","payload":"Fitted theory output and parameter display values"},
+      {"from":"qtheory","to":"plot","call":"end_thread_fit() -> update_Qplot()","payload":"Visible fitted curves and reset fit busy state"}]},
+    {"id":"change-view","label":"Change View","summary":"Changing the active view reprocesses data and theory tables through View.view_proc before updating line data on the canvas.","steps":[
+      {"from":"qt","to":"appwindow","call":"View combobox/current tab change","payload":"Selected View object and plot layout state"},
+      {"from":"appwindow","to":"dataset","call":"Dataset do_plot() for visible datasets","payload":"Active files, inactive files, active theory flags"},
+      {"from":"dataset","to":"view","call":"view.view_proc(file.data_table, file.file_parameters)","payload":"Raw data table and file parameters converted to display arrays"},
+      {"from":"dataset","to":"tools","call":"Optional active Tool.calculate_all()","payload":"View arrays, axes, file parameters, data/theory selection"},
+      {"from":"dataset","to":"datatable","call":"series[nplot][series].set_data(x, y)","payload":"Matplotlib line objects owned by File and QTheory DataTables"},
+      {"from":"dataset","to":"plot","call":"parent_application.update_plot()","payload":"Axes limits, legend, visible line state, canvas redraw"}]},
+    {"id":"new-tool","label":"New Tool","summary":"Application-level tool creation attaches a QTool/Tool subclass to the app and lets it transform data or theory arrays during plotting.","steps":[
+      {"from":"qt","to":"appwindow","call":"actionNew_Tool.triggered -> handle_actionNewTool()","payload":"Selected tool name and current application"},
+      {"from":"appwindow","to":"tools","call":"availabletools[toolname](tool_id, parent_application)","payload":"Tool id, application parent, optional tool UI"},
+      {"from":"appwindow","to":"dataset","call":"Plot refresh","payload":"Datasets re-run plotting with active tools in order"},
+      {"from":"tools","to":"view","call":"calculate_all(view.n, x, y, axes, color, file_parameters)","payload":"Transformed display arrays for data and optionally theory"},
+      {"from":"dataset","to":"plot","call":"update_plot/update_Qplot","payload":"Tool-modified curves rendered on the canvas"}]},
+    {"id":"save-project","label":"Save Project","summary":"The manager serializes open applications, datasets, files, theories, parameters, theory tables, and tools into the project JSON stored inside a .rept archive.","steps":[
+      {"from":"qt","to":"manager","call":"actionSaveProject.triggered -> launch_save_dialog()","payload":"Target .rept file path"},
+      {"from":"manager","to":"appwindow","call":"Iterate ApplicationtabWidget widgets","payload":"Application tab names and application class names"},
+      {"from":"appwindow","to":"dataset","call":"Iterate DataSettabWidget widgets","payload":"Dataset tab names, files, theories, tools"},
+      {"from":"dataset","to":"file","call":"Serialize File entries","payload":"Filename, active state, file parameters, table data, theory x-range controls"},
+      {"from":"dataset","to":"qtheory","call":"Serialize Theory entries","payload":"Theory name, parameter values, tables, extra tables, extra data"},
+      {"from":"qtheory","to":"project","call":"Build ordered JSON dictionaries","payload":"Serializable lists and dictionaries, preserving tab order"},
+      {"from":"manager","to":"project","call":"Write reptate_project.json into .rept zip","payload":"Project archive representation used by load_project"}]}
+  ]
+}
+  </script>
+
+  <script>
+    const data = JSON.parse(document.getElementById("workflow-data").textContent);
+    const componentById = new Map(data.components.map((component) => [component.id, component]));
+    const nodesEl = document.getElementById("nodes");
+    const actionsEl = document.getElementById("actions");
+    const detailsEl = document.getElementById("details");
+    const svg = document.getElementById("links");
+    let activeFlow = data.flows[0];
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderNodes() {
+      nodesEl.innerHTML = data.components.map((component) => `
+        <article class="node" id="node-${component.id}" data-node-id="${component.id}" data-package="${escapeHtml(component.package)}" title="${escapeHtml(component.summary)}">
+          <span class="name">${escapeHtml(component.name)}</span>
+          <span class="pkg">${escapeHtml(component.package)}</span>
+          <span class="kind">${escapeHtml(component.kind)}</span>
+        </article>
+      `).join("");
+    }
+
+    function renderActions() {
+      actionsEl.innerHTML = data.flows.map((flow) => `
+        <button class="action" type="button" data-flow="${flow.id}">${escapeHtml(flow.label)}</button>
+      `).join("");
+      actionsEl.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-flow]");
+        if (!button) return;
+        activeFlow = data.flows.find((flow) => flow.id === button.dataset.flow);
+        render();
+      });
+    }
+
+    function linePath(fromRect, toRect, mapRect, index) {
+      const x1 = fromRect.left + fromRect.width / 2 - mapRect.left;
+      const y1 = fromRect.top + fromRect.height / 2 - mapRect.top;
+      const x2 = toRect.left + toRect.width / 2 - mapRect.left;
+      const y2 = toRect.top + toRect.height / 2 - mapRect.top;
+      const dx = x2 - x1;
+      const curve = Math.max(60, Math.min(180, Math.abs(dx) * 0.34 + 30));
+      const sweep = index % 2 === 0 ? curve : -curve;
+      const c1x = x1 + dx * 0.42;
+      const c2x = x1 + dx * 0.58;
+      const c1y = y1 + sweep;
+      const c2y = y2 - sweep;
+      return {
+        path: `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`,
+        labelX: (x1 + x2) / 2,
+        labelY: (y1 + y2) / 2 + sweep * 0.18
+      };
+    }
+
+    function drawEdges() {
+      const mapRect = document.getElementById("map").getBoundingClientRect();
+      const defs = `
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#c9d1d9"></path>
+          </marker>
+          <marker id="arrowActive" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#d64545"></path>
+          </marker>
+        </defs>`;
+      const activeKeys = new Set(activeFlow.steps.map((step) => `${step.from}->${step.to}`));
+      const allSteps = data.flows.flatMap((flow) => flow.steps);
+      const unique = [];
+      const seen = new Set();
+      allSteps.forEach((step) => {
+        const key = `${step.from}->${step.to}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          unique.push(step);
+        }
+      });
+
+      const edgeMarkup = unique.map((step, index) => {
+        const from = document.getElementById(`node-${step.from}`);
+        const to = document.getElementById(`node-${step.to}`);
+        if (!from || !to) return "";
+        const shape = linePath(from.getBoundingClientRect(), to.getBoundingClientRect(), mapRect, index);
+        const active = activeKeys.has(`${step.from}->${step.to}`);
+        return `
+          <path class="edge${active ? " active" : ""}" d="${shape.path}"></path>
+          <text class="edge-label${active ? " active" : ""}" x="${shape.labelX}" y="${shape.labelY}">${escapeHtml(step.call.split("->").pop().trim()).slice(0, 42)}</text>
+        `;
+      }).join("");
+
+      svg.setAttribute("viewBox", `0 0 ${mapRect.width} ${mapRect.height}`);
+      svg.innerHTML = defs + edgeMarkup;
+    }
+
+    function renderDetails() {
+      const usedIds = new Set(activeFlow.steps.flatMap((step) => [step.from, step.to]));
+      const usedComponents = [...usedIds].map((id) => componentById.get(id)).filter(Boolean);
+      detailsEl.innerHTML = `
+        <h3>${escapeHtml(activeFlow.label)}</h3>
+        <p>${escapeHtml(activeFlow.summary)}</p>
+        <div class="step-list">
+          ${activeFlow.steps.map((step, index) => `
+            <section class="step">
+              <strong>${index + 1}. ${escapeHtml(componentById.get(step.from)?.name || step.from)} -> ${escapeHtml(componentById.get(step.to)?.name || step.to)}</strong>
+              <code>${escapeHtml(step.call)}</code>
+              <span>${escapeHtml(step.payload)}</span>
+            </section>
+          `).join("")}
+        </div>
+        <section class="component-info">
+          <h4>Components Used</h4>
+          ${usedComponents.map((component) => `
+            <dl>
+              <dt>Name</dt><dd>${escapeHtml(component.name)}</dd>
+              <dt>Package</dt><dd>${escapeHtml(component.package)}</dd>
+              <dt>File</dt><dd><code>${escapeHtml(component.file)}</code></dd>
+              <dt>Role</dt><dd>${escapeHtml(component.summary)}</dd>
+            </dl>
+          `).join("<hr>")}
+        </section>
+      `;
+    }
+
+    function updateHighlights() {
+      const usedIds = new Set(activeFlow.steps.flatMap((step) => [step.from, step.to]));
+      document.querySelectorAll(".node").forEach((node) => {
+        const used = usedIds.has(node.dataset.nodeId);
+        node.classList.toggle("active", used);
+        node.classList.toggle("dimmed", !used);
+      });
+      document.querySelectorAll("button.action").forEach((button) => {
+        button.classList.toggle("active", button.dataset.flow === activeFlow.id);
+      });
+    }
+
+    function render() {
+      updateHighlights();
+      drawEdges();
+      renderDetails();
+    }
+
+    renderNodes();
+    renderActions();
+    render();
+    window.addEventListener("resize", () => window.requestAnimationFrame(drawEdges));
+  </script>
+</body>
+</html>
