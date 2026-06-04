@@ -44,13 +44,11 @@ from PySide6.QtWidgets import (
     QFormLayout,
     QHBoxLayout,
     QLineEdit,
-    QMenu,
     QMessageBox,
     QPushButton,
     QTableWidget,
     QTableWidgetItem,
     QToolBar,
-    QToolButton,
     QVBoxLayout,
 )
 
@@ -67,7 +65,6 @@ from RepTate.tools.ToolMaterialsDatabase import (
 
 QAbstractItemView_any: Any = QAbstractItemView
 QDialogButtonBox_any: Any = QDialogButtonBox
-QToolButton_any: Any = QToolButton
 
 
 class LP2RAdvancedControlsDialog(QDialog):
@@ -156,21 +153,48 @@ class LP2RComponentsDialog(QDialog):
         )
         layout.addWidget(self.table)
 
-        buttons = QHBoxLayout()
         self.add_lognormal_button = QPushButton("Add lognormal")
-        self.add_mwd_button = QPushButton("Add MWD data")
-        self.edit_button = QPushButton("Edit")
+        self.add_mwd_button = QPushButton("Add MWD")
+        self.get_mwd_button = QPushButton("Get MWD (MWD app)")
+        self.get_mwd_file_button = QPushButton("Get MWD (.gpc file)")
         self.remove_button = QPushButton("Remove")
         self.normalize_button = QPushButton("Normalize weights")
+        self.add_lognormal_button.setIcon(
+            QIcon(":/Images/Images/new_icons/icons8-plus.png")
+        )
+        self.add_mwd_button.setIcon(
+            QIcon(":/Images/Images/new_icons/icons8-insert-table.png")
+        )
+        self.get_mwd_button.setIcon(
+            QIcon(":/Images/Images/new_icons/icons8-categorize.png")
+        )
+        self.get_mwd_file_button.setIcon(
+            QIcon(":/Icons/Images/new_icons/MWD.png")
+        )
+        self.remove_button.setIcon(
+            QIcon(":/Images/Images/new_icons/icons8-minus.png")
+        )
+        self.normalize_button.setIcon(
+            QIcon(":/Images/Images/new_icons/icons8-equal-sign.png")
+        )
+
+        add_buttons = QHBoxLayout()
         for button in (
             self.add_lognormal_button,
             self.add_mwd_button,
-            self.edit_button,
+            self.get_mwd_button,
+            self.get_mwd_file_button,
+        ):
+            add_buttons.addWidget(button)
+        layout.addLayout(add_buttons)
+
+        edit_buttons = QHBoxLayout()
+        for button in (
             self.remove_button,
             self.normalize_button,
         ):
-            buttons.addWidget(button)
-        layout.addLayout(buttons)
+            edit_buttons.addWidget(button)
+        layout.addLayout(edit_buttons)
 
         button_box = QDialogButtonBox_any(QDialogButtonBox_any.Ok | QDialogButtonBox_any.Cancel)
         button_box.accepted.connect(self.accept)
@@ -180,7 +204,8 @@ class LP2RComponentsDialog(QDialog):
 
         self.add_lognormal_button.clicked.connect(self.add_lognormal)
         self.add_mwd_button.clicked.connect(self.add_mwd)
-        self.edit_button.clicked.connect(self.edit_selected)
+        self.get_mwd_button.clicked.connect(self.get_mwd_reptate)
+        self.get_mwd_file_button.clicked.connect(self.import_mwd_gpc)
         self.remove_button.clicked.connect(self.remove_selected)
         self.normalize_button.clicked.connect(self.normalize_weights)
         self.table.cellDoubleClicked.connect(lambda *_: self.edit_selected())
@@ -230,6 +255,65 @@ class LP2RComponentsDialog(QDialog):
             if component is not None:
                 self.components.append(component)
                 self.refresh()
+
+    def get_mwd_reptate(self):
+        get_dict = self.parent_theory._collect_mwd_getters()
+        if not get_dict:
+            QMessageBox.warning(
+                self, "Get MW distribution", 'No "Discretize MWD" theory found'
+            )
+            return
+
+        dialog = GetMwdRepTate(self.parent_theory, get_dict, "Select Discretized MWD")
+        if dialog.exec_() and dialog.btngrp.checkedButton() is not None:
+            _, success1 = self.parent_theory.set_param_value(
+                "tau_e", dialog.taue_text.text()
+            )
+            _, success2 = self.parent_theory.set_param_value(
+                "Me", dialog.Me_text.text()
+            )
+            if not success1 * success2:
+                self.parent_theory.Qprint("Could not understand Me or tau_e, try again")
+                return
+            item = dialog.btngrp.checkedButton().text()
+            masses, weights = get_dict[item]()
+            try:
+                self.components.append(
+                    TheoryLP2RLVE.make_mwd_component(
+                        masses,
+                        weights,
+                        label=item,
+                        source="RepTate",
+                    )
+                )
+            except ValueError as exc:
+                QMessageBox.warning(self, "LP2R Components", str(exc))
+                return
+            self.refresh()
+
+    def import_mwd_gpc(self):
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open MWD .gpc file",
+            "",
+            "GPC Files (*.gpc);;All Files (*)",
+        )
+        if not path:
+            return
+        try:
+            masses, weights = TheoryLP2RLVE.read_gpc_mwd(path)
+            self.components.append(
+                TheoryLP2RLVE.make_mwd_component(
+                    masses,
+                    weights,
+                    label=path.split("/")[-1].split("\\")[-1],
+                    source="gpc",
+                )
+            )
+        except ValueError as exc:
+            QMessageBox.warning(self, "LP2R Components", str(exc))
+            return
+        self.refresh()
 
     def edit_selected(self):
         row = self.selected_row()
@@ -632,32 +716,10 @@ class TheoryLP2RLVE(QTheory):
         tb = QToolBar()
         tb.setIconSize(QSize(24, 24))
 
-        self.tbutcomponents = QToolButton()
-        self.tbutcomponents.setPopupMode(QToolButton_any.MenuButtonPopup)
-        menu = QMenu(self)
-        self.edit_components_action = menu.addAction(
+        self.edit_components_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-edit-file.png"),
             "LP2R components",
         )
-        self.get_mwd_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
-            "Get MWD (MWD app)",
-        )
-        self.get_mwd_data_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-broadcasting.png"),
-            "Get MWD (MWD data)",
-        )
-        self.get_mwd_file_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-opened-folder.png"),
-            "Get MWD (.gpc file)",
-        )
-        self.normalize_components_action = menu.addAction(
-            QIcon(":/Icon8/Images/new_icons/icons8-scales.png"),
-            "Normalize LP2R component weights",
-        )
-        self.tbutcomponents.setDefaultAction(self.edit_components_action)
-        self.tbutcomponents.setMenu(menu)
-        tb.addWidget(self.tbutcomponents)
 
         self.advanced_controls_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
@@ -666,12 +728,6 @@ class TheoryLP2RLVE(QTheory):
         self.thToolsLayout.insertWidget(0, tb)
         self.edit_components_action.triggered.connect(self.edit_lp2r_components)
         self.advanced_controls_action.triggered.connect(self.edit_advanced_controls)
-        self.get_mwd_action.triggered.connect(self.get_mwd_reptate)
-        self.get_mwd_data_action.triggered.connect(self.edit_mwd_data)
-        self.get_mwd_file_action.triggered.connect(self.import_mwd_gpc)
-        self.normalize_components_action.triggered.connect(
-            self.normalize_lp2r_component_weights
-        )
 
     def edit_advanced_controls(self):
         """Open a dialog for the LP2R resource-file style controls."""
@@ -1101,7 +1157,7 @@ class TheoryLP2RLVE(QTheory):
         self.set_lp2r_components(components)
 
     def normalize_lp2r_component_weights(self):
-        """Normalize LP2R component weights from the toolbar action."""
+        """Normalize LP2R component weights on the current theory."""
         try:
             self.set_lp2r_components(
                 self.normalize_component_weights(self.lp2r_components)

@@ -16,7 +16,9 @@ Polymer components
 The LP2R LVE theory represents the polymer input as a list of components rather
 than as a single visible input-mode parameter. Open the ``LP2R components``
 dialog from the theory toolbar to add, edit, remove, import, and normalise the
-components used in the next calculation.
+components used in the next calculation. The component dialog contains buttons
+for manual MWD entry, MWD import from a RepTate ``Discretize MWD`` theory,
+``.gpc`` file import, and component-weight normalisation.
 
 Each component has a weight fraction and one of two forms:
 

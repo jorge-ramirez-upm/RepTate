@@ -123,4 +123,267 @@ or by BOB software (Chinmay Das and Daniel Read) outside RepTate (`<https://sour
         Click the "Help" button to show the original documentation of BOB v2.3 by Chinmay Das.
 
 #.  Click "OK" to launch the calculations of the linear rheology. In the theory text-box, you will find informations
-    related to BOB simulation parameters and to the topology of the polymers found in the "polyconf" file. 
+    related to BOB simulation parameters and to the topology of the polymers found in the "polyconf" file.
+
+--------------------
+LP2R LVE predictions
+--------------------
+
+LP2R predicts linear viscoelastic spectra for polydisperse linear polymers.
+The examples in ``data/LP2R`` reproduce the reference spectra saved as
+``Expected_Output.tts`` in each LP2R example folder. These files were generated
+with the original LP2R input convention; in RepTate the same information is
+entered through the LP2R theory parameters and the ``LP2R components`` dialog.
+
+In all examples below, load the corresponding ``Expected_Output.tts`` file
+first. This gives RepTate the same frequency window as the reference output and
+lets you compare the LP2R prediction directly with the expected spectrum.
+
+Common steps
+^^^^^^^^^^^^
+
+#.  Start RepTate and create a new LVE Application |logo|.
+
+#.  Drag and drop the ``Expected_Output.tts`` file from the example folder, or
+    open it from the LVE application.
+
+#.  Select the ``LP2R LVE`` theory and press |einstein| to create it. Copy the
+    parameter block given for the example and use the theory toolbar command
+    ``Paste Parameters`` to set the material and numerical parameters.
+
+    .. note::
+        The blocks below use the parameter names stored by the theory. RepTate
+        accepts whitespace-separated ``name value`` rows when using
+        ``Paste Parameters``.
+
+#.  Click the theory toolbar action ``LP2R components`` to open the component
+    dialog. Use the buttons in this dialog to define the polymer distribution
+    for the example. Existing components can be edited by double-clicking their
+    row in the component table.
+
+#.  Press ``Calculate`` |calculate|. To save the calculated theory line as a
+    ``.tts`` file, click the |th_save| button.
+
+01rcdefault
+^^^^^^^^^^^
+
+This example reproduces
+``data/LP2R/01rcdefault/Expected_Output.tts``. It corresponds to a nearly
+monodisperse PI melt represented by one lognormal LP2R component.
+
+#.  Follow the common steps and load
+    ``data/LP2R/01rcdefault/Expected_Output.tts``.
+
+#.  Copy the following block and use ``Paste Parameters``:
+
+    .. code-block:: text
+
+        Mw 634.5
+        PDI 1.03
+        n 50
+        MK 0.113
+        Me 4.35
+        G0 476000
+        tau_e 1.30e-5
+        G_glass 1e9
+        tau_glass 7.0e-11
+        beta_glass 0.370
+        freq_ratio 1.1
+        alpha 1
+        t_cr_start 1
+        delta_cr 0.3
+        b_zeta 2
+        a_eq 2
+        b_eq 10
+        ret_pref 0.189
+        ret_pref_0 0.02
+        ret_switch_exponent 0.42
+        rept_switch_factor 1.664
+        rouse_switch_factor 1.5
+        disentanglement_switch 1
+        start_time 0.001
+        time_ratio 1.02
+
+#.  Open ``LP2R components``. Keep one lognormal component and double-click its
+    row to set it to:
+
+    - ``Weight fraction = 1.0``
+    - ``npoly = 50``
+    - ``Mw = 634.5`` kg/mol
+    - ``PDI = 1.03``
+
+    .. image:: images/01rcdefaultLP2RComponentDialog.png
+        :width: 80%
+        :align: center
+        :alt: 01rcdefault_Component_Dialog
+
+
+#.  Open ``Advanced LP2R controls`` and keep the default control values. They
+    correspond to ``data/LP2R/01rcdefault/LP2R.rc``.
+
+#.  Press ``Calculate`` |calculate| and save the theory line. The saved file
+    should match the loaded ``Expected_Output.tts`` reference.
+
+02PIblend
+^^^^^^^^^
+
+This example reproduces ``data/LP2R/02PIblend/Expected_Output.tts``. It is a
+binary PI blend represented by two lognormal components.
+
+#.  Follow the common steps and load
+    ``data/LP2R/02PIblend/Expected_Output.tts``.
+
+#.  Copy the following block and use ``Paste Parameters``:
+
+    .. code-block:: text
+
+        MK 0.113
+        Me 4.35
+        G0 476000
+        tau_e 1.30e-5
+        G_glass 1e9
+        tau_glass 7.0e-11
+        beta_glass 0.370
+        freq_ratio 1.1
+        alpha 1
+        t_cr_start 1
+        delta_cr 0.3
+        b_zeta 2
+        a_eq 2
+        b_eq 10
+        ret_pref 0.189
+        ret_pref_0 0.02
+        ret_switch_exponent 0.42
+        rept_switch_factor 1.664
+        rouse_switch_factor 1.5
+        disentanglement_switch 1
+        start_time 0.001
+        time_ratio 1.02
+
+#.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
+    then click ``Add lognormal`` twice and enter:
+
+    - Component 1: ``Weight fraction = 0.04``, ``npoly = 50``,
+      ``Mw = 225.9`` kg/mol, ``PDI = 1.03``.
+    - Component 2: ``Weight fraction = 0.96``, ``npoly = 50``,
+      ``Mw = 23.4`` kg/mol, ``PDI = 1.03``.
+
+    .. image:: images/02PIblendLP2RComponentDialog.png
+        :width: 80%
+        :align: center
+        :alt: 01rcdefault_Component_Dialog
+
+#.  Open ``Advanced LP2R controls`` and keep the default control values, as in
+    ``data/LP2R/02PIblend/LP2R.rc``.
+
+#.  Press ``Calculate`` |calculate| and save the theory line. The saved file
+    should match the loaded ``Expected_Output.tts`` reference.
+
+03MWD
+^^^^^
+
+This example reproduces ``data/LP2R/03MWD/Expected_Output.tts``. It uses a
+discrete molar-mass distribution with three equally weighted PS components.
+
+#.  Follow the common steps and load
+    ``data/LP2R/03MWD/Expected_Output.tts``.
+
+#.  Copy the following block and use ``Paste Parameters``:
+
+    .. code-block:: text
+
+        MK 0.720
+        Me 12.870
+        G0 230000
+        tau_e 2.0e-3
+        G_glass 1.20e9
+        tau_glass 1.30e-9
+        beta_glass 0.380
+        freq_ratio 1.5
+        alpha 1
+        t_cr_start 1
+        delta_cr 0.3
+        b_zeta 2
+        a_eq 2
+        b_eq 10
+        ret_pref 0.189
+        ret_pref_0 0.02
+        ret_switch_exponent 0.42
+        rept_switch_factor 1.664
+        rouse_switch_factor 1.5
+        disentanglement_switch 1
+        start_time 0.001
+        time_ratio 1.02
+
+#.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
+    then add one MWD component using one of the following equivalent methods:
+
+    - Click ``Add MWD`` and enter masses ``100, 1000, 10000``
+      kg/mol with normalized weights ``0.333333, 0.333333, 0.333334``.
+    - Or click ``Get MWD (.gpc file)`` and select
+      ``data/LP2R/03MWD/MWD.gpc``. The file declares masses in ``g/mol``;
+      RepTate converts them to ``kg/mol``.
+
+    .. image:: images/03MWDLP2RComponentDialog.png
+        :width: 80%
+        :align: center
+        :alt: 01rcdefault_Component_Dialog
+
+#.  Open ``Advanced LP2R controls`` and keep the default control values, as in
+    ``data/LP2R/03MWD/LP2R.rc``.
+
+#.  Press ``Calculate`` |calculate| and save the theory line. The saved file
+    should match the loaded ``Expected_Output.tts`` reference.
+
+03PS8
+^^^^^
+
+This example reproduces ``data/LP2R/03PS8/Expected_Output.tts``. It uses the
+discrete PS8 molar-mass distribution stored in
+``data/LP2R/03PS8/PS390Kmcut.gpc``.
+
+#.  Follow the common steps and load
+    ``data/LP2R/03PS8/Expected_Output.tts``.
+
+#.  Copy the following block and use ``Paste Parameters``:
+
+    .. code-block:: text
+
+        MK 0.720
+        Me 12.870
+        G0 230000
+        tau_e 2.0e-3
+        G_glass 1.20e9
+        tau_glass 1.30e-9
+        beta_glass 0.380
+        freq_ratio 1.5
+        alpha 1
+        t_cr_start 1
+        delta_cr 0.3
+        b_zeta 2
+        a_eq 2
+        b_eq 10
+        ret_pref 0.189
+        ret_pref_0 0.02
+        ret_switch_exponent 0.42
+        rept_switch_factor 1.664
+        rouse_switch_factor 1.5
+        disentanglement_switch 1
+        start_time 0.001
+        time_ratio 1.02
+
+#.  Open ``LP2R components``. Click ``Remove`` to delete the default component,
+    then click ``Get MWD (.gpc file)`` and select
+    ``data/LP2R/03PS8/PS390Kmcut.gpc``. The file declares masses in ``g/mol``;
+    RepTate converts them to ``kg/mol``.
+
+    .. image:: images/03PS8LP2RComponentDialog.png
+        :width: 80%
+        :align: center
+        :alt: 01rcdefault_Component_Dialog
+
+#.  Open ``Advanced LP2R controls`` and keep the default control values, as in
+    ``data/LP2R/03PS8/LP2R.rc``.
+
+#.  Press ``Calculate`` |calculate| and save the theory line. The saved file
+    should match the loaded ``Expected_Output.tts`` reference.
