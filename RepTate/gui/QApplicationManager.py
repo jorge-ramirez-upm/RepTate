@@ -191,6 +191,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         # add the handlers to the logger
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
+        self.logTextBox: QTextEditLogger = QTextEditLogger(self)
+        formatter = logging.Formatter(
+            "<font color=blue>%(asctime)s</font> <b>%(name)s <font color=red>%(levelname)s</font></b>: %(message)s",
+            "%Y%m%d %H%M%S",
+        )
+        self.logTextBox.setFormatter(formatter)
+        self.logTextBox.setLevel(loglevel)
+        self.logger.addHandler(self.logTextBox)
         self.logger.debug("New ApplicationManager")
         self.logger.debug(
             "ApplicationManager initialized: version=%s build=%s loglevel=%s logfile=%s",
@@ -357,18 +365,10 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         tb.addAction(self.actionCopyLogText)
         self.LoggerdochorizontalLayout.addWidget(tb)
 
-        self.logTextBox: QTextEditLogger = QTextEditLogger(self)
-        formatter = logging.Formatter(
-            "<font color=blue>%(asctime)s</font> <b>%(name)s <font color=red>%(levelname)s</font></b>: %(message)s",
-            "%Y%m%d %H%M%S",
-        )
-        self.logTextBox.setFormatter(formatter)
-        logging.getLogger("RepTate").addHandler(self.logTextBox)
         logging.getLogger("RepTate").setLevel(loglevel)
         import matplotlib
 
         matplotlib._log.addHandler(self.logTextBox)
-        self.logTextBox.setLevel(loglevel)
         self.LoggerdochorizontalLayout.addWidget(self.logTextBox.widget)
 
         self.actionLogNotSet.triggered.connect(self.logNotSet)
@@ -391,10 +391,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
         # Hide Logger Window
         self.LoggerdockWidget.hide()
+        if loglevel == logging.DEBUG:
+            self.showLogger(True)
 
     def showLogger(self, checked: bool) -> None:
         """Handle show Log window"""
         self.logger.debug("Logger dock requested: checked=%s", checked)
+        if self.actionShow_Logger.isChecked() != checked:
+            self.actionShow_Logger.setChecked(checked)
         if checked:
             self.LoggerdockWidget.show()
         else:
