@@ -141,7 +141,7 @@ def start_UV(argv: Sequence[str]) -> None:
     if args.verbose:
         loglevel = logging.DEBUG
     else:
-        loglevel = logging.INFO
+        loglevel = logging.WARNING
 
     QApplication.setStyle("Fusion")  # comment that line for a native look
     # for a list of available styles: "from PySide6.QtWidgets import QStyleFactory; print(QStyleFactory.keys())"

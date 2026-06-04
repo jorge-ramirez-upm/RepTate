@@ -192,6 +192,17 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         self.logger.debug("New ApplicationManager")
+        self.logger.debug(
+            "ApplicationManager initialized: version=%s build=%s loglevel=%s logfile=%s",
+            self.version,
+            self.build,
+            logging.getLevelName(loglevel),
+            logfile,
+        )
+        self.logger.debug(
+            "Available applications: %s",
+            ", ".join(self.available_applications.keys()),
+        )
 
         if CmdBase.calcmode == CalcMode.singlethread:
             self.setWindowTitle("RepTate " + self.version + " " + self.date + " - SINGLE THREAD!!")
@@ -383,6 +394,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def showLogger(self, checked: bool) -> None:
         """Handle show Log window"""
+        self.logger.debug("Logger dock requested: checked=%s", checked)
         if checked:
             self.LoggerdockWidget.show()
         else:
@@ -390,39 +402,47 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def handle_loggerVisibilityChanged(self, visible: bool) -> None:
         """Handle the hide/show event of the logger window"""
+        self.logger.debug("Logger dock visibility changed: visible=%s", visible)
         self.actionShow_Logger.setChecked(visible)
 
     def logNotSet(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.NOTSET)
         self.logTextBox.setLevel(logging.NOTSET)
         self.tbutlog.setDefaultAction(self.actionLogNotSet)
+        self.logger.debug("RepTate log level set to NOTSET")
 
     def logDebug(self) -> None:
         logging.getLogger("RepTate").setLevel(logging.DEBUG)
         self.logTextBox.setLevel(logging.DEBUG)
         self.tbutlog.setDefaultAction(self.actionLogDebug)
+        self.logger.debug("RepTate log level set to DEBUG")
 
     def logInfo(self) -> None:
+        self.logger.debug("RepTate log level set to INFO")
         logging.getLogger("RepTate").setLevel(logging.INFO)
         self.logTextBox.setLevel(logging.INFO)
         self.tbutlog.setDefaultAction(self.actionLogInfo)
 
     def logWarning(self) -> None:
+        self.logger.debug("RepTate log level set to WARNING")
         logging.getLogger("RepTate").setLevel(logging.WARNING)
         self.logTextBox.setLevel(logging.WARNING)
         self.tbutlog.setDefaultAction(self.actionLogWarning)
 
     def logError(self) -> None:
+        self.logger.debug("RepTate log level set to ERROR")
         logging.getLogger("RepTate").setLevel(logging.ERROR)
         self.logTextBox.setLevel(logging.ERROR)
         self.tbutlog.setDefaultAction(self.actionLogError)
 
     def logCritical(self) -> None:
+        self.logger.debug("RepTate log level set to CRITICAL")
         logging.getLogger("RepTate").setLevel(logging.CRITICAL)
         self.logTextBox.setLevel(logging.CRITICAL)
         self.tbutlog.setDefaultAction(self.actionLogCritical)
 
     def copyLogText(self) -> None:
+        self.logger.debug("Copying logger dock text to clipboard")
         self.logTextBox.widget.selectAll()
         self.logTextBox.widget.copy()
 
@@ -539,6 +559,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     def handle_doubleClickTab(self, index):
         """Edit Application name, tab only, the dictinary key remains unchanged"""
         old_name = self.ApplicationtabWidget.tabText(index)
+        self.logger.debug("Application tab rename requested: index=%d old_name=%s", index, old_name)
         dlg = QInputDialog(self)
         dlg.setWindowTitle("Change Application Name")
         dlg.setLabelText("New Application Name:")
@@ -548,11 +569,20 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         new_tab_name = dlg.textValue()
         if success and new_tab_name != "":
             self.ApplicationtabWidget.setTabText(index, new_tab_name)
+            self.logger.debug(
+                "Application tab renamed: index=%d old_name=%s new_name=%s",
+                index,
+                old_name,
+                new_tab_name,
+            )
             # self.applications[old_name].name = new_tab_name
             # self.applications[new_tab_name] = self.applications.pop(old_name)
+        else:
+            self.logger.debug("Application tab rename cancelled: index=%d old_name=%s", index, old_name)
 
     def show_about(self):
         """Show about window"""
+        self.logger.debug("Showing About dialog")
         from RepTate.gui.QAboutReptate import AboutWindow
 
         # dlg = AboutWindow(self, self.version + ' ' + self.date)
@@ -574,6 +604,12 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     def close_app_tab(self, index):
         """Close an app"""
         app = self.ApplicationtabWidget.widget(index)
+        self.logger.debug(
+            "Closing application tab: index=%d app=%s datasets=%d",
+            index,
+            app.name,
+            len(app.datasets),
+        )
         ds_name_list = [key for key in app.datasets]
         for ds_name in ds_name_list:
             app.delete(ds_name)  # call theory destructor
@@ -583,9 +619,12 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
     def delete(self, name):
         """Delete an open application"""
         if name in self.applications.keys():
+            self.logger.debug("Deleting application: name=%s", name)
             self.applications[name].delete_multiplot()
             del self.applications[name]
+            self.logger.debug("Application deleted: name=%s remaining=%d", name, len(self.applications))
         else:
+            self.logger.debug("Delete requested for missing application: name=%s", name)
             print('Application "%s" not found' % name)
 
     def new(self, appname):
@@ -595,30 +634,51 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             - name {str} -- Application to open (MWD, LVE, TTS, etc)"""
         if appname in self.available_applications:
             self.application_counter += 1
+            self.logger.debug(
+                "Creating application: appname=%s counter=%d",
+                appname,
+                self.application_counter,
+            )
             newapp = self.available_applications[appname](appname + str(self.application_counter), self)
             self.applications[newapp.name] = newapp
+            self.logger.debug(
+                "Application created: name=%s open_applications=%d",
+                newapp.name,
+                len(self.applications),
+            )
             return newapp
         else:
+            self.logger.debug("Application creation requested for unavailable app: appname=%s", appname)
             print('Application "%s" is not available' % appname)
             return None
 
     def Qopen_app(self, app_name, icon):
         """Open app"""
+        self.logger.debug("Opening application tab: app_name=%s icon=%s", app_name, icon)
         newapp = self.new(app_name)
         newapp.createNew_Empty_Dataset()  # populate with empty dataset at app opening
         app_tabname = "%s%d" % (app_name, self.application_counter)
         ind = self.ApplicationtabWidget.addTab(cast(QWidget, newapp), QIcon(icon), app_tabname)
         self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
+        self.logger.debug(
+            "Application tab opened: app_name=%s tabname=%s index=%d datasets=%d",
+            app_name,
+            app_tabname,
+            ind,
+            len(newapp.datasets),
+        )
         return newapp
 
     def handle_new_app(self, app_name=""):
         """Open a new application window from name"""
+        self.logger.debug("New application action triggered: app_name=%s", app_name)
         newapp = self.Qopen_app(app_name, ":/Icons/Images/new_icons/%s.png" % app_name)
         return newapp
 
     def handle_app_coming_soon(self, appname=""):
         """Show message"""
+        self.logger.debug("Unavailable application action triggered: appname=%s", appname)
         QMessageBox.warning(self, "new %s application" % appname, "%s coming soon..." % appname)
 
     ############################
@@ -627,6 +687,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """Ask if we want to save project before closing RepTate (uncomment the rest)"""
+        self.logger.debug("Main window close event received: open_applications=%d", len(self.applications))
         pass
         # btns = (QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
         # msg = 'Do you want to save your project before exiting RepTate?'
@@ -643,6 +704,7 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def launch_open_dialog(self):
         """Get filename of RepTate project to open"""
+        self.logger.debug("Open project dialog requested: load_path=%s", self.load_path)
         if self.load_path:
             fpath, _ = QFileDialog.getOpenFileName(self, "Open RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
@@ -653,11 +715,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 "RepTate Project (*.rept)",
             )
         if fpath == "":
+            self.logger.debug("Open project dialog cancelled")
             return
+        self.logger.debug("Open project dialog selected path: %s", fpath)
         self.open_project(fpath)
 
     def launch_save_dialog(self):
         """Get filename of RepTate project to save"""
+        self.logger.debug("Save project dialog requested: load_path=%s", self.load_path)
         if self.load_path:
             fpath, _ = QFileDialog.getSaveFileName(self, "Save RepTate Project", self.load_path, "RepTate Project (*.rept)")
         else:
@@ -668,26 +733,47 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 "RepTate Project (*.rept)",
             )
         if fpath == "":
+            self.logger.debug("Save project dialog cancelled")
             return False
+        self.logger.debug("Save project dialog selected path: %s", fpath)
         self.save_reptate(fpath)
         return True
 
     def save_reptate(self, fpath):
         """Save RepTate project to 'fpath'"""
+        self.logger.debug("Saving RepTate project: path=%s", fpath)
         self.load_path = fpath
         apps_dic = OrderedDict()
         napps = self.ApplicationtabWidget.count()
+        self.logger.debug("Collecting project state for save: applications=%d", napps)
         nth_saved = 0
         nfile_saved = 0
         ntool_saved = 0
         for i in range(napps):
             app = self.ApplicationtabWidget.widget(i)
+            self.logger.debug(
+                "Saving application state: index=%d name=%s tab=%s datasets=%d tools=%d annotations=%d",
+                i,
+                app.name,
+                self.ApplicationtabWidget.tabText(i),
+                app.DataSettabWidget.count(),
+                len(app.tools),
+                len(app.graphicnotes),
+            )
 
             # Save DataSets in application
             datasets_dic = OrderedDict()
             ndatasets = app.DataSettabWidget.count()
             for j in range(ndatasets):
                 ds = app.DataSettabWidget.widget(j)
+                self.logger.debug(
+                    "Saving dataset state: app=%s dataset=%s tab=%s files=%d theories=%d",
+                    app.name,
+                    ds.name,
+                    app.DataSettabWidget.tabText(j),
+                    len(ds.files),
+                    ds.TheorytabWidget.count(),
+                )
                 files_dic = OrderedDict()
                 for f in ds.files:
                     nfile_saved += 1
@@ -915,6 +1001,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             json.dump(out, open(tmp, "w"), indent=4)
             with zipfile.ZipFile(fpath, "w", compression=zipfile.ZIP_DEFLATED) as z:
                 z.write(tmp, self.REPTATE_PROJ_JSON)
+        self.logger.debug(
+            "RepTate project saved: path=%s applications=%d theories=%d files=%d tools=%d",
+            fpath,
+            napps,
+            nth_saved,
+            nfile_saved,
+            ntool_saved,
+        )
 
         if napps > 1:
             txtapp = "Applications"
@@ -954,15 +1048,18 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
 
     def restore_app(self, app_name, app_tabname):
         """Open new application"""
+        self.logger.debug("Restoring application: app_name=%s tabname=%s", app_name, app_tabname)
         newapp = self.new(app_name)
         icon = QIcon(":/Icons/Images/new_icons/%s.png" % app_name)
         ind = self.ApplicationtabWidget.addTab(cast(QWidget, newapp), icon, app_tabname)
         # self.ApplicationtabWidget.setCurrentIndex(ind)
         self.ApplicationtabWidget.setTabToolTip(ind, app_name + " app")
+        self.logger.debug("Application restored: app_name=%s tabname=%s index=%d", app_name, app_tabname, ind)
         return self.ApplicationtabWidget.widget(ind), ind
 
     def restore_files(self, ds: DataSetLike, files):
         """Open data files"""
+        self.logger.debug("Restoring files: dataset=%s files=%d", ds.name, len(files))
         for file_dic in files.values():
             fname = file_dic["fname"]
             is_active = file_dic["is_active"]
@@ -995,9 +1092,11 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             ds.do_plot()
             ds.parent_application.update_Qplot()
             ds.set_table_icons(ds.table_icon_list)
+        self.logger.debug("Files restored: dataset=%s files=%d", ds.name, len(files))
 
     def restore_theories(self, ds, theories):
         """Open theories"""
+        self.logger.debug("Restoring theories: dataset=%s theories=%d", ds.name, len(theories))
         for th_dic in theories.values():
             th_tabname = th_dic["th_tabname"]
             thname = th_dic["thname"]
@@ -1038,9 +1137,11 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             new_th.update_parameter_table()
             new_th.thTextBox.insertHtml(th_textbox)
             new_th.autocalculate = autocal
+        self.logger.debug("Theories restored: dataset=%s theories=%d", ds.name, len(theories))
 
     def restore_marker_settings(self, ds, marker_dic):
         """Restore the dataset marker settings"""
+        self.logger.debug("Restoring marker settings: dataset=%s", ds.name)
         ds.marker_size = marker_dic["marker_size"]
         ds.line_width = marker_dic["line_width"]
         ds.colormode = marker_dic["colormode"]
@@ -1054,9 +1155,11 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         ds.symbol1_name = marker_dic["symbol1_name"]
         ds.th_linestyle = marker_dic["th_linestyle"]
         ds.th_line_width = marker_dic["th_line_width"]
+        self.logger.debug("Marker settings restored: dataset=%s", ds.name)
 
     def restore_tools(self, app, tools):
         """Restore the tools"""
+        self.logger.debug("Restoring tools: app=%s tools=%d", app.name, len(tools["tools_dic"]))
         for tdic in tools["tools_dic"].values():
             toolname = tdic["tool_name"]
             tool_tab_name = tdic["tool_tab_name"]
@@ -1073,43 +1176,61 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             for pname in tool_param:
                 to.set_param_value(pname, tool_param[pname])
         app.TooltabWidget.setCurrentIndex(tools["cur_tab_index"])
+        self.logger.debug(
+            "Tools restored: app=%s tools=%d current_index=%d",
+            app.name,
+            len(tools["tools_dic"]),
+            tools["cur_tab_index"],
+        )
 
     def restore_annotations(self, app, annotations):
         """Restore the annotations"""
+        self.logger.debug("Restoring annotations: app=%s annotations=%d", app.name, len(annotations))
         for ann in annotations.values():
             ann_text = ann["ann_text"]
             ann_x = ann["ann_x"]
             ann_y = ann["ann_y"]
             ann_opts = ann["ann_opts"]
             app.add_annotation(text=ann_text, x=ann_x, y=ann_y, annotation_opts=ann_opts)
+        self.logger.debug("Annotations restored: app=%s annotations=%d", app.name, len(annotations))
 
     def open_project(self, project_path):
         """Open file and load project"""
         import json, zipfile, tempfile
 
+        self.logger.debug("Opening RepTate project: path=%s", project_path)
         if not isfile(project_path):
+            self.logger.debug("RepTate project path does not exist: path=%s", project_path)
             return
         self.load_path = project_path
         try:
             with tempfile.TemporaryDirectory() as tmpdirname:
+                self.logger.debug("Extracting RepTate project archive: path=%s", project_path)
                 with zipfile.ZipFile(project_path) as z:
                     z.extract(self.REPTATE_PROJ_JSON, tmpdirname)
                     data = json.load(
                         open(join(tmpdirname, self.REPTATE_PROJ_JSON)),
                         object_pairs_hook=OrderedDict,
                     )
-        except:
+        except Exception:
+            self.logger.exception("Could not read RepTate project archive: path=%s", project_path)
             print('File "%s" seems to be corrupted' % project_path)
             return
         try:
             app_indx_now = current_app_indx = data["current_app_indx"]
             apps_dic = data["apps"]
         except KeyError:
+            self.logger.exception("RepTate project is missing required keys: path=%s", project_path)
             print('Could not find data in "%s"' % project_path)
             return
         # switch to single thread
         calc_mode_tmp = CmdBase.calcmode
         CmdBase.calcmode = CalcMode.singlethread
+        self.logger.debug(
+            "Project load switched calculation mode: previous=%s temporary=%s",
+            calc_mode_tmp,
+            CmdBase.calcmode,
+        )
         # turn off numpy error messages
         old_np_settings = np.seterr(all="ignore")
 
@@ -1117,6 +1238,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         nth_saved = int(data["nth_saved"])
         nfile_saved = int(data["nfile_saved"])
         ntool_saved = int(data["ntool_saved"])
+        self.logger.debug(
+            "Project metadata loaded: applications=%d theories=%d files=%d tools=%d current_app_index=%d",
+            napps,
+            nth_saved,
+            nfile_saved,
+            ntool_saved,
+            current_app_indx,
+        )
         if napps > 1:
             txtapp = "Applications"
         else:
@@ -1151,6 +1280,9 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             QMessageBox.Yes,
         )
         if ans != QMessageBox.Yes:
+            self.logger.debug("Project load cancelled by user: path=%s", project_path)
+            CmdBase.calcmode = calc_mode_tmp
+            np.seterr(**old_np_settings)
             return
         for app_dic in apps_dic.values():
             app_tabname = app_dic["app_tabname"]
@@ -1163,6 +1295,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
             show_inspector = bool(app_dic["show_inspector"])
             annotations = app_dic["annotations"]
 
+            self.logger.debug(
+                "Restoring app from project: appname=%s tabname=%s datasets=%d tools=%d annotations=%d",
+                appname,
+                app_tabname,
+                len(datasets),
+                len(tools["tools_dic"]),
+                len(annotations),
+            )
             new_app_tab, ind = self.restore_app(appname, app_tabname)
 
             try:
@@ -1188,6 +1328,13 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
                 theories = ds_dic["theories"]
                 ds_markers = ds_dic["ds_markers"]
 
+                self.logger.debug(
+                    "Restoring dataset from project: app=%s tabname=%s files=%d theories=%d",
+                    appname,
+                    ds_tabname,
+                    len(files),
+                    len(theories),
+                )
                 new_ds_tab = new_app_tab.createNew_Empty_Dataset(tabname=ds_tabname)
                 self.restore_files(new_ds_tab, files)
                 self.restore_theories(new_ds_tab, theories)
@@ -1213,6 +1360,14 @@ class QApplicationManager(QMainWindow, Ui_MainWindow):
         CmdBase.calcmode = calc_mode_tmp
         # restore numpy error messages settings
         np.seterr(**old_np_settings)
+        self.logger.debug(
+            "RepTate project opened: path=%s applications=%d theories=%d files=%d tools=%d",
+            project_path,
+            napps,
+            nth_saved,
+            nfile_saved,
+            ntool_saved,
+        )
 
 
 #################

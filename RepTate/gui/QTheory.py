@@ -558,7 +558,7 @@ class QTheory(QWidget, Ui_TheoryTab):
 
     def write(self, type, flag):
         """Write numpy error logs to the logger"""
-        self.logger.info("numpy: %s (flag %s)" % (type, flag))
+        self.logger.warning("numpy: %s (flag %s)" % (type, flag))
 
     def setup_default_minimization_options(self):
         # MINIMIZATION OPTIONS
@@ -1621,7 +1621,7 @@ class QTheory(QWidget, Ui_TheoryTab):
     def set_modes(self, tau, G):
         """Set Maxwell modes in this theory. This function must be rewritten from derived theories
         that provide this functionality."""
-        self.logger.info("set_modes not allowed in this theory (%s)" % self.thname)
+        self.logger.warning("set_modes not allowed in this theory (%s)" % self.thname)
         return False
 
     def do_cite(self, line):

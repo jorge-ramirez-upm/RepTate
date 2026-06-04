@@ -276,7 +276,7 @@ class QTool(QWidget, Ui_ToolTab):
 
     def write(self, type: Any, flag: Any) -> None:
         """Write numpy error logs to the logger"""
-        self.logger.info("numpy: %s (flag %s)" % (type, flag))
+        self.logger.warning("numpy: %s (flag %s)" % (type, flag))
 
     def destructor(self) -> None:
         """If the Tool needs to erase some memory in a special way, any

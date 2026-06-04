@@ -86,7 +86,7 @@ If the theory does not provide modes, simply delete this function."""
     def set_modes(self) -> bool:
         """If the theory provides Maxwell modes, fill this up (see examples in TheoryMaxwellModes.
 If the theory does not provide modes, simply delete this function."""
-        self.logger.info("set_modes not allowed in this theory (%s)" % self.thname)
+        self.logger.warning("set_modes not allowed in this theory (%s)" % self.thname)
         return False
 
     def destructor(self) -> None:
