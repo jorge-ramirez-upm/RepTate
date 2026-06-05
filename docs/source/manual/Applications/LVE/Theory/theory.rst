@@ -9,6 +9,7 @@ LVE Theories
    :maxdepth: 2
 
 .. include:: Maxwell.rst
+.. include:: BaumgaertelWinter.rst
 .. include:: LikhtmanMcLeish.rst
 .. include:: CarreauYasuda.rst
 .. include:: CFSM.rst

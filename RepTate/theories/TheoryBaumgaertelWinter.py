@@ -32,15 +32,15 @@
 # --------------------------------------------------------------------------------------------------------
 """Module TheoryBaumgaertelWinter.
 
-Discrete Baumgaertel-Winter relaxation spectrum from dynamic moduli or
-relaxation modulus data.
+Discrete Baumgaertel-Winter relaxation/retardation spectra from dynamic
+moduli, relaxation modulus, or creep data.
 
 The frequency-domain theory fits G'(omega), G''(omega) to a discrete generalized
 Maxwell spectrum.  The time-domain theory uses the same independent modes to fit
 G(t).  The original Baumgaertel-Winter method also discusses adaptive mode
 elimination/merging and conversion to a retardation spectrum.  This implementation
-includes a conservative mode-simplification helper for the frequency-domain data,
-but the retardation spectrum is intentionally left for a later implementation.
+includes a conservative mode-simplification helper for frequency-domain,
+time-domain, and creep retardation data.
 """
 
 import os
@@ -54,7 +54,7 @@ import numpy as np
 import RepTate
 from scipy.optimize import least_squares
 from PySide6.QtCore import QObject, QThread, QSize, Signal
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QCursor, QIcon
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -62,6 +62,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QFormLayout,
     QMessageBox,
+    QCheckBox,
     QSpinBox,
     QToolBar,
     QToolButton,
@@ -281,26 +282,39 @@ class TheoryBaumgaertelWinter(QTheory):
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/LVE/Theory/theory.html"
     single_file: ClassVar[bool] = True
     is_time_domain: ClassVar[bool] = False
+    is_retardation_domain: ClassVar[bool] = False
     last_load_modes_folder: ClassVar[str | None] = None
 
     def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
         """Constructor."""
         super().__init__(name, parent_dataset, ax)
-        if self.is_time_domain:
+        if self.is_retardation_domain:
+            self.function = self.BaumgaertelWinterRetardation
+        elif self.is_time_domain:
             self.function = self.BaumgaertelWinterTime
         else:
             self.function = self.BaumgaertelWinterFrequency
         self.has_modes = True
         self.MAX_MODES = 40
         self.view_modes = True
-        self.min_logtau_separation = 0.25
-        self.max_residual_increase = 0.05
-        self.weak_mode_threshold = 1.0e-3
+        if self.is_retardation_domain:
+            self.min_logtau_separation = 0.12
+            self.max_residual_increase = 0.005
+            self.max_cumulative_residual_increase = 0.01
+            self.weak_mode_threshold = 0.0
+            self.allow_trial_deletion = False
+        else:
+            self.min_logtau_separation = 0.25
+            self.max_residual_increase = 0.05
+            self.max_cumulative_residual_increase = np.inf
+            self.weak_mode_threshold = 1.0e-3
+            self.allow_trial_deletion = True
         self.simplification_running = False
         self.simplification_cancel_requested = False
         self.simplification_thread: QThread | None = None
         self.simplification_worker: _BaumgaertelWinterSimplificationWorker | None = None
         self._last_minimized_mode_signature: tuple[Any, ...] | None = None
+        self.mode_context_menu_cid: int | None = None
 
         xmin = self.parent_dataset.minpositivecol(0)
         xmax = self.parent_dataset.maxcol(0)
@@ -310,21 +324,37 @@ class TheoryBaumgaertelWinter(QTheory):
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
-            description="Number of Baumgaertel-Winter Maxwell modes",
+            description="Number of Baumgaertel-Winter %s modes" % self._mode_family_name(),
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False,
             min_value=1,
             max_value=self.MAX_MODES,
         )
-        self.parameters["Ge"] = Parameter(
-            name="Ge",
-            value=0.0,
-            description="Equilibrium modulus expressed in Pa; keep zero for viscoelastic liquids",
-            type=ParameterType.real,
-            opt_type=OptType.const,
-            min_value=0.0,
-        )
+        if self.is_retardation_domain:
+            self.parameters["logJini"] = Parameter(
+                name="logJini",
+                value=-4.0,
+                description="Log of instantaneous compliance expressed in 1/Pa",
+                type=ParameterType.real,
+                opt_type=OptType.opt,
+            )
+            self.parameters["logeta0"] = Parameter(
+                name="logeta0",
+                value=0.0,
+                description="Log of terminal viscosity expressed in Pa.s",
+                type=ParameterType.real,
+                opt_type=OptType.opt,
+            )
+        else:
+            self.parameters["Ge"] = Parameter(
+                name="Ge",
+                value=0.0,
+                description="Equilibrium modulus expressed in Pa; keep zero for viscoelastic liquids",
+                type=ParameterType.real,
+                opt_type=OptType.const,
+                min_value=0.0,
+            )
 
         tau = self._initial_tau(xmin, xmax, nmodes)
         mode_x = self._mode_x_from_tau(tau)
@@ -340,10 +370,11 @@ class TheoryBaumgaertelWinter(QTheory):
                 min_value=-30,
                 max_value=30,
             )
-            self.parameters["logG%02d" % i] = Parameter(
-                name="logG%02d" % i,
+            mode_parameter = self._mode_parameter_name(i)
+            self.parameters[mode_parameter] = Parameter(
+                name=mode_parameter,
                 value=float(np.log10(max(G[i], _LOG_FLOOR))),
-                description="log10(G%02d) of Mode %d relaxation strength expressed in Pa" % (i, i),
+                description=self._mode_parameter_description(i),
                 type=ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=-30,
@@ -403,7 +434,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.configure_simplification_action.triggered.connect(self.configure_simplification_parameters)
 
     def _initial_tau(self, xmin: float, xmax: float, nmodes: int) -> FloatArray:
-        if self.is_time_domain:
+        if self.is_time_domain or self.is_retardation_domain:
             if nmodes > 1:
                 return _logspace(np.log10(xmin), np.log10(xmax), nmodes)
             return _logspace(np.log10(np.sqrt(xmin * xmax)), np.log10(np.sqrt(xmin * xmax)), nmodes)
@@ -412,7 +443,7 @@ class TheoryBaumgaertelWinter(QTheory):
         return _logspace(-np.log10(np.sqrt(xmin * xmax)), -np.log10(np.sqrt(xmin * xmax)), nmodes)
 
     def _mode_x_from_tau(self, tau: FloatArray) -> FloatArray:
-        if self.is_time_domain:
+        if self.is_time_domain or self.is_retardation_domain:
             return tau
         return 1.0 / np.maximum(tau, _LOG_FLOOR)
 
@@ -420,12 +451,42 @@ class TheoryBaumgaertelWinter(QTheory):
         data = self.parent_dataset.files[0].data_table.data
         x_data = data[:, 0]
         storage = np.abs(data[:, 1])
-        if not self.is_time_domain and data.shape[1] > 2:
+        if self.is_retardation_domain:
+            try:
+                stress = abs(float(self.parent_dataset.files[0].file_parameters["stress"]))
+            except (ValueError, KeyError):
+                self.Qprint("Invalid stress value")
+                stress = 1.0
+            if stress <= 0.0:
+                self.Qprint("Invalid stress value")
+                stress = 1.0
+            modulus_scale = storage / stress
+        elif not self.is_time_domain and data.shape[1] > 2:
             loss = np.abs(data[:, 2])
             modulus_scale = np.sqrt(storage**2 + loss**2)
         else:
             modulus_scale = storage
         return np.maximum(np.interp(mode_x, x_data, modulus_scale), _LOG_FLOOR)
+
+    def _mode_family_name(self) -> str:
+        if self.is_retardation_domain:
+            return "retardation"
+        return "Maxwell"
+
+    def _mode_parameter_name(self, index: int) -> str:
+        if self.is_retardation_domain:
+            return "logJ%02d" % index
+        return "logG%02d" % index
+
+    def _mode_parameter_description(self, index: int) -> str:
+        if self.is_retardation_domain:
+            return "log10(J%02d) of Mode %d retardation compliance expressed in 1/Pa" % (index, index)
+        return "log10(G%02d) of Mode %d relaxation strength expressed in Pa" % (index, index)
+
+    def _mode_amplitude_label(self) -> str:
+        if self.is_retardation_domain:
+            return "J"
+        return "G"
 
     def Qhide_theory_extras(self, state: bool) -> None:
         """Uncheck the modeaction button. Called when current theory is changed."""
@@ -450,7 +511,10 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def set_param_value(self, name: str, value: Any) -> tuple[str, bool]:
         """Change mode parameters when nmodes changes; otherwise call parent."""
-        if self.simplification_running and (name == "nmodes" or name.startswith("logtau") or name.startswith("logG")):
+        mode_prefix = self._mode_parameter_name(0)[:-2]
+        if self.simplification_running and (
+            name == "nmodes" or name.startswith("logtau") or name.startswith(mode_prefix)
+        ):
             return "Cannot change BW modes while spectrum simplification is running", False
         if name == "nmodes":
             nmodesold = self.parameter_int("nmodes")
@@ -458,9 +522,10 @@ class TheoryBaumgaertelWinter(QTheory):
             logGold = np.zeros(nmodesold)
             for i in range(nmodesold):
                 logtauold[i] = self.parameter_float("logtau%02d" % i)
-                logGold[i] = self.parameter_float("logG%02d" % i)
+                mode_parameter = self._mode_parameter_name(i)
+                logGold[i] = self.parameter_float(mode_parameter)
                 del self.parameters["logtau%02d" % i]
-                del self.parameters["logG%02d" % i]
+                del self.parameters[mode_parameter]
 
             nmodesnew = int(value)
             message, success = super().set_param_value("nmodes", nmodesnew)
@@ -485,10 +550,11 @@ class TheoryBaumgaertelWinter(QTheory):
                     min_value=-30,
                     max_value=30,
                 )
-                self.parameters["logG%02d" % i] = Parameter(
-                    "logG%02d" % i,
+                mode_parameter = self._mode_parameter_name(i)
+                self.parameters[mode_parameter] = Parameter(
+                    mode_parameter,
                     float(logGnew[i]),
-                    "Log of Mode %d relaxation strength" % i,
+                    self._mode_parameter_description(i),
                     ParameterType.real,
                     opt_type=OptType.opt,
                     min_value=-30,
@@ -500,7 +566,11 @@ class TheoryBaumgaertelWinter(QTheory):
         else:
             message, success = super().set_param_value(name, value)
 
-        if success and (name == "nmodes" or name == "Ge" or name.startswith("logtau") or name.startswith("logG")):
+        if success and (
+            name in ("nmodes", "Ge", "logJini", "logeta0")
+            or name.startswith("logtau")
+            or name.startswith(mode_prefix)
+        ):
             self._invalidate_minimized_modes()
         return message, success
 
@@ -524,16 +594,86 @@ class TheoryBaumgaertelWinter(QTheory):
             logtau = -np.asarray(dx, dtype=float)
 
         if self.current_view().log_y:
-            logG = _safe_log10(dy)
+            log_amplitude = _safe_log10(dy)
         else:
-            logG = np.asarray(dy, dtype=float)
+            log_amplitude = np.asarray(dy, dtype=float)
 
         for i in range(nmodes):
             self.set_param_value("logtau%02d" % i, float(logtau[i]))
-            self.set_param_value("logG%02d" % i, float(logG[i]))
+            self.set_param_value(self._mode_parameter_name(i), float(log_amplitude[i]))
 
         self.do_calculate("")
         self.update_parameter_table()
+
+    def handle_mode_context_menu(self, event: Any) -> None:
+        """Show a context menu for a BW mode marker."""
+        if event.inaxes != self.graphicmodes.axes:
+            return
+        if event.button != 3:
+            return
+        if self.simplification_running:
+            return
+        contains, _ = self.graphicmodes.contains(event)
+        if not contains:
+            return
+        if event.xdata is None or event.ydata is None:
+            return
+
+        mode_index = self._nearest_displayed_mode_index(float(event.xdata), float(event.ydata))
+        if mode_index is None:
+            return
+
+        parent_application = self.parent_dataset.parent_application
+        if hasattr(parent_application, "suppress_next_right_click_zoom"):
+            parent_application.suppress_next_right_click_zoom()
+        if getattr(event, "guiEvent", None) is not None:
+            event.guiEvent.accept()
+
+        menu = QMenu(self)
+        delete_action = menu.addAction("Delete Mode %d" % mode_index)
+        delete_action.setEnabled(self.parameter_int("nmodes") > 1)
+        action = menu.exec(QCursor.pos())
+        if action == delete_action:
+            self.delete_mode(mode_index)
+            parent_application.clear_suppressed_right_click_zoom()
+
+    def _nearest_displayed_mode_index(self, x: float, y: float) -> int | None:
+        """Return the nearest displayed mode marker index to an axes coordinate."""
+        xdata_raw, ydata_raw = self.graphicmodes.get_data()
+        xdata = np.asarray(xdata_raw, dtype=float)
+        ydata = np.asarray(ydata_raw, dtype=float)
+        if xdata.ndim > 1:
+            xdata = xdata[:, 0]
+        if ydata.ndim > 1:
+            ydata = ydata[:, 0]
+        if xdata.size == 0 or ydata.size == 0:
+            return None
+
+        view = self.current_view()
+        if view.log_x:
+            xdist = _safe_log10(xdata) - np.log10(max(x, _LOG_FLOOR))
+        else:
+            xdist = xdata - x
+        if view.log_y:
+            ydist = _safe_log10(ydata) - np.log10(max(y, _LOG_FLOOR))
+        else:
+            ydist = ydata - y
+        return int(np.argmin(xdist**2 + ydist**2))
+
+    def delete_mode(self, mode_index: int) -> None:
+        """Delete one independent BW mode and refresh the theory."""
+        tau, amplitude = self._mode_values()
+        if tau.size <= 1:
+            self.Qprint("Cannot delete the last BW mode.")
+            return
+        if mode_index < 0 or mode_index >= tau.size:
+            return
+
+        self._set_mode_values(np.delete(tau, mode_index), np.delete(amplitude, mode_index))
+        self.do_calculate("")
+        self.plot_theory_stuff()
+        self.update_parameter_table()
+        self.parent_dataset.parent_application.update_plot()
 
     def update_modes(self) -> None:
         """Do nothing."""
@@ -554,7 +694,7 @@ class TheoryBaumgaertelWinter(QTheory):
         min_sep_spinbox.setRange(0.0, 10.0)
         min_sep_spinbox.setSingleStep(0.05)
         min_sep_spinbox.setValue(float(self.min_logtau_separation))
-        min_sep_spinbox.setToolTip("Minimum separation between relaxation times in log10 decades before two modes are merged")
+        min_sep_spinbox.setToolTip("Minimum separation between mode times in log10 decades before two modes are merged")
 
         max_increase_spinbox = QDoubleSpinBox(dialog)
         max_increase_spinbox.setDecimals(4)
@@ -563,16 +703,35 @@ class TheoryBaumgaertelWinter(QTheory):
         max_increase_spinbox.setValue(float(self.max_residual_increase))
         max_increase_spinbox.setToolTip("Maximum accepted relative increase of the mean square relative residual after deleting one mode")
 
+        max_cumulative_increase_spinbox = QDoubleSpinBox(dialog)
+        max_cumulative_increase_spinbox.setDecimals(4)
+        max_cumulative_increase_spinbox.setRange(0.0, 10.0)
+        max_cumulative_increase_spinbox.setSingleStep(0.01)
+        if np.isfinite(self.max_cumulative_residual_increase):
+            max_cumulative_increase_spinbox.setValue(float(self.max_cumulative_residual_increase))
+        else:
+            max_cumulative_increase_spinbox.setValue(10.0)
+        max_cumulative_increase_spinbox.setToolTip("Maximum accepted residual increase relative to the initial simplified spectrum")
+
         weak_mode_spinbox = QDoubleSpinBox(dialog)
         weak_mode_spinbox.setDecimals(6)
         weak_mode_spinbox.setRange(0.0, 1.0)
         weak_mode_spinbox.setSingleStep(1.0e-4)
         weak_mode_spinbox.setValue(float(self.weak_mode_threshold))
-        weak_mode_spinbox.setToolTip("Remove modes with G_i smaller than this fraction of the total mode strength")
+        weak_mode_spinbox.setToolTip(
+            "Remove modes with %s_i smaller than this fraction of the total mode strength; use 0 to disable"
+            % self._mode_amplitude_label()
+        )
+
+        trial_deletion_checkbox = QCheckBox(dialog)
+        trial_deletion_checkbox.setChecked(bool(self.allow_trial_deletion))
+        trial_deletion_checkbox.setToolTip("Allow residual-guarded deletion of the best single mode even when it is not amplitude-weak")
 
         layout.addRow("Minimum log(tau) separation / decades", min_sep_spinbox)
-        layout.addRow("Maximum residual increase", max_increase_spinbox)
+        layout.addRow("Maximum step residual increase", max_increase_spinbox)
+        layout.addRow("Maximum cumulative residual increase", max_cumulative_increase_spinbox)
         layout.addRow("Weak-mode threshold", weak_mode_spinbox)
+        layout.addRow("Allow trial deletion", trial_deletion_checkbox)
 
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(dialog.accept)
@@ -582,17 +741,19 @@ class TheoryBaumgaertelWinter(QTheory):
         if dialog.exec() == QDialog.DialogCode.Accepted:
             self.min_logtau_separation = float(min_sep_spinbox.value())
             self.max_residual_increase = float(max_increase_spinbox.value())
+            self.max_cumulative_residual_increase = float(max_cumulative_increase_spinbox.value())
             self.weak_mode_threshold = float(weak_mode_spinbox.value())
+            self.allow_trial_deletion = bool(trial_deletion_checkbox.isChecked())
 
     def load_modes(self) -> None:
-        """Load Maxwell modes from a text file."""
+        """Load independent BW modes from a text file."""
         if self.simplification_running:
             self.Qprint("Cannot load modes while BW spectrum simplification is running.")
             return
         start_folder = self.last_load_modes_folder or os.path.join(RepTate.root_dir, "data")
         fpath, _ = QFileDialog.getOpenFileName(
             self,
-            "Load Maxwell modes from a text file",
+            "Load %s modes from a text file" % self._mode_family_name(),
             start_folder,
             "Text (*.txt);;All files (*)",
         )
@@ -605,22 +766,64 @@ class TheoryBaumgaertelWinter(QTheory):
                 raise ValueError("Loaded %d modes, but the maximum is %d" % (tau.size, self.MAX_MODES))
             self._set_mode_values(tau, G)
         except Exception as exc:
-            self.Qprint("<font color=red><b>Could not load Maxwell modes:</b></font> %s" % exc)
-            QMessageBox.warning(self, "Load Maxwell modes", str(exc))
+            self.Qprint("<font color=red><b>Could not load %s modes:</b></font> %s" % (self._mode_family_name(), exc))
+            QMessageBox.warning(self, "Load %s modes" % self._mode_family_name(), str(exc))
             return
 
         self.update_parameter_table()
         self.do_calculate("")
         self.plot_theory_stuff()
         self.parent_dataset.parent_application.update_plot()
-        self.Qprint("<font color=red><b>Loaded %d Maxwell modes from %s.</b></font>" % (tau.size, os.path.basename(fpath)))
+        self.Qprint(
+            "<font color=red><b>Loaded %d %s modes from %s.</b></font>"
+            % (tau.size, self._mode_family_name(), os.path.basename(fpath))
+        )
 
     def get_modes_reptate(self) -> None:
-        """Get Maxwell modes from another open RepTate theory."""
+        """Get modes from another open RepTate theory."""
         if self.simplification_running:
             self.Qprint("Cannot get modes while BW spectrum simplification is running.")
             return
         self.Qcopy_modes()
+
+    def save_modes(self) -> None:
+        """Save independent BW modes to a text file."""
+        fpath, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save %s modes to a text file" % self._mode_family_name(),
+            os.path.join(RepTate.root_dir, "data"),
+            "Text (*.txt)",
+        )
+        if fpath == "":
+            self.logger.debug("Save modes cancelled: theory=%s thname=%s", self.name, self.thname)
+            return
+
+        times, amplitudes, success = self.get_modes()
+        if not success:
+            self.logger.warning("Could not get modes correctly for %s", self.name)
+            return
+
+        self.logger.debug(
+            "Saving modes: theory=%s thname=%s path=%s modes=%d",
+            self.name,
+            self.thname,
+            fpath,
+            len(times),
+        )
+        with open(fpath, "w") as f:
+            version = RepTate.__version__.split("+")[0]
+            try:
+                build = RepTate.__version__.split("+")[1]
+            except IndexError:
+                build = ""
+            f.write("# %s modes\n" % self._mode_family_name().capitalize())
+            f.write("# Generated with RepTate %s  (build %s)\n" % (version, build))
+            f.write("# At %s on %s\n" % (time.strftime("%X"), time.strftime("%a %b %d, %Y")))
+            f.write("\n#number of modes\n")
+            f.write("%d\n" % len(times))
+            f.write("\n#%4s\t%15s\t%15s\n" % ("i", "tau_i", "%s_i" % self._mode_amplitude_label()))
+            for i, (tau_i, amplitude_i) in enumerate(zip(times, amplitudes), start=1):
+                f.write("%5d\t%15g\t%15g\n" % (i, tau_i, amplitude_i))
 
     def do_fit(self, line: str) -> None:
         """Minimize BW modes and remember that this exact state is fitted."""
@@ -652,12 +855,19 @@ class TheoryBaumgaertelWinter(QTheory):
             self.parent_dataset.parent_application,
             self.drag_mode,
         )
+        self.mode_context_menu_cid = self.graphicmodes.figure.canvas.mpl_connect(
+            "button_press_event",
+            self.handle_mode_context_menu,
+        )
         self.plot_theory_stuff()
 
     def destructor(self) -> None:
         """Called when the theory tab is closed."""
         if self.simplification_running:
             self._request_simplification_cancel()
+        if self.mode_context_menu_cid is not None:
+            self.graphicmodes.figure.canvas.mpl_disconnect(self.mode_context_menu_cid)
+            self.mode_context_menu_cid = None
         self.graphicmodes_visible(False)
         self.graphicmodes.remove()
 
@@ -682,7 +892,7 @@ class TheoryBaumgaertelWinter(QTheory):
         G = np.zeros(nmodes)
         for i in range(nmodes):
             tau[i] = np.power(10.0, self.parameter_float("logtau%02d" % i))
-            G[i] = np.power(10.0, self.parameter_float("logG%02d" % i))
+            G[i] = np.power(10.0, self.parameter_float(self._mode_parameter_name(i)))
         return tau, G
 
     def _mode_fit_signature(self, file: FileLike | None = None) -> tuple[Any, ...]:
@@ -694,10 +904,13 @@ class TheoryBaumgaertelWinter(QTheory):
         return (
             file_id,
             self.is_time_domain,
+            self.is_retardation_domain,
             self.parameter_int("nmodes"),
             tuple(np.round(tau, decimals=14)),
             tuple(np.round(G, decimals=14)),
-            round(self.parameter_float("Ge"), 14),
+            round(self.parameter_float("Ge"), 14) if "Ge" in self.parameters else None,
+            round(self.parameter_float("logJini"), 14) if "logJini" in self.parameters else None,
+            round(self.parameter_float("logeta0"), 14) if "logeta0" in self.parameters else None,
         )
 
     def _mark_modes_minimized(self) -> None:
@@ -712,10 +925,15 @@ class TheoryBaumgaertelWinter(QTheory):
 
     def _first_valid_file(self) -> FileLike | None:
         """Return the first data file with enough columns for this domain."""
-        min_columns = 2 if self.is_time_domain else 3
+        min_columns = 2 if self.is_time_domain or self.is_retardation_domain else 3
         for file in self.parent_dataset.files:
             data = file.data_table.data
             if data is not None and data.ndim == 2 and data.shape[1] >= min_columns and data.shape[0] > 0:
+                if self.is_retardation_domain:
+                    try:
+                        self._file_stress(file)
+                    except (ValueError, KeyError):
+                        continue
                 return file
         return None
 
@@ -751,6 +969,17 @@ class TheoryBaumgaertelWinter(QTheory):
             Gt += G_i * np.exp(-time / tau_i)
         return Gt * gamma
 
+    def _predict_creep_strain(self, file: FileLike, time: FloatArray, tau: FloatArray, J: FloatArray) -> FloatArray:
+        """Predict creep strain for a discrete retardation spectrum."""
+        time = np.asarray(time, dtype=float)
+        stress = self._file_stress(file)
+        Jt = np.full_like(time, np.power(10.0, self.parameter_float("logJini")), dtype=float)
+        for tau_i, J_i in zip(tau, J):
+            Jt += J_i * (1.0 - np.exp(-time / tau_i))
+        if self._file_recovery_flag(file) != 1:
+            Jt += time / np.power(10.0, self.parameter_float("logeta0"))
+        return stress * Jt
+
     def _file_gamma(self, file: FileLike) -> float:
         value = file.file_parameters.get("gamma")
         if value is None:
@@ -760,9 +989,33 @@ class TheoryBaumgaertelWinter(QTheory):
             return 1.0
         return gamma
 
+    def _file_stress(self, file: FileLike) -> float:
+        stress = float(file.file_parameters["stress"])
+        if stress == 0.0:
+            raise ValueError("stress must be non-zero")
+        return stress
+
+    def _file_recovery_flag(self, file: FileLike) -> int:
+        try:
+            return int(file.file_parameters["rec"])
+        except (ValueError, KeyError):
+            return 0
+
     def _residual_vector_for_modes(self, file: FileLike, tau: FloatArray, G: FloatArray) -> FloatArray:
         """Return the Baumgaertel-Winter relative residual vector for one file."""
         data = file.data_table.data
+        if self.is_retardation_domain:
+            time = np.asarray(data[:, 0], dtype=float)
+            strain_exp = np.asarray(data[:, 1], dtype=float)
+            valid = (time >= 0.0) & (np.abs(strain_exp) > _LOG_FLOOR)
+            if not np.any(valid):
+                return np.array([], dtype=float)
+            try:
+                strain_fit = self._predict_creep_strain(file, time[valid], tau, G)
+            except (ValueError, KeyError):
+                return np.array([], dtype=float)
+            return strain_fit / strain_exp[valid] - 1.0
+
         if self.is_time_domain:
             time = np.asarray(data[:, 0], dtype=float)
             Gt_exp = np.asarray(data[:, 1], dtype=float)
@@ -823,17 +1076,17 @@ class TheoryBaumgaertelWinter(QTheory):
         tau = np.asarray(tau, dtype=float)
         G = np.asarray(G, dtype=float)
         if tau.size != G.size:
-            raise ValueError("tau and G must have the same length")
+            raise ValueError("tau and %s must have the same length" % self._mode_amplitude_label())
         if tau.size < 1:
             raise ValueError("At least one mode is required")
         if tau.size > self.MAX_MODES:
             raise ValueError("Number of modes must be no larger than %d" % self.MAX_MODES)
         if np.any(tau <= 0.0) or np.any(G <= 0.0):
-            raise ValueError("tau and G mode values must be positive")
+            raise ValueError("tau and %s mode values must be positive" % self._mode_amplitude_label())
         nmodes_old = self.parameter_int("nmodes")
         for i in range(nmodes_old):
             self.parameters.pop("logtau%02d" % i, None)
-            self.parameters.pop("logG%02d" % i, None)
+            self.parameters.pop(self._mode_parameter_name(i), None)
 
         nmodes_new = int(tau.size)
         super().set_param_value("nmodes", nmodes_new)
@@ -850,10 +1103,11 @@ class TheoryBaumgaertelWinter(QTheory):
                 min_value=-30,
                 max_value=30,
             )
-            self.parameters["logG%02d" % i] = Parameter(
-                "logG%02d" % i,
+            mode_parameter = self._mode_parameter_name(i)
+            self.parameters[mode_parameter] = Parameter(
+                mode_parameter,
                 float(np.log10(max(G[i], _LOG_FLOOR))),
-                "Log of Mode %d relaxation strength" % i,
+                self._mode_parameter_description(i),
                 ParameterType.real,
                 opt_type=OptType.opt,
                 min_value=-30,
@@ -864,11 +1118,11 @@ class TheoryBaumgaertelWinter(QTheory):
         self.spinbox.blockSignals(False)
 
     def set_modes(self, tau: Any, G: Any) -> bool:
-        """Set Maxwell modes in this theory."""
+        """Set independent modes in this theory."""
         try:
             self._set_mode_values(tau, G)
         except ValueError as exc:
-            self.Qprint("<font color=red><b>Could not set Maxwell modes:</b></font> %s" % exc)
+            self.Qprint("<font color=red><b>Could not set %s modes:</b></font> %s" % (self._mode_family_name(), exc))
             return False
         return True
 
@@ -908,6 +1162,8 @@ class TheoryBaumgaertelWinter(QTheory):
         still dominate a part of the frequency window.  The returned indices are
         therefore only candidates for residual-guarded deletion.
         """
+        if self.is_retardation_domain:
+            return []
         if G.size <= 1 or self.weak_mode_threshold <= 0.0:
             return []
         total_G = float(np.sum(G))
@@ -934,6 +1190,30 @@ class TheoryBaumgaertelWinter(QTheory):
         residual_floor = max(old_residual, 1.0e-8)
         relative_increase = (new_residual - old_residual) / residual_floor
         return bool(relative_increase <= self.max_residual_increase)
+
+    def _cumulative_residual_increase_is_acceptable(self, initial_residual: float, new_residual: float) -> bool:
+        """Return True if a simplified spectrum remains close to the initial fit."""
+        if not np.isfinite(new_residual):
+            return False
+        if new_residual <= initial_residual:
+            return True
+        if not np.isfinite(self.max_cumulative_residual_increase):
+            return True
+        residual_floor = max(initial_residual, 1.0e-8)
+        relative_increase = (new_residual - initial_residual) / residual_floor
+        return bool(relative_increase <= self.max_cumulative_residual_increase)
+
+    def _simplification_residual_is_acceptable(
+        self,
+        current_residual: float,
+        initial_residual: float,
+        new_residual: float,
+    ) -> bool:
+        """Apply both local and cumulative residual guards."""
+        return self._residual_increase_is_acceptable(
+            current_residual,
+            new_residual,
+        ) and self._cumulative_residual_increase_is_acceptable(initial_residual, new_residual)
 
     def _best_single_mode_removal(
         self,
@@ -979,21 +1259,28 @@ class TheoryBaumgaertelWinter(QTheory):
             return
         file = self._first_valid_file()
         if file is None:
-            data_description = "G(t)" if self.is_time_domain else "G', G''"
+            if self.is_retardation_domain:
+                data_description = "creep"
+            elif self.is_time_domain:
+                data_description = "G(t)"
+            else:
+                data_description = "G', G''"
             QMessageBox.warning(self, "Baumgaertel-Winter", f"No valid {data_description} data file was found.")
             return
 
         tau, G = self._mode_values()
         skip_initial_fit = self._last_minimized_mode_signature == self._mode_fit_signature(file)
         self._set_simplification_running(True)
-        self.simplification_thread = QThread()
-        self.simplification_worker = _BaumgaertelWinterSimplificationWorker(self, file, tau.copy(), G.copy(), skip_initial_fit)
-        self.simplification_worker.moveToThread(self.simplification_thread)
-        self.simplification_worker.sig_done.connect(self._apply_simplification_result)
-        self.simplification_worker.sig_done.connect(self.simplification_thread.quit)
-        self.simplification_thread.started.connect(self.simplification_worker.work)
-        self.simplification_thread.finished.connect(self.simplification_worker.deleteLater)
-        self.simplification_thread.start()
+        thread = QThread()
+        worker = _BaumgaertelWinterSimplificationWorker(self, file, tau.copy(), G.copy(), skip_initial_fit)
+        self.simplification_thread = thread
+        self.simplification_worker = worker
+        worker.moveToThread(thread)
+        worker.sig_done.connect(self._apply_simplification_result)
+        worker.sig_done.connect(thread.quit)
+        thread.started.connect(worker.work)
+        thread.finished.connect(worker.deleteLater)
+        thread.start()
         self.Qprint("<font color=red><b>Started BW spectrum simplification...</b></font>")
         if skip_initial_fit:
             self.Qprint("<font color=red><b>Skipping initial BW refit because the current modes were just minimized.</b></font>")
@@ -1047,7 +1334,7 @@ class TheoryBaumgaertelWinter(QTheory):
                     modes_before = int(tau.size)
                     residual_before = current_residual
                     tau_fit, G_fit, merged_residual = self._fit_modes_to_file(file, tau_merged, G_merged)
-                    if self._residual_increase_is_acceptable(current_residual, merged_residual):
+                    if self._simplification_residual_is_acceptable(current_residual, initial_residual, merged_residual):
                         tau, G = tau_fit, G_fit
                         current_residual = merged_residual
                         n_merged_total += n_merged
@@ -1075,6 +1362,7 @@ class TheoryBaumgaertelWinter(QTheory):
                 tau_trial, G_trial, trial_residual, accept, removed_index = self._best_single_mode_removal(
                     file, tau, G, current_residual, weak_candidates
                 )
+                accept = accept and self._cumulative_residual_increase_is_acceptable(initial_residual, trial_residual)
                 modes_before = int(tau.size)
                 residual_before = current_residual
                 if accept and tau_trial.size < tau.size:
@@ -1111,42 +1399,49 @@ class TheoryBaumgaertelWinter(QTheory):
                         )
                     )
 
-                self._check_simplification_cancelled()
-                tau_trial, G_trial, trial_residual, accept, removed_index = self._best_single_mode_removal(file, tau, G, current_residual)
-                modes_before = int(tau.size)
-                residual_before = current_residual
-                if accept and tau_trial.size < tau.size:
-                    tau, G = tau_trial, G_trial
-                    current_residual = trial_residual
-                    n_deleted_total += 1
-                    changed = True
-                    report_events.append(
-                        _SimplificationReportEvent(
-                            pass_number=iteration,
-                            operation="trial deletion",
-                            modes_before=modes_before,
-                            modes_after=int(tau.size),
-                            residual_before=residual_before,
-                            residual_after=trial_residual,
-                            accepted=True,
-                            note="removed best candidate",
-                            mode_index=removed_index,
-                        )
+                if self.allow_trial_deletion:
+                    self._check_simplification_cancelled()
+                    tau_trial, G_trial, trial_residual, accept, removed_index = self._best_single_mode_removal(
+                        file,
+                        tau,
+                        G,
+                        current_residual,
                     )
-                else:
-                    report_events.append(
-                        _SimplificationReportEvent(
-                            pass_number=iteration,
-                            operation="trial deletion",
-                            modes_before=modes_before,
-                            modes_after=int(tau_trial.size),
-                            residual_before=residual_before,
-                            residual_after=trial_residual,
-                            accepted=False,
-                            note="best candidate rejected",
-                            mode_index=removed_index,
+                    accept = accept and self._cumulative_residual_increase_is_acceptable(initial_residual, trial_residual)
+                    modes_before = int(tau.size)
+                    residual_before = current_residual
+                    if accept and tau_trial.size < tau.size:
+                        tau, G = tau_trial, G_trial
+                        current_residual = trial_residual
+                        n_deleted_total += 1
+                        changed = True
+                        report_events.append(
+                            _SimplificationReportEvent(
+                                pass_number=iteration,
+                                operation="trial deletion",
+                                modes_before=modes_before,
+                                modes_after=int(tau.size),
+                                residual_before=residual_before,
+                                residual_after=trial_residual,
+                                accepted=True,
+                                note="removed best candidate",
+                                mode_index=removed_index,
+                            )
                         )
-                    )
+                    else:
+                        report_events.append(
+                            _SimplificationReportEvent(
+                                pass_number=iteration,
+                                operation="trial deletion",
+                                modes_before=modes_before,
+                                modes_after=int(tau_trial.size),
+                                residual_before=residual_before,
+                                residual_after=trial_residual,
+                                accepted=False,
+                                note="best candidate rejected",
+                                mode_index=removed_index,
+                            )
+                        )
             self._check_simplification_cancelled()
         except _SimplificationCancelled:
             self.Qprint("BW simplification stopped after pass %d with %d accepted mode(s)." % (iteration, tau.size))
@@ -1315,6 +1610,32 @@ class TheoryBaumgaertelWinter(QTheory):
                 break
             tt.data[:, 1] += G[i] * np.exp(-tt.data[:, 0] / tau[i]) * gamma
 
+    def BaumgaertelWinterRetardation(self, f: FileLike) -> None:
+        """Calculate the time-domain creep response from independent retardation modes."""
+        ft = f.data_table
+        tt = self.tables[f.file_name_short]
+        tt.num_columns = ft.num_columns
+        tt.num_rows = ft.num_rows
+        tt.data = np.zeros((tt.num_rows, tt.num_columns))
+        tt.data[:, 0] = ft.data[:, 0]
+        if tt.num_columns <= 1:
+            return
+
+        try:
+            stress = self._file_stress(f)
+        except (ValueError, KeyError):
+            self.Qprint("Invalid stress value")
+            return
+
+        tau, J = self._mode_values()
+        tt.data[:, 1] = stress * np.power(10.0, self.parameter_float("logJini"))
+        for tau_i, J_i in zip(tau, J):
+            if self.stop_theory_flag:
+                break
+            tt.data[:, 1] += stress * J_i * (1.0 - np.exp(-tt.data[:, 0] / tau_i))
+        if self._file_recovery_flag(f) != 1:
+            tt.data[:, 1] += stress * tt.data[:, 0] / np.power(10.0, self.parameter_float("logeta0"))
+
     def plot_theory_stuff(self) -> None:
         """Plot draggable mode helpers."""
         data_table_tmp: Any = DataTable(self.axarr)
@@ -1355,6 +1676,27 @@ class TheoryBaumgaertelWinterTime(TheoryBaumgaertelWinter):
     description: ClassVar[str] = "Discrete relaxation spectrum from G(t)"
     html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Gt/Theory/theory.html"
     is_time_domain: ClassVar[bool] = True
+
+
+class TheoryBaumgaertelWinterRetardation(TheoryBaumgaertelWinter):
+    r"""Fit a Baumgaertel-Winter discrete retardation spectrum to creep data.
+
+    * **Function**
+        .. math::
+            \gamma(t) = \sigma_0 \left[
+                J_0 + \sum_i J_i \left(1 - \exp(-t/\tau_i)\right)
+                + \frac{t}{\eta_0}
+            \right]
+
+    The retardation times :math:`\tau_i` and compliances :math:`J_i` are
+    independent adjustable parameters.
+    """
+
+    thname: ClassVar[str] = "Baumgaertel-Winter Retardation"
+    description: ClassVar[str] = "Discrete retardation spectrum from creep data"
+    html_help_file: ClassVar[str] = "http://reptate.readthedocs.io/manual/Applications/Creep/Theory/theory.html"
+    single_file: ClassVar[bool] = False
+    is_retardation_domain: ClassVar[bool] = True
 
 
 TheoryBaumgaertelWinterFrequency = TheoryBaumgaertelWinter

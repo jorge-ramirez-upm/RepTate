@@ -701,6 +701,7 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         self._axes = None  # To store x and y axes concerned by interaction
         self._event = None  # To store reference event during interaction
         self._was_zooming: bool = False
+        self._suppress_next_right_release: bool = False
 
         # LOGGING STUFF
         self.logger = logging.getLogger(self.parent_manager.logger.name + "." + self.name)
@@ -1752,6 +1753,9 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
     def onrelease(self, event):
         """Called when releasing mouse"""
         if event.button == 3:  # if release a right click
+            if self._suppress_next_right_release:
+                self._cancel_right_click_zoom()
+                return
             self._zoom_area(event)
             if not self._was_zooming:
                 self.open_figure_popup_menu(event)
@@ -1760,6 +1764,32 @@ class QApplicationWindow(QMainWindow, Ui_AppWindow):
         elif event.button == 2:
             self._pan(event)
         self._pressed_button = None
+
+    def suppress_next_right_click_zoom(self) -> None:
+        """Cancel the pending right-click zoom started by a handled plot event."""
+        self._suppress_next_right_release = True
+        self._cancel_pending_right_click_zoom()
+
+    def clear_suppressed_right_click_zoom(self) -> None:
+        """Clear a handled right-click interaction when no release event follows."""
+        self._cancel_right_click_zoom()
+
+    def _cancel_right_click_zoom(self) -> None:
+        """Reset right-click zoom state without changing axes limits."""
+        self._suppress_next_right_release = False
+        self._cancel_pending_right_click_zoom()
+
+    def _cancel_pending_right_click_zoom(self) -> None:
+        """Clear any active right-click zoom rectangle and interaction state."""
+        self._pressed_button = None
+        self._event = None
+        self._was_zooming = False
+        try:
+            self._patch.remove()
+            del self._patch
+            self.figure.canvas.draw()
+        except AttributeError:
+            pass
 
     def _pan(self, event):
         if event.name == "button_press_event":  # begin pan
