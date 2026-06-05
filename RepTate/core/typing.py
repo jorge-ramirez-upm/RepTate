@@ -212,6 +212,7 @@ class ApplicationManagerLike(Protocol):
 class DataSetLike(Protocol):
     """Minimal dataset contract used by QTheory and theory implementations."""
 
+    name: str
     logger: Any
     files: list[File]
     current_file: File | None
