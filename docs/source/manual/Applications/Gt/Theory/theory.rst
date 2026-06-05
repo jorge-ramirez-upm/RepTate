@@ -9,6 +9,7 @@ Stress Relaxation: Theories
    :maxdepth: 2
 
 .. include:: Maxwell.rst
+.. include:: BaumgaertelWinter.rst
 .. include:: Rouse.rst
 .. include:: DTDStars_time.rst
 .. include:: ReSpect.rst

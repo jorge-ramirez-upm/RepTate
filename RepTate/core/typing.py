@@ -198,6 +198,10 @@ class ApplicationLike(Protocol):
 
     def showDataInspector(self, checked: bool) -> Any: ...
 
+    def suppress_next_right_click_zoom(self) -> None: ...
+
+    def clear_suppressed_right_click_zoom(self) -> None: ...
+
 
 class ApplicationManagerLike(Protocol):
     """Minimal application manager contract used by applications and theories."""

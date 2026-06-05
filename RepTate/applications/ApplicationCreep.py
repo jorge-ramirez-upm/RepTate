@@ -78,6 +78,7 @@ class ApplicationCreep(QApplicationWindow):
 
     def __init__(self, name: str = "Creep", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
+        from RepTate.theories.TheoryBaumgaertelWinter import TheoryBaumgaertelWinterRetardation
         from RepTate.theories.TheoryRetardationModes import TheoryRetardationModesTime
 
         super().__init__(name, parent)
@@ -266,6 +267,7 @@ class ApplicationCreep(QApplicationWindow):
 
         # THEORIES
         self.theories[TheoryRetardationModesTime.thname] = TheoryRetardationModesTime
+        self.theories[TheoryBaumgaertelWinterRetardation.thname] = TheoryBaumgaertelWinterRetardation
         self.add_common_theories()
 
         # set the current view
