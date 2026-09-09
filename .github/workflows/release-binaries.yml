@@ -74,6 +74,17 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install Nuitka
 
+      - name: Report Windows native toolchain
+        shell: pwsh
+        run: |
+          where.exe gcc
+          where.exe g++
+          where.exe mingw32-make
+          gcc --version
+          g++ --version
+          gcc -v 2>&1
+          g++ -v 2>&1
+
       - name: Build UI (uic + rcc + patch imports)
         run: |
           python scripts/build_ui.py
@@ -301,17 +312,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install Nuitka
-
-      - name: Report Windows native toolchain
-        shell: pwsh
-        run: |
-          where.exe gcc
-          where.exe g++
-          where.exe mingw32-make
-          gcc --version
-          g++ --version
-          gcc -v 2>&1
-          g++ -v 2>&1
 
       - name: Build UI (uic + rcc + patch imports)
         run: |
