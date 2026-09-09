@@ -82,6 +82,14 @@ jobs:
         run: |
           python -m pip install -e .
 
+      - name: Build RepTate native Windows libraries from source
+        run: |
+          python scripts/build_native_libraries.py
+
+      - name: Verify RepTate native Windows libraries
+        run: |
+          python scripts/build_native_libraries.py --check
+
       - name: Build with Nuitka (Windows)
         shell: cmd
         run: |
@@ -165,6 +173,14 @@ jobs:
       - name: Install RepTate (editable) so that Nuitka can read the version and other metadata
         run: |
           python -m pip install -e .
+
+      - name: Build RepTate native Linux libraries from source
+        run: |
+          python scripts/build_native_libraries.py
+
+      - name: Verify RepTate native Linux libraries
+        run: |
+          python scripts/build_native_libraries.py --check
 
       - name: Build with Nuitka (Linux)
         shell: bash

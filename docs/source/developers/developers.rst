@@ -7,12 +7,15 @@ Contents:
 Native theory libraries
 ------------------------
 
-Source developers can rebuild the RepTate-owned native theory libraries with::
+Source developers can rebuild the RepTate-owned native theory libraries on
+macOS, Linux, or Windows with::
 
    python scripts/build_native_libraries.py
 
-Release CI uses this same entry point for native macOS builds. Ordinary users
-installing a binary release do not need to compile these libraries.
+Use ``--library bob`` to build one logical library or ``--check`` to verify
+existing outputs without rebuilding. Release CI uses this same entry point on
+all three platforms. Ordinary users installing a binary release do not need
+to compile these libraries.
 
 .. toctree::
    :maxdepth: 2
