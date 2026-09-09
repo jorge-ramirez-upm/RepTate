@@ -88,7 +88,7 @@ jobs:
 
       - name: Verify RepTate native Windows libraries
         run: |
-          python scripts/build_native_libraries.py --check
+          python scripts/build_native_libraries.py --check --audit-dependencies
 
       - name: Build with Nuitka (Windows)
         shell: cmd
@@ -114,6 +114,27 @@ jobs:
             --include-data-files=RepTate\theories\*.npz=RepTate\theories\ ^
             --include-data-files=RepTate\theories\*_win32*.so=RepTate\theories\ ^
             RepTate
+
+      - name: Audit packaged Windows native-library dependencies
+        shell: pwsh
+        run: |
+          $distDir = Get-ChildItem -Path "dist" -Directory | Where-Object { $_.Name -like "*.dist" } | Select-Object -First 1
+          if (-not $distDir) { throw "No *.dist directory found under dist/" }
+          $native = @(Get-ChildItem -LiteralPath $distDir.FullName -Recurse -File -Filter "*_win32*.so")
+          if ($native.Count -ne 9) { throw "Expected 9 packaged RepTate Windows native libraries, found $($native.Count)" }
+          $systemDll = '^(api-ms-win-|ext-ms-win-|KERNEL32\.dll$|KERNELBASE\.dll$|NTDLL\.dll$|USER32\.dll$|ADVAPI32\.dll$|SHELL32\.dll$|OLE32\.dll$|OLEAUT32\.dll$|WS2_32\.dll$|GDI32\.dll$|COMDLG32\.dll$|RPCRT4\.dll$|MSVCRT\.dll$|UCRTBASE\.dll$|VCRUNTIME[^ ]*\.dll$|CRYPT32\.dll$|BCRYPT\.dll$|COMBASE\.dll$|SHLWAPI\.dll$|VERSION\.dll$|WINMM\.dll$|PSAPI\.dll$|IMM32\.dll$|SETUPAPI\.dll$|SECHOST\.dll$|USERENV\.dll$|NORMALIZ\.dll$)'
+          foreach ($library in $native) {
+            $dump = & objdump -p $library.FullName 2>&1
+            if ($LASTEXITCODE -ne 0) { throw "objdump failed for $($library.FullName)" }
+            $imports = @($dump | ForEach-Object { if ($_ -match 'DLL Name:\s*(.+)$') { $Matches[1].Trim() } })
+            Write-Host "$($library.Name) imports: $($imports -join ', ')"
+            foreach ($dependency in $imports) {
+              if ($dependency -match $systemDll) { continue }
+              $present = Get-ChildItem -LiteralPath $distDir.FullName -Recurse -File -Filter $dependency | Select-Object -First 1
+              if (-not $present) { throw "Missing packaged non-system dependency $dependency required by $($library.FullName)" }
+            }
+          }
+          Write-Host "Packaged Windows native-library dependency audit passed"
 
       - name: Add docs into dist folder (Windows)
         shell: pwsh

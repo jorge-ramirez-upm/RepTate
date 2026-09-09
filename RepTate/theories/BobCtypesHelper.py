@@ -89,7 +89,7 @@ class BobCtypesHelper:
             logger.debug("Loaded BoB shared library: path=%s", self.lib_path)
         except OSError as exc:
             logger.exception("Failed to load BoB shared library: path=%s", self.lib_path)
-            print(f"Could not load shared library {self.lib_path}: {exc}")
+            raise BobError(f"Could not load BoB shared library {self.lib_path}: {exc}") from exc
         # link the C function to Python
         self.link_c_functions()
 

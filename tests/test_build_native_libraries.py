@@ -37,7 +37,7 @@ def test_command_construction():
         "cc", "-shared", "-fPIC", "-O2", "rouse.c", "-o", "../rouse_lib_linux.so"
     ]
     assert build_native_libraries.direct_command(library, "windows") == [
-        "gcc", "-shared", "-fPIC", "-O2", "rouse.c", "-o", "../rouse_lib_win32.so"
+        "gcc", "-shared", "-fPIC", "-O2", "-static-libgcc", "rouse.c", "-o", "../rouse_lib_win32.so"
     ]
     landscape = next(item for item in build_native_libraries.NATIVE_LIBRARIES if item.name == "landscape")
     assert "-I./" in build_native_libraries.direct_command(landscape)

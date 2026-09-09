@@ -9,6 +9,7 @@ build; only compiler flags and output names vary by platform.
 from __future__ import annotations
 
 import argparse
+import ctypes
 import os
 import platform as platform_module
 import shutil
@@ -116,6 +117,8 @@ def direct_command(library: NativeLibrary, platform_name: str = "darwin", compil
     """Construct the existing direct compiler recipe for one platform."""
     compiler = compiler or {"darwin": "cc", "linux": "cc", "windows": "gcc"}[platform_name]
     flags = ["-dynamiclib", "-fPIC", "-O2"] if platform_name == "darwin" else ["-shared", "-fPIC", "-O2"]
+    if platform_name == "windows":
+        flags.append("-static-libgcc")
     command = [compiler, *flags, *library.source_files]
     if library.include_current_directory:
         command.append("-I./")
@@ -160,13 +163,13 @@ def _compiler(platform_name: str) -> str:
     return _tool(default, f"{platform_name} C compiler")
 
 
-def _make_command(platform_name: str) -> tuple[str, dict[str, str]]:
+def _make_command(platform_name: str) -> tuple[str, dict[str, str], str]:
     names = ("mingw32-make", "make") if platform_name == "windows" else ("make",)
     make = next((shutil.which(name) for name in names if shutil.which(name)), None)
     if make is None:
         raise BuildError(f"required {platform_name} make program was not found (tried: {', '.join(names)})")
-    cxx = os.environ.get("CXX") or _tool("g++", f"{platform_name} C++ compiler for Bob")
-    return make, _tool_environment((make, cxx))
+    cxx = _tool("g++", f"{platform_name} C++ compiler for Bob")
+    return make, _tool_environment((make, cxx)), "g++"
 
 
 def _file_output(path: Path, library: NativeLibrary) -> str:
@@ -229,7 +232,30 @@ def _verify_windows(path: Path, library: NativeLibrary, expected: str) -> None:
     print(f"{path.name}: verified Windows PE x86_64 (machine 0x{machine:04x})")
 
 
-def verify_output(path: Path, library: NativeLibrary, platform_name: str, expected: str) -> None:
+def _load_windows_library(path: Path, library: NativeLibrary) -> None:
+    try:
+        ctypes.CDLL(str(path))
+    except OSError as exc:
+        raise BuildError(f"{library.name}: Windows loader could not load {path}: {exc}") from exc
+    print(f"{path.name}: ctypes.CDLL load passed")
+
+
+def _windows_dependencies(path: Path, library: NativeLibrary) -> tuple[str, ...]:
+    objdump = _tool("objdump", "Windows PE dependency inspection tool")
+    try:
+        result = subprocess.run([objdump, "-p", str(path)], check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as exc:
+        raise BuildError(f"{library.name}: objdump dependency audit failed with exit status {exc.returncode}: {path}") from exc
+    dependencies = tuple(
+        line.split("DLL Name:", 1)[1].strip()
+        for line in result.stdout.splitlines()
+        if "DLL Name:" in line
+    )
+    print(f"{path.name} imports: {', '.join(dependencies) or '(none)'}")
+    return dependencies
+
+
+def verify_output(path: Path, library: NativeLibrary, platform_name: str, expected: str, load_windows: bool = False) -> None:
     if not path.is_file():
         raise BuildError(f"{library.name}: expected output was not created: {path}")
     if platform_name == "darwin":
@@ -238,6 +264,8 @@ def verify_output(path: Path, library: NativeLibrary, platform_name: str, expect
         _verify_linux(path, library, expected)
     elif platform_name == "windows":
         _verify_windows(path, library, expected)
+        if load_windows:
+            _load_windows_library(path, library)
 
 
 def _remove_bob_products(source_dir: Path, verbose: bool = False) -> None:
@@ -250,14 +278,17 @@ def _remove_bob_products(source_dir: Path, verbose: bool = False) -> None:
 
 def _build_bob(library: NativeLibrary, theories_dir: Path, platform_name: str, verbose: bool) -> None:
     source_dir = library.source_path(theories_dir)
-    make, environment = _make_command(platform_name)
+    make, environment, cxx = _make_command(platform_name)
     if platform_name != "windows":
         _run([make, "-f", "makefile_for_lib", "clean"], source_dir, library, verbose, environment)
     else:
         # The makefile's clean recipe uses Unix rm; use the script's narrow
         # product cleanup on Windows while retaining the established build.
         _remove_bob_products(source_dir, verbose)
-    _run([make, "-f", "makefile_for_lib"], source_dir, library, verbose, environment)
+    command = [make, "-f", "makefile_for_lib"]
+    if platform_name == "windows":
+        command.append(f"cpp={cxx} -Wall -g -O3 -DNBETA -shared -fPIC -static-libstdc++ -static-libgcc")
+    _run(command, source_dir, library, verbose, environment)
     built = source_dir / "bob2p5_lib.so"
     if not built.is_file():
         raise BuildError(f"{library.name}: make completed but did not produce {built} (source: {source_dir})")
@@ -286,12 +317,21 @@ def clean_outputs(theories_dir: Path, platform_name: str) -> None:
     _remove_bob_products(theories_dir / "modified_bob2.5/code/src/obj")
 
 
+def audit_windows_dependencies(theories_dir: Path, selected: Sequence[NativeLibrary]) -> None:
+    for library in selected:
+        output = library.output_path(theories_dir, "windows")
+        if not output.is_file():
+            raise BuildError(f"{library.name}: expected output is missing for dependency audit: {output}")
+        _windows_dependencies(output, library)
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--all", action="store_true", help="build all libraries for the current platform")
     parser.add_argument("--library", choices=[library.name for library in NATIVE_LIBRARIES], help="build/check one library")
     parser.add_argument("--clean", action="store_true", help="remove current-platform outputs and Bob build products")
     parser.add_argument("--check", action="store_true", help="check current-platform outputs without rebuilding")
+    parser.add_argument("--audit-dependencies", action="store_true", help="audit Windows DLL imports with objdump")
     parser.add_argument("--verbose", action="store_true", help="print compiler commands")
     return parser
 
@@ -316,9 +356,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         clean_outputs(theories_dir, platform_name)
         return 0
     if args.check:
+        if args.audit_dependencies:
+            if platform_name != "windows":
+                raise BuildError("--audit-dependencies is only implemented on Windows")
+            audit_windows_dependencies(theories_dir, selected)
         for library in selected:
             output = library.output_path(theories_dir, platform_name)
-            verify_output(output, library, platform_name, expected)
+            verify_output(output, library, platform_name, expected, load_windows=platform_name == "windows")
         return 0
     for library in selected:
         build_library(library, theories_dir, platform_name, expected, args.verbose)
