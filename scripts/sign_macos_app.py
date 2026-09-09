@@ -13,12 +13,23 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Sequence
 
 
 class SigningError(RuntimeError):
     """An actionable signing or DMG creation error."""
+
+
+@dataclass
+class SigningSummary:
+    reptate_owned_signed: int = 0
+    third_party_signed: int = 0
+    third_party_preserved: int = 0
+    nested_bundles_signed: int = 0
+    outer_signed: bool = False
+    final_verification: bool = False
 
 
 def _run(command: Sequence[str], *, capture_output: bool = False) -> subprocess.CompletedProcess[str]:
@@ -33,6 +44,30 @@ def _run(command: Sequence[str], *, capture_output: bool = False) -> subprocess.
 def is_macho(file_output: str) -> bool:
     """Return whether ``file`` output identifies Mach-O code."""
     return "Mach-O" in file_output
+
+
+def is_reptate_owned(path: Path, app_path: Path) -> bool:
+    """Classify native code by its final bundle path, not its suffix alone."""
+    contents_dir = app_path / "Contents"
+    if path == contents_dir / "MacOS" / "RepTate.bin":
+        return True
+    for package_root in (contents_dir / "MacOS" / "RepTate", contents_dir / "Resources" / "RepTate"):
+        try:
+            path.relative_to(package_root)
+            return True
+        except ValueError:
+            continue
+    return False
+
+
+def has_valid_signature(path: Path, runner=None) -> bool:
+    """Check an existing signature at the binary's final packaged location."""
+    run = _run if runner is None else runner
+    try:
+        run(["codesign", "--verify", "--strict", str(path)])
+    except SigningError:
+        return False
+    return True
 
 
 def discover_macho_files(contents_dir: Path) -> list[Path]:
@@ -66,12 +101,13 @@ def discover_code_bundles(app_path: Path, macho_files: Iterable[Path]) -> list[P
     return sorted(bundles, key=lambda path: (-len(path.relative_to(app_path).parts), str(path)))
 
 
-def adhoc_sign(path: Path) -> None:
-    print(f"Ad-hoc signing: {path}")
+def adhoc_sign(path: Path, message: str, verbose: bool) -> None:
+    if verbose:
+        print(f"{message}: {path}")
     _run(["codesign", "--force", "--sign", "-", str(path)])
 
 
-def sign_app(app_path: Path) -> list[Path]:
+def sign_app(app_path: Path, verbose: bool = False) -> SigningSummary:
     """Sign nested Mach-O code and bundles, then sign the outer app last."""
     if not app_path.is_dir() or app_path.suffix != ".app":
         raise SigningError(f"application bundle does not exist: {app_path}")
@@ -82,22 +118,48 @@ def sign_app(app_path: Path) -> list[Path]:
     macho_files = discover_macho_files(contents_dir)
     if not macho_files:
         raise SigningError(f"no Mach-O files found below {contents_dir}")
+    summary = SigningSummary()
     print(f"Found {len(macho_files)} Mach-O file(s) under {contents_dir}")
     for macho in sorted(macho_files, key=lambda path: (-len(path.relative_to(contents_dir).parts), str(path))):
-        adhoc_sign(macho)
+        if is_reptate_owned(macho, app_path):
+            adhoc_sign(macho, "Signing RepTate-owned binary", verbose)
+            summary.reptate_owned_signed += 1
+        elif has_valid_signature(macho):
+            if verbose:
+                print(f"Preserving valid signature: {macho}")
+            summary.third_party_preserved += 1
+        else:
+            adhoc_sign(macho, "Signing unsigned/invalid third-party binary", verbose)
+            summary.third_party_signed += 1
     for bundle in discover_code_bundles(app_path, macho_files):
-        adhoc_sign(bundle)
+        if has_valid_signature(bundle):
+            if verbose:
+                print(f"Preserving valid nested bundle signature: {bundle}")
+        else:
+            adhoc_sign(bundle, "Signing unsigned/invalid nested bundle", verbose)
+            summary.nested_bundles_signed += 1
 
     # Keep this explicit and last: no app contents may be changed afterwards.
     print(f"Ad-hoc signing outer application: {app_path}")
     _run(["codesign", "--force", "--sign", "-", str(app_path)])
-    return macho_files
+    summary.outer_signed = True
+    return summary
 
 
 def verify_app(app_path: Path) -> None:
     print("Verifying ad-hoc signature (adhoc)")
     _run(["codesign", "--verify", "--deep", "--strict", "--verbose=4", str(app_path)])
     _run(["codesign", "-dv", "--verbose=4", str(app_path)])
+
+
+def print_summary(summary: SigningSummary) -> None:
+    print("== macOS signing summary ==")
+    print(f"RepTate-owned binaries signed: {summary.reptate_owned_signed}")
+    print(f"Unsigned/invalid third-party binaries signed: {summary.third_party_signed}")
+    print(f"Valid third-party signatures preserved: {summary.third_party_preserved}")
+    print(f"Nested bundles signed: {summary.nested_bundles_signed}")
+    print(f"Outer application signed: {'yes' if summary.outer_signed else 'no'}")
+    print(f"Final verification: {'passed' if summary.final_verification else 'not run'}")
 
 
 def create_dmg(app_path: Path, dmg_path: Path) -> None:
@@ -134,12 +196,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("app", type=Path, help="assembled .app bundle to sign")
     parser.add_argument("dmg", type=Path, help="output DMG path")
+    parser.add_argument("--verbose", action="store_true", help="print each preserved and signed path")
     args = parser.parse_args(argv)
     if sys.platform != "darwin":
         raise SigningError("macOS app signing and DMG creation require macOS")
-    sign_app(args.app)
+    summary = sign_app(args.app, verbose=args.verbose)
     verify_app(args.app)
+    summary.final_verification = True
     create_dmg(args.app, args.dmg)
+    print_summary(summary)
     return 0
 
 

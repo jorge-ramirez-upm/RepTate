@@ -1,4 +1,5 @@
 import importlib.util
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,6 +17,23 @@ def test_macho_detection():
     assert not sign_macos_app.is_macho("ELF 64-bit LSB shared object")
 
 
+def test_reptate_owned_classification():
+    app = Path("dist/RepTate.app")
+    assert sign_macos_app.is_reptate_owned(app / "Contents/MacOS/RepTate.bin", app)
+    assert sign_macos_app.is_reptate_owned(app / "Contents/MacOS/RepTate/theories/rouse_lib_darwin.so", app)
+    assert sign_macos_app.is_reptate_owned(app / "Contents/Resources/RepTate/foo.so", app)
+    assert not sign_macos_app.is_reptate_owned(app / "Contents/MacOS/scipy/foo.so", app)
+
+
+def test_signature_decision():
+    def runner(command):
+        if str(command[-1]).endswith("invalid.so"):
+            raise sign_macos_app.SigningError("invalid")
+
+    assert sign_macos_app.has_valid_signature(Path("valid.so"), runner)
+    assert not sign_macos_app.has_valid_signature(Path("invalid.so"), runner)
+
+
 def test_nested_bundles_are_inside_out():
     app = Path("dist/RepTate.app")
     framework = app / "Contents/Frameworks/Example.framework"
@@ -23,3 +41,53 @@ def test_nested_bundles_are_inside_out():
     macho = nested / "Inner"
     bundles = sign_macos_app.discover_code_bundles(app, [macho])
     assert bundles == [nested, framework]
+
+
+def test_symlink_is_excluded_from_macho_discovery(tmp_path, monkeypatch):
+    target = tmp_path / "real"
+    target.write_text("binary")
+    link = tmp_path / "link"
+    try:
+        link.symlink_to(target)
+    except (OSError, NotImplementedError):
+        return
+
+    def fake_run(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout="Mach-O 64-bit", stderr="")
+
+    monkeypatch.setattr(sign_macos_app, "_run", fake_run)
+    assert sign_macos_app.discover_macho_files(tmp_path) == [target]
+
+
+def test_signing_summary_and_outer_order(tmp_path, monkeypatch):
+    app = tmp_path / "RepTate.app"
+    contents = app / "Contents/MacOS"
+    contents.mkdir(parents=True)
+    owned = contents / "RepTate.bin"
+    valid = contents / "scipy/valid.so"
+    invalid = contents / "scipy/invalid.so"
+    valid.parent.mkdir()
+    owned.touch()
+    valid.touch()
+    invalid.touch()
+    bundle = app / "Contents/Frameworks/Third.framework"
+    calls = []
+
+    def fake_run(command, **kwargs):
+        calls.append(command)
+        if command[:3] == ["codesign", "--verify", "--strict"] and str(command[-1]).endswith(("invalid.so", "Third.framework")):
+            raise sign_macos_app.SigningError("invalid")
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(sign_macos_app, "_run", fake_run)
+    monkeypatch.setattr(sign_macos_app, "discover_macho_files", lambda _: [owned, valid, invalid])
+    monkeypatch.setattr(sign_macos_app, "discover_code_bundles", lambda *_: [bundle])
+    summary = sign_macos_app.sign_app(app)
+
+    assert summary.reptate_owned_signed == 1
+    assert summary.third_party_signed == 1
+    assert summary.third_party_preserved == 1
+    assert summary.nested_bundles_signed == 1
+    assert summary.outer_signed
+    force_signs = [call[-1] for call in calls if call[:3] == ["codesign", "--force", "--sign"]]
+    assert force_signs[-1] == str(app)
