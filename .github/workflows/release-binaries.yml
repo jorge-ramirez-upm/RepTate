@@ -123,7 +123,6 @@ jobs:
             --include-data-dir=RepTate\gui\Images=RepTate\gui\Images ^
             --include-data-files=RepTate\tools\*.npy=RepTate\tools\ ^
             --include-data-files=RepTate\theories\*.npz=RepTate\theories\ ^
-            --include-data-files=RepTate\theories\*_win32*.so=RepTate\theories\ ^
             RepTate
 
       - name: Audit packaged Windows native-library dependencies
@@ -131,8 +130,41 @@ jobs:
         run: |
           $distDir = Get-ChildItem -Path "dist" -Directory | Where-Object { $_.Name -like "*.dist" } | Select-Object -First 1
           if (-not $distDir) { throw "No *.dist directory found under dist/" }
-          $native = @(Get-ChildItem -LiteralPath $distDir.FullName -Recurse -File -Filter "*_win32*.so")
-          if ($native.Count -ne 9) { throw "Expected 9 packaged RepTate Windows native libraries, found $($native.Count)" }
+          $expectedNames = @(
+            "bob2p5_lib_win32.so",
+            "dtd_lib_win32.so",
+            "kww_lib_win32.so",
+            "landscape_win32.so",
+            "react_lib_win32.so",
+            "rouse_lib_win32.so",
+            "rp_blend_lib_win32.so",
+            "sccr_lib_win32.so",
+            "schwarzl_lib_win32.so"
+          )
+          $allNative = @(Get-ChildItem -LiteralPath $distDir.FullName -Recurse -File -Filter "*_win32*.so")
+          Write-Host "Discovered packaged Windows native libraries:"
+          $allNative | Group-Object Name | Sort-Object Name | ForEach-Object {
+            Write-Host ("{0}:" -f $_.Name)
+            $_.Group | ForEach-Object { Write-Host ("  {0}" -f ($_.FullName.Substring($distDir.FullName.Length + 1))) }
+          }
+
+          $authoritativeDir = Join-Path $distDir.FullName "RepTate\theories"
+          if (-not (Test-Path -LiteralPath $authoritativeDir -PathType Container)) {
+            throw "Authoritative packaged theory directory is missing: $authoritativeDir"
+          }
+          $native = @()
+          foreach ($name in $expectedNames) {
+            $matches = @(Get-ChildItem -LiteralPath $authoritativeDir -File -Filter $name)
+            if ($matches.Count -ne 1) {
+              throw "Expected exactly one $name in authoritative directory $authoritativeDir, found $($matches.Count)"
+            }
+            $native += $matches[0]
+          }
+          $unexpected = @($allNative | Where-Object { $_.FullName -notlike "$authoritativeDir\*" })
+          if ($unexpected.Count -gt 0) {
+            throw "Redundant Windows native-library copies found outside $authoritativeDir: $($unexpected.FullName -join ', ')"
+          }
+          Write-Host "Authoritative packaged RepTate native-library directory: $authoritativeDir"
           $systemDll = '^(api-ms-win-|ext-ms-win-|KERNEL32\.dll$|KERNELBASE\.dll$|NTDLL\.dll$|USER32\.dll$|ADVAPI32\.dll$|SHELL32\.dll$|OLE32\.dll$|OLEAUT32\.dll$|WS2_32\.dll$|GDI32\.dll$|COMDLG32\.dll$|RPCRT4\.dll$|MSVCRT\.dll$|UCRTBASE\.dll$|VCRUNTIME[^ ]*\.dll$|CRYPT32\.dll$|BCRYPT\.dll$|COMBASE\.dll$|SHLWAPI\.dll$|VERSION\.dll$|WINMM\.dll$|PSAPI\.dll$|IMM32\.dll$|SETUPAPI\.dll$|SECHOST\.dll$|USERENV\.dll$|NORMALIZ\.dll$)'
           foreach ($library in $native) {
             $dump = & objdump -p $library.FullName 2>&1
