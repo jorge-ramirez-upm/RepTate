@@ -66,8 +66,9 @@ def test_windows_bob_static_runtime_linker_flags():
     text = makefile.read_text()
     assert "$(all_obj) $(BOB_LDFLAGS) -o bob2p5_lib.so" in text
     command = build_native_libraries.bob_build_command("mingw32-make", "g++", "windows")
+    assert "-static -Wall" in command[3]
     assert "-static-libstdc++ -static-libgcc" in command[3]
-    assert command[4] == "BOB_LDFLAGS=-Wl,-Bstatic -lwinpthread -Wl,-Bdynamic"
+    assert len(command) == 4
 
 
 def test_windows_pe_architecture(tmp_path):

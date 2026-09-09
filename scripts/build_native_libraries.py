@@ -285,10 +285,11 @@ def bob_build_command(make: str, cxx: str, platform_name: str) -> list[str]:
     """Construct Bob's platform-specific make invocation."""
     command = [make, "-f", "makefile_for_lib"]
     if platform_name == "windows":
-        command.append(f"cpp={cxx} -Wall -g -O3 -DNBETA -shared -fPIC -static-libstdc++ -static-libgcc")
-        # This is deliberately after $(all_obj) in makefile_for_lib so the
-        # static archive is searched after object-file references are known.
-        command.append("BOB_LDFLAGS=-Wl,-Bstatic -lwinpthread -Wl,-Bdynamic")
+        # The historical Windows Bob recipe used -static in addition to the
+        # individual GCC/C++ runtime switches.  This statically selects the
+        # MinGW runtime archives, including winpthread, for Bob only; the
+        # other native libraries retain their existing direct C recipes.
+        command.append(f"cpp={cxx} -static -Wall -g -O3 -DNBETA -shared -fPIC -static-libstdc++ -static-libgcc")
     return command
 
 
