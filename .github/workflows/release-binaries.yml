@@ -257,6 +257,7 @@ jobs:
             --macos-app-icon=RepTate/gui/Images/RepTate_logo_new.icns \
             --macos-app-macos-min-version=11.0 \
             --output-dir=dist \
+            --output-filename=RepTate.bin \
             --noinclude-qt-translations \
             --python-flag=-m \
             --include-package=RepTate.tools \
@@ -286,10 +287,7 @@ jobs:
         run: |
           set -euo pipefail
           APP_PATH="dist/RepTate.app"
-          EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate"
-          if [[ ! -f "$EXECUTABLE" ]]; then
-            EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate.bin"
-          fi
+          EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate.bin"
           test -f "$EXECUTABLE"
 
           echo "== macOS build identity =="
@@ -328,8 +326,8 @@ jobs:
           echo "== bundle resources =="
           test -d "$APP_PATH/Contents/Resources/data"
           test -d "$APP_PATH/Contents/Resources/docs/build/html"
-          test -d "$APP_PATH/Contents/Resources/RepTate"
-          echo "Resources/data, Resources/RepTate, and offline HTML docs are present"
+          test -d "$APP_PATH/Contents/MacOS/RepTate"
+          echo "Resources/data, MacOS/RepTate, and offline HTML docs are present"
 
       - name: Zip artifact (macOS)
         shell: bash
