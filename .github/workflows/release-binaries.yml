@@ -213,11 +213,36 @@ jobs:
           name: RepTate-${{ github.ref_name }}-linux
           path: dist/${{ env.ZIP }}
 
+  # Legacy macOS 11 / Big Sur Intel compatibility experiment.
+  # Disabled by default; reference only. It requires Big-Sur-compatible native
+  # wheels, notably a SciPy build other than the macOS-14 Accelerate wheel.
+  # legacy-macos-intel-big-sur:
+  #   runs-on: macos-15-intel
+  #   # Retain the proven bundle settings if this experiment is restored:
+  #   # --mode=app
+  #   # --output-filename=RepTate.bin
+  #   # --macos-app-macos-min-version=11.0
+  #   # --include-package=RepTate.tools
+  #   # --include-data-dir=data=data
+  #   # --include-data-dir=RepTate/gui/Images=RepTate/gui/Images
+  #   # --include-data-files=RepTate/tools/*.npy=RepTate/tools/
+  #   # --include-data-files=RepTate/theories/*.npz=RepTate/theories/
+  #   # --include-data-files=RepTate/theories/*_darwin*.so=RepTate/theories/
+
   build-macos:
     needs: build-docs
-    # The supported manual-test machine is Intel macOS Big Sur.  Keep this
-    # explicit: the default macOS label may select an Apple Silicon runner.
-    runs-on: macos-15-intel
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - architecture: arm64
+            runner: macos-15
+          - architecture: x86_64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    env:
+      # SciPy 1.15.3's Intel macOS wheel uses Accelerate and can require 14.0.
+      MACOS_MIN_VERSION: "14.0"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -248,14 +273,31 @@ jobs:
         run: |
           python -m pip install -e .
 
-      - name: Build with Nuitka (macOS)
+      - name: Smoke-test Python and RepTate imports
+        shell: bash
+        run: |
+          python - <<'PY'
+          import PySide6
+          import numpy
+          import scipy
+          import scipy.interpolate
+          import scipy.linalg
+          import scipy.optimize
+          import RepTate
+          import RepTate.gui.Reptate_rc
+          import RepTate.tools.polymer_data
+          print("dependency and RepTate imports: passed")
+          PY
+          QT_QPA_PLATFORM=offscreen python -c "from PySide6.QtWidgets import QApplication; app = QApplication([]); import RepTate; print('offscreen Qt smoke test: passed')"
+
+      - name: Build with Nuitka (macOS ${{ matrix.architecture }})
         shell: bash
         run: |
           python -m nuitka \
             --mode=app \
             --enable-plugin=pyside6 \
             --macos-app-icon=RepTate/gui/Images/RepTate_logo_new.icns \
-            --macos-app-macos-min-version=11.0 \
+            --macos-app-macos-min-version=${{ env.MACOS_MIN_VERSION }} \
             --output-dir=dist \
             --output-filename=RepTate.bin \
             --noinclude-qt-translations \
@@ -288,16 +330,48 @@ jobs:
           set -euo pipefail
           APP_PATH="dist/RepTate.app"
           EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate.bin"
-          test -f "$EXECUTABLE"
+          EXPECTED_ARCH="${{ matrix.architecture }}"
+          CLAIMED_MIN_MACOS="${{ env.MACOS_MIN_VERSION }}"
+
+          require_file() {
+            local label="$1"
+            local path="$2"
+            if [[ -f "$path" ]]; then
+              echo "present file ($label): $path"
+            else
+              echo "::error::Missing required file ($label): $path"
+              return 1
+            fi
+          }
+
+          require_file "main RepTate executable" "$EXECUTABLE"
 
           echo "== macOS build identity =="
-          uname -m
-          python -c "import platform; print(platform.machine())"
-          test "$(uname -m)" = "x86_64"
-          python -c "import platform; assert platform.machine() == 'x86_64'"
-          echo "architecture: x86_64 (expected)"
-          file "$EXECUTABLE"
-          file "$EXECUTABLE" | grep -q 'x86_64'
+          RUNNER_ARCH="$(uname -m)"
+          PYTHON_ARCH="$(python -c 'import platform; print(platform.machine())')"
+          echo "runner architecture: $RUNNER_ARCH"
+          echo "Python architecture: $PYTHON_ARCH"
+          echo "expected architecture: $EXPECTED_ARCH"
+          if [[ "$RUNNER_ARCH" != "$EXPECTED_ARCH" ]]; then
+            echo "::error::Runner architecture $RUNNER_ARCH does not match expected $EXPECTED_ARCH"
+            exit 1
+          fi
+          if [[ "$PYTHON_ARCH" != "$EXPECTED_ARCH" ]]; then
+            echo "::error::Python architecture $PYTHON_ARCH does not match expected $EXPECTED_ARCH"
+            exit 1
+          fi
+
+          version_is_newer() {
+            local required="$1"
+            local claimed="$2"
+            local required_major="${required%%.*}"
+            local required_minor="${required#*.}"
+            local claimed_major="${claimed%%.*}"
+            local claimed_minor="${claimed#*.}"
+            required_minor="${required_minor%%.*}"
+            claimed_minor="${claimed_minor%%.*}"
+            (( required_major > claimed_major || (required_major == claimed_major && required_minor > claimed_minor) ))
+          }
 
           audit_binary() {
             local binary="$1"
@@ -313,17 +387,27 @@ jobs:
             echo "path: $binary"
             echo "architecture: $architecture"
             echo "$file_info"
-            deployment_target="$(otool -l "$binary" | awk '/LC_BUILD_VERSION/{found=1; next} found && /minos/{print $2; exit} /LC_VERSION_MIN_MACOSX/{found=2; next} found == 2 && /version/{print $2; exit}')"
-            echo "minimum macOS: ${deployment_target:-unknown}"
-            if [[ "$deployment_target" =~ ^([0-9]+)\. ]]; then
-              if (( BASH_REMATCH[1] > 11 )); then
-                echo "::warning file=$binary::requires macOS $deployment_target, newer than intended minimum 11.0"
-              fi
+            if [[ "$architecture" != "$EXPECTED_ARCH" ]]; then
+              echo "::error file=$binary::architecture $architecture does not match expected $EXPECTED_ARCH"
+              return 1
+            fi
+            deployment_target="$(otool -l "$binary" | awk '
+              /LC_BUILD_VERSION/ { build=1; legacy=0; next }
+              /LC_VERSION_MIN_MACOSX/ { legacy=1; build=0; next }
+              build && $1 == "minos" { print $2; exit }
+              legacy && $1 == "version" { print $2; exit }
+            ')"
+            echo "minimum macOS deployment target: ${deployment_target:-unknown}"
+            if [[ -z "$deployment_target" ]]; then
+              echo "::warning file=$binary::could not determine minimum macOS deployment target"
+            elif version_is_newer "$deployment_target" "$CLAIMED_MIN_MACOS"; then
+              echo "::error file=$binary::requires macOS $deployment_target, newer than claimed minimum $CLAIMED_MIN_MACOS"
+              return 1
             fi
             otool -l "$binary" | grep -A4 -E 'LC_BUILD_VERSION|LC_VERSION_MIN_MACOSX' | grep -E 'cmd |platform |minos |version ' || true
           }
 
-          echo "== main executable deployment target =="
+          echo "== main executable =="
           audit_binary "$EXECUTABLE"
 
           find_representative() {
@@ -400,21 +484,21 @@ jobs:
           require_directory "RepTate GUI images" "$PACKAGE_DIR/gui/Images"
           echo "Runtime data, RepTate package resources, and offline HTML docs are present"
 
-      - name: Zip artifact (macOS)
+      - name: Zip artifact (macOS ${{ matrix.architecture }})
         shell: bash
         run: |
-          ZIP="RepTate-${{ github.ref_name }}-macos.zip"
+          ZIP="RepTate-${{ github.ref_name }}-macos-${{ matrix.architecture }}.zip"
           OUTDIR="dist/RepTate.app"
           test -d "$OUTDIR"
           rm -f "dist/$ZIP"
           (cd "$(dirname "$OUTDIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$OUTDIR")")
-          unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/MacOS/'
+          unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/MacOS/RepTate.bin'
           unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/Resources/docs/build/html/'
           echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: RepTate-${{ github.ref_name }}-macos
+          name: RepTate-${{ github.ref_name }}-macos-${{ matrix.architecture }}
           path: dist/${{ env.ZIP }}
 
   release:
