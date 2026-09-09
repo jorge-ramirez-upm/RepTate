@@ -214,7 +214,9 @@ jobs:
 
   build-macos:
     needs: build-docs
-    runs-on: macos-latest
+    # The supported manual-test machine is Intel macOS Big Sur.  Keep this
+    # explicit: the default macOS label may select an Apple Silicon runner.
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
         with:
@@ -249,9 +251,10 @@ jobs:
         shell: bash
         run: |
           python -m nuitka \
-            --mode=standalone \
+            --mode=app \
             --enable-plugin=pyside6 \
             --macos-app-icon=RepTate/gui/Images/RepTate_logo_new.icns \
+            --macos-app-macos-min-version=11.0 \
             --output-dir=dist \
             --noinclude-qt-translations \
             --python-flag=-m \
@@ -271,20 +274,72 @@ jobs:
       - name: Add docs into app/dist folder (macOS)
         shell: bash
         run: |
-          OUTDIR="$(find dist -maxdepth 2 -type d \( -name '*.app' -o -name '*.dist' \) | head -n 1)"
-          test -n "$OUTDIR"
-          rm -rf "$OUTDIR/docs"
-          mkdir -p "$OUTDIR/docs/build/html"
-          cp -a docs_html/. "$OUTDIR/docs/build/html/"
+          APP_PATH="dist/RepTate.app"
+          RESOURCES_DIR="$APP_PATH/Contents/Resources"
+          test -d "$APP_PATH"
+          mkdir -p "$RESOURCES_DIR/docs/build/html"
+          cp -a docs_html/. "$RESOURCES_DIR/docs/build/html/"
+
+      - name: Audit macOS bundle compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_PATH="dist/RepTate.app"
+          EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate"
+          if [[ ! -f "$EXECUTABLE" ]]; then
+            EXECUTABLE="$APP_PATH/Contents/MacOS/RepTate.bin"
+          fi
+          test -f "$EXECUTABLE"
+
+          echo "== macOS build identity =="
+          uname -m
+          python -c "import platform; print(platform.machine())"
+          test "$(uname -m)" = "x86_64"
+          python -c "import platform; assert platform.machine() == 'x86_64'"
+          echo "architecture: x86_64 (expected)"
+          file "$EXECUTABLE"
+          file "$EXECUTABLE" | grep -q 'x86_64'
+
+          audit_binary() {
+            local binary="$1"
+            local deployment_target
+            echo "-- $binary"
+            file "$binary"
+            deployment_target="$(otool -l "$binary" | awk '/LC_BUILD_VERSION/{found=1; next} found && /minos/{print $2; exit} /LC_VERSION_MIN_MACOSX/{found=2; next} found == 2 && /version/{print $2; exit}')"
+            echo "minimum macOS: ${deployment_target:-unknown}"
+            if [[ "$deployment_target" =~ ^([0-9]+)\. ]]; then
+              if (( BASH_REMATCH[1] > 11 )); then
+                echo "::warning file=$binary::requires macOS $deployment_target, newer than intended minimum 11.0"
+              fi
+            fi
+            otool -l "$binary" | grep -A4 -E 'LC_BUILD_VERSION|LC_VERSION_MIN_MACOSX' | grep -E 'cmd |platform |minos |version ' || true
+          }
+
+          echo "== main executable deployment target =="
+          audit_binary "$EXECUTABLE"
+
+          echo "== representative native components =="
+          while IFS= read -r binary; do
+            [[ -n "$binary" ]] || continue
+            audit_binary "$binary"
+          done < <(find "$APP_PATH/Contents" -type f \( -name '*.dylib' -o -name '*.so' \) | grep -Ei '(Qt|shiboken|numpy|scipy|bob2p5|darwin)' | head -n 12 || true)
+
+          echo "== bundle resources =="
+          test -d "$APP_PATH/Contents/Resources/data"
+          test -d "$APP_PATH/Contents/Resources/docs/build/html"
+          test -d "$APP_PATH/Contents/Resources/RepTate"
+          echo "Resources/data, Resources/RepTate, and offline HTML docs are present"
 
       - name: Zip artifact (macOS)
         shell: bash
         run: |
           ZIP="RepTate-${{ github.ref_name }}-macos.zip"
-          OUTDIR="$(find dist -maxdepth 2 -type d \( -name '*.app' -o -name '*.dist' \) | head -n 1)"
-          test -n "$OUTDIR"
+          OUTDIR="dist/RepTate.app"
+          test -d "$OUTDIR"
           rm -f "dist/$ZIP"
           (cd "$(dirname "$OUTDIR")" && zip -r "$GITHUB_WORKSPACE/dist/$ZIP" "$(basename "$OUTDIR")")
+          unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/MacOS/'
+          unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/Resources/docs/build/html/'
           echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v4
@@ -302,5 +357,3 @@ jobs:
         with:
           files: |
             **/*.zip
-            
-            
