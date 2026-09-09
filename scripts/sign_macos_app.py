@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Sequence
@@ -168,13 +169,38 @@ def create_dmg(app_path: Path, dmg_path: Path) -> None:
         staging = Path(temporary_directory)
         shutil.copytree(app_path, staging / app_path.name, symlinks=True)
         (staging / "Applications").symlink_to("/Applications", target_is_directory=True)
-        print(f"Creating DMG: {dmg_path}")
-        _run([
-            "hdiutil", "create", "-volname", "RepTate", "-srcfolder", str(staging),
-            "-ov", "-format", "UDZO", str(dmg_path),
-        ])
+        _run(["sync"])
+        for attempt in range(1, 4):
+            _remove_partial_dmg(dmg_path)
+            print(f"Creating DMG: attempt {attempt}/3: {dmg_path}")
+            try:
+                _run([
+                    "hdiutil", "create", "-volname", "RepTate", "-srcfolder", str(staging),
+                    "-ov", "-format", "UDZO", str(dmg_path),
+                ])
+                break
+            except SigningError as exc:
+                print(f"hdiutil failed: {exc}")
+                if attempt == 3:
+                    _remove_partial_dmg(dmg_path)
+                    print("hdiutil info diagnostics:")
+                    try:
+                        _run(["hdiutil", "info"])
+                    except SigningError as diagnostic_error:
+                        print(f"Unable to collect hdiutil info: {diagnostic_error}")
+                    raise
+                print("Retrying DMG creation...")
+                time.sleep(3)
     verify_dmg(dmg_path, app_path.name)
     print("DMG contains the ad-hoc signed app; the DMG itself is unsigned.")
+
+
+def _remove_partial_dmg(dmg_path: Path) -> None:
+    if not (dmg_path.exists() or dmg_path.is_symlink()):
+        return
+    if not dmg_path.is_file() and not dmg_path.is_symlink():
+        raise SigningError(f"DMG output path is not a removable file: {dmg_path}")
+    dmg_path.unlink()
 
 
 def verify_dmg(dmg_path: Path, app_name: str) -> None:

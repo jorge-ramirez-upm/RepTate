@@ -61,6 +61,15 @@ def test_special_case_dispatch():
     assert bob.special_build == "bob_makefile"
 
 
+def test_windows_bob_static_runtime_linker_flags():
+    makefile = Path("RepTate/theories/modified_bob2.5/code/src/obj/makefile_for_lib")
+    text = makefile.read_text()
+    assert "$(all_obj) $(BOB_LDFLAGS) -o bob2p5_lib.so" in text
+    command = build_native_libraries.bob_build_command("mingw32-make", "g++", "windows")
+    assert "-static-libstdc++ -static-libgcc" in command[3]
+    assert command[4] == "BOB_LDFLAGS=-Wl,-Bstatic -lwinpthread -Wl,-Bdynamic"
+
+
 def test_windows_pe_architecture(tmp_path):
     binary = bytearray(70)
     binary[:2] = b"MZ"
@@ -71,3 +80,8 @@ def test_windows_pe_architecture(tmp_path):
     path.write_bytes(binary)
     library = build_native_libraries.NATIVE_LIBRARIES[0]
     assert build_native_libraries._windows_pe_machine(path, library) == 0x8664
+
+
+def test_windows_dependency_parser():
+    output = "  DLL Name: KERNEL32.dll\n  DLL Name: libwinpthread-1.dll\n"
+    assert build_native_libraries.parse_windows_dependencies(output) == ("KERNEL32.dll", "libwinpthread-1.dll")

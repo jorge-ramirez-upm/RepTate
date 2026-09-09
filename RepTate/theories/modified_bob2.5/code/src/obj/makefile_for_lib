@@ -13,7 +13,7 @@ default : $(all_obj) ../main/bob.cpp
 ../calc/FlowPriority/sample_alt_time.cpp \
  ../calc/FlowPriority/sample_alt_taus.cpp \
  ../RepTate/reptate_func.cpp \
-  $(all_obj) -o bob2p5_lib.so
+ $(all_obj) $(BOB_LDFLAGS) -o bob2p5_lib.so
 clean :
 	rm -f *.o
 

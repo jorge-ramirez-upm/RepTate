@@ -246,13 +246,18 @@ def _windows_dependencies(path: Path, library: NativeLibrary) -> tuple[str, ...]
         result = subprocess.run([objdump, "-p", str(path)], check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as exc:
         raise BuildError(f"{library.name}: objdump dependency audit failed with exit status {exc.returncode}: {path}") from exc
-    dependencies = tuple(
-        line.split("DLL Name:", 1)[1].strip()
-        for line in result.stdout.splitlines()
-        if "DLL Name:" in line
-    )
+    dependencies = parse_windows_dependencies(result.stdout)
     print(f"{path.name} imports: {', '.join(dependencies) or '(none)'}")
     return dependencies
+
+
+def parse_windows_dependencies(output: str) -> tuple[str, ...]:
+    """Parse DLL Name entries from GNU objdump PE output."""
+    return tuple(
+        line.split("DLL Name:", 1)[1].strip()
+        for line in output.splitlines()
+        if "DLL Name:" in line
+    )
 
 
 def verify_output(path: Path, library: NativeLibrary, platform_name: str, expected: str, load_windows: bool = False) -> None:
@@ -276,6 +281,17 @@ def _remove_bob_products(source_dir: Path, verbose: bool = False) -> None:
                 print(f"Removed {product}")
 
 
+def bob_build_command(make: str, cxx: str, platform_name: str) -> list[str]:
+    """Construct Bob's platform-specific make invocation."""
+    command = [make, "-f", "makefile_for_lib"]
+    if platform_name == "windows":
+        command.append(f"cpp={cxx} -Wall -g -O3 -DNBETA -shared -fPIC -static-libstdc++ -static-libgcc")
+        # This is deliberately after $(all_obj) in makefile_for_lib so the
+        # static archive is searched after object-file references are known.
+        command.append("BOB_LDFLAGS=-Wl,-Bstatic -lwinpthread -Wl,-Bdynamic")
+    return command
+
+
 def _build_bob(library: NativeLibrary, theories_dir: Path, platform_name: str, verbose: bool) -> None:
     source_dir = library.source_path(theories_dir)
     make, environment, cxx = _make_command(platform_name)
@@ -285,10 +301,7 @@ def _build_bob(library: NativeLibrary, theories_dir: Path, platform_name: str, v
         # The makefile's clean recipe uses Unix rm; use the script's narrow
         # product cleanup on Windows while retaining the established build.
         _remove_bob_products(source_dir, verbose)
-    command = [make, "-f", "makefile_for_lib"]
-    if platform_name == "windows":
-        command.append(f"cpp={cxx} -Wall -g -O3 -DNBETA -shared -fPIC -static-libstdc++ -static-libgcc")
-    _run(command, source_dir, library, verbose, environment)
+    _run(bob_build_command(make, cxx, platform_name), source_dir, library, verbose, environment)
     built = source_dir / "bob2p5_lib.so"
     if not built.is_file():
         raise BuildError(f"{library.name}: make completed but did not produce {built} (source: {source_dir})")

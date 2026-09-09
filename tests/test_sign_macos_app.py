@@ -3,6 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "sign_macos_app.py"
 SPEC = importlib.util.spec_from_file_location("sign_macos_app", SCRIPT)
@@ -91,3 +93,52 @@ def test_signing_summary_and_outer_order(tmp_path, monkeypatch):
     assert summary.outer_signed
     force_signs = [call[-1] for call in calls if call[:3] == ["codesign", "--force", "--sign"]]
     assert force_signs[-1] == str(app)
+
+
+def test_dmg_creation_retries_and_removes_partial_output(tmp_path, monkeypatch):
+    app = tmp_path / "RepTate.app"
+    (app / "Contents").mkdir(parents=True)
+    (app / "Contents" / "resource.txt").write_text("ready")
+    dmg = tmp_path / "RepTate.dmg"
+    calls = []
+
+    def fake_run(command, **kwargs):
+        calls.append(command)
+        if command[:2] == ["hdiutil", "create"]:
+            create_count = len([call for call in calls if call[:2] == ["hdiutil", "create"]])
+            if create_count == 1:
+                dmg.touch()
+                raise sign_macos_app.SigningError("Resource busy")
+            assert not dmg.exists()
+            dmg.touch()
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(sign_macos_app, "_run", fake_run)
+    monkeypatch.setattr(sign_macos_app, "verify_dmg", lambda *_: None)
+    monkeypatch.setattr(sign_macos_app.time, "sleep", lambda _: None)
+    sign_macos_app.create_dmg(app, dmg)
+
+    creates = [call for call in calls if call[:2] == ["hdiutil", "create"]]
+    assert len(creates) == 2
+    assert dmg.is_file()
+
+
+def test_dmg_creation_propagates_after_three_failures(tmp_path, monkeypatch):
+    app = tmp_path / "RepTate.app"
+    (app / "Contents").mkdir(parents=True)
+    dmg = tmp_path / "RepTate.dmg"
+    attempts = []
+
+    def fake_run(command, **kwargs):
+        if command[:2] == ["hdiutil", "create"]:
+            attempts.append(command)
+            dmg.touch()
+            raise sign_macos_app.SigningError("Resource busy")
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(sign_macos_app, "_run", fake_run)
+    monkeypatch.setattr(sign_macos_app.time, "sleep", lambda _: None)
+    with pytest.raises(sign_macos_app.SigningError, match="Resource busy"):
+        sign_macos_app.create_dmg(app, dmg)
+    assert len(attempts) == 3
+    assert not dmg.exists()
