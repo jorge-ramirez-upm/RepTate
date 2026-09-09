@@ -274,28 +274,10 @@ jobs:
           python -m pip install -e .
 
       - name: Build RepTate native macOS libraries (${{ matrix.architecture }})
-        shell: bash
+        env:
+          MACOSX_DEPLOYMENT_TARGET: ${{ env.MACOS_MIN_VERSION }}
         run: |
-          set -euo pipefail
-          export MACOSX_DEPLOYMENT_TARGET="${{ env.MACOS_MIN_VERSION }}"
-
-          # These commands reproduce the source README recipes with Apple's
-          # native C/C++ compiler.  Outputs intentionally replace only the
-          # Darwin libraries; Windows/Linux artifacts are untouched.
-          (cd RepTate/theories/dtd_source_c_code && cc -dynamiclib -fPIC -O2 dtd.c trapz.c qtrap.c -o ../dtd_lib_darwin.so)
-          (cd RepTate/theories/kww_source_c_code && cc -dynamiclib -fPIC -O2 kww.c -o ../kww_lib_darwin.so)
-          (cd RepTate/theories/BuildLandscape_Linux && cc -dynamiclib -fPIC -O2 *.c -I./ -o ../landscape_darwin.so)
-          (cd RepTate/theories/react_source_c_code && cc -dynamiclib -fPIC -O2 binsandbob.c polybits.c polycleanup.c polymassrg.c ran3.c tobitabatch.c tobitaCSTR.c multimetCSTR.c dieneCSTR.c calc_architecture.c -o ../react_lib_darwin.so)
-          (cd RepTate/theories/rouse_source_c_code && cc -dynamiclib -fPIC -O2 rouse.c -o ../rouse_lib_darwin.so)
-          (cd RepTate/theories/rp_blend_source_c_code && cc -dynamiclib -fPIC -O2 derivs_rolie_poly_blend.c -o ../rp_blend_lib_darwin.so)
-          (cd RepTate/theories/sccr_source_c_code && cc -dynamiclib -fPIC -O2 sccr.c -o ../sccr_lib_darwin.so)
-          (cd RepTate/theories/schwarzl_source_c_code && cc -dynamiclib -fPIC -O2 schwarzl.c -o ../schwarzl_lib_darwin.so)
-
-          # Bob is the only C++ library and has its own generated-object
-          # makefile, documented in modified_bob2.5/README.txt.
-          make -C RepTate/theories/modified_bob2.5/code/src/obj -f makefile_for_lib clean
-          make -C RepTate/theories/modified_bob2.5/code/src/obj -f makefile_for_lib
-          cp RepTate/theories/modified_bob2.5/code/src/obj/bob2p5_lib.so RepTate/theories/bob2p5_lib_darwin.so
+          python scripts/build_native_libraries.py
 
       - name: Audit RepTate native libraries before Nuitka
         shell: bash
