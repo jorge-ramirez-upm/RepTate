@@ -523,6 +523,13 @@ jobs:
           require_directory "RepTate GUI images" "$PACKAGE_DIR/gui/Images"
           echo "Runtime data, RepTate package resources, and offline HTML docs are present"
 
+      - name: Ad-hoc sign and package macOS app (${{ matrix.architecture }})
+        shell: bash
+        run: |
+          python scripts/sign_macos_app.py \
+            "dist/RepTate.app" \
+            "dist/RepTate-${{ github.ref_name }}-macos-${{ matrix.architecture }}.dmg"
+
       - name: Zip artifact (macOS ${{ matrix.architecture }})
         shell: bash
         run: |
@@ -535,10 +542,16 @@ jobs:
           unzip -l "dist/$ZIP" | grep -q 'RepTate.app/Contents/Resources/docs/build/html/'
           echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
+      - name: Set DMG artifact name (macOS ${{ matrix.architecture }})
+        shell: bash
+        run: echo "DMG=RepTate-${{ github.ref_name }}-macos-${{ matrix.architecture }}.dmg" >> "$GITHUB_ENV"
+
       - uses: actions/upload-artifact@v4
         with:
           name: RepTate-${{ github.ref_name }}-macos-${{ matrix.architecture }}
-          path: dist/${{ env.ZIP }}
+          path: |
+            dist/${{ env.ZIP }}
+            dist/${{ env.DMG }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -551,3 +564,4 @@ jobs:
         with:
           files: |
             **/*.zip
+            **/*.dmg
