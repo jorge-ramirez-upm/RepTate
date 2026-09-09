@@ -301,9 +301,18 @@ jobs:
 
           audit_binary() {
             local binary="$1"
+            local file_info
+            local architecture
             local deployment_target
-            echo "-- $binary"
-            file "$binary"
+            file_info="$(file "$binary")"
+            architecture="unknown"
+            case "$file_info" in
+              *x86_64*) architecture="x86_64" ;;
+              *arm64*) architecture="arm64" ;;
+            esac
+            echo "path: $binary"
+            echo "architecture: $architecture"
+            echo "$file_info"
             deployment_target="$(otool -l "$binary" | awk '/LC_BUILD_VERSION/{found=1; next} found && /minos/{print $2; exit} /LC_VERSION_MIN_MACOSX/{found=2; next} found == 2 && /version/{print $2; exit}')"
             echo "minimum macOS: ${deployment_target:-unknown}"
             if [[ "$deployment_target" =~ ^([0-9]+)\. ]]; then
@@ -317,17 +326,79 @@ jobs:
           echo "== main executable deployment target =="
           audit_binary "$EXECUTABLE"
 
+          find_representative() {
+            local label="$1"
+            local pattern="$2"
+            local binary
+            binary="$(find "$APP_PATH/Contents" -type f \( -name '*.dylib' -o -name '*.so' \) -print | grep -Ei "$pattern" | sort | head -n 1 || true)"
+            if [[ -n "$binary" ]]; then
+              echo "== $label representative =="
+              audit_binary "$binary"
+            else
+              echo "::warning::No representative $label native binary found (pattern: $pattern)"
+            fi
+          }
+
           echo "== representative native components =="
-          while IFS= read -r binary; do
-            [[ -n "$binary" ]] || continue
-            audit_binary "$binary"
-          done < <(find "$APP_PATH/Contents" -type f \( -name '*.dylib' -o -name '*.so' \) | grep -Ei '(Qt|shiboken|numpy|scipy|bob2p5|darwin)' | head -n 12 || true)
+          find_representative "PySide6 / Qt" 'pyside6|/qt[^/]*|qt[^/]*\.(dylib|so)$'
+          find_representative "Shiboken" 'shiboken'
+          find_representative "NumPy" 'numpy'
+          find_representative "SciPy" 'scipy'
+          find_representative "RepTate native" '_darwin[^/]*\.so$'
+
+          require_directory() {
+            local label="$1"
+            local path="$2"
+            if [[ -d "$path" ]]; then
+              echo "present directory ($label): $path"
+            else
+              echo "::error::Missing required directory ($label): $path"
+              return 1
+            fi
+          }
+
+          echo "== bundle layout (relevant paths) =="
+          find "$APP_PATH/Contents" -maxdepth 7 \( -type d -o -type l \) -print | grep -E '/(data|RepTate|theories|tools|Images|docs|html)(/|$)' | sort || true
 
           echo "== bundle resources =="
-          test -d "$APP_PATH/Contents/Resources/data"
-          test -d "$APP_PATH/Contents/Resources/docs/build/html"
-          test -d "$APP_PATH/Contents/MacOS/RepTate"
-          echo "Resources/data, MacOS/RepTate, and offline HTML docs are present"
+          DATA_DIR=""
+          for candidate in \
+            "$APP_PATH/Contents/Resources/data" \
+            "$APP_PATH/Contents/MacOS/data"; do
+            if [[ -d "$candidate" ]]; then
+              echo "present runtime data directory: $candidate"
+              DATA_DIR="$candidate"
+              break
+            fi
+            echo "missing runtime data candidate: $candidate"
+          done
+          if [[ -z "$DATA_DIR" ]]; then
+            echo "::error::Missing runtime data directory; checked Contents/Resources/data and Contents/MacOS/data"
+            exit 1
+          fi
+
+          require_directory "offline HTML documentation" "$APP_PATH/Contents/Resources/docs/build/html"
+
+          PACKAGE_DIR=""
+          for candidate in \
+            "$APP_PATH/Contents/MacOS/RepTate" \
+            "$APP_PATH/Contents/Resources/RepTate"; do
+            if [[ -d "$candidate" ]]; then
+              echo "present RepTate package directory: $candidate"
+              PACKAGE_DIR="$candidate"
+              break
+            fi
+            echo "missing RepTate package candidate: $candidate"
+          done
+          if [[ -z "$PACKAGE_DIR" ]]; then
+            echo "::error::Missing RepTate package directory; checked Contents/MacOS/RepTate and Contents/Resources/RepTate"
+            exit 1
+          fi
+
+          require_directory "RepTate theories" "$PACKAGE_DIR/theories"
+          require_directory "RepTate tools" "$PACKAGE_DIR/tools"
+          require_directory "RepTate GUI images" "$PACKAGE_DIR/gui/Images"
+          echo "Runtime data, RepTate package resources, and offline HTML docs are present"
 
       - name: Zip artifact (macOS)
         shell: bash
