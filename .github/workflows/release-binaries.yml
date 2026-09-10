@@ -455,8 +455,11 @@ jobs:
           set -euo pipefail
           OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
           test -n "$OUTDIR"
-          EXECUTABLE="$OUTDIR/RepTate"
+          EXECUTABLE="$OUTDIR/RepTate.bin"
+          test -f "$EXECUTABLE"
           test -x "$EXECUTABLE"
+          ls -l "$EXECUTABLE"
+          file "$EXECUTABLE"
           QT_QPA_PLATFORM=offscreen timeout 60s "$EXECUTABLE" --version
           echo "Packaged RepTate offscreen smoke test passed"
 
