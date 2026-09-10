@@ -5,6 +5,19 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      target:
+        description: "Binary platform target to build"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - windows
+          - linux
+          - macos
+          - macos-arm64
+          - macos-x86_64
 
 permissions:
   contents: write
@@ -50,6 +63,7 @@ jobs:
           path: docs/build/html
 
   build-windows:
+    if: github.event_name == 'push' || inputs.target == 'all' || inputs.target == 'windows'
     needs: build-docs
     runs-on: windows-2022
     steps:
@@ -248,6 +262,7 @@ jobs:
           path: dist/${{ env.ZIP }}
 
   build-linux:
+    if: github.event_name == 'push' || inputs.target == 'all' || inputs.target == 'linux'
     needs: build-docs
     runs-on: ubuntu-22.04
     steps:
@@ -420,15 +435,16 @@ jobs:
   #   # --include-data-files=RepTate/theories/*_darwin*.so=RepTate/theories/
 
   build-macos:
+    if: github.event_name == 'push' || inputs.target == 'all' || inputs.target == 'macos' || inputs.target == 'macos-arm64' || inputs.target == 'macos-x86_64'
     needs: build-docs
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - architecture: arm64
-            runner: macos-15
-          - architecture: x86_64
-            runner: macos-15-intel
+      matrix: >-
+        ${{ fromJSON(
+          (github.event_name == 'push' || inputs.target == 'all' || inputs.target == 'macos') && '[{"architecture":"arm64","runner":"macos-15"},{"architecture":"x86_64","runner":"macos-15-intel"}]' ||
+          inputs.target == 'macos-arm64' && '[{"architecture":"arm64","runner":"macos-15"}]' ||
+          '[{"architecture":"x86_64","runner":"macos-15-intel"}]'
+        ) }}
     runs-on: ${{ matrix.runner }}
     env:
       # SciPy 1.15.3's Intel macOS wheel uses Accelerate and can require 14.0.
@@ -744,7 +760,7 @@ jobs:
             dist/${{ env.DMG }}
 
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: always() && startsWith(github.ref, 'refs/tags/v') && needs.build-docs.result == 'success' && needs.build-windows.result == 'success' && needs.build-linux.result == 'success' && needs.build-macos.result == 'success'
     needs: [build-docs, build-windows, build-linux, build-macos]
     runs-on: ubuntu-22.04
     steps:
