@@ -275,13 +275,34 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Qt xcb cursor runtime dependency
+      - name: Install Qt xcb runtime dependencies for CI
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libxcb-cursor0
-          echo "Ubuntu package providing libxcb-cursor.so.0: libxcb-cursor0"
-          dpkg -L libxcb-cursor0 | grep -E '/libxcb-cursor\.so\.0(\.|$)'
-          ldconfig -p | grep -E '^\s*libxcb-cursor\.so\.0\s'
+          sudo apt-get install --yes \
+            libxcb-cursor0 \
+            libxkbcommon-x11-0 \
+            libxcb-icccm4 \
+            libxcb-keysyms1 \
+            libxcb-shape0 \
+            libxcb-xkb1 \
+            libegl1
+          declare -A LIB_PACKAGES=(
+            [libxcb-cursor.so.0]=libxcb-cursor0
+            [libxkbcommon-x11.so.0]=libxkbcommon-x11-0
+            [libxcb-icccm.so.4]=libxcb-icccm4
+            [libxcb-keysyms.so.1]=libxcb-keysyms1
+            [libxcb-shape.so.0]=libxcb-shape0
+            [libxcb-xkb.so.1]=libxcb-xkb1
+            [libEGL.so.1]=libegl1
+          )
+          for library in "${!LIB_PACKAGES[@]}"; do
+            package="${LIB_PACKAGES[$library]}"
+            echo "Ubuntu package providing $library: $package"
+            dpkg -L "$package" | while IFS= read -r path; do
+              if [[ "$(basename "$path")" == "$library" ]]; then echo "  package path: $path"; fi
+            done
+            ldconfig -p | awk -v library="$library" '$1 == library {print "  loader path: " $NF; exit}'
+          done
 
       - name: Download docs artifact
         uses: actions/download-artifact@v4
@@ -334,12 +355,13 @@ jobs:
             --include-data-files=RepTate/theories/*_linux*.so=RepTate/theories/ \
             RepTate
 
-      - name: Package Qt xcb cursor runtime dependency
+      - name: Package Qt xcb helper runtime dependencies
         shell: bash
         run: |
           set -euo pipefail
           OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
           test -n "$OUTDIR"
+          OUTDIR="$(cd "$OUTDIR" && pwd)"
 
           QXCB="$(find "$OUTDIR/PySide6/qt-plugins/platforms" -type f -name 'libqxcb.so' -print -quit)"
           test -n "$QXCB"
@@ -347,41 +369,85 @@ jobs:
           test -n "$QT_CORE"
           NUITKA_LIB_DIR="$(dirname "$QT_CORE")"
 
-          XCB_LDCONFIG="$(ldconfig -p | awk '$1 == "libxcb-cursor.so.0" {print $NF; exit}')"
-          test -n "$XCB_LDCONFIG"
-          XCB_LINK="$(dpkg -L libxcb-cursor0 | grep -E '/libxcb-cursor\.so\.0$' | head -n 1)"
-          test -n "$XCB_LINK"
-          XCB_REAL="$(readlink -f "$XCB_LINK")"
-          test -f "$XCB_REAL"
-          test -f "$XCB_LDCONFIG"
-          printf 'libxcb-cursor.so.0 loader path: %s\n' "$XCB_LDCONFIG"
-          printf 'libxcb-cursor.so.0 package path: %s\n' "$XCB_LINK"
-          printf 'libxcb-cursor.so.0 real target: %s\n' "$XCB_REAL"
+          declare -A HELPER_PACKAGES=(
+            [libxcb-cursor.so.0]=libxcb-cursor0
+            [libxkbcommon-x11.so.0]=libxkbcommon-x11-0
+            [libxcb-icccm.so.4]=libxcb-icccm4
+            [libxcb-keysyms.so.1]=libxcb-keysyms1
+            [libxcb-shape.so.0]=libxcb-shape0
+            [libxcb-xkb.so.1]=libxcb-xkb1
+          )
+          HELPER_LIBRARIES=(libxcb-cursor.so.0 libxkbcommon-x11.so.0 libxcb-icccm.so.4 libxcb-keysyms.so.1 libxcb-shape.so.0 libxcb-xkb.so.1)
           printf 'Nuitka shared-library directory: %s\n' "$NUITKA_LIB_DIR"
 
-          test ! -e "$NUITKA_LIB_DIR/$(basename "$XCB_REAL")"
-          test ! -e "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
-          cp -a "$XCB_REAL" "$NUITKA_LIB_DIR/"
-          if [[ "$XCB_LINK" != "$XCB_REAL" ]]; then
-            ln -s "$(basename "$XCB_REAL")" "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
-          fi
-          test -e "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
+          for library in "${HELPER_LIBRARIES[@]}"; do
+            package="${HELPER_PACKAGES[$library]}"
+            source_link=""
+            while IFS= read -r candidate; do
+              if [[ "$(basename "$candidate")" == "$library" ]]; then source_link="$candidate"; break; fi
+            done < <(dpkg -L "$package")
+            test -n "$source_link"
+            source_real="$(readlink -f "$source_link")"
+            loader_path="$(ldconfig -p | awk -v library="$library" '$1 == library {print $NF; exit}')"
+            test -f "$source_real"
+            test -f "$loader_path"
+            printf '%s loader path: %s\n' "$library" "$loader_path"
+            printf '%s package path: %s\n' "$library" "$source_link"
+            printf '%s real target: %s\n' "$library" "$source_real"
 
-      - name: Audit packaged Linux Qt xcb dependencies
+            test ! -e "$NUITKA_LIB_DIR/$(basename "$source_real")"
+            test ! -L "$NUITKA_LIB_DIR/$(basename "$source_real")"
+            test ! -e "$NUITKA_LIB_DIR/$library"
+            test ! -L "$NUITKA_LIB_DIR/$library"
+            cp -a "$source_real" "$NUITKA_LIB_DIR/"
+            if [[ "$source_link" != "$source_real" ]]; then
+              ln -s "$(basename "$source_real")" "$NUITKA_LIB_DIR/$library"
+            fi
+            test -e "$NUITKA_LIB_DIR/$library"
+          done
+
+      - name: Audit packaged Linux Qt xcb helper dependencies
         shell: bash
         run: |
           set -euo pipefail
           OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
           test -n "$OUTDIR"
+          OUTDIR="$(cd "$OUTDIR" && pwd)"
           QXCB="$(find "$OUTDIR/PySide6/qt-plugins/platforms" -type f -name 'libqxcb.so' -print -quit)"
           test -n "$QXCB"
           echo "Packaged libqxcb.so: $QXCB"
           LDD_OUTPUT="$(ldd "$QXCB")"
           printf '%s\n' "$LDD_OUTPUT"
+          HELPER_LIBRARIES=(libxcb-cursor.so.0 libxkbcommon-x11.so.0 libxcb-icccm.so.4 libxcb-keysyms.so.1 libxcb-shape.so.0 libxcb-xkb.so.1)
+          for library in "${HELPER_LIBRARIES[@]}"; do
+            resolved="$(awk -v library="$library" '$1 == library && $2 == "=>" {print $3; exit}' <<<"$LDD_OUTPUT")"
+            if [[ -z "$resolved" || "$resolved" == "not" ]]; then
+              echo "Bundled helper is unresolved in libqxcb.so: $library" >&2
+              exit 1
+            fi
+            case "$resolved" in
+              "$OUTDIR"/*) ;;
+              *) echo "Bundled helper resolves outside RepTate.dist: $library -> $resolved" >&2; exit 1 ;;
+            esac
+            echo "$library => $resolved (inside RepTate.dist)"
+          done
           if grep -q 'not found' <<<"$LDD_OUTPUT"; then
-            echo "Missing dependencies detected for packaged libqxcb.so" >&2
+            echo "Unresolved non-bundled dependency detected for packaged libqxcb.so" >&2
             exit 1
           fi
+
+          echo "Bundled helper dependency audits:"
+          for library in "${HELPER_LIBRARIES[@]}"; do
+            helper_path="$(find -L "$OUTDIR" -name "$library" -print -quit)"
+            test -f "$helper_path"
+            helper_ldd="$(ldd "$helper_path")"
+            printf '%s:\n%s\n' "$library" "$helper_ldd"
+            if grep -q 'not found' <<<"$helper_ldd"; then
+              echo "Unresolved dependency detected in bundled helper $library" >&2
+              exit 1
+            fi
+          done
+          echo "Packaged Linux Qt xcb helper dependency audit passed"
 
       - name: Smoke-test packaged RepTate (offscreen)
         shell: bash
