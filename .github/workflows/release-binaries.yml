@@ -260,6 +260,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install Qt xcb cursor runtime dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libxcb-cursor0
+          echo "Ubuntu package providing libxcb-cursor.so.0: libxcb-cursor0"
+          dpkg -L libxcb-cursor0 | grep -E '/libxcb-cursor\.so\.0(\.|$)'
+          ldconfig -p | grep -E '^\s*libxcb-cursor\.so\.0\s'
+
       - name: Download docs artifact
         uses: actions/download-artifact@v4
         with:
@@ -310,6 +318,66 @@ jobs:
             --include-data-files=RepTate/theories/*.npz=RepTate/theories/ \
             --include-data-files=RepTate/theories/*_linux*.so=RepTate/theories/ \
             RepTate
+
+      - name: Package Qt xcb cursor runtime dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
+          test -n "$OUTDIR"
+
+          QXCB="$(find "$OUTDIR/PySide6/qt-plugins/platforms" -type f -name 'libqxcb.so' -print -quit)"
+          test -n "$QXCB"
+          QT_CORE="$(find "$OUTDIR" -type f \( -name 'libQt6Core.so*' -o -name 'libQt5Core.so*' \) -print -quit)"
+          test -n "$QT_CORE"
+          NUITKA_LIB_DIR="$(dirname "$QT_CORE")"
+
+          XCB_LDCONFIG="$(ldconfig -p | awk '$1 == "libxcb-cursor.so.0" {print $NF; exit}')"
+          test -n "$XCB_LDCONFIG"
+          XCB_LINK="$(dpkg -L libxcb-cursor0 | grep -E '/libxcb-cursor\.so\.0$' | head -n 1)"
+          test -n "$XCB_LINK"
+          XCB_REAL="$(readlink -f "$XCB_LINK")"
+          test -f "$XCB_REAL"
+          test -f "$XCB_LDCONFIG"
+          printf 'libxcb-cursor.so.0 loader path: %s\n' "$XCB_LDCONFIG"
+          printf 'libxcb-cursor.so.0 package path: %s\n' "$XCB_LINK"
+          printf 'libxcb-cursor.so.0 real target: %s\n' "$XCB_REAL"
+          printf 'Nuitka shared-library directory: %s\n' "$NUITKA_LIB_DIR"
+
+          test ! -e "$NUITKA_LIB_DIR/$(basename "$XCB_REAL")"
+          test ! -e "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
+          cp -a "$XCB_REAL" "$NUITKA_LIB_DIR/"
+          if [[ "$XCB_LINK" != "$XCB_REAL" ]]; then
+            ln -s "$(basename "$XCB_REAL")" "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
+          fi
+          test -e "$NUITKA_LIB_DIR/libxcb-cursor.so.0"
+
+      - name: Audit packaged Linux Qt xcb dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
+          test -n "$OUTDIR"
+          QXCB="$(find "$OUTDIR/PySide6/qt-plugins/platforms" -type f -name 'libqxcb.so' -print -quit)"
+          test -n "$QXCB"
+          echo "Packaged libqxcb.so: $QXCB"
+          LDD_OUTPUT="$(ldd "$QXCB")"
+          printf '%s\n' "$LDD_OUTPUT"
+          if grep -q 'not found' <<<"$LDD_OUTPUT"; then
+            echo "Missing dependencies detected for packaged libqxcb.so" >&2
+            exit 1
+          fi
+
+      - name: Smoke-test packaged RepTate (offscreen)
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUTDIR="$(find dist -maxdepth 2 -type d -name '*.dist' -print -quit)"
+          test -n "$OUTDIR"
+          EXECUTABLE="$OUTDIR/RepTate"
+          test -x "$EXECUTABLE"
+          QT_QPA_PLATFORM=offscreen timeout 60s "$EXECUTABLE" --version
+          echo "Packaged RepTate offscreen smoke test passed"
 
       - name: Add docs into dist folder (Linux)
         shell: bash
