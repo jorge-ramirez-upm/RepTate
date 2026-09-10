@@ -516,6 +516,7 @@ jobs:
         ) }}
     runs-on: ${{ matrix.runner }}
     env:
+      # Current binary packages target macOS 14 or later.
       # SciPy 1.15.3's Intel macOS wheel uses Accelerate and can require 14.0.
       MACOS_MIN_VERSION: "14.0"
     steps:

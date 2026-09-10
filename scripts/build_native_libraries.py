@@ -3,7 +3,9 @@
 The direct C recipes follow the platform-specific source README files. Bob
 retains its established generated-object makefile as an explicit special case.
 Linux and Windows builds use the same source inventory as the working Darwin
-build; only compiler flags and output names vary by platform.
+build; only compiler flags and output names vary by platform. The script
+rebuilds outputs in place; checked-in binaries may already exist for source-user
+convenience, while official CI rebuilds from source to validate release builds.
 """
 
 from __future__ import annotations

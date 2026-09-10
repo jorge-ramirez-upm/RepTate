@@ -41,11 +41,13 @@ macOS
 -----
 
 Current macOS releases include a DMG and ZIP for each supported architecture
-(``arm64`` and ``x86_64``). The application is currently ad-hoc signed, not
-Apple-notarized or Developer ID signed. macOS Gatekeeper may therefore block
-the first launch after download; in Finder, Control-click ``RepTate.app`` and
-choose ``Open`` to approve it. Ad-hoc signing does not make the application
-trusted or notarized, and the DMG container itself is unsigned.
+(``arm64`` and ``x86_64``) for macOS 14 or later. This is the current
+compatibility baseline for the binary packages, not a claim that RepTate source
+code cannot run on older macOS versions. The application is currently ad-hoc
+signed, not Apple-notarized or Developer ID signed. macOS Gatekeeper may
+therefore block the first launch after download; in Finder, Control-click
+``RepTate.app`` and choose ``Open`` to approve it. Ad-hoc signing does not make
+the application trusted or notarized, and the DMG container itself is unsigned.
 
 Previous versions of the binary packages can be downloaded from the following `folder 
 <https://upm365-my.sharepoint.com/:f:/g/personal/jorge_ramirez_upm_es/EmVwGD9TFo1BhgRlBahS3NwB98txob9v_e3CUJSVYITKYg?e=9QB5vz>`_.
