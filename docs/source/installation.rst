@@ -20,6 +20,26 @@ The "shortcut"
 
 Binary packages (containing all the needed files and libraries), for the latest version (|release|) can be downloaded from the **Releases** section of the RepTate GitHub repository: `here <https://github.com/jorge-ramirez-upm/RepTate/releases>`_. Unzip the downloaded file and look for the RepTate executable. The Linux binary packages should work on Ubuntu 22.04.
 
+Windows SmartScreen warning
+---------------------------
+
+The Windows binary distributed by RepTate is currently not digitally signed
+with a commercial code-signing certificate. As a result, Microsoft Defender
+SmartScreen may display a warning such as ``Windows protected your PC`` and
+identify the publisher as ``Unknown publisher`` when RepTate is launched for
+the first time.
+
+If you downloaded RepTate from the official
+`RepTate GitHub Releases page <https://github.com/jorge-ramirez-upm/RepTate/releases>`_,
+you can choose ``More info`` and then ``Run anyway`` to start the application.
+
+This warning is caused by the absence of a trusted Windows code-signing
+certificate; it does not by itself indicate that RepTate is unsafe or that the
+download is corrupted.
+
+macOS
+-----
+
 Current macOS releases include a DMG and ZIP for each supported architecture
 (``arm64`` and ``x86_64``). The application is currently ad-hoc signed, not
 Apple-notarized or Developer ID signed. macOS Gatekeeper may therefore block
