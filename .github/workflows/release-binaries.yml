@@ -162,7 +162,7 @@ jobs:
           }
           $unexpected = @($allNative | Where-Object { $_.FullName -notlike "$authoritativeDir\*" })
           if ($unexpected.Count -gt 0) {
-            throw "Redundant Windows native-library copies found outside $authoritativeDir: $($unexpected.FullName -join ', ')"
+            throw ("Redundant Windows native-library copies found outside {0}: {1}" -f $authoritativeDir, ($unexpected.FullName -join ', '))
           }
           Write-Host "Authoritative packaged RepTate native-library directory: $authoritativeDir"
           $systemDll = '^(api-ms-win-|ext-ms-win-|KERNEL32\.dll$|KERNELBASE\.dll$|NTDLL\.dll$|USER32\.dll$|ADVAPI32\.dll$|SHELL32\.dll$|OLE32\.dll$|OLEAUT32\.dll$|WS2_32\.dll$|GDI32\.dll$|COMDLG32\.dll$|RPCRT4\.dll$|MSVCRT\.dll$|UCRTBASE\.dll$|VCRUNTIME[^ ]*\.dll$|CRYPT32\.dll$|BCRYPT\.dll$|COMBASE\.dll$|SHLWAPI\.dll$|VERSION\.dll$|WINMM\.dll$|PSAPI\.dll$|IMM32\.dll$|SETUPAPI\.dll$|SECHOST\.dll$|USERENV\.dll$|NORMALIZ\.dll$)'
