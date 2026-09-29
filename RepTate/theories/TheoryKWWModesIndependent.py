@@ -5,8 +5,8 @@ from typing import Any, ClassVar
 import numpy as np
 
 from RepTate.core.Parameter import OptType, Parameter, ParameterType
-from RepTate.core.typing import AxesArray, DataSetLike, FileLike, FloatArray
-from RepTate.theories.TheoryBaumgaertelWinter import TheoryBaumgaertelWinter
+from RepTate.core.typing import FileLike, FloatArray
+from RepTate.theories.TheoryIndependentDielectricModes import TheoryIndependentDielectricModes
 from RepTate.theories.kww_ctypes_helper import kwwc, kwws
 
 
@@ -18,7 +18,7 @@ def _kww_values(omega: FloatArray, tau: float, beta: float) -> tuple[FloatArray,
     return cosine, sine
 
 
-class TheoryKWWModesIndependent(TheoryBaumgaertelWinter):
+class TheoryKWWModesIndependent(TheoryIndependentDielectricModes):
     """Fit KWW dielectric modes with independent times and strengths.
 
     The relaxation times ``tau_i`` and strengths ``Delta-epsilon_i`` are
@@ -32,8 +32,6 @@ class TheoryKWWModesIndependent(TheoryBaumgaertelWinter):
     html_help_file: ClassVar[str] = (
         "http://reptate.readthedocs.io/manual/Applications/Dielectric/Theory/theory.html"
     )
-    is_dielectric_domain: ClassVar[bool] = True
-
     def _mode_family_name(self) -> str:
         return "KWW"
 
@@ -88,22 +86,3 @@ class TheoryKWWModesIndependent(TheoryBaumgaertelWinter):
             epsilon_prime / epsilon_prime_exp[valid] - 1.0,
             epsilon_double_prime / epsilon_double_prime_exp[valid] - 1.0,
         ]
-
-    def BaumgaertelWinterFrequency(self, f: FileLike) -> None:
-        """Calculate epsilon' and epsilon'' for the current independent KWW modes."""
-        ft = f.data_table
-        tt = self.tables[f.file_name_short]
-        tt.num_columns = ft.num_columns
-        tt.num_rows = ft.num_rows
-        tt.data = np.zeros((tt.num_rows, tt.num_columns))
-        tt.data[:, 0] = ft.data[:, 0]
-        if tt.num_columns <= 1:
-            return
-
-        tau, amplitude = self._mode_values()
-        epsilon_prime, epsilon_double_prime = self._predict_dynamic_moduli(
-            tt.data[:, 0], tau, amplitude
-        )
-        tt.data[:, 1] = epsilon_prime
-        if tt.num_columns > 2:
-            tt.data[:, 2] = epsilon_double_prime

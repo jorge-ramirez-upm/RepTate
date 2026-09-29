@@ -58,8 +58,12 @@ class ApplicationDielectric(QApplicationWindow):
     def __init__(self, name: str = "Dielectric", parent: ApplicationManagerLike | None = None) -> None:
         """**Constructor**"""
         from RepTate.theories.TheoryDebyeModes import TheoryDebyeModesFrequency
+        from RepTate.theories.TheoryDebyeModesIndependent import TheoryDebyeModesIndependent
         from RepTate.theories.TheoryHavriliakNegamiModes import (
             TheoryHavriliakNegamiModesFrequency,
+        )
+        from RepTate.theories.TheoryHavriliakNegamiModesIndependent import (
+            TheoryHavriliakNegamiModesIndependent,
         )
         from RepTate.theories.TheoryKWWModes import TheoryKWWModesFrequency
         from RepTate.theories.TheoryKWWModesIndependent import TheoryKWWModesIndependent
@@ -224,9 +228,13 @@ class ApplicationDielectric(QApplicationWindow):
 
         # THEORIES
         self.theories[TheoryDebyeModesFrequency.thname] = TheoryDebyeModesFrequency
+        self.theories[TheoryDebyeModesIndependent.thname] = TheoryDebyeModesIndependent
         self.theories[
             TheoryHavriliakNegamiModesFrequency.thname
         ] = TheoryHavriliakNegamiModesFrequency
+        self.theories[
+            TheoryHavriliakNegamiModesIndependent.thname
+        ] = TheoryHavriliakNegamiModesIndependent
         self.theories[TheoryKWWModesFrequency.thname] = TheoryKWWModesFrequency
         self.theories[TheoryKWWModesIndependent.thname] = TheoryKWWModesIndependent
         self.theories[TheoryLP2RDielectric.thname] = TheoryLP2RDielectric
