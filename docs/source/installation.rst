@@ -58,6 +58,14 @@ The "scenic route"
 This option will take you through the installation of Python 3.11, RepTate dependencies, 
 and the "cloning" of RepTate's repository.
 
+.. warning::
+
+   Installing RepTate from source builds the LP2R C++ extension. On Windows,
+   this requires the Microsoft C++ build tools. If you do not have a C++
+   compiler installed, use the prebuilt Windows package from the `RepTate
+   GitHub Releases page <https://github.com/jorge-ramirez-upm/RepTate/releases>`_
+   instead. The prebuilt package already contains the compiled extension.
+
 Executive summary
 -----------------
 
@@ -70,6 +78,24 @@ Executive summary
 #. From time to time, check for updates via ``git pull``
 
 Should anything go wrong, please read the detailed explanations below. 
+
+Source builds and the C++ compiler
+----------------------------------
+
+The command ``python setup.py build_ext --inplace`` is a developer/source-build
+command. It compiles RepTate's LP2R solver using pybind11; installing pybind11
+alone does not install a C++ compiler.
+
+On Windows, source builds require the free `Visual Studio Build Tools
+<https://visualstudio.microsoft.com/visual-cpp-build-tools/>`_. During
+installation, select **Desktop development with C++**, including the MSVC
+compiler and a Windows SDK. Then open a new terminal and run::
+
+    python -m pip install --upgrade pip setuptools wheel pybind11
+    python setup.py build_ext --inplace
+
+Users who only want to run RepTate do not need these build tools; they should
+use the prebuilt package described in "The shortcut" above.
 
 Detailed explanations
 ----------------------

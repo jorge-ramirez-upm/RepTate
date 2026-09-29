@@ -262,7 +262,9 @@ This means a local editable install is enough to build the extension:
 If the C++ compiler and build dependencies are available, this produces the
 platform-specific compiled module inside ``RepTate/theories``.  On Windows the
 file is a ``.pyd`` extension module; on Linux and macOS it is a ``.so`` extension
-module.
+module. This is a source/developer build step, not a requirement for ordinary
+users of the prebuilt RepTate packages. On Windows, the source build requires
+the Microsoft C++ build tools (the **Desktop development with C++** workload).
 
 GitHub release builds
 ---------------------
