@@ -283,6 +283,7 @@ class TheoryBaumgaertelWinter(QTheory):
     single_file: ClassVar[bool] = True
     is_time_domain: ClassVar[bool] = False
     is_retardation_domain: ClassVar[bool] = False
+    is_dielectric_domain: ClassVar[bool] = False
     last_load_modes_folder: ClassVar[str | None] = None
 
     def __init__(self, name: str = "", parent_dataset: DataSetLike | None = None, ax: AxesArray | None = None) -> None:
@@ -316,6 +317,8 @@ class TheoryBaumgaertelWinter(QTheory):
         self._last_minimized_mode_signature: tuple[Any, ...] | None = None
         self.mode_context_menu_cid: int | None = None
 
+        self._add_domain_parameters()
+
         xmin = self.parent_dataset.minpositivecol(0)
         xmax = self.parent_dataset.maxcol(0)
         nmodes = max(1, int(np.round(np.log10(xmax / xmin))))
@@ -324,7 +327,7 @@ class TheoryBaumgaertelWinter(QTheory):
         self.parameters["nmodes"] = Parameter(
             name="nmodes",
             value=nmodes,
-            description="Number of Baumgaertel-Winter %s modes" % self._mode_family_name(),
+            description="Number of %s modes" % self._mode_family_name(),
             type=ParameterType.integer,
             opt_type=OptType.const,
             display_flag=False,
@@ -345,6 +348,16 @@ class TheoryBaumgaertelWinter(QTheory):
                 description="Log of terminal viscosity expressed in Pa.s",
                 type=ParameterType.real,
                 opt_type=OptType.opt,
+            )
+        elif self.is_dielectric_domain:
+            equilibrium_name = self._equilibrium_parameter_name()
+            self.parameters[equilibrium_name] = Parameter(
+                name=equilibrium_name,
+                value=0.0,
+                description=self._equilibrium_parameter_description(),
+                type=ParameterType.real,
+                opt_type=OptType.opt,
+                min_value=0.0,
             )
         else:
             self.parameters["Ge"] = Parameter(
@@ -413,11 +426,11 @@ class TheoryBaumgaertelWinter(QTheory):
         self.save_modes_action = tb.addAction(QIcon(":/Icon8/Images/new_icons/icons8-save-Maxwell.png"), "Save Modes")
         self.simplify_modes_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-broom.png"),
-            "Simplify BW spectrum",
+            "Simplify %s spectrum" % self._spectrum_label(),
         )
         self.configure_simplification_action = tb.addAction(
             QIcon(":/Icon8/Images/new_icons/icons8-maintenance.png"),
-            "Configure BW simplification",
+            "Configure %s simplification" % self._spectrum_label(),
         )
         self.configure_simplification_action.setToolTip("Configure the Baumgaertel-Winter mode merging and deletion thresholds")
         self.simplify_modes_action.setToolTip("Merge close modes and remove redundant modes if the relative residual increase is small")
@@ -441,6 +454,18 @@ class TheoryBaumgaertelWinter(QTheory):
         if nmodes > 1:
             return _logspace(-np.log10(xmax), -np.log10(xmin), nmodes)
         return _logspace(-np.log10(np.sqrt(xmin * xmax)), -np.log10(np.sqrt(xmin * xmax)), nmodes)
+
+    def _add_domain_parameters(self) -> None:
+        """Add parameters specific to a domain-specific spectrum."""
+        pass
+
+    def _equilibrium_parameter_name(self) -> str:
+        return "einf" if self.is_dielectric_domain else "Ge"
+
+    def _equilibrium_parameter_description(self) -> str:
+        if self.is_dielectric_domain:
+            return "Unrelaxed permittivity"
+        return "Equilibrium modulus expressed in Pa; keep zero for viscoelastic liquids"
 
     def _mode_x_from_tau(self, tau: FloatArray) -> FloatArray:
         if self.is_time_domain or self.is_retardation_domain:
@@ -469,21 +494,33 @@ class TheoryBaumgaertelWinter(QTheory):
         return np.maximum(np.interp(mode_x, x_data, modulus_scale), _LOG_FLOOR)
 
     def _mode_family_name(self) -> str:
+        if self.is_dielectric_domain:
+            return "dielectric"
         if self.is_retardation_domain:
             return "retardation"
         return "Maxwell"
 
+    def _spectrum_label(self) -> str:
+        """Short label used by the shared mode-management controls."""
+        return "BW"
+
     def _mode_parameter_name(self, index: int) -> str:
+        if self.is_dielectric_domain:
+            return "logDe%02d" % index
         if self.is_retardation_domain:
             return "logJ%02d" % index
         return "logG%02d" % index
 
     def _mode_parameter_description(self, index: int) -> str:
+        if self.is_dielectric_domain:
+            return "log10(Delta-epsilon%02d) of Mode %d dielectric strength" % (index, index)
         if self.is_retardation_domain:
             return "log10(J%02d) of Mode %d retardation compliance expressed in 1/Pa" % (index, index)
         return "log10(G%02d) of Mode %d relaxation strength expressed in Pa" % (index, index)
 
     def _mode_amplitude_label(self) -> str:
+        if self.is_dielectric_domain:
+            return "Delta-epsilon"
         if self.is_retardation_domain:
             return "J"
         return "G"
@@ -566,8 +603,9 @@ class TheoryBaumgaertelWinter(QTheory):
         else:
             message, success = super().set_param_value(name, value)
 
+        equilibrium_name = self._equilibrium_parameter_name()
         if success and (
-            name in ("nmodes", "Ge", "logJini", "logeta0")
+            name in ("nmodes", equilibrium_name, "logJini", "logeta0")
             or name.startswith("logtau")
             or name.startswith(mode_prefix)
         ):
@@ -908,7 +946,9 @@ class TheoryBaumgaertelWinter(QTheory):
             self.parameter_int("nmodes"),
             tuple(np.round(tau, decimals=14)),
             tuple(np.round(G, decimals=14)),
-            round(self.parameter_float("Ge"), 14) if "Ge" in self.parameters else None,
+            round(self.parameter_float(self._equilibrium_parameter_name()), 14)
+            if self._equilibrium_parameter_name() in self.parameters
+            else None,
             round(self.parameter_float("logJini"), 14) if "logJini" in self.parameters else None,
             round(self.parameter_float("logeta0"), 14) if "logeta0" in self.parameters else None,
         )
@@ -1485,11 +1525,11 @@ class TheoryBaumgaertelWinter(QTheory):
         self.configure_simplification_action.setDisabled(running)
         if running:
             self.simplify_modes_action.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-stop-sign.png"))
-            self.simplify_modes_action.setText("Cancel BW simplification")
+            self.simplify_modes_action.setText("Cancel %s simplification" % self._spectrum_label())
             self.simplify_modes_action.setToolTip("Cancel the running Baumgaertel-Winter spectrum simplification")
         else:
             self.simplify_modes_action.setIcon(QIcon(":/Icon8/Images/new_icons/icons8-broom.png"))
-            self.simplify_modes_action.setText("Simplify BW spectrum")
+            self.simplify_modes_action.setText("Simplify %s spectrum" % self._spectrum_label())
             self.simplify_modes_action.setToolTip("Merge close modes and remove redundant modes if the relative residual increase is small")
 
     def _request_simplification_cancel(self) -> None:

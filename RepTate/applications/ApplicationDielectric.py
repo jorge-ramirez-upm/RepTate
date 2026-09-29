@@ -62,6 +62,7 @@ class ApplicationDielectric(QApplicationWindow):
             TheoryHavriliakNegamiModesFrequency,
         )
         from RepTate.theories.TheoryKWWModes import TheoryKWWModesFrequency
+        from RepTate.theories.TheoryKWWModesIndependent import TheoryKWWModesIndependent
         from RepTate.theories.TheoryLP2RLVE import TheoryLP2RDielectric
 
         super().__init__(name, parent)
@@ -227,6 +228,7 @@ class ApplicationDielectric(QApplicationWindow):
             TheoryHavriliakNegamiModesFrequency.thname
         ] = TheoryHavriliakNegamiModesFrequency
         self.theories[TheoryKWWModesFrequency.thname] = TheoryKWWModesFrequency
+        self.theories[TheoryKWWModesIndependent.thname] = TheoryKWWModesIndependent
         self.theories[TheoryLP2RDielectric.thname] = TheoryLP2RDielectric
         self.add_common_theories()
 

@@ -11,3 +11,4 @@ Dielectric Theories
 .. include:: Debye.rst
 .. include:: HavriliakNegami.rst
 .. include:: KWW.rst
+.. include:: KWWIndependent.rst
